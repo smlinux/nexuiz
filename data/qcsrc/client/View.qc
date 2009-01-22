@@ -8,8 +8,8 @@ void Net_ReadHoldAngles()
 	angles_held_status[wpn] = ReadByte();
 	if(angles_held_status[wpn])
 	{
-		v_x = ReadCoord();
-		v_y = ReadCoord();
+		v_x = ReadAngle();
+		v_y = ReadAngle();
 		v_z = 0;
 		angles_held[wpn] = v;
 	}

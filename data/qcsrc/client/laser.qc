@@ -99,8 +99,8 @@ void Ent_Laser()
 		}
 		else
 		{
-			self.angles_x = ReadCoord();
-			self.angles_y = ReadCoord();
+			self.angles_x = ReadAngle();
+			self.angles_y = ReadAngle();
 		}
 	}
 	if(f & 4)

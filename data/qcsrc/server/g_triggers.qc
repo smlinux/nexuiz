@@ -918,8 +918,8 @@ float laser_SendEntity(entity to, float fl)
 		}
 		else
 		{
-			WriteCoord(MSG_ENTITY, self.mangle_x);
-			WriteCoord(MSG_ENTITY, self.mangle_y);
+			WriteAngle(MSG_ENTITY, self.mangle_x);
+			WriteAngle(MSG_ENTITY, self.mangle_y);
 		}
 	}
 	if(fl & 4)

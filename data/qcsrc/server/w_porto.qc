@@ -239,8 +239,8 @@ float w_porto(float req)
 					WriteByte(MSG_ONE, TE_CSQC_HOLDANGLES);
 					WriteByte(MSG_ONE, WEP_PORTO);
 					WriteByte(MSG_ONE, 1);
-					WriteCoord(MSG_ONE, self.v_angle_x);
-					WriteCoord(MSG_ONE, self.v_angle_y);
+					WriteAngle(MSG_ONE, self.v_angle_x);
+					WriteAngle(MSG_ONE, self.v_angle_y);
 				});
 				self.porto_v_angle_held = 1;
 			}

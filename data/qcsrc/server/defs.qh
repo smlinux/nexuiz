@@ -528,3 +528,5 @@ void target_voicescript_clear(entity pl);
 
 void SUB_DontUseTargets();
 void SUB_UseTargets();
+
+.void() reset; // if set, an entity is reset using this

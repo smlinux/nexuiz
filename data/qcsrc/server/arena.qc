@@ -42,6 +42,12 @@ void reset_map()
 	for(self = world; (self = nextent(self)); )
 	if(clienttype(self) == CLIENTTYPE_NOTACLIENT)
 	{
+		if(self.reset)
+		{
+			self.reset();
+			continue;
+		}
+
 		if(self.team_saved)
 			self.team = self.team_saved;
 
