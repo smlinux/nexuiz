@@ -1174,6 +1174,18 @@ void(vector origin, string sample, float volume, float attenuation) pointsound =
 // You may as such dictate the behavior as to what happens to the entity.
 // To mimic the engine's default behavior, simply call remove(self).
 
+//DP_SV_ONENTITYPREPOSTSPAWNFUNCTION
+//idea: div0
+//darkplaces implementation: div0
+//engine-called QC prototypes:
+//void() SV_OnEntityPreSpawnFunction;
+//void() SV_OnEntityPostSpawnFunction;
+//description:
+// These functions are called BEFORE or AFTER an entity is spawned the regular way.
+// You may as such dictate the behavior as to what happens to the entity.
+// SV_OnEntityPreSpawnFunction is called before even looking for the spawn function, so you can even change its classname in there. If it remove()s the entity, the spawn function will not be looked for.
+// SV_OnEntityPostSpawnFunction is called ONLY after its spawn function or SV_OnEntityNoSpawnFunction was called, and skipped if the entity got removed by either.
+
 //DP_SV_MODELFLAGS_AS_EFFECTS
 //idea: LordHavoc, Dresk
 //darkplaces implementation: LordHavoc
