@@ -897,6 +897,9 @@ One possible use is to trigger entities with more than one targetname on an acti
 More than one "trigger event" can be delayed at once, as opposed to trigger_delay.
 -------- KEYS --------
 target: trigger all entities with this targetname when triggered
+target2: trigger all entities with this targetname when triggered
+target3: trigger all entities with this targetname when triggered
+target4: trigger all entities with this targetname when triggered
 targetname: name that identifies this entity so it can be triggered
 delay: delay the triggering by the given time
 message: print this message to the player who activated the trigger
@@ -1362,4 +1365,28 @@ PROJECT_ON_TARGETNORMAL: target's origin is projected onto the given direction v
 PROJECT_ON_TARGET2NORMAL: target2's origin is projected onto the given direction vector, not on the plane perpendicular to it
 PROJECT_ON_TARGET3NORMAL: target3's origin is projected onto the given direction vector, not on the plane perpendicular to it
 PROJECT_ON_TARGET4NORMAL: target4's origin is projected onto the given direction vector, not on the plane perpendicular to it
+*/
+
+/*QUAKED trigger_relay_teamcheck (.5 .5 .5) (-8 -8 -8) (8 8 8) NOTEAM_TOO INVERT
+Works similar to trigger_relay, but only relays trigger events if the team of the activator matches this entity's team
+-------- KEYS --------
+target: trigger all entities with this targetname when triggered
+target2: trigger all entities with this targetname when triggered
+target3: trigger all entities with this targetname when triggered
+target4: trigger all entities with this targetname when triggered
+targetname: name that identifies this entity so it can be triggered
+delay: delay the triggering by the given time
+message: print this message to the player who activated the trigger
+killtarget: remove all entities with this targetname when triggered
+team: 5 for red, 14 for blue, 13 for yellow, 10 for pink team
+-------- SPAWNFLAGS --------
+NOTEAM_TOO: also relay events if the activator has no team set
+INVERT: only relay the event if this entity has the matching team
+*/
+
+/*QUAKED trigger_disablerelay (.5 .5 .5) (-8 -8 -8) (8 8 8) 
+Disables a trigger_relay temporarily (until triggered again)
+-------- KEYS --------
+target: disable/enable all relays with this targetname when triggered
+targetname: name that identifies this entity so it can be triggered
 */

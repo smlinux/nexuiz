@@ -42,6 +42,12 @@ void reset_map()
 	for(self = world; (self = nextent(self)); )
 	if(clienttype(self) == CLIENTTYPE_NOTACLIENT)
 	{
+		if(self.team_saved)
+			self.team = self.team_saved;
+
+		if(self.use == SUB_DontUseTargets)
+			self.use = SUB_UseTargets;
+
 		if(self.classname == STR_ITEM_KH_KEY)
 		{
 			kh_Key_AssignTo(self, world);
@@ -106,10 +112,6 @@ void reset_map()
 		}
 		// TODO properly reset Assault
 		// General teambased game modes
-		else if(self.classname == "info_player_deathmatch")
-		{
-			self.team = self.team_saved;
-		}
 		else if(self.classname == "func_breakable")
 		{
 			func_breakable_reset();
@@ -140,6 +142,16 @@ void reset_map()
 		else if(self.classname == "target_assault_roundstart")
 		{
 			self.use();
+		}
+		else if(self.classname == "trigger_gamestart")
+		{
+			if(self.wait)
+			{
+				self.think = self.use;
+				self.nextthink = game_starttime + self.wait;
+			}
+			else
+				self.use();
 		}
 	}
 

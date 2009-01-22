@@ -269,28 +269,17 @@ void assault_new_round() {
 		assault_attacker_team = COLOR_TEAM1;
 	}
 
-	// swap spawn point teams
-	local entity ent;
-	ent = find(world, classname, "info_player_deathmatch");
-	while (ent)
-	{
-		if(ent.team_saved == COLOR_TEAM1)
-			ent.team_saved = COLOR_TEAM2;
-		else if(ent.team_saved == COLOR_TEAM2)
-			ent.team_saved = COLOR_TEAM1;
-		ent.team = ent.team_saved;
-		ent = find(ent, classname, "info_player_deathmatch");
-	}
 
-	// swap all destructibles
-	ent = find(world, classname, "func_assault_destructible");
-	while (ent)
+	local entity ent;
+	for(ent = world; (ent = nextent(ent)); )
 	{
-		if(ent.team == COLOR_TEAM1)
-			ent.team = COLOR_TEAM2;
-		else if(ent.team == COLOR_TEAM2)
-			ent.team = COLOR_TEAM1;
-		ent = find(ent, classname, "func_assault_destructible");
+		if(clienttype(ent) == CLIENTTYPE_NOTACLIENT)
+		{
+			if(ent.team_saved == COLOR_TEAM1)
+				ent.team_saved = COLOR_TEAM2;
+			else if(ent.team_saved == COLOR_TEAM2)
+				ent.team_saved = COLOR_TEAM1;
+		}
 	}
 
 	// reset the level with a countdown

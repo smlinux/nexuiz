@@ -525,3 +525,6 @@ void target_voicescript_clear(entity pl);
 .string target3;
 .string target4;
 .float trigger_reverse;
+
+void SUB_DontUseTargets();
+void SUB_UseTargets();

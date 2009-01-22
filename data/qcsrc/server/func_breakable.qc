@@ -203,5 +203,7 @@ void spawnfunc_func_breakable() {
 	if(self.noise)
 		precache_sound(self.noise);
 
+	self.team_saved = self.team;
+
 	func_breakable_reset();
 }

@@ -1,3 +1,7 @@
+void SUB_DontUseTargets()
+{
+}
+
 
 void() SUB_UseTargets;
 
@@ -251,6 +255,8 @@ void spawnfunc_trigger_multiple()
 	self.use = multi_use;
 
 	EXACTTRIGGER_INIT;
+
+	self.team_saved = self.team;
 
 	if (self.health)
 	{
@@ -1340,10 +1346,12 @@ void gamestart_use() {
 }
 
 void spawnfunc_trigger_gamestart() {
+	self.use = gamestart_use;
+
 	if(self.wait)
 	{
-		self.think = gamestart_use;
-		self.nextthink = self.wait;
+		self.think = self.use;
+		self.nextthink = game_starttime + self.wait;
 	}
 	else
 		InitializeEntity(self, gamestart_use, INITPRIO_FINDTARGET);
@@ -1437,4 +1445,66 @@ void spawnfunc_target_voicescript()
 		}
 		precache_sound(strcat(self.netname, "/", argv(i), ".wav"));
 	}
+}
+
+
+
+void trigger_relay_teamcheck_use()
+{
+	if(activator.team)
+	{
+		if(self.spawnflags & 2)
+		{
+			if(activator.team != self.team)
+				SUB_UseTargets();
+		}
+		else
+		{
+			if(activator.team == self.team)
+				SUB_UseTargets();
+		}
+	}
+	else
+	{
+		if(self.spawnflags & 1)
+			SUB_UseTargets();
+	}
+}
+
+void spawnfunc_trigger_relay_teamcheck()
+{
+	self.team_saved = self.team;
+	self.use = trigger_relay_teamcheck_use;
+}
+
+
+
+void trigger_disablerelay_use()
+{
+	entity e;
+
+	float a, b;
+	a = b = 0;
+
+	for(e = world; (e = find(e, targetname, self.target)); )
+	{
+		if(e.use == SUB_UseTargets)
+		{
+			e.use = SUB_DontUseTargets;
+			++a;
+		}
+		else if(e.use == SUB_DontUseTargets)
+		{
+			e.use = SUB_UseTargets;
+			++b;
+		}
+	}
+
+	if(!a == !b)
+		print("Invalid use of trigger_disablerelay: ", ftos(a), " relays were on, ", ftos(b), " relays were off!\n");
+}
+
+void spawnfunc_trigger_disablerelay()
+{
+	self.use = trigger_disablerelay_use;
 }
