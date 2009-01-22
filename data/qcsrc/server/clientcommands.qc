@@ -393,7 +393,7 @@ void ReadyRestartForce()
 
 	//reset map immediately if this cvar is not set
 	if (!cvar("sv_ready_restart_after_countdown"))
-		reset_map();
+		reset_map(TRUE);
 	
 	if(cvar("sv_eventlog"))
 		GameLogEcho(":restart");
@@ -459,7 +459,7 @@ void restartAnnouncer_Think() {
 		if(self.spawnflags & 1)
 		{
 			restart_mapalreadyrestarted = 1;
-			reset_map();
+			reset_map(TRUE);
 		}
 
 		FOR_EACH_REALCLIENT(plr) {

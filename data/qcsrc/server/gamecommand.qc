@@ -822,7 +822,8 @@ void GameCommand(string command)
 
 	if(argv(0) == "__FORCE_READY_RESTART")
 	{
-		ReadyRestartForce();
+		reset_map(FALSE);
+		return;
 	}
 
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");
