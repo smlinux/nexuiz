@@ -274,10 +274,11 @@ void assault_new_round() {
 	ent = find(world, classname, "info_player_deathmatch");
 	while (ent)
 	{
-		if(ent.team == COLOR_TEAM1)
-			ent.team = COLOR_TEAM2;
-		else if(ent.team == COLOR_TEAM2)
-			ent.team = COLOR_TEAM1;
+		if(ent.team_saved == COLOR_TEAM1)
+			ent.team_saved = COLOR_TEAM2;
+		else if(ent.team_saved == COLOR_TEAM2)
+			ent.team_saved = COLOR_TEAM1;
+		ent.team = ent.team_saved;
 		ent = find(ent, classname, "info_player_deathmatch");
 	}
 
