@@ -66,12 +66,6 @@ void reset_map(float norespawn)
 			self.reset2();
 			continue;
 		}
-
-		if(self.classname == "sprite_waypoint")
-		{
-			if(self.health || g_keyhunt) // TODO remove this KH workaround somehow
-				WaypointSprite_Kill(self);
-		}
 	}
 
 	// Moving the player reset code here since the player-reset depends

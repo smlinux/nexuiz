@@ -213,6 +213,14 @@ float WaypointSprite_SendEntity(entity to, float sendflags)
 	return TRUE;
 }
 
+void WaypointSprite_Reset()
+{
+	// if a WP wants to time out, let it time out immediately; other WPs ought to be reset/killed by their owners
+
+	if(self.health) // there was there before: || g_keyhunt, do we really need this?
+		WaypointSprite_Kill(self);
+}
+
 entity WaypointSprite_Spawn(
 	string spr, // sprite
 	float lifetime, float maxdistance, // lifetime, max distance
@@ -252,6 +260,7 @@ entity WaypointSprite_Spawn(
 	wp.SendEntity = WaypointSprite_SendEntity;
 	wp.customizeentityforclient = WaypointSprite_Customize;
 	wp.waypointsprite_visible_for_player = WaypointSprite_visible_for_player;
+	wp.reset2 = WaypointSprite_Reset;
 	return wp;
 }
 
