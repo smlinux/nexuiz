@@ -153,13 +153,23 @@ void plat_use()
 	plat_go_down();
 };
 
-void plat_init_movedown()
-{
-	setorigin (self, self.pos2);
-	self.state = 2;
-}
-
 .string sound1, sound2;
+
+void plat_reset()
+{
+	IFTARGETED
+	{
+		setorigin (self, self.pos1);
+		self.state = 4;
+		self.use = plat_use;
+	}
+	else
+	{
+		setorigin (self, self.pos2);
+		self.state = 2;
+		self.use = plat_trigger_use;
+	}
+}
 
 void spawnfunc_path_corner() { };
 void spawnfunc_func_plat()
@@ -225,17 +235,10 @@ void spawnfunc_func_plat()
 	self.pos2 = self.origin;
 	self.pos2_z = self.origin_z - self.size_z + 8;
 
-	self.use = plat_trigger_use;
-
 	plat_spawn_inside_trigger ();	// the "start moving" trigger
 
-	IFTARGETED
-	{
-		self.state = 4;
-		self.use = plat_use;
-	}
-	else
-		InitializeEntity(self, plat_init_movedown, INITPRIO_SETLOCATION);
+	self.reset = plat_reset;
+	plat_reset();
 };
 
 
@@ -320,6 +323,8 @@ void spawnfunc_func_train()
 	if(self.dmg && (!self.dmgtime))
 		self.dmgtime = 0.25;
 	self.dmgtime2 = time;
+
+	// TODO make a reset function for this one
 };
 
 /*QUAKED spawnfunc_func_rotating (0 .5 .8) ? - - X_AXIS Y_AXIS
@@ -369,6 +374,8 @@ void spawnfunc_func_rotating()
 	// wait for targets to spawn
 	self.nextthink = self.ltime + 999999999;
 	self.think = SUB_Null;
+
+	// TODO make a reset function for this one
 };
 
 .float height;
@@ -447,6 +454,8 @@ void spawnfunc_func_bobbing()
 
 	// Savage: Reduce bandwith, critical on e.g. nexdm02
 	self.effects |= EF_LOWPRECISION;
+
+	// TODO make a reset function for this one
 };
 
 // button and multiple button
@@ -500,6 +509,15 @@ void button_fire()
 	SUB_CalcMove (self.pos2, self.speed, button_wait);
 };
 
+void button_reset()
+{
+	self.health = self.max_health;
+	setorigin(self, self.pos1);
+	self.frame = 0;			// use normal textures
+	self.state = STATE_BOTTOM;
+	if (self.health)
+		self.takedamage = DAMAGE_YES;	// can be shot again
+}
 
 void button_use()
 {
@@ -594,10 +612,10 @@ void spawnfunc_func_button()
     if(self.noise != "")
         precache_sound(self.noise);
 
-	self.state = STATE_BOTTOM;
-
 	self.pos1 = self.origin;
 	self.pos2 = self.pos1 + self.movedir*(fabs(self.movedir*self.size) - self.lip);
+
+	button_reset();
 };
 
 
@@ -1160,6 +1178,13 @@ void door_init_startopen()
 	self.pos1 = self.origin;
 }
 
+void door_reset()
+{
+	setorigin(self, self.pos1);
+	self.state = STATE_BOTTOM;
+	self.think = SUB_Null;
+}
+
 void spawnfunc_func_door()
 {
 	//if (!self.deathtype) // map makers can override this
@@ -1222,6 +1247,8 @@ void spawnfunc_func_door()
 // LinkDoors can't be done until all of the doors have been spawned, so
 // the sizes can be detected properly.
 	InitializeEntity(self, LinkDoors, INITPRIO_LINKDOORS);
+
+	self.reset = door_reset;
 };
 
 /*QUAKED spawnfunc_func_door_rotating (0 .5 .8) ? START_OPEN BIDIR DOOR_DONT_LINK BIDIR_IN_DOWN x TOGGLE X_AXIS Y_AXIS
@@ -1251,6 +1278,13 @@ START_OPEN causes the door to move to its destination when spawned, and operate 
 4)	screechy metal
 FIXME: only one sound set available at the time being
 */
+
+void door_rotating_reset()
+{
+	self.angles = self.pos1;
+	self.state = STATE_BOTTOM;
+	self.think = SUB_Null;
+}
 
 void door_rotating_init_startopen()
 {
@@ -1334,6 +1368,8 @@ void spawnfunc_func_door_rotating()
 // LinkDoors can't be done until all of the doors have been spawned, so
 // the sizes can be detected properly.
 	InitializeEntity(self, LinkDoors, INITPRIO_LINKDOORS);
+
+	self.reset = door_rotating_reset;
 };
 
 /*
@@ -1506,6 +1542,16 @@ void secret_touch()
 	}
 };
 
+void secret_reset()
+{
+	if (self.spawnflags&SECRET_YES_SHOOT)
+	{
+		self.health = 10000;
+		self.takedamage = DAMAGE_YES;
+	}
+	setorigin(self, self.oldorigin);
+	self.think = SUB_Null;
+}
 
 /*QUAKED spawnfunc_func_door_secret (0 .5 .8) ? open_once 1st_left 1st_down no_shoot always_shoot
 Basic secret door. Slides back, then to the side. Angle determines direction.
@@ -1559,6 +1605,9 @@ void spawnfunc_func_door_secret()
 	self.oldorigin = self.origin;
 	if (!self.wait)
 		self.wait = 5;		// 5 seconds before closing
+
+	self.reset = secret_reset;
+	secret_reset();
 };
 
 /*QUAKED spawnfunc_func_fourier (0 .5 .8) ?
@@ -1636,6 +1685,8 @@ void spawnfunc_func_fourier()
 
 	// Savage: Reduce bandwith, critical on e.g. nexdm02
 	self.effects |= EF_LOWPRECISION;
+
+	// TODO make a reset function for this one
 };
 
 // reusing some fields havocbots declared
