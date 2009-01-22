@@ -71,7 +71,6 @@ pathlib.qc
 //animation.qc
 
 g_world.qc
-g_decors.qc
 g_casings.qc
 
 t_jumppads.qc

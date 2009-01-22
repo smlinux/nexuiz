@@ -13,7 +13,6 @@ float warmup;
 void PutObserverInServer();
 void PutClientInServer();
 void(entity e) ReturnFlag;
-void(entity e) removedecor;
 void dom_controlpoint_setup();
 void onslaught_generator_reset();
 void onslaught_controlpoint_reset();
@@ -98,10 +97,6 @@ void reset_map(float norespawn)
 		{
 			stopsound(self, CHAN_PROJECTILE);
 			remove(self);
-		}
-		else if(self.isdecor)
-		{
-			removedecor(self);
 		}
 		else if(self.classname == "onslaught_generator")
 		{
