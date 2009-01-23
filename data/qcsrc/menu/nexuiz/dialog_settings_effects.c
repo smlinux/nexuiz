@@ -87,6 +87,10 @@ void fillNexuizEffectsSettingsTab(entity me)
 	        setDependent(e, "cl_decals", 1, 1);
 
 	me.TR(me);
+	me.TR(me);
+		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_gentle", "Replace gore effects for general audiences"));
+
+	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Gibs:"));
 		me.TD(me, 1, 2, e = makeNexuizTextSlider("cl_nogibs"));
 			e.addValue(e, "None", "1");
@@ -96,11 +100,8 @@ void fillNexuizEffectsSettingsTab(entity me)
 			e.configureNexuizTextSliderValues(e);
 
 	me.TR(me);
-		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_coronas", "Coronas"));
-	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "r_bloom", "Bloom"));
-			setDependent(e, "r_hdr", 0, 0);
-		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "r_hdr", "High Dynamic Range (HDR)"));
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Damage kick:"));
+		me.TD(me, 1, 2, e = makeNexuizSlider(0, 0.5, 0.05, "v_kicktime"));
 
 	me.gotoRC(me, 2, 3.5); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Anisotropy:"));
@@ -135,13 +136,18 @@ void fillNexuizEffectsSettingsTab(entity me)
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(0, "r_shadow_usenormalmap", "Use normal maps"));
 			setDependentOR(e, "r_shadow_realtime_dlight", 1, 1, "r_shadow_realtime_world", 1, 1);
+
+	me.TR(me);
+		if(cvar("developer"))
+			me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_showsurfaces", "Show surfaces"));
+				e.yesValue = 3;
+
 	me.TR(me);
 		me.TD(me, 1, 1.5, e = makeNexuizCheckBox(0, "r_glsl_deluxemapping", "Deluxe mapping"));
 			setDependentAND(e, "r_glsl", 1, 1, "mod_q3bsp_nolightmaps", 0, 0);
 		me.TD(me, 1, 1.5, e = makeNexuizCheckBox(0, "r_shadow_gloss", "Gloss"));
-			setDependentAND3(e, "r_glsl", 1, 1, "r_glsl_deluxemapping", 1, 1, "mod_q3bsp_nolightmaps", 0, 0);
+			setDependentAND3(e, "r_glsl", 1, 1, "r_glsl_deluxemapping", 1, 2, "mod_q3bsp_nolightmaps", 0, 0);
 	
-	me.TR(me);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "r_water", "Reflections"));
 			setDependent(e, "r_glsl", 1, 1);
@@ -156,13 +162,11 @@ void fillNexuizEffectsSettingsTab(entity me)
 	me.TR(me);
 
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Damage kick:"));
-		me.TD(me, 1, 2, e = makeNexuizSlider(0, 0.5, 0.05, "v_kicktime"));
-
+		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_coronas", "Coronas"));
 	me.TR(me);
-		if(cvar("developer"))
-			me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_showsurfaces", "Show surfaces"));
-				e.yesValue = 3;
+		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "r_bloom", "Bloom"));
+			setDependent(e, "r_hdr", 0, 0);
+		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "r_hdr", "High Dynamic Range (HDR)"));
 
 	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "r_restart", COMMANDBUTTON_APPLY));
