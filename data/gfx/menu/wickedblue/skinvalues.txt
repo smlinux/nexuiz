@@ -21,6 +21,7 @@ COLOR_DIALOG_CREDITS            '0.5 0.75 1'
 COLOR_DIALOG_WEAPONS            '0.5 0.75 1'
 COLOR_DIALOG_RADAR              '0.5 0.75 1'
 COLOR_DIALOG_SERVERINFO         '0.5 0.75 1'
+COLOR_DIALOG_CVARS              '1 0 0'
 
 // nexposee positions of windows (they are the scale transformation
 // centers, NOT the actual positions of the windows!)
@@ -86,6 +87,13 @@ WIDTH_CREDITS                   0.5
 
 // item: crosshair button
 //   uses "crosshairbutton" images
+
+// item: cvar list
+ALPHA_CVARLIST_SAVED            1
+ALPHA_CVARLIST_TEMPORARY        0.7    
+COLOR_CVARLIST_CHANGED          '1 1 0.4' 
+COLOR_CVARLIST_REVERTBUTTON     '1 0 0'
+COLOR_CVARLIST_UNCHANGED        '1 1 1'
 
 // item: dialog
 //   uses "border" images
