@@ -235,6 +235,7 @@ void DamageInfo_Precache()
 	precache_sound("weapons/crylink_impact2.wav");
 	precache_sound("weapons/crylink_impact.wav");
 	precache_sound("weapons/electro_impact.wav");
+	precache_sound("weapons/electro_impact_combo.wav");
 	precache_sound("weapons/flacexp1.wav");
 	precache_sound("weapons/flacexp2.wav");
 	precache_sound("weapons/flacexp3.wav");
