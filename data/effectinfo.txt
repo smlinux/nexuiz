@@ -2367,13 +2367,14 @@ count 1
 type static
 color 0x20FF30 0x80FFC0
 size 1 1
+sizeincrease 5
 alpha 256 256 256
 gravity -0.4
 bounce 1.5
 airfriction 8
 liquidfriction 16
 //velocityoffset 0 0 120
-velocityjitter 16 16 16
+velocityjitter 128 128 128
 
 // effect for removing player model
 // "teleport"
