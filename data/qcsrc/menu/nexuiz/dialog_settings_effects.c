@@ -113,10 +113,10 @@ void fillNexuizEffectsSettingsTab(entity me)
 			e.addValue(e, "16x", "16");
 			e.configureNexuizTextSliderValues(e);
 	me.TR(me);
-		me.TD(me, 1, 1.5, e = makeNexuizCheckBox(0, "r_glsl_offsetmapping", "Offset mapping"));
-			setDependent(e, "r_glsl", 1, 1);
-		me.TD(me, 1, 1.5, e = makeNexuizCheckBox(0, "r_glsl_offsetmapping_reliefmapping", "Relief mapping"));
-			setDependentAND(e, "r_glsl", 1, 1, "r_glsl_offsetmapping", 1, 1);
+		me.TD(me, 1, 1.5, e = makeNexuizCheckBox(0, "r_glsl_deluxemapping", "Deluxe mapping"));
+			setDependentAND(e, "r_glsl", 1, 1, "mod_q3bsp_nolightmaps", 0, 0);
+		me.TD(me, 1, 1.5, e = makeNexuizCheckBox(0, "r_shadow_gloss", "Gloss"));
+			setDependentAND3(e, "r_glsl", 1, 1, "r_glsl_deluxemapping", 1, 2, "mod_q3bsp_nolightmaps", 0, 0);
 
 	me.TR(me);
 
@@ -143,10 +143,10 @@ void fillNexuizEffectsSettingsTab(entity me)
 				e.yesValue = 3;
 
 	me.TR(me);
-		me.TD(me, 1, 1.5, e = makeNexuizCheckBox(0, "r_glsl_deluxemapping", "Deluxe mapping"));
-			setDependentAND(e, "r_glsl", 1, 1, "mod_q3bsp_nolightmaps", 0, 0);
-		me.TD(me, 1, 1.5, e = makeNexuizCheckBox(0, "r_shadow_gloss", "Gloss"));
-			setDependentAND3(e, "r_glsl", 1, 1, "r_glsl_deluxemapping", 1, 2, "mod_q3bsp_nolightmaps", 0, 0);
+		me.TD(me, 1, 1.5, e = makeNexuizCheckBox(0, "r_glsl_offsetmapping", "Offset mapping"));
+			setDependent(e, "r_glsl", 1, 1);
+		me.TD(me, 1, 1.5, e = makeNexuizCheckBox(0, "r_glsl_offsetmapping_reliefmapping", "Relief mapping"));
+			setDependentAND(e, "r_glsl", 1, 1, "r_glsl_offsetmapping", 1, 1);
 	
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "r_water", "Reflections"));
