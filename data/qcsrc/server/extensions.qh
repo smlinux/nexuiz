@@ -559,6 +559,14 @@ string(string s) cvar_defstring = #482;
 //description:
 //returns the default value of a cvar, as a tempstring.
 
+//DP_QC_CVAR_DESCRIPTION
+//idea: div0
+//DarkPlaces implementation: div0
+//builtin definitions:
+string(string name) cvar_description = #518;
+//description:
+//returns the description of a cvar
+
 //DP_QC_CVAR_STRING
 //idea: VorteX
 //DarkPlaces implementation: VorteX, LordHavoc
@@ -566,6 +574,18 @@ string(string s) cvar_defstring = #482;
 string(string s) cvar_string = #448;
 //description:
 //returns the value of a cvar, as a tempstring.
+
+//DP_QC_CVAR_TYPE
+//idea: div0
+//DarkPlaces implementation: div0
+//builtin definitions:
+float(string name) cvar_type = #495;
+float CVAR_TYPEFLAG_EXISTS = 1;
+float CVAR_TYPEFLAG_SAVED = 2;
+float CVAR_TYPEFLAG_PRIVATE = 4;
+float CVAR_TYPEFLAG_ENGINE = 8;
+float CVAR_TYPEFLAG_HASDESCRIPTION = 16;
+float CVAR_TYPEFLAG_READONLY = 32;
 
 //DP_QC_EDICT_NUM
 //idea: 515
@@ -1793,6 +1813,13 @@ string(float bufhandle, float string_index) bufstr_get = #466;
 void(float bufhandle, float string_index, string str) bufstr_set = #467;
 float(float bufhandle, string str, float order) bufstr_add = #468;
 void(float bufhandle, float string_index) bufstr_free = #469;
+
+//DP_QC_STRINGBUFFERS_CVARLIST
+//idea: div0
+//darkplaces implementation: div0
+//functions to list cvars and store their names into a stringbuffer
+//cvars that start with pattern but not with antipattern will be stored into the buffer
+void(float bufhandle, string pattern, string antipattern) buf_cvarlist = #517;
 
 //DP_QC_STRREPLACE
 //idea: Sajt
