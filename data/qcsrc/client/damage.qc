@@ -126,6 +126,7 @@ void Ent_DamageInfo()
 						pointparticles(particleeffectnum("electro_impact"), org2, '0 0 0', 1);
 					}
 				}
+				break;
 			case WEP_CRYLINK:
 				if(secondary)
 				{

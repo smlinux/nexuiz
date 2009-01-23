@@ -424,7 +424,7 @@ void CSQC_UpdateView(float w, float h)
 
 		if(cvar("camera_look_player"))
 		{
-			local vector dir, delta;
+			local vector dir;
 			local float n;
 			
 			dir = normalize(view_origin - new_origin);

@@ -104,7 +104,7 @@ void Ent_RemoveProjectile()
 
 void Ent_Projectile()
 {
-	float f, r;
+	float f;
 
 	InterpolateOrigin_Undo();
 

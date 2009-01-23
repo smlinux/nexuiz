@@ -18,7 +18,6 @@ void Casing_Draw()
 		R_AddEntity(self);
 }
 
-float trace_networkentity;
 void Casing_Touch()
 {
 	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
