@@ -224,10 +224,14 @@ void Ent_Projectile()
 			case PROJECTILE_PORTO_RED:
 				self.colormod = '2 1 1';
 				self.alpha = 0.5;
+				self.move_movetype = MOVETYPE_BOUNCE;
+				self.move_touch = SUB_Null;
 				break;
 			case PROJECTILE_PORTO_BLUE:
 				self.colormod = '1 1 2';
 				self.alpha = 0.5;
+				self.move_movetype = MOVETYPE_BOUNCE;
+				self.move_touch = SUB_Null;
 				break;
 			case PROJECTILE_HAGAR_BOUNCING:
 				self.move_movetype = MOVETYPE_BOUNCE;
