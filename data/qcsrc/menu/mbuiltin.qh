@@ -287,6 +287,8 @@ string(float bufhandle, float string_index) bufstr_get = #446;
 void(float bufhandle, float string_index, string str) bufstr_set = #447;
 float(float bufhandle, string str, float order) bufstr_add = #448;
 void(float bufhandle, float string_index) bufstr_free = #449;
+void(float bufhandle, string pattern, string antipattern) buf_cvarlist = #517;
+string(string name) cvar_description = #518;
 
 //DP_QC_CRC16
 //idea: div0
@@ -302,6 +304,7 @@ float CVAR_TYPEFLAG_SAVED = 2;
 float CVAR_TYPEFLAG_PRIVATE = 4;
 float CVAR_TYPEFLAG_ENGINE = 8;
 float CVAR_TYPEFLAG_HASDESCRIPTION = 16;
+float CVAR_TYPEFLAG_READONLY = 32;
 
 //DP_QC_URI_ESCAPE
 //idea: div0

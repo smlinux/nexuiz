@@ -52,7 +52,7 @@ string campaign_longdesc_wrapped[CAMPAIGN_MAX_ENTRIES];
 void rewrapCampaign(float w, float l0, float emptyheight)
 {
 	float i, j;
-	float n, take, cantake, l;
+	float n, l;
 	string r, s;
 	for(i = 0; i < campaign_entries; ++i)
 	{
@@ -70,33 +70,13 @@ void rewrapCampaign(float w, float l0, float emptyheight)
 				r = strcat(r, "\n");
 				continue;
 			}
-			for(;;)
+
+			getWrappedLine_remaining = s;
+			while(getWrappedLine_remaining)
 			{
-				cantake = draw_TextLengthUpToWidth(s, w, 0);
-				if(cantake > 0 && cantake < strlen(s))
-				{
-					take = cantake - 1;
-					while(take > 0 && substring(s, take, 1) != " ")
-						--take;
-					if(take == 0)
-					{
-						if(--l < 0) goto toolong;
-						r = strcat(r, substring(s, 0, cantake), "\n");
-						s = substring(s, cantake, strlen(s) - cantake);
-					}
-					else
-					{
-						if(--l < 0) goto toolong;
-						r = strcat(r, substring(s, 0, take), "\n");
-						s = substring(s, take + 1, strlen(s) - take);
-					}
-				}
-				else
-				{
-					if(--l < 0) goto toolong;
-					r = strcat(r, s, "\n");
-					break;
-				}
+				s = getWrappedLine(w);
+				if(--l < 0) goto toolong;
+				r = strcat(r, s, "\n");
 			}
 		}
 		goto nottoolong;

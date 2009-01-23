@@ -49,5 +49,12 @@ void fillNexuizMiscSettingsTab(entity me)
 		me.TD(me, 1, 2.8/3, e = makeNexuizRadioButton(1, "showspeed", "3", "km/h"));
 		me.TD(me, 1, 2.8/3, e = makeNexuizRadioButton(1, "showspeed", "4", "mph"));
 		me.TD(me, 1, 2.8/3, e = makeNexuizRadioButton(1, "showspeed", "5", "knots"));
+	me.TR(me);
+	me.TR(me);
+		me.TDempty(me, 0.5);
+		me.TD(me, 1, 2, e = makeNexuizButton("Advanced settings...", '0 0 0'));
+			e.onClick = DialogOpenButton_Click;
+			e.onClickEntity = main.cvarsDialog;
+		me.TDempty(me, 0.5);
 }
 #endif

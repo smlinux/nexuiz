@@ -20,6 +20,7 @@ CLASS(Label) EXTENDS(Item)
 	ATTRIB(Label, disabled, float, 0)
 	ATTRIB(Label, disabledAlpha, float, 0.3)
 	ATTRIB(Label, textEntity, entity, NULL)
+	ATTRIB(Label, allowWrap, float, 0)
 ENDCLASS(Label)
 #endif
 
@@ -54,6 +55,7 @@ void configureLabelLabel(entity me, string txt, float sz, float algn)
 void drawLabel(entity me)
 {
 	string t;
+	vector o;
 	if(me.disabled)
 		draw_alpha *= me.disabledAlpha;
 
@@ -68,8 +70,19 @@ void drawLabel(entity me)
 	if(me.fontSize)
 		if(t)
 		{
-			if(me.allowCut)
+			if(me.allowCut) // FIXME allowCut incompatible with align != 0
 				draw_Text(me.realOrigin, draw_TextShortenToWidth(t, (1 - me.keepspaceLeft - me.keepspaceRight) / me.realFontSize_x, 0), me.realFontSize, me.colorL, me.alpha, 0);
+			else if(me.allowWrap) // FIXME allowWrap incompatible with align != 0
+			{
+				getWrappedLine_remaining = t;
+				o = me.realOrigin;
+				while(getWrappedLine_remaining)
+				{
+					t = getWrappedLine((1 - me.keepspaceLeft - me.keepspaceRight) / me.realFontSize_x);
+					draw_Text(o, t, me.realFontSize, me.colorL, me.alpha, 0);
+					o_y += me.realFontSize_y;
+				}
+			}
 			else
 				draw_Text(me.realOrigin, t, me.realFontSize, me.colorL, me.alpha, 0);
 		}

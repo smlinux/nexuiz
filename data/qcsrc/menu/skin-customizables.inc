@@ -53,6 +53,7 @@ SKINBEGIN
 	SKINVECTOR(COLOR_DIALOG_WEAPONS, '1 0.7 0.7');
 	SKINVECTOR(COLOR_DIALOG_RADAR, '0.7 0.7 1');
 	SKINVECTOR(COLOR_DIALOG_SERVERINFO, '0.7 0.7 1');
+	SKINVECTOR(COLOR_DIALOG_CVARS, '1 0 0');
 
 	// nexposee positions of windows (they are the scale transformation
 	// centers, NOT the actual positions of the windows!)
@@ -118,6 +119,13 @@ SKINBEGIN
 
 	// item: crosshair button
 	SKINSTRING(GFX_CROSSHAIRBUTTON, "crosshairbutton");
+
+	// item: cvar list
+	SKINFLOAT(ALPHA_CVARLIST_SAVED, 1);
+	SKINFLOAT(ALPHA_CVARLIST_TEMPORARY, 0.7);
+	SKINVECTOR(COLOR_CVARLIST_CHANGED, '1 1 0.4');
+	SKINVECTOR(COLOR_CVARLIST_REVERTBUTTON, '1 0 0');
+	SKINVECTOR(COLOR_CVARLIST_UNCHANGED, '1 1 1');
 
 	// item: dialog
 	SKINSTRING(GFX_DIALOGBORDER, "border");
