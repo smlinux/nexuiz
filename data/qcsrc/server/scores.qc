@@ -88,6 +88,10 @@ void TeamScore_Spawn(float t, string name)
 float TeamScore_AddToTeam(float t, float scorefield, float score)
 {
 	entity s;
+
+	if(gameover)
+		return;
+
 	if(!scores_initialized) return 0; // FIXME remove this when everything uses this system
 	if(t <= 0 || t >= 16)
 		error("Adding score to invalid team!");
@@ -284,6 +288,10 @@ void PlayerScore_Detach(entity player)
 float PlayerScore_Add(entity player, float scorefield, float score)
 {
 	entity s;
+
+	if(gameover)
+		return;
+
 	if(!scores_initialized) return 0; // FIXME remove this when everything uses this system
 	s = player.scorekeeper;
 	if(!s)
