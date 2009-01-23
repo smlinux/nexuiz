@@ -156,24 +156,96 @@ float GotoFirstMap()
 
 void cvar_changes_init()
 {
-	float fh;
-	string s, k, v, d;
-	float n;
+	float h;
+	string k, v, d;
+	float n, i;
 
 	if(cvar_changes)
 		strunzone(cvar_changes);
 	cvar_changes = string_null;
-	fh = fopen("cvars.txt", FILE_READ);
-	if(fh < 0)
-		return;
-	while((s = fgets(fh)))
+
+	h = buf_create();
+	buf_cvarlist(h, "", "_"); // exclude all _ cvars as they are temporary
+	n = buf_getsize(h);
+
+	for(i = 0; i < n; ++i)
 	{
-		n = tokenize_sane(s);
-		if(n < 1)
-			continue;
-		if(argv(0) == "//")
-			continue;
-		k = argv(0);
+		k = bufstr_get(h, i);
+
+#define BADPREFIX(p) if(substring(k, 0, strlen(p)) == p) continue
+#define BADCVAR(p) if(k == p) continue
+		// internal
+		BADPREFIX("csqc_");
+		BADPREFIX("cvar_check_");
+		BADCVAR("gamecfg");
+		BADCVAR("g_configversion");
+		BADCVAR("g_maplist_index");
+		BADCVAR("halflifebsp");
+
+		// client
+		BADPREFIX("cl_");
+		BADPREFIX("con_");
+		BADPREFIX("g_campaign");
+		BADPREFIX("gl_");
+		BADPREFIX("joy");
+		BADPREFIX("menu_");
+		BADPREFIX("net_slist_");
+		BADPREFIX("r_");
+		BADPREFIX("sbar_");
+		BADPREFIX("scr_");
+		BADPREFIX("userbind");
+		BADPREFIX("v_");
+		BADPREFIX("vid_");
+		BADCVAR("mod_q3bsp_lightmapmergepower");
+		BADCVAR("mod_q3bsp_nolightmaps");
+
+		// private
+		BADPREFIX("g_ban_");
+		BADPREFIX("g_chat_flood_");
+		BADPREFIX("rcon_");
+		BADPREFIX("settemp_");
+		BADPREFIX("sv_allowdownloads_");
+		BADPREFIX("sv_autodemo");
+		BADPREFIX("sv_curl_");
+		BADPREFIX("sv_eventlog");
+		BADPREFIX("sv_logscores_");
+		BADPREFIX("sv_master");
+		BADCVAR("g_banned_list");
+		BADCVAR("log_dest_udp");
+		BADCVAR("log_file");
+		BADCVAR("net_address");
+		BADCVAR("port");
+		BADCVAR("savedgamecfg");
+		BADCVAR("sv_heartbeatperoid");
+		BADCVAR("sv_vote_master_password");
+		BADCVAR("sys_colortranslation");
+		BADCVAR("sys_specialcharactertranslation");
+		BADCVAR("timestamps");
+
+		// mapinfo
+		BADCVAR("timelimit");
+		BADCVAR("fraglimit");
+		BADCVAR("g_arena");
+		BADCVAR("g_assault");
+		BADCVAR("g_ctf");
+		BADCVAR("g_dm");
+		BADCVAR("g_domination");
+		BADCVAR("g_keyhunt");
+		BADCVAR("g_keyhunt_teams");
+		BADCVAR("g_onslaught");
+		BADCVAR("g_race");
+		BADCVAR("g_runematch");
+		BADCVAR("g_tdm");
+		BADCVAR("teamplay");
+
+		// long
+		BADCVAR("hostname");
+		BADCVAR("g_maplist");
+		BADCVAR("g_maplist_mostrecent");
+		BADCVAR("sv_motd");
+#undef BADPREFIX
+#undef BADCVAR
+
 		v = cvar_string(k);
 		d = cvar_defstring(k);
 		if(v != d)
@@ -186,7 +258,7 @@ void cvar_changes_init()
 			}
 		}
 	}
-	fclose(fh);
+	buf_del(h);
 	if(cvar_changes == "")
 		cvar_changes = "// this server runs at default settings\n";
 	else
