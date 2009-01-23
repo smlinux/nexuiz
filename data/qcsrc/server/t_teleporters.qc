@@ -105,7 +105,7 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 
 void Teleport_Touch (void)
 {
-	entity oldself;
+	entity oldself, e;
 
 	if (other.health < 1)
 		return;
@@ -119,13 +119,35 @@ void Teleport_Touch (void)
 	if(other.classname == "player")
 		RemoveGrapplingHook(other);
 
-	TeleportPlayer(self, other, self.enemy.origin + '0 0 1' * (1 - other.mins_z - 24), self.enemy.mangle, v_forward * vlen(other.velocity), '0 0 0', '0 0 0');
+	if(self.enemy)
+	{
+		e = self.enemy;
+	}
+	else
+	{
+		RandomSelection_Init();
+		for(e = world; (e = find(e, targetname, self.target)); )
+		{
+			if(e.cnt)
+				RandomSelection_Add(e, 0, e.cnt, 0);
+			else
+				RandomSelection_Add(e, 0, 1, 0);
+		}
+		e = RandomSelection_chosen_ent;
+	}
 
-	if(self.enemy.target)
+	if(!e)
+	{
+		sprint(other, "Teleport destination vanished. Sorry... please complain to the mapper.\n");
+	}
+
+	TeleportPlayer(self, other, e.origin + '0 0 1' * (1 - other.mins_z - 24), e.mangle, v_forward * vlen(other.velocity), '0 0 0', '0 0 0');
+
+	if(e.target)
 	{
 		oldself = self;
 		activator = other;
-		self = self.enemy;
+		self = e;
 		SUB_UseTargets();
 		self = oldself;
 	}
@@ -133,6 +155,8 @@ void Teleport_Touch (void)
 
 void spawnfunc_info_teleport_destination (void)
 {
+	self.classname = "info_teleport_destination";
+
 	self.mangle = self.angles;
 	self.angles = '0 0 0';
 
@@ -143,7 +167,7 @@ void spawnfunc_info_teleport_destination (void)
 	{
 	}
 	else
-		objerror ("Teleport destination without a targetname");
+		objerror ("^3Teleport destination without a targetname");
 }
 
 void spawnfunc_misc_teleporter_dest (void)
@@ -158,18 +182,39 @@ void spawnfunc_target_teleporter (void)
 
 void teleport_findtarget (void)
 {
-	// now enable touch
-	self.touch = Teleport_Touch;
+	entity e;
+	float n;
 
-	self.enemy = find (world, targetname, self.target);
-	if (!self.enemy)
+	n = 0;
+	for(e = world; (e = find(e, targetname, self.target)); )
 	{
+		++n;
+		if(e.movetype == MOVETYPE_NONE)
+			waypoint_spawnforteleporter(self, e.origin, 0);
+		if(e.classname != "info_teleport_destination")
+			print("^3MAPPER ERROR: teleporter does target an invalid teleport destination entity. Angles will not work.\n");
+	}
+
+	if(n == 0)
+	{
+		// no dest!
 		objerror ("Teleporter with nonexistant target");
 		return;
 	}
+	else if(n == 1)
+	{
+		// exactly one dest - bots love that
+		self.enemy = find(e, targetname, self.target);
+		self.dest = self.enemy.origin;
+	}
+	else
+	{
+		// have to use random selection every single time
+		self.enemy = world;
+	}
 
-	self.dest = self.enemy.origin;
-	waypoint_spawnforteleporter(self, self.dest, 0);
+	// now enable touch
+	self.touch = Teleport_Touch;
 }
 
 void spawnfunc_trigger_teleport (void)

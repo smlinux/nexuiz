@@ -1415,6 +1415,10 @@ void precache()
 		}
 	}
 
+	precache_model("models/elaser.mdl");
+	precache_model("models/laser.mdl");
+	precache_model("models/ebomb.mdl");
+
 #if 0
 	// Disabled this code because it simply does not work (e.g. ignores bgmvolume, overlaps with "cd loop" controlled tracks).
 

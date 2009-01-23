@@ -6,8 +6,8 @@
 .void()         th_run;
 .float()        th_missile; // LordHavoc: changed from void() to float(), returns true if attacking
 .void()         th_melee;
-.void(entity attacker, float damage, float damgtype, string dethtype)           th_pain;
-.void()         th_die;
+//.void(entity attacker, float damage, float damgtype, string dethtype)           th_pain; // TODO Nexuiz uses event_damage
+//.void()         th_die; // TODO never called directly by Nexuiz
 .entity         oldenemy;               // mad at this player before taking damage
 entity  newmis;                 // launch_spike sets this after spawning it
 

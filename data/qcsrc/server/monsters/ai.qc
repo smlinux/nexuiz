@@ -188,10 +188,10 @@ void() monster_spawnwanderpath =
 
 void() monster_checkbossflag =
 {
+#if 0
 	local float healthboost;
 	local float r;
 
-#if 0
 	// monsterbosses cvar or spawnflag 64 causes a monster to be a miniboss
 	if ((self.spawnflags & 64) || (random() * 100 < cvar("monsterbosspercent")))
 	{

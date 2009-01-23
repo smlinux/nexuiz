@@ -159,11 +159,12 @@ void() monsterinwall =
 	// puts a spikey ball where the error is...
 	e = spawn();
 	setorigin(e, self.origin);
-	setmodel (e, "progs/star.mdl");
+	setmodel (e, "models/ebomb.mdl");
 	e.movetype = MOVETYPE_NONE;
 	e.solid = SOLID_NOT;
 	e.think = SUB_Null;
 	e.nextthink = -1;
+	e.scale = 16;
 };
 
 //============================================================================
