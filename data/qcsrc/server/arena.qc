@@ -24,7 +24,7 @@ void target_assault_roundend_reset();
  * Resets the state of all clients, items, flags, runes, keys, weapons, waypoints, ... of the map.
  * Sets the 'warmup' global variable.
  */
-void reset_map(float norespawn)
+void reset_map(float dorespawn)
 {
 	entity oldself;
 	oldself = self;
@@ -70,7 +70,7 @@ void reset_map(float norespawn)
 
 	// Moving the player reset code here since the player-reset depends
 	// on spawnpoint entities which have to be reset first --blub
-	if(!norespawn)
+	if(dorespawn)
 	FOR_EACH_CLIENT(self) {
 		if(self.flags & FL_CLIENT)				// reset all players
 		{
