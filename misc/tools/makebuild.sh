@@ -236,21 +236,15 @@ $aft FAQ.aft
 rm FAQ.aft-TOC
 cd "$tmpdir/data"
 mv common-spog.pk3 ..
-perl -pi -e '/^set g_nexuizversion "?([0-9.]*)[^"]*"?/ and $_ = "set g_nexuizversion '$version'\n"' default.cfg
-if [ -n "$versiontag" ]; then
-	perl -pi -e '/^set g_nexuizversion/ and $_ = "showbrand 3\n$_"' default.cfg
-	cp "$buildfiles/brand/$versiontag.tga" gfx/brand.tga
+perl -pi -e '/^set g_nexuizversion "?([0-9.]*)[^"]*"?/ and $_ = "set g_nexuizversion '$version'\n"' defaultNexuiz.cfg
+if [ -z "$versiontag" ]; then
+	perl -pi -e 'm|^//!<showbrand| .. m|^//!>showbrand| and $_ = "";' defaultNexuiz.cfg
+	rm -f gfx/brand.tga
 fi
-echo >> default.cfg
-echo "$defaultcfg" >> default.cfg
+echo >> defaultNexuiz.cfg
+echo "$defaultcfg" >> defaultNexuiz.cfg
 mk7z ../data.pk3 .
 cd "$tmpdir/havoc"
-perl -pi -e '/^set g_nexuizversion "?([0-9.]*)[^"]*"?/ and $_ = "set g_nexuizversion '$version-havoc'\n"' default.cfg
-if [ -n "$versiontag" ]; then
-	perl -pi -e '/^set g_nexuizversion/ and $_ = "showbrand 3\n$_"' default.cfg
-fi
-echo >> default.cfg
-echo "$defaultcfg" >> default.cfg
 mk7z ../havoc.pk3 .
 
 # make data pk3
