@@ -1507,18 +1507,21 @@ void Sbar_Draw (void)
 			s = strcat("^1Press ^3", getcommandkey("jump", "+jump"), "^1 to join");
 		o = Sbar_DrawNoteLine(o, s);
 	}
+	if(warmup_stage)
+	{
+		s = "^2Currently in ^1warmup^2 stage!";
+		o = Sbar_DrawNoteLine(o, s);
+	}
+
+	// move more important stuff more to the middle so its more visible
+	o_y = vid_conheight * 0.66;
 
 	string blinkcolor;
 	if(mod(time, 1) >= 0.5)
 		blinkcolor = "^1";
 	else
 		blinkcolor = "^3";
-		
-	if(warmup_stage)
-	{
-		s = "^2Currently in ^1warmup^2 stage!";
-		o = Sbar_DrawNoteLine(o, s);
-	}
+
 	if(ready_waiting)
 	{
 		if(ready_waiting_for_me)
