@@ -90,7 +90,7 @@ float TeamScore_AddToTeam(float t, float scorefield, float score)
 	entity s;
 
 	if(gameover)
-		return;
+		score = 0;
 
 	if(!scores_initialized) return 0; // FIXME remove this when everything uses this system
 	if(t <= 0 || t >= 16)
@@ -290,7 +290,7 @@ float PlayerScore_Add(entity player, float scorefield, float score)
 	entity s;
 
 	if(gameover)
-		return;
+		score = 0;
 
 	if(!scores_initialized) return 0; // FIXME remove this when everything uses this system
 	s = player.scorekeeper;
