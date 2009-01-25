@@ -2363,53 +2363,88 @@ velocityjitter 256 256 256
 // impact effect indicating damage
 // used in qcsrc/server/cl_player.qc:		pointparticles(particleeffectnum("damage_hit"), hitloc, force, bound(0, damage, 200))
 effect damage_hit
+tex 48 55
 count 1
-type static
-color 0x20FF30 0x80FFC0
-size 1 1
-sizeincrease 5
-alpha 256 256 256
+type alphastatic
+color 0x00FFFF 0xFF00FF
+size 16 16
+sizeincrease -24
+alpha 256 256 384
 gravity -0.4
 bounce 1.5
-airfriction 8
-liquidfriction 16
-//velocityoffset 0 0 120
-velocityjitter 128 128 128
+airfriction 5
+liquidfriction 10
+velocityjitter 256 256 256
+effect damage_hit
+tex 48 55
+count 1
+type alphastatic
+color 0xFF00FF 0xFFFF00
+size 16 16
+sizeincrease -24
+alpha 256 256 384
+gravity -0.4
+bounce 1.5
+airfriction 5
+liquidfriction 10
+velocityjitter 256 256 256
+effect damage_hit
+tex 48 55
+count 1
+type alphastatic
+color 0xFFFF00 0x00FFFF
+size 16 16
+sizeincrease -24
+alpha 256 256 384
+gravity -0.4
+bounce 1.5
+airfriction 5
+liquidfriction 10
+velocityjitter 256 256 256
 
 // effect for removing player model
 // "teleport"
 // used in qcsrc/server/cl_player.qc:			pointparticles(particleeffectnum("damage_dissolve"), self.origin, force, 1)
-effect damage_dissolve
-count 96
-type static
-color 0x66FF66 0xFFFFFF
-size 10 10
-alpha 64 128 128
-airfriction 1
-liquidfriction 4
-originoffset 0 0 28
-originjitter 16 16 28
-velocityjitter 0 0 256
-// flare
-effect damage_dissolve
-countabsolute 1
-type static
-tex 38 38
-color 0x00FF00 0x99FF99
-size 32 32
-alpha 256 256 196
+
 // large sparks
 effect damage_dissolve
-count 20
-type static
-color 0x00FF00 0x99FF99
-size 16 16
-alpha 256 256 256
-//gravity 1
+tex 48 55
+count 50
+type alphastatic
+color 0x00FFFF 0xFF00FF
+size 32 32
+sizeincrease -16
+alpha 256 256 128
+gravity -0.4
 bounce 1.5
-airfriction 4
-liquidfriction 16
-//velocityoffset 0 0 120
+airfriction 3
+liquidfriction 6
+velocityjitter 512 512 512
+effect damage_dissolve
+tex 48 55
+count 50
+type alphastatic
+color 0xFF00FF 0xFFFF00
+size 32 32
+sizeincrease -16
+alpha 256 256 128
+gravity -0.4
+bounce 1.5
+airfriction 3
+liquidfriction 6
+velocityjitter 512 512 512
+effect damage_dissolve
+tex 48 55
+count 50
+type alphastatic
+color 0xFFFF00 0x00FFFF
+size 32 32
+sizeincrease -16
+alpha 256 256 128
+gravity -0.4
+bounce 1.5
+airfriction 3
+liquidfriction 6
 velocityjitter 512 512 512
 
 // decal
