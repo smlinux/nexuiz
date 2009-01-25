@@ -283,7 +283,7 @@ void SV_ParseClientCommand(string s) {
 			pointparticles(effectnum, start, end, f);
 		}
 		else
-			print("Usage: sv_cheats 1; restart; cmd pointparticles effectname position(0..1) velocityvector multiplier\n");
+			sprint(self, "Usage: sv_cheats 1; restart; cmd pointparticles effectname position(0..1) velocityvector multiplier\n");
 	} else if(argv(0) == "trailparticles") {
 		if(sv_cheats && tokens == 3)
 		{
@@ -296,7 +296,7 @@ void SV_ParseClientCommand(string s) {
 			trailparticles(self, effectnum, w_shotorg, trace_endpos);
 		}
 		else
-			print("Usage: sv_cheats 1; restart; cmd trailparticles effectname shotorigin\n");
+			sprint(self, "Usage: sv_cheats 1; restart; cmd trailparticles effectname shotorigin\n");
 	} else {
 		//if(ctf_clientcommand())
 		//	return;
