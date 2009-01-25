@@ -2369,7 +2369,7 @@ type alphastatic
 color 0x00FFFF 0xFF00FF
 size 16 16
 sizeincrease -24
-alpha 256 256 384
+alpha 128 128 192
 gravity -0.4
 bounce 1.5
 airfriction 5
@@ -2382,7 +2382,7 @@ type alphastatic
 color 0xFF00FF 0xFFFF00
 size 16 16
 sizeincrease -24
-alpha 256 256 384
+alpha 128 128 192
 gravity -0.4
 bounce 1.5
 airfriction 5
@@ -2395,7 +2395,7 @@ type alphastatic
 color 0xFFFF00 0x00FFFF
 size 16 16
 sizeincrease -24
-alpha 256 256 384
+alpha 128 128 192
 gravity -0.4
 bounce 1.5
 airfriction 5
@@ -2409,7 +2409,7 @@ velocityjitter 256 256 256
 // large sparks
 effect damage_dissolve
 tex 48 55
-count 50
+count 30
 type alphastatic
 color 0x00FFFF 0xFF00FF
 size 32 32
@@ -2422,7 +2422,7 @@ liquidfriction 6
 velocityjitter 512 512 512
 effect damage_dissolve
 tex 48 55
-count 50
+count 30
 type alphastatic
 color 0xFF00FF 0xFFFF00
 size 32 32
@@ -2435,7 +2435,7 @@ liquidfriction 6
 velocityjitter 512 512 512
 effect damage_dissolve
 tex 48 55
-count 50
+count 30
 type alphastatic
 color 0xFFFF00 0x00FFFF
 size 32 32
