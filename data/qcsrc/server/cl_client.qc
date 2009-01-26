@@ -1389,7 +1389,6 @@ void ChatBubbleThink()
 		remove(self);
 		return;
 	}
-	setorigin(self, self.owner.origin + '0 0 15' + self.owner.maxs_z * '0 0 1');
 	if (self.owner.BUTTON_CHAT && !self.owner.deadflag)
 		self.model = self.mdl;
 	else
@@ -1409,7 +1408,9 @@ void UpdateChatBubble()
 		self.chatbubbleentity.think = ChatBubbleThink;
 		self.chatbubbleentity.nextthink = time;
 		setmodel(self.chatbubbleentity, "models/misc/chatbubble.spr"); // precision set below
-		setorigin(self.chatbubbleentity, self.origin + '0 0 15' + self.maxs_z * '0 0 1');
+		//setorigin(self.chatbubbleentity, self.origin + '0 0 15' + self.maxs_z * '0 0 1');
+		setorigin(self.chatbubbleentity, '0 0 15' + self.maxs_z * '0 0 1');
+		setattachment(self.chatbubbleentity, self, "");  // sticks to moving player better, also conserves bandwidth
 		self.chatbubbleentity.mdl = self.chatbubbleentity.model;
 		self.chatbubbleentity.model = "";
 		self.chatbubbleentity.effects = EF_LOWPRECISION;
@@ -1454,7 +1455,7 @@ void UpdateTeamBubble()
 		self.teambubbleentity.nextthink = time;
 		setmodel(self.teambubbleentity, "models/misc/teambubble.spr"); // precision set below
 //		setorigin(self.teambubbleentity, self.origin + '0 0 15' + self.maxs_z * '0 0 1');
-		setorigin(self.teambubbleentity, self.teambubbleentity.origin + '0 0 15' + self.maxs_z * '0 0 1');
+		setorigin(self.teambubbleentity, '0 0 15' + self.maxs_z * '0 0 1');
 		setattachment(self.teambubbleentity, self, "");  // sticks to moving player better, also conserves bandwidth
 		self.teambubbleentity.mdl = self.teambubbleentity.model;
 		self.teambubbleentity.model = self.teambubbleentity.mdl;
