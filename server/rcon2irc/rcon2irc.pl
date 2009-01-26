@@ -129,9 +129,9 @@ sub color_dp2none($)
 sub color_rgb2basic($)
 {
 	my ($data) = @_;
-	my ($r, $g, $b) = @$data;
-	my $min = [sort ($r, $g, $b)]->[0];
-	my $max = [sort ($r, $g, $b)]->[-1];
+	my ($R, $G, $B) = @$data;
+	my $min = [sort { $a <=> $b } ($R, $G, $B)]->[0];
+	my $max = [sort { $a <=> $b } ($R, $G, $B)]->[-1];
 
 	my $v = $max / 15;
 	my $s = ($max == $min) ? 0 : 1 - $min/$max;
@@ -147,17 +147,17 @@ sub color_rgb2basic($)
 	{
 		$h = 0;
 	}
-	elsif($max == $r)
+	elsif($max == $R)
 	{
-		$h = (60 * ($g - $b) / ($max - $min)) % 360;
+		$h = (60 * ($G - $B) / ($max - $min)) % 360;
 	}
-	elsif($max == $g)
+	elsif($max == $G)
 	{
-		$h = (60 * ($b - $r) / ($max - $min)) + 120;
+		$h = (60 * ($B - $R) / ($max - $min)) + 120;
 	}
-	elsif($max == $b)
+	elsif($max == $B)
 	{
-		$h = (60 * ($r - $g) / ($max - $min)) + 240;
+		$h = (60 * ($R - $G) / ($max - $min)) + 240;
 	}
 
 	return 1 if $h < 36;
