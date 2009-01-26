@@ -1128,8 +1128,8 @@ void dummyfunction(float a1, float a2, float a3, float a4, float a5, float a6, f
 
 void Sbar_Score(float margin)
 {
-	float timelimit, timeleft, minutes, seconds, distribution, myplace, score;
-	vector sbar_save, place;
+	float timelimit, minutes, seconds, timeleft, minutesLeft, secondsLeft, distribution, myplace, score;
+	vector sbar_save, place, timer_color;
 	entity tm, pl, me;
 	sbar_save = sbar;
 	
@@ -1201,32 +1201,52 @@ void Sbar_Score(float margin)
 			Sbar_DrawXNum('-128 0 0', score, 4, 32, '1 0 0', 1, DRAWFLAG_NORMAL);
 		}
 	}
+	
+	//draw the remaining or elapsed time
 	timelimit = getstatf(STAT_TIMELIMIT);
 	if(timelimit > 0)
 	{
 		timeleft = max(0, timelimit * 60 + getstatf(STAT_GAMESTARTTIME) - time);
 		timeleft = ceil(timeleft);
-		minutes = floor(timeleft / 60);
-		seconds = timeleft - minutes*60;
-		if(minutes >= 5)
-		{
-			Sbar_DrawXNum('-72 32 0', minutes, 3, 12, '1 1 1', 1, DRAWFLAG_NORMAL);
-			drawpic(sbar + '-36 32 0', "gfx/num_colon", '12 12 0', '1 1 1', sbar_alpha_fg, 0);
-			Sbar_DrawXNum('-24 32 0', seconds, -2, 12, '1 1 1', 1, DRAWFLAG_NORMAL);
-		} else if(minutes >= 1)
-		{
-			Sbar_DrawXNum('-72 32 0', minutes, 3, 12, '1 1 0', 1, DRAWFLAG_NORMAL);
-			drawpic(sbar + '-36 32 0', "gfx/num_colon", '12 12 0', '1 1 0', sbar_alpha_fg, 0);
-			Sbar_DrawXNum('-24 32 0', seconds, -2, 12, '1 1 0', 1, DRAWFLAG_NORMAL);
+		minutesLeft = floor(timeleft / 60);
+		secondsLeft = timeleft - minutesLeft*60;
+		
+		if(minutesLeft >= 5) {
+			timer_color = '1 1 1'; //white
+		} else if(minutesLeft >= 1) {
+			timer_color = '1 1 0'; //yellow
 		} else {
-			Sbar_DrawXNum('-24 32 0', seconds, -2, 12, '1 0 0', 1, DRAWFLAG_NORMAL);
+			timer_color = '1 0 0'; //red
 		}
+		
+		if (cvar("sbar_increment_maptime")) {
+			if (time < getstatf(STAT_GAMESTARTTIME)) {
+				//while restart is still active, show negative counter
+				minutes = 0;
+				seconds = ceil(getstatf(STAT_GAMESTARTTIME) - time);
+			} else {
+				float elapsedTime;
+				elapsedTime = floor(time - getstatf(STAT_GAMESTARTTIME)); //127
+				minutes = floor(elapsedTime / 60);
+				seconds = elapsedTime - minutes*60;
+			}
+		} else {
+			minutes = minutesLeft;
+			seconds = secondsLeft;
+		}
+		
+		if(minutesLeft >= 1 || (cvar("sbar_increment_maptime") && minutes >= 1) ) {
+			Sbar_DrawXNum('-72 32 0', minutes, 3, 12, timer_color, 1, DRAWFLAG_NORMAL);
+			drawpic(sbar + '-36 32 0', "gfx/num_colon", '12 12 0', timer_color, sbar_alpha_fg, 0);
+		}
+		Sbar_DrawXNum('-24 32 0', seconds, -2, 12, timer_color, 1, DRAWFLAG_NORMAL);
 	} else {
+		timer_color = '1 1 1'; //white
 		minutes = floor(time / 60);
 		seconds = floor(time - minutes*60);
-		Sbar_DrawXNum('-72 32 0', minutes, 3, 12, '1 1 1', 1, DRAWFLAG_NORMAL);
-		drawpic(sbar + '-36 32 0', "gfx/num_colon", '12 12 0', '1 1 1', sbar_alpha_fg, 0);
-		Sbar_DrawXNum('-24 32 0', seconds, -2, 12, '1 1 1', 1, DRAWFLAG_NORMAL);
+		Sbar_DrawXNum('-72 32 0', minutes, 3, 12, timer_color, 1, DRAWFLAG_NORMAL);
+		drawpic(sbar + '-36 32 0', "gfx/num_colon", '12 12 0', timer_color, sbar_alpha_fg, 0);
+		Sbar_DrawXNum('-24 32 0', seconds, -2, 12, timer_color, 1, DRAWFLAG_NORMAL);
 	}
 
 	if(gametype == GAME_RACE)
