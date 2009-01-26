@@ -14,6 +14,7 @@ interpolate.qh
 teamradar.qh
 waypointsprites.qh
 movetypes.qh
+prandom.qh
 
 main.qh
 
@@ -40,6 +41,7 @@ interpolate.qc
 teamradar.qc
 waypointsprites.qc
 movetypes.qc
+prandom.qc
 
 ../common/util.qc
 ../common/gamecommand.qc

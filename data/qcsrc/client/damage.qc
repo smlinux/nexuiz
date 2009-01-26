@@ -67,7 +67,7 @@ void Ent_DamageInfo()
 		secondary = hittype & HITTYPE_SECONDARY;
 		bounce = hittype & HITTYPE_BOUNCE;
 		headshot = hittype & HITTYPE_HEADSHOT;
-		r = random();
+		r = prandom();
 
 		traceline(org - normalize(force) * 16, org + normalize(force) * 16, MOVE_NOMONSTERS, world);
 		if(trace_fraction < 1)

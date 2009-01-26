@@ -35,7 +35,7 @@ void Casing_Touch()
 				string s;
 				float f;
 
-				f = floor(random() * 3) + 1;
+				f = floor(prandom() * 3) + 1;
 				switch(self.state)
 				{
 					case 1:

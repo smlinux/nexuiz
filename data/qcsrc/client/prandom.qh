@@ -1,0 +1,2 @@
+// prandom - PREDICTABLE random number generator
+float prandom();
