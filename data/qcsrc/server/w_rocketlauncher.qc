@@ -238,7 +238,7 @@ void W_Rocket_Attack (void)
 	missile.cnt = time + cvar("g_balance_rocketlauncher_lifetime");
 	missile.flags = FL_PROJECTILE;
 
-	CSQCProjectile(missile, cvar("g_balance_rocketlauncher_speedaccel") == 0 && cvar("g_laserguided_missiles") == 0, PROJECTILE_ROCKET);
+	CSQCProjectile(missile, cvar("g_balance_rocketlauncher_speedaccel") == 0 && !g_laserguided_missile, PROJECTILE_ROCKET);
 	missile.effects |= EF_NODEPTHTEST; // because of fly sound
 
 	// muzzle flash for 1st person view
