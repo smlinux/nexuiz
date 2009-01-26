@@ -2112,7 +2112,8 @@ void PlayerPreThink (void)
 		if(time > self.teleport_time)
 		{
 			self.teleport_time = 0;
-			self.effects = self.effects - (self.effects & EF_NODRAW);
+			if(! (self.items & IT_STRENGTH))
+				self.effects = self.effects - (self.effects & EF_NODRAW);
 			if(self.weaponentity)
 				self.weaponentity.flags = self.weaponentity.flags - (self.weaponentity.flags & EF_NODRAW);
 		}

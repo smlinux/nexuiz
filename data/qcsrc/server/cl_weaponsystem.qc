@@ -285,6 +285,15 @@ void CL_Weaponentity_Think()
 		self.alpha = self.owner.alpha;
 	else
 		self.alpha = 1;
+	
+	/* Minstagib invis doesnt set alpha with perfect invis, 
+	 * but only sets EF_NODRAW, so we have to copy it, too.
+	*/
+	if(self.owner.effects & EF_NODRAW)
+		self.effects |= EF_NODRAW;
+	else
+		self.effects -= self.effects & EF_NODRAW;
+	
 	self.colormap = self.owner.colormap;
 
 	self.angles = '0 0 0';
@@ -344,6 +353,15 @@ void CL_ExteriorWeaponentity_Think()
 		self.alpha = self.owner.alpha;
 	else
 		self.alpha = 1;
+	
+	/* Minstagib invis doesnt set alpha with perfect invis, 
+	 * but only sets EF_NODRAW, so we have to copy it, too.
+	*/
+	if(self.owner.effects & EF_NODRAW)
+		self.effects |= EF_NODRAW;
+	else
+		self.effects -= self.effects & EF_NODRAW;
+	
 	self.colormap = self.owner.colormap;
 };
 
