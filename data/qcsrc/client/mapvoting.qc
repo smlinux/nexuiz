@@ -1,5 +1,6 @@
 float mv_num_maps;
 
+float mv_active;
 string mv_maps[MAPVOTE_COUNT];
 string mv_pics[MAPVOTE_COUNT];
 string mv_pk3[MAPVOTE_COUNT];
@@ -117,6 +118,9 @@ void MapVote_Draw()
 	float columns, rows;
 	float tsize;
 	vector dist;
+
+	if(!mv_active)
+		return;
 	
 	center = (vid_conwidth - 1)/2;
 	xmin = vid_conwidth*0.05; // 5% border must suffice
@@ -265,6 +269,8 @@ void MapVote_Init()
 	registercmd("+showscores");
 	registercmd("-showscores");
 
+	mv_active = 1;
+
 	ssdir = ReadString();
 	
 	mv_num_maps = min(MAPVOTE_COUNT, ReadByte());
@@ -345,6 +351,8 @@ void MapVote_UpdateVotes()
 void Ent_MapVote()
 {
 	float sf;
+
+	sf = ReadByte();
 
 	if(sf & 1)
 		MapVote_Init();

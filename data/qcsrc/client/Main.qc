@@ -681,6 +681,7 @@ void Ent_Init()
 	self.classname = "ent_client_init";
 
 	csqc_revision = ReadShort();
+
 	maxclients = ReadByte();
 	for(i = 0; i < 24; ++i)
 		weaponimpulse[i] = ReadByte() - 1;
