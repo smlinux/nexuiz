@@ -277,9 +277,9 @@ void MapVote_Init()
 	mv_timeout = ReadCoord();
 
 	if(mv_num_maps <= 8)
-		m = ReadByte();
+		mv_maps_mask = ReadByte();
 	else
-		m = ReadShort();
+		mv_maps_mask = ReadShort();
 	
 	// Assume mv_pk3list is NULL, there should only be 1 mapvote per round
 	mv_pk3list = NULL; // I'm still paranoid!
@@ -288,7 +288,7 @@ void MapVote_Init()
 	{
 		mv_votes[i] = 0;
 
-		if(m & power)
+		if(mv_maps_mask & power)
 		{
 			map = strzone(ReadString());
 			pk3 = strzone(ReadString());
