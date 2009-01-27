@@ -10,6 +10,7 @@ float mv_abstain;
 float mv_ownvote;
 float mv_detail;
 float mv_timeout;
+float mv_maps_mask;
 
 string MapVote_FormatMapItem(float id, string map, float count, float maxwidth)
 {
@@ -259,10 +260,12 @@ void MapVote_CheckPic(string pic, string pk3, float id)
 void MapVote_Init()
 {
 	float i, power, m;
-	string map, pk3;
+	string map, pk3, ssdir;
 
 	registercmd("+showscores");
 	registercmd("-showscores");
+
+	ssdir = ReadString();
 	
 	mv_num_maps = min(MAPVOTE_COUNT, ReadByte());
 	mv_abstain = ReadByte();
@@ -291,7 +294,7 @@ void MapVote_Init()
 			pk3 = strzone(ReadString());
 			mv_maps[i] = map;
 			mv_pk3[i] = pk3;
-			map = strzone(strcat(config_get("mv_screenshot_dir", "maps"), "/", map));
+			map = strzone(strcat(ssdir, "/", map));
 			mv_pics[i] = map;
 
 			mv_preview[i] = false;
@@ -307,19 +310,25 @@ void MapVote_Init()
 			mv_preview[i] = false;
 		}
 	}
+
+	// do we NEED this, or can we handle key presses directly in CSQC?
+	localcmd("\nin_bind 7 1 \"impulse 1\"; in_bind 7 2 \"impulse 2\"; in_bind 7 3 \"impulse 3\"; in_bind 7 4 \"impulse 4\"; in_bind 7 5 \"impulse 5\"; in_bind 7 6 \"impulse 6\"; in_bind 7 7 \"impulse 7\"; in_bind 7 8 \"impulse 8\"; in_bind 7 9 \"impulse 9\"; in_bind 7 0 \"impulse 10\"; in_bind 7 KP_1 \"impulse 1\"; in_bind 7 KP_2 \"impulse 2\"; in_bind 7 KP_3 \"impulse 3\"; in_bind 7 KP_4 \"impulse 4\"; in_bind 7 KP_5 \"impulse 5\"; in_bind 7 KP_6 \"impulse 6\"; in_bind 7 KP_7 \"impulse 7\"; in_bind 7 KP_8 \"impulse 8\"; in_bind 7 KP_9 \"impulse 9\"; in_bind 7 KP_0 \"impulse 10\"; in_bindmap 7 0\n");
 }
 
-void MapVote_Update()
+void MapVote_UpdateMask()
+{
+	if(mv_num_maps <= 8)
+		mv_maps_mask = ReadByte();
+	else
+		mv_maps_mask = ReadShort();
+}
+
+void MapVote_UpdateVotes()
 {
 	float i, power;
-	float m;
-	if(mv_num_maps <= 8)
-		m = ReadByte();
-	else
-		m = ReadShort();
 	for(i = 0, power = 1; i < mv_num_maps; ++i, power *= 2)
 	{
-		if(m & power)
+		if(mv_maps_mask & power)
 		{
 			if(mv_detail)
 				mv_votes[i] = ReadByte();
@@ -329,30 +338,29 @@ void MapVote_Update()
 		else
 			mv_votes[i] = -1;
 	}
+
+	mv_ownvote = ReadByte()-1;
+}
+
+void Ent_MapVote()
+{
+	float sf;
+
+	if(sf & 1)
+		MapVote_Init();
+
+	if(sf & 2)
+		MapVote_UpdateMask();
+
+	if(sf & 4)
+		MapVote_UpdateVotes();
 }
 
 string Net_ReadPicture();
-void Net_Mapvote()
+void Net_MapVote_Picture()
 {
 	float type;
 	type = ReadByte();
-	switch(type)
-	{
-	case MAPVOTE_NET_INIT:
-		MapVote_Init();
-		// do we NEED this, or can we handle key presses directly in CSQC?
-		localcmd("\nin_bind 7 1 \"impulse 1\"; in_bind 7 2 \"impulse 2\"; in_bind 7 3 \"impulse 3\"; in_bind 7 4 \"impulse 4\"; in_bind 7 5 \"impulse 5\"; in_bind 7 6 \"impulse 6\"; in_bind 7 7 \"impulse 7\"; in_bind 7 8 \"impulse 8\"; in_bind 7 9 \"impulse 9\"; in_bind 7 0 \"impulse 10\"; in_bind 7 KP_1 \"impulse 1\"; in_bind 7 KP_2 \"impulse 2\"; in_bind 7 KP_3 \"impulse 3\"; in_bind 7 KP_4 \"impulse 4\"; in_bind 7 KP_5 \"impulse 5\"; in_bind 7 KP_6 \"impulse 6\"; in_bind 7 KP_7 \"impulse 7\"; in_bind 7 KP_8 \"impulse 8\"; in_bind 7 KP_9 \"impulse 9\"; in_bind 7 KP_0 \"impulse 10\"; in_bindmap 7 0\n");
-		break;
-	case MAPVOTE_NET_UPDATE:
-		MapVote_Update();
-		break;
-	case MAPVOTE_NET_OWNVOTE:
-		mv_ownvote = ReadByte()-1;
-		break;
-	case MAPVOTE_NET_PIC:
-		type = ReadByte();
-		mv_preview[type] = true;
-		mv_pics[type] = strzone(Net_ReadPicture());
-		break;
-	}
+	mv_preview[type] = true;
+	mv_pics[type] = strzone(Net_ReadPicture());
 }

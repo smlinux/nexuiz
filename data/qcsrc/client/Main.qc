@@ -534,6 +534,8 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		Ent_Init();
 	else if(self.enttype == ENT_CLIENT_SCORES_INFO)
 		Ent_ScoresInfo();
+	else if(self.enttype == ENT_CLIENT_MAPVOTE)
+		Ent_MapVote();
 	else
 		error(strcat("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n"));
 	
@@ -844,8 +846,8 @@ float CSQC_Parse_TempEntity()
 		// NOTE: Could just do return instead of break...
 	switch(nTEID)
 	{
-		case TE_CSQC_MAPVOTE:
-			Net_Mapvote();
+		case TE_CSQC_PICTURE:
+			Net_MapVote_Picture();
 			bHandled = true;
 			break;
 		case TE_CSQC_CONFIG:

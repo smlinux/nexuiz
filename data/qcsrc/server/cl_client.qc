@@ -1269,11 +1269,6 @@ void ClientConnect (void)
 		sprint(self, strcat("nexuiz-csqc protocol ", ftos(CSQC_REVISION), "\n"));
 
 		msg_entity = self;
-		if(mapvote_initialized && !cvar("g_maplist_textonly"))
-		{
-			MapVote_SendData(MSG_ONE);
-			MapVote_UpdateData(MSG_ONE);
-		}
 
 		if(inWarmupStage)
 		{

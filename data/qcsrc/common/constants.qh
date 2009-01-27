@@ -59,6 +59,7 @@ const float ENT_CLIENT_GIBSPLASH = 13;
 const float ENT_CLIENT_DAMAGEINFO = 14;
 const float ENT_CLIENT_CASING = 15;
 const float ENT_CLIENT_INIT = 16;
+const float ENT_CLIENT_MAPVOTE = 17;
 
 const float SPRITERULE_DEFAULT = 0;
 const float SPRITERULE_TEAMPLAY = 1;
@@ -215,7 +216,6 @@ const float ENTCS_MSG_ONS_REMOVE = 2;
 const float ENTCS_MSG_INIT = 3;
 
 const float TE_CSQC_PICTURE = 105;
-const float TE_CSQC_MAPVOTE = 106; // TODO turn into shared ent
 const float TE_CSQC_CONFIG = 107; // TODO maybe turn into shared ent
 const float TE_CSQC_RACE = 109;
 const float TE_CSQC_FORCESCOREBOARD = 110; // TODO turn into shared ent
@@ -239,10 +239,6 @@ const float CTF_STATE_COMMANDER = 3;
 // moved that here so the client knows the max.
 // # of maps, I'll use arrays for them :P
 #define MAPVOTE_COUNT 10
-const float MAPVOTE_NET_INIT = 0;
-const float MAPVOTE_NET_UPDATE = 1;
-const float MAPVOTE_NET_PIC = 2;
-const float MAPVOTE_NET_OWNVOTE = 3;
 
 const float RACE_NET_CHECKPOINT_HIT_QUALIFYING = 0; // byte checkpoint, short time, short recordtime, string recordholder
 const float RACE_NET_CHECKPOINT_CLEAR = 1;
