@@ -657,6 +657,7 @@ void Gamemode_Init();
 void Ent_ScoresInfo()
 {
 	float i;
+	self.classname = "ent_client_scores_info";
 	gametype = ReadByte();
 	for(i = 0; i < MAX_SCORE; ++i)
 	{
