@@ -2039,7 +2039,7 @@ float MapVote_GetMapMask()
 }
 
 entity mapvote_ent;
-void MapVote_SendEntity(entity to, float sf)
+float MapVote_SendEntity(entity to, float sf)
 {
 	string mapfile, pakfile;
 	float i, o;
@@ -2094,6 +2094,8 @@ void MapVote_SendEntity(entity to, float sf)
 
 		WriteByte(MSG_ENTITY, to.mapvote);
 	}
+
+	return TRUE;
 }
 
 void MapVote_Spawn()
