@@ -150,29 +150,38 @@ void ScoreInfo_SetLabel_TeamScore(float i, string label, float scoreflags)
 	}
 }
 
-void ScoreInfo_Write(float targ)
+float ScoreInfo_SendEntity(entity to, float sf)
 {
 	float i;
-	if not(scores_initialized)
-		return;
-	WriteByte(targ, SVC_TEMPENTITY);
-	WriteByte(targ, TE_CSQC_SCORESINFO);
-	WriteByte(targ, game);
+	WriteByte(MSG_ENTITY, ENT_CLIENT_SCORES_INFO);
+	WriteByte(MSG_ENTITY, game);
 	for(i = 0; i < MAX_SCORE; ++i)
 	{
-		WriteString(targ, scores_label[i]);
-		WriteByte(targ, scores_flags[i]);
+		WriteString(MSG_ENTITY, scores_label[i]);
+		WriteByte(MSG_ENTITY, scores_flags[i]);
 	}
 	for(i = 0; i < MAX_TEAMSCORE; ++i)
 	{
-		WriteString(targ, teamscores_label[i]);
-		WriteByte(targ, teamscores_flags[i]);
+		WriteString(MSG_ENTITY, teamscores_label[i]);
+		WriteByte(MSG_ENTITY, teamscores_flags[i]);
 	}
+	return TRUE;
 }
 
 void ScoreInfo_Init(float teams)
 {
-	scores_initialized = 1;
+	if(scores_initialized)
+	{
+		scores_initialized.SendFlags |= 1; // force a resend
+	}
+	else
+	{
+		scores_initialized = spawn();
+		scores_initialized.classname = "ent_client_scoreinfo";
+		scores_initialized.SendEntity = ScoreInfo_SendEntity;
+		setmodel(scores_initialized, "null");
+		scores_initialized.effects = EF_NODEPTHTEST;
+	}
 	if(teams >= 1)
 		TeamScore_Spawn(COLOR_TEAM1, "Red");
 	if(teams >= 2)
@@ -181,7 +190,6 @@ void ScoreInfo_Init(float teams)
 		TeamScore_Spawn(COLOR_TEAM3, "Yellow");
 	if(teams >= 4)
 		TeamScore_Spawn(COLOR_TEAM4, "Pink");
-	ScoreInfo_Write(MSG_ALL);
 }
 
 /*

@@ -1,4 +1,4 @@
-float scores_initialized; // 1 when scores labels/rules have been set
+entity scores_initialized; // non-world when scores labels/rules have been set
 .float scores[MAX_SCORE];
 .float teamscores[MAX_TEAMSCORE];
 
@@ -73,12 +73,6 @@ void ScoreInfo_SetLabel_PlayerScore(float i, string label, float scoreflags);
  * Set all labels right before this call.
  */
 void ScoreInfo_Init(float teams);
-
-/**
- * Writes the scores info to the given stream. Use this in ClientConnect to
- * notify newly connecting players.
- */
-void ScoreInfo_Write(float targ);
 
 /**
  * Clear ALL scores (for ready-restart).

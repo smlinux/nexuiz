@@ -301,6 +301,7 @@ void detect_maptype()
 float world_already_spawned;
 void RegisterWeapons();
 void Nagger_Init();
+void ClientInit_Spawn();
 void spawnfunc_worldspawn (void)
 {
 	float fd, l, i, j, n;
@@ -554,6 +555,8 @@ void spawnfunc_worldspawn (void)
 	maplist_reply = strzone(strcat(maplist_reply, "\n"));
 
 	records_reply = strzone(getrecords());
+
+	ClientInit_Spawn();
 
 	world_initialized = 1;
 }

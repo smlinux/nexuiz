@@ -58,6 +58,7 @@ const float ENT_CLIENT_PROJECTILE = 12;
 const float ENT_CLIENT_GIBSPLASH = 13;
 const float ENT_CLIENT_DAMAGEINFO = 14;
 const float ENT_CLIENT_CASING = 15;
+const float ENT_CLIENT_INIT = 16;
 
 const float SPRITERULE_DEFAULT = 0;
 const float SPRITERULE_TEAMPLAY = 1;
@@ -213,11 +214,9 @@ const float ENTCS_MSG_ONS_GPS = 1;
 const float ENTCS_MSG_ONS_REMOVE = 2;
 const float ENTCS_MSG_INIT = 3;
 
-const float TE_CSQC_INIT = 100; // TODO get rid of this
 const float TE_CSQC_PICTURE = 105;
 const float TE_CSQC_MAPVOTE = 106; // TODO turn into shared ent
 const float TE_CSQC_CONFIG = 107; // TODO maybe turn into shared ent
-const float TE_CSQC_SCORESINFO = 108; // TODO turn into shared ent
 const float TE_CSQC_RACE = 109;
 const float TE_CSQC_FORCESCOREBOARD = 110; // TODO turn into shared ent
 const float TE_CSQC_SPECTATING = 111; // TODO turn into shared ent

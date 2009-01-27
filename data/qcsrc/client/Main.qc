@@ -482,6 +482,8 @@ void Ent_Nagger()
 // CSQC_Ent_Update : Called every frame that the server has indicated an update to the SSQC / CSQC entity has occured.
 // The only parameter reflects if the entity is "new" to the client, meaning it just came into the client's PVS.
 void Ent_RadarLink();
+void Ent_Init();
+void Ent_ScoresInfo();
 void(float bIsNewEntity) CSQC_Ent_Update =
 {
 	float t;
@@ -528,6 +530,10 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		Ent_DamageInfo();
 	else if(self.enttype == ENT_CLIENT_CASING)
 		Ent_Casing();
+	else if(self.enttype == ENT_CLIENT_INIT)
+		Ent_Init();
+	else if(self.enttype == ENT_CLIENT_SCORES_INFO)
+		Ent_ScoresInfo();
 	else
 		error(strcat("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n"));
 	
@@ -648,7 +654,7 @@ void Net_ReadFog()
 }
 
 void Gamemode_Init();
-void Net_ReadScoresInfo()
+void Ent_ScoresInfo()
 {
 	float i;
 	gametype = ReadByte();
@@ -666,9 +672,11 @@ void Net_ReadScoresInfo()
 	Gamemode_Init();
 }
 
-void Net_ReadInit()
+void Ent_Init()
 {
 	float i;
+	self.classname = "ent_client_init";
+
 	csqc_revision = ReadShort();
 	maxclients = ReadByte();
 	for(i = 0; i < 24; ++i)
@@ -677,6 +685,9 @@ void Net_ReadInit()
 	hook_shotorigin_y = ReadCoord();
 	hook_shotorigin_z = ReadCoord();
 	CSQC_CheckRevision();
+	
+	if(!postinit)
+		PostInit();
 }
 
 string Net_ReadPicture()
@@ -832,20 +843,12 @@ float CSQC_Parse_TempEntity()
 		// NOTE: Could just do return instead of break...
 	switch(nTEID)
 	{
-		case TE_CSQC_INIT:
-			Net_ReadInit();
-			bHandled = true;
-			break;
 		case TE_CSQC_MAPVOTE:
 			Net_Mapvote();
 			bHandled = true;
 			break;
 		case TE_CSQC_CONFIG:
 			Net_Config();
-			bHandled = true;
-			break;
-		case TE_CSQC_SCORESINFO:
-			Net_ReadScoresInfo();
 			bHandled = true;
 			break;
 		case TE_CSQC_RACE:
@@ -889,9 +892,6 @@ float CSQC_Parse_TempEntity()
 			bHandled = false;
 			break;
 	}
-	
-	if(!postinit)
-		PostInit();
 		
 	return bHandled;
 }

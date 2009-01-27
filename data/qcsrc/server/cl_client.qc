@@ -823,21 +823,10 @@ void PutClientInServer (void)
 	//	ctf_playerchanged();
 }
 
-/*
-=============
-SendCSQCInfo
-
-Send whatever CSQC needs NOW and cannot wait for SendServerInfo to happen...
-=============
-*/
-void SendCSQCInfo(void)
+float ClientInit_SendEntity(entity to, float sf)
 {
 	float i;
-	if(clienttype(self) != CLIENTTYPE_REAL)
-		return;
-	msg_entity = self;
-	WriteByte(MSG_ONE, SVC_TEMPENTITY);
-	WriteByte(MSG_ONE, TE_CSQC_INIT);
+	WriteByte(MSG_ENTITY, ENT_CLIENT_INIT);
 	WriteShort(MSG_ONE, CSQC_REVISION);
 	WriteByte(MSG_ONE, maxclients);
 	for(i = 1; i <= 24; ++i)
@@ -845,6 +834,17 @@ void SendCSQCInfo(void)
 	WriteCoord(MSG_ONE, hook_shotorigin_x);
 	WriteCoord(MSG_ONE, hook_shotorigin_y);
 	WriteCoord(MSG_ONE, hook_shotorigin_z);
+	return TRUE;
+}
+
+void ClientInit_Spawn()
+{
+	entity e;
+	e = spawn();
+	e.classname = "ent_client_init";
+	e.SendEntity = ClientInit_SendEntity;
+	setmodel(e, "null");
+	e.effects = EF_NODEPTHTEST;
 }
 
 /*
@@ -1267,14 +1267,13 @@ void ClientConnect (void)
 	if(clienttype(self) == CLIENTTYPE_REAL)
 	{
 		sprint(self, strcat("nexuiz-csqc protocol ", ftos(CSQC_REVISION), "\n"));
-		SendCSQCInfo();
+
 		msg_entity = self;
 		if(mapvote_initialized && !cvar("g_maplist_textonly"))
 		{
 			MapVote_SendData(MSG_ONE);
 			MapVote_UpdateData(MSG_ONE);
 		}
-		ScoreInfo_Write(MSG_ONE);
 
 		if(inWarmupStage)
 		{
