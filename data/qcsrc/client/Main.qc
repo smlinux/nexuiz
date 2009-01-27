@@ -138,6 +138,24 @@ void CSQC_Init(void)
 	GibSplash_Precache();
 	Casings_Precache();
 	DamageInfo_Precache();
+
+	get_mi_min_max_texcoords(1); // try the CLEVER way first
+	minimapname = strcat("gfx/", mi_shortname, "_radar.tga");
+	shortmapname = mi_shortname;
+
+	if(precache_pic(minimapname) == "")
+	{
+		// but maybe we have a non-clever minimap
+		minimapname = strcat("gfx/", mi_shortname, "_mini.tga");
+		if(precache_pic(minimapname) == "")
+			minimapname = ""; // FAIL
+		else
+			get_mi_min_max_texcoords(0); // load new texcoords
+	}
+
+	mi_center = (mi_min + mi_max) * 0.5;
+	mi_scale = mi_max - mi_min;
+	minimapname = strzone(minimapname);
 }
 
 // CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)
@@ -591,24 +609,6 @@ void CSQC_Ent_Remove()
 
 void Gamemode_Init()
 {
-	get_mi_min_max_texcoords(1); // try the CLEVER way first
-	minimapname = strcat("gfx/", mi_shortname, "_radar.tga");
-	shortmapname = mi_shortname;
-
-	if(precache_pic(minimapname) == "")
-	{
-		// but maybe we have a non-clever minimap
-		minimapname = strcat("gfx/", mi_shortname, "_mini.tga");
-		if(precache_pic(minimapname) == "")
-			minimapname = ""; // FAIL
-		else
-			get_mi_min_max_texcoords(0); // load new texcoords
-	}
-
-	mi_center = (mi_min + mi_max) * 0.5;
-	mi_scale = mi_max - mi_min;
-	minimapname = strzone(minimapname);
-
 	if(gametype == GAME_ONSLAUGHT) {
 		print(strcat("Using ", minimapname, " as minimap.\n"));
 		precache_pic("gfx/ons-cp-neutral.tga");
