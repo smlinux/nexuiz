@@ -2,6 +2,7 @@ FTEQCC ?= fteqcc
 PERL ?= perl
 PK3NAME ?= `date +../data%Y%m%d.pk3`
 ZIP ?= 7za a -tzip -mx=9
+ZIPEXCLUDE ?= -x\!*.pk3 -xr\!\.svn -x\!qcsrc
 
 FTEQCCFLAGS ?= -Wall -Wno-mundane -O3 -Ono-c -Ono-cs -flo
 FTEQCCFLAGS_PROGS ?= 
@@ -25,6 +26,20 @@ skin: gfx/menu/default/skinvalues.txt
 
 .PHONY: pk3
 pk3: $(PK3NAME)
+
+.PHONY: pk3here
+pk3here: qc
+	$(RM) $(PK3NAME); \
+	set -ex; \
+		ABSPK3NAME=$(PK3NAME); \
+		case $$ABSPK3NAME in \
+			/*) \
+				;; \
+			*) \
+				ABSPK3NAME=$$PWD/$$ABSPK3NAME; \
+				;; \
+		esac; \
+		$(ZIP) $(ZIPEXCLUDE) $$ABSPK3NAME .
 
 .PHONY: clean
 clean:
