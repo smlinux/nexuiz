@@ -175,8 +175,7 @@ void RuneCarriedThink()
 
 	makevectors(ang);
 
-	//setorigin(self, v_forward*32);
-	self.view_ofs = v_forward*32;
+	setorigin(self, v_forward*32);
 }
 
 void rune_touch()
@@ -195,14 +194,8 @@ void rune_touch()
 
 	self.owner = other;
 	self.enemy.owner = other;
-	//setattachment(self, other, "");
-	setattachment(self, world, "");
+	setattachment(self, other, "");
 
-	self.movetype = MOVETYPE_FOLLOW;
-	self.aiment = other;
-	self.view_ofs = other.origin;
-
-	setorigin(self, '0 0 0');
 	other.runes = other.runes | self.runes | self.enemy.runes;
 
 	//self.think = SUB_Null;
