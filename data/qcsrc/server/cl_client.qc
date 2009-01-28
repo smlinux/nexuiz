@@ -1530,17 +1530,9 @@ void player_powerups (void)
 		{
 			if (time > self.strength_finished)
 			{
-				if (g_minstagib_invis_alpha > 0)
-				{
-					self.alpha = default_player_alpha;
-					self.exteriorweaponentity.alpha = default_weapon_alpha;
-					self.effects = self.effects | EF_FULLBRIGHT;
-				}
-				else
-				{
-					self.effects -= self.effects & EF_NODRAW;
-				}
-				self.items = self.items - (self.items & IT_STRENGTH);
+				self.alpha = default_player_alpha;
+				self.exteriorweaponentity.alpha = default_weapon_alpha;
+				self.items &~= IT_STRENGTH;
 				sprint(self, "^3Invisibility has worn off\n");
 			}
 		}
@@ -1548,17 +1540,9 @@ void player_powerups (void)
 		{
 			if (time < self.strength_finished)
 			{
-				if (g_minstagib_invis_alpha > 0)
-				{
-					self.alpha = g_minstagib_invis_alpha;
-					self.exteriorweaponentity.alpha = g_minstagib_invis_alpha;
-					self.effects -= self.effects & EF_FULLBRIGHT;
-				}
-				else
-				{
-					self.effects = self.effects | EF_NODRAW;
-				}
-				self.items = self.items | IT_STRENGTH;
+				self.alpha = g_minstagib_invis_alpha;
+				self.exteriorweaponentity.alpha = g_minstagib_invis_alpha;
+				self.items |= IT_STRENGTH;
 				sprint(self, "^3You are invisible\n");
 			}
 		}
@@ -2108,8 +2092,6 @@ void PlayerPreThink (void)
 			self.teleport_time = 0;
 			if(! (self.items & IT_STRENGTH))
 				self.effects = self.effects - (self.effects & EF_NODRAW);
-			if(self.weaponentity)
-				self.weaponentity.flags = self.weaponentity.flags - (self.weaponentity.flags & EF_NODRAW);
 		}
 
 		Nixnex_GiveCurrentWeapon();

@@ -831,6 +831,9 @@ void readplayerstartcvars()
 		weapon_action(WEP_MINSTANEX, WR_PRECACHE);
 		start_ammo_cells = cvar("g_minstagib_ammo_start");
 		g_minstagib_invis_alpha = cvar("g_minstagib_invis_alpha");
+
+		if(g_minstagib_invis_alpha <= 0)
+			g_minstagib_invis_alpha = -1;
 	}
 	else
 	{

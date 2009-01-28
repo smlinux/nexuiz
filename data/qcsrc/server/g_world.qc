@@ -23,7 +23,7 @@ void SetDefaultAlpha()
 	else
 	{
 		default_player_alpha = cvar("g_player_alpha");
-		if(default_player_alpha <= 0)
+		if(default_player_alpha == 0)
 			default_player_alpha = 1;
 		default_weapon_alpha = default_player_alpha;
 	}
