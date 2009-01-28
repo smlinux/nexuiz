@@ -65,6 +65,8 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 	player.fixangle = TRUE;
 	player.velocity = to_velocity;
 
+	UpdateCSQCProjectile(player);
+
 	if(player.classname == "player")
 	{
 		if(player.takedamage && player.deadflag == DEAD_NO && !g_race)
