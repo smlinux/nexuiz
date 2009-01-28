@@ -223,7 +223,6 @@ const float TE_CSQC_SPECTATING = 111; // TODO turn into shared ent
 const float TE_CSQC_SPAWN = 112;
 const float TE_CSQC_ZOOMNOTIFY = 113; // TODO turn into shared ent
 const float TE_CSQC_HOLDANGLES = 114; // TODO turn into shared ent
-const float TE_CSQC_WARMUP = 115; // TODO turn into shared ent
 const float TE_CSQC_FOG = 116; // TODO turn into shared ent
 
 // ideas: turn TE_CSQC_FORCESCOREBOARD, TE_CSQC_SPECTATING, TE_CSQC_ZOOMNOTIFY, TE_CSQC_HOLDANGLES into a single shared ent, the other two in ones for their own

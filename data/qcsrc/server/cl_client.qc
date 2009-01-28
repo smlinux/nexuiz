@@ -1268,16 +1268,6 @@ void ClientConnect (void)
 	{
 		sprint(self, strcat("nexuiz-csqc protocol ", ftos(CSQC_REVISION), "\n"));
 
-		msg_entity = self;
-
-		if(inWarmupStage)
-		{
-			msg_entity = self;
-			WriteByte(MSG_ONE, SVC_TEMPENTITY);
-			WriteByte(MSG_ONE, TE_CSQC_WARMUP);
-			WriteByte(MSG_ONE, 1);
-		}
-
 		if(cvar("g_bugrigs"))
 			stuffcmd(self, "cl_cmd settemp chase_active 1\n");
 	}

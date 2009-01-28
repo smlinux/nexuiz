@@ -495,6 +495,7 @@ void Ent_Nagger()
 	ready_waiting_for_me = (nags & 2);
 	vote_waiting = (nags & 4);
 	vote_waiting_for_me = (nags & 8);
+	warmup_stage = (nags & 16);
 }
 
 // CSQC_Ent_Update : Called every frame that the server has indicated an update to the SSQC / CSQC entity has occured.
@@ -827,11 +828,6 @@ void Net_ReadSpawn()
 	current_viewzoom = 0.6;
 }
 
-void Net_ReadWarmupStage()
-{
-	warmup_stage = ReadByte();
-}
-
 // CSQC_Parse_TempEntity : Handles all temporary entity network data in the CSQC layer.
 // You must ALWAYS first acquire the temporary ID, which is sent as a byte.
 // Return value should be 1 if CSQC handled the temporary entity, otherwise return 0 to have the engine process the event.
@@ -881,10 +877,6 @@ float CSQC_Parse_TempEntity()
 			break;
 		case TE_CSQC_HOLDANGLES:
 			Net_ReadHoldAngles();
-			bHandled = true;
-			break;
-		case TE_CSQC_WARMUP:
-			Net_ReadWarmupStage();
 			bHandled = true;
 			break;
 		case TE_CSQC_FOG:
