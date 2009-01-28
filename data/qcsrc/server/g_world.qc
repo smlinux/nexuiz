@@ -2248,9 +2248,6 @@ float MapVote_CheckRules_2()
 }
 void MapVote_Tick()
 {
-	string msgstr;
-	string tmp;
-	float i;
 	float keeptwo;
 	float totalvotes;
 

@@ -174,7 +174,6 @@ float		sb_showscores;
 .float team_size;
 
 float vid_conwidth, vid_conheight;
-float configdb;
 float binddb;
 
 // QUALIFYING
@@ -221,3 +220,7 @@ float ticrate;
 
 .float damageforcescale;
 .void(float thisdmg, float hittype, vector org, vector thisforce) event_damage;
+
+// only for Porto
+float angles_held_status;
+vector angles_held;

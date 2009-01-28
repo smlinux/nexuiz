@@ -115,15 +115,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 				e.race_completed = 1;
 				MAKE_INDEPENDENT_PLAYER(e);
 				bprint(e.netname, "^7 has finished the race.\n");
-				// TODO support spectators with this (e.g. set a flag for forced sbar)
-				if(clienttype(e) == CLIENTTYPE_REAL)
-				{
-					msg_entity = e;
-					WriteByte(MSG_ONE, SVC_TEMPENTITY);
-					WriteByte(MSG_ONE, TE_CSQC_FORCESCOREBOARD);
-					WriteByte(MSG_ONE, 1);
-					// he can still move, but will see the scoreboard now
-				}
+				ClientData_Touch(e);
 			}
 		}
 	}
@@ -451,15 +443,7 @@ void race_AbandonRaceCheck(entity p)
 		p.race_completed = 1;
 		MAKE_INDEPENDENT_PLAYER(p);
 		bprint(p.netname, "^7 has abandoned the race.\n");
-		// TODO support spectators with this (e.g. set a flag for forced sbar)
-		if(clienttype(p) == CLIENTTYPE_REAL)
-		{
-			msg_entity = p;
-			WriteByte(MSG_ONE, SVC_TEMPENTITY);
-			WriteByte(MSG_ONE, TE_CSQC_FORCESCOREBOARD);
-			WriteByte(MSG_ONE, 1);
-			// he can still move, but will see the scoreboard now
-		}
+		ClientData_Touch(p);
 	}
 }
 

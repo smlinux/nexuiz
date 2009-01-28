@@ -263,7 +263,7 @@ void MapVote_CheckPic(string pic, string pk3, float id)
 
 void MapVote_Init()
 {
-	float i, power, m;
+	float i, power;
 	string map, pk3, ssdir;
 
 	registercmd("+showscores");

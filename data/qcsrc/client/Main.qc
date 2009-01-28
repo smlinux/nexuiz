@@ -41,16 +41,6 @@ void() menu_sub_null =
 float __engine_check;
 #endif
 
-string config_get(string key, string defaultvalue)
-{
-	string s;
-	s = db_get(configdb, strcat("/s/", key));
-	if(s == "")
-		return defaultvalue;
-	else
-		return db_get(configdb, strcat("/v/", key));
-}
-
 string forcefog;
 void WaypointSprite_Load();
 void CSQC_Init(void)
@@ -71,7 +61,6 @@ void CSQC_Init(void)
 	CSQC_CheckEngine();
 	dprint_load();
 
-	configdb = db_create();
 	binddb = db_create();
 	tempdb = db_create();
 	compressShortVector_init();
@@ -170,7 +159,6 @@ void CSQC_Shutdown(void)
 
 	remove(teams);
 	remove(players);
-	db_close(configdb);
 	db_close(binddb);
 	db_close(tempdb);
 
@@ -478,6 +466,47 @@ void Ent_ReadTeamScore()
 	Sbar_UpdateTeamPos(o);
 }
 
+void Net_Reset()
+{
+}
+
+void Ent_ClientData()
+{
+	float f;
+	float newspectatee_status;
+
+	f = ReadByte();
+
+	sb_showscores_force = (f & 1);
+
+	if(f & 2)
+	{
+		newspectatee_status = ReadByte();
+		if(newspectatee_status == player_localentnum)
+			newspectatee_status = -1; // observing
+	}
+	else
+		newspectatee_status = 0;
+
+	spectatorbutton_zoom = (f & 4);
+
+	if(f & 8)
+	{
+		angles_held_status = 1;
+		angles_held_x = ReadAngle();
+		angles_held_y = ReadAngle();
+		angles_held_z = 0;
+	}
+	
+	if(newspectatee_status != spectatee_status)
+	{
+		// clear race stuff
+		race_laptime = 0;
+		race_checkpointtime = 0;
+	}
+	spectatee_status = newspectatee_status;
+}
+
 void Ent_Nagger()
 {
 	float nags;
@@ -555,6 +584,8 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		Ent_ScoresInfo();
 	else if(self.enttype == ENT_CLIENT_MAPVOTE)
 		Ent_MapVote();
+	else if(self.enttype == ENT_CLIENT_CLIENTDATA)
+		Ent_ClientData();
 	else
 		error(strcat("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n"));
 	
@@ -648,14 +679,6 @@ void Fog_Force()
 		localcmd(strcat("\nfog ", forcefog, "\nr_fog_exp2 0\nr_drawfog 1\n"));
 }
 
-void Net_ReadFog()
-{
-	if(forcefog)
-		strunzone(forcefog);
-	ReadCoord(); // ignore fog interval
-	forcefog = strzone(ReadString());
-}
-
 void Gamemode_Init();
 void Ent_ScoresInfo()
 {
@@ -689,8 +712,12 @@ void Ent_Init()
 	hook_shotorigin_x = ReadCoord();
 	hook_shotorigin_y = ReadCoord();
 	hook_shotorigin_z = ReadCoord();
+
+	if(forcefog)
+		strunzone(forcefog);
+	forcefog = strzone(ReadString());
+
 	CSQC_CheckRevision();
-	
 	if(!postinit)
 		PostInit();
 }
@@ -714,15 +741,6 @@ string Net_ReadPicture()
 			ReadByte();
 	}
 	return img;
-}
-
-void Net_Config()
-{
-	string key, value;
-	key = ReadString();
-	value = ReadString();
-	db_put(configdb, strcat("/v/", key), value);
-	db_put(configdb, strcat("/s/", key), "1");
 }
 
 void Net_ReadRace()
@@ -792,36 +810,6 @@ void Net_ReadRace()
 	}
 }
 
-void Net_ReadForceScoreboard()
-{
-	sb_showscores_force = ReadByte();
-}
-
-void Net_Reset()
-{
-	float i;
-	race_laptime = 0;
-	race_checkpointtime = 0;
-	for(i = 0; i < 24; ++i)
-		angles_held_status[i] = 0;
-}
-
-void Net_ReadSpectating()
-{
-	float newspectatee_status;
-	newspectatee_status = ReadByte();
-	if(newspectatee_status == player_localentnum)
-		newspectatee_status = -1; // observing
-	if(newspectatee_status != spectatee_status)
-		Net_Reset();
-	spectatee_status = newspectatee_status;
-}
-
-void Net_ReadZoomNotify()
-{
-	spectatorbutton_zoom = ReadByte();
-}
-
 void Net_ReadSpawn()
 {
 	zoomin_effect = 1;
@@ -831,7 +819,6 @@ void Net_ReadSpawn()
 // CSQC_Parse_TempEntity : Handles all temporary entity network data in the CSQC layer.
 // You must ALWAYS first acquire the temporary ID, which is sent as a byte.
 // Return value should be 1 if CSQC handled the temporary entity, otherwise return 0 to have the engine process the event.
-void Net_ReadHoldAngles();
 float CSQC_Parse_TempEntity()
 {
 	local float bHandled;
@@ -847,20 +834,8 @@ float CSQC_Parse_TempEntity()
 			Net_MapVote_Picture();
 			bHandled = true;
 			break;
-		case TE_CSQC_CONFIG:
-			Net_Config();
-			bHandled = true;
-			break;
 		case TE_CSQC_RACE:
 			Net_ReadRace();
-			bHandled = true;
-			break;
-		case TE_CSQC_FORCESCOREBOARD:
-			Net_ReadForceScoreboard();
-			bHandled = true;
-			break;
-		case TE_CSQC_SPECTATING:
-			Net_ReadSpectating();
 			bHandled = true;
 			break;
 		case 13: // TE_BEAM
@@ -869,18 +844,6 @@ float CSQC_Parse_TempEntity()
 			break;
 		case TE_CSQC_SPAWN:
 			Net_ReadSpawn();
-			bHandled = true;
-			break;
-		case TE_CSQC_ZOOMNOTIFY:
-			Net_ReadZoomNotify();
-			bHandled = true;
-			break;
-		case TE_CSQC_HOLDANGLES:
-			Net_ReadHoldAngles();
-			bHandled = true;
-			break;
-		case TE_CSQC_FOG:
-			Net_ReadFog();
 			bHandled = true;
 			break;
 		default:

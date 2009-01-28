@@ -1,3 +1,79 @@
+.float spectatee_status;
+.float zoomstate;
+
+.entity clientdata;
+float ClientData_Send(entity to, float sf)
+{
+	if(to != self.owner)
+	{
+		error("wtf");
+		return FALSE;
+	}
+
+	entity e;
+
+	e = to;
+	if(to.classname == "spectator")
+		e = to.enemy;
+
+	sf = 0;
+
+	if(e.race_completed)
+		sf |= 1; // forced scoreboard
+	if(to.spectatee_status)
+		sf |= 2; // spectator ent number follows
+	if(e.zoomstate)
+		sf |= 4; // zoomed
+	if(e.porto_v_angle_held)
+		sf |= 8; // angles held
+	
+	WriteByte(MSG_ENTITY, ENT_CLIENT_CLIENTDATA);
+	WriteByte(MSG_ENTITY, sf);
+
+	if(sf & 2)
+		WriteByte(MSG_ENTITY, to.spectatee_status);
+	
+	if(sf & 8)
+	{
+		WriteAngle(MSG_ENTITY, e.v_angle_x);
+		WriteAngle(MSG_ENTITY, e.v_angle_y);
+	}
+
+	return TRUE;
+}
+
+void ClientData_Attach()
+{
+	self.clientdata = spawn();
+	self.clientdata.SendEntity = ClientData_Send;
+	self.clientdata.effects = EF_NODEPTHTEST;
+	self.clientdata.drawonlytoclient = self;
+	self.clientdata.owner = self;
+	setmodel(self.clientdata, "null");
+}
+
+void ClientData_Detach()
+{
+	remove(self.clientdata);
+	self.clientdata = world;
+}
+
+void ClientData_Touch(entity e)
+{
+	e.clientdata.SendFlags = 1;
+
+	// make it spectatable
+	entity e2;
+	FOR_EACH_REALCLIENT(e2)
+	{
+		if(e2 != e)
+			if(e2.classname == "spectator")
+				if(e2.enemy == e)
+					e2.clientdata.SendFlags = 1;
+	}
+}
+
+
 #define SPAWNPOINT_SCORE frags
 
 .float wantswelcomemessage;
@@ -834,6 +910,12 @@ float ClientInit_SendEntity(entity to, float sf)
 	WriteCoord(MSG_ENTITY, hook_shotorigin_x);
 	WriteCoord(MSG_ENTITY, hook_shotorigin_y);
 	WriteCoord(MSG_ENTITY, hook_shotorigin_z);
+
+	if(sv_foginterval && world.fog != "")
+		WriteString(MSG_ENTITY, world.fog);
+	else
+		WriteString(MSG_ENTITY, "");
+
 	return TRUE;
 }
 
@@ -1088,31 +1170,6 @@ void FixClientCvars(entity e)
 	 */
 }
 
-.float fog_set;
-void SendFog()
-{
-	if(clienttype(self) == CLIENTTYPE_REAL)
-	if(world.fog) // NOT string_null!
-	{
-		if(!self.fog_set)
-		{
-			if(sv_foginterval)
-			{
-				msg_entity = self;
-				WriteByte(MSG_ONE, SVC_TEMPENTITY);
-				WriteByte(MSG_ONE, TE_CSQC_FOG);
-				WriteCoord(MSG_ONE, sv_foginterval);
-				WriteString(MSG_ONE, world.fog);
-			}
-			else
-				// set it once
-				stuffcmd(self, strcat("\nfog ", world.fog, "\nr_fog_exp2 0\nr_drawfog 1\n"));
-
-			self.fog_set = 1;
-		}
-	}
-}
-
 /*
 =============
 ClientConnect
@@ -1151,6 +1208,7 @@ void ClientConnect (void)
 	}
 
 	PlayerScore_Attach(self);
+	ClientData_Attach();
 
 	bot_clientconnect();
 
@@ -1281,7 +1339,8 @@ void ClientConnect (void)
 		}
 	}
 
-	SendFog();
+	if(!sv_foginterval && world.fog != "")
+		stuffcmd(self, strcat("\nfog ", world.fog, "\nr_fog_exp2 0\nr_drawfog 1\n"));
 }
 
 /*
@@ -1348,6 +1407,7 @@ void ClientDisconnect (void)
 		Spawnqueue_Remove(self);
 	}
 
+	ClientData_Detach();
 	PlayerScore_Detach(self);
 
 	if(self.netname_previous)
@@ -1706,18 +1766,11 @@ void player_regen (void)
 		self.event_damage(self, self, 1, DEATH_ROT, self.origin, '0 0 0');
 }
 
-.float zoomstate;
 float zoomstate_set;
 void SetZoomState(float z)
 {
 	if(z != self.zoomstate)
-	{
-		msg_entity = self;
-		WriteByte(MSG_ONE, SVC_TEMPENTITY);
-		WriteByte(MSG_ONE, TE_CSQC_ZOOMNOTIFY);
-		WriteByte(MSG_ONE, z);
-		self.zoomstate = z;
-	}
+		ClientData_Touch(self);
 	zoomstate_set = 1;
 }
 
@@ -1992,7 +2045,6 @@ Called every frame for each client before the physics are run
 =============
 */
 void() ctf_setstatus;
-.float spectatee_status;
 void PlayerPreThink (void)
 {
 	self.stat_sys_ticrate = cvar("sys_ticrate");
@@ -2052,10 +2104,7 @@ void PlayerPreThink (void)
 	}
 
 	if(frametime)
-	{
-		SendFog();
 		antilag_record(self);
-	}
 
 	if(self.classname == "player") {
 //		if(self.netname == "Wazat")
@@ -2249,10 +2298,7 @@ void PlayerPreThink (void)
 		self.spectatee_status = 0;
 	if(self.spectatee_status != oldspectatee_status)
 	{
-		msg_entity = self;
-		WriteByte(MSG_ONE, SVC_TEMPENTITY);
-		WriteByte(MSG_ONE, TE_CSQC_SPECTATING);
-		WriteByte(MSG_ONE, self.spectatee_status);
+		ClientData_Touch(self);
 		if(g_race)
 			race_InitSpectator();
 	}

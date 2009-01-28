@@ -219,13 +219,9 @@ float w_porto(float req)
 			if(!self.BUTTON_ATCK2)
 			{
 				msg_entity = self;
-				WRITESPECTATABLE_MSG_ONE_VARNAME(dummy1, {
-					WriteByte(MSG_ONE, SVC_TEMPENTITY);
-					WriteByte(MSG_ONE, TE_CSQC_HOLDANGLES);
-					WriteByte(MSG_ONE, WEP_PORTO);
-					WriteByte(MSG_ONE, 0);
-				});
 				self.porto_v_angle_held = 0;
+
+				ClientData_Touch(self);
 			}
 		}
 		else
@@ -234,15 +230,9 @@ float w_porto(float req)
 			{
 				self.porto_v_angle = self.v_angle;
 				msg_entity = self;
-				WRITESPECTATABLE_MSG_ONE_VARNAME(dummy2, {
-					WriteByte(MSG_ONE, SVC_TEMPENTITY);
-					WriteByte(MSG_ONE, TE_CSQC_HOLDANGLES);
-					WriteByte(MSG_ONE, WEP_PORTO);
-					WriteByte(MSG_ONE, 1);
-					WriteAngle(MSG_ONE, self.v_angle_x);
-					WriteAngle(MSG_ONE, self.v_angle_y);
-				});
 				self.porto_v_angle_held = 1;
+
+				ClientData_Touch(self);
 			}
 		}
 		v_angle_save = self.v_angle;

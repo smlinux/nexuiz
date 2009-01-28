@@ -1,20 +1,3 @@
-vector angles_held[24];
-void Net_ReadHoldAngles()
-{
-	float wpn;
-	vector v;
-	wpn = ReadByte();
-	--wpn;
-	angles_held_status[wpn] = ReadByte();
-	if(angles_held_status[wpn])
-	{
-		v_x = ReadAngle();
-		v_y = ReadAngle();
-		v_z = 0;
-		angles_held[wpn] = v;
-	}
-}
-
 entity porto;
 vector polyline[16];
 float trace_dphitcontents;
@@ -30,9 +13,9 @@ void Porto_Draw()
 
 	dir = view_forward;
 
-	if(angles_held_status[WEP_PORTO-1])
+	if(angles_held_status)
 	{
-		makevectors(angles_held[WEP_PORTO-1]);
+		makevectors(angles_held);
 		dir = v_forward;
 	}
 

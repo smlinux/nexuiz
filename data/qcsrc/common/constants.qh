@@ -42,6 +42,17 @@ const float AS_INT		= 2;
 const float AS_FLOAT_TRUNCATED	= 2;
 const float AS_FLOAT		= 8;
 
+const float TE_CSQC_PICTURE = 100;
+const float TE_CSQC_RACE = 101;
+const float TE_CSQC_SPAWN = 102;
+
+const float RACE_NET_CHECKPOINT_HIT_QUALIFYING = 0; // byte checkpoint, short time, short recordtime, string recordholder
+const float RACE_NET_CHECKPOINT_CLEAR = 1;
+const float RACE_NET_CHECKPOINT_NEXT_QUALIFYING = 2; // byte nextcheckpoint, short recordtime, string recordholder
+const float RACE_NET_CHECKPOINT_HIT_RACE = 3; // byte checkpoint, short delta, byte lapsdelta, string opponent
+const float RACE_NET_CHECKPOINT_HIT_RACE_BY_OPPONENT = 4; // byte checkpoint, short delta, byte lapsdelta, string opponent
+const float RACE_NET_CHECKPOINT_NEXT_SPEC_QUALIFYING = 5; // byte nextcheckpoint, float laptime, short recordtime, string recordholder
+
 const float ENT_CLIENT = 0;
 const float ENT_CLIENT_DEAD = 1;
 const float ENT_CLIENT_ENTCS = 2;
@@ -60,6 +71,7 @@ const float ENT_CLIENT_DAMAGEINFO = 14;
 const float ENT_CLIENT_CASING = 15;
 const float ENT_CLIENT_INIT = 16;
 const float ENT_CLIENT_MAPVOTE = 17;
+const float ENT_CLIENT_CLIENTDATA = 18;
 
 const float SPRITERULE_DEFAULT = 0;
 const float SPRITERULE_TEAMPLAY = 1;
@@ -210,23 +222,6 @@ float CVAR_READONLY	= 4;
 ///////////////////////////
 // csqc communication stuff
 
-const float ENTCS_MSG_END = 0;
-const float ENTCS_MSG_ONS_GPS = 1;
-const float ENTCS_MSG_ONS_REMOVE = 2;
-const float ENTCS_MSG_INIT = 3;
-
-const float TE_CSQC_PICTURE = 105;
-const float TE_CSQC_CONFIG = 107; // TODO maybe turn into shared ent (but it's unused anyway)
-const float TE_CSQC_RACE = 109;
-const float TE_CSQC_FORCESCOREBOARD = 110; // TODO turn into shared ent
-const float TE_CSQC_SPECTATING = 111; // TODO turn into shared ent
-const float TE_CSQC_SPAWN = 112;
-const float TE_CSQC_ZOOMNOTIFY = 113; // TODO turn into shared ent
-const float TE_CSQC_HOLDANGLES = 114; // TODO turn into shared ent
-const float TE_CSQC_FOG = 116; // TODO turn into shared ent
-
-// ideas: turn TE_CSQC_FORCESCOREBOARD, TE_CSQC_SPECTATING, TE_CSQC_ZOOMNOTIFY, TE_CSQC_HOLDANGLES into a single shared ent, the other two in ones for their own
-
 const float STAT_KH_KEYS = 32;
 const float STAT_CTF_STATE = 33;
 const float STAT_SYS_TICRATE = 34;
@@ -240,13 +235,6 @@ const float CTF_STATE_COMMANDER = 3;
 // moved that here so the client knows the max.
 // # of maps, I'll use arrays for them :P
 #define MAPVOTE_COUNT 10
-
-const float RACE_NET_CHECKPOINT_HIT_QUALIFYING = 0; // byte checkpoint, short time, short recordtime, string recordholder
-const float RACE_NET_CHECKPOINT_CLEAR = 1;
-const float RACE_NET_CHECKPOINT_NEXT_QUALIFYING = 2; // byte nextcheckpoint, short recordtime, string recordholder
-const float RACE_NET_CHECKPOINT_HIT_RACE = 3; // byte checkpoint, short delta, byte lapsdelta, string opponent
-const float RACE_NET_CHECKPOINT_HIT_RACE_BY_OPPONENT = 4; // byte checkpoint, short delta, byte lapsdelta, string opponent
-const float RACE_NET_CHECKPOINT_NEXT_SPEC_QUALIFYING = 5; // byte nextcheckpoint, float laptime, short recordtime, string recordholder
 
 /**
  * Lower scores are better (e.g. suicides)
