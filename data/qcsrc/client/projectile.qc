@@ -13,6 +13,52 @@ void SUB_Stop()
 .float gravity;
 .float snd_looping;
 
+void Projectile_DrawTrail(vector from, vector to)
+{
+	switch(self.cnt)
+	{
+		case PROJECTILE_ROCKET:
+			trailparticles(self, particleeffectnum("TR_ROCKET"), from, to);
+			break;
+		case PROJECTILE_TAG:
+			trailparticles(self, particleeffectnum("TR_VORESPIKE"), from, to);
+			break;
+		case PROJECTILE_ELECTRO_BEAM:
+			trailparticles(self, particleeffectnum("TR_NEXUIZPLASMA"), from, to);
+			break;
+		case PROJECTILE_GRENADE:
+			trailparticles(self, particleeffectnum("TR_KNIGHTSPIKE"), from, to);
+			break;
+		case PROJECTILE_GRENADE_BOUNCING:
+			trailparticles(self, particleeffectnum("TR_KNIGHTSPIKE"), from, to);
+			break;
+		case PROJECTILE_PORTO_RED:
+			trailparticles(self, particleeffectnum("TR_WIZSPIKE"), from, to);
+			break;
+		case PROJECTILE_PORTO_BLUE:
+			trailparticles(self, particleeffectnum("TR_WIZSPIKE"), from, to);
+			break;
+		case PROJECTILE_FLAC:
+			trailparticles(self, particleeffectnum("TR_VORESPIKE"), from, to);
+			break;
+		case PROJECTILE_SEEKER:
+			trailparticles(self, particleeffectnum("TR_ROCKET"), from, to);
+			break;
+		case PROJECTILE_HOOKBOMB:
+			trailparticles(self, particleeffectnum("TR_KNIGHTSPIKE"), from, to);
+			break;
+		case PROJECTILE_HAGAR:
+			trailparticles(self, particleeffectnum("TR_GRENADE"), from, to);
+			break;
+		case PROJECTILE_HAGAR_BOUNCING:
+			trailparticles(self, particleeffectnum("TR_GRENADE"), from, to);
+			break;
+		default:
+			break;
+	}
+
+}
+
 void Projectile_Draw()
 {
 	vector oldorg;
@@ -30,49 +76,19 @@ void Projectile_Draw()
 		InterpolateOrigin_Do();
 	}
 
+	Projectile_DrawTrail(oldorg, self.origin);
+
 	switch(self.cnt)
 	{
-		case PROJECTILE_ROCKET:
-			trailparticles(self, particleeffectnum("TR_ROCKET"), oldorg, self.origin);
-			break;
-		case PROJECTILE_TAG:
-			trailparticles(self, particleeffectnum("TR_VORESPIKE"), oldorg, self.origin);
-			break;
-		case PROJECTILE_ELECTRO_BEAM:
-			trailparticles(self, particleeffectnum("TR_NEXUIZPLASMA"), oldorg, self.origin);
-			break;
 		case PROJECTILE_GRENADE:
-			trailparticles(self, particleeffectnum("TR_KNIGHTSPIKE"), oldorg, self.origin);
 			self.angles -= '750 0 0' * time;
 			break;
 		case PROJECTILE_GRENADE_BOUNCING:
-			trailparticles(self, particleeffectnum("TR_KNIGHTSPIKE"), oldorg, self.origin);
 			if(!(self.move_flags & FL_ONGROUND))
 				self.angles += '100 150 100' * time;
 			break;
-		case PROJECTILE_PORTO_RED:
-			// TODO add red dynamic light
-			trailparticles(self, particleeffectnum("TR_WIZSPIKE"), oldorg, self.origin);
-			break;
-		case PROJECTILE_PORTO_BLUE:
-			// TODO add blue dynamic light
-			trailparticles(self, particleeffectnum("TR_WIZSPIKE"), oldorg, self.origin);
-			break;
-		case PROJECTILE_FLAC:
-			trailparticles(self, particleeffectnum("TR_VORESPIKE"), oldorg, self.origin);
-			break;
-		case PROJECTILE_SEEKER:
-			trailparticles(self, particleeffectnum("TR_ROCKET"), oldorg, self.origin);
-			break;
 		case PROJECTILE_HOOKBOMB:
-			trailparticles(self, particleeffectnum("TR_KNIGHTSPIKE"), oldorg, self.origin);
 			self.angles = '0 500 0' * time;
-			break;
-		case PROJECTILE_HAGAR:
-			trailparticles(self, particleeffectnum("TR_GRENADE"), oldorg, self.origin);
-			break;
-		case PROJECTILE_HAGAR_BOUNCING:
-			trailparticles(self, particleeffectnum("TR_GRENADE"), oldorg, self.origin);
 			break;
 		case PROJECTILE_BULLET_GLOWING:
 			R_AddDynamicLight(self.origin, 50, '1 1 0');
@@ -100,6 +116,12 @@ void Ent_RemoveProjectile()
 {
 	if(self.snd_looping)
 		sound(self, CHAN_PROJECTILE, "misc/null.wav", VOL_BASE, ATTN_NORM);
+
+	if(self.count & 0x80)
+	{
+		tracebox(self.origin, self.mins, self.maxs, self.origin + self.velocity * 0.05, MOVE_NORMAL, self);
+		Projectile_DrawTrail(self.origin, trace_endpos);
+	}
 }
 
 void Ent_Projectile()

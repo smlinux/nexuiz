@@ -381,10 +381,6 @@ void Ent_ReadEntCS()
 	InterpolateOrigin_Note();
 }
 
-void Ent_RemoveEntCS()
-{
-}
-
 void Ent_Remove();
 void Ent_ReadPlayerScore()
 {
@@ -597,10 +593,7 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 void Ent_Remove()
 {
 	float i;
-	if(self.enttype == ENT_CLIENT_ENTCS)
-	{
-		Ent_RemoveEntCS();
-	} else if(self.enttype == ENT_CLIENT_SCORES)
+	if(self.enttype == ENT_CLIENT_SCORES)
 	{
 		if(self.owner)
 		{
