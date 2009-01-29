@@ -31,7 +31,6 @@ void turret_hellion_attack()
 
     missile = spawn ();
     setorigin(missile, self.tur_shotorg_updated);
-    setmodel (missile, "models/turrets/mlrs_rocket.md3"); // precision set below
     setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
 
     missile.classname          = "hellion_missile";
@@ -46,7 +45,6 @@ void turret_hellion_attack()
     missile.nextthink          = time + 0.2;
     missile.solid              = SOLID_BBOX;
     missile.movetype           = MOVETYPE_FLYMISSILE;
-    missile.effects            = EF_LOWPRECISION;
     missile.velocity           = (self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed; // + ('0 0 1' * self.shot_speed * 0.15);
     missile.angles             = vectoangles(missile.velocity);
     missile.touch              = turret_hellion_missile_explode;
@@ -56,8 +54,7 @@ void turret_hellion_attack()
     missile.tur_aimpos         = randomvec() * 128;
     te_explosion (missile.origin);
 
-	CSQCProjectile(missile, FALSE, PROJECTILE_ROCKET);
-	missile.effects |= EF_NODEPTHTEST; // projectile has a fly sound
+	CSQCProjectile(missile, FALSE, PROJECTILE_ROCKET, FALSE); // no culling, has fly sound
 
     // switch tubes
     self.tur_shotorg_y = self.tur_shotorg_y * -1;

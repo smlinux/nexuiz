@@ -36,8 +36,6 @@ void W_Laser_Attack (float issecondary)
 	if(issecondary)
 		missile.projectiledeathtype |= HITTYPE_SECONDARY;
 
-	setmodel (missile, "null"); // precision set below
-	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, w_shotorg);
 
 	if (issecondary)
@@ -57,7 +55,7 @@ void W_Laser_Attack (float issecondary)
 
 	missile.flags = FL_PROJECTILE;
 
-	CSQCProjectile(missile, TRUE, PROJECTILE_LASER);
+	CSQCProjectile(missile, TRUE, PROJECTILE_LASER, TRUE);
 }
 
 float w_laser(float req)

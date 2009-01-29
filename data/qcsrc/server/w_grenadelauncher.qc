@@ -90,8 +90,6 @@ void W_Grenade_Attack (void)
 	gren.movetype = MOVETYPE_BOUNCE;
 	gren.solid = SOLID_BBOX;
 	gren.projectiledeathtype = WEP_GRENADE_LAUNCHER;
-	setmodel(gren, "null"); // precision set above
-	setsize(gren, '0 0 0', '0 0 0');
 	setorigin(gren, w_shotorg);
 
 	gren.nextthink = time + cvar("g_balance_grenadelauncher_primary_lifetime");
@@ -104,7 +102,7 @@ void W_Grenade_Attack (void)
 	gren.angles = vectoangles (gren.velocity);
 	gren.flags = FL_PROJECTILE;
 
-	CSQCProjectile(gren, TRUE, PROJECTILE_GRENADE);	
+	CSQCProjectile(gren, TRUE, PROJECTILE_GRENADE, TRUE);	
 }
 
 void W_Grenade_Attack2 (void)
@@ -126,8 +124,7 @@ void W_Grenade_Attack2 (void)
 	gren.movetype = MOVETYPE_BOUNCE;
 	gren.solid = SOLID_BBOX;
 	gren.projectiledeathtype = WEP_GRENADE_LAUNCHER | HITTYPE_SECONDARY;
-	setmodel(gren, "null"); // precision set above
-	setsize(gren, '0 0 -3', '0 0 -3');
+	setsize(gren, '0 0 -3', '0 0 -3'); // why, just, why?
 	setorigin(gren, w_shotorg);
 
 	gren.nextthink = time + cvar("g_balance_grenadelauncher_secondary_lifetime");
@@ -144,7 +141,7 @@ void W_Grenade_Attack2 (void)
 	gren.angles = vectoangles (gren.velocity);
 	gren.flags = FL_PROJECTILE;
 
-	CSQCProjectile(gren, TRUE, PROJECTILE_GRENADE_BOUNCING);	
+	CSQCProjectile(gren, TRUE, PROJECTILE_GRENADE_BOUNCING, TRUE);
 }
 
 void spawnfunc_weapon_grenadelauncher (void)

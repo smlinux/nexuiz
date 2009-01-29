@@ -21,13 +21,8 @@ void SpawnCasing(vector org, vector vel, float randomvel, vector ang, vector ave
 	e.origin = org;
 	e.velocity = vel;
 	e.angles = ang;
-
 	e.oldorigin_x = compressShortVector(e.velocity);
 
-	setmodel(e, "null");
-	e.SendEntity = Casing_SendEntity;
-
-	e.nextthink = time + 0.2;
-	e.think = SUB_Remove;
+	Net_LinkEntity(e, TRUE, 0.2, Casing_SendEntity);
 		// 0.2s should be enough time for all clients to receive this ent once, do the gibbage and be done with it
 }

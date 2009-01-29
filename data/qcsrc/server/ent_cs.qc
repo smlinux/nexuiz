@@ -36,7 +36,7 @@ float entcs_customize()
 	return TRUE;
 }
 
-float entcs_send(entity to)
+float entcs_send(entity to, float sf)
 {
 	entity o;
 	o = self.owner;
@@ -73,11 +73,8 @@ entity attach_entcs()
 	ent.owner = self;
 	ent.think = entcs_think;
 	ent.nextthink = time;
-	ent.effects = EF_NODEPTHTEST | EF_LOWPRECISION;
-	ent.model = "entcs_sender";
-	ent.modelindex = 1;
 
-	ent.SendEntity = entcs_send;
+	Net_LinkEntity(ent, FALSE, 0, entcs_send);
 	ent.customizeentityforclient = entcs_customize;
 
 	self.entcs = ent;

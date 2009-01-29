@@ -36,9 +36,7 @@ float Nagger_SendEntity(entity to, float sendflags)
 }
 void Nagger_Init()
 {
-	nagger = spawn();
-	Net_LinkEntity(nagger);
-	nagger.SendEntity = Nagger_SendEntity;
+	Net_LinkEntity(nagger = spawn(), FALSE, 0, Nagger_SendEntity);
 }
 void Nagger_VoteChanged()
 {

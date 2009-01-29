@@ -76,11 +76,9 @@ void TeamScore_Spawn(float t, string name)
 	entity ts;
 	ts = spawn();
 	ts.classname = "csqc_score_team";
-	ts.SendEntity = TeamScore_SendEntity;
 	ts.netname = name; // not used yet, FIXME
-	//ts.SendFlags = SENDFLAGS_CREATE; // immediately send, so csqc knows about the team
 	ts.team = t;
-	Net_LinkEntity(ts);
+	Net_LinkEntity(ts, FALSE, 0, TeamScore_SendEntity);
 	teamscorekeepers[t - 1] = ts;
 	++teamscores_entities_count;
 }
@@ -178,9 +176,7 @@ void ScoreInfo_Init(float teams)
 	{
 		scores_initialized = spawn();
 		scores_initialized.classname = "ent_client_scoreinfo";
-		scores_initialized.SendEntity = ScoreInfo_SendEntity;
-		setmodel(scores_initialized, "null");
-		scores_initialized.effects = EF_NODEPTHTEST;
+		Net_LinkEntity(scores_initialized, FALSE, 0, ScoreInfo_SendEntity);
 	}
 	if(teams >= 1)
 		TeamScore_Spawn(COLOR_TEAM1, "Red");
@@ -280,8 +276,7 @@ void PlayerScore_Attach(entity player)
 		error("player already has a scorekeeper");
 	sk = spawn();
 	sk.owner = player;
-	sk.SendEntity = PlayerScore_SendEntity;
-	Net_LinkEntity(sk);
+	Net_LinkEntity(sk, FALSE, 0, PlayerScore_SendEntity);
 	player.scorekeeper = sk;
 }
 

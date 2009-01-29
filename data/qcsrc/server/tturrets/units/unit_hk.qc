@@ -89,7 +89,6 @@ void turret_hk_attack()
 
     missile                    = spawn ();
     missile.solid            = SOLID_BBOX;
-    setmodel (missile, "models/turrets/hunter2.md3"); // precision set below
     setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
     setorigin(missile, self.tur_shotorg_updated);
 
@@ -105,7 +104,6 @@ void turret_hk_attack()
     missile.event_damage     = turret_hk_missile_damage;
     missile.nextthink        = time + 0.25;
     missile.movetype         = MOVETYPE_BOUNCEMISSILE;
-    missile.effects          = EF_LOWPRECISION;
     missile.velocity         = self.tur_shotdir_updated * (self.shot_speed * 0.75);
     missile.angles           = vectoangles(missile.velocity);
     missile.touch            = turret_hk_missile_explode; //turret_hk_missile_touch;
@@ -115,8 +113,7 @@ void turret_hk_attack()
     missile.cnt              = time + 30;
     missile.ticrate          = max(cvar("sys_ticrate"),0.05);
 
-	CSQCProjectile(missile, FALSE, PROJECTILE_ROCKET);
-	missile.effects |= EF_NODEPTHTEST; // projectile has a fly sound
+	CSQCProjectile(missile, FALSE, PROJECTILE_ROCKET, FALSE); // no culling, fly sound
 
     te_explosion (missile.origin);
 

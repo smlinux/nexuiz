@@ -55,8 +55,6 @@ void W_HLAC_Attack (void)
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
 
-	setmodel (missile, "null"); // precision set below
-	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, w_shotorg);
 
     missile.velocity = (w_shotdir + randomvec() * spread) * cvar("g_balance_hlac_primary_speed");
@@ -72,7 +70,7 @@ void W_HLAC_Attack (void)
 	missile.flags = FL_PROJECTILE;
 	missile.projectiledeathtype = WEP_HLAC;
 
-	CSQCProjectile(missile, TRUE, PROJECTILE_HLAC);
+	CSQCProjectile(missile, TRUE, PROJECTILE_HLAC, TRUE);
 }
 
 void W_HLAC_Attack2f (void)
@@ -100,8 +98,6 @@ void W_HLAC_Attack2f (void)
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
 
-	setmodel (missile, "null"); // precision set below
-	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, w_shotorg);
 
     missile.velocity = (w_shotdir + randomvec() * spread) * cvar("g_balance_hlac_secondary_speed");
@@ -117,7 +113,7 @@ void W_HLAC_Attack2f (void)
 	missile.flags = FL_PROJECTILE;
 	missile.projectiledeathtype = WEP_HLAC | HITTYPE_SECONDARY;
 
-	CSQCProjectile(missile, TRUE, PROJECTILE_HLAC);
+	CSQCProjectile(missile, TRUE, PROJECTILE_HLAC, TRUE);
 }
 
 void W_HLAC_Attack2 (void)

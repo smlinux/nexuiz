@@ -25,22 +25,17 @@ void Damage_DamageInfo(vector org, float coredamage, float edgedamage, float rad
 	entity e;
 
 	e = spawn();
-	e.classname = "damageinfo";
 	setorigin(e, org);
-	setmodel(e, "null");
-	e.think = SUB_Remove;
-	e.nextthink = time + 0.2;
 	e.projectiledeathtype = deathtype;
 	e.dmg = coredamage;
 	e.dmg_edge = edgedamage;
 	e.dmg_radius = rad;
 	e.dmg_force = vlen(force);
 	e.velocity = force;
-	e.effects = EF_NODEPTHTEST; // needs to be, sorry
 
 	e.oldorigin_x = compressShortVector(e.velocity);
 
-	e.SendEntity = Damage_DamageInfo_SendEntity;
+	Net_LinkEntity(e, TRUE, 0.2, Damage_DamageInfo_SendEntity);
 }
 
 #define DAMAGE_CENTERPRINT_SPACER NEWLINES

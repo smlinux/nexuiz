@@ -96,13 +96,11 @@ void W_Electro_Attack()
 	proj.angles = vectoangles(proj.velocity);
 	proj.touch = W_Plasma_TouchExplode;
 	proj.flags = FL_PROJECTILE;
-	setmodel(proj, "null"); // precision set above
-	setsize(proj, '0 0 0', '0 0 0');
 
 	//sound (proj, CHAN_PAIN, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
 	//sounds bad
 
-	CSQCProjectile(proj, TRUE, PROJECTILE_ELECTRO_BEAM);
+	CSQCProjectile(proj, TRUE, PROJECTILE_ELECTRO_BEAM, TRUE);
 }
 
 void W_Electro_Attack2()
@@ -133,7 +131,6 @@ void W_Electro_Attack2()
 	proj.velocity = (w_shotdir + randomvec() * cvar("g_balance_electro_secondary_spread")) * cvar("g_balance_electro_secondary_speed") + v_up * cvar("g_balance_electro_secondary_speed_up");
 	W_SetupProjectileVelocity(proj);
 	proj.touch = W_Plasma_Touch;
-	setmodel(proj, "null"); // precision set above
 	setsize(proj, '0 0 -3', '0 0 -3');
 	proj.takedamage = DAMAGE_YES;
 	proj.damageforcescale = 4;
@@ -141,8 +138,7 @@ void W_Electro_Attack2()
 	proj.event_damage = W_Plasma_Damage;
 	proj.flags = FL_PROJECTILE;
 
-	CSQCProjectile(proj, TRUE, PROJECTILE_ELECTRO);
-	proj.effects = EF_NODEPTHTEST;
+	CSQCProjectile(proj, TRUE, PROJECTILE_ELECTRO, FALSE); // no culling, it has sound
 }
 
 void spawnfunc_weapon_electro (void)

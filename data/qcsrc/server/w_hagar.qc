@@ -66,11 +66,8 @@ void W_Hagar_Attack (void)
 	missile.think = adaptor_think2use;
 	missile.nextthink = time + cvar("g_balance_hagar_primary_lifetime");
 	missile.solid = SOLID_BBOX;
-	missile.scale = 0.4; // BUG: the model is too big
 	missile.projectiledeathtype = WEP_HAGAR;
 	setorigin (missile, w_shotorg);
-	setmodel (missile, "null"); // precision set below
-	setsize (missile, '0 0 0', '0 0 0');
 	//missile.takedamage = DAMAGE_YES;
 	//missile.damageforcescale = 4;
 	//missile.health = 10;
@@ -83,7 +80,7 @@ void W_Hagar_Attack (void)
 	missile.angles = vectoangles (missile.velocity);
 	missile.flags = FL_PROJECTILE;
 
-	CSQCProjectile(missile, TRUE, PROJECTILE_HAGAR);
+	CSQCProjectile(missile, TRUE, PROJECTILE_HAGAR, TRUE);
 }
 
 void W_Hagar_Attack2 (void)
@@ -108,11 +105,8 @@ void W_Hagar_Attack2 (void)
 	missile.think = adaptor_think2use;
 	missile.nextthink = time + cvar("g_balance_hagar_secondary_lifetime");
 	missile.solid = SOLID_BBOX;
-	missile.scale = 0.4; // BUG: the model is too big
 	missile.projectiledeathtype = WEP_HAGAR | HITTYPE_SECONDARY;
 	setorigin (missile, w_shotorg);
-	setmodel (missile, "null"); // precision set below
-	setsize (missile, '0 0 0', '0 0 0');
 	//missile.takedamage = DAMAGE_YES;
 	//missile.damageforcescale = 4;
 	//missile.health = 10;
@@ -126,7 +120,7 @@ void W_Hagar_Attack2 (void)
 	missile.angles = vectoangles (missile.velocity);
 	missile.flags = FL_PROJECTILE;
 
-	CSQCProjectile(missile, TRUE, PROJECTILE_HAGAR_BOUNCING);
+	CSQCProjectile(missile, TRUE, PROJECTILE_HAGAR_BOUNCING, TRUE);
 }
 
 void spawnfunc_weapon_hagar (void)

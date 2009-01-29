@@ -310,7 +310,6 @@ void walker_fire_rocket(vector org)
     setorigin(rocket, org);
 
     sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", VOL_BASE, ATTN_NORM);
-    setmodel (rocket, "models/turrets/rocket.md3"); // precision set below
     setsize (rocket, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
 
     rocket.classname          = "walker_rocket";
@@ -335,7 +334,6 @@ void walker_fire_rocket(vector org)
     rocket.nextthink          = time + 0.25;
     rocket.solid              = SOLID_BBOX;
     rocket.movetype           = MOVETYPE_FLYMISSILE;
-    rocket.effects            = EF_LOWPRECISION;
     rocket.velocity           = ((v_forward + v_up * 0.25) +(randomvec() * 0.1))* cvar("g_turrets_unit_walker_std_rocket_speed");
     rocket.angles             = vectoangles(rocket.velocity);
     rocket.touch              = walker_rocket_explode;
@@ -343,8 +341,7 @@ void walker_fire_rocket(vector org)
     rocket.solid              = SOLID_BBOX;
     rocket.tur_health         = time + 9;
 
-	CSQCProjectile(rocket, TRUE, PROJECTILE_ROCKET);
-	rocket.effects |= EF_NODEPTHTEST; // projectile has a fly sound
+	CSQCProjectile(rocket, TRUE, PROJECTILE_ROCKET, FALSE); // no cull, fly sound
 
     te_explosion (rocket.origin);
 

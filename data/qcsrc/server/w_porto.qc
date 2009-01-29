@@ -123,7 +123,7 @@ void W_Porto_Touch (void)
 			trace_plane_normal = norm;
 			W_Porto_Fail(0);
 		}
-		CSQCProjectile(self, TRUE, PROJECTILE_PORTO_BLUE); // change type
+		CSQCProjectile(self, TRUE, PROJECTILE_PORTO_BLUE, TRUE); // change type
 	}
 	else
 	{
@@ -170,8 +170,6 @@ void W_Porto_Attack (void)
 	gren.solid = SOLID_BBOX;
 	gren.effects = EF_RED;
 	gren.scale = 4;
-	setmodel(gren, "null"); // precision set above
-	setsize(gren, '0 0 0', '0 0 0');
 	setorigin(gren, w_shotorg);
 
 	gren.nextthink = time + cvar("g_balance_porto_primary_lifetime");
@@ -193,7 +191,7 @@ void W_Porto_Attack (void)
 
 	gren.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_PLAYERCLIP;
 
-	CSQCProjectile(gren, TRUE, PROJECTILE_PORTO_RED);
+	CSQCProjectile(gren, TRUE, PROJECTILE_PORTO_RED, TRUE);
 }
 
 void spawnfunc_weapon_porto (void)

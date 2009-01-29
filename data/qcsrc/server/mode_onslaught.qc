@@ -978,6 +978,5 @@ void spawnfunc_onslaught_link()
 		objerror("target and target2 must be set\n");
 	self.think = onslaught_link_delayed;
 	self.nextthink = time + 0.1;
-	self.SendEntity = onslaught_link_send;
-	Net_LinkEntity(self);
+	Net_LinkEntity(self, FALSE, 0, onslaught_link_send);
 };

@@ -23,7 +23,6 @@ void turret_mlrs_attack()
     sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", VOL_BASE, ATTN_NORM);
 
     missile                    = spawn ();
-    setmodel (missile, "models/turrets/rocket.md3"); // precision set below
     setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
     setorigin(missile, self.tur_shotorg_updated);
     missile.classname          = "mlrs_missile";
@@ -37,7 +36,6 @@ void turret_mlrs_attack()
     missile.nextthink          = time + max(self.tur_impacttime,(self.shot_radius * 2) / self.shot_speed);
     missile.solid              = SOLID_BBOX;
     missile.movetype           = MOVETYPE_FLYMISSILE;
-    missile.effects            = EF_LOWPRECISION;
     missile.velocity           = (self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
     missile.angles             = vectoangles(missile.velocity);
     missile.touch              = turret_mlrs_rocket_explode;
@@ -45,8 +43,7 @@ void turret_mlrs_attack()
     missile.solid              = SOLID_BBOX;
     missile.enemy              = self.enemy;
 
-	CSQCProjectile(missile, TRUE, PROJECTILE_ROCKET);
-	missile.effects |= EF_NODEPTHTEST; // projectile has a fly sound
+	CSQCProjectile(missile, TRUE, PROJECTILE_ROCKET, FALSE); // no cull, fly sound
 
     te_explosion (missile.origin);
 

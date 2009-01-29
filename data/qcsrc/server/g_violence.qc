@@ -23,12 +23,6 @@ void Violence_GibSplash_At(vector org, vector mi, vector ma, vector dir, float t
 	e.state = type;
 	if(sv_gentle)
 		e.state |= 0x80; // "force gentle" bit
-	e.SendEntity = Violence_GibSplash_SendEntity;
-	e.nextthink = time + 0.2;
-	e.think = SUB_Remove;
-		// 0.2s should be enough time for all clients to receive this ent once, do the gibbage and be done with it
-	setmodel(e, "null");
-	e.effects = EF_NODEPTHTEST; // show gibs from around the corner
 	setorigin(e, org);
 	setsize(e, mi, ma);
 	e.velocity = dir;
@@ -36,6 +30,8 @@ void Violence_GibSplash_At(vector org, vector mi, vector ma, vector dir, float t
 	e.oldorigin_x = compressShortVector(e.velocity);
 	e.oldorigin_y = compressShortVector(e.mins);
 	e.oldorigin_z = compressShortVector(e.maxs);
+
+	Net_LinkEntity(e, FALSE, 0.2, Violence_GibSplash_SendEntity);
 }
 
 void Violence_GibSplash(entity source, float type, float amount)

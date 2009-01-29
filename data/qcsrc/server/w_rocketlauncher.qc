@@ -221,7 +221,6 @@ void W_Rocket_Attack (void)
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
 	missile.projectiledeathtype = WEP_ROCKET_LAUNCHER;
-	setmodel (missile, "null"); // precision set below
 	setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
 
 	setorigin (missile, w_shotorg - v_forward * 3); // move it back so it hits the wall at the right point
@@ -238,8 +237,7 @@ void W_Rocket_Attack (void)
 	missile.cnt = time + cvar("g_balance_rocketlauncher_lifetime");
 	missile.flags = FL_PROJECTILE;
 
-	CSQCProjectile(missile, cvar("g_balance_rocketlauncher_speedaccel") == 0 && !g_laserguided_missile, PROJECTILE_ROCKET);
-	missile.effects |= EF_NODEPTHTEST; // because of fly sound
+	CSQCProjectile(missile, cvar("g_balance_rocketlauncher_speedaccel") == 0 && !g_laserguided_missile, PROJECTILE_ROCKET, FALSE); // because of fly sound
 
 	// muzzle flash for 1st person view
 	flash = spawn ();

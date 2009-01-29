@@ -632,19 +632,16 @@ void spawnfunc_func_pointparticles()
 	if(self.noise != "")
 		precache_sound (self.noise);
 
-	self.effects = EF_NODEPTHTEST;
-	self.SendEntity = pointparticles_SendEntity;
 	if(!self.modelindex)
 	{
-		vector misave, masave;
-		misave = self.mins;
-		masave = self.maxs;
-		setmodel(self, "null");
-		setorigin(self, self.origin + misave);
-		setsize(self, '0 0 0', masave - misave);
+		setorigin(self, self.origin + self.mins);
+		setsize(self, '0 0 0', self.maxs - self.mins);
 	}
 	if(!self.cnt)
 		self.cnt = particleeffectnum(self.mdl);
+
+	Net_LinkEntity(self, FALSE, 0, pointparticles_SendEntity);
+
 	IFTARGETED
 	{
 		self.use = pointparticles_use;
@@ -682,7 +679,7 @@ void spawnfunc_func_sparks()
 	spawnfunc_func_pointparticles();
 }
 
-float rainsnow_SendEntity(float to)
+float rainsnow_SendEntity(entity to, float sf)
 {
 	WriteByte(MSG_ENTITY, ENT_CLIENT_RAINSNOW);
 	WriteByte(MSG_ENTITY, self.state);
@@ -730,18 +727,9 @@ void spawnfunc_func_rain()
 		self.count = 65535;
 
 	self.state = 1; // 1 is rain, 0 is snow
-	self.effects = EF_NODEPTHTEST;
-	self.SendEntity = rainsnow_SendEntity;
 	self.Version = 1;
 
-	if(!self.modelindex)
-	{
-		vector misave, masave;
-		misave = self.mins;
-		masave = self.maxs;
-		setmodel(self, "null");
-		setsize(self, misave, masave);
-	}
+	Net_LinkEntity(self, FALSE, 0, rainsnow_SendEntity);
 };
 
 
@@ -777,18 +765,9 @@ void spawnfunc_func_snow()
 		self.count = 65535;
 
 	self.state = 0; // 1 is rain, 0 is snow
-	self.effects = EF_NODEPTHTEST;
-	self.SendEntity = rainsnow_SendEntity;
 	self.Version = 1;
 
-	if(!self.modelindex)
-	{
-		vector misave, masave;
-		misave = self.mins;
-		masave = self.maxs;
-		setmodel(self, "null");
-		setsize(self, misave, masave);
-	}
+	Net_LinkEntity(self, FALSE, 0, rainsnow_SendEntity);
 };
 
 
@@ -1022,10 +1001,9 @@ void spawnfunc_misc_laser()
 	self.nextthink = time;
 	InitializeEntity(self, misc_laser_init, INITPRIO_FINDTARGET);
 
-	self.effects = EF_NODEPTHTEST;
-	self.SendEntity = laser_SendEntity;
-	setmodel(self, "null");
 	self.mangle = self.angles;
+
+	Net_LinkEntity(self, FALSE, 0, laser_SendEntity);
 
 	IFTARGETED
 	{

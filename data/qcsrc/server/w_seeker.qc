@@ -189,7 +189,6 @@ void Seeker_Fire_Missile(vector f_org)
 	missile.projectiledeathtype = WEP_SEEKER;
 
 	setorigin (missile, w_shotorg);
-	setmodel  (missile, "null");
 	setsize (missile, '-2 -2 -2', '2 2 2');
 
 
@@ -203,7 +202,7 @@ void Seeker_Fire_Missile(vector f_org)
 	missile.switchweapon = vlen(missile.velocity);
 	missile.angles = vectoangles (missile.velocity);
 
-	CSQCProjectile(missile, FALSE, PROJECTILE_SEEKER);
+	CSQCProjectile(missile, FALSE, PROJECTILE_SEEKER, TRUE);
 }
 
 void Seeker_Vollycontroler_Think()
@@ -330,9 +329,7 @@ void Seeker_Fire_Tag()
 	missile.event_damage    = Seeker_Tag_Explode;
 	missile.health          = 5;
 
-	setmodel (missile, "null");
 	setorigin (missile, w_shotorg);
-	setsize (missile, '0 0 0', '0 0 0');
 
 	missile.flags       = FL_PROJECTILE;
 
@@ -341,8 +338,7 @@ void Seeker_Fire_Tag()
 	W_SetupProjectileVelocity(missile);
 	missile.angles = vectoangles (missile.velocity);
 
-	CSQCProjectile(missile, TRUE, PROJECTILE_TAG);
-	missile.effects = EF_NODEPTHTEST;
+	CSQCProjectile(missile, TRUE, PROJECTILE_TAG, FALSE); // has sound
 }
 
 
@@ -405,8 +401,6 @@ void Seeker_Fire_Flac()
 	missile.scale = 0.4; // BUG: the model is too big
 	missile.projectiledeathtype = WEP_SEEKER;
 	setorigin (missile, w_shotorg);
-	setmodel (missile, "null"); // precision set below
-	setsize (missile, '0 0 0', '0 0 0');
 	missile.projectiledeathtype = WEP_SEEKER | HITTYPE_SECONDARY;
 
 	missile.movetype = MOVETYPE_FLY;
@@ -418,7 +412,7 @@ void Seeker_Fire_Flac()
 	missile.angles = vectoangles (missile.velocity);
 	missile.flags = FL_PROJECTILE;
 
-	CSQCProjectile(missile, TRUE, PROJECTILE_FLAC);
+	CSQCProjectile(missile, TRUE, PROJECTILE_FLAC, TRUE);
 }
 
 void spawnfunc_weapon_seeker (void)

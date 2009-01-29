@@ -31,9 +31,9 @@ float CSQCProjectile_SendEntity(entity to, float sf)
 	return 1;
 }
 
-void CSQCProjectile(entity e, float clientanimate, float type)
+void CSQCProjectile(entity e, float clientanimate, float type, float docull)
 {
-	e.SendEntity = CSQCProjectile_SendEntity;
+	Net_LinkEntity(e, docull, 0, CSQCProjectile_SendEntity);
 	
 	e.csqcprojectile_clientanimate = clientanimate;
 	
@@ -46,7 +46,6 @@ void CSQCProjectile(entity e, float clientanimate, float type)
 		e.gravity = 0;
 
 	e.csqcprojectile_type = type;
-	e.SendFlags = 0xFFFFFF;
 }
 
 void UpdateCSQCProjectile(entity e)

@@ -44,12 +44,9 @@ float ClientData_Send(entity to, float sf)
 
 void ClientData_Attach()
 {
-	self.clientdata = spawn();
-	self.clientdata.SendEntity = ClientData_Send;
-	self.clientdata.effects = EF_NODEPTHTEST;
+	Net_LinkEntity(self.clientdata = spawn(), FALSE, 0, ClientData_Send);
 	self.clientdata.drawonlytoclient = self;
 	self.clientdata.owner = self;
-	setmodel(self.clientdata, "null");
 }
 
 void ClientData_Detach()
@@ -921,12 +918,7 @@ float ClientInit_SendEntity(entity to, float sf)
 
 void ClientInit_Spawn()
 {
-	entity e;
-	e = spawn();
-	e.classname = "ent_client_init";
-	e.SendEntity = ClientInit_SendEntity;
-	setmodel(e, "null");
-	e.effects = EF_NODEPTHTEST;
+	Net_LinkEntity(spawn(), FALSE, 0, ClientInit_SendEntity);
 }
 
 /*

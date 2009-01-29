@@ -86,8 +86,6 @@ void W_Crylink_Attack (void)
 		proj.projectiledeathtype = WEP_CRYLINK;
 		//proj.gravity = 0.001;
 
-		setmodel (proj, "null"); // precision set below
-		setsize (proj, '0 0 0', '0 0 0');
 		setorigin (proj, w_shotorg);
 
 
@@ -120,7 +118,7 @@ void W_Crylink_Attack (void)
 
 		proj.flags = FL_PROJECTILE;
 
-		CSQCProjectile(proj, TRUE, PROJECTILE_CRYLINK);
+		CSQCProjectile(proj, TRUE, PROJECTILE_CRYLINK, TRUE);
 
 		counter = counter + 1;
 	}
@@ -151,8 +149,6 @@ void W_Crylink_Attack2 (void)
 		proj.projectiledeathtype = WEP_CRYLINK | HITTYPE_SECONDARY;
 		//proj.gravity = 0.001;
 
-		setmodel (proj, "null"); // precision set below
-		setsize (proj, '0 0 0', '0 0 0');
 		setorigin (proj, w_shotorg);
 
 		proj.velocity = (w_shotdir + (((counter + 0.5) / shots) * 2 - 1) * v_right * cvar("g_balance_crylink_secondary_spread")) * cvar("g_balance_crylink_secondary_speed");
@@ -171,7 +167,7 @@ void W_Crylink_Attack2 (void)
 
 		proj.flags = FL_PROJECTILE;
 
-		CSQCProjectile(proj, TRUE, PROJECTILE_CRYLINK);
+		CSQCProjectile(proj, TRUE, PROJECTILE_CRYLINK, TRUE);
 
 		counter = counter + 1;
 	}

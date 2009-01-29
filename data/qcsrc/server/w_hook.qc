@@ -69,8 +69,6 @@ void W_Hook_Attack2()
 	gren.movetype = MOVETYPE_TOSS;
 	gren.solid = SOLID_BBOX;
 	gren.projectiledeathtype = WEP_HOOK | HITTYPE_SECONDARY;
-	setmodel(gren, "null"); // precision set above // FIXME replace
-	setsize(gren, '0 0 0', '0 0 0');
 	setorigin(gren, w_shotorg);
 
 	gren.nextthink = time + cvar("g_balance_hook_secondary_lifetime");
@@ -88,7 +86,7 @@ void W_Hook_Attack2()
 	gren.angles = '0 0 0';
 	gren.flags = FL_PROJECTILE;
 
-	CSQCProjectile(gren, TRUE, PROJECTILE_HOOKBOMB);
+	CSQCProjectile(gren, TRUE, PROJECTILE_HOOKBOMB, TRUE);
 }
 
 void spawnfunc_weapon_hook (void)

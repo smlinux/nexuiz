@@ -278,8 +278,6 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 	proj.angles = vectoangles(proj.velocity);
 	proj.dmg_radius = cvar("g_ballistics_materialconstant") / bulletconstant;
 	// so: bulletconstant = bullet mass / area of bullet circle
-	setmodel(proj, "null");
-	setsize(proj, '0 0 0', '0 0 0');
 	setorigin(proj, start);
 	proj.flags = FL_PROJECTILE;
 
@@ -292,9 +290,9 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 	proj.oldvelocity = proj.velocity;
 
 	if(tracereffects & EF_RED)
-		CSQCProjectile(proj, TRUE, PROJECTILE_BULLET_GLOWING);
+		CSQCProjectile(proj, TRUE, PROJECTILE_BULLET_GLOWING, TRUE);
 	else
-		CSQCProjectile(proj, TRUE, PROJECTILE_BULLET);
+		CSQCProjectile(proj, TRUE, PROJECTILE_BULLET, TRUE);
 }
 
 void fireBullet (vector start, vector dir, float spread, float damage, float force, float dtype, float tracer)
@@ -328,12 +326,10 @@ void fireBullet (vector start, vector dir, float spread, float damage, float for
 		e.nextthink = time + vlen(trace_endpos - start) / 6000;
 		e.velocity = dir * 6000;
 		e.angles = vectoangles(e.velocity);
-		setmodel (e, "null"); // precision set below
-		setsize (e, '0 0 0', '0 0 0');
 		setorigin (e, start);
 		e.flags = FL_PROJECTILE;
 
-		CSQCProjectile(e, TRUE, PROJECTILE_BULLET);
+		CSQCProjectile(e, TRUE, PROJECTILE_BULLET, TRUE);
 	}
 
 	if ((trace_fraction != 1.0) && (pointcontents (trace_endpos) != CONTENT_SKY))
