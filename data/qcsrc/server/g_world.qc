@@ -1776,7 +1776,13 @@ void CheckRules_World()
 	}
 	else
 	{
-		if (timelimit && time >= timelimit)
+		if (timelimit < 0)
+		{
+			// endmatch
+			NextLevel();
+			return;
+		}
+		else if (timelimit && time >= timelimit)
 		{
 			if(g_race && g_race_qualifying == 2 && timelimit > 0)
 			{
