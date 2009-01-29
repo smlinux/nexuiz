@@ -454,15 +454,15 @@ float turret_validate_target(entity e_turret,entity e_target,float validate_flag
         }
     }
 
-    // Line of sight?
-    if (validate_flags & TFL_TARGETSELECT_LOS)
+    // Range limits?
+    tvt_dist = vlen(e_turret.origin - real_origin(e_target));
+    if (validate_flags & TFL_TARGETSELECT_RANGELIMTS)
     {
-        v_tmp = real_origin(e_target) + ((e_target.mins + e_target.maxs) * 0.5);
-        //v_tmp = e_target.origin;
-        traceline(e_turret.origin + e_turret.tur_aimorg,v_tmp,0,e_turret);
+        if (tvt_dist < e_turret.target_range_min)
+            return -13;
 
-        if (e_turret.aim_firetolerance_dist < vlen(v_tmp - trace_endpos))
-            return -10;
+        if (tvt_dist > e_turret.target_range)
+            return -14;
     }
 
     // Can we even aim this thing?
@@ -480,15 +480,15 @@ float turret_validate_target(entity e_turret,entity e_target,float validate_flag
             return -12;
     }
 
-    // Range limits?
-    tvt_dist = vlen(e_turret.origin - real_origin(e_target));
-    if (validate_flags & TFL_TARGETSELECT_RANGELIMTS)
+    // Line of sight?
+    if (validate_flags & TFL_TARGETSELECT_LOS)
     {
-        if (tvt_dist < e_turret.target_range_min)
-            return -13;
+        v_tmp = real_origin(e_target) + ((e_target.mins + e_target.maxs) * 0.5);
+        //v_tmp = e_target.origin;
+        traceline(e_turret.origin + e_turret.tur_aimorg,v_tmp,0,e_turret);
 
-        if (tvt_dist > e_turret.target_range)
-            return -14;
+        if (e_turret.aim_firetolerance_dist < vlen(v_tmp - trace_endpos))
+            return -10;
     }
 
 #ifdef TURRET_DEBUG_TARGETSELECT
