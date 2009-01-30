@@ -528,6 +528,9 @@ float weapon_prepareattack(float secondary, float attacktime)
 	if (self.weaponentity.state != WS_READY)
 		return FALSE;
 	self.weaponentity.state = WS_INUSE;
+
+	self.spawnshieldtime = min(self.spawnshieldtime, time); // kill spawn shield when you fire
+
 	// if the weapon hasn't been firing continuously, reset the timer
 	if(attacktime >= 0)
 	{
