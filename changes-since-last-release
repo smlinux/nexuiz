@@ -1,10 +1,12 @@
-CHANGES since 2.4.2 to r5313:
+CHANGES since 2.4.2 to r5703:
 compat-q3a: switch crylink/hagar, as crylink is closer to BFG and hagar is closer to Plasmagun
 game: airshot announcer
+game: all projectiles are clientside now, massive bandwidth reduction
 game: alternate HUD is now default
 game: antilag improved
 game: assault bugfixed
 game: bots try to not take items near team mates
+game: cl_gentle, clientside gib replacement for general audiences
 game: cmd maplist improved
 game: colors improved (TODO credit sev in nexuiz-credits.txt!)
 game: command allready
@@ -22,12 +24,14 @@ game: crylink weakened
 game: ctf capture records now can only be made on an otherwise empty server, prevents "assisted" records
 game: ctf flag touching when dead bug fixed
 game: ctf scoring now uses flags, not frags
+game: custom weapon priorities for bots
 game: cvar cl_weaponpriority* (custom weapon orders)
 game: cvar cl_weaponpriority_useforcycling
 game: cvar g_balance_ctf_damageforcescale
 game: cvar g_balance_electro_combo_speed
 game: cvar g_balance_teams_complain can now be turned off
 game: cvar g_ballistics_force, makes MG and SG projectiles
+game: cvar g_bloodloss - a new pointless mutator ;)
 game: cvar g_bugrigs*
 game: cvar g_ctf_allow_drop
 game: cvar g_ctf_fullbrightflags
@@ -39,6 +43,7 @@ game: cvar g_pickup_respawntime*
 game: cvar g_showweaponspawns
 game: cvar g_spawn_furthest
 game: cvar g_spawnpoints_auto_move_out_of_solid
+game: cvar g_spawnshield_time automatically disables itself when shooting
 game: cvar g_start_delay
 game: cvar g_touchexplode
 game: cvar g_warmup
@@ -50,9 +55,10 @@ game: cvar sv_ready_restart_after_countdown
 game: cvar sv_ready_restart_nag
 game: cvar sv_ready_restart_repeatable
 game: cvar teamplay_lockonrestart
-game: fix some memory leaks
 game: fix flag falling through bunker
 game: fix q3skoredm1
+game: fix some memory leaks
+game: free camera for demo playback
 game: friendly fire slightly added now
 game: handle sv_foginterval on the client now
 game: hook attaches to moving objects
@@ -60,8 +66,9 @@ game: hook can pull players (but detaches when that player shoots you)
 game: hook detaches when teleporting
 game: hook is no longer "seta"
 game: hook jitter-less
-game: hook takes ammo
 game: hook sky-attach bug fixed
+game: hook takes ammo
+game: improved bot ai: teamworking, items rating and weapon combos
 game: improved weapon system, new weapons Port-O-Launch, MinstaNex, On-hand hook, TAG Seeker, HLAC; now up to 24 weapons supported
 game: IP ban syncing support
 game: item respawn: 20s for 50health and 25armor
@@ -83,8 +90,8 @@ game: scores per-team
 game: sounds: model specific player sounds
 game: strength and shield have better performance now
 game: sv_foginterval
-game: team radar (sv_cmd bbox, sv_cmd radarmap commands to create/debug it!)
 game: teamkill and typekill complaints
+game: team radar (sv_cmd bbox, sv_cmd radarmap commands to create/debug it!)
 game: texturecompression for lightmaps off (workaround for OS X bug)
 game: timeout feature
 game: turrets
@@ -93,6 +100,7 @@ game: weapons rebalanced according to frag statistics
 game: zoom unlagged, detect zoom scripts (for spectating/demos)
 map: aggressor supports keyhunt
 map: all maps recompiled, now with external lightmaps
+mapping: added egyptsoc textures
 mapping: allow mins/maxs specification for brush entities instead of models (as alternative)
 mapping: automatic shader generator script
 mapping: entities.def updated
@@ -105,8 +113,8 @@ mapping: entity func_train now supports -1 wait on path_corner, making it NOT wa
 mapping: entity info_null now removes itself (as it should); this DOES break some maps that need fixing now
 mapping: entity info_player_start now triggers other entities when someone spawns
 mapping: entity misc_follow
-mapping: entity misc_laser changed and improved
 mapping: entity misc_gamemodel, func_illusionary replacing misc_models
+mapping: entity misc_laser changed and improved
 mapping: entity target_spawn (BEWARE OF THE)
 mapping: entity trigger_flipflop, trigger_monoflip, trigger_multivibrator
 mapping: entity trigger_heal
@@ -124,6 +132,7 @@ map: reslimed: less distracting fog
 map: some more TDM map settings
 map: starship and silvercity: no CTF
 menu: channel mixer
+menu: cvar list editor
 menu: demo browser
 menu: game type in server browser
 menu: input box margin now in chars, not percent
@@ -135,18 +144,15 @@ menu: new skin "wickedz"
 menu: play button in map info
 menu: server favorites
 menu: server info
-menu: skin selector
-menu: weapon priority dialog
 menuskins: big buttons as extra graphics
 menuskins: COLOR_SCROLLBAR_C
+menu: skin selector
 menuskins: HEIGHT_DIALOGBORDER
+menu: weapon priority dialog
 menu: wicked skins
 misc: +exec benchmark.cfg
 misc: new color codes ^xRGB
-models: specop now knows that she is female
 models: new flag model
+models: specop now knows that she is female
 rcon2irc: disconnect fix
 rcon2irc: irc_trigger
-game: custom weapon priorities for bots
-game: improved bot ai: teamworking, items rating and weapon combos
-game: free camera for demo playback
