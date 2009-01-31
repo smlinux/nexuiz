@@ -6,6 +6,8 @@ CLASS(NexuizPlayerList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizPlayerList, realFontSize, vector, '0 0 0')
 	ATTRIB(NexuizPlayerList, columnNameOrigin, float, 0)
 	ATTRIB(NexuizPlayerList, columnNameSize, float, 0)
+	ATTRIB(NexuizPlayerList, columnScoreOrigin, float, 0)
+	ATTRIB(NexuizPlayerList, columnScoreSize, float, 0)
 	ATTRIB(NexuizPlayerList, realUpperMargin, float, 0)
 	ATTRIB(NexuizPlayerList, origin, vector, '0 0 0')
 	ATTRIB(NexuizPlayerList, itemAbsSize, vector, '0 0 0')
@@ -84,13 +86,18 @@ void resizeNotifyNexuizPlayerList(entity me, vector relOrigin, vector relSize, v
 	me.realFontSize_x = me.fontSize / (me.itemAbsSize_x = (absSize_x * (1 - me.controlWidth)));
 	me.realUpperMargin = 0.5 * (1 - me.realFontSize_y);
 
+	// this list does 1 char left and right margin
+	me.columnScoreSize = 3 * me.realFontSize_x;
+	me.columnNameSize = 1 - 3 * me.realFontSize_x - me.columnScoreSize;
+
 	me.columnNameOrigin = me.realFontSize_x;
-	me.columnNameSize = 1 - 2 * me.realFontSize_x;
+	me.columnScoreOrigin = me.columnNameOrigin + me.columnNameSize + me.realFontSize_x;
 }
 
 void drawListBoxItemNexuizPlayerList(entity me, float i, vector absSize, float isSelected)
 {
 	string s;
+	string score;
 	float t;
 	vector rgb;
 
@@ -107,13 +114,13 @@ void drawListBoxItemNexuizPlayerList(entity me, float i, vector absSize, float i
 		rgb = '1 1 1';
 	
 	s = me.getPlayerList(me, i, PLAYERPARM_NAME);
+	score = me.getPlayerList(me, i, PLAYERPARM_SCORE);
 
-	if(rgb != '1 1 1')
-		s = strdecolorize(s);
+	s = draw_TextShortenToWidth(s, (me.columnNameSize / me.realFontSize_x), 1);
+	score = draw_TextShortenToWidth(score, me.columnScoreSize / me.realFontSize_x, 0);
 
-	s = draw_TextShortenToWidth(s, me.columnNameSize / me.realFontSize_x, rgb == '1 1 1');
-
-	draw_Text(me.realUpperMargin2 * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 1) * me.realFontSize_x)) * eX, s, me.realFontSize, rgb, 1, rgb == '1 1 1');
+	draw_Text(me.realUpperMargin2 * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 1) * me.realFontSize_x)) * eX, s, me.realFontSize, '1 1 1', 1, 1);
+	draw_Text(me.realUpperMargin2 * eY + (me.columnScoreOrigin + 1.00 * (me.columnScoreSize - draw_TextWidth(score, 1) * me.realFontSize_x)) * eX, score, me.realFontSize, rgb, 1, 0);
 }
 
 #endif

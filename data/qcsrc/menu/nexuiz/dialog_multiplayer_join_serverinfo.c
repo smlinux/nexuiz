@@ -123,7 +123,7 @@ void fillNexuizServerInfoDialog(entity me)
 			me.cnameLabel = e;
 
 	me.TR(me);
-		me.TD(me, 1, 6, e = makeNexuizTextLabel(0, "Players:"));
+		me.TD(me, 1, 5.5, e = makeNexuizTextLabel(0, "Players:"));
 	me.TR(me);
 		me.TD(me, me.rows - 4, 5.5, e = makeNexuizPlayerList());
 			me.rawPlayerList = e;
