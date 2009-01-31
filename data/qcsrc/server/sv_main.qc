@@ -13,7 +13,7 @@ void CreatureFrame (void)
 			{
 				if (!(self.flags & FL_INWATER))
 				{
-					self.flags = self.flags + FL_INWATER;
+					self.flags |= FL_INWATER;
 					self.dmgtime = 0;
 				}
 				if (self.waterlevel != 3)
@@ -60,7 +60,7 @@ void CreatureFrame (void)
 				if (self.flags & FL_INWATER)
 				{
 					// play leave water sound
-					self.flags = self.flags - FL_INWATER;
+					self.flags &~= FL_INWATER;
 					self.dmgtime = 0;
 				}
 				self.air_finished = time + 12;

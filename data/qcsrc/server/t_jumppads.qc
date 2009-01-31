@@ -121,7 +121,7 @@ void trigger_push_touch()
 	if(self.target)
 		self.movedir = trigger_push_calculatevelocity(other.origin, self.enemy, self.height);
 
-	other.flags = other.flags - (other.flags & FL_ONGROUND);
+	other.flags &~= FL_ONGROUND;
 	// reset tracking of oldvelocity for impact damage (sudden velocity changes)
 	other.oldvelocity = other.velocity = self.movedir;
 

@@ -1191,7 +1191,7 @@ void ClientConnect (void)
 
 	self.classname = "player_joining";
 
-	self.flags = self.flags | FL_CLIENT;
+	self.flags = FL_CLIENT;
 	self.version_nagtime = time + 10 + random() * 10;
 
 	if(player_count<0)
@@ -1969,19 +1969,19 @@ void ObserverThink()
 	if (self.flags & FL_JUMPRELEASED) {
 		if (self.BUTTON_JUMP && !self.version_mismatch) {
 			self.welcomemessage_time = 0;
-			self.flags = self.flags - FL_JUMPRELEASED;
+			self.flags &~= FL_JUMPRELEASED;
 			LeaveSpectatorMode();
 			return;
 		} else if(self.BUTTON_ATCK && !self.version_mismatch) {
 			self.welcomemessage_time = 0;
-			self.flags = self.flags - FL_JUMPRELEASED;
+			self.flags &~= FL_JUMPRELEASED;
 			if(SpectateNext() == 1) {
 				self.classname = "spectator";
 			}
 		}
 	} else {
 		if (!(self.BUTTON_ATCK || self.BUTTON_JUMP)) {
-			self.flags = self.flags | FL_JUMPRELEASED;
+			self.flags |= FL_JUMPRELEASED;
 		}
 	}
 	if(self.BUTTON_ZOOM)
@@ -1995,12 +1995,12 @@ void SpectatorThink()
 	if (self.flags & FL_JUMPRELEASED) {
 		if (self.BUTTON_JUMP && !self.version_mismatch) {
 			self.welcomemessage_time = 0;
-			self.flags = self.flags - FL_JUMPRELEASED;
+			self.flags &~= FL_JUMPRELEASED;
 			LeaveSpectatorMode();
 			return;
 		} else if(self.BUTTON_ATCK) {
 			self.welcomemessage_time = 0;
-			self.flags = self.flags - FL_JUMPRELEASED;
+			self.flags &~= FL_JUMPRELEASED;
 			if(SpectateNext() == 1) {
 				self.classname = "spectator";
 			} else {
@@ -2009,7 +2009,7 @@ void SpectatorThink()
 			}
 		} else if (self.BUTTON_ATCK2) {
 			self.welcomemessage_time = 0;
-			self.flags = self.flags - FL_JUMPRELEASED;
+			self.flags &~= FL_JUMPRELEASED;
 			self.classname = "observer";
 			PutClientInServer();
 		} else {
@@ -2018,14 +2018,14 @@ void SpectatorThink()
 		}
 	} else {
 		if (!(self.BUTTON_ATCK || self.BUTTON_ATCK2)) {
-			self.flags = self.flags | FL_JUMPRELEASED;
+			self.flags |= FL_JUMPRELEASED;
 		}
 	}
 	if(self.BUTTON_ZOOM)
 		self.wantswelcomemessage = 0;
 	if(self.wantswelcomemessage)
 		PrintWelcomeMessage(self);
-	self.flags = self.flags | FL_CLIENT | FL_NOTARGET;
+	self.flags |= FL_CLIENT | FL_NOTARGET;
 }
 
 .float touchexplode_time;

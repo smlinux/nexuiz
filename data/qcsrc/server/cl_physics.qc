@@ -79,8 +79,8 @@ void PlayerJump (void)
 	self.velocity_z = self.velocity_z + mjumpheight;
 	self.oldvelocity_z = self.velocity_z;
 
-	self.flags = self.flags - FL_ONGROUND;
-	self.flags = self.flags - FL_JUMPRELEASED;
+	self.flags &~= FL_ONGROUND;
+	self.flags &~= FL_JUMPRELEASED;
 
 	if (self.crouch)
 		player_setanim(self.anim_duckjump, FALSE, TRUE, TRUE);
@@ -111,9 +111,9 @@ void CheckWaterJump()
 		traceline (start, end, TRUE, self);
 		if (trace_fraction == 1)
 		{	// open at eye level
-			self.flags = self.flags | FL_WATERJUMP;
+			self.flags |= FL_WATERJUMP;
 			self.velocity_z = 225;
-			self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
+			self.flags &~= FL_JUMPRELEASED;
 			self.teleport_time = time + 2;	// safety net
 			return;
 		}
@@ -514,16 +514,16 @@ void SV_PlayerPhysics()
 	{
 		if(sv_doublejump)
 		{
-			self.flags = self.flags - (self.flags & FL_ONGROUND);
+			self.flags &~= FL_ONGROUND;
 			tracebox(self.origin + '0 0 1', self.mins, self.maxs, self.origin - '0 0 2', MOVE_NORMAL, self);
 			if(trace_fraction < 1 && trace_plane_normal_z > 0.7)
-				self.flags = self.flags | FL_ONGROUND;
+				self.flags |= FL_ONGROUND;
 		}
 
 		if (self.BUTTON_JUMP)
 			PlayerJump ();
 		else
-			self.flags = self.flags | FL_JUMPRELEASED;
+			self.flags |= FL_JUMPRELEASED;
 
 		if (self.waterlevel == 2)
 			CheckWaterJump ();
@@ -535,7 +535,7 @@ void SV_PlayerPhysics()
 		self.velocity_y = self.movedir_y;
 		if (time > self.teleport_time || self.waterlevel == 0)
 		{
-			self.flags = self.flags - (self.flags & FL_WATERJUMP);
+			self.flags &~= FL_WATERJUMP;
 			self.teleport_time = 0;
 		}
 	}
@@ -546,7 +546,7 @@ void SV_PlayerPhysics()
 	else if (self.movetype == MOVETYPE_NOCLIP || self.movetype == MOVETYPE_FLY)
 	{
 		// noclipping or flying
-		self.flags = self.flags - (self.flags & FL_ONGROUND);
+		self.flags &~= FL_ONGROUND;
 
 		self.velocity = self.velocity * (1 - frametime * sv_friction);
 		makevectors(self.v_angle);
@@ -567,7 +567,7 @@ void SV_PlayerPhysics()
 	else if (self.waterlevel >= 2)
 	{
 		// swimming
-		self.flags = self.flags - (self.flags & FL_ONGROUND);
+		self.flags &~= FL_ONGROUND;
 
 		makevectors(self.v_angle);
 		//wishvel = v_forward * self.movement_x + v_right * self.movement_y + v_up * self.movement_z;
@@ -592,7 +592,7 @@ void SV_PlayerPhysics()
 	else if (time < self.ladder_time)
 	{
 		// on a spawnfunc_func_ladder or swimming in spawnfunc_func_water
-		self.flags = self.flags - (self.flags & FL_ONGROUND);
+		self.flags &~= FL_ONGROUND;
 
 		self.velocity = self.velocity * (1 - frametime * sv_friction);
 		makevectors(self.v_angle);

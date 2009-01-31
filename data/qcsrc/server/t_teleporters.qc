@@ -74,12 +74,10 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 
 		// hide myself a tic
 		player.effects = player.effects | EF_NODRAW;
-		if (player.weaponentity) // misuse FL_FLY to avoid EF_NODRAW on viewmodel
-			player.weaponentity.flags = player.weaponentity.flags | FL_FLY;
 		player.teleport_time = time + cvar("sys_ticrate");
 
 		// player no longer is on ground
-		player.flags = player.flags - (player.flags & FL_ONGROUND);
+		player.flags &~= FL_ONGROUND;
 
 		// reset tracking of oldvelocity for impact damage (sudden velocity changes)
 		player.oldvelocity = player.velocity;

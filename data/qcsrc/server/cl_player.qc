@@ -480,7 +480,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		// shootable corpse
 		self.solid = SOLID_CORPSE;
 		// don't stick to the floor
-		self.flags = self.flags - (self.flags & FL_ONGROUND);
+		self.flags &~= FL_ONGROUND;
 		// dying animation
 		self.deadflag = DEAD_DYING;
 		// when to allow respawn
