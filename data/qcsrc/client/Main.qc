@@ -347,15 +347,28 @@ float CSQC_ConsoleCommand(string strMessage)
 	return false;
 }
 
-float GameCommand(string msg)
+void GameCommand(string msg)
 {
 	float argc;
 	argc = tokenize_sane(msg);
+
+	if(argv(0) == "help" || argc == 0)
+	{
+		print("Usage: sv_cmd COMMAND..., where possible commands are:\n");
+		print("  settemp cvar value\n");
+		print("  radar\n");
+		print("  sbar_columns_set ...\n");
+		print("  sbar_columns_help\n");
+		GameCommand_Generic("help");
+	}
+
+	if(GameCommand_Generic(msg))
+		return;
+
 	string cmd;
 	cmd = argv(0);
 	if(cmd == "mv_download") {
 		Cmd_MapVote_MapDownload(argc);
-		return true;
 	}
 	else if(cmd == "settemp") {
 		cvar_clientsettemp(argv(1), argv(2));
@@ -377,8 +390,12 @@ float GameCommand(string msg)
 		blurtest_power = stof(argv(3));
 	}
 #endif
+	else
+	{
+		print("Invalid command. For a list of supported commands, try cl_cmd help.\n");
+	}
 	
-	return false;
+	return;
 }
 
 // CSQC_InputEvent : Used to perform actions based on any key pressed, key released and mouse on the client.
