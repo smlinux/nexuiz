@@ -1,5 +1,6 @@
 .float spectatee_status;
 .float zoomstate;
+.float bloodloss_timer;
 
 .entity clientdata;
 float ClientData_Send(entity to, float sf)
@@ -2222,7 +2223,7 @@ void PlayerPreThink (void)
 
 		self.oldorigin = self.origin;
 
-		if (self.BUTTON_CROUCH && !self.hook.state)
+		if ((self.BUTTON_CROUCH && !self.hook.state) || self.health <= g_bloodloss)
 		{
 			if (!self.crouch)
 			{
@@ -2243,6 +2244,15 @@ void PlayerPreThink (void)
 					self.view_ofs = PL_VIEW_OFS;
 					setsize (self, PL_MIN, PL_MAX);
 				}
+			}
+		}
+		
+		if(self.health <= g_bloodloss && self.deadflag == DEAD_NO)
+		{
+			if(self.bloodloss_timer < time)
+			{
+				self.event_damage(self, self, 1, DEATH_ROT, self.origin, '0 0 0');
+				self.bloodloss_timer = time + 0.5 + random() * 0.5;
 			}
 		}
 

@@ -999,6 +999,7 @@ void readlevelcvars(void)
 	g_nixnex_with_laser = cvar("g_nixnex_with_laser");
 	g_norecoil = cvar("g_norecoil");
 	g_vampire = cvar("g_vampire");
+	g_bloodloss = cvar("g_bloodloss");
 	sv_maxidle = cvar("sv_maxidle");
 	sv_maxidle_spectatorsareidle = cvar("sv_maxidle_spectatorsareidle");
 	sv_pogostick = cvar("sv_pogostick");

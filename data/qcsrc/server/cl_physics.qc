@@ -52,6 +52,9 @@ void PlayerJump (void)
 	if(!sv_pogostick)
 		if (!(self.flags & FL_JUMPRELEASED))
 			return;
+			
+	if(self.health <= g_bloodloss)
+		return;
 
 	if(g_runematch)
 	{

@@ -86,6 +86,8 @@ string toStringNexuizMutatorsDialog(entity me)
 		s = strcat(s, ", Vampire");
 	if(cvar("g_weapon_stay"))
 		s = strcat(s, ", Weapons stay");
+	if(cvar("g_bloodloss") > 0)
+		s = strcat(s, ", Bloodloss");
 	if(s == "")
 		return "None";
 	else
@@ -174,6 +176,12 @@ void fillNexuizMutatorsDialog(entity me)
 			s.valueDisplayMultiplier = 0.125; // show gravity in percent
 		me.TD(me, 1, 2, e = makeNexuizSliderCheckBox(800, 1, s, "Low gravity"));
 			e.savedValue = 200; // good on silvercity
+	me.TR(me);
+		me.TDempty(me, 0.2);
+		me.TD(me, 1, 1.8, s);
+	me.TR(me);
+		s = makeNexuizSlider(10, 50, 1, "g_bloodloss");
+		me.TD(me, 1, 2, e = makeNexuizSliderCheckBox(0, 1, s, "Blood loss"));
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 1.8, s);
