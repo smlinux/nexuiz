@@ -2122,8 +2122,7 @@ void PlayerPreThink (void)
 		if(time > self.teleport_time)
 		{
 			self.teleport_time = 0;
-			if(! (self.items & IT_STRENGTH))
-				self.effects = self.effects - (self.effects & EF_NODRAW);
+			self.effects = self.effects - (self.effects & EF_NODRAW);
 		}
 
 		Nixnex_GiveCurrentWeapon();
