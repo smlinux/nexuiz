@@ -138,3 +138,7 @@ float current_zoomfraction;
 
 float cs_project_is_b0rked;
 float vid_width, vid_height, vid_pixelheight;
+
+float camera_active;		// Demo camera is active if set to TRUE
+float chase_active_backup;
+vector camera_direction;

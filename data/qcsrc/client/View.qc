@@ -94,7 +94,6 @@ float atan2(float y, float x)
 	return v_y * 0.01745329251994329576;
 }
 
-float camera_active;
 vector GetCurrentFov(float fov)
 {
 	float zoomsensitivity, zoomspeed, zoomfactor, zoomdir;
@@ -171,17 +170,17 @@ void CSQC_common_hud(void);
 void CSQC_kh_hud(void);
 void CSQC_ctf_hud(void);
 void PostInit(void);
+void CSQC_Demo_Camera();
 float Sbar_WouldDrawScoreboard ();
 float zoomscript_caught;
 float view_set;
 float camera_mode;
-vector camera_offset, current_origin, mouse_angles, current_camera_offset, new_angles;
 void CSQC_UpdateView(float w, float h)
 {
 	entity e;
 	float fov;
 	float f;
-	vector v1, v2, delta;
+	vector v1, v2;
 
 	dprint_load();
 	WaypointSprite_Load();
@@ -295,162 +294,29 @@ void CSQC_UpdateView(float w, float h)
 	R_SetView(VF_FOV, GetCurrentFov(fov));
 
 	// Camera for demo playback
-	if (cvar("chase_active") > 1 && cvar("cl_demo_mousegrab") && isdemo())
+	if(camera_active)
 	{
-		float speed, attenuation;
-		vector new_origin, m;
-
-		if(!camera_active)
-			camera_active = TRUE;
-		
-		if(cvar("camera_free"))
-			speed = cvar("camera_speed_free");
-		else
-			speed = cvar("camera_speed_chase");
-			
-		attenuation = cvar("camera_speed_attenuation");
-		
-		attenuation = 1 / max(1, attenuation);
-
-		if( cvar("camera_reset") || !camera_mode )
-		{
-			camera_offset = '0 0 0';
-			new_angles = view_angles;
-			camera_offset_z += 20;
-			camera_offset_x += 20 * -cos(new_angles_y * DEG2RAD);
-			camera_offset_y += 20 * -sin(new_angles_y * DEG2RAD);
-			current_origin = view_origin;
-		}
-
-		// Camera angles
-		if( cvar("camera_roll") )
-			mouse_angles_z += cvar("camera_roll") * cvar("camera_speed_roll");
-
-		if(!cvar("camera_look_player"))
-		{
-			m = getmousepos() * 0.1;
-			if(vlen(m)>cvar("camera_mouse_treshold"))
-			{
-				mouse_angles_x += m_y * cos(mouse_angles_z * DEG2RAD) + (m_x * sin(mouse_angles_z * DEG2RAD));
-				mouse_angles_y -= m_x * cos(mouse_angles_z * DEG2RAD) + (m_y * -sin(mouse_angles_z * DEG2RAD));
-			}
-
-			while (mouse_angles_x < -180)
-				mouse_angles_x = mouse_angles_x + 360;
-			while (mouse_angles_x > 180)
-				mouse_angles_x = mouse_angles_x - 360;
-			while (mouse_angles_y < -180)
-				mouse_angles_y = mouse_angles_y + 360;
-			while (mouse_angles_y > 180)
-				mouse_angles_y = mouse_angles_y - 360;
-			
-			delta = '0 0 0';			
-			if( mouse_angles_y < -90 && new_angles_y > 0)
-				delta = '0 360 0';
-			if( mouse_angles_y > 90 && new_angles_y < -90)
-				delta = '0 -360 0';
-
-			new_angles += (mouse_angles - new_angles + delta) * attenuation;
-		}
-		
-		// Camera position
-		if( cvar("camera_direction_x") )
-		{
-			camera_offset_x += cvar("camera_direction_x") * speed * cos(new_angles_y * DEG2RAD);
-			camera_offset_y += cvar("camera_direction_x") * speed * sin(new_angles_y * DEG2RAD);
-			if( cvar("camera_forward_follows") )
-				camera_offset_z += cvar("camera_direction_x") * speed * -sin(new_angles_x * DEG2RAD);
-		}
-
-		if( cvar("camera_direction_y") )
-		{
-			camera_offset_y += cvar("camera_direction_y") * speed * cos(new_angles_y * DEG2RAD) * cos(new_angles_z * DEG2RAD);
-			camera_offset_x += cvar("camera_direction_y") * speed * -sin(new_angles_y * DEG2RAD);
-			camera_offset_z += cvar("camera_direction_y") * speed * sin(new_angles_z * DEG2RAD);
-		}
-
-		if( cvar("camera_direction_z") )
-			camera_offset_z += cvar("camera_direction_z") * speed * cos(new_angles_z * DEG2RAD);
-
-		current_camera_offset += (camera_offset - current_camera_offset) * attenuation;
-
-		// Camera modes
-		if( cvar("camera_free") )
-		{
-			if ( camera_mode == CAMERA_CHASE )
-			{
-				current_camera_offset = current_origin + current_camera_offset;
-				camera_offset = current_origin + camera_offset;
-			}
-
-			camera_mode = CAMERA_FREE;
-			new_origin = current_camera_offset;
-		}
+		if(cvar("camera_enable"))
+			CSQC_Demo_Camera();
 		else
 		{
-			if ( camera_mode == CAMERA_FREE )
-			{
-				current_origin = view_origin;
-				camera_offset = camera_offset - current_origin;
-				current_camera_offset = current_camera_offset - current_origin;
-			}
-
-			camera_mode = CAMERA_CHASE;
-			
-			if(cvar("camera_chase_smoothly"))
-				current_origin += (view_origin - current_origin) * attenuation;
-			else
-				current_origin = view_origin;
-				
-			new_origin = current_origin + current_camera_offset;
-		}
-
-		if(cvar("camera_look_player"))
-		{
-			local vector dir;
-			local float n;
-			
-			dir = normalize(view_origin - new_origin);
-			n = mouse_angles_z;
-			mouse_angles = vectoangles(dir);
-			mouse_angles_x = mouse_angles_x * -1;
-			mouse_angles_z = n;
-
-			while (mouse_angles_x < -180)
-				mouse_angles_x = mouse_angles_x + 360;
-			while (mouse_angles_x > 180)
-				mouse_angles_x = mouse_angles_x - 360;
-			while (mouse_angles_y < -180)
-				mouse_angles_y = mouse_angles_y + 360;
-			while (mouse_angles_y > 180)
-				mouse_angles_y = mouse_angles_y - 360;
-
-			delta = '0 0 0';
-			if(mouse_angles_y < -90 && new_angles_y > 0)
-				delta = '0 360 0';
-			if(mouse_angles_y > 90 && new_angles_y < -90)
-				delta = '0 -360 0';
-
-			n = 1 / max(1, cvar("camera_look_attenuation"));		
-			new_angles += (mouse_angles - new_angles + delta) * n;
-		}
-
-		while (new_angles_x < -180)
-			new_angles_x = new_angles_x + 360;
-		while (new_angles_x > 180)
-			new_angles_x = new_angles_x - 360;
-		while (new_angles_y < -180)
-			new_angles_y = new_angles_y + 360;
-		while (new_angles_y > 180)
-			new_angles_y = new_angles_y - 360;
-
-		R_SetView(VF_ANGLES, new_angles);
-		R_SetView(VF_ORIGIN, new_origin);
-	}
-	else
-	{
-		if(camera_active)
+			cvar_set("chase_active", ftos(chase_active_backup));
+			cvar_set("cl_demo_mousegrab", "0");
 			camera_active = FALSE;
+		}
+	}
+#ifdef CAMERATEST
+	else if(cvar("camera_enable"))
+#else
+	else if(cvar("camera_enable") && isdemo())
+#endif
+	{
+		// Enable required Darkplaces cvars
+		chase_active_backup = cvar("chase_active");
+		cvar_set("chase_active", "2");		
+		cvar_set("cl_demo_mousegrab", "1");
+		camera_active = TRUE;
+		camera_mode = FALSE;
 	}
 	
 	// Draw the Crosshair
@@ -670,4 +536,151 @@ void CSQC_kh_hud(void)
 			drawpic (pink_pos, kh_carrying, kh_size, pink, 1.0, 0);
 	}
 
+}
+
+// following vectors must be global to allow seamless switching between camera modes
+vector camera_offset, current_camera_offset, mouse_angles, current_angles, current_origin, camera_position, current_position;
+void CSQC_Demo_Camera()
+{
+	float speed, attenuation, dimensions;
+	vector tmp, delta;
+
+	if( cvar("camera_reset") || !camera_mode )
+	{
+		camera_offset = '0 0 0';
+		current_angles = '0 0 0';
+		camera_direction = '0 0 0';
+		camera_offset_z += 30;
+		camera_offset_x += 30 * -cos(current_angles_y * DEG2RAD);
+		camera_offset_y += 30 * -sin(current_angles_y * DEG2RAD);
+		current_origin = view_origin;
+		current_camera_offset  = camera_offset;
+		cvar_set("camera_reset", "0");
+		camera_mode = CAMERA_CHASE;
+	}
+
+	// Camera angles
+	if( cvar("camera_roll") )
+		mouse_angles_z += cvar("camera_roll") * cvar("camera_speed_roll");
+
+	if(cvar("camera_look_player"))
+	{
+		local vector dir;
+		local float n;
+
+		dir = normalize(view_origin - current_position);
+		n = mouse_angles_z;
+		mouse_angles = vectoangles(dir);
+		mouse_angles_x = mouse_angles_x * -1;
+		mouse_angles_z = n;
+	}
+	else
+	{
+		tmp = getmousepos() * 0.1;
+		if(vlen(tmp)>cvar("camera_mouse_treshold"))
+		{
+			mouse_angles_x += tmp_y * cos(mouse_angles_z * DEG2RAD) + (tmp_x * sin(mouse_angles_z * DEG2RAD));
+			mouse_angles_y -= tmp_x * cos(mouse_angles_z * DEG2RAD) + (tmp_y * -sin(mouse_angles_z * DEG2RAD));
+		}
+	}
+
+	while (mouse_angles_x < -180) mouse_angles_x = mouse_angles_x + 360;
+	while (mouse_angles_x > 180) mouse_angles_x = mouse_angles_x - 360;
+	while (mouse_angles_y < -180) mouse_angles_y = mouse_angles_y + 360;
+	while (mouse_angles_y > 180) mouse_angles_y = mouse_angles_y - 360;
+
+	// Wrap angles for quick movements
+	delta = '0 0 0';
+	if(mouse_angles_y < -60 && current_angles_y > 60)
+		delta = '0 360 0';
+	if(mouse_angles_y > 60 && current_angles_y < -60)
+		delta = '0 -360 0';
+	//
+
+	if(cvar("camera_look_player"))
+		attenuation = cvar("camera_look_attenuation");
+	else
+		attenuation = cvar("camera_speed_attenuation");
+
+	attenuation = 1 / max(1, attenuation);
+	current_angles += (mouse_angles - current_angles + delta) * attenuation;
+
+	while (current_angles_x < -180) current_angles_x = current_angles_x + 360;
+	while (current_angles_x > 180) current_angles_x = current_angles_x - 360;
+	while (current_angles_y < -180) current_angles_y = current_angles_y + 360;
+	while (current_angles_y > 180) current_angles_y = current_angles_y - 360;
+
+	// Camera position
+	tmp = '0 0 0';
+	dimensions = 0;
+
+	if( camera_direction_x )
+	{
+		tmp_x = camera_direction_x * cos(current_angles_y * DEG2RAD);
+		tmp_y = camera_direction_x * sin(current_angles_y * DEG2RAD);
+		if( cvar("camera_forward_follows") && !cvar("camera_look_player") )
+			tmp_z = camera_direction_x * -sin(current_angles_x * DEG2RAD);
+		++dimensions;
+	}
+
+	if( camera_direction_y )
+	{
+		tmp_x += camera_direction_y * -sin(current_angles_y * DEG2RAD);
+		tmp_y += camera_direction_y * cos(current_angles_y * DEG2RAD) * cos(current_angles_z * DEG2RAD);
+		tmp_z += camera_direction_y * sin(current_angles_z * DEG2RAD);
+		++dimensions;
+	}
+
+	if( camera_direction_z )
+	{
+		tmp_z += camera_direction_z * cos(current_angles_z * DEG2RAD);
+		++dimensions;
+	}
+
+	if(cvar("camera_free"))
+		speed = cvar("camera_speed_free");
+	else
+		speed = cvar("camera_speed_chase");
+
+	if(dimensions)
+	{
+		speed = speed * sqrt(1 / dimensions);
+		camera_offset += tmp * speed;
+	}
+
+	current_camera_offset += (camera_offset - current_camera_offset) * attenuation;
+
+	// Camera modes
+	if( cvar("camera_free") )
+	{
+		if ( camera_mode == CAMERA_CHASE )
+		{
+			current_camera_offset = current_origin + current_camera_offset;
+			camera_offset = current_origin + camera_offset;
+		}
+
+		camera_mode = CAMERA_FREE;
+		current_position = current_camera_offset;
+	}
+	else
+	{
+		if ( camera_mode == CAMERA_FREE )
+		{
+			current_origin = view_origin;
+			camera_offset = camera_offset - current_origin;
+			current_camera_offset = current_camera_offset - current_origin;
+		}
+
+		camera_mode = CAMERA_CHASE;
+
+		if(cvar("camera_chase_smoothly"))
+			current_origin += (view_origin - current_origin) * attenuation;
+		else
+			current_origin = view_origin;
+
+		current_position = current_origin + current_camera_offset;
+	}
+
+	R_SetView(VF_ANGLES, current_angles);
+	R_SetView(VF_ORIGIN, current_position);
 }

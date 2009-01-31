@@ -83,6 +83,19 @@ void CSQC_Init(void)
 	registercmd("+button4");
 	registercmd("-button4");
 
+#ifndef CAMERATEST
+	if(isdemo())
+	{
+#endif
+		registercmd("+forward");registercmd("-forward");
+		registercmd("+back");registercmd("-back");
+		registercmd("+moveup");registercmd("-moveup");
+		registercmd("+movedown");registercmd("-movedown");
+		registercmd("+moveright");registercmd("-moveright");
+		registercmd("+moveleft");registercmd("-moveleft");
+#ifndef CAMERATEST
+	}
+#endif
 	registercvar("sbar_usecsqc", "1");
 	registercvar("sbar_columns", "default", CVAR_SAVE);
 
@@ -163,6 +176,9 @@ void CSQC_Shutdown(void)
 	db_close(tempdb);
 
 	cvar_clientsettemp_restore();
+
+	if(camera_active)
+		cvar_set("chase_active",ftos(chase_active_backup));
 }
 
 .float has_team;
@@ -306,7 +322,28 @@ float CSQC_ConsoleCommand(string strMessage)
 		sb_showscores = false;
 		return true;
 	}
-	
+
+	if(camera_active)
+	if(strCmd == "+forward" || strCmd == "-back") {
+		++camera_direction_x;
+		return true;
+	} else if(strCmd == "-forward" || strCmd == "+back") {
+		--camera_direction_x;
+		return true;
+	} else if(strCmd == "+moveright" || strCmd == "-moveleft") {
+		--camera_direction_y;
+		return true;
+	} else if(strCmd == "-moveright" || strCmd == "+moveleft") {
+		++camera_direction_y;
+		return true;
+	} else if(strCmd == "+moveup" || strCmd == "-movedown") {
+		++camera_direction_z;
+		return true;
+	} else if(strCmd == "-moveup" || strCmd == "+movedown") {
+		--camera_direction_z;
+		return true;
+	}
+
 	return false;
 }
 
