@@ -93,6 +93,8 @@ void CSQC_Init(void)
 		registercmd("+movedown");registercmd("-movedown");
 		registercmd("+moveright");registercmd("-moveright");
 		registercmd("+moveleft");registercmd("-moveleft");
+		registercmd("+roll_right");registercmd("-roll_right");
+		registercmd("+roll_left");registercmd("-roll_left");
 #ifndef CAMERATEST
 	}
 #endif
@@ -341,6 +343,12 @@ float CSQC_ConsoleCommand(string strMessage)
 		return true;
 	} else if(strCmd == "-moveup" || strCmd == "+movedown") {
 		--camera_direction_z;
+		return true;
+	} else if(strCmd == "+roll_right" || strCmd == "-roll_left") {
+		++camera_roll;
+		return true;
+	} else if(strCmd == "+roll_left" || strCmd == "-roll_right") {
+		--camera_roll;
 		return true;
 	}
 

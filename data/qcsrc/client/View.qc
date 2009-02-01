@@ -560,8 +560,8 @@ void CSQC_Demo_Camera()
 	}
 
 	// Camera angles
-	if( cvar("camera_roll") )
-		mouse_angles_z += cvar("camera_roll") * cvar("camera_speed_roll");
+	if( camera_roll )
+		mouse_angles_z += camera_roll * cvar("camera_speed_roll");
 
 	if(cvar("camera_look_player"))
 	{
@@ -589,13 +589,12 @@ void CSQC_Demo_Camera()
 	while (mouse_angles_y < -180) mouse_angles_y = mouse_angles_y + 360;
 	while (mouse_angles_y > 180) mouse_angles_y = mouse_angles_y - 360;
 
-	// Wrap angles for quick movements
+	// Fix difference when angles don't have the same sign
 	delta = '0 0 0';
 	if(mouse_angles_y < -60 && current_angles_y > 60)
 		delta = '0 360 0';
 	if(mouse_angles_y > 60 && current_angles_y < -60)
 		delta = '0 -360 0';
-	//
 
 	if(cvar("camera_look_player"))
 		attenuation = cvar("camera_look_attenuation");
