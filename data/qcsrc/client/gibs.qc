@@ -67,9 +67,9 @@ void TossGib (string mdlname, vector org, vector v, float destroyontouch)
 	gib.move_velocity = v + randomvec();
 	gib.move_avelocity = randomvec() * vlen(gib.move_velocity);
 	gib.move_time = time;
-	gib.damageforcescale = 3.5;
+	gib.damageforcescale = cvar("cl_gibs_damageforcescale");
 
-	gib.nextthink = time + 12 + prandom () * 4;
+	gib.nextthink = time + cvar("cl_gibs_lifetime") * (1 + prandom() * 0.15);
 }
 
 void Ent_GibSplash()
@@ -90,7 +90,7 @@ void Ent_GibSplash()
 
 	if(cvar("cl_gentle"))
 		type |= 0x80; // set gentle bit
-
+	
 	gibfactor = 1 - cvar("cl_nogibs");
 	if(gibfactor <= 0)
 		return;
