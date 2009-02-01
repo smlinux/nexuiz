@@ -1,0 +1,12 @@
+title Accident
+description Symetrical CTF map
+author Morphed
+cdtrack 5
+has weapons
+type ctf 300 20 10
+// optional: fog density red green blue alpha mindist maxdist
+// optional: settemp_for_type (all|gametypename) cvarname value
+// optional: clientsettemp_for_type (all|gametypename) cvarname value
+// optional: size mins_x mins_y mins_z maxs_x maxs_y maxs_z
+// optional: hidden
+size -4352 -2048 128 4352 2048 960
