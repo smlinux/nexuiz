@@ -228,12 +228,7 @@ make FTEQCC="$fteqccdir/fteqcc.bin"
 # prepare root
 rm -rf "$tmpdir/data/qcsrc"
 cd "$tmpdir/Docs"
-perl -pi -e '/^#---SET nexversion=([0-9.]*)$/ and $_ = "#---SET nexversion='$version'\n"' FAQ.aft
-perl -pi -e '/^\s*Version ([0-9.]*)<\/div>$/ and $_ = "Version '$version'</div>\n"' Readme.htm
 cp "$dpdir/darkplaces.txt" .
-$aft FAQ.aft
-$aft FAQ.aft
-rm FAQ.aft-TOC
 cd "$tmpdir/data"
 mv common-spog.pk3 ..
 perl -pi -e '/^set g_nexuizversion "?([0-9.]*)[^"]*"?/ and $_ = "set g_nexuizversion '$version'\n"' defaultNexuiz.cfg
