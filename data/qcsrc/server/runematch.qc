@@ -36,7 +36,7 @@ spawn point for runes in runematch
 
 void spawnfunc_runematch_spawn_point()
 {
-	if(!g_runematch)
+	if(!g_runematch || !cvar("g_runematch_fixedspawns"))
 	{
 		remove(self);
 		return;
