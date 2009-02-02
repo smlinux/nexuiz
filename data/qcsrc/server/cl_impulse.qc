@@ -95,12 +95,8 @@ void printsurfaceinfo(entity e, vector v)
 void ImpulseCommands (void)
 {
 	local float imp;
-	vector start, end, enddown;
 	float i;
 	float m;
-	float good, evil, evilsurf;
-	float maxattempts;
-	vector org, delta;
 	float wep;
 	entity e;
 
@@ -394,99 +390,14 @@ void ImpulseCommands (void)
 							sprint(self, "No waypoint set, cheater (use g_waypointsprite_personal to set one)\n");
 						break;
 					case 143:
-						good = DPCONTENTS_SOLID | DPCONTENTS_CORPSE | DPCONTENTS_PLAYERCLIP;
-						evil = DPCONTENTS_SLIME | DPCONTENTS_LAVA | DPCONTENTS_SKY | DPCONTENTS_BODY | DPCONTENTS_DONOTENTER;
-						evilsurf = Q3SURFACEFLAG_SKY;
-
-						m = self.dphitcontentsmask;
-						self.dphitcontentsmask = good | evil;
-
-						org = world.mins;
-						delta = world.maxs - world.mins;
-
-						maxattempts = ((sv_cheats >= 2) ? 100000 : 100);
-
-						for(i = 0; i < maxattempts; ++i)
+						if(MoveToRandomMapLocation(self, DPCONTENTS_SOLID | DPCONTENTS_CORPSE | DPCONTENTS_PLAYERCLIP, DPCONTENTS_SLIME | DPCONTENTS_LAVA | DPCONTENTS_SKY | DPCONTENTS_BODY | DPCONTENTS_DONOTENTER, Q3SURFACEFLAG_SKY, ((sv_cheats >= 2) ? 100000 : 100), 1024, 256))
 						{
-							start_x = org_x + random() * delta_x;
-							start_y = org_y + random() * delta_y;
-							start_z = org_z + random() * delta_z;
-
-							// rule 1: start inside world bounds, and outside
-							// solid, and don't start from somewhere where you can
-							// fall down to evil
-							tracebox(start, self.mins, self.maxs, start - '0 0 1' * delta_z, MOVE_NORMAL, self);
-							if(trace_fraction >= 1)
-								continue;
-							if(trace_startsolid)
-								continue;
-							dprint("hit contents ", ftos(trace_dphitcontents), "\n");
-							if(trace_dphitcontents & evil)
-								continue;
-							if(trace_dphitq3surfaceflags & evilsurf)
-								continue;
-
-							// rule 2: if we are too high, lower the point
-							if(trace_fraction * delta_z > 1024)
-								start = trace_endpos + '0 0 1024';
-							enddown = trace_endpos;
-
-							// these can be traceLINES as we already verified the starting box
-							traceline(start, start + '1 0 0' * delta_x, MOVE_NORMAL, self);
-							if(trace_fraction >= 1)
-								continue;
-							traceline(start, start - '1 0 0' * delta_x, MOVE_NORMAL, self);
-							if(trace_fraction >= 1)
-								continue;
-							traceline(start, start + '0 1 0' * delta_y, MOVE_NORMAL, self);
-							if(trace_fraction >= 1)
-								continue;
-							traceline(start, start - '0 1 0' * delta_y, MOVE_NORMAL, self);
-							if(trace_fraction >= 1)
-								continue;
-							traceline(start, start + '0 0 1' * delta_z, MOVE_NORMAL, self);
-							if(trace_fraction >= 1)
-								continue;
-
-							end_x = org_x + random() * delta_x;
-							end_y = org_y + random() * delta_y;
-							end_z = org_z + random() * delta_z;
-							end = start + normalize(end - start) * vlen(delta);
-
-							// rule 3: start TO end must not be too short
-							tracebox(start, self.mins, self.maxs, end, MOVE_NORMAL, self);
-							if(trace_startsolid)
-								continue;
-							if(trace_fraction < 256 / vlen(delta))
-								continue;
-
-							// rule 4: don't want to look at sky
-							if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SKY)
-								continue;
-
-							// rule 5: we must not end up in trigger_hurt
-							if(tracebox_hits_trigger_hurt(start, self.mins, self.maxs, enddown))
-							{
-								dprint("trigger_hurt! ouch! and nothing else could find it!\n");
-								continue;
-							}
-
-							break;
-						}
-
-						if(i < maxattempts)
-						{
-							self.origin = start;
-							self.angles = vectoangles(end - start);
 							self.angles_x = -self.angles_x;
 							self.fixangle = TRUE;
 							self.velocity = '0 0 0';
-							dprint("Needed ", ftos(i + 1), " attempts\n");
 						}
 						else
 							sprint(self, "Emergency teleport could not find a good location, forget it!\n");
-
-						self.dphitcontentsmask = m;
 						break;
 					case 144:
 						makevectors(self.v_angle);
