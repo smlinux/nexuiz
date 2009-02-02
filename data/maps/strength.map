@@ -29448,83 +29448,12 @@ eX/eXmetalBase07rust
 }
 // entity 549
 {
-"classname" "runematch_spawn_point"
-"origin" "152 320 184"
-}
-// entity 550
-{
-"classname" "runematch_spawn_point"
-"origin" "256 1584 184"
-}
-// entity 551
-{
-"classname" "runematch_spawn_point"
-"origin" "1152 1344 296"
-}
-// entity 552
-{
-"classname" "runematch_spawn_point"
-"origin" "1504 1856 552"
-}
-// entity 553
-{
-"classname" "runematch_spawn_point"
-"origin" "1632 576 296"
-}
-// entity 554
-{
-"classname" "runematch_spawn_point"
-"origin" "1088 832 552"
-}
-// entity 555
-{
-"classname" "runematch_spawn_point"
-"origin" "160 320 744"
-}
-// entity 556
-{
-"classname" "runematch_spawn_point"
-"origin" "256 248 1456"
-}
-// entity 557
-{
-"classname" "runematch_spawn_point"
-"origin" "512 1856 1456"
-}
-// entity 558
-{
-"classname" "runematch_spawn_point"
-"origin" "1240 1856 1064"
-}
-// entity 559
-{
-"classname" "runematch_spawn_point"
-"origin" "1944 872 1488"
-"spawnflags" "1"
-}
-// entity 560
-{
-"classname" "runematch_spawn_point"
-"origin" "1752 832 1768"
-}
-// entity 561
-{
-"classname" "runematch_spawn_point"
-"origin" "512 832 1184"
-}
-// entity 562
-{
-"classname" "runematch_spawn_point"
-"origin" "1536 584 1184"
-}
-// entity 563
-{
 "classname" "light"
 "_color" "1.000000 0.861357 0.341588"
 "light" "80"
 "origin" "1536 568 768"
 }
-// entity 564
+// entity 550
 {
 "classname" "dom_controlpoint"
 "wait" "5"
@@ -29532,7 +29461,7 @@ eX/eXmetalBase07rust
 "message" "^3 has captured the Strength"
 "origin" "512 832 1200"
 }
-// entity 565
+// entity 551
 {
 "classname" "dom_controlpoint"
 "origin" "1752 832 1784"
@@ -29540,7 +29469,7 @@ eX/eXmetalBase07rust
 "frags" "3"
 "wait" "5"
 }
-// entity 566
+// entity 552
 {
 "classname" "dom_controlpoint"
 "wait" "5"
@@ -29548,7 +29477,7 @@ eX/eXmetalBase07rust
 "message" "^3 has captured the Base"
 "origin" "1632 832 288"
 }
-// entity 567
+// entity 553
 {
 "classname" "func_group"
 // brush 0
@@ -29561,7 +29490,7 @@ eX/eXmetalBase07rust
 ( 80 632 1920 ) ( 80 728 1920 ) ( 144 632 1920 ) common/clip 0 0 0 0.5 0.5 0 13 0
 }
 }
-// entity 568
+// entity 554
 {
 "classname" "func_group"
 // brush 0
@@ -29574,7 +29503,7 @@ eX/eXmetalBase07rust
 ( 192 944 256 ) ( 192 912 256 ) ( 192 912 1664 ) common/clip -32 0 0 0.5 0.5 0 13 0
 }
 }
-// entity 569
+// entity 555
 {
 "classname" "light"
 "_color" "0.3085 0.3906 0.5586"
@@ -29583,13 +29512,13 @@ eX/eXmetalBase07rust
 "target" "t33"
 "_sun" "1"
 }
-// entity 570
+// entity 556
 {
 "classname" "target_position"
 "origin" "832 808 1880"
 "targetname" "t33"
 }
-// entity 571
+// entity 557
 {
 "classname" "light"
 "_sun" "1"
@@ -29598,13 +29527,13 @@ eX/eXmetalBase07rust
 "light" "40"
 "_color" "0.3085 0.3906 0.5586"
 }
-// entity 572
+// entity 558
 {
 "classname" "target_position"
 "targetname" "t34"
 "origin" "888 840 1880"
 }
-// entity 573
+// entity 559
 {
 "classname" "light"
 "_sun" "1"
@@ -29613,13 +29542,13 @@ eX/eXmetalBase07rust
 "light" "40"
 "_color" "0.3085 0.3906 0.5586"
 }
-// entity 574
+// entity 560
 {
 "classname" "target_position"
 "targetname" "t35"
 "origin" "816 888 1880"
 }
-// entity 575
+// entity 561
 {
 "classname" "light"
 "origin" "248 1752 1592"

@@ -7414,33 +7414,3 @@ evil6_walls/e6girdersupport
 "classname" "dom_controlpoint"
 "origin" "1070 -580 -108"
 }
-// entity 116
-{
-"classname" "runematch_spawn_point"
-"origin" "430 20 70"
-}
-// entity 117
-{
-"classname" "runematch_spawn_point"
-"origin" "-350 550 -108"
-}
-// entity 118
-{
-"classname" "runematch_spawn_point"
-"origin" "1070 -580 -108"
-}
-// entity 119
-{
-"classname" "runematch_spawn_point"
-"origin" "440 250 -112"
-}
-// entity 120
-{
-"classname" "runematch_spawn_point"
-"origin" "55 -680 -112"
-}
-// entity 121
-{
-"classname" "runematch_spawn_point"
-"origin" "1000 410 80"
-}
