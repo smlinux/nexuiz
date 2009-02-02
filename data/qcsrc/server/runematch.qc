@@ -1,3 +1,4 @@
+float rune_numspawns;
 
 float	RUNE_FIRST	= 1;
 float	RUNE_STRENGTH	= 1;
@@ -14,6 +15,8 @@ float	CURSE_VENOM	= 32768;
 float	CURSE_SLOW	= 65536;
 float	CURSE_EMPATHY	= 131072;
 float	CURSE_LAST	= 131072;
+
+float RUNE_COUNT = 5;
 
 /* rune ideas:
 
@@ -41,6 +44,65 @@ void spawnfunc_runematch_spawn_point()
 
 	setsize(self, '0 0 -35', '0 0 0');
 	droptofloor();
+	++rune_numspawns;
+}
+
+// only used if using rune spawns at all
+entity rune_find_spawnpoint()
+{
+	entity e;
+
+	if(rune_numspawns < RUNE_COUNT)
+		return world;
+
+	RandomSelection_Init();
+
+	for(e = world; (e = find(e, classname, "runematch_spawn_point")); )
+		if(e.owner == world)
+			RandomSelection_Add(e, 0, e.cnt, 0);
+
+	return RandomSelection_chosen_ent;
+}
+
+float rune_spawn_somewhere(entity e)
+{
+	entity spot;
+	spot = rune_find_spawnpoint();
+	if(spot)
+	{
+		spot.owner = e;
+		setorigin(e, spot.origin);
+
+		e.owner = spot;
+		spot.owner = e;
+
+		return TRUE;
+	}
+	else
+	{
+		if(MoveToRandomMapLocation(e, DPCONTENTS_SOLID | DPCONTENTS_CORPSE | DPCONTENTS_PLAYERCLIP, DPCONTENTS_SLIME | DPCONTENTS_LAVA | DPCONTENTS_SKY | DPCONTENTS_BODY | DPCONTENTS_DONOTENTER, Q3SURFACEFLAG_SKY, 10, 1024, 256))
+		{
+			// great
+			makevectors(self.angles),
+			self.velocity = v_forward * 250;
+			self.angles = '0 0 0';
+			return TRUE;
+		}
+		else
+		{
+			// sorry, can't spawn, better luck next frame
+			return FALSE;
+		}
+	}
+}
+
+void rune_unmark_spot(entity e)
+{
+	if(e.owner.classname == "runematch_spawn_point")
+	{
+		e.owner.owner = world;
+		e.owner = world;
+	}
 }
 
 string RuneName(float r)
@@ -97,52 +159,6 @@ vector RuneColormod(float r)
 	return _color * (1 / 255) * cvar("g_runematch_rune_color_strength");
 }
 
-float count_rune_spawnpoints()
-{
-	float num;
-	entity e;
-	num = 0;
-	e = findchain(classname, "runematch_spawn_point");
-	while(e)
-	{
-		num = num + 1;
-		e = e.chain;
-
-	}
-	return num;
-}
-
-entity rune_find_spawnpoint(float num, float r)
-{
-	entity e;
-	e = world;
-	do
-	{
-		e = find(e, classname, "runematch_spawn_point");
-		if(!e)
-			e = find(e, classname, "runematch_spawn_point");
-		if(!e)
-			break;
-
-		if(r < 0)
-		{
-			return e; // emergency: prevent crash
-		}
-
-		if(e.owner != world)//e.wait > time) // already taken
-			continue;
-
-		if(r <= 1)
-		{
-			return e;
-		}
-
-		r = r - 1;
-
-	}while(e);
-	return world;
-}
-
 void rune_respawn();
 
 void RuneCarriedThink()
@@ -180,17 +196,20 @@ void RuneCarriedThink()
 
 void rune_touch()
 {
+	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+	{
+		self.think = rune_respawn;
+		self.nextthink = time;
+		return;
+	}
+
 	if(other.classname != "player" || other.health < 1)
 		return;
 	if(self.wait > time)
 		return; // "notouch" time isn't finished
 
 	// detach from the spawn point you're on
-	if(self.owner.classname == "runematch_spawn_point")
-	{
-		self.owner.owner = world;
-		self.owner = world;
-	}
+	rune_unmark_spot(self);
 
 	self.owner = other;
 	self.enemy.owner = other;
@@ -218,35 +237,20 @@ void rune_touch()
 
 void rune_respawn()
 {
-	float num, r;
-	entity spot;
-	num = count_rune_spawnpoints();
-	r = floor(random()*num) + 1;
-
-	if(self.owner.classname == "runematch_spawn_point")
+	rune_unmark_spot(self);
+	if(rune_spawn_somewhere(self))
 	{
-		self.owner.owner = world;
-		self.owner = world;
+		self.solid = SOLID_TRIGGER;
+		self.touch = rune_touch;
+		self.think = rune_respawn;
+		self.nextthink = time + cvar("g_runematch_shuffletime");//30 + random()*5; // fixme: cvar
 	}
-
-
-	spot = rune_find_spawnpoint(num, r);
-	if(!spot)
+	else
 	{
-		bprint("Warning: couldn't find spawn spot for rune respawn\n");
-		return;
+		// try again later
+		self.think = rune_respawn;
+		self.nextthink = time;
 	}
-
-	self.solid = SOLID_TRIGGER;
-
-	setorigin(self, spot.origin);
-	self.owner = spot;
-	spot.owner = self;
-
-	self.touch = rune_touch;
-
-	self.think = rune_respawn;
-	self.nextthink = time + cvar("g_runematch_shuffletime");//30 + random()*5; // fixme: cvar
 }
 
 entity FindRune(entity own, string clname, float r)
@@ -426,19 +430,6 @@ void DropAllRunes(entity pl)
 	}while(rune);
 }
 
-void spawn_default_runespawnpoints()
-{
-	entity spot, e;
-	spot = find(world, classname, "info_player_deathmatch");
-	while(spot)
-	{
-		e = spawn();
-		e.classname = "runematch_spawn_point";
-		e.origin = spot.origin;
-		spot = find(spot, classname, "info_player_deathmatch");
-	}
-}
-
 void rune_reset()
 {
 	if(self.owner)
@@ -449,8 +440,8 @@ void rune_reset()
 
 void spawn_runes()
 {
-	float r, num, max_num, rn, cs, numrunes, runes_left, curses_left, tries, prevent_same;
-	entity e, spot;
+	float rn, cs, runes_used, curses_used, prevent_same, numrunes;
+	entity e;
 
 	if(self)
 		remove(self);
@@ -458,133 +449,44 @@ void spawn_runes()
 	// fixme: instead of placing them all now, why not
 	// simply create them all and let them call rune_respawn() as their think?
 
-	runes_left  = RUNE_STRENGTH | RUNE_DEFENSE | RUNE_REGEN | RUNE_SPEED | RUNE_VAMPIRE;
-	curses_left = CURSE_WEAK | CURSE_VULNER | CURSE_VENOM | CURSE_SLOW | CURSE_EMPATHY;
-	numrunes = 5;
-	max_num = num = count_rune_spawnpoints();
-
-	if(num < numrunes)
-	{
-		spawn_default_runespawnpoints();
-	}
+	runes_used  = 0;
+	curses_used = 0;
 
 	prevent_same = !cvar("g_runematch_allow_same");
-
-	max_num = num = count_rune_spawnpoints();
-
-	if(num < numrunes)
-		error(strcat("not enough spawn points for runematch, need ", ftos(numrunes), " but found ", ftos(num), "\n"));
+	numrunes = RUNE_COUNT;
 
 	while(numrunes > 0)
 	{
-		r = floor(random()*numrunes) + 1;
-		if(r == 1)
-			rn = RUNE_STRENGTH;
-		else if(r == 2)
-			rn = RUNE_DEFENSE;
-		else if(r == 3)
-			rn = RUNE_REGEN;
-		else if(r == 4)
-			rn = RUNE_SPEED;
-		else
-			rn = RUNE_VAMPIRE;
+		RandomSelection_Init();
+		for(rn = RUNE_FIRST; rn <= RUNE_LAST; rn *= 2)
+			if not(runes_used & rn)
+				RandomSelection_Add(world, rn, 1, 1);
+		rn = RandomSelection_chosen_float;
 
-		if(curses_left > 1 && prevent_same)
-		{
-			tries = 15;
-			// avoid pairing runes and curses that match each other
-			do{
-				r = floor(random()*numrunes) + 1;
-				if(r == 1)
-					cs = CURSE_WEAK;
-				else if(r == 2)
-					cs = CURSE_VULNER;
-				else if(r == 3)
-					cs = CURSE_VENOM;
-				else if(r == 4)
-					cs = CURSE_SLOW;
-				else
-					cs = CURSE_EMPATHY;
-				tries = tries - 1;
-			}while(RuneMatchesCurse(rn, cs) && tries > 0);
-			if(tries <= 0)
-			{
-				bprint("warning: couldn't prevent same rune\n");
-			}
-		}
-		else
-		{
-			r = floor(random()*numrunes) + 1;
-			if(r == 1)
-				cs = CURSE_WEAK;
-			else if(r == 2)
-				cs = CURSE_VULNER;
-			else if(r == 3)
-				cs = CURSE_VENOM;
-			else if(r == 4)
-				cs = CURSE_SLOW;
-			else
-				cs = CURSE_EMPATHY;
-		}
+		RandomSelection_Init();
+		for(cs = CURSE_FIRST; cs <= CURSE_LAST; cs *= 2)
+			if not(curses_used & cs)
+				if not(prevent_same && cs == RuneMatchesCurse(rn, cs))
+					RandomSelection_Add(world, cs, 1, 1);
+		cs = RandomSelection_chosen_float;
 
+		if(!rn || !cs)
+			error("No rune/curse left");
 
-
-		if(num <= 1)
-			r = 1;
-		else
-			r = floor(random()*num*1.25) + 1;
-
-		spot = rune_find_spawnpoint(num, r);
-
-		if(spot == world)
-		{
-			error("failed to find runematch spawnpoint!\n");
-		}
-
-		// choose and spawn rune
-
-/*		//rn = RUNE_FIRST;
-		while(!runes_left & rn && rn <= RUNE_LAST)
-			rn = rn * 2;
-		if(rn > RUNE_LAST)
-			error("couldn't select rune\n");
-		runes_left = runes_left - rn;
-
-		//cs = CURSE_FIRST;
-		while(!curses_left & cs && cs <= CURSE_LAST)
-			cs = cs * 2;
-		if(cs > CURSE_LAST)
-			error("couldn't select rune\n");
-		curses_left = curses_left - cs;
-*/
-		while(!runes_left & rn)
-		{
-			rn = rn * 2;
-			if(rn > RUNE_LAST)
-				rn = RUNE_FIRST;
-		}
-		runes_left = runes_left - rn;
-
-		while(!curses_left & cs)
-		{
-			cs = cs * 2;
-			if(cs > CURSE_LAST)
-				cs = CURSE_FIRST;
-		}
-		curses_left = curses_left - cs;
+		runes_used |= rn;
+		curses_used |= cs;
 
 		e = spawn();
 		e.runes = rn;
 		e.classname = "rune";
 		e.touch = rune_touch;
 		e.think = rune_respawn;
-		e.nextthink = time + random();
+		e.nextthink = time;
 		e.movetype = MOVETYPE_TOSS;
 		e.solid = SOLID_TRIGGER;
 		e.flags = FL_ITEM;
 		e.reset = rune_reset;
 		setmodel(e, "models/runematch/rune.mdl"); // precision set below
-		setorigin(e, spot.origin);
 		setsize(e, '0 0 -35', '0 0 0');
 
 		e.enemy = spawn();
@@ -596,7 +498,6 @@ void spawn_runes()
 		setorigin(e, '0 0 0');
 		setattachment(e.enemy, e, "");
 
-
 		e.colormod = RuneColormod(rn);
 		e.enemy.colormod = RuneColormod(cs);
 
@@ -606,16 +507,10 @@ void spawn_runes()
 		//e.glow_size = e.enemy.glow_size = cvar("g_runematch_rune_glow_size");
 		//e.glow_color = e.enemy.glow_color = cvar("g_runematch_rune_glow_color");
 
-		// this spot is taken
-		spot.owner = e;
-		e.owner = spot;
-
-
 		//rn = RUNE_FIRST;
 		//cs = CURSE_FIRST;
 
 		numrunes = numrunes - 1;
-		num = num - 1;
 	}
 }
 

@@ -1862,7 +1862,7 @@ string getrecords()
 float MoveToRandomMapLocation(entity e, float goodcontents, float badcontents, float badsurfaceflags, float attempts, float maxaboveground, float minviewdistance)
 {
 	float m, i;
-	vector start, org, delta, end, enddown;
+	vector start, org, delta, end, enddown, mstart;
 
 	m = e.dphitcontentsmask;
 	e.dphitcontentsmask = goodcontents | badcontents;
@@ -1898,19 +1898,20 @@ float MoveToRandomMapLocation(entity e, float goodcontents, float badcontents, f
 		// for somewhat well formed maps. A good rule of thumb is that
 		// the map should have a convex outside hull.
 		// these can be traceLINES as we already verified the starting box
-		traceline(start, start + '1 0 0' * delta_x, MOVE_NORMAL, e);
+		mstart = start + 0.5 * (e.mins + e.maxs);
+		traceline(mstart, mstart + '1 0 0' * delta_x, MOVE_NORMAL, e);
 		if(trace_fraction >= 1)
 			continue;
-		traceline(start, start - '1 0 0' * delta_x, MOVE_NORMAL, e);
+		traceline(mstart, mstart - '1 0 0' * delta_x, MOVE_NORMAL, e);
 		if(trace_fraction >= 1)
 			continue;
-		traceline(start, start + '0 1 0' * delta_y, MOVE_NORMAL, e);
+		traceline(mstart, mstart + '0 1 0' * delta_y, MOVE_NORMAL, e);
 		if(trace_fraction >= 1)
 			continue;
-		traceline(start, start - '0 1 0' * delta_y, MOVE_NORMAL, e);
+		traceline(mstart, mstart - '0 1 0' * delta_y, MOVE_NORMAL, e);
 		if(trace_fraction >= 1)
 			continue;
-		traceline(start, start + '0 0 1' * delta_z, MOVE_NORMAL, e);
+		traceline(mstart, mstart + '0 0 1' * delta_z, MOVE_NORMAL, e);
 		if(trace_fraction >= 1)
 			continue;
 
