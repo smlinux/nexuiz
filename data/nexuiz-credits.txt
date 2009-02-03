@@ -92,6 +92,7 @@ Amos "torus" Dudley - Announcer voices
 William "Willis" Weilep - Master server host
 "sev" - "Wicked" menu skins
 Simon O'Callaghan - "egyptsoc" texture set
+Robert "ai" Kuroto - Various models
 
 Qantourisc
 Tymo
