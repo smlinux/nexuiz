@@ -7,6 +7,11 @@ float prandom()
 	float c;
 	c = crc16(FALSE, strcat(ftos(prandom_seed), ftos(prandom_seed + 3.1415926535)));
 	prandom_seed = c;
+
+#ifdef USE_PRANDOM_DEBUG
+	print("RANDOM -> ", ftos(c), "\n");
+#endif
+
 	return c / 65536; // in [0..1[
 }
 
@@ -28,5 +33,15 @@ vector prandomvec()
 void psrandom(float seed)
 {
 	prandom_seed = seed;
+#ifdef USE_PRANDOM_DEBUG
+	print("SRANDOM ", ftos(seed), "\n");
+#endif
 }
+
+#ifdef USE_PRANDOM_DEBUG
+void prandom_debug()
+{
+	print("Current random seed = ", ftos(prandom_seed), "\n");
+}
+#endif
 #endif

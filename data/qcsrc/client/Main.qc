@@ -603,7 +603,10 @@ void Ent_Nagger()
 
 void Ent_RandomSeed()
 {
-	psrandom(ReadShort());
+	float s;
+	prandom_debug();
+	s = ReadShort();
+	psrandom(s);
 }
 
 // CSQC_Ent_Update : Called every frame that the server has indicated an update to the SSQC / CSQC entity has occured.

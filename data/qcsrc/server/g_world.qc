@@ -309,6 +309,8 @@ void RandomSeed_Think()
 {
 	self.cnt = bound(0, floor(random() * 65536), 65535);
 	self.nextthink = time + 5;
+
+	self.SendFlags |= 1;
 }
 void RandomSeed_Spawn()
 {
