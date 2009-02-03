@@ -303,6 +303,7 @@ float RandomSeed_Send(entity to, float sf)
 {
 	WriteByte(MSG_ENTITY, ENT_CLIENT_RANDOMSEED);
 	WriteShort(MSG_ENTITY, self.cnt);
+	return TRUE;
 }
 void RandomSeed_Think()
 {

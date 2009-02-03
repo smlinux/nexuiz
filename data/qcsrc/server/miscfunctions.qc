@@ -1642,8 +1642,8 @@ void Net_LinkEntity(entity e, float docull, float dt, float(entity, float) sendf
 
 	if(e.model == "" || self.modelindex == 0)
 	{
-		mi = self.mins;
-		ma = self.maxs;
+		mi = e.mins;
+		ma = e.maxs;
 		setmodel(e, "null");
 		setsize(e, mi, ma);
 	}

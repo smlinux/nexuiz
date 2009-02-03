@@ -1,5 +1,6 @@
 // prandom - PREDICTABLE random number generator (not seeded yet)
 
+#ifdef USE_PRANDOM
 float prandom_seed;
 float prandom()
 {
@@ -28,3 +29,4 @@ void psrandom(float seed)
 {
 	prandom_seed = seed;
 }
+#endif

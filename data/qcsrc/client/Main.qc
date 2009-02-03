@@ -636,6 +636,7 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		case ENT_CLIENT_ENTCS: Ent_ReadEntCS(); break;
 		case ENT_CLIENT_SCORES: Ent_ReadPlayerScore(); break;
 		case ENT_CLIENT_TEAMSCORES: Ent_ReadTeamScore(); break;
+		case ENT_CLIENT_POINTPARTICLES: Ent_PointParticles(); break;
 		case ENT_CLIENT_RAINSNOW: Ent_RainOrSnow(); break;
 		case ENT_CLIENT_LASER: Ent_Laser(); break;
 		case ENT_CLIENT_NAGGER: Ent_Nagger(); break;
@@ -662,8 +663,6 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 // with others, make sure it can no longer do so.
 void Ent_Remove()
 {
-	float i;
-
 	if(self.entremove)
 		self.entremove();
 

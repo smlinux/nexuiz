@@ -386,10 +386,10 @@ string ColorTranslateRGB(string s)
 	return s2;
 }
 
-float cvar_or(string cvar, float v)
+float cvar_or(string cv, float v)
 {
 	string s;
-	s = cvar_string(cvar);
+	s = cvar_string(cv);
 	if(s == "")
 		return v;
 	else
