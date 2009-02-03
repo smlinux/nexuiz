@@ -283,6 +283,7 @@ void Ent_Projectile()
 		InterpolateOrigin_Note();
 	
 	self.draw = Projectile_Draw;
+	self.entremove = Ent_RemoveProjectile;
 }
 
 void Projectile_Precache()

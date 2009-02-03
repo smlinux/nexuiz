@@ -298,6 +298,30 @@ void detect_maptype()
 #endif
 }
 
+entity randomseed;
+float RandomSeed_Send(entity to, float sf)
+{
+	WriteByte(MSG_ENTITY, ENT_CLIENT_RANDOMSEED);
+	WriteShort(MSG_ENTITY, self.cnt);
+}
+void RandomSeed_Think()
+{
+	self.cnt = bound(0, floor(random() * 65536), 65535);
+	self.nextthink = time + 5;
+}
+void RandomSeed_Spawn()
+{
+	randomseed = spawn();
+	randomseed.think = RandomSeed_Think;
+	Net_LinkEntity(randomseed, FALSE, 0, RandomSeed_Send);
+
+	entity oldself;
+	oldself = self;
+	self = randomseed;
+	self.think(); // sets random seed and nextthink
+	self = oldself;
+}
+
 float world_already_spawned;
 void RegisterWeapons();
 void Nagger_Init();
@@ -557,6 +581,7 @@ void spawnfunc_worldspawn (void)
 	records_reply = strzone(getrecords());
 
 	ClientInit_Spawn();
+	RandomSeed_Spawn();
 
 	world_initialized = 1;
 }

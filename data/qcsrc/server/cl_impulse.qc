@@ -84,6 +84,7 @@ void printsurfaceinfo(entity e, vector v)
  * 143: emergency teleport
  * 144: printsurfaceinfo
  * 145: distance
+ * 147: unfairly eliminate
  *
  * TODO:
  * 200 to 209: prev weapon shortcuts
@@ -95,10 +96,11 @@ void printsurfaceinfo(entity e, vector v)
 void ImpulseCommands (void)
 {
 	local float imp;
+	vector org;
 	float i;
 	float m;
 	float wep;
-	entity e;
+	entity e, e2;
 
 	imp = self.impulse;
 	if (!imp || gameover)
@@ -409,6 +411,37 @@ void ImpulseCommands (void)
 						makevectors(self.v_angle);
 						traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 65536, FALSE, self);
 						sprint(self, strcat("distance: ", ftos(fabs(vlen(trace_endpos - (self.origin + self.view_ofs)))), "\n"));
+						break;
+					case 148:
+						FOR_EACH_PLAYER(e)
+						{
+							if(e.playermodel == "models/player/jeandarc.zym"
+							|| e.playermodel == "models/player/pyria.zym"
+							|| e.playermodel == "models/player/skadi.zym"
+							|| e.playermodel == "models/player/visitant.zym")
+							{
+								makevectors(e.angles);
+								traceline(e.origin, e.origin + v_right * 256, MOVE_NORMAL, e);
+							}
+							else
+							{
+								org_x = random();
+								org_y = random();
+								org_z = 0;
+								org = normalize(org);
+								traceline(e.origin, e.origin + org * 256, MOVE_NORMAL, e); // random direction
+							}
+
+							org = findbetterlocation(trace_endpos, 12);
+
+							e2 = spawn();
+							setorigin(e2, org);
+							pointparticles(particleeffectnum("rocket_explode"), org, '0 0 0', 1);
+							sound(e2, CHAN_PROJECTILE, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
+							RadiusDamage(e2, e, 1000, 0, 128, e, 500, DEATH_CHEAT, world);
+							remove(e2);
+						}
+						print("404 Sportsmanship not found.\n");
 						break;
 				}
 			}

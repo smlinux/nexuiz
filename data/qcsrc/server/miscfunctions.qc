@@ -1633,15 +1633,20 @@ void SetCustomizer(entity e, float(void) customizer, void(void) uncustomizer)
 #define IFTARGETED if(!self.nottargeted && self.targetname != "")
 
 void() SUB_Remove;
-void Net_LinkEntityWithSize(entity e, float docull, float dt, vector mi, vector ma, float(entity, float) sendfunc)
+void Net_LinkEntity(entity e, float docull, float dt, float(entity, float) sendfunc)
 {
+	vector mi, ma;
+
 	if(e.classname == "")
 		e.classname = "net_linked";
 
 	if(e.model == "" || self.modelindex == 0)
+	{
+		mi = self.mins;
+		ma = self.maxs;
 		setmodel(e, "null");
-
-	setsize(e, mi, ma);
+		setsize(e, mi, ma);
+	}
 
 	e.SendEntity = sendfunc;
 	e.SendFlags = 0xFFFFFF;
@@ -1654,11 +1659,6 @@ void Net_LinkEntityWithSize(entity e, float docull, float dt, vector mi, vector 
 		e.nextthink = time + dt;
 		e.think = SUB_Remove;
 	}
-}
-
-void Net_LinkEntity(entity e, float docull, float dt, float(entity, float) sendfunc)
-{
-	Net_LinkEntityWithSize(e, docull, dt, e.mins, e.maxs, sendfunc);
 }
 
 void adaptor_think2touch()

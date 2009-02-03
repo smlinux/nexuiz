@@ -200,6 +200,16 @@ void Draw_WaypointSprite()
 	drawrotpic(o, rot * 90 * DEG2RAD, spriteimage, SPRITE_SIZE * waypointsprite_scale * vidscale, SPRITE_HOTSPOT * waypointsprite_scale * vidscale, '1 1 1', a, DRAWFLAG_MIPMAP);
 }
 
+void Ent_RemoveWaypointSprite()
+{
+	if(self.netname)
+		strunzone(self.netname);
+	if(self.netname2)
+		strunzone(self.netname2);
+	if(self.netname3)
+		strunzone(self.netname3);
+}
+
 void Ent_WaypointSprite()
 {
 	float sendflags, f;
@@ -267,16 +277,8 @@ void Ent_WaypointSprite()
 	}
 
 	InterpolateOrigin_Note();
-}
 
-void Ent_RemoveWaypointSprite()
-{
-	if(self.netname)
-		strunzone(self.netname);
-	if(self.netname2)
-		strunzone(self.netname2);
-	if(self.netname3)
-		strunzone(self.netname3);
+	self.entremove = Ent_RemoveWaypointSprite;
 }
 
 void WaypointSprite_Load()

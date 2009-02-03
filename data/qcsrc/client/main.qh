@@ -110,6 +110,7 @@ entity teamslots[17];    // 17 teams (including "spectator team")
 
 .void(void) draw;
 .void(void) draw2d;
+.void(void) entremove;
 float drawframetime;
 vector view_origin, view_angles, view_forward, view_right, view_up;
 

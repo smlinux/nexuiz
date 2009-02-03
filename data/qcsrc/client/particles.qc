@@ -91,6 +91,13 @@ void Draw_PointParticles()
 	self.origin = o;
 }
 
+void Ent_PointParticles_Remove()
+{
+	if(self.noise)
+		strunzone(self.noise);
+	self.noise = string_null;
+}
+
 void Ent_PointParticles()
 {
 	float f;
@@ -144,13 +151,7 @@ void Ent_PointParticles()
 	setsize(self, self.mins, self.maxs);
 	self.solid = SOLID_NOT;
 	self.draw = Draw_PointParticles;
-}
-
-void Ent_PointParticles_Remove()
-{
-	if(self.noise)
-		strunzone(self.noise);
-	self.noise = string_null;
+	self.entremove = Ent_PointParticles_Remove;
 }
 
 void Draw_Rain()

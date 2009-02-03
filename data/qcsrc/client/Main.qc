@@ -444,6 +444,20 @@ void Ent_ReadEntCS()
 }
 
 void Ent_Remove();
+
+void Ent_RemovePlayerScore()
+{
+	float i;
+
+	if(self.owner)
+	{
+		SetTeam(self.owner, -1);
+		self.owner.gotscores = 0;
+		for(i = 0; i < MAX_SCORE; ++i)
+			self.owner.(scores[i]) = 0; // clear all scores
+	}
+}
+
 void Ent_ReadPlayerScore()
 {
 	float i, n;
@@ -495,6 +509,8 @@ void Ent_ReadPlayerScore()
 
 	if(o.sort_prev)
 		Sbar_UpdatePlayerPos(o); // if not registered, we cannot do this yet!
+	
+	self.entremove = Ent_RemovePlayerScore;
 }
 
 void Ent_ReadTeamScore()
@@ -585,6 +601,11 @@ void Ent_Nagger()
 	warmup_stage = (nags & 16);
 }
 
+void Ent_RandomSeed()
+{
+	psrandom(ReadShort());
+}
+
 // CSQC_Ent_Update : Called every frame that the server has indicated an update to the SSQC / CSQC entity has occured.
 // The only parameter reflects if the entity is "new" to the client, meaning it just came into the client's PVS.
 void Ent_RadarLink();
@@ -610,42 +631,29 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		}
 #endif
 	self.enttype = t;
-	if(self.enttype == ENT_CLIENT_ENTCS)
-		Ent_ReadEntCS();
-	else if(self.enttype == ENT_CLIENT_SCORES)
-		Ent_ReadPlayerScore();
-	else if(self.enttype == ENT_CLIENT_TEAMSCORES)
-		Ent_ReadTeamScore();
-	else if(self.enttype == ENT_CLIENT_POINTPARTICLES)
-		Ent_PointParticles();
-	else if(self.enttype == ENT_CLIENT_RAINSNOW)
-		Ent_RainOrSnow();
-	else if(self.enttype == ENT_CLIENT_LASER)
-		Ent_Laser();
-	else if(self.enttype == ENT_CLIENT_NAGGER)
-		Ent_Nagger();
-	else if(self.enttype == ENT_CLIENT_WAYPOINT)
-		Ent_WaypointSprite();
-	else if(self.enttype == ENT_CLIENT_RADARLINK)
-		Ent_RadarLink();
-	else if(self.enttype == ENT_CLIENT_PROJECTILE)
-		Ent_Projectile();
-	else if(self.enttype == ENT_CLIENT_GIBSPLASH)
-		Ent_GibSplash();
-	else if(self.enttype == ENT_CLIENT_DAMAGEINFO)
-		Ent_DamageInfo();
-	else if(self.enttype == ENT_CLIENT_CASING)
-		Ent_Casing();
-	else if(self.enttype == ENT_CLIENT_INIT)
-		Ent_Init();
-	else if(self.enttype == ENT_CLIENT_SCORES_INFO)
-		Ent_ScoresInfo();
-	else if(self.enttype == ENT_CLIENT_MAPVOTE)
-		Ent_MapVote();
-	else if(self.enttype == ENT_CLIENT_CLIENTDATA)
-		Ent_ClientData();
-	else
-		error(strcat("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n"));
+	switch(t)
+	{
+		case ENT_CLIENT_ENTCS: Ent_ReadEntCS(); break;
+		case ENT_CLIENT_SCORES: Ent_ReadPlayerScore(); break;
+		case ENT_CLIENT_TEAMSCORES: Ent_ReadTeamScore(); break;
+		case ENT_CLIENT_RAINSNOW: Ent_RainOrSnow(); break;
+		case ENT_CLIENT_LASER: Ent_Laser(); break;
+		case ENT_CLIENT_NAGGER: Ent_Nagger(); break;
+		case ENT_CLIENT_WAYPOINT: Ent_WaypointSprite(); break;
+		case ENT_CLIENT_RADARLINK: Ent_RadarLink(); break;
+		case ENT_CLIENT_PROJECTILE: Ent_Projectile(); break;
+		case ENT_CLIENT_GIBSPLASH: Ent_GibSplash(); break;
+		case ENT_CLIENT_DAMAGEINFO: Ent_DamageInfo(); break;
+		case ENT_CLIENT_CASING: Ent_Casing(); break;
+		case ENT_CLIENT_INIT: Ent_Init(); break;
+		case ENT_CLIENT_SCORES_INFO: Ent_ScoresInfo(); break;
+		case ENT_CLIENT_MAPVOTE: Ent_MapVote(); break;
+		case ENT_CLIENT_CLIENTDATA: Ent_ClientData(); break;
+		case ENT_CLIENT_RANDOMSEED: Ent_RandomSeed(); break;
+		default:
+			error(strcat("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n"));
+			break;
+	}
 	
 	time = savetime;
 };
@@ -655,35 +663,14 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 void Ent_Remove()
 {
 	float i;
-	if(self.enttype == ENT_CLIENT_SCORES)
-	{
-		if(self.owner)
-		{
-			SetTeam(self.owner, -1);
-			self.owner.gotscores = 0;
-			for(i = 0; i < MAX_SCORE; ++i)
-				self.owner.(scores[i]) = 0; // clear all scores
-		}
-	} else if(self.enttype == ENT_CLIENT_TEAMSCORES)
-	{
-		/*
-		if(self.owner)
-			RemoveTeam(self.owner);
-		*/
-		// we don't NEED to remove them... they won't display anyway
-		// plus, svqc never does this anyway
-	} else if(self.enttype == ENT_CLIENT_POINTPARTICLES)
-	{
-		Ent_PointParticles_Remove();
-	}
-	else if(self.enttype == ENT_CLIENT_WAYPOINT)
-		Ent_RemoveWaypointSprite();
-	else if(self.enttype == ENT_CLIENT_PROJECTILE)
-		Ent_RemoveProjectile();
+
+	if(self.entremove)
+		self.entremove();
 
 	self.enttype = 0;
 	self.classname = "";
 	self.draw = menu_sub_null;
+	self.entremove = menu_sub_null;
 	// TODO possibly set more stuff to defaults
 }
 // CSQC_Ent_Remove : Called when the server requests a SSQC / CSQC entity to be removed.  Essentially call remove(self) as well.

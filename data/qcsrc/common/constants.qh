@@ -72,6 +72,7 @@ const float ENT_CLIENT_CASING = 15;
 const float ENT_CLIENT_INIT = 16;
 const float ENT_CLIENT_MAPVOTE = 17;
 const float ENT_CLIENT_CLIENTDATA = 18;
+const float ENT_CLIENT_RANDOMSEED = 19;
 
 const float SPRITERULE_DEFAULT = 0;
 const float SPRITERULE_TEAMPLAY = 1;
@@ -358,32 +359,33 @@ float PROJECTILE_BULLET_GLOWING = 18;
 
 // Deathtypes (weapon deathtypes are the IT_* constants below)
 // NOTE: when adding death types, please add an explanation to Docs/spamlog.txt too.
-float	DEATH_SPECIAL_START     = 10000;
-float	DEATH_FALL				= 10000;
-float	DEATH_TELEFRAG				= 10001;
-float	DEATH_DROWN				= 10002;
-float	DEATH_HURTTRIGGER			= 10003;
-float	DEATH_LAVA				= 10004;
-float	DEATH_SLIME				= 10005;
-float	DEATH_KILL				= 10006;
-float	DEATH_NOAMMO				= 10007;
-float	DEATH_SWAMP				= 10008;
-float	DEATH_TEAMCHANGE			= 10009;
-float	DEATH_AUTOTEAMCHANGE			= 10010;
-float	DEATH_CAMP				= 10011;
-float	DEATH_SHOOTING_STAR			= 10012;
-float	DEATH_ROT				= 10013;
-float	DEATH_MIRRORDAMAGE		= 10014;
-float	DEATH_TOUCHEXPLODE      = 10015;
-float   DEATH_TURRET            = 10100;
+float DEATH_SPECIAL_START = 10000;
+float DEATH_FALL = 10000;
+float DEATH_TELEFRAG = 10001;
+float DEATH_DROWN = 10002;
+float DEATH_HURTTRIGGER = 10003;
+float DEATH_LAVA = 10004;
+float DEATH_SLIME = 10005;
+float DEATH_KILL = 10006;
+float DEATH_NOAMMO = 10007;
+float DEATH_SWAMP = 10008;
+float DEATH_TEAMCHANGE = 10009;
+float DEATH_AUTOTEAMCHANGE = 10010;
+float DEATH_CAMP = 10011;
+float DEATH_SHOOTING_STAR = 10012;
+float DEATH_ROT = 10013;
+float DEATH_MIRRORDAMAGE = 10014;
+float DEATH_TOUCHEXPLODE = 10015;
+float DEATH_CHEAT = 10016;
+float DEATH_TURRET = 10100;
 
-float	DEATH_WEAPONMASK        = 0xFF;
-float	DEATH_HITTYPEMASK		= 0x1F00; // which is WAY below 10000 used for normal deaths
-float	HITTYPE_SECONDARY = 0x100;
-float	HITTYPE_SPLASH = 0x200;
-float	HITTYPE_BOUNCE = 0x400;
-float	HITTYPE_HEADSHOT = 0x800;
-float	HITTYPE_RESERVED = 0x1000; // unused yet
+float DEATH_WEAPONMASK = 0xFF;
+float DEATH_HITTYPEMASK = 0x1F00; // which is WAY below 10000 used for normal deaths
+float HITTYPE_SECONDARY = 0x100;
+float HITTYPE_SPLASH = 0x200;
+float HITTYPE_BOUNCE = 0x400;
+float HITTYPE_HEADSHOT = 0x800;
+float HITTYPE_RESERVED = 0x1000; // unused yet
 
 // macros to access these
 #define DEATH_ISSPECIAL(t)            ((t) >= DEATH_SPECIAL_START)
