@@ -28,6 +28,8 @@ morphed
 nexdm18_rmx
 official_cmp1
 portals
+race
+racetrack
 reaper
 ruiner
 savdm6ish
