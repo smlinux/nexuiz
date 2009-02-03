@@ -1,2 +1,5 @@
 // prandom - PREDICTABLE random number generator
 float prandom();
+vector prandomvec();
+
+void psrandom(float seed);

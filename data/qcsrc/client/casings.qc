@@ -78,9 +78,9 @@ void Ent_Casing()
 
 	casing.draw = Casing_Draw;
 	casing.move_origin = casing.origin;
-	casing.move_velocity = casing.velocity + 2 * randomvec();
+	casing.move_velocity = casing.velocity + 2 * prandomvec();
 	casing.move_angles = casing.angles;
-	casing.move_avelocity = '0 250 0' + 100 * randomvec();
+	casing.move_avelocity = '0 250 0' + 100 * prandomvec();
 	casing.move_movetype = MOVETYPE_BOUNCE;
 	casing.move_touch = Casing_Touch;
 	casing.move_time = time;

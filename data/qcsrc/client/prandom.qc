@@ -1,11 +1,30 @@
 // prandom - PREDICTABLE random number generator (not seeded yet)
 
-//float prandom_seed;
+float prandom_seed;
 float prandom()
 {
-	return random();
-//	float c;
-//	c = crc16(FALSE, strcat(ftos(prandom_seed), ftos(prandom_seed + 3.1415926535)));
-//	prandom_seed = c;
-//	return c / 65536; // in [0..1[
+	float c;
+	c = crc16(FALSE, strcat(ftos(prandom_seed), ftos(prandom_seed + 3.1415926535)));
+	prandom_seed = c;
+	return c / 65536; // in [0..1[
+}
+
+vector prandomvec()
+{
+	vector v;
+
+	do
+	{
+		v_x = prandom();
+		v_y = prandom();
+		v_z = prandom();
+	}
+	while(v * v > 1);
+
+	return v;
+}
+
+void psrandom(float seed)
+{
+	prandom_seed = seed;
 }

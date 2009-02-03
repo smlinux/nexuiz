@@ -385,3 +385,13 @@ string ColorTranslateRGB(string s)
 
 	return s2;
 }
+
+float cvar_or(string cvar, float v)
+{
+	string s;
+	s = cvar_string(cvar);
+	if(s == "")
+		return v;
+	else
+		return stof(s);
+}

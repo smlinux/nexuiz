@@ -41,7 +41,7 @@ void Gib_Draw()
 		R_AddEntity(self);
 }
 
-void TossGib (string mdlname, vector org, vector v, float destroyontouch)
+void TossGib (string mdlname, vector org, vector vconst, vector vrand, float destroyontouch)
 {
 	entity gib;
 
@@ -56,7 +56,7 @@ void TossGib (string mdlname, vector org, vector v, float destroyontouch)
 	setmodel (gib, mdlname); // precision set above
 
 	setsize (gib, '-8 -8 -8', '8 8 8');
-
+                                          
 	gib.draw = Gib_Draw;
 	if(destroyontouch)
 		gib.move_touch = Gib_Touch;
@@ -64,12 +64,12 @@ void TossGib (string mdlname, vector org, vector v, float destroyontouch)
 		gib.move_touch = SUB_RemoveOnNoImpact;
 
 	gib.move_origin = gib.origin = org;
-	gib.move_velocity = v + randomvec();
-	gib.move_avelocity = randomvec() * vlen(gib.move_velocity);
+	gib.move_velocity = vconst * cvar_or("cl_gibs_velocity_scale", 1) + vrand * cvar_or("cl_gibs_velocity_random", 1) + '0 0 1' * cvar("cl_gibs_velocity_up");
+	gib.move_avelocity = prandomvec() * vlen(gib.move_velocity);
 	gib.move_time = time;
-	gib.damageforcescale = cvar("cl_gibs_damageforcescale");
+	gib.damageforcescale = cvar_or("cl_gibs_damageforcescale", 3.5);
 
-	gib.nextthink = time + cvar("cl_gibs_lifetime") * (1 + prandom() * 0.15);
+	gib.nextthink = time + cvar_or("cl_gibs_lifetime", 14) * (1 + prandom() * 0.15);
 }
 
 void Ent_GibSplash()
@@ -108,37 +108,37 @@ void Ent_GibSplash()
 			sound (self, CHAN_PAIN, "misc/gib.wav", VOL_BASE, ATTN_NORM);
 
 			if(prandom() < amount)
-				TossGib("models/gibs/eye.md3", org, vel + randomvec() * 150, 0);
+				TossGib("models/gibs/eye.md3", org, vel, prandomvec() * 150, 0);
 			te_bloodshower(org + mi, org + ma, 1200, 1000 * amount);
 			if(prandom() < amount)
-				TossGib("models/gibs/bloodyskull.md3", org, vel + randomvec() * 100, 0);
+				TossGib("models/gibs/bloodyskull.md3", org, vel, prandomvec() * 100, 0);
 
 			for(c = 0; c < amount; ++c)
 			{
 				randomvalue = amount - c;
 					
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/arm.md3", org, vel + randomvec() * (prandom() * 120 + 90),0);
+					TossGib ("models/gibs/arm.md3", org, vel, prandomvec() * (prandom() * 120 + 90),0);
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/arm.md3", org, vel + randomvec() * (prandom() * 120 + 90),0);
+					TossGib ("models/gibs/arm.md3", org, vel, prandomvec() * (prandom() * 120 + 90),0);
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/chest.md3", org + '0 0 -12', vel + randomvec() * (prandom() * 120 + 80),0);
+					TossGib ("models/gibs/chest.md3", org + '0 0 -12', vel, prandomvec() * (prandom() * 120 + 80),0);
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/smallchest.md3", org, vel + randomvec() * (prandom() * 120 + 80),0);
+					TossGib ("models/gibs/smallchest.md3", org, vel, prandomvec() * (prandom() * 120 + 80),0);
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/leg1.md3", org + '0 0 -5', vel + randomvec() * (prandom() * 120 + 85),0);
+					TossGib ("models/gibs/leg1.md3", org + '0 0 -5', vel, prandomvec() * (prandom() * 120 + 85),0);
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/leg2.md3", org + '0 0 -9', vel + randomvec() * (prandom() * 120 + 85),0);
+					TossGib ("models/gibs/leg2.md3", org + '0 0 -9', vel, prandomvec() * (prandom() * 120 + 85),0);
 
 				// these splat on impact
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/chunk.mdl", org, vel + randomvec() * 450,1);
+					TossGib ("models/gibs/chunk.mdl", org, vel, prandomvec() * 450,1);
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/chunk.mdl", org, vel + randomvec() * 450,1);
+					TossGib ("models/gibs/chunk.mdl", org, vel, prandomvec() * 450,1);
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/chunk.mdl", org, vel + randomvec() * 450,1);
+					TossGib ("models/gibs/chunk.mdl", org, vel, prandomvec() * 450,1);
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/chunk.mdl", org, vel + randomvec() * 450,1);
+					TossGib ("models/gibs/chunk.mdl", org, vel, prandomvec() * 450,1);
 			}
 			break;
 		case 0x02:
@@ -146,7 +146,7 @@ void Ent_GibSplash()
 			break;
 		case 0x03:
 			if(prandom() < amount)
-				TossGib ("models/gibs/chunk.mdl", org, vel, 1);
+				TossGib ("models/gibs/chunk.mdl", org, vel, prandomvec() * (prandom() * 30 + 20), 1); // TODO maybe adjust to more randomization?
 			break;
 		case 0x81:
 			pointparticles(particleeffectnum("damage_dissolve"), org, vel, amount);
