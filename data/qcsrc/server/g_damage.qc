@@ -35,7 +35,7 @@ void Damage_DamageInfo(vector org, float coredamage, float edgedamage, float rad
 
 	e.oldorigin_x = compressShortVector(e.velocity);
 
-	Net_LinkEntity(e, TRUE, 0.2, Damage_DamageInfo_SendEntity);
+	Net_LinkEntity(e, FALSE, 0.2, Damage_DamageInfo_SendEntity);
 }
 
 #define DAMAGE_CENTERPRINT_SPACER NEWLINES
