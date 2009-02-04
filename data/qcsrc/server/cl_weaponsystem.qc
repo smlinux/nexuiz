@@ -39,6 +39,9 @@ void W_SetupShot(entity ent, vector vecs, float antilag, float recoil, string sn
 	traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, self);
 	trueaimpoint = trace_endpos;
 
+	if(debug_shotorg != '0 0 0')
+		vecs = debug_shotorg;
+
 	if (cvar("g_shootfromeye"))
 		w_shotorg = ent.origin + ent.view_ofs;
 	else if (cvar("g_shootfromcenter"))

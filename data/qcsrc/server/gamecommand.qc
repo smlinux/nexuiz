@@ -826,6 +826,12 @@ void GameCommand(string command)
 		return;
 	}
 
+	if(argv(0) == "debug_shotorg")
+	{
+		debug_shotorg = stov(argv(1));
+		return;
+	}
+
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");
 }
 

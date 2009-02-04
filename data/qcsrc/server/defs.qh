@@ -531,3 +531,5 @@ void SUB_UseTargets();
 .void() reset2; // if set, an entity is reset using this (after calling ALL the reset functions for other entities)
 
 void ClientData_Touch(entity e);
+
+vector debug_shotorg; // if non-zero, overrides the shot origin of all weapons

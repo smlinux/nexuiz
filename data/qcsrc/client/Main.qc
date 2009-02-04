@@ -374,7 +374,7 @@ void ShotOrg_Spawn()
 	precache_model("models/shotorg_adjuster.md3");
 	setmodel(debug_shotorg, "models/shotorg_adjuster.md3");
 	debug_shotorg.scale = 3;
-	debug_shotorg.alpha = 0.8;
+	debug_shotorg.alpha = 0.7;
 	debug_shotorg.view_ofs = '25 8 -8';
 }
 
@@ -427,6 +427,7 @@ void GameCommand(string msg)
 		else
 			debug_shotorg.view_ofs = debug_shotorg.view_ofs + stov(argv(1));
 		print(vtos(debug_shotorg.view_ofs), "\n");
+		localcmd("sv_cmd debug_shotorg \"", vtos(debug_shotorg.view_ofs), "\"\n");
 	}
 	else if(cmd == "shotorg_movez") {
 		if(!debug_shotorg)
@@ -434,6 +435,7 @@ void GameCommand(string msg)
 		else
 			debug_shotorg.view_ofs = debug_shotorg.view_ofs + stof(argv(1)) * (debug_shotorg.view_ofs * (1 / debug_shotorg.view_ofs_x)); // closer/farther, same xy pos
 		print(vtos(debug_shotorg.view_ofs), "\n");
+		localcmd("sv_cmd debug_shotorg \"", vtos(debug_shotorg.view_ofs), "\"\n");
 	}
 	else if(cmd == "shotorg_set") {
 		if(!debug_shotorg)
@@ -441,6 +443,7 @@ void GameCommand(string msg)
 		else
 			debug_shotorg.view_ofs = stov(argv(1));
 		print(vtos(debug_shotorg.view_ofs), "\n");
+		localcmd("sv_cmd debug_shotorg \"", vtos(debug_shotorg.view_ofs), "\"\n");
 	}
 	else if(cmd == "shotorg_setz") {
 		if(!debug_shotorg)
@@ -448,6 +451,7 @@ void GameCommand(string msg)
 		else
 			debug_shotorg.view_ofs = debug_shotorg.view_ofs * (stof(argv(1)) / debug_shotorg.view_ofs_x); // closer/farther, same xy pos
 		print(vtos(debug_shotorg.view_ofs), "\n");
+		localcmd("sv_cmd debug_shotorg \"", vtos(debug_shotorg.view_ofs), "\"\n");
 	}
 	else if(cmd == "shotorg_end") {
 		if(debug_shotorg)
@@ -456,6 +460,7 @@ void GameCommand(string msg)
 			remove(debug_shotorg);
 			debug_shotorg = world;
 		}
+		localcmd("sv_cmd debug_shotorg\n");
 	}
 	else
 	{
