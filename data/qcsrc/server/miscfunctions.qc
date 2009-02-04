@@ -871,9 +871,11 @@ void readplayerstartcvars()
 				if(g_lms)
 					t = (e.spawnflags & WEPSPAWNFLAG_NORMAL);
 				else if(g_race)
-					t = (i & WEP_LASER);
+					t = (i == WEP_LASER);
 				else
-					t = (i & (WEP_LASER | WEP_SHOTGUN));
+					t = (i == WEP_LASER || i == WEP_SHOTGUN);
+				if(g_grappling_hook) // if possible, redirect off-hand hook to on-hand hook
+					t += (i == WEP_HOOK);
 			}
 
 			if(t)
@@ -922,10 +924,10 @@ void readplayerstartcvars()
 		}
 	}
 
-	if(g_grappling_hook) // offhand hook
+	if(start_weapons & WEPBIT_HOOK)
 	{
-		start_weapons &~= WEPBIT_HOOK;
-		warmup_start_weapons &~= WEPBIT_HOOK;
+		// can't have off-hand hook, if hook weapon is enabled
+		g_grappling_hook = 0;
 	}
 
 	if(g_weapon_stay == 2)
