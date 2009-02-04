@@ -355,6 +355,28 @@ float CSQC_ConsoleCommand(string strMessage)
 	return false;
 }
 
+.vector view_ofs;
+entity debug_shotorg;
+void ShotOrg_Draw()
+{
+	self.origin = view_origin + view_forward * self.view_ofs_x + view_right * self.view_ofs_y + view_up * self.view_ofs_z;
+	self.angles = view_angles;
+	self.angles_x = -self.angles_x;
+	R_AddEntity(self);
+}
+
+void ShotOrg_Spawn()
+{
+	debug_shotorg = spawn();
+	debug_shotorg.draw = ShotOrg_Draw;
+	debug_shotorg.renderflags = RF_VIEWMODEL;
+	debug_shotorg.effects = EF_FULLBRIGHT;
+	precache_model("models/ax_planes.md3");
+	setmodel(debug_shotorg, "models/ax_planes.md3");
+	debug_shotorg.scale = 4;
+	debug_shotorg.view_ofs = '25 8 -8';
+}
+
 void GameCommand(string msg)
 {
 	float argc;
@@ -398,6 +420,42 @@ void GameCommand(string msg)
 		blurtest_power = stof(argv(3));
 	}
 #endif
+	else if(cmd == "shotorg_move") {
+		if(!debug_shotorg)
+			ShotOrg_Spawn();
+		else
+			debug_shotorg.view_ofs = debug_shotorg.view_ofs + stov(argv(1));
+		print(vtos(debug_shotorg.view_ofs), "\n");
+	}
+	else if(cmd == "shotorg_movez") {
+		if(!debug_shotorg)
+			ShotOrg_Spawn();
+		else
+			debug_shotorg.view_ofs = debug_shotorg.view_ofs + stof(argv(1)) * (debug_shotorg.view_ofs * (1 / debug_shotorg.view_ofs_x)); // closer/farther, same xy pos
+		print(vtos(debug_shotorg.view_ofs), "\n");
+	}
+	else if(cmd == "shotorg_set") {
+		if(!debug_shotorg)
+			ShotOrg_Spawn();
+		else
+			debug_shotorg.view_ofs = stov(argv(1));
+		print(vtos(debug_shotorg.view_ofs), "\n");
+	}
+	else if(cmd == "shotorg_setz") {
+		if(!debug_shotorg)
+			ShotOrg_Spawn();
+		else
+			debug_shotorg.view_ofs = debug_shotorg.view_ofs * (stof(argv(1)) / debug_shotorg.view_ofs_x); // closer/farther, same xy pos
+		print(vtos(debug_shotorg.view_ofs), "\n");
+	}
+	else if(cmd == "shotorg_end") {
+		if(debug_shotorg)
+		{
+			print(vtos(debug_shotorg.view_ofs), "\n");
+			remove(debug_shotorg);
+			debug_shotorg = world;
+		}
+	}
 	else
 	{
 		print("Invalid command. For a list of supported commands, try cl_cmd help.\n");
