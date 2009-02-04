@@ -51,7 +51,7 @@ void W_CampingRifle_FireBullet(float pSpread, float pDamage, float pHeadshotAdde
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_nails -= pAmmo;
 
-	W_SetupShot (self, '32 8 -4', FALSE, 2, "weapons/campingrifle_fire.wav");
+	W_SetupShot (self, '32 8 -8', FALSE, 2, "weapons/campingrifle_fire.wav");
 	pointparticles(particleeffectnum("shotgun_muzzleflash"), w_shotorg, w_shotdir * 2000, 1);
 
 	if(self.BUTTON_ZOOM) // if zoomed, shoot from the eye
