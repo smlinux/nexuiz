@@ -863,7 +863,20 @@ void readplayerstartcvars()
 			e = get_weaponinfo(i);
 			if(!(e.weapon))
 				continue;
-			if(((e.spawnflags & WEPSPAWNFLAG_NORMAL) && g_lms) || cvar(strcat("g_start_weapon_", e.netname)))
+
+			t = cvar(strcat("g_start_weapon_", e.netname));
+
+			if(t < 0) // "default" weapon selection
+			{
+				if(g_lms)
+					t = (e.spawnflags & WEPSPAWNFLAG_NORMAL);
+				else if(g_race)
+					t = (i & WEP_LASER);
+				else
+					t = (i & (WEP_LASER | WEP_SHOTGUN));
+			}
+
+			if(t)
 			{
 				start_weapons |= e.weapons;
 				weapon_action(e.weapon, WR_PRECACHE);
