@@ -356,7 +356,7 @@ cnt: weight of this item for random selection using "team". Set to a lower value
 -------- SPAWNFLAGS --------
 FLOATING: the item will float in air, instead of aligning to the floor by falling
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
-model="models/items/a_bullets.mdl"
+model="models/items/a_bullets.md3"
 */
 
 /*QUAKED item_cells (.3 .3 1) (-30 -30 0) (30 30 32) FLOATING
@@ -739,6 +739,7 @@ wait: number of seconds func_train will pause on this path corner before moving 
 
 /*QUAKED runematch_spawn_point (.3 .3 1) (-16 -16 -16) (16 16 16) 
 Spawn point for runes in a runematch.
+Runematch can work without runes also, it then spawn runes at random safe locations.
 */
 
 /*QUAKED target_assault_roundend (1 0 0) (-8 -8 -8) (8 8 8) 
