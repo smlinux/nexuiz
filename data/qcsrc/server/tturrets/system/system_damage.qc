@@ -258,6 +258,8 @@ void turret_stdproc_respawn()
     self.tur_head.avelocity     = self.avelocity;
     self.tur_head.angles        = self.idle_aim;
     self.health                 = self.tur_health;
+    self.tur_head.health         = self.tur_health;
+
     self.enemy                  = world;
     self.volly_counter          = self.shot_volly;
     self.ammo                   = self.ammo_max;
@@ -275,30 +277,34 @@ void turret_stdproc_respawn()
 */
 void turret_stdproc_damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector vforce)
 {
-    entity baseent,oldself;
-
-    if (self.health <= 0) return;
+    entity baseent;
 
     // Damage func is shared on all parts as standard, we need to know what the master entity of this turret is.
+
     if (self.owner)
         baseent = self.owner;
     else
         baseent = self;
 
-    oldself = self;
-    self = baseent;
+    //oldself = self;
+    //self = baseent;
+
+
+    if (self.health <= 0) return;
 
     if (teamplay != 0)
     if (self.team == attacker.team)
     {
         // This does not happen anymore. Re-enable if you fix that.
         //if(attacker.flags & FL_CLIENT)
+        if(clienttype(attacker) == CLIENTTYPE_REAL)
+            sprint(attacker, "\{1}Turret tells you: I'm on your team!\n");
             //if not(attacker.isbot)
-                //sprint(attacker, "\{1}Turret tells you: I'm on your team!\n");
+
 
         if(cvar("g_friendlyfire"))
         {
-            self = oldself;
+            //self = oldself;
             return;
         }
         else
@@ -310,7 +316,7 @@ void turret_stdproc_damage (entity inflictor, entity attacker, float damage, flo
     self.health = self.health - damage;
 
     // thorw head slightly off aim when hit?
-    if (oldself.classname == "turret_head")
+    if (self.classname == "turret_head")
         if (self.damage_flags & TFL_DMG_HEADSHAKE)
             self.tur_head.angles = self.tur_head.angles + randomvec() * damage;
 
@@ -319,11 +325,11 @@ void turret_stdproc_damage (entity inflictor, entity attacker, float damage, flo
 
     // Start burning when we have 10% or less health left
     if (self.health < (self.tur_health * 0.1))
-        self.tur_head.effects = EF_FLAME;
+        self.effects = EF_FLAME;
 
-    self = oldself;
+   // self = oldself;
 
-    if (baseent.health <= 0)
+    if (self.health <= 0)
     {
         baseent.event_damage           = SUB_Null;
         baseent.tur_head.event_damage  = SUB_Null;
@@ -332,6 +338,7 @@ void turret_stdproc_damage (entity inflictor, entity attacker, float damage, flo
         baseent.nextthink = time;
         baseent.think = turret_stdproc_die;
     }
+
 
 
 

@@ -955,7 +955,7 @@ float turret_stdproc_init (string cvar_base_name)
 // Spawn extra bits
     self.tur_head   = spawn();
 
-    self.tur_head.netname = self.tur_head.classname     = "turret_head";
+    self.tur_head.netname = self.tur_head.classname = "turret_head";
     self.tur_head.team = self.team;
 
     // Defend mode?
@@ -970,7 +970,7 @@ float turret_stdproc_init (string cvar_base_name)
     }
 
 // Claim ownership
-    self.tur_head.owner   = self;
+    self.tur_head.owner = self;
 
 // Put pices in place
 
@@ -987,7 +987,9 @@ float turret_stdproc_init (string cvar_base_name)
         self.tur_head.angles    = self.idle_aim;
 
     if (!self.health) self.health  = 150;
-    self.tur_health = self.health;
+        self.tur_health = self.health;
+
+    self.tur_head.health = self.health;
 
     //Solid bbox for preformance reasons
     self.solid              = SOLID_BBOX;
@@ -1015,7 +1017,7 @@ float turret_stdproc_init (string cvar_base_name)
         self.turret_postthink       = turret_stdproc_nothing;
 
         //self.turret_damagefunc          = turret_stdproc_damage;
-        self.event_damage               = turret_stdproc_damage;
+        //self.event_damage               = turret_stdproc_damage;
         self.tur_head.event_damage      = turret_stdproc_damage;
 
         //self.turret_diefunc             = turret_stdproc_die;
