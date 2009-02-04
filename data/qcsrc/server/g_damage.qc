@@ -667,6 +667,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			attacker.lms_traveled_distance = cvar("g_lms_campcheck_distance");
 		}
 
+		if(targ.classname == "player")
 		if (g_minstagib)
 		{
 			if ((deathtype == DEATH_FALL)  ||
