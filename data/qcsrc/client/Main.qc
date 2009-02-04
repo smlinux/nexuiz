@@ -371,8 +371,8 @@ void ShotOrg_Spawn()
 	debug_shotorg.draw = ShotOrg_Draw;
 	debug_shotorg.renderflags = RF_VIEWMODEL;
 	debug_shotorg.effects = EF_FULLBRIGHT;
-	precache_model("models/ax_planes.md3");
-	setmodel(debug_shotorg, "models/ax_planes.md3");
+	precache_model("models/shotorg_adjuster.md3");
+	setmodel(debug_shotorg, "models/shotorg_adjuster.md3");
 	debug_shotorg.scale = 4;
 	debug_shotorg.view_ofs = '25 8 -8';
 }
