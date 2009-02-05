@@ -577,8 +577,8 @@ void make_mapinfo_Think()
 void GameCommand(string command)
 {
 	float argc;
-	entity client;
-	float entno;
+	entity client, e;
+	float entno, i;
 	argc = tokenize_sane(command);
 
 	if(argv(0) == "help" || argc == 0)
@@ -621,7 +621,6 @@ void GameCommand(string command)
 
 	if(argv(0) == "make_mapinfo")
 	{
-		entity e;
 		e = spawn();
 		e.classname = "make_mapinfo";
 		e.think = make_mapinfo_Think;
@@ -829,6 +828,29 @@ void GameCommand(string command)
 	if(argv(0) == "debug_shotorg")
 	{
 		debug_shotorg = stov(argv(1));
+		return;
+	}
+
+	if(argv(0) == "gettaginfo") if(argc >= 4)
+	{
+		e = spawn();
+		if(argv(1) == "w")
+			setmodel(e, (nextent(world)).weaponentity.model);
+		else
+			setmodel(e, argv(1));
+		e.frame = stof(argv(2));
+		i = gettagindex(e, argv(3));
+		if(i)
+		{
+			print("model ", e.model, " frame ", ftos(e.frame), " tag ", argv(3));
+			print(" index = ", ftos(i));
+			print(" vector = ", vtos(gettaginfo(e, i)), "\n");
+			if(argc >= 6)
+				localcmd(strcat(argv(4), vtos(gettaginfo(e, i)), argv(5), "\n"));
+		}
+		else
+			print("bone not found\n");
+		remove(e);
 		return;
 	}
 

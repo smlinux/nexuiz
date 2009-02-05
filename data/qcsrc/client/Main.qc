@@ -364,17 +364,37 @@ void ShotOrg_Draw()
 	self.angles_x = -self.angles_x;
 	R_AddEntity(self);
 }
+void ShotOrg_Draw2D()
+{
+	vector coord2d_topleft, coord2d_topright, coord2d;
+	string s;
+	vector fs;
+
+	s = vtos(self.view_ofs);
+	s = substring(s, 1, strlen(s) - 2);
+	if(tokenize_sane(s) == 3)
+		s = strcat(argv(0), " ", argv(1), " ", argv(2));
+
+	coord2d_topleft = project_3d_to_2d(self.origin + view_up * 4 - view_right * 4);
+	coord2d_topright = project_3d_to_2d(self.origin + view_up * 4 + view_right * 4);
+
+	fs = '1 1 0' * ((coord2d_topright_x - coord2d_topleft_x) / stringwidth(s, FALSE));
+
+	coord2d = coord2d_topleft - '0 1 0' * fs_y;
+	coord2d_z = 0;
+	drawstring(coord2d, s, fs, '1 1 1', 1, 0);
+}
 
 void ShotOrg_Spawn()
 {
 	debug_shotorg = spawn();
 	debug_shotorg.draw = ShotOrg_Draw;
+	debug_shotorg.draw2d = ShotOrg_Draw2D;
 	debug_shotorg.renderflags = RF_VIEWMODEL;
 	debug_shotorg.effects = EF_FULLBRIGHT;
 	precache_model("models/shotorg_adjuster.md3");
 	setmodel(debug_shotorg, "models/shotorg_adjuster.md3");
-	debug_shotorg.scale = 3;
-	debug_shotorg.alpha = 0.7;
+	debug_shotorg.scale = 2;
 	debug_shotorg.view_ofs = '25 8 -8';
 }
 
@@ -426,7 +446,6 @@ void GameCommand(string msg)
 			ShotOrg_Spawn();
 		else
 			debug_shotorg.view_ofs = debug_shotorg.view_ofs + stov(argv(1));
-		print(vtos(debug_shotorg.view_ofs), "\n");
 		localcmd("sv_cmd debug_shotorg \"", vtos(debug_shotorg.view_ofs), "\"\n");
 	}
 	else if(cmd == "shotorg_movez") {
@@ -434,7 +453,6 @@ void GameCommand(string msg)
 			ShotOrg_Spawn();
 		else
 			debug_shotorg.view_ofs = debug_shotorg.view_ofs + stof(argv(1)) * (debug_shotorg.view_ofs * (1 / debug_shotorg.view_ofs_x)); // closer/farther, same xy pos
-		print(vtos(debug_shotorg.view_ofs), "\n");
 		localcmd("sv_cmd debug_shotorg \"", vtos(debug_shotorg.view_ofs), "\"\n");
 	}
 	else if(cmd == "shotorg_set") {
@@ -442,7 +460,6 @@ void GameCommand(string msg)
 			ShotOrg_Spawn();
 		else
 			debug_shotorg.view_ofs = stov(argv(1));
-		print(vtos(debug_shotorg.view_ofs), "\n");
 		localcmd("sv_cmd debug_shotorg \"", vtos(debug_shotorg.view_ofs), "\"\n");
 	}
 	else if(cmd == "shotorg_setz") {
@@ -450,7 +467,6 @@ void GameCommand(string msg)
 			ShotOrg_Spawn();
 		else
 			debug_shotorg.view_ofs = debug_shotorg.view_ofs * (stof(argv(1)) / debug_shotorg.view_ofs_x); // closer/farther, same xy pos
-		print(vtos(debug_shotorg.view_ofs), "\n");
 		localcmd("sv_cmd debug_shotorg \"", vtos(debug_shotorg.view_ofs), "\"\n");
 	}
 	else if(cmd == "shotorg_end") {
