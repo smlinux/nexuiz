@@ -1219,6 +1219,10 @@ void Sbar_Score(float margin)
 			timer_color = '1 0 0'; //red
 		}
 		
+		if (warmup_stage) {
+			timer_color = '1 1 1'; //don't use red or yellow for timer during warmup
+		}
+		
 		if (cvar("sbar_increment_maptime")) {
 			if (time < getstatf(STAT_GAMESTARTTIME)) {
 				//while restart is still active, show negative counter
