@@ -117,7 +117,6 @@ sub color_dp2none($)
 	return color_dp_transform
 	{
 		my ($type, $data, $next) = @_;
-		print "$type $data\n";
 		$type eq 'char'
 			? $text_qfont_table[ord $data]
 			: "";
@@ -174,7 +173,6 @@ sub color_dp_rgb2basic($)
 	return color_dp_transform
 	{
 		my ($type, $data, $next) = @_;
-		print "$type $data\n";
 		$type eq 'char'  ? ($data eq '^' ? '^^' : $data) :
 		$type eq 'color' ? "^$data" :
 		$type eq 'rgb'   ? "^" . color_rgb2basic $data :
