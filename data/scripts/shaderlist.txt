@@ -3,6 +3,8 @@ blacksky
 common
 dsi
 e7
+eggandbacon
+egyptsoc
 el3dm1
 evil1_grates
 evil2
@@ -46,5 +48,6 @@ terrain_dotproduct2projected
 test3
 toxic
 tree
+turrets
 tznex01
 water
