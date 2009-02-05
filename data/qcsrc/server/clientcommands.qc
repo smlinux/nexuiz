@@ -398,8 +398,11 @@ void ReadyRestart()
 	if(g_arena | g_assault | gameover | intermission_running | race_completing)
 		localcmd("restart\n");
 
-	// reset ALL scores
-	Score_ClearAll();
+	// reset ALL scores, but only do that at the beginning 
+	//of the countdown if sv_ready_restart_after_countdown is off!
+	//Otherwise scores could be manipulated during the countdown!
+	if (!cvar("sv_ready_restart_after_countdown"))
+		Score_ClearAll();
 
 	ReadyRestartForce();
 }
@@ -448,9 +451,14 @@ void restartAnnouncer_Think() {
 	float f, c;
 	c = game_starttime - time;
 	f = floor(0.5 + c);
-	if(c <= 0) { //show the "Begin" message and
-		if(self.spawnflags & 1)
+	if(c <= 0) { //show the "Begin" message
+		if(self.spawnflags & 1) // if sv_ready_restart_after_countdown is set
 		{
+			if (!g_assault) {
+				//don't clear scores for assault mode, which uses ReadyRestartForce (and thus 
+				//restartAnnouncer_Think) to start a new round
+				Score_ClearAll();
+			}
 			restart_mapalreadyrestarted = 1;
 			reset_map(TRUE);
 		}
