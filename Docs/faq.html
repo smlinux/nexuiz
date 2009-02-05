@@ -78,6 +78,7 @@
 <ul>
 <li> <a class="link" href="#How do I install Nexuiz?">How do I install Nexuiz?</a></li>
 <li> <a class="link" href="#When I start Nexuiz all I see is a black screen or a black screen with some checkered squares">When I start Nexuiz all I see is a black screen or a black screen with some checkered squares</a></li>
+<li> <a class="link" href="#Using Linux i only see the map but no players and items">Using Linux i only see the map but no players and items</a></li>
 <li> <a class="link" href="#When i start Nexuiz my screen is flickering">When i start Nexuiz my screen is flickering</a></li>
 <li> <a class="link" href="#How can I speed up my frame rate?">How can I speed up my frame rate?</a></li>
 <li> <a class="link" href="#The sound is broken, it crackles and stutters">The sound is broken, it crackles and stutters</a></li>
@@ -146,6 +147,15 @@ This happens when the engine can't load the data*.pk3 file or has trouble to ini
 <li> on Mac: you tried to extract and move the files from a Nexuiz update and it deleted the old files.  When using the mac GUI please be sure to move only the files not the folders as that will delete the old files or use the mv console command which will not delete the old files</li>
 <li> the engine could not initialize OpenGL.  Please install the latest drivers for your graphic card.  You will probably find one for your card there: <a class="link" href="http://intel.com">intel</a> <a class="link" href="http://ati.com">ati</a> <a class="link" href="http://nvidia.com">nvidia</a></li>
 <li> your download might be corrupted, please download Nexuiz again</li>
+</ol>
+</p>
+<!--End Section 2-->
+<h3><a name="Using Linux i only see the map but no players and items" id="Using Linux i only see the map but no players and items">Using Linux i only see the map but no players and items</a></h3>
+<p class="Body">
+This happens when the engine has trouble to initialize OpenGL.  The reasons could be:
+<ol>
+<li> the engine could not initialize OpenGL.  Please install the latest drivers for your graphic card.  You will probably find one for your card there: <a class="link" href="http://intel.com">intel</a> <a class="link" href="http://ati.com">ati</a> <a class="link" href="http://nvidia.com">nvidia</a></li>
+<li> You do not have permissions needed for 3d acceleration.  Usually you need to add yourself to the group <tt>video</tt>, you can do that via console as root like this: <tt>usermod -a -G video YOURUSERNAME</tt>.  You need to logoff/in afterwards.</li>
 </ol>
 </p>
 <!--End Section 2-->

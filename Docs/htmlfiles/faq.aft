@@ -44,6 +44,11 @@ This happens when the engine can't load the data*.pk3 file or has trouble to ini
 	4. the engine could not initialize OpenGL.  Please install the latest drivers for your graphic card.  You will probably find one for your card there: [intel (http://intel.com)] [ati (http://ati.com)] [nvidia (http://nvidia.com)]
 	5. your download might be corrupted, please download Nexuiz again
 
+** Using Linux i only see the map but no players and items
+This happens when the engine has trouble to initialize OpenGL.  The reasons could be:
+	1. the engine could not initialize OpenGL.  Please install the latest drivers for your graphic card.  You will probably find one for your card there: [intel (http://intel.com)] [ati (http://ati.com)] [nvidia (http://nvidia.com)]
+	2. You do not have permissions needed for 3d acceleration.  Usually you need to add yourself to the group |video|, you can do that via console as root like this: |usermod -a -G video YOURUSERNAME|.  You need to logoff/in afterwards.
+
 ** When i start Nexuiz my screen is flickering
 This is known to happen on Windows with Intel graphic chips and is a bug in the graphics drivers.  A workaround is to set |Flip-Policiy| to |blit|.  Open the control panel, there should be an icon called |Intel(R) GMA driver| (or something like that), double click it. Click on |3D Settings| to find the screen with those settings.
 
