@@ -128,7 +128,7 @@ void fillNexuizAudioSettingsTab(entity me)
 		setDependent(e, "snd_channels", 1.5, 0.5);
 	me.TR(me);
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Directional voices:"));
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Spatial voices:"));
 		me.TD(me, 1, 2/3, e = makeNexuizRadioButton(1, "cl_voice_directional", "0", "None"));
 		me.TD(me, 1, 2/3, e = makeNexuizRadioButton(1, "cl_voice_directional", "2", "Taunts"));
 		me.TD(me, 1, 2/3, e = makeNexuizRadioButton(1, "cl_voice_directional", "1", "All"));
