@@ -135,3 +135,11 @@ string rgb_to_hexcolor(vector rgb);
 
 float boxesoverlap(vector m1, vector m2, vector m3, vector m4);
 float boxinsidebox(vector smins, vector smaxs, vector bmins, vector bmaxs);
+
+#ifndef MENUQC
+vector AnglesTransform_Apply(vector transform, vector v);
+vector AnglesTransform_Multiply(vector t1, vector t2);
+vector AnglesTransform_Invert(vector transform);
+vector AnglesTransform_TurnDirection(vector transform);
+vector AnglesTransform_Divide(vector to_transform, vector from_transform);
+#endif

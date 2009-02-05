@@ -1,3 +1,6 @@
+.float spawntime;
+.vector trail_oldorigin;
+
 void SUB_Null()
 {
 }
@@ -13,8 +16,11 @@ void SUB_Stop()
 .float gravity;
 .float snd_looping;
 
-void Projectile_DrawTrail(vector from, vector to)
+void Projectile_DrawTrail(vector to)
 {
+	vector from;
+	from = self.trail_oldorigin;
+	self.trail_oldorigin = to;
 	switch(self.cnt)
 	{
 		case PROJECTILE_ROCKET:
@@ -61,35 +67,57 @@ void Projectile_DrawTrail(vector from, vector to)
 
 void Projectile_Draw()
 {
-	vector oldorg;
-
-	oldorg = self.origin;
+	vector rot;
+	vector trailorigin;
 
 	if(self.count & 0x80)
 	{
 		//self.move_flags &~= FL_ONGROUND;
 		Movetype_Physics(TRUE);
-		self.angles = vectoangles(self.velocity);
+		if(!(self.move_flags & FL_ONGROUND))
+			self.angles = vectoangles(self.velocity);
 	}
 	else
 	{
 		InterpolateOrigin_Do();
 	}
 
-	Projectile_DrawTrail(oldorg, self.origin);
+	if(!(self.move_flags & FL_ONGROUND))
+	{
+		rot = '0 0 0';
+		switch(self.cnt)
+		{
+			case PROJECTILE_GRENADE:
+				rot = '-750 0 0';
+				break;
+			case PROJECTILE_GRENADE_BOUNCING:
+				rot = '0 -750 0';
+				break;
+			case PROJECTILE_HOOKBOMB:
+				rot = '0 1000 0';
+				break;
+			default:
+				break;
+		}
+		self.angles = AnglesTransform_Multiply(self.angles, rot * (time - self.spawntime));
+
+		fixedmakevectors(self.angles);
+
+		trailorigin = self.origin;
+		switch(self.cnt)
+		{
+			case PROJECTILE_GRENADE:
+			case PROJECTILE_GRENADE_BOUNCING:
+				trailorigin += v_right * 1 + v_forward * -10;
+				break;
+			default:
+				break;
+		}
+		Projectile_DrawTrail(trailorigin);
+	}
 
 	switch(self.cnt)
 	{
-		case PROJECTILE_GRENADE:
-			self.angles -= '750 0 0' * time;
-			break;
-		case PROJECTILE_GRENADE_BOUNCING:
-			if(!(self.move_flags & FL_ONGROUND))
-				self.angles += '100 150 100' * time;
-			break;
-		case PROJECTILE_HOOKBOMB:
-			self.angles = '0 500 0' * time;
-			break;
 		case PROJECTILE_BULLET_GLOWING:
 			R_AddDynamicLight(self.origin, 50, '1 1 0');
 			break;
@@ -120,7 +148,7 @@ void Ent_RemoveProjectile()
 	if(self.count & 0x80)
 	{
 		tracebox(self.origin, self.mins, self.maxs, self.origin + self.velocity * 0.05, MOVE_NORMAL, self);
-		Projectile_DrawTrail(self.origin, trace_endpos);
+		Projectile_DrawTrail(trace_endpos);
 	}
 }
 
@@ -153,7 +181,10 @@ void Ent_Projectile()
 
 	// sv_gameplayfix_delayprojectiles
 	if(!self.move_time)
+	{
 		self.move_time = time + ticrate;
+		self.spawntime = time + ticrate;
+	}
 	else
 		self.move_time = max(self.move_time, time);
 
@@ -175,6 +206,8 @@ void Ent_Projectile()
 			self.move_origin = self.origin;
 			self.move_velocity = self.velocity;
 		}
+
+		self.trail_oldorigin = self.origin;
 	}
 
 	if(f & 2)

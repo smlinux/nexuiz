@@ -6,63 +6,6 @@
 .float portal_wants_to_vanish;
 .float portal_activatetime;
 
-vector Portal_Transform_Apply(vector transform, vector v)
-{
-	fixedmakevectors(transform);
-	return v_forward * v_x
-	     + v_right   * (-v_y)
-		 + v_up      * v_z;
-}
-
-vector Portal_Transform_Multiply(vector t1, vector t2)
-{
-	vector m_forward, m_up;
-	fixedmakevectors(t2); m_forward = v_forward; m_up = v_up;
-	m_forward = Portal_Transform_Apply(t1, m_forward); m_up = Portal_Transform_Apply(t1, m_up);
-	return fixedvectoangles2(m_forward, m_up);
-}
-
-vector Portal_Transform_Invert(vector transform)
-{
-	vector i_forward, i_up;
-	fixedmakevectors(transform);
-	// we want angles that turn v_forward into '1 0 0', v_right into '0 1 0' and v_up into '0 0 1'
-	// but these are orthogonal unit vectors!
-	// so to invert, we can simply fixedvectoangles the TRANSPOSED matrix
-	// TODO is this always -transform?
-	i_forward_x = v_forward_x;
-	i_forward_y = -v_right_x;
-	i_forward_z = v_up_x;
-	i_up_x = v_forward_z;
-	i_up_y = -v_right_z;
-	i_up_z = v_up_z;
-#ifdef DEBUG
-	vector v;
-	v = fixedvectoangles2(i_forward, i_up);
-	print("Transform: ", vtos(transform), "\n");
-	print("Inverted: ", vtos(v), "\n");
-	print("Verify: ", vtos(Portal_Transform_Multiply(v, transform)), "\n");
-	fixedmakevectors(Portal_Transform_Multiply(v, transform));
-	print("Verify: ", vtos(v_forward), "\n");
-	print("Verify: ", vtos(v_right), "\n");
-	print("Verify: ", vtos(v_up), "\n");
-#endif
-	return fixedvectoangles2(i_forward, i_up);
-}
-
-vector Portal_Transform_TurnDirection(vector transform)
-{
-	// turn 180 degrees around v_up
-	// changes in-direction to out-direction
-	fixedmakevectors(transform);
-	return fixedvectoangles2(-1 * v_forward, 1 * v_up);
-}
-
-vector Portal_Transform_Divide(vector to_transform, vector from_transform)
-{
-	return Portal_Transform_Multiply(to_transform, Portal_Transform_Invert(from_transform));
-}
-
 float PlayerEdgeDistance(entity p, vector v)
 {
 	vector vbest;
@@ -94,8 +37,8 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 	transform = teleporter.portal_transform;
 
 	to = teleporter.enemy.origin;
-	to = to + Portal_Transform_Apply(teleporter.portal_transform, player.origin - from);
-	newvel = Portal_Transform_Apply(transform, player.velocity);
+	to = to + AnglesTransform_Apply(teleporter.portal_transform, player.origin - from);
+	newvel = AnglesTransform_Apply(transform, player.velocity);
 	// this now is INSIDE the plane... can't use that
 	
 	// shift it out
@@ -144,13 +87,13 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 		ang = player.v_angle;
 		/*
 		ang_x = bound(-89, mod(-ang_x + 180, 360) - 180, 89);
-		ang = Portal_Transform_Multiply(transform, ang);
+		ang = AnglesTransform_Multiply(transform, ang);
 		*/
 
 		// PLAYERS use different math
 		ang_x = -ang_x;
 
-		//print("reference: ", vtos(Portal_Transform_Multiply(transform, ang)), "\n");
+		//print("reference: ", vtos(AnglesTransform_Multiply(transform, ang)), "\n");
 
 		fixedmakevectors(ang);
 		old_forward = v_forward;
@@ -159,9 +102,9 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 		old_yawforward = v_forward;
 
 		// their aiming directions are portalled...
-		new_forward = Portal_Transform_Apply(transform, old_forward);
-		new_up = Portal_Transform_Apply(transform, old_up);
-		new_yawforward = Portal_Transform_Apply(transform, old_yawforward);
+		new_forward = AnglesTransform_Apply(transform, old_forward);
+		new_up = AnglesTransform_Apply(transform, old_up);
+		new_yawforward = AnglesTransform_Apply(transform, old_yawforward);
 
 		// but now find a new sense of direction
 		// this is NOT easy!
@@ -193,11 +136,11 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 	else
 	{
 		ang = player.angles;
-		ang = Portal_Transform_Multiply(transform, player.angles);
+		ang = AnglesTransform_Multiply(transform, player.angles);
 	}
 
 	// factor -1 allows chaining portals, but may be weird
-	player.right_vector = -1 * Portal_Transform_Apply(transform, player.right_vector);
+	player.right_vector = -1 * AnglesTransform_Apply(transform, player.right_vector);
 
 	if(player.flagcarried)
 		DropFlag(player.flagcarried, player, world);
@@ -383,35 +326,7 @@ void Portal_Disconnect(entity teleporter, entity destination)
 
 void Portal_Connect(entity teleporter, entity destination)
 {
-	teleporter.portal_transform = Portal_Transform_Divide(Portal_Transform_TurnDirection(destination.angles), teleporter.angles);
-
-#ifdef DEBUG
-	{
-		// let's verify the transform
-		vector in_f, in_r, in_u;
-		vector out_f, out_r, out_u;
-		fixedmakevectors(teleporter.angles);
-		in_f = v_forward;
-		in_r = v_right;
-		in_u = v_up;
-		print("teleporter: ", vtos(in_f), " ", vtos(in_r), " ", vtos(in_u), "\n");
-		fixedmakevectors(destination.angles);
-		out_f = v_forward;
-		out_r = v_right;
-		out_u = v_up;
-		print("dest: ", vtos(out_f), " ", vtos(out_r), " ", vtos(out_u), "\n");
-		// INTENDED TRANSFORM:
-		//   in_f -> -out_f
-		//   in_r -> -out_r
-		//   in_u -> +out_u
-		print("FORWARD: ", vtos(in_f), " -> ", vtos(Portal_Transform_Apply(teleporter.portal_transform, in_f)), ", should be", vtos(-1 * out_f), "\n");
-		print("RIGHT: ", vtos(in_r), " -> ", vtos(Portal_Transform_Apply(teleporter.portal_transform, in_r)), ", should be", vtos(-1 * out_r), "\n");
-		print("UP: ", vtos(in_u), " -> ", vtos(Portal_Transform_Apply(teleporter.portal_transform, in_u)), ", should be", vtos(out_u), "\n");
-
-		te_lightning3(world, teleporter.origin, teleporter.origin + in_r * 1000);
-		te_lightning3(world, destination.origin, destination.origin + out_r * 1000);
-	}
-#endif
+	teleporter.portal_transform = AnglesTransform_Divide(AnglesTransform_TurnDirection(destination.angles), teleporter.angles);
 
 	teleporter.enemy = destination;
 	destination.enemy = teleporter;

@@ -247,13 +247,6 @@ void Seeker_Vollycontroler_Think()
 	self = oldself;
 }
 
-void Seeker_Tag_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
-{
-	self.health = self.health - damage;
-	if (self.health <= 0)
-		self.think ();
-}
-
 void Seeker_Tag_Explode ()
 {
 	//if(other==self.owner)
@@ -261,6 +254,13 @@ void Seeker_Tag_Explode ()
 	Damage_DamageInfo(self.origin, 0, 0, 0, self.velocity, WEP_SEEKER | HITTYPE_BOUNCE);
 
 	remove (self);
+}
+
+void Seeker_Tag_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
+{
+	self.health = self.health - damage;
+	if (self.health <= 0)
+		Seeker_Tag_Explode();
 }
 
 void Seeker_Tag_Think()
