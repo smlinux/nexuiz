@@ -875,9 +875,9 @@ void PutClientInServer (void)
 
 		if(g_assault) {
 			if(self.team == assault_attacker_team)
-				centerprint(self, "You are attacking!\n");
+				centerprint(self, "You are attacking!");
 			else
-				centerprint(self, "You are defending!\n");
+				centerprint(self, "You are defending!");
 		}
 
 		target_voicescript_clear(self);

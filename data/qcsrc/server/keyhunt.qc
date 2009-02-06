@@ -623,11 +623,11 @@ void kh_Key_Think()  // runs all the time
 		{
 			if(head.team == kh_interferemsg_team)
 				if(head.kh_next)
-					centerprint(head, "All keys are in your team's hands!\n\nMeet the other key carriers ^1NOW^7!\n");
+					centerprint(head, "All keys are in your team's hands!\n\nMeet the other key carriers ^1NOW^7!");
 				else
-					centerprint(head, "All keys are in your team's hands!\n\nHelp the key carriers to meet!\n");
+					centerprint(head, "All keys are in your team's hands!\n\nHelp the key carriers to meet!");
 			else
-				centerprint(head, strcat("All keys are in the ", ColoredTeamName(kh_interferemsg_team), "^7's hands!\n\nInterfere ^1NOW^7!\n"));
+				centerprint(head, strcat("All keys are in the ", ColoredTeamName(kh_interferemsg_team), "^7's hands!\n\nInterfere ^1NOW^7!"));
 		}
 	}
 
@@ -714,7 +714,7 @@ void kh_LoserTeam(float teem, entity lostkey)  // runs when a player pushes a fl
 			// don't actually GIVE him the -nn points, just log
 		kh_Scores_Event(attacker, world, "push", cvar("g_balance_keyhunt_score_push"), 0);
 		PlayerScore_Add(attacker, SP_KH_PUSHES, 1);
-		centerprint(attacker, "Your push is the best!\n\n\n");
+		centerprint(attacker, "Your push is the best!");
 		bprint("The ", ColoredTeamName(teem), "^7 could not take care of the ", lostkey.netname, "^7 when ", attacker.netname, "^7 came\n");
 	}
 	else

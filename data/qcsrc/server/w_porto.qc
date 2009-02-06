@@ -113,7 +113,7 @@ void W_Porto_Touch (void)
 		{
 			sound(self, CHAN_PROJECTILE, "porto/create.wav", VOL_BASE, ATTN_NORM);
 			trace_plane_normal = norm;
-			centerprint(self.owner, "^1In^7-portal created.\n");
+			centerprint(self.owner, "^1In^7-portal created.");
 			self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * norm);
 			self.angles = vectoangles(self.velocity - 2 * trace_plane_normal * (self.velocity * norm));
 		}
@@ -133,7 +133,7 @@ void W_Porto_Touch (void)
 			{
 				sound(self, CHAN_PROJECTILE, "porto/create.wav", VOL_BASE, ATTN_NORM);
 				trace_plane_normal = norm;
-				centerprint(self.owner, "^4Out^7-portal created.\n");
+				centerprint(self.owner, "^4Out^7-portal created.");
 				W_Porto_Success();
 			}
 			else

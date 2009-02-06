@@ -444,7 +444,7 @@ void Nixnex_GiveCurrentWeapon()
 			if(dt >= 1 && dt <= 5)
 				self.nixnex_lastinfotime = -42;
 			else
-				centerprint(self, strcat("\n\n^2Active weapon: ^3", W_Name(nixnex_weapon), "\n"));
+				centerprint(self, strcat("\n\n^2Active weapon: ^3", W_Name(nixnex_weapon)));
 		}
 		if(self.nixnex_lastinfotime != dt)
 		{
