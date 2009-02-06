@@ -1509,12 +1509,14 @@ vector centerprint_start;
 float centerprint_expire;
 float centerprint_num;
 float centerprint_offset_hint;
-vector centerprint_fontsize = '11 11 0';
+vector centerprint_fontsize;
 
 void centerprint(string strMessage)
 {
 	float i, j, n, hcount;
 	string s;
+
+	centerprint_fontsize = Sbar_GetFontSize("scr_centersize");
 	
 	// delete old centerprint messages
 	for (i=0; i<centerprint_num; ++i)
@@ -1690,7 +1692,7 @@ void Sbar_Draw (void)
 	vector o; o = '1 0 0' * vid_conwidth;
 	string s;
 
-	sbar_fontsize = Sbar_GetFontsize();
+	sbar_fontsize = Sbar_GetFontsize("sbar_fontsize");
 	
 	if(spectatee_status)
 	{

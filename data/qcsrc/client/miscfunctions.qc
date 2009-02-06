@@ -205,12 +205,12 @@ void CSQC_CheckEngine()
 		csqc_flags |= CSQC_FLAG_COLORCODES;
 }
 
-vector Sbar_GetFontsize()
+vector Sbar_GetFontsize(string cvarname)
 {
 	if(csqc_flags & CSQC_FLAG_READPICTURE)
 	{
 		vector v;
-		v = stov(cvar_string("sbar_fontsize"));
+		v = stov(cvar_string(cvarname));
 		if(v_x == 0)
 			v = '8 8 0';
 		if(v_y == 0)
