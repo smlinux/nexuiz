@@ -819,8 +819,10 @@ void Say(entity source, float teamsay, string msgin, float floodcontrol)
 	}
 	else
 	{
-		// TODO invent a cvar name for allowing global chat by spectators during warmup anyway
-		if(cvar("g_chat_nospectators") && source.classname != "player") {
+		if(
+			(cvar("g_chat_nospectators") == 1 && source.classname != "player")
+			|| (cvar("g_chat_nospectators") == 2 && source.classname != "player" && !inWarmupStage)
+		) {
 			FOR_EACH_REALCLIENT(head) if(head.classname != "player") {
 				sprint(head, msgstr);
 			}
