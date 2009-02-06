@@ -1069,16 +1069,7 @@ void readlevelcvars(void)
 		g_weapon_stay = 1;
 
 	if not(inWarmupStage)
-	{
 		game_starttime                 = cvar("g_start_delay");
-		if(game_starttime)
-		{
-			restartAnnouncer = spawn();
-			restartAnnouncer.think = restartAnnouncer_Think;
-			restartAnnouncer.nextthink = time + 0.1;
-			restartAnnouncer.spawnflags = 0;
-		}
-	}
 
 	readplayerstartcvars();
 }

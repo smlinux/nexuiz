@@ -59,8 +59,6 @@ float team1_score, team2_score, team3_score, team4_score;
 
 float maxclients;
 
-#define NEWLINES "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
-
 // Fields
 
 .void(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force) event_damage;
@@ -259,8 +257,8 @@ float alreadychangedlevel;
 .float ready;
 #define RESTART_COUNTDOWN 10
 float restart_mapalreadyrestarted; //bool, indicates whether reset_map() was already executed
-entity restartAnnouncer; //a temporary entity which will play the countdown sounds 3, 2, 1 for all clients, will also reset the map after the countdown
-void restartAnnouncer_Think();
+entity restartTimer;
+void restartTimer_Think();
 float blockSpectators; //if set, new or existing spectators or observers will be removed unless they become a player within g_maxplayers_spectator_blocktime seconds
 .float spectatortime; //point in time since the client is spectating or observing
 void checkSpectatorBlock();

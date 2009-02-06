@@ -387,14 +387,16 @@ void PrintWelcomeMessage(entity pl)
 		return;
 	}
 
+//TODO GreEn`mArine: make the timeout-messages clientside as well (just like the ready restart countdown)!
 	if(!self.BUTTON_INFO)
 	{
 		// TODO get rid of this too
 		local string specString;
 		specString = NEWLINES;
-		if(time < game_starttime) //also show the countdown when being a spectator
-			specString = strcat(specString, "\n\n^1Game starts in ", ftos(ceil(game_starttime - time)), " seconds^7");
-		else if (timeoutStatus != 0)
+		//if(time < game_starttime) //also show the countdown when being a spectator
+		//	specString = strcat(specString, "\n\n^1Game starts in ", ftos(ceil(game_starttime - time)), " seconds^7");
+		//else
+		if (timeoutStatus != 0)
 			specString = strcat(specString, "\n\n", getTimeoutText(1));
 		else
 		{
@@ -459,9 +461,6 @@ void PrintWelcomeMessage(entity pl)
 
 	if(modifications != "")
 		s = strcat(s, "^8\nactive modifications: ^3", modifications, "^8\n");
-
-	if(time < game_starttime)
-		s = strcat(s, "\n^1Game starts in ", ftos(restartAnnouncer.cnt + 1), " seconds^7");
 
 	if(timeoutStatus != 0)
 		s = strcat(s, "\n\n", getTimeoutText(1));

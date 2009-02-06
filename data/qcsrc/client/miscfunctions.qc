@@ -3,6 +3,30 @@ var float(string text, float handleColors) stringwidth;
 entity players;
 entity teams;
 
+void restartAnnouncer_Think() {
+	float countdown_rounded, countdown;
+	countdown = getstatf(STAT_GAMESTARTTIME) - time;
+	countdown_rounded = floor(0.5 + countdown);
+	if(countdown <= 0) {
+		if (!spectatee_status) //do cprint only for players
+			cprint(NEWLINES, "^1Begin!");
+
+		sound(self, CHAN_VOICE, "announcer/robotic/begin.wav", VOL_BASEVOICE, ATTN_NONE);
+		remove(self);
+		return;
+	}
+	else {
+		if (!spectatee_status) //do cprint only for players
+			cprint(NEWLINES, "^1Game starts in ", ftos(countdown_rounded), " seconds");
+
+		if(countdown_rounded <= 3 && countdown_rounded >= 1) {
+			sound(self, CHAN_VOICE, strcat("announcer/robotic/", ftos(countdown_rounded), ".wav"), VOL_BASEVOICE, ATTN_NONE);
+		}
+
+		self.nextthink = getstatf(STAT_GAMESTARTTIME) - (countdown - 1);
+	}
+}
+
 void AuditLists()
 {
 	entity e;

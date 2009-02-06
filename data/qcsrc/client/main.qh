@@ -136,6 +136,10 @@ float ready_waiting_for_me;
 float vote_waiting;
 float vote_waiting_for_me;
 
+float previous_game_starttime;
+entity restartAnnouncer; //a temporary entity which will play the countdown sounds 3, 2, 1 for the client
+void restartAnnouncer_Think();
+
 float current_zoomfraction;
 
 float cs_project_is_b0rked;

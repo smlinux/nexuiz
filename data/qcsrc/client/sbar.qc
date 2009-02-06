@@ -1590,6 +1590,15 @@ void Sbar_Draw (void)
 		else
 			s = strcat("^1Press ^3", getcommandkey("jump", "+jump"), "^1 to join");
 		o = Sbar_DrawNoteLine(o, s);
+		
+		//show restart countdown:
+		if (time < getstatf(STAT_GAMESTARTTIME)) {
+			float countdown;
+			//we need to ceil, otherwise the countdown would be off by .5 when using round()
+			countdown = ceil(getstatf(STAT_GAMESTARTTIME) - time);
+			s = strcat("^1Game starts in ^3", ftos(countdown), "^1 seconds");
+			o = Sbar_DrawNoteLine(o, s);
+		}
 	}
 	if(warmup_stage)
 	{

@@ -399,3 +399,6 @@ float HITTYPE_RESERVED = 0x1000; // unused yet
 #define FRAGS_PLAYER 0
 #define FRAGS_SPECTATOR -666
 #define FRAGS_PLAYER_NONSOLID -616
+
+//misc. stuff
+#define NEWLINES "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
