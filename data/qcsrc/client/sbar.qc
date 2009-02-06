@@ -1516,7 +1516,7 @@ void centerprint(string strMessage)
 	float i, j, n, hcount;
 	string s;
 
-	centerprint_fontsize = Sbar_GetFontSize("scr_centersize");
+	centerprint_fontsize = Sbar_GetFontsize("scr_centersize");
 	
 	// delete old centerprint messages
 	for (i=0; i<centerprint_num; ++i)
