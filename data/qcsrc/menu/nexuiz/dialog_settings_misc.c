@@ -42,6 +42,7 @@ void fillNexuizMiscSettingsTab(entity me)
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2.8/3, e = makeNexuizRadioButton(1, "showspeed", "0", "Off"));
+			setDependent(e, "showtopspeed", 0, 0);
 		me.TD(me, 1, 2.8/3, e = makeNexuizRadioButton(1, "showspeed", "1", "in/s"));
 		me.TD(me, 1, 2.8/3, e = makeNexuizRadioButton(1, "showspeed", "2", "m/s"));
 	me.TR(me);
@@ -49,6 +50,12 @@ void fillNexuizMiscSettingsTab(entity me)
 		me.TD(me, 1, 2.8/3, e = makeNexuizRadioButton(1, "showspeed", "3", "km/h"));
 		me.TD(me, 1, 2.8/3, e = makeNexuizRadioButton(1, "showspeed", "4", "mph"));
 		me.TD(me, 1, 2.8/3, e = makeNexuizRadioButton(1, "showspeed", "5", "knots"));
+	me.TR(me);
+		me.TDempty(me, 0.2);
+		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(0, "showtopspeed", "Also show top speed"));
+			e.yesValue = -1;
+			e.noValue = 0;
+			setDependent(e, "showspeed", 0.5, -0.5);
 	me.TR(me);
 	me.TR(me);
 		me.TDempty(me, 0.5);
