@@ -87,14 +87,16 @@ void Projectile_Draw()
 		rot = '0 0 0';
 		switch(self.cnt)
 		{
+			/*
 			case PROJECTILE_GRENADE:
-				rot = '-2000 0 0';
+				rot = '-2000 0 0'; // forward
 				break;
+			*/
 			case PROJECTILE_GRENADE_BOUNCING:
-				rot = '0 -2000 0';
+				rot = '0 -2000 0'; // sideways
 				break;
 			case PROJECTILE_HOOKBOMB:
-				rot = '0 1000 0';
+				rot = '1000 0 0'; // forward
 				break;
 			default:
 				break;
