@@ -218,7 +218,7 @@ void Ent_Projectile()
 		switch(self.cnt)
 		{
 			case PROJECTILE_ELECTRO: setmodel(self, "models/ebomb.mdl"); break;
-			case PROJECTILE_ROCKET: setmodel(self, "models/rocket.md3"); self.scale = 4; break;
+			case PROJECTILE_ROCKET: setmodel(self, "models/rocket.md3"); self.scale = 3; break;
 			case PROJECTILE_TAG: setmodel(self, "models/laser.mdl"); break;
 			case PROJECTILE_BULLET: setmodel(self, "models/tracer.mdl"); break;
 			case PROJECTILE_BULLET_GLOWING: setmodel(self, "models/tracer.mdl"); break;

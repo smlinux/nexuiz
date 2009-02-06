@@ -198,7 +198,7 @@ void W_Rocket_Attack (void)
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_rocketlauncher_ammo");
 
-	W_SetupShot (self, '25 3 -4', FALSE, 5, "weapons/rocket_fire.wav");
+	W_SetupShot (self, '34.0 8.5 -11.0', FALSE, 5, "weapons/rocket_fire.wav");
 	//W_SetupShot (self, '25 8 -8', FALSE, 5, "weapons/rocket_fire.wav"); // TODO: move model to the right a little
 	pointparticles(particleeffectnum("rocketlauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
