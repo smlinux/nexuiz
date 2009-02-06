@@ -252,7 +252,17 @@ void player_anim (void)
 
 void SpawnThrownWeapon (vector org, float w)
 {
-	W_ThrowWeapon(randomvec() * 100 + '0 0 200', org - self.origin, FALSE);
+	if(g_pinata)
+	{
+		float j;
+		for(j = WEP_FIRST; j <= WEP_LAST; ++j)
+		{
+			if(self.weapons == self.weapons | W_WeaponBit(j))
+				W_ThrowNewWeapon(self, j, FALSE, self.origin, randomvec() * 175 + '0 0 325');
+		}
+	}
+	else
+		W_ThrowWeapon(randomvec() * 125 + '0 0 200', org - self.origin, FALSE);
 }
 
 void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)

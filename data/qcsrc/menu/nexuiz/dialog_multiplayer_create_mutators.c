@@ -84,6 +84,8 @@ string toStringNexuizMutatorsDialog(entity me)
 		s = strcat(s, ", Midair");
 	if(cvar("g_vampire"))
 		s = strcat(s, ", Vampire");
+	if(cvar("g_pinata"))
+		s = strcat(s, ", Pinata");
 	if(cvar("g_weapon_stay"))
 		s = strcat(s, ", Weapons stay");
 	if(cvar("g_bloodloss") > 0)
@@ -168,6 +170,8 @@ void fillNexuizMutatorsDialog(entity me)
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_midair", "Midair"));
 	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_vampire", "Vampire"));
+	me.TR(me);
+		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_pinata", "Pinata"));
 	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_weapon_stay", "Weapons stay"));
 	me.TR(me);

@@ -1069,6 +1069,8 @@ void readlevelcvars(void)
 	g_pickup_healthmega                = cvar("g_pickup_healthmega");
 	g_pickup_healthmega_max            = cvar("g_pickup_healthmega_max");
 
+	g_pinata = cvar("g_pinata");
+
 	g_weapon_stay = cvar("g_weapon_stay");
 	if(!g_weapon_stay && (cvar("deathmatch") == 2))
 		g_weapon_stay = 1;
