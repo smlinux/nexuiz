@@ -4,7 +4,7 @@ CLASS(NexuizServerInfoDialog) EXTENDS(NexuizDialog)
 	METHOD(NexuizServerInfoDialog, loadServerInfo, void(entity, float))
 	ATTRIB(NexuizServerInfoDialog, title, string, "Server Information")
 	ATTRIB(NexuizServerInfoDialog, color, vector, SKINCOLOR_DIALOG_SERVERINFO)
-	ATTRIB(NexuizServerInfoDialog, intendedWidth, float, 0.60)
+	ATTRIB(NexuizServerInfoDialog, intendedWidth, float, 0.68)
 	ATTRIB(NexuizServerInfoDialog, rows, float, 11)
 	ATTRIB(NexuizServerInfoDialog, columns, float, 12)
 
@@ -125,44 +125,44 @@ void fillNexuizServerInfoDialog(entity me)
 	me.TR(me);
 		me.TD(me, 1, 5.5, e = makeNexuizTextLabel(0, "Players:"));
 	me.TR(me);
-		me.TD(me, me.rows - 4, 5.5, e = makeNexuizPlayerList());
+		me.TD(me, me.rows - 4, 6, e = makeNexuizPlayerList());
 			me.rawPlayerList = e;
 
-	me.gotoRC(me, 1, 6); me.setFirstColumn(me, me.currentColumn);
+	me.gotoRC(me, 1, 6.25); me.setFirstColumn(me, me.currentColumn);
 
 	me.TR(me);
 		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Type:"));
-		me.TD(me, 1, 4.5, e = makeNexuizTextLabel(0, ""));
+		me.TD(me, 1, 4.0, e = makeNexuizTextLabel(0, ""));
 			e.allowCut = 1;
 			me.typeLabel = e;
 	me.TR(me);
 		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Map:"));
-		me.TD(me, 1, 4.5, e = makeNexuizTextLabel(0, ""));
+		me.TD(me, 1, 4.0, e = makeNexuizTextLabel(0, ""));
 			e.allowCut = 1;
 			me.mapLabel = e;
 	me.TR(me);
 		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Players:"));
-		me.TD(me, 1, 4.5, e = makeNexuizTextLabel(0, ""));
+		me.TD(me, 1, 4.0, e = makeNexuizTextLabel(0, ""));
 			e.allowCut = 1;
 			me.numPlayersLabel = e;
 	me.TR(me);
 		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Bots:"));
-		me.TD(me, 1, 4.5, e = makeNexuizTextLabel(0, ""));
+		me.TD(me, 1, 4.0, e = makeNexuizTextLabel(0, ""));
 			e.allowCut = 1;
 			me.numBotsLabel = e;
 	me.TR(me);
 		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Mod:"));
-		me.TD(me, 1, 4.5, e = makeNexuizTextLabel(0, ""));
+		me.TD(me, 1, 4.0, e = makeNexuizTextLabel(0, ""));
 			e.allowCut = 1;
 			me.modLabel = e;
 	me.TR(me);
 		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Version:"));
-		me.TD(me, 1, 4.5, e = makeNexuizTextLabel(0, ""));
+		me.TD(me, 1, 4.0, e = makeNexuizTextLabel(0, ""));
 			e.allowCut = 1;
 			me.versionLabel = e;
 	me.TR(me);
 		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Ping:"));
-		me.TD(me, 1, 4.5, e = makeNexuizTextLabel(0, ""));
+		me.TD(me, 1, 4.0, e = makeNexuizTextLabel(0, ""));
 			e.allowCut = 1;
 			me.pingLabel = e;
 
