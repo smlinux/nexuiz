@@ -742,11 +742,13 @@ void Say(entity source, float teamsay, string msgin, float floodcontrol)
 		namestr = source.netname;
 	if(teamsay)
 	{
-		msgstr = strzone(strcat("\{1}\{13}", colorstr, "(^3", namestr, colorstr, ") ^7", msgin, "\n"));
-		cmsgstr = strcat(colorstr, "(^3", namestr, colorstr, ")\n^7", wordwrap(msgin, 50));
+		msgstr = strcat("\{1}\{13}", colorstr, "(^3", namestr, colorstr, ") ^7", msgin);
+		cmsgstr = strcat(colorstr, "(^3", namestr, colorstr, ")\n^7", msgin);
 	}
 	else
-		msgstr = strzone(strcat("\{1}", namestr, "^7: ", msgin, "\n"));
+		msgstr = strcat("\{1}", namestr, "^7: ", msgin);
+	
+	msgstr = strcat(strreplace("\n", " ", msgstr), "\n"); // newlines only are good for centerprint
 
 	// FLOOD CONTROL
 	flood = 0;
@@ -830,8 +832,6 @@ void Say(entity source, float teamsay, string msgin, float floodcontrol)
 		else
 			bprint(msgstr);
 	}
-
-	strunzone(msgstr);
 }
 
 float GetVoiceMessageVoiceType(string type)

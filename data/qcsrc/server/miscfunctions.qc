@@ -395,12 +395,10 @@ string NearestLocation(vector p)
 
 string formatmessage(string msg)
 {
-	float p;
+	float p, p1, p2;
 	float n;
-	string msg_save;
 	string escape;
 	string replacement;
-	msg_save = strzone(msg);
 	p = 0;
 	n = 7;
 	while(1)
@@ -408,13 +406,25 @@ string formatmessage(string msg)
 		if(n < 1)
 			break; // too many replacements
 		n = n - 1;
-		p = strstr(msg_save, "%", p); // NOTE: this destroys msg as it's a tempstring!
+		p1 = strstr(msg, "%", p); // NOTE: this destroys msg as it's a tempstring!
+		p2 = strstr(msg, "\\", p); // NOTE: this destroys msg as it's a tempstring!
+
+		if(p1 < 0)
+			p1 = p2;
+		if(p2 < 0)
+			p2 = p1;
+		p = min(p1, p2);
+		
 		if(p < 0)
 			break;
-		replacement = substring(msg_save, p, 2);
-		escape = substring(msg_save, p + 1, 1);
+		replacement = substring(msg, p, 2);
+		escape = substring(msg, p + 1, 1);
 		if(escape == "%")
 			replacement = "%";
+		else if(escape == "\\")
+			replacement = "\\";
+		else if(escape == "n")
+			replacement = "\n";
 		else if(escape == "a")
 			replacement = ftos(floor(self.armorvalue));
 		else if(escape == "h")
@@ -456,14 +466,9 @@ string formatmessage(string msg)
 			else
 				replacement = "(nobody)";
 		}
-		msg = strcat(substring(msg_save, 0, p), replacement);
-		msg = strcat(msg, substring(msg_save, p+2, strlen(msg_save) - (p+2)));
-		strunzone(msg_save);
-		msg_save = strzone(msg);
-		p = p + 2;
+		msg = strcat(substring(msg, 0, p), replacement, substring(msg, p+2, strlen(msg) - (p+2)));
+		p = p + strlen(replacement);
 	}
-	msg = strcat(msg_save, "");
-	strunzone(msg_save);
 	return msg;
 }
 

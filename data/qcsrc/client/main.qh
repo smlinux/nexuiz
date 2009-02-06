@@ -149,3 +149,5 @@ float camera_active;		// Demo camera is active if set to TRUE
 float chase_active_backup;
 float camera_roll;
 vector camera_direction;
+
+void centerprint(string strMessage);

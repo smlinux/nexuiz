@@ -1,6 +1,4 @@
-string cache_motd;
 string cache_mutatormsg;
-string cache_lastmotd;
 string cache_lastmutatormsg;
 
 // client counts for each team
@@ -330,9 +328,7 @@ void InitGameplayMode()
 	cvar_set("gamecfg", ftos(game));
 
 	cache_mutatormsg = strzone("");
-	cache_motd = strzone("");
 	cache_lastmutatormsg = strzone("");
-	cache_lastmotd = strzone("");
 
 	// enforce the server's universal frag/time limits
 	if(!cvar("g_campaign"))
@@ -369,7 +365,7 @@ string GetClientVersionMessage() {
 
 void PrintWelcomeMessage(entity pl)
 {
-	string s, mutator, modifications;
+	string s, mutator, modifications, motd;
 
 	/*if(self.welcomemessage_time > time)
 		return;
@@ -475,25 +471,16 @@ void PrintWelcomeMessage(entity pl)
 		if(cache_mutatormsg)
 			strunzone(cache_mutatormsg);
 		cache_lastmutatormsg = strzone(cvar_string("g_mutatormsg"));
-		cache_mutatormsg = strzone(wordwrap(cache_lastmutatormsg, 50));
+		cache_mutatormsg = strzone(cache_lastmutatormsg);
 	}
 
 	if (cache_mutatormsg != "") {
 		s = strcat(s, "\n\n^8special gameplay tips: ^7", cache_mutatormsg);
 	}
 
-	if(cache_lastmotd != cvar_string("sv_motd"))
-	{
-		if(cache_lastmotd)
-			strunzone(cache_lastmotd);
-		if(cache_motd)
-			strunzone(cache_motd);
-		cache_lastmotd = strzone(cvar_string("sv_motd"));
-		cache_motd = strzone(wordwrap(cache_lastmotd, 50));
-	}
-
-	if (cache_motd != "") {
-		s = strcat(s, "\n\n^8MOTD: ^7", cache_motd);
+	motd = cvar_string("sv_motd");
+	if (motd != "") {
+		s = strcat(s, "\n\n^8MOTD: ^7", strreplace("\\n", "\n", motd));
 	}
 	s = strcat(s, "\n");
 

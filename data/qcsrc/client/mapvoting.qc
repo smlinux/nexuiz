@@ -22,7 +22,7 @@ string MapVote_FormatMapItem(float id, string map, float count, float maxwidth)
 	else
 		post = "";
 	maxwidth -= stringwidth(pre, FALSE) + stringwidth(post, FALSE);
-	map = textShortenToWidth(map, maxwidth, FALSE);
+	map = textShortenToWidth(map, maxwidth, stringwidth_nocolors);
 	return strcat(pre, map, post);
 }
 

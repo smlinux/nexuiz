@@ -661,51 +661,20 @@ string Sbar_GetField(entity pl, float field)
 	//return "error";
 }
 
-// shamelessly stolen from menu QC :P <- as if I would steal YOUR code pfft ;)
-float textLengthUpToWidth(string theText, float maxWidth, float handleColors)
-{
-	// STOP.
-	// The following function is SLOW.
-	// For your safety and for the protection of those around you...
-	// DO NOT CALL THIS AT HOME.
-	// No really, don't.
-	if(stringwidth(theText, handleColors) <= maxWidth)
-		return strlen(theText); // yeah!
-
-	// binary search for right place to cut string
-	float left, right, middle; // this always works
-	left = 0;
-	right = strlen(theText); // this always fails
-	do
-	{
-		middle = floor((left + right) / 2);
-		if(stringwidth(substring(theText, 0, middle), handleColors) <= maxWidth)
-			left = middle;
-		else
-			right = middle;
-	}
-	while(left < right - 1);
-
-	// NOTE: when color codes are involved, this binary search is,
-	// mathematically, BROKEN. However, it is obviously guaranteed to
-	// terminate, as the range still halves each time - but nevertheless, it is
-	// guaranteed that it finds ONE valid cutoff place (where "left" is in
-	// range, and "right" is outside).
-
-	return left;
-}
-string textShortenToWidth(string theText, float maxWidth, float handleColors)
-{
-	if(stringwidth(theText, handleColors) <= maxWidth)
-		return theText;
-	else
-		return strcat(substring(theText, 0, textLengthUpToWidth(theText, maxWidth - stringwidth("...", handleColors), handleColors)), "...");
-}
-
 float xmin, xmax, ymin, ymax, sbwidth;
 float sbar_fixscoreboardcolumnwidth_len;
 float sbar_fixscoreboardcolumnwidth_iconlen;
 float sbar_fixscoreboardcolumnwidth_marginlen;
+
+float stringwidth_colors(string s)
+{
+	return stringwidth(s, TRUE);
+}
+
+float stringwidth_nocolors(string s)
+{
+	return stringwidth(s, FALSE);
+}
 
 string Sbar_FixScoreboardColumnWidth(float i, string str)
 {
@@ -719,7 +688,7 @@ string Sbar_FixScoreboardColumnWidth(float i, string str)
 		for(j = 0; j < sbar_num_fields; ++j) if(j != i) if(sbar_field[j] != SP_SEPARATOR)
 			maxsize -= sbar_size[j] + 1;
 		maxsize += 1;
-		str = textShortenToWidth(str, maxsize, TRUE);
+		str = textShortenToWidth(str, maxsize, stringwidth_colors);
 		sbar_fixscoreboardcolumnwidth_len = stringwidth(str, TRUE);
 	}
 	else
@@ -854,6 +823,7 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self)
 }
 
 float lastpingstime;
+float scoreboard_bottom;
 void Sbar_DrawScoreboard()
 {
 	//float xmin, ymin, xmax, ymax;
@@ -871,7 +841,7 @@ void Sbar_DrawScoreboard()
 	sbwidth = Sbar_GetWidth(6.5 * sbar_fontsize_y);
 
 	xmin = 0.5 * (vid_conwidth - sbwidth);
-	ymin = 20;
+	ymin = 45;
 
 	xmax = vid_conwidth - xmin;
     ymax = vid_conheight - 0.2*vid_conheight;
@@ -1062,10 +1032,11 @@ void Sbar_DrawScoreboard()
 	}
 	
 
-	pos_y += 1.5 * sbar_fontsize_y;
+	pos_y += 1.2 * sbar_fontsize_y;
 	drawcolorcodedstring(pos + '0.5 0 0' * (sbwidth - sbar_fontsize_x * stringwidth(str, TRUE)), str, sbar_fontsize, 0.8, 0);
 	
 	sbar = sbar_save;
+	scoreboard_bottom = pos_y + 2 * sbar_fontsize_y;
 }
 
 string MakeRaceString(float cp, float mytime, float histime, float lapdelta, string hisname)
@@ -1478,19 +1449,6 @@ float Sbar_WouldDrawScoreboard ()
 	return 0;
 }
 
-vector Sbar_DrawNoteLine(vector offset, string s)
-{
-	dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
-	drawcolorcodedstring(
-		offset - sbar_fontsize_x * '1 0 0' * stringwidth(s, TRUE),
-		s,
-		sbar_fontsize,
-		sbar_alpha_fg,
-		0
-	);
-	return offset + sbar_fontsize_y * '0 1 0';
-}
-
 void CSQC_Strength_Timer() {
 	float stat_items;
 	stat_items = getstati(STAT_ITEMS);
@@ -1542,6 +1500,186 @@ void CSQC_Strength_Timer() {
 			Sbar_DrawXNum(number_position, ceil(invincibility_time), 2, countdown_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
 		}
 	}
+}
+
+#define CENTERPRINT_MAX_LINES 30
+string centerprint_messages[CENTERPRINT_MAX_LINES]; 
+float centerprint_width[CENTERPRINT_MAX_LINES]; 
+vector centerprint_start;
+float centerprint_expire;
+float centerprint_num;
+float centerprint_offset_hint;
+vector centerprint_fontsize = '11 11 0';
+
+void centerprint(string strMessage)
+{
+	float i, j, n, hcount;
+	string s;
+	
+	// delete old centerprint messages
+	for (i=0; i<centerprint_num; ++i)
+	{
+		if(centerprint_messages[i])
+		{
+			strunzone(centerprint_messages[i]);
+			centerprint_messages[i] = string_null;
+			centerprint_width[i] = 0;
+		}
+	}
+
+	if(strMessage == "")
+		return;
+
+	// strip trailing newlines
+	j = strlen(strMessage) - 1;
+	while(substring(strMessage, j, 1) == "\n" && j >= 0)
+		j = j - 1;
+	strMessage = substring(strMessage, 0, j + 1);
+	
+	if(strMessage == "")
+		return;
+
+	// strip leading newlines and remember them, they are a hint that the message should be lower on the screen
+	j = 0;
+	while(substring(strMessage, j, 1) == "\n" && j < strlen(strMessage))
+		j = j + 1;
+	strMessage = substring(strMessage, j, strlen(strMessage) - j);
+	centerprint_offset_hint = j;
+	
+	// TODO if we're parsing centerprints now anyway, why not word wrap them?
+	n = tokenizebyseparator(strMessage, "\n");
+	i = hcount = 0;
+	for(j = 0; j < n; ++j)
+	{
+		getWrappedLine_remaining = argv(j);
+		while(getWrappedLine_remaining)
+		{
+			s = getWrappedLine(vid_conwidth * 0.75 / centerprint_fontsize_x, stringwidth_colors);
+			centerprint_messages[i] = strzone(s);
+			centerprint_width[i] = stringwidth(s, TRUE);
+			++i;
+
+			// half height for empty lines looks better
+			if(s == "")
+				hcount += 0.5;
+			else
+				hcount += 1;
+
+			if(i >= CENTERPRINT_MAX_LINES)
+				break;
+		}
+	}
+
+	float h, havail;
+	h = centerprint_fontsize_y*hcount;
+
+	havail = vid_conheight;
+	if(cvar("con_chatpos") < 0)
+		havail -= (-cvar("con_chatpos") + cvar("con_chat")) * cvar("con_chatsize"); // avoid overlapping chat
+
+	centerprint_start_x = 0;
+
+#if 0
+	float forbiddenmin, forbiddenmax, allowedmin, allowedmax, preferred;
+
+	// here, the centerprint would cover the crosshair. REALLY BAD.
+	forbiddenmin = vid_conheight * 0.5 - h - 16;
+	forbiddenmax = vid_conheight * 0.5 + 16;
+
+	allowedmin = scoreboard_bottom;
+	allowedmax = havail - h;
+	preferred = (havail - h)/2;
+
+
+	// possible orderings (total: 4! / 4 = 6)
+	//  allowedmin allowedmax forbiddenmin forbiddenmax
+	//  forbiddenmin forbiddenmax allowedmin allowedmax
+	if(allowedmax < forbiddenmin || allowedmin > forbiddenmax)
+	{
+		// forbidden doesn't matter in this case
+		centerprint_start_y = bound(allowedmin, preferred, allowedmax);
+	}
+	//  allowedmin forbiddenmin allowedmax forbiddenmax
+	else if(allowedmin < forbiddenmin && allowedmax < forbiddenmax)
+	{
+		centerprint_start_y = bound(allowedmin, preferred, forbiddenmin);
+	}
+	//  allowedmin forbiddenmin forbiddenmax allowedmax
+	else if(allowedmin < forbiddenmin)
+	{
+		// make sure the forbidden zone is not covered
+		if(preferred > (forbiddenmin + forbiddenmax) * 0.5)
+			centerprint_start_y = bound(allowedmin, preferred, forbiddenmin);
+		else
+			centerprint_start_y = bound(forbiddenmax, preferred, allowedmin);
+	}
+	//  forbiddenmin allowedmin allowedmax forbiddenmax
+	else if(allowedmax < forbiddenmax)
+	{
+		// it's better to leave the allowed zone (overlap with scoreboard) than
+		// to cover the forbidden zone (crosshair)
+		if(preferred > (forbiddenmin + forbiddenmax) * 0.5)
+			centerprint_start_y = forbiddenmax;
+		else
+			centerprint_start_y = forbiddenmin;
+	}
+	//  forbiddenmin allowedmin forbiddenmax allowedmax
+	else
+	{
+		centerprint_start_y = bound(forbiddenmax, preferred, allowedmax);
+	}
+#else
+	centerprint_start_y =
+		min(
+			max(
+				max(scoreboard_bottom, vid_conheight * 0.5 + 16),
+				(havail - h)/2
+			),
+			havail - h
+		);
+#endif
+
+	centerprint_num = i;
+	centerprint_expire = time + cvar("scr_centertime");
+}
+
+void Sbar_DrawCenterPrint (void)
+{
+	float i;
+	vector pos;
+	string ts;
+
+	if(time > centerprint_expire)
+		return;
+	
+	pos = centerprint_start;
+	for (i=0; i<centerprint_num; i = i + 1)
+	{
+		pos_x = (vid_conwidth - centerprint_fontsize_x * centerprint_width[i]) * 0.5;
+		ts = centerprint_messages[i];
+		if (ts != "")
+		{
+			dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
+			drawcolorcodedstring(pos, ts, centerprint_fontsize, 1, DRAWFLAG_NORMAL);
+			pos_y = pos_y + centerprint_fontsize_y;
+		}
+		else
+			// half height for empty lines looks better
+			pos_y = pos_y + centerprint_fontsize_y * 0.5;
+	}
+}
+
+vector Sbar_DrawNoteLine(vector offset, string s)
+{
+	dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
+	drawcolorcodedstring(
+		offset - sbar_fontsize_x * '1 0 0' * stringwidth(s, TRUE),
+		s,
+		sbar_fontsize,
+		sbar_alpha_fg,
+		0
+	);
+	return offset + sbar_fontsize_y * '0 1 0';
 }
 
 void Sbar_Draw (void)
@@ -1696,14 +1834,21 @@ void Sbar_Draw (void)
 	sb_lines = 24;
 
 	if (sb_showscores)
+	{
 		Sbar_DrawScoreboard();
+		Sbar_DrawCenterPrint();
+	}
 	else if (intermission == 1)
 	{
 		Sbar_DrawScoreboard();
+		Sbar_DrawCenterPrint();
 		return;
 	}
 	else if (intermission == 2)
+	{
 		Sbar_FinaleOverlay();
+		Sbar_DrawCenterPrint();
+	}
 	else
 	{
 		if (sb_showscores || sb_showscores_force || (getstati(STAT_HEALTH) <= 0 && cvar("cl_deathscoreboard")))
@@ -1895,6 +2040,7 @@ void Sbar_Draw (void)
 				CSQC_ctf_hud();
 			}
 		}
+		Sbar_DrawCenterPrint();
 	}
 }
 

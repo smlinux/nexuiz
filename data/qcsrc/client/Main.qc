@@ -807,10 +807,11 @@ void CSQC_Parse_Print(string strMessage)
 {
 	print(ColorTranslateRGB(strMessage));
 }
-// CSQC_Parse_CenterPrint : Provides the centerprint string in the first parameter that the server provided.  To execute standard behavior, simply execute cprint with the string.
+
+// CSQC_Parse_CenterPrint : Provides the centerprint string in the first parameter that the server provided.  
 void CSQC_Parse_CenterPrint(string strMessage)
 {
-	cprint(ColorTranslateRGB(strMessage));
+	centerprint(strMessage);
 }
 
 void CSQC_CheckRevision();

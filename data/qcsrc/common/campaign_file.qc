@@ -56,7 +56,7 @@ float CampaignFile_Load(float offset, float n)
 				CAMPAIGN_GETARG; campaign_fraglimit[campaign_entries] = stof(a);
 				CAMPAIGN_GETARG; campaign_mutators[campaign_entries] = strzone(a);
 				CAMPAIGN_GETARG; campaign_shortdesc[campaign_entries] = strzone(a);
-				CAMPAIGN_GETARG; campaign_longdesc[campaign_entries] = strzone(a);
+				CAMPAIGN_GETARG; campaign_longdesc[campaign_entries] = strzone(strreplace("\\n", "\n", a));
 				campaign_entries = campaign_entries + 1;
 
 				if(campaign_entries >= n)

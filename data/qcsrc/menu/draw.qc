@@ -284,62 +284,20 @@ string draw_TextShortenToWidth(string theText, float maxWidth, float ICanHasKall
 		return strcat(substring(theText, 0, draw_TextLengthUpToWidth(theText, maxWidth - draw_TextWidth("...", ICanHasKallerz), ICanHasKallerz)), "...");
 }
 
-float draw_TextLengthUpToWidth(string theText, float maxWidth, float ICanHasKallerz)
+float draw_TextWidth_WithColors(string s)
 {
-	// STOP.
-	// The following function is SLOW.
-	// For your safety and for the protection of those around you...
-	// DO NOT CALL THIS AT HOME.
-	// No really, don't.
-	if(draw_TextWidth(theText, ICanHasKallerz) <= maxWidth)
-		return strlen(theText); // yeah!
+	return draw_TextWidth(s, TRUE);
+}
 
-	// binary search for right place to cut string
-	float ch;
-	float left, right, middle; // this always works
-	left = 0;
-	right = strlen(theText); // this always fails
-	do
-	{
-		middle = floor((left + right) / 2);
-		if(draw_TextWidth(substring(theText, 0, middle), ICanHasKallerz) <= maxWidth)
-			left = middle;
-		else
-			right = middle;
-	}
-	while(left < right - 1);
+float draw_TextWidth_WithoutColors(string s)
+{
+	return draw_TextWidth(s, FALSE);
+}
 
-	// NOTE: when color codes are involved, this binary search is,
-	// mathematically, BROKEN. However, it is obviously guaranteed to
-	// terminate, as the range still halves each time - but nevertheless, it is
-	// guaranteed that it finds ONE valid cutoff place (where "left" is in
-	// range, and "right" is outside).
-	
-	// terencehill: the following code detects truncated ^xrgb tags (e.g. ^x or ^x4)
-	// and decrease left on the basis of the chars detected of the truncated tag
-	// Even if the ^xrgb tag is not complete/correct, left is decreased
-	// (sometimes too much but with a correct result)
-	// it fixes also ^[0-9]
-	if (left >= 1 && substring(theText, left-1, 1) == "^") // * it doesn't consider one or more ^ before the current ^
-		left-=1;
-	else if (left >= 2 && substring(theText, left-2, 2) == "^x") // ^x/
-		left-=2;
-	else if (left >= 3 && substring(theText, left-3, 2) == "^x")
-		{
-			ch = str2chr(theText, left-1);
-			if( (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F') ) // ^xr/
-				left-=3;
-		}
-	else if (left >= 4 && substring(theText, left-4, 2) == "^x")
-		{
-			ch = str2chr(theText, left-2);
-			if ( (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F') )
-			{
-				ch = str2chr(theText, left-1);
-				if ( (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F') ) // ^xrg/
-					left-=4;
-			}
-		}
-	
-	return left;
+float draw_TextLengthUpToWidth(string theText, float maxWidth, float allowColorCodes)
+{
+	if(allowColorCodes)
+		return textLengthUpToWidth(theText, maxWidth, draw_TextWidth_WithColors);
+	else
+		return textLengthUpToWidth(theText, maxWidth, draw_TextWidth_WithoutColors);
 }

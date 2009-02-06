@@ -78,7 +78,7 @@ void drawLabel(entity me)
 				o = me.realOrigin;
 				while(getWrappedLine_remaining)
 				{
-					t = getWrappedLine((1 - me.keepspaceLeft - me.keepspaceRight) / me.realFontSize_x);
+					t = getWrappedLine((1 - me.keepspaceLeft - me.keepspaceRight) / me.realFontSize_x, draw_TextWidth_WithoutColors);
 					draw_Text(o, t, me.realFontSize, me.colorL, me.alpha, 0);
 					o_y += me.realFontSize_y;
 				}
