@@ -88,7 +88,7 @@ void fillNexuizEffectsSettingsTab(entity me)
 
 	me.TR(me);
 	me.TR(me);
-		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_gentle", "Replace gore effects for general audiences"));
+		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_gentle", "Disable gore effects"));
 
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Gibs:"));
