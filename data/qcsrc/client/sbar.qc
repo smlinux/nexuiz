@@ -1241,7 +1241,6 @@ void Sbar_Score(float margin)
 
 		if(race_checkpointtime)
 		{
-
 			a = bound(0, 2 - (time - race_checkpointtime), 1);
 			s = "";
 			forcetime = "";
@@ -1649,8 +1648,16 @@ void Sbar_DrawCenterPrint (void)
 	float i;
 	vector pos;
 	string ts;
+	float a;
 
-	if(time > centerprint_expire)
+	//if(time > centerprint_expire)
+	//	return;
+	
+	//a = bound(0, 1 - 2 * (time - centerprint_expire), 1);
+	a = bound(0, 1 - 4 * (time - centerprint_expire), 1);
+	//sz = 1.2 / (a + 0.2);
+
+	if(a <= 0)
 		return;
 	
 	pos = centerprint_start;
@@ -1661,7 +1668,8 @@ void Sbar_DrawCenterPrint (void)
 		if (ts != "")
 		{
 			dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
-			drawcolorcodedstring(pos, ts, centerprint_fontsize, 1, DRAWFLAG_NORMAL);
+			drawcolorcodedstring(pos, ts, centerprint_fontsize, a, DRAWFLAG_NORMAL);
+			//  - '0 0.5 0' * (sz - 1) * centerprint_fontsize_x - '0.5 0 0' * (sz - 1) * centerprint_width[i] * centerprint_fontsize_y, centerprint_fontsize * sz
 			pos_y = pos_y + centerprint_fontsize_y;
 		}
 		else
