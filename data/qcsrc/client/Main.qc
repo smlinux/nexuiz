@@ -851,9 +851,6 @@ void Ent_Init()
 
 	csqc_revision = ReadShort();
 
-	print("prev maxclients = ", ftos(maxclients), "\n");
-	maxclients = ReadByte();
-	print("new maxclients = ", ftos(maxclients), "\n");
 	for(i = 0; i < 24; ++i)
 		weaponimpulse[i] = ReadByte() - 1;
 	hook_shotorigin_x = ReadCoord();

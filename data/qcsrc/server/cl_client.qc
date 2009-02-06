@@ -902,7 +902,6 @@ float ClientInit_SendEntity(entity to, float sf)
 	float i;
 	WriteByte(MSG_ENTITY, ENT_CLIENT_INIT);
 	WriteShort(MSG_ENTITY, CSQC_REVISION);
-	WriteByte(MSG_ENTITY, maxclients);
 	for(i = 1; i <= 24; ++i)
 		WriteByte(MSG_ENTITY, (get_weaponinfo(i)).impulse + 1);
 	WriteCoord(MSG_ENTITY, hook_shotorigin_x);
