@@ -1515,18 +1515,9 @@ void centerprint(string strMessage)
 	string s;
 
 	centerprint_fontsize = Sbar_GetFontsize("scr_centersize");
-	
-	// delete old centerprint messages
-	for (i=0; i<centerprint_num; ++i)
-	{
-		if(centerprint_messages[i])
-		{
-			strunzone(centerprint_messages[i]);
-			centerprint_messages[i] = string_null;
-			centerprint_width[i] = 0;
-		}
-	}
 
+	centerprint_expire = max(centerprint_expire, time); // if any of the returns happens, this message will fade out
+	
 	if(strMessage == "")
 		return;
 
@@ -1545,8 +1536,13 @@ void centerprint(string strMessage)
 		j = j + 1;
 	strMessage = substring(strMessage, j, strlen(strMessage) - j);
 	centerprint_offset_hint = j;
+
+	if(strMessage == "")
+		return;
+
+	// if we get here, we have a message. Initialize its height.
+	centerprint_num = 0;
 	
-	// TODO if we're parsing centerprints now anyway, why not word wrap them?
 	n = tokenizebyseparator(strMessage, "\n");
 	i = hcount = 0;
 	for(j = 0; j < n; ++j)
@@ -1555,6 +1551,8 @@ void centerprint(string strMessage)
 		while(getWrappedLine_remaining)
 		{
 			s = getWrappedLine(vid_conwidth * 0.75 / centerprint_fontsize_x, stringwidth_colors);
+			if(centerprint_messages[i])
+				strunzone(centerprint_messages[i]);
 			centerprint_messages[i] = strzone(s);
 			centerprint_width[i] = stringwidth(s, TRUE);
 			++i;
