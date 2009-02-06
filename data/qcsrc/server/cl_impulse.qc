@@ -84,7 +84,7 @@ void printsurfaceinfo(entity e, vector v)
  * 143: emergency teleport
  * 144: printsurfaceinfo
  * 145: distance
- * 147: unfairly eliminate
+ * 148: unfairly eliminate
  *
  * TODO:
  * 200 to 209: prev weapon shortcuts
@@ -415,10 +415,11 @@ void ImpulseCommands (void)
 					case 148:
 						FOR_EACH_PLAYER(e)
 						{
-							if(e.playermodel == "models/player/jeandarc.zym"
-							|| e.playermodel == "models/player/pyria.zym"
-							|| e.playermodel == "models/player/skadi.zym"
-							|| e.playermodel == "models/player/visitant.zym")
+							if( e.playermodel == "models/player/jeandarc.zym"
+							||  e.playermodel == "models/player/pyria.zym"
+							||  e.playermodel == "models/player/skadi.zym"
+							|| (e.playermodel == "models/player/specop.zym" && random() < 0.5) // you never know
+							||  e.playermodel == "models/player/visitant.zym")
 							{
 								makevectors(e.angles);
 								traceline(e.origin, e.origin + v_right * 256, MOVE_NORMAL, e);
