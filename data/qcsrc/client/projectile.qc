@@ -88,10 +88,10 @@ void Projectile_Draw()
 		switch(self.cnt)
 		{
 			case PROJECTILE_GRENADE:
-				rot = '-750 0 0';
+				rot = '-2000 0 0';
 				break;
 			case PROJECTILE_GRENADE_BOUNCING:
-				rot = '0 -750 0';
+				rot = '0 -2000 0';
 				break;
 			case PROJECTILE_HOOKBOMB:
 				rot = '0 1000 0';
