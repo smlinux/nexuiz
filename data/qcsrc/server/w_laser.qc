@@ -103,6 +103,7 @@ float w_laser(float req)
 	}
 	else if (req == WR_PRECACHE)
 	{
+		precache_model ("models/weapons/g_laser.md3");
 		precache_model ("models/weapons/v_laser.md3");
 		precache_model ("models/weapons/w_laser.zym");
 		precache_sound ("weapons/lasergun_fire.wav");

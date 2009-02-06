@@ -974,6 +974,20 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/weapons/g_hagar.md3"
 */
 
+/*QUAKED weapon_laser (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
+the Laser. Note that unless you use
+  settemp_for_type all g_start_weapon_laser 0
+in your mapinfo file, everyone will already spawn with one, making this pickup useless.
+-------- KEYS --------
+respawntime: time till it respawns (default: 15)
+team: out of items with the same value here, only one (random one) will spawn. Useful to put multiple items on one spot.
+cnt: weight of this item for random selection using "team". Set to a lower value for items you want to see less likely.
+-------- SPAWNFLAGS --------
+FLOATING: the item will float in air, instead of aligning to the floor by falling
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/weapons/g_laser.md3"
+*/
+
 /*QUAKED weapon_nex (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
 the Nex
 In Minstagib, this turns into an item_minst_cells if no explicit item_minst_cells have been placed.
@@ -1003,7 +1017,9 @@ model="models/weapons/g_rl.md3"
 */
 
 /*QUAKED weapon_shotgun (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
-the Shotgun
+the Shotgun. Note that unless you use
+  settemp_for_type all g_start_weapon_shotgun 0
+in your mapinfo file, everyone will already spawn with one, making this pickup useless.
 -------- KEYS --------
 ammo_shells: initial shells of the weapon (if unset, g_pickup_shells is used)
 respawntime: time till it respawns (default: 15)

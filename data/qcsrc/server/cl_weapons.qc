@@ -232,8 +232,6 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 	w = self.weapon;
 	if (w == 0)
 		return; // just in case
-	if (w == WEP_LASER)
-		return; // just in case
 	if (g_weaponarena)
 		return;
 	if (g_lms)
@@ -255,6 +253,7 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 			return;
 		if(wa != IT_SUPERWEAPON && start_items & IT_UNLIMITED_WEAPON_AMMO)
 			return;
+		// start weapons that take no ammo can't be dropped (this prevents dropping the laser, as long as it continues to use no ammo)
 		if(wa == 0)
 			return;
 	}
@@ -379,30 +378,19 @@ float nixnex_nextweapon;
 
 void Nixnex_ChooseNextWeapon()
 {
-	float numberof, id;
-	numberof = WEP_LAST - WEP_FIRST; // all but the current one
-	if(g_nixnex_with_laser)
-		numberof = numberof - 1;
-	id = WEP_FIRST + floor(random() * numberof);
+	float j;
+	entity e;
 
-	if(g_nixnex_with_laser) // skip the laser if needed
-		id = id + 1;
-
-	if(id >= nixnex_weapon) // skip the current weapon
-		id = id + 1;
-
-	if(id < WEP_FIRST) // can't happen, but to be sure...
+	RandomSelection_Init();
+	for(j = WEP_FIRST; j <= WEP_LAST; ++j)
 	{
-		dprint("Won't happen (id < WEP_FIRST)\n");
-		id = WEP_FIRST;
+		if(j == WEP_LASER && g_nixnex_with_laser)
+			continue;
+		if(!e.weapons) // skip dummies
+			continue;
+		RandomSelection_Add(world, j, 1, 0);
 	}
-	if(id > WEP_LAST) // either
-	{
-		dprint("Won't happen (id > WEP_LAST)\n");
-		id = WEP_LAST;
-	}
-
-	nixnex_nextweapon = id;
+	nixnex_nextweapon = RandomSelection_chosen_float;
 }
 
 void Nixnex_GiveCurrentWeapon()
