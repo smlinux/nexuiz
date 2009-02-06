@@ -606,14 +606,13 @@ string Sbar_GetField(entity pl, float field)
 			return str;
 		
 		case SP_NAME:
-			if(!teamplay)
+			if(ready_waiting && pl.ready)
+			{
+				sbar_field_icon0 = "gfx/sb_player_ready";
+			}
+			else if(!teamplay)
 			{
 				f = stof(getplayerkey(pl.sv_entnum, "colors"));
-				if(ready_waiting && pl.ready)
-				{
-					sbar_field_icon0 = "gfx/sb_player_ready";
-				}
-				else
 				{
 					sbar_field_icon0 = "gfx/sb_playercolor_base";
 					sbar_field_icon1 = "gfx/sb_playercolor_shirt";
