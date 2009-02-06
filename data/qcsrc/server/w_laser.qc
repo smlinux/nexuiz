@@ -58,6 +58,11 @@ void W_Laser_Attack (float issecondary)
 	CSQCProjectile(missile, TRUE, PROJECTILE_LASER, TRUE);
 }
 
+void spawnfunc_weapon_laser (void)
+{
+	weapon_defaultspawnfunc(WEP_LASER);
+}
+
 float w_laser(float req)
 {
 	local float r1;

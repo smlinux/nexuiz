@@ -257,8 +257,9 @@ void SpawnThrownWeapon (vector org, float w)
 		float j;
 		for(j = WEP_FIRST; j <= WEP_LAST; ++j)
 		{
-			if(self.weapons == self.weapons | W_WeaponBit(j))
-				W_ThrowNewWeapon(self, j, FALSE, self.origin, randomvec() * 175 + '0 0 325');
+			if(self.weapons & W_WeaponBit(j))
+				if(W_IsWeaponThrowable(j))
+					W_ThrowNewWeapon(self, j, FALSE, self.origin, randomvec() * 175 + '0 0 325');
 		}
 	}
 	else

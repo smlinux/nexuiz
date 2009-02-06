@@ -224,10 +224,31 @@ float W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vector
 	}
 }
 
+float W_IsWeaponThrowable(float w)
+{
+	float wb, wa;
+	wb = W_WeaponBit(w);
+	if(!wb)
+		return 0;
+	wa = W_AmmoItemCode(w);
+	if(start_weapons & wb)
+	{
+		if(wa == IT_SUPERWEAPON && start_items & IT_UNLIMITED_SUPERWEAPONS)
+			return 0;
+		if(wa != IT_SUPERWEAPON && start_items & IT_UNLIMITED_WEAPON_AMMO)
+			return 0;
+		// start weapons that take no ammo can't be dropped (this prevents dropping the laser, as long as it continues to use no ammo)
+		if(wa == 0)
+			return 0;
+	}
+
+	return 1;
+}
+
 // toss current weapon
 void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 {
-	local float w, a, wb, wa;
+	local float w, a, wb;
 
 	w = self.weapon;
 	if (w == 0)
@@ -240,25 +261,14 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 		return;
 	if (!cvar("g_pickup_items"))
 		return;
+	if(!W_IsWeaponThrowable(w))
+		return;
 
 	wb = W_WeaponBit(w);
-	wa = W_AmmoItemCode(w);
-	if(!wb)
-		return;
 	if(self.weapons & wb != wb)
 		return;
-	if(start_weapons & wb)
-	{
-		if(wa == IT_SUPERWEAPON && start_items & IT_UNLIMITED_SUPERWEAPONS)
-			return;
-		if(wa != IT_SUPERWEAPON && start_items & IT_UNLIMITED_WEAPON_AMMO)
-			return;
-		// start weapons that take no ammo can't be dropped (this prevents dropping the laser, as long as it continues to use no ammo)
-		if(wa == 0)
-			return;
-	}
 
-	self.weapons = self.weapons - wb;
+	self.weapons &~= wb;
 	W_SwitchWeapon_Force(self, w_getbestweapon(self));
 	a = W_ThrowNewWeapon(self, w, doreduce, self.origin + delta, velo);
 	if(a < 0)
