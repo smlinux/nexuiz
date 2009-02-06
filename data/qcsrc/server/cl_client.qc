@@ -1780,6 +1780,8 @@ void SpectateCopy(entity spectatee) {
 	self.health = spectatee.health;
 	self.impulse = 0;
 	self.items = spectatee.items;
+	self.strength_finished = spectatee.strength_finished;
+	self.invincible_finished = spectatee.invincible_finished;
 	self.weapons = spectatee.weapons;
 	self.switchweapon = spectatee.switchweapon;
 	self.weapon = spectatee.weapon;

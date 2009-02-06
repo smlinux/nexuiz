@@ -543,6 +543,9 @@ void spawnfunc_worldspawn (void)
 	addstat(STAT_SWITCHWEAPON, AS_INT, switchweapon);
 	addstat(STAT_GAMESTARTTIME, AS_FLOAT, stat_game_starttime);
 	Nagger_Init();
+	
+	addstat(STAT_STRENGTH_FINISHED, AS_FLOAT, strength_finished);
+	addstat(STAT_INVINCIBLE_FINISHED, AS_FLOAT, invincible_finished);
 
 	next_pingtime = time + 5;
 	InitializeEntity(self, cvar_changes_init, INITPRIO_CVARS);

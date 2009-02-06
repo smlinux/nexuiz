@@ -1491,6 +1491,59 @@ vector Sbar_DrawNoteLine(vector offset, string s)
 	return offset + sbar_fontsize_y * '0 1 0';
 }
 
+void CSQC_Strength_Timer() {
+	float stat_items;
+	stat_items = getstati(STAT_ITEMS);
+	if not(stat_items & IT_STRENGTH)
+		if not(stat_items & IT_INVINCIBLE)
+			return;
+	
+	if (getstati(STAT_HEALTH) <= 0)
+		return;
+	
+	vector pos, picsize, number_position;
+	float strength_time, invincibility_time, countdown_fontsize;
+
+	picsize = '40 40 0';
+	countdown_fontsize = 22;
+	
+	//element will be positioned on the right side of the screen:
+	pos_x = vid_conwidth - picsize_x - 10; //margin 10 from right border
+	number_position_x = pos_x - 5/*margin to the left from image*/ - countdown_fontsize*2/*width of text*/;
+	
+	pos_y = 180;
+	number_position_y = pos_y;
+	
+	//now calculate the values Sbar_DrawXNum() will be called with:
+	number_position_x = number_position_x - sbar_x; //relative to sbar coordinates
+	number_position_y = number_position_y - sbar_y; //relative to sbar coordinates
+	number_position_y += 10; //center number vertically to the icon
+	
+	pos_z = number_position_z = 0;
+	
+	//strength
+	if (stat_items & IT_STRENGTH) {
+		drawpic(pos, "gfx/sb_str", picsize, '0 0.086 0.953'/*strength color*/, 1, DRAWFLAG_NORMAL);
+		strength_time = getstatf(STAT_STRENGTH_FINISHED) - time;
+		if (strength_time > 0) { //show countdown once we received the valid stats-value
+			Sbar_DrawXNum(number_position, ceil(strength_time), 2, countdown_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
+		}
+		
+		//add some margin to the invincibility icon
+		pos_y             += picsize_y + 10;
+		number_position_y += picsize_y + 10;
+	}
+	
+	//invincibility
+	if (stat_items & IT_INVINCIBLE) {
+		drawpic(pos, "gfx/sb_invinc", picsize, '0.976 0 0.165'/*invincibility color*/, 1, DRAWFLAG_NORMAL);
+		invincibility_time = getstatf(STAT_INVINCIBLE_FINISHED) - time;
+		if (invincibility_time > 0) { //show countdown once we received the valid stats-value
+			Sbar_DrawXNum(number_position, ceil(invincibility_time), 2, countdown_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
+		}
+	}
+}
+
 void Sbar_Draw (void)
 {
 	float i;
@@ -1821,7 +1874,9 @@ void Sbar_Draw (void)
 				//   that is, 96 pixels mini scoreboard size, needing 16 pixels
 				//   to the right!
 			}
-		
+			
+			//show strength/invincibility ICON and timer:
+			CSQC_Strength_Timer();
 
 			if(gametype == GAME_KEYHUNT)
 			{
