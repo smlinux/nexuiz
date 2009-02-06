@@ -2,7 +2,8 @@ entity nagger;
 float readycount;
 float Nagger_SendEntity(entity to, float sendflags)
 {
-	float nags;
+	float nags, i, f, b;
+	entity e;
 	WriteByte(MSG_ENTITY, ENT_CLIENT_NAGGER);
 
 	nags = 0;
@@ -22,15 +23,28 @@ float Nagger_SendEntity(entity to, float sendflags)
 		nags |= 16;
 
 	if(sendflags & 128)
+		nags |= 128;
+
+	WriteByte(MSG_ENTITY, nags);
+
+	if(nags & 128)
 	{
-		WriteByte(MSG_ENTITY, nags | 128);
 		if(votecalled)
 			WriteString(MSG_ENTITY, votecalledvote_display);
 		else
 			WriteString(MSG_ENTITY, "");
 	}
-	else
-		WriteByte(MSG_ENTITY, nags);
+	
+	if(nags & 1)
+	{
+		for(i = 1; i <= maxclients; i += 8)
+		{
+			for(f = 0, e = edict_num(i), b = 1; b < 256; b *= 2, e = nextent(e))
+				if(clienttype(e) != CLIENTTYPE_REAL || e.ready)
+					f |= b;
+			WriteByte(MSG_ENTITY, f);
+		}
+	}
 
 	return TRUE;
 }

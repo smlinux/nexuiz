@@ -609,11 +609,18 @@ string Sbar_GetField(entity pl, float field)
 			if(!teamplay)
 			{
 				f = stof(getplayerkey(pl.sv_entnum, "colors"));
-				sbar_field_icon0 = "gfx/sb_playercolor_base";
-				sbar_field_icon1 = "gfx/sb_playercolor_shirt";
-				sbar_field_icon1_rgb = colormapPaletteColor(floor(f / 16), 0);
-				sbar_field_icon2 = "gfx/sb_playercolor_pants";
-				sbar_field_icon2_rgb = colormapPaletteColor(mod(f, 16), 1);
+				if(ready_waiting && pl.ready)
+				{
+					sbar_field_icon0 = "gfx/sb_player_ready";
+				}
+				else
+				{
+					sbar_field_icon0 = "gfx/sb_playercolor_base";
+					sbar_field_icon1 = "gfx/sb_playercolor_shirt";
+					sbar_field_icon1_rgb = colormapPaletteColor(floor(f / 16), 0);
+					sbar_field_icon2 = "gfx/sb_playercolor_pants";
+					sbar_field_icon2_rgb = colormapPaletteColor(mod(f, 16), 1);
+				}
 			}
 			return GetPlayerName(pl.sv_entnum);
 

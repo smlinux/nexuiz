@@ -69,7 +69,12 @@ void CSQC_Init(void)
 	menu_visible = FALSE;
 	menu_show = menu_show_error;
 	menu_action = menu_sub_null;
-	maxclients = 255; // we later get the real maxclients to speed up stuff
+
+	for(i = 0; i < 255; ++i)
+		if(getplayerkey(i, "viewentity") == "")
+			break;
+	maxclients = i;
+
 	//ctf_temp_1 = "";
 	// localcmd("alias order \"cmd order $*\""); enable if ctf-command thingy is used
 	//registercmd("ctf_menu");
@@ -663,7 +668,7 @@ void Ent_ClientData()
 
 void Ent_Nagger()
 {
-	float nags;
+	float nags, i, j, b, f;
 
 	nags = ReadByte();
 
@@ -672,6 +677,21 @@ void Ent_Nagger()
 		if(vote_called_vote)
 			strunzone(vote_called_vote);
 		vote_called_vote = strzone(ColorTranslateRGB(ReadString()));
+	}
+
+	if(nags & 1)
+	{
+		for(j = 0; j < maxclients; ++j)
+			if(playerslots[j])
+				playerslots[j].ready = 1;
+		for(i = 1; i <= maxclients; i += 8)
+		{
+			f = ReadByte();
+			for(j = i-1, b = 1; b < 256; b *= 2, ++j)
+				if not(f & b)
+					if(playerslots[j])
+						playerslots[j].ready = 0;
+		}
 	}
 
 	ready_waiting = (nags & 1);
@@ -830,7 +850,9 @@ void Ent_Init()
 
 	csqc_revision = ReadShort();
 
+	print("prev maxclients = ", ftos(maxclients), "\n");
 	maxclients = ReadByte();
+	print("new maxclients = ", ftos(maxclients), "\n");
 	for(i = 0; i < 24; ++i)
 		weaponimpulse[i] = ReadByte() - 1;
 	hook_shotorigin_x = ReadCoord();

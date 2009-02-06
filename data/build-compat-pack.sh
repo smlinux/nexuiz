@@ -28,6 +28,7 @@ COMPAT_FILES="
 	gfx/sb_flag_red_shielded.tga
 	gfx/sb_kh_full.tga
 	gfx/sb_kh_outline.tga
+	gfx/sb_player_ready.tga
 	gfx/sb_playercolor_base.tga
 	gfx/sb_playercolor_pants.tga
 	gfx/sb_playercolor_shirt.tga
