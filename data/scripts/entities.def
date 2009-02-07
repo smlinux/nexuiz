@@ -14,6 +14,9 @@ In order to get Domination working well in your map, you need to place dom_team 
 message: message to be displayed to all players when this point is captured, preceded by the team's name.  This defaults to " has captured a control point".  You can specify different names for each point, for example " has captured the Lava Room".
 wait: How often this point gives its controlling team frags.
 frags: How many frags this point gives each wait cycle.
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/domination/dom_unclaimed.md3"
+
 */
 
 /*QUAKED dom_team (.3 .3 1) (-16 -16 -16) (16 16 16) 
