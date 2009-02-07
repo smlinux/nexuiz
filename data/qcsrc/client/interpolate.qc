@@ -8,7 +8,7 @@ void InterpolateOrigin_Note()
 {
 	float dt;
 
-	dt = time - self.itime1;
+	dt = time - self.itime2;
 
 	if(self.iflags & IFLAG_PREVALID)
 		self.iflags |= IFLAG_VALID;
@@ -48,8 +48,8 @@ void InterpolateOrigin_Note()
 
 	if(dt < 0.2)
 	{
-		self.itime1 = time;
-		self.itime2 = time + getstatf(STAT_SYS_TICRATE) * getstatf(STAT_MOVEVARS_TIMESCALE);
+		self.itime1 = serverprevtime;
+		self.itime2 = time;
 	}
 	else
 	{

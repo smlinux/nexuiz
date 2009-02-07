@@ -723,7 +723,15 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 	// set up the "time" global for received entities to be correct for interpolation purposes
 	savetime = time;
 	if(servertime)
+	{
 		time = servertime;
+	}
+	else
+	{
+		serverprevtime = time;
+		serverdeltatime = getstatf(STAT_SYS_TICRATE) * getstatf(STAT_MOVEVARS_TIMESCALE);
+		time = serverprevtime + serverdeltatime;
+	}
 
 #ifdef DP_CSQC_ENTITY_REMOVE_IS_B0RKED
 	if(self.enttype)

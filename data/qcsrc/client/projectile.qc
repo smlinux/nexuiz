@@ -158,8 +158,6 @@ void Ent_Projectile()
 {
 	float f;
 
-	InterpolateOrigin_Undo();
-
 	// projectile properties:
 	//   kind (interpolated, or clientside)
 	//
