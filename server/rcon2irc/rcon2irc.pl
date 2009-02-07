@@ -1371,7 +1371,7 @@ sub cond($)
 	} ],
 
 	# scores: Nexuiz server -> IRC channel, new format
-	[ dp => q{:player:see-labels:(\d+)[-0-9,]*:(\d+):(\d+):(\d+):(.*)} => sub {
+	[ dp => q{:player:see-labels:(-?\d+)[-0-9,]*:(\d+):(\d+):(\d+):(.*)} => sub {
 		my ($frags, $time, $team, $id, $name) = @_;
 		return if not exists $store{scores};
 		push @{$store{scores}{players}}, [$frags, $team, $name];
@@ -1379,7 +1379,7 @@ sub cond($)
 	} ],
 
 	# scores: Nexuiz server -> IRC channel (CTF), new format
-	[ dp => q{:teamscores:see-labels:(\d+)[-0-9,]*:(\d+)} => sub {
+	[ dp => q{:teamscores:see-labels:(-?\d+)[-0-9,]*:(\d+)} => sub {
 		my ($frags, $team) = @_;
 		return if not exists $store{scores};
 		$store{scores}{teams}{$team} = $frags;
