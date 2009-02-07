@@ -1,3 +1,6 @@
+#define FLAG_MIN (PL_MIN + '0 0 -13')
+#define FLAG_MAX (PL_MAX + '0 0 -13')
+
 .entity sprite;
 entity ctf_worldflaglist; // CTF flags in the map
 .entity ctf_worldflagnext;
@@ -304,6 +307,15 @@ void FlagThink()
 	local entity e;
 
 	self.nextthink = time + 0.1;
+
+	// sorry, we have to reset the flag size if it got squished by something
+	if(self.mins != FLAG_MIN || self.maxs != FLAG_MAX)
+	{
+		// if we can grow back, grow back
+		tracebox(self.origin, FLAG_MIN, FLAG_MAX, self.origin, MOVE_NOMONSTERS, self);
+		if(!trace_startsolid)
+			setsize(self, FLAG_MIN, FLAG_MAX);
+	}
 
 	if(self == ctf_worldflaglist) // only for the first flag
 	{
@@ -719,7 +731,7 @@ void spawnfunc_item_flag_team1()
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
 	//setsize(self, '-16 -16 -37', '16 16 37');
-	setsize(self, PL_MIN + '0 0 -13', PL_MAX + '0 0 -13');
+	setsize(self, FLAG_MIN, FLAG_MAX);
 	setorigin(self, self.origin + '0 0 37');
 	self.nextthink = time + 0.2; // start after doors etc
 	self.think = place_flag;
@@ -817,7 +829,7 @@ void spawnfunc_item_flag_team2()
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
 	//setsize(self, '-16 -16 -37', '16 16 37');
-	setsize(self, PL_MIN + '0 0 -13', PL_MAX + '0 0 -13');
+	setsize(self, FLAG_MIN, FLAG_MAX);
 	setorigin(self, self.origin + '0 0 37');
 	self.nextthink = time + 0.2; // start after doors etc
 	self.think = place_flag;
