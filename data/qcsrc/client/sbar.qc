@@ -1099,10 +1099,6 @@ string MakeRaceString(float cp, float mytime, float histime, float lapdelta, str
 		return strcat(col, cpname, " (", timestr, " ", strcat(hisname, col, lapstr), ")");
 }
 
-void dummyfunction(float a1, float a2, float a3, float a4, float a5, float a6, float a7, float a8)
-{
-}
-
 void Sbar_Score(float margin)
 {
 	float timelimit, minutes, seconds, timeleft, minutesLeft, secondsLeft, distribution, myplace, score;
@@ -1273,10 +1269,8 @@ void Sbar_Score(float margin)
 
 			if(forcetime != "")
 			{
-				float sz;
-				a = bound(0, 1 - 2 * (time - race_checkpointtime), 1);
-				sz = 1.2 / (a + 0.2);
-				drawstring(m - '0 0 0' - '0 16 0' * (sz - 1) - '16 0 0' * sz * stringwidth(forcetime, FALSE), forcetime, '32 32 0' * sz, '1 1 1', sbar_alpha_fg * a, 0);
+				a = bound(0, (time - race_checkpointtime) / 0.5, 1);
+				drawstring_expanding(m - '0 16 0' - '16 0 0' * stringwidth(forcetime, FALSE), forcetime, '32 32 0', '1 1 1', sbar_alpha_fg, 0, a);
 				a = 1 - a;
 			}
 			else
@@ -1448,7 +1442,7 @@ float Sbar_WouldDrawScoreboard ()
 }
 
 void CSQC_Strength_Timer() {
-	float stat_items;
+	float stat_items, dt;
 	stat_items = getstati(STAT_ITEMS);
 	if not(stat_items & IT_STRENGTH)
 		if not(stat_items & IT_INVINCIBLE)
@@ -1478,24 +1472,45 @@ void CSQC_Strength_Timer() {
 	pos_z = number_position_z = 0;
 	
 	//strength
-	if (stat_items & IT_STRENGTH) {
-		drawpic(pos, "gfx/sb_str", picsize, '0 0.086 0.953'/*strength color*/, sbar_alpha_fg, DRAWFLAG_NORMAL);
-		strength_time = getstatf(STAT_STRENGTH_FINISHED) - time;
-		if (strength_time > 0) { //show countdown once we received the valid stats-value
-			Sbar_DrawXNum(number_position, ceil(strength_time), 2, countdown_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
+	strength_time = getstatf(STAT_STRENGTH_FINISHED);
+	invincibility_time = getstatf(STAT_INVINCIBLE_FINISHED);
+
+	if (strength_time) {
+		dt = strength_time - time;
+		if(dt > 0)
+		{
+			if(dt < 5)
+			{
+				drawpic_expanding_two(pos, "gfx/sb_str", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE,
+					bound(0, (ceil(dt) - dt) / 0.5, 1));
+			}
+			else
+			{
+				drawpic(pos, "gfx/sb_str", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE);
+			}
+			Sbar_DrawXNum(number_position, ceil(dt), 2, countdown_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
 		}
-		
-		//add some margin to the invincibility icon
-		pos_y             += picsize_y + 10;
-		number_position_y += picsize_y + 10;
 	}
 	
+	//add some margin to the invincibility icon
+	pos_y             += picsize_y + 10;
+	number_position_y += picsize_y + 10;
+
 	//invincibility
-	if (stat_items & IT_INVINCIBLE) {
-		drawpic(pos, "gfx/sb_invinc", picsize, '0.976 0 0.165'/*invincibility color*/, sbar_alpha_fg, DRAWFLAG_NORMAL);
-		invincibility_time = getstatf(STAT_INVINCIBLE_FINISHED) - time;
-		if (invincibility_time > 0) { //show countdown once we received the valid stats-value
-			Sbar_DrawXNum(number_position, ceil(invincibility_time), 2, countdown_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
+	if (invincibility_time) {
+		dt = invincibility_time - time;
+		if(dt > 0)
+		{
+			if(dt < 5)
+			{
+				drawpic_expanding_two(pos, "gfx/sb_invinc", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE,
+					bound(0, (ceil(dt) - dt) / 0.5, 1));
+			}
+			else
+			{
+				drawpic(pos, "gfx/sb_invinc", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE);
+			}
+			Sbar_DrawXNum(number_position, ceil(dt), 2, countdown_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
 		}
 	}
 }
