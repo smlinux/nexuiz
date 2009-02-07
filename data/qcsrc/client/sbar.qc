@@ -1479,7 +1479,7 @@ void CSQC_Strength_Timer() {
 	
 	//strength
 	if (stat_items & IT_STRENGTH) {
-		drawpic(pos, "gfx/sb_str", picsize, '0 0.086 0.953'/*strength color*/, 1, DRAWFLAG_NORMAL);
+		drawpic(pos, "gfx/sb_str", picsize, '0 0.086 0.953'/*strength color*/, sbar_alpha_fg, DRAWFLAG_NORMAL);
 		strength_time = getstatf(STAT_STRENGTH_FINISHED) - time;
 		if (strength_time > 0) { //show countdown once we received the valid stats-value
 			Sbar_DrawXNum(number_position, ceil(strength_time), 2, countdown_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
@@ -1492,7 +1492,7 @@ void CSQC_Strength_Timer() {
 	
 	//invincibility
 	if (stat_items & IT_INVINCIBLE) {
-		drawpic(pos, "gfx/sb_invinc", picsize, '0.976 0 0.165'/*invincibility color*/, 1, DRAWFLAG_NORMAL);
+		drawpic(pos, "gfx/sb_invinc", picsize, '0.976 0 0.165'/*invincibility color*/, sbar_alpha_fg, DRAWFLAG_NORMAL);
 		invincibility_time = getstatf(STAT_INVINCIBLE_FINISHED) - time;
 		if (invincibility_time > 0) { //show countdown once we received the valid stats-value
 			Sbar_DrawXNum(number_position, ceil(invincibility_time), 2, countdown_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
@@ -2090,25 +2090,25 @@ void CSQC_ctf_hud(void)
 
 	switch(redflag)
 	{
-	case 1: drawpic(pos, "gfx/sb_flag_red_taken", '128 64 0', '1 1 1', 1, DRAWFLAG_NORMAL); break;
-	case 2: drawpic(pos, "gfx/sb_flag_red_lost", '128 64 0', '1 1 1', 1, DRAWFLAG_NORMAL); break;
-	case 3: drawpic(pos, "gfx/sb_flag_red_carrying", '128 64 0', '1 1 1', 1, DRAWFLAG_NORMAL); break;
+	case 1: drawpic(pos, "gfx/sb_flag_red_taken", '128 64 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
+	case 2: drawpic(pos, "gfx/sb_flag_red_lost", '128 64 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
+	case 3: drawpic(pos, "gfx/sb_flag_red_carrying", '128 64 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
 	default:
 		if(stat_items & IT_CTF_SHIELDED)
 			if(myteam == COLOR_TEAM2)
-				drawpic(pos, "gfx/sb_flag_red_shielded", '128 64 0', '1 1 1', 1, DRAWFLAG_NORMAL); break;
+				drawpic(pos, "gfx/sb_flag_red_shielded", '128 64 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
 	}
 
 	pos_y -= 64;
 	
 	switch(blueflag)
 	{
-	case 1: drawpic(pos, "gfx/sb_flag_blue_taken", '128 64 0', '1 1 1', 1, 0); break;
-	case 2: drawpic(pos, "gfx/sb_flag_blue_lost", '128 64 0', '1 1 1', 1, 0); break;
-	case 3: drawpic(pos, "gfx/sb_flag_blue_carrying", '128 64 0', '1 1 1', 1, 0); break;
+	case 1: drawpic(pos, "gfx/sb_flag_blue_taken", '128 64 0', '1 1 1', sbar_alpha_fg, 0); break;
+	case 2: drawpic(pos, "gfx/sb_flag_blue_lost", '128 64 0', '1 1 1', sbar_alpha_fg, 0); break;
+	case 3: drawpic(pos, "gfx/sb_flag_blue_carrying", '128 64 0', '1 1 1', sbar_alpha_fg, 0); break;
 	default:
 		if(stat_items & IT_CTF_SHIELDED)
 			if(myteam == COLOR_TEAM1)
-				drawpic(pos, "gfx/sb_flag_blue_shielded", '128 64 0', '1 1 1', 1, DRAWFLAG_NORMAL); break;
+				drawpic(pos, "gfx/sb_flag_blue_shielded", '128 64 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
 	}
 }
