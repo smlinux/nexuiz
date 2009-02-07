@@ -1271,7 +1271,6 @@ void Sbar_Score(float margin)
 			{
 				a = bound(0, (time - race_checkpointtime) / 0.5, 1);
 				drawstring_expanding(m - '16 0 0' * stringwidth(forcetime, FALSE), forcetime, '32 32 0', '1 1 1', sbar_alpha_fg, 0, a);
-				a = 1 - a;
 			}
 			else
 				a = 1;
