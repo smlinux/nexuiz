@@ -11001,7 +11001,7 @@
 {
 "classname" "target_speaker"
 "origin" "448 3136 928"
-"noise" "sound/desertfactory/Lights_Loop.wav"
+"noise" "sound/desertfactory/lights_loop.wav"
 "volume" "0.5"
 "atten" "3.5"
 }
@@ -11009,7 +11009,7 @@
 {
 "classname" "target_speaker"
 "origin" "240 4032 296"
-"noise" "sound/desertfactory/WindOutside_Loop.wav"
+"noise" "sound/desertfactory/windoutside_loop.wav"
 "atten" "3.5"
 "volume" "1"
 }
@@ -11017,7 +11017,7 @@
 {
 "classname" "target_speaker"
 "origin" "2032 704 576"
-"noise" "sound/desertfactory/Lights_Loop.wav"
+"noise" "sound/desertfactory/lights_loop.wav"
 "volume" "1"
 "atten" "3.5"
 }
@@ -11025,7 +11025,7 @@
 {
 "classname" "target_speaker"
 "origin" "1792 1552 576"
-"noise" "sound/desertfactory/Lights_Loop.wav"
+"noise" "sound/desertfactory/lights_loop.wav"
 "volume" "1"
 "atten" "3.5"
 }
@@ -11033,7 +11033,7 @@
 {
 "classname" "target_speaker"
 "origin" "1792 2336 576"
-"noise" "sound/desertfactory/Lights_Loop.wav"
+"noise" "sound/desertfactory/lights_loop.wav"
 "volume" "1"
 "atten" "3.5"
 }
@@ -11041,7 +11041,7 @@
 {
 "classname" "target_speaker"
 "origin" "1632 400 768"
-"noise" "sound/desertfactory/MachineVat_Loop.wav"
+"noise" "sound/desertfactory/machinevat_loop.wav"
 "volume" "1"
 "atten" "2"
 }
@@ -11049,7 +11049,7 @@
 {
 "classname" "target_speaker"
 "origin" "2112 1952 288"
-"noise" "sound/desertfactory/PipeWater_Loop.wav"
+"noise" "sound/desertfactory/pipewater_loop.wav"
 "atten" "3"
 "volume" "0.75"
 }
@@ -11057,7 +11057,7 @@
 {
 "classname" "target_speaker"
 "origin" "264 1416 272"
-"noise" "sound/desertfactory/Cricket_Loop.wav"
+"noise" "sound/desertfactory/cricket_loop.wav"
 "atten" "3.5"
 "volume" "0.5"
 }
@@ -11065,7 +11065,7 @@
 {
 "classname" "target_speaker"
 "origin" "704 2816 272"
-"noise" "sound/desertfactory/Cricket_Loop.wav"
+"noise" "sound/desertfactory/cricket_loop.wav"
 "atten" "3.5"
 "volume" "0.5"
 }
@@ -11073,7 +11073,7 @@
 {
 "classname" "target_speaker"
 "origin" "1120 1376 272"
-"noise" "sound/desertfactory/Cricket_Loop.wav"
+"noise" "sound/desertfactory/cricket_loop.wav"
 "atten" "3.5"
 "volume" "0.5"
 }
@@ -11081,7 +11081,7 @@
 {
 "classname" "target_speaker"
 "origin" "960 2336 1248"
-"noise" "sound/desertfactory/WindOutside_Loop.wav"
+"noise" "sound/desertfactory/windoutside_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11089,7 +11089,7 @@
 {
 "classname" "target_speaker"
 "origin" "960 1792 1248"
-"noise" "sound/desertfactory/WindOutside_Loop.wav"
+"noise" "sound/desertfactory/windoutside_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11097,7 +11097,7 @@
 {
 "classname" "target_speaker"
 "origin" "448 1792 1248"
-"noise" "sound/desertfactory/WindOutside_Loop.wav"
+"noise" "sound/desertfactory/windoutside_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11105,7 +11105,7 @@
 {
 "classname" "target_speaker"
 "origin" "448 2336 1248"
-"noise" "sound/desertfactory/WindOutside_Loop.wav"
+"noise" "sound/desertfactory/windoutside_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11113,7 +11113,7 @@
 {
 "classname" "target_speaker"
 "origin" "960 1792 736"
-"noise" "sound/desertfactory/WindOutside_Loop.wav"
+"noise" "sound/desertfactory/windoutside_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11121,7 +11121,7 @@
 {
 "classname" "target_speaker"
 "origin" "448 1792 736"
-"noise" "sound/desertfactory/WindOutside_Loop.wav"
+"noise" "sound/desertfactory/windoutside_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11129,7 +11129,7 @@
 {
 "classname" "target_speaker"
 "origin" "960 2336 736"
-"noise" "sound/desertfactory/WindOutside_Loop.wav"
+"noise" "sound/desertfactory/windoutside_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11137,7 +11137,7 @@
 {
 "classname" "target_speaker"
 "origin" "448 2336 736"
-"noise" "sound/desertfactory/WindOutside_Loop.wav"
+"noise" "sound/desertfactory/windoutside_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11145,7 +11145,7 @@
 {
 "classname" "target_speaker"
 "origin" "1248 704 576"
-"noise" "sound/desertfactory/Lights_Loop.wav"
+"noise" "sound/desertfactory/lights_loop.wav"
 "volume" "1"
 "atten" "3.5"
 }
@@ -11153,7 +11153,7 @@
 {
 "classname" "target_speaker"
 "origin" "2240 2880 384"
-"noise" "sound/desertfactory/WindHowling_Loop.ogg"
+"noise" "sound/desertfactory/windhowling_loop.ogg"
 "atten" "3"
 "volume" "1"
 }
@@ -11161,7 +11161,7 @@
 {
 "classname" "target_speaker"
 "origin" "960 1792 480"
-"noise" "sound/desertfactory/WindOutside_Loop.wav"
+"noise" "sound/desertfactory/windoutside_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11169,7 +11169,7 @@
 {
 "classname" "target_speaker"
 "origin" "448 2336 480"
-"noise" "sound/desertfactory/WindOutside_Loop.wav"
+"noise" "sound/desertfactory/windoutside_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11177,7 +11177,7 @@
 {
 "classname" "target_speaker"
 "origin" "960 2336 480"
-"noise" "sound/desertfactory/WindOutside_Loop.wav"
+"noise" "sound/desertfactory/windoutside_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11185,7 +11185,7 @@
 {
 "classname" "target_speaker"
 "origin" "960 1792 992"
-"noise" "sound/desertfactory/WindOutside_Loop.wav"
+"noise" "sound/desertfactory/windoutside_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11193,7 +11193,7 @@
 {
 "classname" "target_speaker"
 "origin" "448 1792 992"
-"noise" "sound/desertfactory/WindOutside_Loop.wav"
+"noise" "sound/desertfactory/windoutside_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11201,7 +11201,7 @@
 {
 "classname" "target_speaker"
 "origin" "960 2336 992"
-"noise" "sound/desertfactory/WindOutside_Loop.wav"
+"noise" "sound/desertfactory/windoutside_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11209,7 +11209,7 @@
 {
 "classname" "target_speaker"
 "origin" "448 2336 992"
-"noise" "sound/desertfactory/WindOutside_Loop.wav"
+"noise" "sound/desertfactory/windoutside_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11217,7 +11217,7 @@
 {
 "classname" "target_speaker"
 "origin" "448 1792 480"
-"noise" "sound/desertfactory/WindOutside_Loop.wav"
+"noise" "sound/desertfactory/windoutside_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11225,7 +11225,7 @@
 {
 "classname" "target_speaker"
 "origin" "208 1792 384"
-"noise" "sound/desertfactory/WindHowling_Loop.ogg"
+"noise" "sound/desertfactory/windhowling_loop.ogg"
 "atten" "3"
 "volume" "1"
 }
@@ -11233,7 +11233,7 @@
 {
 "classname" "target_speaker"
 "origin" "2288 704 384"
-"noise" "sound/desertfactory/WindHowling_Loop.ogg"
+"noise" "sound/desertfactory/windhowling_loop.ogg"
 "atten" "3"
 "volume" "1"
 }
@@ -11241,7 +11241,7 @@
 {
 "classname" "target_speaker"
 "origin" "2240 3136 384"
-"noise" "sound/desertfactory/WindHowling_Loop.ogg"
+"noise" "sound/desertfactory/windhowling_loop.ogg"
 "atten" "3"
 "volume" "1"
 }
@@ -11249,7 +11249,7 @@
 {
 "classname" "target_speaker"
 "origin" "2240 2624 384"
-"noise" "sound/desertfactory/WindHowling_Loop.ogg"
+"noise" "sound/desertfactory/windhowling_loop.ogg"
 "atten" "3"
 "volume" "1"
 }
@@ -11257,7 +11257,7 @@
 {
 "classname" "target_speaker"
 "origin" "1792 3120 576"
-"noise" "sound/desertfactory/Lights_Loop.wav"
+"noise" "sound/desertfactory/lights_loop.wav"
 "volume" "1"
 "atten" "3.5"
 }
@@ -11265,7 +11265,7 @@
 {
 "classname" "target_speaker"
 "origin" "1008 2944 848"
-"noise" "sound/desertfactory/RadioMessage.wav"
+"noise" "sound/desertfactory/radiomessage.wav"
 "volume" "0.75"
 "atten" "3.5"
 "targetname" "radiomessage"
@@ -11274,7 +11274,7 @@
 {
 "classname" "target_speaker"
 "origin" "464 704 576"
-"noise" "sound/desertfactory/Lights_Loop.wav"
+"noise" "sound/desertfactory/lights_loop.wav"
 "volume" "1"
 "atten" "3.5"
 }
@@ -11282,7 +11282,7 @@
 {
 "classname" "target_speaker"
 "origin" "1632 400 384"
-"noise" "sound/desertfactory/MachineVat_Loop.wav"
+"noise" "sound/desertfactory/machinevat_loop.wav"
 "volume" "1"
 "atten" "2"
 }
@@ -11290,7 +11290,7 @@
 {
 "classname" "target_speaker"
 "origin" "864 1008 768"
-"noise" "sound/desertfactory/MachineVat_Loop.wav"
+"noise" "sound/desertfactory/machinevat_loop.wav"
 "volume" "1"
 "atten" "2"
 }
@@ -11298,7 +11298,7 @@
 {
 "classname" "target_speaker"
 "origin" "864 1008 384"
-"noise" "sound/desertfactory/MachineVat_Loop.wav"
+"noise" "sound/desertfactory/machinevat_loop.wav"
 "volume" "1"
 "atten" "2"
 }
@@ -11306,7 +11306,7 @@
 {
 "classname" "target_speaker"
 "origin" "896 2816 1152"
-"noise" "sound/desertfactory/PipeWater_Loop.wav"
+"noise" "sound/desertfactory/pipewater_loop.wav"
 "atten" "3.5"
 "volume" "0.75"
 }
@@ -11314,7 +11314,7 @@
 {
 "classname" "target_speaker"
 "origin" "1248 704 224"
-"noise" "sound/desertfactory/PipeWater_Loop.wav"
+"noise" "sound/desertfactory/pipewater_loop.wav"
 "atten" "3"
 "volume" "0.75"
 }
@@ -11322,7 +11322,7 @@
 {
 "classname" "target_speaker"
 "origin" "1632 704 224"
-"noise" "sound/desertfactory/PipeWater_Loop.wav"
+"noise" "sound/desertfactory/pipewater_loop.wav"
 "atten" "3"
 "volume" "0.75"
 }
@@ -11330,7 +11330,7 @@
 {
 "classname" "target_speaker"
 "origin" "1792 1952 288"
-"noise" "sound/desertfactory/PipeWater_Loop.wav"
+"noise" "sound/desertfactory/pipewater_loop.wav"
 "atten" "3"
 "volume" "0.75"
 }
@@ -11338,7 +11338,7 @@
 {
 "classname" "target_speaker"
 "origin" "864 704 224"
-"noise" "sound/desertfactory/PipeWater_Loop.wav"
+"noise" "sound/desertfactory/pipewater_loop.wav"
 "atten" "3"
 "volume" "0.75"
 }
@@ -11346,7 +11346,7 @@
 {
 "classname" "target_speaker"
 "origin" "1024 448 1152"
-"noise" "sound/desertfactory/PipeWater_Loop.wav"
+"noise" "sound/desertfactory/pipewater_loop.wav"
 "atten" "3"
 "volume" "0.75"
 }
@@ -11354,7 +11354,7 @@
 {
 "classname" "target_speaker"
 "origin" "1632 400 1152"
-"noise" "sound/desertfactory/PipeWater_Loop.wav"
+"noise" "sound/desertfactory/pipewater_loop.wav"
 "atten" "3"
 "volume" "0.75"
 }
@@ -11362,7 +11362,7 @@
 {
 "classname" "target_speaker"
 "origin" "864 1008 1152"
-"noise" "sound/desertfactory/PipeWater_Loop.wav"
+"noise" "sound/desertfactory/pipewater_loop.wav"
 "atten" "3"
 "volume" "0.75"
 }
@@ -11370,7 +11370,7 @@
 {
 "classname" "target_speaker"
 "origin" "832 2368 1152"
-"noise" "sound/desertfactory/PipeWater_Loop.wav"
+"noise" "sound/desertfactory/pipewater_loop.wav"
 "atten" "3"
 "volume" "0.75"
 }
@@ -11378,7 +11378,7 @@
 {
 "classname" "target_speaker"
 "origin" "976 1792 1152"
-"noise" "sound/desertfactory/PipeWater_Loop.wav"
+"noise" "sound/desertfactory/pipewater_loop.wav"
 "atten" "3"
 "volume" "0.75"
 }
@@ -11386,7 +11386,7 @@
 {
 "classname" "target_speaker"
 "origin" "864 1792 1152"
-"noise" "sound/desertfactory/PipeWater_Loop.wav"
+"noise" "sound/desertfactory/pipewater_loop.wav"
 "atten" "3"
 "volume" "0.75"
 }
@@ -11394,7 +11394,7 @@
 {
 "classname" "target_speaker"
 "origin" "2112 1952 768"
-"noise" "sound/desertfactory/Ambient_Loop.wav"
+"noise" "sound/desertfactory/ambient_loop.wav"
 "atten" "2"
 "volume" "1"
 }
@@ -11402,7 +11402,7 @@
 {
 "classname" "target_speaker"
 "origin" "1440 1696 448"
-"noise" "sound/desertfactory/Ambient_Loop.wav"
+"noise" "sound/desertfactory/ambient_loop.wav"
 "atten" "2"
 "volume" "1"
 }
@@ -11410,7 +11410,7 @@
 {
 "classname" "target_speaker"
 "origin" "2032 704 1024"
-"noise" "sound/desertfactory/Ambient_Loop.wav"
+"noise" "sound/desertfactory/ambient_loop.wav"
 "atten" "2"
 "volume" "1"
 }
@@ -11418,7 +11418,7 @@
 {
 "classname" "target_speaker"
 "origin" "1792 3120 1024"
-"noise" "sound/desertfactory/Ambient_Loop.wav"
+"noise" "sound/desertfactory/ambient_loop.wav"
 "atten" "2"
 "volume" "1"
 }
@@ -11433,7 +11433,7 @@
 {
 "classname" "target_speaker"
 "origin" "960 3136 928"
-"noise" "sound/desertfactory/Lights_Loop.wav"
+"noise" "sound/desertfactory/lights_loop.wav"
 "volume" "0.5"
 "atten" "3.5"
 }
@@ -11441,7 +11441,7 @@
 {
 "classname" "target_speaker"
 "origin" "1008 2944 824"
-"noise" "sound/desertfactory/RadioStatic_Loop.wav"
+"noise" "sound/desertfactory/radiostatic_loop.wav"
 "volume" "1"
 "atten" "3.5"
 }
@@ -11609,7 +11609,7 @@
 "count" "1"
 "mdl" "TE_EXPLOSION"
 "targetname" "steamburst01"
-"noise" "sound/desertfactory/Steam_Burst.wav"
+"noise" "sound/desertfactory/steam_burst.wav"
 // brush 0
 {
 ( 1668 1040 300 ) ( 1668 1008 300 ) ( 1636 1040 300 ) common/trigger 0 0 0 0.25 0.25 134217728 0 0
@@ -11632,7 +11632,7 @@
 {
 "classname" "target_speaker"
 "origin" "1654 1024 280"
-"noise" "sound/desertfactory/Steam_Loop.wav"
+"noise" "sound/desertfactory/steam_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11640,7 +11640,7 @@
 {
 "classname" "target_speaker"
 "origin" "304 752 352"
-"noise" "sound/desertfactory/Generator_Loop.wav"
+"noise" "sound/desertfactory/generator_loop.wav"
 "atten" "2"
 "volume" "1"
 }
@@ -11648,7 +11648,7 @@
 {
 "classname" "target_speaker"
 "origin" "842 384 280"
-"noise" "sound/desertfactory/Steam_Loop.wav"
+"noise" "sound/desertfactory/steam_loop.wav"
 "atten" "3"
 "volume" "1"
 }
@@ -11738,7 +11738,7 @@
 "count" "1"
 "mdl" "TE_EXPLOSION"
 "targetname" "steamburst02"
-"noise" "sound/desertfactory/Steam_Burst.wav"
+"noise" "sound/desertfactory/steam_burst.wav"
 // brush 0
 {
 ( 856 400 300 ) ( 856 368 300 ) ( 824 400 300 ) common/trigger 0 0 0 0.25 0.25 134217728 0 0
@@ -11763,7 +11763,7 @@
 {
 "classname" "trigger_multiple"
 "wait" "8"
-"noise" "sound/desertfactory/Steam_Fade.ogg"
+"noise" "sound/desertfactory/steam_fade.ogg"
 "target" "steam02_monoflop"
 // brush 0
 {
@@ -11876,7 +11876,7 @@
 {
 "classname" "target_speaker"
 "origin" "1056 3280 272"
-"noise" "sound/desertfactory/Cricket_Loop.wav"
+"noise" "sound/desertfactory/cricket_loop.wav"
 "atten" "3.5"
 "volume" "0.5"
 }
