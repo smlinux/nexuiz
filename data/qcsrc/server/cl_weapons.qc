@@ -296,6 +296,7 @@ void W_WeaponFrame()
 		self.weapon = 0;
 		self.weaponentity.state = WS_CLEAR;
 		self.weaponname = "";
+		self.items &~= IT_AMMO;
 		return;
 	}
 

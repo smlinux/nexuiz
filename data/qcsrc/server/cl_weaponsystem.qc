@@ -472,7 +472,6 @@ void w_clear()
 	if (self.weaponentity)
 	{
 		self.weaponentity.state = WS_CLEAR;
-		// self.weaponname = ""; // next frame will setmodel it to "" when needed anyway
 		self.weaponentity.effects = 0;
 	}
 };
@@ -489,7 +488,7 @@ void weapon_setup(float windex)
 {
 	entity e;
 	e = get_weaponinfo(windex);
-	self.items = self.items - (self.items & IT_AMMO);
+	self.items &~= IT_AMMO;
 	self.items = self.items | e.items;
 
 	// the two weapon entities will notice this has changed and update their models
