@@ -383,7 +383,42 @@ void CSQC_UpdateView(float w, float h)
 	// next R_RenderScene call
 	drawstring('0 0 0', "", '1 1 0', '1 1 1', 0, 0);
 
-	// crosshair
+	// Draw the mouse cursor
+	// NOTE: drawpic must happen after R_RenderScene for some reason
+	//drawpic(getmousepos(), "gfx/cursor.tga", '11 14 0', '1 1 1', 1, 0);
+	//drawstring('50 50', ftos(game), '10 10 0', '1 1 1', 1, 0);
+	//self = edict_num(player_localnum);
+	//drawstring('0 0', vtos(pmove_org), '8 8 0', '1 1 1', 1, 0);
+	//drawstring('0 8', strcat("ORG: ", vtos(self.origin), " state: ", ftos(self.ctf_state), " HP: ", ftos(self.health)), '8 8 0', '1 1 1', 1, 0);
+	// as long as the ctf part isn't in, this is useless
+	if(menu_visible)
+		menu_show();
+	
+	/*if(gametype == GAME_CTF)
+	{
+		ctf_view();
+	} else */
+
+	// draw 2D entities
+	e = self;
+	for(self = world; (self = nextent(self)); )
+		if(self.draw2d)
+			self.draw2d();
+	self = e;
+	
+	// draw radar
+	if(teamplay || cvar("cl_teamradar") == 2)
+	{
+		if((cvar_string("cl_teamradar") != "0" && !scoreboard_active) || ons_showmap)
+			teamradar_view();
+	}
+
+	// draw sbar
+	if(cvar("r_letterbox") == 0)
+	if(cvar("viewsize") < 120)
+		CSQC_common_hud();
+
+	// crosshair goes VERY LAST
 	if(!scoreboard_active && !ons_showmap) {
 		string wcross_style;
 		wcross_style = cvar_string("crosshair");
@@ -428,41 +463,6 @@ void CSQC_UpdateView(float w, float h)
 			drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x) + '0 0.5 0' * (vid_conheight - wcross_size_y), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
 		}
 	}
-
-	// Draw the mouse cursor
-	// NOTE: drawpic must happen after R_RenderScene for some reason
-	//drawpic(getmousepos(), "gfx/cursor.tga", '11 14 0', '1 1 1', 1, 0);
-	//drawstring('50 50', ftos(game), '10 10 0', '1 1 1', 1, 0);
-	//self = edict_num(player_localnum);
-	//drawstring('0 0', vtos(pmove_org), '8 8 0', '1 1 1', 1, 0);
-	//drawstring('0 8', strcat("ORG: ", vtos(self.origin), " state: ", ftos(self.ctf_state), " HP: ", ftos(self.health)), '8 8 0', '1 1 1', 1, 0);
-	// as long as the ctf part isn't in, this is useless
-	if(menu_visible)
-		menu_show();
-	
-	/*if(gametype == GAME_CTF)
-	{
-		ctf_view();
-	} else */
-
-	// draw 2D entities
-	e = self;
-	for(self = world; (self = nextent(self)); )
-		if(self.draw2d)
-			self.draw2d();
-	self = e;
-	
-	// draw radar
-	if(teamplay || cvar("cl_teamradar") == 2)
-	{
-		if((cvar_string("cl_teamradar") != "0" && !scoreboard_active) || ons_showmap)
-			teamradar_view();
-	}
-
-	// draw sbar
-	if(cvar("r_letterbox") == 0)
-	if(cvar("viewsize") < 120)
-		CSQC_common_hud();
 }
 
 void Sbar_Draw();
