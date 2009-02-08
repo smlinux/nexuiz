@@ -1,0 +1,30 @@
+
+// entity 0
+{
+"classname" "worldspawn"
+"message" "Created for the Desert Factory map project"
+"author" "sev"
+"license" "GNU GPL version 2 or any later version"
+// brush 0
+{
+patchDef2
+{
+desertfactory_stone/sand01
+( 3 3 0 0 0 )
+(
+( ( -96 192 0 11.5 5.0000004768 ) ( 96 192 0 11.5 5.7499995232 ) ( 96 0 0 10.75 5.75 ) )
+( ( -96 0 32 10.75 4.9999995232 ) ( 96 0 0 10.75 5.75 ) ( 96 0 0 10.75 5.75 ) )
+( ( -96 -192 0 10 5 ) ( 96 -192 0 9.9999990463 5.7499995232 ) ( 96 0 0 10.75 5.75 ) )
+)
+}
+}
+// brush 1
+{
+( 8 8 16 ) ( 8 0 16 ) ( -8 8 16 ) common/origin 0 0 0 0.25 0.25 0 0 0
+( 8 8 32 ) ( -8 8 32 ) ( 8 8 0 ) common/origin 0 0 0 0.25 0.25 0 0 0
+( 8 8 32 ) ( 8 8 0 ) ( 8 0 32 ) common/origin 0 0 0 0.25 0.25 0 0 0
+( -8 0 0 ) ( 8 0 0 ) ( -8 8 0 ) common/origin 0 0 0 0.25 0.25 0 0 0
+( -8 -8 0 ) ( -8 -8 32 ) ( 8 -8 0 ) common/origin 0 0 0 0.25 0.25 0 0 0
+( -8 0 0 ) ( -8 8 0 ) ( -8 0 32 ) common/origin 0 0 0 0.25 0.25 0 0 0
+}
+}

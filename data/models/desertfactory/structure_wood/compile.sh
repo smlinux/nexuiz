@@ -1,0 +1,26 @@
+"/home/sev/netradiant/install/q3map2.x86" -meta -patchmeta -subdivisions 64 -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/deck01.map"
+"/home/sev/netradiant/install/q3map2.x86" -convert ase -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/deck01.bsp"
+"/home/sev/netradiant/install/q3map2.x86" -meta -patchmeta -subdivisions 64 -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/deck02.map"
+"/home/sev/netradiant/install/q3map2.x86" -convert ase -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/deck02.bsp"
+"/home/sev/netradiant/install/q3map2.x86" -meta -patchmeta -subdivisions 64 -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/stairs01.map"
+"/home/sev/netradiant/install/q3map2.x86" -convert ase -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/stairs01.bsp"
+
+"/home/sev/netradiant/install/q3map2.x86" -meta -patchmeta -subdivisions 64 -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/hut01.map"
+"/home/sev/netradiant/install/q3map2.x86" -convert ase -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/hut01.bsp"
+"/home/sev/netradiant/install/q3map2.x86" -meta -patchmeta -subdivisions 64 -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/hut02.map"
+"/home/sev/netradiant/install/q3map2.x86" -convert ase -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/hut02.bsp"
+"/home/sev/netradiant/install/q3map2.x86" -meta -patchmeta -subdivisions 64 -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/hut03.map"
+"/home/sev/netradiant/install/q3map2.x86" -convert ase -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/hut03.bsp"
+"/home/sev/netradiant/install/q3map2.x86" -meta -patchmeta -subdivisions 64 -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/hole01.map"
+"/home/sev/netradiant/install/q3map2.x86" -convert ase -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/hole01.bsp"
+"/home/sev/netradiant/install/q3map2.x86" -meta -patchmeta -subdivisions 64 -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/hole02.map"
+"/home/sev/netradiant/install/q3map2.x86" -convert ase -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/hole02.bsp"
+"/home/sev/netradiant/install/q3map2.x86" -meta -patchmeta -subdivisions 64 -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/door01.map"
+"/home/sev/netradiant/install/q3map2.x86" -convert ase -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/door01.bsp"
+
+"/home/sev/netradiant/install/q3map2.x86" -meta -patchmeta -subdivisions 8 -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/vines01.map"
+"/home/sev/netradiant/install/q3map2.x86" -convert ase -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/vines01.bsp"
+
+"/home/sev/netradiant/install/q3map2.x86" -meta -patchmeta -subdivisions 2 -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/toilethut01.map"
+"/home/sev/netradiant/install/q3map2.x86" -convert ase -game quake3 "/home/sev/.nexuiz/data/models/desertfactory/structure_wood/toilethut01.bsp"
+

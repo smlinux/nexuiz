@@ -1,0 +1,167 @@
+
+================================================================================
+Desert Factory Map Project
+================================================================================
+
+Project Title	: Desert Factory
+Version		: 1.0
+Game		: Nexuiz <alientrap.org>
+Release Date	: February 2009
+Author		: Severin "sev" Meyer
+Email Address	: sev.ch(at)web.de
+
+Final compile:
+-meta -skyfix -samplesize 8
+-vis -saveprt
+-light -fast -deluxe -filter -samples 3 -lightmapsize 512 -bounce 4 -fastbounce -bouncegrid
+
+Have fun
+sev
+
+================================================================================
+License
+================================================================================
+
+Michael Quinn releases the ambient sound files, and I release all the other
+files that are part of the Desert Factory map project under the terms of the
+
+GNU General Public License
+
+as published by the Free Software Foundation,
+either version 2 of the License, or any later version.
+
+You can redistribute them and/or modify them under the terms of the
+GNU General Public License. <http://www.gnu.org/licenses/>.
+
+All the files that are part of the Desert Factory map project are distributed
+in the hope that they will be useful, but WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+================================================================================
+Credits
+================================================================================
+
+I want to thank everyone who dedicates their time
+and talent, and shares their work with all of us.
+
+----------------------------------------
+
+Very special thanks go to
+
+    Michael "Tenshihan" Quinn
+
+who contributed all the great ambient sounds.
+
+----------------------------------------
+
+The programs I used:
+
+    NetRadiant
+    Q3Map2
+    Nexuiz
+    GIMP
+    xsane
+    p7zip
+    openSUSE
+
+----------------------------------------
+
+The sources of photographs and textures I used:
+(Also check the "Detailed Credits for the Textures" section)
+
+    The Blender Texture Disc
+    Textures provided with Nexuiz
+
+----------------------------------------
+
+The wikis and manuals that helped me getting
+(almost) everything done the way I intended:
+
+    GtkRadiant Wikibook
+        <http://en.wikibooks.org/wiki/Radiant>
+    Q3Map2 Wikibook
+        <http://en.wikibooks.org/wiki/Q3Map2>
+    Q3Map2 Shader Manual
+        <http://members.lycos.co.uk/quakeroats/q3map2/shader_manual>
+
+----------------------------------------
+
+The people who have given me helpful feedback:
+
+    [-z-]
+    Fisume!
+    <o()))><
+    TAVI
+    fin
+    error
+    Tenshihan
+    torus
+    Ronan
+    player
+    CuBe0wL
+    morphed
+    morfar
+    SavageX
+
+================================================================================
+Detailed Credits for the Textures
+================================================================================
+
+The textures of the Desert Factory project are based on the
+following files, listed below their respective sources:
+
+----------------------------------------
+
+The Blender texture disc
+<http://www.tellim.com/texture_cd/>
+<http://www.blender.org/>
+Quote: "The Blender Foundation has now decided to open up this content entirely
+as public domain. We wish you a lot of fun with the collection!"
+
+building/wall/brickvariety_cyc.jpg
+cloth/paper1.jpg
+cloth/denimgrey.jpg
+dirt/spottywall.jpg
+metal/aluminum_corrugated.jpg
+metal/pewter-b.jpg
+skin/whitemonkey.jpg
+wood/boards3_vcyc.jpg
+wood/greywood.jpg
+wood/walnut_blk.jpg
+wood/wornboards_vcyc.jpg
+
+pattern/sign/exit_here.jpg
+pattern/sign/touch_wires.jpg
+pattern/sign/warning.jpg
+pattern/sign/workers_above.jpg
+pattern/sign/explosion.jpg
+pattern/sign/toxic.jpg
+pattern/sign/wear_glasses.jpg
+pattern/sign/yellow_shock.jpg
+pattern/sign/radioactive.jpg
+pattern/sign/use_ladder.jpg
+pattern/sign/white_biohazard.jpg
+
+----------------------------------------
+
+Textures provided with Nexuiz
+data/data20080511.pk3
+
+/grass2.tga
+evil2_misc/barrel_rst.jpg
+evil2_misc/barrel_rst_ow.jpg
+evil2_misc/barrel_rst_top2.jpg
+evil3_roofs/s_roof2.jpg
+evil3_roofs/s_roof.jpg
+eX/eX_clangfloor_01b.tga
+eX/eX_cretebase_02.tga
+eX/eX_cretewall_03.tga
+eX/eX_floor_mtl_wrn_01.tga
+eX/eXmetalBase05Rust.tga
+eX/eXmetalBase07rust.tga
+eX/eXmetalrib01.tga
+strength/sand.tga
+
+================================================================================
+Thank you for reading this file.
+================================================================================

@@ -1,0 +1,9 @@
+title Desert Factory
+description An abandoned factory in the desert.
+author sev
+cdtrack 8
+has weapons
+type dm 30 20
+type tdm 30 20 2
+type lms 9 20
+type arena 10 20
