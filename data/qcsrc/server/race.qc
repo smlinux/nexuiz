@@ -395,6 +395,58 @@ float race_waypointsprite_visible_for_player(entity e)
 		return FALSE;
 }
 
+float have_verified;
+void trigger_race_checkpoint_verify()
+{
+	entity oldself;
+	float i, p;
+	float qual;
+
+	if(have_verified)
+		return;
+	have_verified = 1;
+	
+	qual = g_race_qualifying;
+
+	oldself = self;
+	self = spawn();
+	self.classname = "player";
+
+	for(i = 0; i <= race_highest_checkpoint; ++i)
+	{
+		self.race_checkpoint = race_NextCheckpoint(i);
+
+		// race only (middle of the race)
+		g_race_qualifying = 0;
+		self.race_place = 0;
+		if(!Spawn_FilterOutBadSpots(findchain(classname, "info_player_deathmatch"), world, 0, FALSE))
+			error(strcat("Checkpoint ", ftos(i), " misses a spawnpoint with race_place==", ftos(self.race_place), " (used for respawning in race) - bailing out"));
+
+		if(i == 0)
+		{
+			// qualifying only
+			g_race_qualifying = 1;
+			self.race_place = race_lowest_place_spawn;
+			if(!Spawn_FilterOutBadSpots(findchain(classname, "info_player_deathmatch"), world, 0, FALSE))
+				error(strcat("Checkpoint ", ftos(i), " misses a spawnpoint with race_place==", ftos(self.race_place), " (used for qualifying) - bailing out"));
+			
+			// race only (initial spawn)
+			g_race_qualifying = 0;
+			for(p = 1; p <= race_highest_place_spawn; ++p)
+			{
+				self.race_place = p;
+				if(!Spawn_FilterOutBadSpots(findchain(classname, "info_player_deathmatch"), world, 0, FALSE))
+					error(strcat("Checkpoint ", ftos(i), " misses a spawnpoint with race_place==", ftos(self.race_place), " (used for initially spawning in race) - bailing out"));
+			}
+		}
+	}
+
+	g_race_qualifying = qual;
+
+	remove(self);
+	self = oldself;
+}
+
 void spawnfunc_trigger_race_checkpoint()
 {
 	vector o;
@@ -434,6 +486,8 @@ void spawnfunc_trigger_race_checkpoint()
 		WaypointSprite_SpawnFixed("race-finish", o, self, sprite);
 	}
 	self.sprite.waypointsprite_visible_for_player = race_waypointsprite_visible_for_player;
+
+	InitializeEntity(self, trigger_race_checkpoint_verify, INITPRIO_FINDTARGET);
 }
 
 void race_AbandonRaceCheck(entity p)
