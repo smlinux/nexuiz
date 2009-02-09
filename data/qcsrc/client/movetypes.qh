@@ -8,6 +8,7 @@
 .void(void) move_touch;
 .float move_bounce_factor;
 .float move_bounce_stopspeed;
+.float move_nomonsters; // -1 for MOVE_NORMAL, otherwise a MOVE_ constant
 
 void Movetype_Physics(float matchserver);
 

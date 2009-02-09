@@ -182,7 +182,9 @@ void _Movetype_PushEntityTrace(vector push)
 
 	end = self.move_origin + push;
 
-	if(self.move_movetype == MOVETYPE_FLYMISSILE)
+	if(self.move_nomonsters)
+		type = max(0, self.move_nomonsters);
+	else if(self.move_movetype == MOVETYPE_FLYMISSILE)
 		type = MOVE_MISSILE;
 	else if(self.solid == SOLID_TRIGGER || self.solid == SOLID_NOT)
 		type = MOVE_NOMONSTERS;
