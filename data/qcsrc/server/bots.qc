@@ -366,7 +366,8 @@ float lag_additem(float t, float f1, float f2, entity e1, vector v1, vector v2, 
 // used during navigation_goalrating_begin/end sessions
 float navigation_bestrating;
 entity navigation_bestgoal;
-
+entity navigation_alternativegoal;
+.entity alternativegoal;
 
 
 
@@ -1252,6 +1253,7 @@ void navigation_routerating(entity e, float f, float rangebias)
 		//dprint(ftos(f));
 		if (navigation_bestrating < f)
 		{
+			navigation_alternativegoal = navigation_bestgoal;
 			navigation_bestrating = f;
 			navigation_bestgoal = e;
 		}
@@ -1325,6 +1327,7 @@ void navigation_goalrating_end()
 {
 	if (self.havocbot_role == havocbot_role_ctf_offense)
 		dprint(navigation_bestgoal.classname, " (with rating ", ftos(navigation_bestrating), ")\n");
+	self.alternativegoal = navigation_alternativegoal;
 	navigation_routetogoal(navigation_bestgoal);
 };
 
@@ -1367,6 +1370,7 @@ float sv_maxspeed;
 .float(entity player, entity item) bot_pickupevalfunc;
 .float bot_pickupbasevalue;
 .float bot_canfire;
+.float bot_strategytime;
 
 // used for aiming currently
 // FIXME: make the weapon code use these and then replace the calculations here with a call to the weapon code
@@ -1940,10 +1944,13 @@ void bot_think()
 	if (self.deadflag)
 	{
 		if (self.deadflag == DEAD_DEAD)
+		{
 			self.BUTTON_JUMP = 1; // press jump to respawn
-		return;
+			self.bot_strategytime = 0;
+			return;
+		}
 	}
-
+	
 	// now call the current bot AI (havocbot for example)
 	self.bot_ai();
 };

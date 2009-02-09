@@ -55,10 +55,82 @@ vector havocbot_dodge()
 	*/
 };
 
-//.float havocbotignoretime;
 .float havocbot_keyboardtime;
 .float havocbot_ducktime;
 .vector havocbot_keyboard;
+void havocbot_keyboard_movement(vector destorg)
+{
+	local vector keyboard;
+	local float blend, maxspeed;
+
+	maxspeed = cvar("sv_maxspeed");	
+
+	if (time < self.havocbot_keyboardtime)
+		return;
+
+	self.havocbot_keyboardtime =
+		max(
+			self.havocbot_keyboardtime
+				+ bound(0,0.05/(skill+self.havocbot_keyboardskill),0.05)
+				+random()*bound(0,0.025/(skill+self.havocbot_keyboardskill),100)
+		, time);
+	keyboard = self.movement * (1.0 / maxspeed);
+
+	local float trigger, trigger1;
+	blend = bound(0,skill*0.1,1);
+	trigger = cvar("bot_ai_keyboard_treshold");
+	trigger1 = 0 - trigger;
+
+	// categorize forward movement
+	// at skill < 1.5 only forward
+	// at skill < 2.5 only individual directions
+	// at skill < 4.5 only individual directions, and forward diagonals
+	// at skill >= 4.5, all cases allowed
+	if (keyboard_x > trigger)
+	{
+		keyboard_x = 1;
+		if (skill < 2.5)
+			keyboard_y = 0;
+	}
+	else if (keyboard_x < trigger1 && skill > 1.5)
+	{
+		keyboard_x = -1;
+		if (skill < 4.5)
+			keyboard_y = 0;
+	}
+	else
+	{
+		keyboard_x = 0;
+		if (skill < 1.5)
+			keyboard_y = 0;
+	}
+	if (skill < 4.5)
+		keyboard_z = 0;
+
+	if (keyboard_y > trigger)
+		keyboard_y = 1;
+	else if (keyboard_y < trigger1)
+		keyboard_y = -1;
+	else
+		keyboard_y = 0;
+
+	if (keyboard_z > trigger)
+		keyboard_z = 1;
+	else if (keyboard_z < trigger1)
+		keyboard_z = -1;
+	else
+		keyboard_z = 0;
+
+	self.havocbot_keyboard = keyboard * maxspeed;
+	if (self.havocbot_ducktime>time) self.BUTTON_CROUCH=TRUE;
+
+	keyboard = self.havocbot_keyboard;
+	blend = bound(0,vlen(destorg-self.origin)/cvar("bot_ai_keyboard_distance"),1); // When getting close move with 360 degree
+	//dprint("movement ", vtos(self.movement), " keyboard ", vtos(keyboard), " blend ", ftos(blend), "\n");
+	self.movement = self.movement + (keyboard - self.movement) * blend;
+};
+
+//.float havocbotignoretime;
 //.vector bot_dodgevector;
 //.float bot_dodgevector_time;
 //.float bot_dodgevector_jumpbutton;
@@ -91,13 +163,26 @@ void havocbot_movetogoal()
 
 	if (self.goalcurrent == world)
 		return;
+
 	navigation_poptouchedgoals();
 	if (self.goalcurrent == world)
 	{
-		// ran out of goals, rethink strategy as soon as possible
-		self.bot_strategytime = 0;
+		if(self.alternativegoal==world)
+		{
+			// ran out of goals, rethink strategy as soon as possible
+			self.bot_strategytime = 0;
+			return;
+		}
+		// try to use the alternative goal
+		navigation_findnearestwaypoint(self.alternativegoal, TRUE);
+		navigation_routetogoal(self.alternativegoal);
+		self.alternativegoal = world;
 		return;
 	}
+
+//	te_wizspike(self.goalcurrent.origin);
+//	te_lightning2(world, self.origin, self.goalcurrent.origin);
+
 	m1 = self.goalcurrent.origin + self.goalcurrent.mins;
 	m2 = self.goalcurrent.origin + self.goalcurrent.maxs;
 	destorg = self.origin;
@@ -109,23 +194,21 @@ void havocbot_movetogoal()
 	dir = normalize(diff);
 	flatdir = diff;flatdir_z = 0;
 	flatdir = normalize(flatdir);
+
 	//if (self.bot_dodgevector_time < time)
 	{
 	//	self.bot_dodgevector_time = time + cvar("bot_ai_dodgeupdateinterval");
 	//	self.bot_dodgevector_jumpbutton = 1;
 		evadeobstacle = '0 0 0';
 		evadelava = '0 0 0';
-		if (!self.waterlevel)
+		if (self.waterlevel)
 		{
-			// Since new update in air contol, we can move in air
-			//if (!(self.flags & FL_ONGROUND))
-			//{
-			//	// prevent goal checks when we can't walk
-			//	if (self.bot_strategytime < time + 0.1)
-			//		self.bot_strategytime = time + 0.1;
-			//	return;
-			//}
-
+			makevectors(self.v_angle);
+			self.BUTTON_JUMP = 1;
+			// TODO: Make them swim up
+		}
+		else
+		{
 			// jump if going toward an obstacle that doesn't look like stairs we
 			// can walk up directly
 			tracebox(self.origin, self.mins, self.maxs, self.origin + self.velocity * 0.2, FALSE, self);
@@ -144,18 +227,42 @@ void havocbot_movetogoal()
 				}
 			}
 
-			traceline(self.origin + self.velocity * 0.3, self.origin + self.velocity * 0.3 + '0 0 -1000', TRUE, world);
-			s = pointcontents(trace_endpos + '0 0 1');
-			if (s == CONTENT_LAVA || s == CONTENT_SLIME)
-				evadelava = normalize(self.velocity) * -1;
+			// avoiding dangers and obstacles
+			// TODO: don't make this check every frame
+			if(self.flags & FL_ONGROUND)
+			{
+				local vector dst_ahead, dst_down;
+				dst_ahead = self.origin + self.view_ofs + (self.velocity * 0.3);
+				dst_down = dst_ahead + '0 0 -1500';				
+				
+				traceline(self.origin + self.view_ofs , dst_ahead, TRUE, world);
+				
+				if(trace_fraction == 1){
+					traceline(dst_ahead , dst_down, TRUE, world);
+				//	te_lightning2(world, self.origin, dst_ahead);	// Draw "ahead" look 
+					if(trace_fraction == 1)
+					{
+						s = pointcontents(trace_endpos + '0 0 1');
+						if (s == CONTENT_LAVA || s == CONTENT_SLIME)
+							evadelava = normalize(self.velocity) * -1;
+						else if (s == CONTENT_SKY)
+							evadeobstacle = normalize(self.velocity) * -1;
+						else if (tracebox_hits_trigger_hurt(dst_ahead, self.mins, self.maxs, trace_endpos))
+						{
+						//	te_lightning2(world, dst_ahead, dst_down);	// Draw "downards" look
+							// TODO: this could be better, but actually it stops lemming behavior
+							evadeobstacle = flatdir * -1;
+						}
+					}
+				}
+			}
 
 			dir = flatdir;
 			evadeobstacle_z = 0;
 			evadelava_z = 0;
 			makevectors(self.v_angle_y * '0 1 0');
 		}
-		else
-			makevectors(self.v_angle);
+
 		dodge = havocbot_dodge();
 		dodge = dodge * bound(0,3+skill*0.1,1);
 		evadelava = evadelava * bound(1,3-skill,3); //Noobs fear lava a lot and take more distance from it
@@ -176,79 +283,13 @@ void havocbot_movetogoal()
 	self.movement_y = dir * v_right * maxspeed;
 	self.movement_z = dir * v_up * maxspeed;
 
+	// Emulate keyboard interface
 	if (skill < 10)
-	{
-		// Emulate keyboard interface;
-		local vector keyboard;
-		local float blend;
-		if (time >= self.havocbot_keyboardtime)
-		{
-			self.havocbot_keyboardtime =
-				max(
-					self.havocbot_keyboardtime
-						+ bound(0,0.05/(skill+self.havocbot_keyboardskill),0.05)
-						+random()*bound(0,0.025/(skill+self.havocbot_keyboardskill),100)
-				, time);
-			keyboard = self.movement * (1.0 / maxspeed);
-
-			local float trigger, trigger1;
-			blend = bound(0,skill*0.1,1);
-			trigger = cvar("bot_ai_keyboard_treshold");
-			trigger1 = 0 - trigger;
-
-			// categorize forward movement
-			// at skill < 1.5 only forward
-			// at skill < 2.5 only individual directions
-			// at skill < 4.5 only individual directions, and forward diagonals
-			// at skill >= 4.5, all cases allowed
-			if (keyboard_x > trigger)
-			{
-				keyboard_x = 1;
-				if (skill < 2.5)
-					keyboard_y = 0;
-			}
-			else if (keyboard_x < trigger1 && skill > 1.5)
-			{
-				keyboard_x = -1;
-				if (skill < 4.5)
-					keyboard_y = 0;
-			}
-			else
-			{
-				keyboard_x = 0;
-				if (skill < 1.5)
-					keyboard_y = 0;
-			}
-			if (skill < 4.5)
-				keyboard_z = 0;
-
-			if (keyboard_y > trigger)
-				keyboard_y = 1;
-			else if (keyboard_y < trigger1)
-				keyboard_y = -1;
-			else
-				keyboard_y = 0;
-
-			if (keyboard_z > trigger)
-				keyboard_z = 1;
-			else if (keyboard_z < trigger1)
-				keyboard_z = -1;
-			else
-				keyboard_z = 0;
-
-			self.havocbot_keyboard = keyboard * maxspeed;
-			if (self.havocbot_ducktime>time) self.BUTTON_CROUCH=TRUE;
-		}
-		keyboard = self.havocbot_keyboard;
-		blend = bound(0,vlen(destorg-self.origin)/cvar("bot_ai_keyboard_distance"),1); // When getting close move with 360 degree
-		//dprint("movement ", vtos(self.movement), " keyboard ", vtos(keyboard), " blend ", ftos(blend), "\n");
-		self.movement = self.movement + (keyboard - self.movement) * blend;
-	}
+		havocbot_keyboard_movement(destorg);
 
 	if ((dir * v_up) >= cvar("sv_jumpvelocity")*0.5 && (self.flags & FL_ONGROUND)) self.BUTTON_JUMP=1;
 	if (((dodge * v_up) > 0) && random()*frametime >= 0.2*bound(0,(10-skill)*0.1,1)) self.BUTTON_JUMP=TRUE;
 	if (((dodge * v_up) < 0) && random()*frametime >= 0.5*bound(0,(10-skill)*0.1,1)) self.havocbot_ducktime=time+0.3/bound(0.1,skill,10);
-
 };
 
 .float havocbot_chooseenemy_finished;
@@ -559,6 +600,9 @@ void havocbot_ai()
 		// token has been used this frame
 		bot_strategytoken_taken = TRUE;
 	}
+	if(self.deadflag)
+		return;
+
 	havocbot_chooseenemy();
 	if (self.bot_chooseweapontime < time )
 	{

@@ -1,7 +1,6 @@
 
 .float havocbot_role_timeout;
 .void() havocbot_previous_role;
-.float bot_strategytime;
 .void() havocbot_role;
 float bot_ignore_bots;
 
@@ -236,10 +235,28 @@ void havocbot_goalrating_enemyplayers(float ratingscale, vector org, float sradi
 		if (self != head)
 		if (head.health > 0)
 		if ((noteam && (!bot_ignore_bots || clienttype(head) == CLIENTTYPE_REAL)) || head.team != self.team)
-		if (vlen(head.origin - org) < sradius)
 		{
+			if (vlen(head.origin - org) > sradius)
+				continue;
+				
+			// rate only visible enemies
+			/*
+			traceline(self.origin + self.view_ofs, head.origin, MOVE_NOMONSTERS, self);
+			if (trace_fraction < 1 || trace_ent != head)
+				continue;
+			*/
+			
+			// not falling
+			if(head.flags & FL_ONGROUND == 0)
+			{
+				traceline(head.origin, head.origin + '0 0 -1500', TRUE, world);
+				t = pointcontents(trace_endpos + '0 0 1');
+				if (t != CONTENT_SOLID)
+					continue;
+				// TODO: check for trigger_hurt here
+			}
+			
 			t = (self.health + self.armorvalue ) / (head.health + head.armorvalue );
-		//	clientcommand(self, strcat("say rating ", ftos(t*ratingscale)));
 			navigation_routerating(head, t * ratingscale, 2000);
 		}
 	}
