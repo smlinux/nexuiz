@@ -2,13 +2,16 @@ textures/toxic/toxic_sky
 {
 	qer_editorimage env/green_dark/green_dark_lf.tga
 	q3map_lightimage env/green_dark/green_dark_lf.tga
+	skyParms env/green_dark/green_dark 128 -
+
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm nomarks
 	surfaceparm sky
+
 	q3map_surfacelight 200
-	q3map_sun 0.55 0.55 0.55 100 215 40
-	skyParms env/green_dark/green_dark 128 -
+//	q3map_sunExt red green blue intensity degrees elevation deviance samples
+	q3map_sunExt 0.55 0.55 0.55 100 215 40 4 4
 }
 
 textures/toxic/toxic_grate
