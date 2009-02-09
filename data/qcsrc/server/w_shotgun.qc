@@ -6,16 +6,20 @@ void W_Shotgun_Attack (void)
 	float	d;
 	float	f;
 	float	spread;
+	float	bulletspeed;
+	float	bulletconstant;
 	local entity flash;
 
 	bullets = cvar("g_balance_shotgun_primary_bullets");
 	d = cvar("g_balance_shotgun_primary_damage");
 	f = cvar("g_balance_shotgun_primary_force");
 	spread = cvar("g_balance_shotgun_primary_spread");
+	bulletspeed = cvar("g_balance_shotgun_primary_speed");
+	bulletconstant = cvar("g_balance_shotgun_primary_bulletconstant");
 
 	W_SetupShot (self, '25 8 -8', TRUE, 5, "weapons/shotgun_fire.wav");
 	for (sc = 0;sc < bullets;sc = sc + 1)
-		fireBullet (w_shotorg, w_shotdir, spread, d, f, WEP_SHOTGUN, sc < 3);
+		fireBallisticBullet(w_shotorg, w_shotdir, spread, bulletspeed, 5, d, 0, f, WEP_SHOTGUN, 0, 1, bulletconstant);
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_shells = self.ammo_shells - cvar("g_balance_shotgun_primary_ammo");
 
@@ -49,16 +53,20 @@ void W_Shotgun_Attack2 (void)
 	float	d;
 	float	f;
 	float	spread;
+	float	bulletspeed;
+	float	bulletconstant;
 	local entity flash;
 
 	bullets = cvar("g_balance_shotgun_secondary_bullets");
 	d = cvar("g_balance_shotgun_secondary_damage");
 	f = cvar("g_balance_shotgun_secondary_force");
 	spread = cvar("g_balance_shotgun_secondary_spread");
+	bulletspeed = cvar("g_balance_shotgun_secondary_speed");
+	bulletconstant = cvar("g_balance_shotgun_secondary_bulletconstant");
 
 	W_SetupShot (self, '25 8 -8', TRUE, 5, "weapons/shotgun_fire.wav");
 	for (sc = 0;sc < bullets;sc = sc + 1)
-		fireBullet (w_shotorg, w_shotdir, spread, d, f, WEP_SHOTGUN | HITTYPE_SECONDARY, sc < 3);
+		fireBallisticBullet(w_shotorg, w_shotdir, spread, bulletspeed, 5, d, 0, f, WEP_SHOTGUN | HITTYPE_SECONDARY, 0, 1, bulletconstant);
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_shells = self.ammo_shells - cvar("g_balance_shotgun_secondary_ammo");
 

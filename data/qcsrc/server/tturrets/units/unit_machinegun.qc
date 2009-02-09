@@ -8,7 +8,7 @@ void turret_machinegun_attack()
 
     entity flash;
     sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", VOL_BASE, ATTN_NORM);
-    fireBullet (self.tur_shotorg_updated, self.tur_shotdir_updated,self.shot_spread, self.shot_dmg, self.shot_force, DEATH_TURRET, FALSE);
+    fireBallisticBullet (self.tur_shotorg_updated, self.tur_shotdir_updated,self.shot_spread, cvar("g_balance_uzi_speed"), 5, self.shot_dmg, 0, self.shot_force, DEATH_TURRET, 0, 1, cvar("g_balance_uzi_bulletconstant"));
 
     te_smallflash(self.tur_shotorg_updated);
     trailparticles(self,particleeffectnum("EF_MGTURRETTRAIL"),self.tur_shotorg_updated,trace_endpos);

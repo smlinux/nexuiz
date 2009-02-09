@@ -295,6 +295,8 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 		CSQCProjectile(proj, TRUE, PROJECTILE_BULLET, TRUE);
 }
 
+/*
+ * not used any more
 void fireBullet (vector start, vector dir, float spread, float damage, float force, float dtype, float tracer)
 {
 	vector  end;
@@ -339,6 +341,7 @@ void fireBullet (vector start, vector dir, float spread, float damage, float for
 		Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * force);
 	}
 }
+*/
 
 void W_PrepareExplosionByDamage(entity attacker, void() explode)
 {
