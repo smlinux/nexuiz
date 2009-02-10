@@ -1241,7 +1241,7 @@ sub cond($)
 	[ dp => q{:name:(\d+):(.*)} => sub {
 		my ($id, $nick) = @_;
 		$nick = color_dp2irc $nick;
-		my $oldnick = $store{"playernick_$id"};
+		my $oldnick = $store{"playernick_byid_$id"};
 		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 is now known as $nick";
 		$store{"playernick_byid_$id"} = $nick;
 		return 0;
