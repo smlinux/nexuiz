@@ -13,8 +13,9 @@ sub normalize_path($)
 	return $p;
 }
 
-my $find_texture_names;
-$find_texture_names = grep { /^-t$/ } @ARGV;
+my $find_texture_names = grep { /^-t$/ } @ARGV;
+my $dump_shaders = grep { /^-d$/ } @ARGV;
+my @match = grep { !/^-/ } @ARGV;
 
 my $shadertext = "";
 my $level = 0;
@@ -55,33 +56,42 @@ while(<STDIN>)
 		if($level <= 0)
 		{
 			$level = 0;
-			printf "%s  %s\n", Digest::MD5::md5_hex($shadertext), $curshader;
 
-			if($find_texture_names)
+			if(!@match || grep { $_ eq $curshader } @match)
 			{
-				# find out possibly loaded textures
-				my @maps = ($shadertext =~ /^map ([^\$].*)$/gim);
-				for($shadertext =~ /^animmap \S+ (.*)$/gim)
+				printf "%s  %s\n", Digest::MD5::md5_hex($shadertext), $curshader;
+
+				if($find_texture_names)
 				{
-					push @maps, split / /, $_;
-				}
-				for($shadertext =~ /^skyparms (.*)$/gim)
-				{
-					for(split / /, $_)
+					# find out possibly loaded textures
+					my @maps = ($shadertext =~ /^(?:clampmap|map|q3r_lightimage|q3r_editorimage) ([^\$].*)$/gim);
+					for($shadertext =~ /^animmap \S+ (.*)$/gim)
 					{
-						next if $_ eq "-";
-						push @maps, "$_"."_lf";
-						push @maps, "$_"."_ft";
-						push @maps, "$_"."_rt";
-						push @maps, "$_"."_bk";
-						push @maps, "$_"."_up";
-						push @maps, "$_"."_dn";
+						push @maps, split / /, $_;
 					}
+					for($shadertext =~ /^skyparms (.*)$/gim)
+					{
+						for(split / /, $_)
+						{
+							next if $_ eq "-";
+							push @maps, "$_"."_lf";
+							push @maps, "$_"."_ft";
+							push @maps, "$_"."_rt";
+							push @maps, "$_"."_bk";
+							push @maps, "$_"."_up";
+							push @maps, "$_"."_dn";
+						}
+					}
+					@maps = ($curshader)
+						if @maps == 0;
+					printf "* %s  %s\n", $_, $curshader
+						for map { normalize_path $_ } @maps;
 				}
-				@maps = ($curshader)
-					if @maps == 0;
-				printf "* %s  %s\n", $_, $curshader
-					for map { normalize_path $_ } @maps;
+
+				if($dump_shaders)
+				{
+					print "| $_\n" for split /\n/, $shadertext;
+				}
 			}
 
 			$curshader = undef;

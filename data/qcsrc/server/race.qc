@@ -153,6 +153,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 						db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/time"), ftos(t));
 						db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"), e.netname);
 						GameLogEcho(strcat(":recordset:", ftos(e.playerid), ":", ftos(t / 10)));
+						stuffcmd(e, strcat("//RACE RECORD SET ", mmsss(t), "\n"));
 					}
 					else if(t < grecordtime)
 					{
@@ -163,6 +164,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 						db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/time"), ftos(t));
 						db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"), e.netname);
 						GameLogEcho(strcat(":recordset:", ftos(e.playerid), ":", ftos(t / 10)));
+						stuffcmd(e, strcat("//RACE RECORD SET ", mmsss(t), "\n"));
 					}
 					else
 					{
