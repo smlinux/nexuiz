@@ -94,7 +94,7 @@ void Projectile_Draw()
 	}
 	else
 	{
-		drawn = !(self.iflags & IFLAG_VALID);
+		drawn = (self.iflags & IFLAG_VALID);
 		t = time;
 	}
 
