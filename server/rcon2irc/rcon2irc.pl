@@ -799,15 +799,15 @@ sub irc_error()
 	delete $channels{irc};
 	schedule sub {
 		my ($timer) = @_;
-		if(!defined $store{slots_full})
+		if(!defined $store{slots_active})
 		{
 			# DP is not running, then delay IRC reconnecting
 			#use Data::Dumper; print Dumper \$timer;
-			schedule $timer => 1;;
+			schedule $timer => 1;
 			return;
 			# this will keep irc_error_active
 		}
-		$channels{irc} = new Channel::Line(new Connection::Socket(tcp => "" => $config{irc_server}));
+		$channels{irc} = new Channel::Line(new Connection::Socket(tcp => "" => $config{irc_server} => 6667));
 		delete $store{$_} for grep { /^irc_/ } keys %store;
 		$store{irc_nick} = "";
 		schedule sub {
