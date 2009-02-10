@@ -197,7 +197,7 @@ void RegenFlag(entity e)
 	setattachment(e, world, "");
 	e.damageforcescale = 0;
 	e.movetype = MOVETYPE_NONE;
-	if(!self.noalign)
+	if(!e.noalign)
 		e.movetype = MOVETYPE_TOSS;
 	e.solid = SOLID_TRIGGER;
 	// TODO: play a sound here
