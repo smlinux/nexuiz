@@ -1189,6 +1189,7 @@ sub cond($)
 
 	# detect IRC errors and reconnect
 	[ irc => q{ERROR .*} => \&irc_error ],
+	[ irc => q{:[^ ]* 404 .*} => \&irc_error ], # cannot send to channel
 	[ system => q{error irc} => \&irc_error ],
 
 	# IRC nick in use
