@@ -634,6 +634,7 @@ our %store = (
 our %config = (
 	irc_server => undef,
 	irc_nick => undef,
+	irc_nick_alternates => "",
 	irc_user => undef,
 	irc_channel => undef,
 	irc_ping_delay => 120,
@@ -817,6 +818,18 @@ sub irc_error()
 	return 0;
 }
 
+sub uniq(@)
+{
+	my @out = ();
+	my %found = ();
+	for(@_)
+	{
+		next if $found{$_}++;
+		push @out, $_;
+	}
+	return @out;
+}
+
 # IRC joining (if this is called as response to a nick name collision, $is433 is set);
 # among other stuff, it performs NickServ or Quakenet authentication. This is to be called
 # until the channel has been joined for every message that may be "interesting" (basically,
@@ -856,13 +869,35 @@ sub irc_joinstage($)
 		{
 			# we failed to get an initial nickname
 			# change ours a bit and try again
-			if(length $store{irc_nick_requested} < 9)
+
+			my @alternates = ($config{irc_nick}, grep { $_ ne "" } split /\s+/, $config{irc_nick_alternates});
+			my $nextnick = undef;
+			for(0..@alternates-2)
 			{
-				$store{irc_nick_requested} .= '_';
+				if($store{irc_nick_requested} eq $alternates[$_])
+				{
+					$nextnick = $alternates[$_+1];
+				}
 			}
-			else
+			if($store{irc_nick_requested} eq $alternates[@alternates-1])
 			{
-				substr $store{irc_nick_requested}, int(rand length $store{irc_nick_requested}), 1, chr(97 + int rand 26);
+				$store{irc_nick_requested} = $alternates[0];
+				# but don't set nextnick, so we edit it
+			}
+			if(not defined $nextnick)
+			{
+				for(;;)
+				{
+					if(length $store{irc_nick_requested} < 9)
+					{
+						$store{irc_nick_requested} .= '_';
+					}
+					else
+					{
+						substr $store{irc_nick_requested}, int(rand length $store{irc_nick_requested}), 1, chr(97 + int rand 26);
+					}
+					last unless grep { $_ eq $store{irc_nick_requested} } @alternates;
+				}
 			}
 			out irc => 1, "NICK $store{irc_nick_requested}";
 			return; # when it fails, we'll get here again, and when it succeeds, we will continue
