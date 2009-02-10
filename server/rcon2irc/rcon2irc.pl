@@ -661,6 +661,8 @@ our %config = (
 	irc_admin_password => "",
 	irc_admin_timeout => 3600,
 
+	irc_reconnect_delay => 300,
+
 	plugins => "",
 );
 
@@ -814,7 +816,7 @@ sub irc_error()
 			$store{status_waiting} = -1;
 		} => 1;
 		# this will clear irc_error_active
-	} => 30;
+	} => $config{irc_reconnect_delay};
 	return 0;
 }
 
