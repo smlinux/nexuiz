@@ -69,6 +69,11 @@ void Projectile_Draw()
 {
 	vector rot;
 	vector trailorigin;
+	float f;
+	float drawn;
+	float t;
+
+	f = self.move_flags;
 
 	if(self.count & 0x80)
 	{
@@ -82,7 +87,18 @@ void Projectile_Draw()
 		InterpolateOrigin_Do();
 	}
 
-	if(!(self.move_flags & FL_ONGROUND))
+	if(self.count & 0x80)
+	{
+		drawn = (time >= self.spawntime - 0.02);
+		t = max(time, self.spawntime);
+	}
+	else
+	{
+		drawn = !(self.iflags & IFLAG_VALID);
+		t = time;
+	}
+
+	if(!(f & FL_ONGROUND))
 	{
 		rot = '0 0 0';
 		switch(self.cnt)
@@ -101,7 +117,7 @@ void Projectile_Draw()
 			default:
 				break;
 		}
-		self.angles = AnglesTransform_Multiply(self.angles, rot * (time - self.spawntime));
+		self.angles = AnglesTransform_Multiply(self.angles, rot * (t - self.spawntime));
 
 		fixedmakevectors(self.angles);
 
@@ -115,8 +131,14 @@ void Projectile_Draw()
 			default:
 				break;
 		}
-		Projectile_DrawTrail(trailorigin);
+		if(drawn)
+			Projectile_DrawTrail(trailorigin);
+		else
+			self.trail_oldorigin = trailorigin;
 	}
+
+	if(!drawn)
+		return;
 
 	switch(self.cnt)
 	{
@@ -129,8 +151,7 @@ void Projectile_Draw()
 
 	self.renderflags = 0;
 
-	if((self.count & 0x80) || (self.iflags & IFLAG_VALID))
-		R_AddEntity(self);
+	R_AddEntity(self);
 }
 
 void loopsound(entity e, float ch, string samp, float vol, float attn)
