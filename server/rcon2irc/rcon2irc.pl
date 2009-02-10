@@ -870,7 +870,7 @@ sub irc_joinstage($)
 			# we failed to get an initial nickname
 			# change ours a bit and try again
 
-			my @alternates = ($config{irc_nick}, grep { $_ ne "" } split /\s+/, $config{irc_nick_alternates});
+			my @alternates = uniq ($config{irc_nick}, grep { $_ ne "" } split /\s+/, $config{irc_nick_alternates});
 			my $nextnick = undef;
 			for(0..@alternates-2)
 			{
@@ -879,12 +879,16 @@ sub irc_joinstage($)
 					$nextnick = $alternates[$_+1];
 				}
 			}
-			if($store{irc_nick_requested} eq $alternates[@alternates-1])
+			if($store{irc_nick_requested} eq $alternates[@alternates-1]) # this will only happen once
 			{
 				$store{irc_nick_requested} = $alternates[0];
 				# but don't set nextnick, so we edit it
 			}
-			if(not defined $nextnick)
+			if(defined $nextnick)
+			{
+				$store{irc_nick_requested} = $nextnick;
+			}
+			else
 			{
 				for(;;)
 				{
