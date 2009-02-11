@@ -12,7 +12,7 @@ void turret_flac_attack()
     sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", VOL_BASE, ATTN_NORM);
     proj = spawn ();
     setorigin(proj, self.tur_shotorg_updated);
-    setmodel(proj, "models/turrets/pd_proj.md3");
+    // setmodel(proj, "models/turrets/pd_proj.md3");
     setsize(proj, '0 0 0', '0 0 0');
     proj.classname          = "turret_fire";
     proj.owner              = self;
@@ -21,14 +21,18 @@ void turret_flac_attack()
     proj.solid              = SOLID_NOT;
     proj.movetype           = MOVETYPE_FLYMISSILE;
     proj.flags              = FL_PROJECTILE;
-    proj.effects            = EF_LOWPRECISION;
-    proj.takedamage         = DAMAGE_YES;
-    proj.health             = 10;
-    proj.velocity           = (self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
+    // proj.effects            = EF_LOWPRECISION;
+    proj.takedamage         = DAMAGE_NO;
+    //proj.health             =  100;
+    proj.velocity           = normalize(self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
     proj.angles             = vectoangles(proj.velocity);
     proj.touch              = turret_flac_projectile_explode;
     proj.think              = turret_flac_projectile_explode;
-    proj.nextthink          = time + (vlen(self.tur_aimpos - self.tur_shotorg_updated) / self.shot_speed) + (random() * self.shot_spread);
+    proj.nextthink          = time + max(self.tur_impacttime,(self.shot_radius * 3) / self.shot_speed);
+    proj.enemy              = self.enemy;
+    proj.cnt                = time + 5;
+
+    CSQCProjectile(proj, TRUE, PROJECTILE_HAGAR, TRUE);
 
     self.tur_head.frame = self.tur_head.frame + 1;
     if (self.tur_head.frame >= 4) self.tur_head.frame = 0;
@@ -38,6 +42,15 @@ void turret_flac_attack()
 void turret_flac_projectile_explode()
 {
     float ftmp;
+
+    // FIXME: tur_impacttime is not accurate enougth, this is a dirty hakk to make flac work.
+    if(self.enemy != world)
+    if(self.cnt < time)
+    if(vlen(self.origin - self.enemy.origin) > self.owner.shot_radius * 0.5)
+    {
+        self.nextthink = time; //vlen(self.origin - self.enemy.origin) / self.owner.shot_speed;
+        return;
+    }
 
     te_explosion (self.origin);
 
@@ -54,12 +67,11 @@ void turret_flac_projectile_explode()
 
 
 #ifdef TURRET_DEBUG
-
     ftmp = RadiusDamage (self, self.owner, self.owner.shot_dmg, 0, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET, world);
     self.owner.tur_dbg_dmg_t_h = self.owner.tur_dbg_dmg_t_h + ftmp; //self.owner.shot_dmg;
     self.owner.tur_dbg_dmg_t_f = self.owner.tur_dbg_dmg_t_f + self.owner.shot_dmg;
 #else
-    RadiusDamage (self, self.owner, self.owner.shot_dmg, 0, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET, world);
+    RadiusDamage (self, self.owner, self.owner.shot_dmg, self.owner.shot_dmg * 0.5, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET, world);
 #endif
 
     remove (self);
@@ -80,6 +92,8 @@ void turret_flac_dinit()
         remove(self);
         return;
     }
+
+    self.damage_flags |= TFL_DMG_HEADSHAKE;
 
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/flac.md3");

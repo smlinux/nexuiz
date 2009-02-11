@@ -38,14 +38,15 @@ void turret_hellion_attack()
     missile.bot_dodge          = TRUE;
     missile.bot_dodgerating    = self.shot_dmg;
     missile.takedamage         = DAMAGE_YES;
+    missile.event_damage       = turret_hellion_missile_damage;
     missile.damageforcescale   = 2;
-    missile.health             = 50;
+    missile.health             = 10;
     missile.enemy              = self.enemy;
     missile.think              = turret_hellion_missile_think;
-    missile.nextthink          = time + 0.2;
+    missile.nextthink          = time;// + 0.2;
     missile.solid              = SOLID_BBOX;
-    missile.movetype           = MOVETYPE_FLYMISSILE;
-    missile.velocity           = (self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed; // + ('0 0 1' * self.shot_speed * 0.15);
+    missile.movetype           = MOVETYPE_FLY;
+    missile.velocity           = normalize(self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
     missile.angles             = vectoangles(missile.velocity);
     missile.touch              = turret_hellion_missile_explode;
     missile.flags              = FL_PROJECTILE;
@@ -77,15 +78,12 @@ void turret_hellion_missile_think()
     vector pre_pos;
     float itime;
 
-    self.nextthink          = time + 0.1;
-
-    // Enemy in range?
-    if (vlen(self.origin - self.enemy.origin) < self.owner.shot_radius * 0.25)
-        turret_hellion_missile_explode();
+    self.nextthink = time + 0.05;
 
     olddir = normalize(self.velocity);
 
-    if (self.tur_health < time) turret_hellion_missile_explode();
+    if(self.tur_health < time)
+        turret_hellion_missile_explode();
 
     // Enemy dead? just keep on the current heading then.
     if ((self.enemy == world) || (self.enemy.deadflag != DEAD_NO))
@@ -94,55 +92,48 @@ void turret_hellion_missile_think()
         // Make sure we dont return to tracking a respawned player
         self.enemy = world;
 
-        // Accelerate
-        self.velocity = olddir * min(vlen(self.velocity) * self.owner.shot_speed_gain,self.owner.shot_speed_max);
-
         // Turn model
         self.angles = vectoangles(self.velocity);
 
-        //if ( (vlen(self.origin - self.owner.origin)) > (self.owner.shot_radius * 10) )
-        //    turret_hellion_missile_explode();
+        if ( (vlen(self.origin - self.owner.origin)) > (self.owner.shot_radius * 5) )
+            turret_hellion_missile_explode();
 
-        // return;
+        // Accelerate
+        self.velocity = olddir * min(vlen(self.velocity) * self.owner.shot_speed_gain,self.owner.shot_speed_max);
+
+        UpdateCSQCProjectile(self);
+
+        return;
     }
 
-    olddir = normalize(self.velocity);
+    // Enemy in range?
+    if (vlen(self.origin - self.enemy.origin) < self.owner.shot_radius * 0.2)
+        turret_hellion_missile_explode();
 
-    if (self.enemy)
-    {
-        // Predict enemy position
-        itime = vlen(self.enemy.origin - self.origin) / vlen(self.velocity);
-        pre_pos = self.enemy.origin + self.enemy.velocity * itime;
-    }
-    else
-    {
-        pre_pos = self.origin + olddir * 1024;
-    }
+    // Predict enemy position
+    itime = vlen(self.enemy.origin - self.origin) / vlen(self.velocity);
+    pre_pos = self.enemy.origin + self.enemy.velocity * itime;
 
     pre_pos = (pre_pos + self.enemy.origin) * 0.5;
 
     //pre_pos += randomvec() * 128; //self.tur_aimpos * (sin(32) * time) ;
 
-
     // Find out the direction to that place
     newdir = normalize(pre_pos - self.origin);
 
     // Turn
-    newdir = normalize(olddir + newdir * 0.5);
-
-    // Accelerate
-    self.velocity = newdir * min(vlen(self.velocity) * self.owner.shot_speed_gain,self.owner.shot_speed_max);
+    newdir = normalize(olddir + newdir * 0.35);
 
     // Turn model
     self.angles = vectoangles(self.velocity);
 
-    if (time+itime < time+0.1)
-    {
-        self.think = turret_hellion_missile_explode;
-        self.nextthink = time + itime;
-    }
+    // Accelerate
+    self.velocity = newdir * min(vlen(self.velocity) * self.owner.shot_speed_gain,self.owner.shot_speed_max);
 
-	UpdateCSQCProjectile(self);
+    if (itime < 0.05)
+        self.think = turret_hellion_missile_explode;
+
+    UpdateCSQCProjectile(self);
 }
 
 void turret_hellion_missile_explode()

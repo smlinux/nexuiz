@@ -7,11 +7,7 @@ void turret_mlrs_postthink()
 {
 
     // 0 = full, 6 = empty
-
     self.tur_head.frame = rint(6 - (self.ammo / self.shot_dmg));
-
-    //if ((self.tur_head.frame >= 6) && (self.attack_finished_single <= time))
-    //    self.tur_head.frame = 0;
 }
 
 void turret_mlrs_attack()
@@ -29,14 +25,17 @@ void turret_mlrs_attack()
     missile.owner              = self;
     missile.bot_dodge          = TRUE;
     missile.bot_dodgerating    = self.shot_dmg;
-    missile.takedamage         = DAMAGE_YES;
+    missile.takedamage         = DAMAGE_NO;
     missile.damageforcescale   = 4;
-    missile.health             = 30;
+    //missile.health             = 25;
     missile.think              = turret_mlrs_rocket_explode;
+
     missile.nextthink          = time + max(self.tur_impacttime,(self.shot_radius * 2) / self.shot_speed);
+    //missile.nextthink          = missile.nextthink + random() * self.shot_spread;
+
     missile.solid              = SOLID_BBOX;
     missile.movetype           = MOVETYPE_FLYMISSILE;
-    missile.velocity           = (self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
+    missile.velocity           = normalize(self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
     missile.angles             = vectoangles(missile.velocity);
     missile.touch              = turret_mlrs_rocket_explode;
     missile.flags              = FL_PROJECTILE;
@@ -74,10 +73,10 @@ void turret_mlrs_rocket_explode()
     self.owner.tur_dbg_dmg_t_h = self.owner.tur_dbg_dmg_t_h + d; //self.owner.shot_dmg;
     self.owner.tur_dbg_dmg_t_f = self.owner.tur_dbg_dmg_t_f + self.owner.shot_dmg;
 #else
-    RadiusDamage (self, self.owner, self.owner.shot_dmg, 0, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET, world);
+    RadiusDamage (self, self.owner, self.owner.shot_dmg, self.owner.shot_dmg * 0.5, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET, world);
 #endif
 
-    // Target dead, get another is still targeting the same.
+    // Target dead, Tell turret.
     if ((self.enemy.deadflag != DEAD_NO) && (self.enemy == self.owner.enemy))
         self.owner.enemy = world;
 
@@ -90,13 +89,18 @@ void turret_mlrs_dinit()
 
     self.turrcaps_flags = TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_MEDPROJ | TFL_TURRCAPS_PLAYERKILL;
     self.ammo_flags = TFL_AMMO_ROCKETS | TFL_AMMO_RECHARGE;
-    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_ZEASE | TFL_AIM_SHOTTIMECOMPENSATE;
+    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_ZEASE | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_INFRONT;
 
     if (turret_stdproc_init("mlrs_std") == 0)
     {
         remove(self);
         return;
     }
+
+    self.damage_flags |= TFL_DMG_HEADSHAKE;
+
+    self.shoot_flags |= TFL_SHOOT_VOLLYALWAYS;
+    self.volly_counter = self.shot_volly;
 
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/mlrs.md3");

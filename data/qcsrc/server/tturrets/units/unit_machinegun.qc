@@ -7,11 +7,12 @@ void turret_machinegun_attack()
 {
 
     entity flash;
+
     sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", VOL_BASE, ATTN_NORM);
-    fireBallisticBullet (self.tur_shotorg_updated, self.tur_shotdir_updated,self.shot_spread, cvar("g_balance_uzi_speed"), 5, self.shot_dmg, 0, self.shot_force, DEATH_TURRET, 0, 1, cvar("g_balance_uzi_bulletconstant"));
+    fireBallisticBullet (self.tur_shotorg_updated, self.tur_shotdir_updated,self.shot_spread, self.shot_speed, 5, self.shot_dmg, 0, self.shot_force, DEATH_TURRET, 0, 1, cvar("g_balance_uzi_bulletconstant"));
 
     te_smallflash(self.tur_shotorg_updated);
-    trailparticles(self,particleeffectnum("EF_MGTURRETTRAIL"),self.tur_shotorg_updated,trace_endpos);
+    //  trailparticles(self,particleeffectnum("EF_MGTURRETTRAIL"),self.tur_shotorg_updated,trace_endpos);
 
     // muzzle flash for 3rd person view
     flash = spawn();
@@ -32,14 +33,16 @@ void turret_machinegun_std_init()
     if (self.netname == "")      self.netname     = "Machinegun Turret";
 
     self.ammo_flags = TFL_AMMO_BULLETS | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
-    self.turrcaps_flags = TFL_TURRCAPS_HITSCAN | TFL_TURRCAPS_PLAYERKILL;
-    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_ZEASE;
+    self.turrcaps_flags = TFL_TURRCAPS_HITSCAN | TFL_TURRCAPS_PLAYERKILL;// | TFL_TURRCAPS_MISSILEKILL;
+    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_ZEASE | TFL_AIM_SHOTTIMECOMPENSATE;
 
     if (turret_stdproc_init("machinegun_std") == 0)
     {
         remove(self);
         return;
     }
+
+    self.damage_flags |= TFL_DMG_HEADSHAKE;
 
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/machinegun.md3");
@@ -64,6 +67,7 @@ void spawnfunc_turret_machinegun()
 {
     //precache_model ("models/turrets/machinegun.md3");
     //precache_model ("models/turrets/base.md3");
+    precache_sound ("weapons/uzi_fire.wav");
 
     self.think = turret_machinegun_std_init;
     self.nextthink = time + 0.5;

@@ -1,6 +1,6 @@
-#define PLF_GROUNDSNAP 1
-#define PLF_NOOPTIMIZE 2
-#define PLF_SUBPATH3D  4
+#define PFL_GROUNDSNAP 1
+#define PFL_NOOPTIMIZE 2
+#define PFL_SUBPATH3D  4
 
 #define PT_QUICKSTAR 1
 #define PT_QUICKBOX  2
@@ -76,7 +76,7 @@ entity pathlib_createpoint(entity parent,entity next,entity first,vector where)
     else
         point.classname = "path_end";
 
-    if (point.owner.path_flags & PLF_GROUNDSNAP)
+    if (point.owner.path_flags & PFL_GROUNDSNAP)
         where = pathlib_groundsnap(where);
 
     setorigin(point,where);
@@ -115,7 +115,7 @@ vector pathlib_subpath_quickbox(entity start,vector vcrash,entity end,float maxs
 
     step = vlen(self.maxs - self.mins) * start.owner.path_subpathing_bboxexpand;
 
-    if(start.owner.path_flags & PLF_SUBPATH3D)
+    if(start.owner.path_flags & PFL_SUBPATH3D)
     {
         zmin = maxsize * -1;
         zmax = maxsize;
@@ -133,7 +133,7 @@ vector pathlib_subpath_quickbox(entity start,vector vcrash,entity end,float maxs
 
         point = vcrash + box;
 
-        if(start.owner.path_flags & PLF_GROUNDSNAP)
+        if(start.owner.path_flags & PFL_GROUNDSNAP)
             point = pathlib_groundsnap(point);
 
         if(self.path_validate(start.origin,point))
@@ -363,9 +363,8 @@ entity pathlib_makepath(vector from, vector to,float pathflags,float subpathing_
     if(subpathing_bboxexpand < 1)
         subpathing_bboxexpand = 1;
 
-    if(pathflags & PLF_GROUNDSNAP)
+    if(pathflags & PFL_GROUNDSNAP)
     {
-        //bprint("SnapIT!\n");
         from = pathlib_groundsnap(from);
         to = pathlib_groundsnap(to);
     }
@@ -458,7 +457,7 @@ void pathlib_test_dinit()
     }
 
     setsize(self,'-50 -50 0','50 50 50');
-    path = pathlib_makepath(self.origin,end.origin, PLF_GROUNDSNAP,500,1.25,PT_QUICKSTAR);
+    path = pathlib_makepath(self.origin,end.origin, PFL_GROUNDSNAP,500,1.25,PT_QUICKSTAR);
 
     if(!path)
     {

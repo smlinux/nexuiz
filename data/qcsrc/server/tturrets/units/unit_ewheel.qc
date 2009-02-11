@@ -39,8 +39,8 @@ void ewheel_attack()
 
         proj                    = spawn ();
         setorigin(proj, self.tur_shotorg_updated);
-        setsize(proj, '-0.5 -0.5 -0.5', '0.5 0.5 0.5');
-        setmodel(proj, "models/laser.mdl"); // precision set above
+        //setsize(proj, '-0.5 -0.5 -0.5', '0.5 0.5 0.5');
+        //setmodel(proj, "models/laser.mdl"); // precision set above
         proj.classname       = "ewheel bolt";
         proj.owner           = self;
         proj.bot_dodge       = FALSE;
@@ -49,12 +49,14 @@ void ewheel_attack()
         proj.nextthink       = time + 9;
         proj.solid           = SOLID_BBOX;
         proj.movetype        = MOVETYPE_FLYMISSILE;
-        proj.velocity        = (self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
+        proj.velocity        = normalize(self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
         proj.angles          = vectoangles(proj.velocity);
         proj.touch           = turret_ewheel_projectile_explode;
-        proj.effects         = EF_LOWPRECISION |  EF_BRIGHTFIELD;
+        //proj.effects         = EF_LOWPRECISION |  EF_BRIGHTFIELD;
         proj.enemy           = self.enemy;
         proj.flags           = FL_PROJECTILE | FL_NOTARGET;
+
+        CSQCProjectile(proj, TRUE, PROJECTILE_LASER, TRUE);
 
         self.tur_head.frame += 2;
 
@@ -65,9 +67,9 @@ void ewheel_attack()
 }
 
 #define EWHEEL_MASS 50
-#define EWHEEL_MAXSPEED 1500
-#define EWHEEL_ACCEL_SLOW 50
-#define EWHEEL_ACCEL_FAST 150
+#define EWHEEL_MAXSPEED 800
+#define EWHEEL_ACCEL_SLOW 25
+#define EWHEEL_ACCEL_FAST 100
 #define EWHEEL_BREAK_SLOW 100
 #define EWHEEL_BREAK_FAST 250
 
@@ -122,7 +124,7 @@ void ewheel_enemymove()
 
     makevectors(self.angles);
 
-    if (self.tur_dist_enemy > self.target_range_optimal)
+    if (self.tur_dist_aimpos > self.target_range_optimal)
     {
         if ( angle_ofs < 10 )
         {
