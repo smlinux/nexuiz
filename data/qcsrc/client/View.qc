@@ -317,6 +317,11 @@ void CSQC_UpdateView(float w, float h)
 	// Draw the World (and sky)
 	R_SetView(VF_DRAWWORLD, 1);
 
+	// Set the console size vars
+	vid_conwidth = cvar("vid_conwidth");
+	vid_conheight = cvar("vid_conheight");
+	vid_pixelheight = cvar("vid_pixelheight");
+
 	R_SetView(VF_FOV, GetCurrentFov(fov));
 
 	// Camera for demo playback
@@ -352,11 +357,6 @@ void CSQC_UpdateView(float w, float h)
 	
 	// Draw the Engine Status Bar (the default Quake HUD)
 	R_SetView(VF_DRAWENGINESBAR, 0);
-
-	// Set the console size vars
-	vid_conwidth = cvar("vid_conwidth");
-	vid_conheight = cvar("vid_conheight");
-	vid_pixelheight = cvar("vid_pixelheight");
 
 	// fetch this one only once per frame
 	sbar_showbinds = cvar("sbar_showbinds");
