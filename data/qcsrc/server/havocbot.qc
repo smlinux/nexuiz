@@ -204,8 +204,8 @@ void havocbot_movetogoal()
 		if (self.waterlevel)
 		{
 			makevectors(self.v_angle);
-			self.BUTTON_JUMP = 1;
-			// TODO: Make them swim up
+			self.BUTTON_JUMP = TRUE;
+			evadelava_z = 1;
 		}
 		else
 		{
@@ -236,22 +236,29 @@ void havocbot_movetogoal()
 				dst_down = dst_ahead + '0 0 -1500';				
 				
 				traceline(self.origin + self.view_ofs , dst_ahead, TRUE, world);
-				
+
 				if(trace_fraction == 1){
 					traceline(dst_ahead , dst_down, TRUE, world);
-				//	te_lightning2(world, self.origin, dst_ahead);	// Draw "ahead" look 
-					if(trace_fraction == 1)
+					//	te_lightning2(world, self.origin, dst_ahead);	// Draw "ahead" look 
+					s = pointcontents(trace_endpos + '0 0 1');
+					if (s != CONTENT_SOLID)
+					if (s == CONTENT_LAVA || s == CONTENT_SLIME)
+						evadelava = normalize(self.velocity) * -1;
+					else if (s == CONTENT_SKY)
+						evadeobstacle = normalize(self.velocity) * -1;
+					else if (tracebox_hits_trigger_hurt(dst_ahead, self.mins, self.maxs, trace_endpos))
 					{
-						s = pointcontents(trace_endpos + '0 0 1');
-						if (s == CONTENT_LAVA || s == CONTENT_SLIME)
-							evadelava = normalize(self.velocity) * -1;
-						else if (s == CONTENT_SKY)
-							evadeobstacle = normalize(self.velocity) * -1;
-						else if (tracebox_hits_trigger_hurt(dst_ahead, self.mins, self.maxs, trace_endpos))
+						//	te_lightning2(world, dst_ahead, dst_down);	// Draw "downwards" look
+						// if ain't a safe goal with "holes" (like the soylent jumpad)
+						if(!boxesoverlap(dst_ahead - self.view_ofs + self.mins, dst_ahead - self.view_ofs + self.maxs, 
+								self.goalcurrent.absmin, self.goalcurrent.absmax))
 						{
-						//	te_lightning2(world, dst_ahead, dst_down);	// Draw "downards" look
-							// TODO: this could be better, but actually it stops lemming behavior
-							evadeobstacle = flatdir * -1;
+							// Remove dangerous dynamic goals from stack
+							if (self.goalcurrent.classname == "player" || self.goalcurrent.classname == "droppedweapon")
+								navigation_poproute();
+							// try to stop
+							flatdir = '0 0 0';
+							evadeobstacle = normalize(self.velocity) * -1;
 						}
 					}
 				}
@@ -358,7 +365,7 @@ void havocbot_chooseenemy()
 		head = head.chain;
 	}
 	self.enemy = best;
-	self.havocbot_stickenemy = 1;
+	self.havocbot_stickenemy = TRUE;
 };
 
 .float bot_chooseweapontime;
@@ -574,6 +581,8 @@ void havocbot_chooseweapon()
 void havocbot_aim()
 {
 	local vector selfvel, enemyvel;
+	if(self.flags & FL_INWATER)
+		return;
 	if (time < self.nextaim)
 		return;
 	self.nextaim = time + 0.1;

@@ -107,6 +107,24 @@ void havocbot_goalrating_items(float ratingscale, vector org, float sradius)
 			continue;		
 		}
 
+		// Check if the item can be picked up safely
+		if(head.classname == "droppedweapon")
+		{
+			traceline(head.origin, head.origin + '0 0 -1500', TRUE, world);
+
+			d = pointcontents(trace_endpos + '0 0 1');
+			if(d & CONTENT_WATER || d & CONTENT_SLIME || d & CONTENT_LAVA)
+			{
+				head = head.chain;
+				continue;		
+			}
+			if(tracebox_hits_trigger_hurt(head.origin, head.mins, head.maxs, trace_endpos))
+			{
+				head = head.chain;
+				continue;
+			}
+		}
+		
 		if(teamplay)
 		{
 			discard = FALSE;
@@ -114,7 +132,7 @@ void havocbot_goalrating_items(float ratingscale, vector org, float sradius)
 			FOR_EACH_PLAYER(player)
 			{
 
-				if ( self == player || player.deadflag != DEAD_NO)
+				if ( self == player || player.deadflag )
 					continue;
 
 				d = vlen(player.origin - head.origin); // distance between player and item
@@ -226,9 +244,6 @@ void havocbot_goalrating_enemyplayers(float ratingscale, vector org, float sradi
 	local entity head;
 	local float t, noteam;
 	noteam = ((self.team == 0) || (teamplay == 0)); // fteqcc sucks
-	//dprint("teamplay is "); dprint(ftos(teamplay)); dprint(", own team is ");
-	//dprint(ftos(self.team)); dprint(" -> noteam is "); dprint(ftos(noteam));
-	//dprint("\n");
 
 	FOR_EACH_PLAYER(head)
 	{
@@ -246,16 +261,21 @@ void havocbot_goalrating_enemyplayers(float ratingscale, vector org, float sradi
 				continue;
 			*/
 			
+			if(head.flags & FL_INWATER || head.flags & FL_PARTIALGROUND)
+				continue;
+			
 			// not falling
 			if(head.flags & FL_ONGROUND == 0)
 			{
 				traceline(head.origin, head.origin + '0 0 -1500', TRUE, world);
 				t = pointcontents(trace_endpos + '0 0 1');
-				if (t != CONTENT_SOLID)
+				if( t != CONTENT_SOLID )
+				if(t & CONTENT_WATER || t & CONTENT_SLIME || t & CONTENT_LAVA)
 					continue;
-				// TODO: check for trigger_hurt here
+				if(tracebox_hits_trigger_hurt(head.origin, head.mins, head.maxs, trace_endpos))
+					continue;
 			}
-			
+
 			t = (self.health + self.armorvalue ) / (head.health + head.armorvalue );
 			navigation_routerating(head, t * ratingscale, 2000);
 		}
@@ -693,7 +713,7 @@ void havocbot_role_dm()
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
 		navigation_goalrating_start();
 		havocbot_goalrating_items(10000, self.origin, 10000);
-		havocbot_goalrating_enemyplayers(10000, self.origin, 20000);
+		havocbot_goalrating_enemyplayers(5000, self.origin, 20000);
 		//havocbot_goalrating_waypoints(1, self.origin, 1000);
 		navigation_goalrating_end();
 	}
