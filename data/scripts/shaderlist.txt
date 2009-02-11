@@ -22,6 +22,7 @@ eX
 final_rage
 flags
 harlequin_sky
+hlac
 kaznexctf2
 leiprojectile
 liquids
@@ -52,5 +53,3 @@ tree
 turrets
 tznex01
 water
-caverna
-hlac
