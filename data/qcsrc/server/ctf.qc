@@ -149,6 +149,9 @@ void() FlagTouch;
 
 void place_flag()
 {
+	if(self.classname != "item_flag_team")
+		error("PlaceFlag a non-flag");
+
 	if(!self.t_width)
 		self.t_width = 0.1; // frame animation rate
 	if(!self.t_length)
@@ -194,6 +197,9 @@ void LogCTF(string mode, float flagteam, entity actor)
 
 void RegenFlag(entity e)
 {
+	if(e.classname != "item_flag_team")
+		error("RegenFlag a non-flag");
+
 	setattachment(e, world, "");
 	e.damageforcescale = 0;
 	e.movetype = MOVETYPE_NONE;
@@ -210,6 +216,9 @@ void RegenFlag(entity e)
 
 void ReturnFlag(entity e)
 {
+	if(e.classname != "item_flag_team")
+		error("ReturnFlag a non-flag");
+
 	if (e.owner)
 	if (e.owner.flagcarried == e)
 	{
@@ -226,6 +235,9 @@ void ReturnFlag(entity e)
 void DropFlag(entity e, entity penalty_receiver, entity attacker)
 {
 	local entity p;
+
+	if(e.classname != "item_flag_team")
+		error("DropFlag a non-flag");
 
 	if(e.speedrunning)
 	{
