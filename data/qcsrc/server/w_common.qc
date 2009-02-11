@@ -128,8 +128,9 @@ void W_BallisticBullet_Hit (void)
 		headshot = 0;
 		yoda = 0;
 		damage_headshotbonus = self.dmg_edge;
-		railgun_start = self.origin - 2 * frametime * self.oldvelocity;
-		railgun_end = self.origin + 2 * frametime * self.oldvelocity;
+		railgun_start = self.origin - 2 * frametime * self.velocity;
+		railgun_end = self.origin + 2 * frametime * self.velocity;
+
 		Damage(other, self, self.owner, self.dmg * f, self.projectiledeathtype, self.origin, self.dmg_force * normalize(self.velocity) * f);
 		damage_headshotbonus = 0;
 
@@ -259,6 +260,9 @@ void W_BallisticBullet_Touch (void)
 
 void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, float lifetime, float damage, float headshotbonus, float force, float dtype, float tracereffects, float gravityfactor, float bulletconstant)
 {
+	float lag, dt, savetime;
+	entity pl, oldself;
+
 	entity proj;
 	proj = spawn();
 	proj.classname = "bullet";
@@ -288,6 +292,61 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 	proj.projectiledeathtype = dtype;
 
 	proj.oldvelocity = proj.velocity;
+
+	if(cvar("g_antilag_bullets"))
+	if(pSpeed >= cvar("g_antilag_bullets"))
+	{
+		// NOTE: this may severely throw off weapon balance
+		lag = ANTILAG_LATENCY(self);
+		if(lag < 0.001)
+			lag = 0;
+		if(clienttype(self) != CLIENTTYPE_REAL)
+			lag = 0;
+
+		if(lag)
+			FOR_EACH_PLAYER(pl)
+				antilag_takeback(pl, time - lag);
+
+		oldself = self;
+		self = proj;
+
+		savetime = frametime;
+		frametime = 0.05;
+
+		for(;;)
+		{
+			tracetoss(self, oldself);
+			other = trace_ent;
+			dt = vlen(trace_endpos - self.origin) / vlen(self.velocity); // this is only approximate!
+			setorigin(self, trace_endpos);
+			self.velocity_z -= sv_gravity * dt;
+
+			if(!SUB_OwnerCheck())
+			{
+				if(SUB_NoImpactCheck())
+					break;
+
+				// hit the player
+				W_BallisticBullet_Hit ();
+			}
+
+			// go through solid!
+			if(!W_BallisticBullet_LeaveSolid(self, self.velocity, self.dmg_radius))
+				break;
+
+			W_BallisticBullet_LeaveSolid_think();
+		}
+		frametime = savetime;
+		self = oldself;
+
+		if(lag)
+			FOR_EACH_PLAYER(pl)
+				antilag_restore(pl);
+
+		remove(proj);
+
+		return;
+	}
 
 	if(tracereffects & EF_RED)
 		CSQCProjectile(proj, TRUE, PROJECTILE_BULLET_GLOWING, TRUE);
