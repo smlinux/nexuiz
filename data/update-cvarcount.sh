@@ -13,9 +13,18 @@ sed -i "s/^set cvar_check_default .*/set cvar_check_default $countd/" defaultNex
 sed -i "s/^set cvar_check_weapons .*/set cvar_check_weapons $countw/" weapons.cfg
 sed -i "s/^set cvar_check_weapons .*/set cvar_check_weapons $countw/" weaponsHavoc.cfg
 
-sed -i "s/^string CVAR_CHECK_DEFAULT = .*/string CVAR_CHECK_DEFAULT = \"$countd\";/" qcsrc/server/constants.qh
-sed -i "s/^string CVAR_CHECK_WEAPONS = .*/string CVAR_CHECK_WEAPONS = \"$countw\";/" qcsrc/server/constants.qh
+sed "
+	s/^string CVAR_CHECK_DEFAULT = .*/string CVAR_CHECK_DEFAULT = \"$countd\";/;
+	s/^string CVAR_CHECK_WEAPONS = .*/string CVAR_CHECK_WEAPONS = \"$countw\";/;
+" qcsrc/server/constants.qh > qcsrc/server/constants.qh.new
 
-[ -z "$DO_NOT_RUN_MAKE" ] && make
-
-echo "New checksums: $countd, $countw; please recompile!"
+if ! diff qcsrc/server/constants.qh qcsrc/server/constants.qh.new; then
+	mv qcsrc/server/constants.qh.new qcsrc/server/constants.qh
+	if [ -z "$DO_NOT_RUN_MAKE" ]; then
+		make
+	else
+		echo "New checksums: $countd, $countw; please recompile!"
+	fi
+else
+	rm -f qcsrc/server/constants.qh.new
+fi
