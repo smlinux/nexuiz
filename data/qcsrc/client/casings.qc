@@ -75,31 +75,33 @@ void Ent_Casing()
 	casing.angles_x = ReadByte() * 360 / 256;
 	casing.angles_y = ReadByte() * 360 / 256;
 	casing.angles_z = ReadByte() * 360 / 256;
+	
+	if(cvar("cl_casings")) {
+		casing.draw = Casing_Draw;
+		casing.move_origin = casing.origin;
+		casing.move_velocity = casing.velocity + 2 * prandomvec();
+		casing.move_angles = casing.angles;
+		casing.move_avelocity = '0 250 0' + 100 * prandomvec();
+		casing.move_movetype = MOVETYPE_BOUNCE;
+		casing.move_touch = Casing_Touch;
+		casing.move_time = time;
+		casing.event_damage = Casing_Damage;
+		casing.solid = SOLID_TRIGGER;
 
-	casing.draw = Casing_Draw;
-	casing.move_origin = casing.origin;
-	casing.move_velocity = casing.velocity + 2 * prandomvec();
-	casing.move_angles = casing.angles;
-	casing.move_avelocity = '0 250 0' + 100 * prandomvec();
-	casing.move_movetype = MOVETYPE_BOUNCE;
-	casing.move_touch = Casing_Touch;
-	casing.move_time = time;
-	casing.event_damage = Casing_Damage;
-	casing.solid = SOLID_TRIGGER;
+		switch(casing.state)
+		{
+			case 1:
+				setmodel(casing, "models/casing_shell.mdl");
+				casing.cnt = time + cvar("cl_casings_shell_time");
+				break;
+			default:
+				setmodel(casing, "models/casing_bronze.mdl");
+				casing.cnt = time + cvar("cl_casings_bronze_time");
+				break;
+		}
 
-	switch(casing.state)
-	{
-		case 1:
-			setmodel(casing, "models/casing_shell.mdl");
-			casing.cnt = time + 30;
-			break;
-		default:
-			setmodel(casing, "models/casing_bronze.mdl");
-			casing.cnt = time + 10;
-			break;
-	}
-
-	setsize(casing, '0 0 -1', '0 0 -1');
+		setsize(casing, '0 0 -1', '0 0 -1');
+	} else remove(self);
 }
 
 void Casings_Precache()
