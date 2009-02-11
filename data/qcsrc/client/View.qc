@@ -413,6 +413,12 @@ void CSQC_UpdateView(float w, float h)
 			teamradar_view();
 	}
 
+	if (cvar("cl_showpressedkeys")) // draw pressed keys when spectating and playing
+	{
+		if(spectatee_status > 0 || cvar("cl_showpressedkeys") >= 2)
+			Sbar_DrawPressedKeys();
+	}
+
 	// draw sbar
 	if(cvar("r_letterbox") == 0)
 	if(cvar("viewsize") < 120)

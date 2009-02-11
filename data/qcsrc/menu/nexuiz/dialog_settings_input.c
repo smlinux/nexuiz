@@ -71,5 +71,9 @@ void fillNexuizInputSettingsTab(entity me)
 			e.addValue(e, "Short", "1");
 			e.addValue(e, "Long", "2");
 			e.configureNexuizTextSliderValues(e);
+	me.TR(me);
+		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_showpressedkeys", "Show pressed keys"));
+			e.noValue = 0;
+			e.yesValue = 2;
 }
 #endif

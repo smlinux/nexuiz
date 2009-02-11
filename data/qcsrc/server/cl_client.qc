@@ -1766,6 +1766,49 @@ void SetZoomState(float z)
 	zoomstate_set = 1;
 }
 
+void GetPressedKeys(void) {
+	if (self.movement_x > 0) // get if movement keys are pressed
+	{	// forward key pressed
+		self.pressedkeys |= KEY_FORWARD;
+		self.pressedkeys &~= KEY_BACKWARD;
+	}
+	else if (self.movement_x < 0)
+	{	// backward key pressed
+		self.pressedkeys |= KEY_BACKWARD;
+		self.pressedkeys &~= KEY_FORWARD;
+	}
+	else
+	{	// no x input
+		self.pressedkeys &~= KEY_FORWARD;
+		self.pressedkeys &~= KEY_BACKWARD;
+	}
+	
+	if (self.movement_y > 0)
+	{	// right key pressed
+		self.pressedkeys |= KEY_RIGHT;
+		self.pressedkeys &~= KEY_LEFT;
+	}
+	else if (self.movement_y < 0)
+	{	// left key pressed
+		self.pressedkeys |= KEY_LEFT;
+		self.pressedkeys &~= KEY_RIGHT;
+	}
+	else
+	{	// no y input
+		self.pressedkeys &~= KEY_RIGHT;
+		self.pressedkeys &~= KEY_LEFT;
+	}
+	
+	if (self.BUTTON_JUMP) // get if jump and crouch keys are pressed
+		self.pressedkeys |= KEY_JUMP;
+	else
+		self.pressedkeys &~= KEY_JUMP;
+	if (self.BUTTON_CROUCH)
+		self.pressedkeys |= KEY_CROUCH;
+	else
+		self.pressedkeys &~= KEY_CROUCH;
+}
+
 /*
 ======================
 spectate mode routines
@@ -1781,6 +1824,7 @@ void SpectateCopy(entity spectatee) {
 	self.items = spectatee.items;
 	self.strength_finished = spectatee.strength_finished;
 	self.invincible_finished = spectatee.invincible_finished;
+	self.pressedkeys = spectatee.pressedkeys;
 	self.weapons = spectatee.weapons;
 	self.switchweapon = spectatee.switchweapon;
 	self.weapon = spectatee.weapon;
@@ -2449,7 +2493,7 @@ void PlayerPostThink (void)
 					self.race_penalty_nagged = 0;
 				}
 			}
-		
+		GetPressedKeys();
 	} else if (self.classname == "observer") {
 		//do nothing
 	} else if (self.classname == "spectator") {

@@ -214,6 +214,15 @@ const float K_MOUSE15		=	528;
 const float K_MOUSE16		=	529;
 
 ///////////////////////////
+// keys pressed
+const float KEY_FORWARD		=	1;
+const float KEY_BACKWARD	=	2;
+const float KEY_LEFT		=	4;
+const float KEY_RIGHT		=	8;
+const float KEY_JUMP		=	16;
+const float KEY_CROUCH		=	32;
+
+///////////////////////////
 // cvar constants
 
 float CVAR_SAVE 	= 1;
@@ -231,6 +240,7 @@ const float STAT_SWITCHWEAPON = 36;
 const float STAT_GAMESTARTTIME = 37;
 const float STAT_STRENGTH_FINISHED = 38;
 const float STAT_INVINCIBLE_FINISHED = 39;
+const float STAT_PRESSED_KEYS = 42;
 const float CTF_STATE_ATTACK = 1;
 const float CTF_STATE_DEFEND = 2;
 const float CTF_STATE_COMMANDER = 3;

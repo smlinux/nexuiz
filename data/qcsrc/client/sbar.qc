@@ -1703,6 +1703,30 @@ vector Sbar_DrawNoteLine(vector offset, string s)
 	return offset + sbar_fontsize_y * '0 1 0';
 }
 
+void Sbar_DrawPressedKeys(void)
+{
+	vector pos, bgsize;
+	float center_y;
+	float pressedkeys;
+	
+	pos = stov(cvar_string("cl_showpressedkeys_position"));
+
+	bgsize = '126 75 0';
+
+	pos = '1 0 0' * (vid_conwidth - bgsize_x) * pos_x
+	    + '0 1 0' * (vid_conheight - bgsize_y) * pos_y;
+	pos -= '-15 -6 0'; // adjust to the origin of these numbers
+	
+	pressedkeys = getstatf(STAT_PRESSED_KEYS);
+	drawpic(pos + '-15   -6   0', "gfx/keys/key_bg.tga",           bgsize, '1 1 1', .1, DRAWFLAG_NORMAL);
+	drawpic(pos + ' 83.5  9   0', "gfx/keys/key_crouch.tga",   ' 24 24 0', '1 1 1', .5 * ((pressedkeys & KEY_CROUCH) + 1), DRAWFLAG_NORMAL);
+	drawpic(pos + ' 32   -1.5 0', "gfx/keys/key_forward.tga",  ' 32 32 0', '1 1 1', .5 * ((pressedkeys & KEY_FORWARD) + 1), DRAWFLAG_NORMAL);
+	drawpic(pos + '-11.5  9   0', "gfx/keys/key_jump.tga",     ' 24 24 0', '1 1 1', .5 * ((pressedkeys & KEY_JUMP) + 1), DRAWFLAG_NORMAL);
+	drawpic(pos + ' -1   32   0', "gfx/keys/key_left.tga",     ' 32 32 0', '1 1 1', .5 * ((pressedkeys & KEY_LEFT) + 1), DRAWFLAG_NORMAL);
+	drawpic(pos + ' 32   32   0', "gfx/keys/key_backward.tga", ' 32 32 0', '1 1 1', .5 * ((pressedkeys & KEY_BACKWARD) + 1), DRAWFLAG_NORMAL);
+	drawpic(pos + ' 65   32   0', "gfx/keys/key_right.tga",    ' 32 32 0', '1 1 1', .5 * ((pressedkeys & KEY_RIGHT) + 1), DRAWFLAG_NORMAL);
+}
+
 void Sbar_Draw (void)
 {
 	float i;

@@ -492,6 +492,7 @@ string clientstuff;
 .float stat_sys_ticrate;
 .float phase;
 .float weapons;
+.float pressedkeys;
 
 .float porto_forbidden;
 
