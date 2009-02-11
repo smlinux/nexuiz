@@ -279,15 +279,10 @@ void turret_stdproc_damage (entity inflictor, entity attacker, float damage, flo
 {
     entity baseent;
 
-    // Damage func is shared on all parts as standard, we need to know what the master entity of this turret is.
-
     if (self.owner)
         baseent = self.owner;
     else
         baseent = self;
-
-    //oldself = self;
-    //self = baseent;
 
 
     if (self.health <= 0) return;
@@ -299,35 +294,30 @@ void turret_stdproc_damage (entity inflictor, entity attacker, float damage, flo
         //if(attacker.flags & FL_CLIENT)
         if(clienttype(attacker) == CLIENTTYPE_REAL)
             sprint(attacker, "\{1}Turret tells you: I'm on your team!\n");
-            //if not(attacker.isbot)
-
 
         if(cvar("g_friendlyfire"))
-        {
-            //self = oldself;
-            return;
-        }
-        else
-        {
             damage = damage * cvar("g_friendlyfire");
-        }
+        else
+            return;
     }
 
     self.health = self.health - damage;
 
     // thorw head slightly off aim when hit?
     if (self.classname == "turret_head")
-        if (self.damage_flags & TFL_DMG_HEADSHAKE)
-            self.tur_head.angles = self.tur_head.angles + randomvec() * damage;
+        if (baseent.damage_flags & TFL_DMG_HEADSHAKE)
+        {
+            self.angles_x = self.angles_x + random() * damage;
+            self.angles_y = self.angles_y + random() * damage;
+        }
 
-    if (self.turrcaps_flags & TFL_TURRCAPS_MOVE)
-        self.velocity = self.velocity + vforce;
+    if (baseent.turrcaps_flags & TFL_TURRCAPS_MOVE)
+        baseent.velocity = baseent.velocity + vforce;
 
+    // FIXME: Better damage feedback
     // Start burning when we have 10% or less health left
-    if (self.health < (self.tur_health * 0.1))
-        self.effects = EF_FLAME;
-
-   // self = oldself;
+    //if (self.health < (self.tur_health * 0.1))
+    //    self.effects = EF_FLAME;
 
     if (self.health <= 0)
     {
@@ -338,10 +328,6 @@ void turret_stdproc_damage (entity inflictor, entity attacker, float damage, flo
         baseent.nextthink = time;
         baseent.think = turret_stdproc_die;
     }
-
-
-
-
 }
 
 

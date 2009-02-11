@@ -52,10 +52,11 @@ TFL_AIM_BALISTIC
 vector turret_stdproc_aim_generic()
 {
     vector pre_pos;
-    // entity mover;
+    float distance,impact_time,i,mintime;
+    vector prep;
 
-    if (self.aim_flags == TFL_AIM_NO)
-        return self.idle_aim;
+    //if (self.aim_flags == TFL_AIM_NO)
+    //  return self.idle_aim;
 
     // Baseline
     pre_pos = real_origin(self.enemy);
@@ -63,53 +64,69 @@ vector turret_stdproc_aim_generic()
     if(self.aim_flags & TFL_AIM_SIMPLE)
         return pre_pos;
 
-    // Lead?
-    //pre_pos = pre_pos + bot_shotlead(self.enemy.origin, self.enemy.velocity, self.shot_speed, 0.01); //self.enemy.velocity;  * (self.tur_dist_enemy / self.shot_speed);
-    if (self.aim_flags & TFL_AIM_LEAD)
-        if (self.aim_flags & TFL_AIM_SHOTTIMECOMPENSATE)       // Need to conpensate for shot traveltime
-        {
-            pre_pos = pre_pos + self.enemy.velocity  * (self.tur_dist_enemy / self.shot_speed);
+    // This is not accurate enougth
+    //pre_pos = bot_shotlead(pre_pos, self.enemy.velocity, self.shot_speed, 0.01); //self.enemy.velocity;  * (self.tur_dist_aimpos / self.shot_speed);
 
-            // FIXME slow projectiles misspredict (well all do, bit the slow ons miss :P)
+    // Keep track of when we can shoot the next tim and
+    // try to predict where the target will be then, so we can put our aimpoint there.
+    // + sys_ticrate becouse projectiles dont move during the first tic of their life.
+    mintime = max(self.attack_finished_single - time,0) + (sys_ticrate * 2);
+
+    if (self.aim_flags & TFL_AIM_INFRONT)   // Aim a bit in front of the target
+        pre_pos += normalize(normalize(self.enemy.velocity) * 16);
+
+    if (self.aim_flags & TFL_AIM_BEHIND)    // Aim a bit behind the target
+        pre_pos -= normalize(normalize(self.enemy.velocity) * 16);
+
+    // Lead?
+    if (self.aim_flags & TFL_AIM_LEAD)
+    if (self.aim_flags & TFL_AIM_SHOTTIMECOMPENSATE)       // Need to conpensate for shot traveltime
+    {
+        // FIXME: this cant be the best way to do this..
+        prep = pre_pos;
+        for(i = 0; i < 3; ++i)
+        {
+            distance = vlen(prep - self.tur_shotorg_updated);
+            impact_time = distance / self.shot_speed;
+            prep = pre_pos + self.enemy.velocity * (impact_time + mintime);
+
+
         }
-        else if (self.turrcaps_flags & TFL_TURRCAPS_HITSCAN)   // Hitscan gun, conpensate for frametime and posibly refire offset.
-            pre_pos = pre_pos + self.enemy.velocity * (frametime + min(max(self.attack_finished_single - time,0),self.ticrate*2));
-        else                                                   // No lead
-            pre_pos += self.enemy.velocity;
+
+        /* no worky well :/
+        if not(self.enemy.flags & FL_ONGROUND)
+        {
+            float z;
+            z = self.enemy.velocity_z;
+            z = z - (sv_gravity * impact_time);
+            prep_z += z;
+        }
+        */
+
+
+        pre_pos = prep;
+    }
+    else
+    {
+        pre_pos = pre_pos + self.enemy.velocity * mintime;
+    }
 
 
     // Smooth out predict-Z?
-    /*
     if (self.aim_flags & TFL_AIM_ZEASE)
     {
         vector v;
         v = real_origin(self.enemy);
-        pre_pos_z = (pre_pos_z  + v_z) * 0.5;
+        pre_pos_z = (pre_pos_z + v_z) * 0.5;
     }
-    */
 
-    /*
-    if (self.aim_flags & TFL_AIM_INFRONT)   // Aim a bit in front of the target
-        pre_pos -= normalize(self.tur_aimorg_updated - pre_pos) * 32;
-
-    if (self.aim_flags & TFL_AIM_BEHIND)    // Aim a bit behind the target
-        pre_pos += normalize(self.tur_aimorg_updated - pre_pos) * 32;
-
-    */
     // This turret should hit the ground neer a target rather the do a direct hit
-
     if ( (self.aim_flags & TFL_AIM_GROUND) ||
          ((self.aim_flags & TFL_AIM_GROUND2) && (self.enemy.flags & FL_ONGROUND)) )
     {
         traceline(pre_pos + '0 0 8',pre_pos - '0 0 10000',1,self.enemy);
         pre_pos = trace_endpos;
     }
-
-
-
-
-
-
 
     return pre_pos;
 }
@@ -130,7 +147,7 @@ vector turret_stdproc_aim_rail()
 
     pre_pos = real_origin(self.enemy);
 
-    self.tur_dist_toaimpos = vlen(self.enemy.origin - self.tur_aimorg_updated);
+    self.tur_dist_impact_to_aimpos = vlen(self.enemy.origin - self.tur_aimorg_updated);
 
     self.tur_impacttime = time;
 

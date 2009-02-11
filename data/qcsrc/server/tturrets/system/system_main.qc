@@ -99,6 +99,8 @@ void turret_stdproc_nothing()
 **/
 void turret_do_updates(entity e_turret)
 {
+    vector enemy_pos;
+
     if (self.turrcaps_flags & TFL_TURRCAPS_LINKED)
     {
         e_turret.tur_head.angles_x = e_turret.tur_head.angles_x * -1;
@@ -113,22 +115,32 @@ void turret_do_updates(entity e_turret)
         makevectors(e_turret.tur_head.angles);
         e_turret.tur_head.angles_x = e_turret.tur_head.angles_x * -1;
     }
-    // v_right = (v_right * -1);
+    enemy_pos = real_origin(e_turret.enemy);
+
     e_turret.tur_shotorg_updated = e_turret.origin + v_forward * e_turret.tur_shotorg_x + v_right * e_turret.tur_shotorg_y + v_up * e_turret.tur_shotorg_z;
-
-    e_turret.tur_shotdir_updated = normalize((e_turret.tur_shotorg_updated + v_forward) - e_turret.tur_shotorg_updated);
     e_turret.tur_aimorg_updated = e_turret.origin + v_forward * e_turret.tur_aimorg_x + v_right * e_turret.tur_aimorg_y + v_up * e_turret.tur_aimorg_z;
+    e_turret.tur_shotdir_updated = v_forward; // normalize((e_turret.tur_shotorg_updated + v_forward) - e_turret.tur_shotorg_updated);
 
+    e_turret.tur_dist_enemy = vlen(e_turret.tur_aimorg_updated - enemy_pos);
+    e_turret.tur_dist_aimpos = vlen(e_turret.tur_aimorg_updated - e_turret.tur_aimpos);
 
-    e_turret.tur_dist_enemy = vlen(e_turret.tur_aimorg_updated - real_origin(e_turret.enemy));
+    //traceline(e_turret.tur_aimorg_updated,e_turret.tur_aimorg_updated + (e_turret.tur_shotdir_updated * e_turret.tur_dist_aimpos),MOVE_NORMAL,e_turret);
+    tracebox(e_turret.tur_aimorg_updated, '-1 -1 -1','1 1 1',e_turret.tur_aimorg_updated + (e_turret.tur_shotdir_updated * e_turret.tur_dist_aimpos),MOVE_NORMAL,e_turret);
 
-    traceline(e_turret.tur_aimorg_updated,e_turret.tur_aimorg_updated+(e_turret.tur_shotdir_updated * e_turret.tur_dist_enemy),MOVE_NORMAL,e_turret);
+    //traceline(e_turret.tur_aimorg_updated,e_turret.tur_aimpos,MOVE_NORMAL,e_turret);
 
     e_turret.tur_impactpoint = trace_endpos;
     e_turret.tur_impactent = trace_ent;
-    //e_turret.tur_impacttime = e_turret.tur_dist_enemy / e_turret.shot_speed;
-    e_turret.tur_impacttime = e_turret.tur_dist_enemy / e_turret.shot_speed;
-    e_turret.tur_dist_toaimpos = vlen(trace_endpos - e_turret.tur_aimpos);
+    e_turret.tur_dist_impact_to_aimpos = vlen(trace_endpos - e_turret.tur_aimpos);
+    e_turret.tur_impacttime = vlen(e_turret.tur_aimorg_updated - trace_endpos) / e_turret.shot_speed;
+
+
+/*
+.float      tur_dist_enemy;
+.float      tur_dist_aimpos;
+.float      tur_dist_impact_to_aimpos;
+*/
+
 }
 
 /**
@@ -137,9 +149,9 @@ void turret_do_updates(entity e_turret)
 **/
 void turret_stdproc_track()
 {
-    vector wish_angle;  // This is where we'd need to be
+    vector wish_angle;  // This is where we want to aim
 
-    vector real_angle;  // This is where we can go
+    vector real_angle;  // This is where we can aim
     float f_tmp;
 
 
@@ -155,7 +167,7 @@ void turret_stdproc_track()
         if (self.turrcaps_flags & TFL_TURRCAPS_LINKED)
             wish_angle = self.idle_aim + self.angles;
         else
-            if(cvar("g_turrets_aimidle_delay") > (time - self.lip))
+            if(time > self.lip)
                 wish_angle = self.idle_aim;
             else
                 wish_angle = self.tur_head.angles;
@@ -249,6 +261,7 @@ void turret_stdproc_track()
         if (self.track_flags & TFL_TRACK_PITCH) self.tur_head.avelocity_x = real_angle_x;
         if (self.track_flags & TFL_TRACK_ROT)   self.tur_head.avelocity_y = real_angle_y;
         self.tur_head.avelocity_z = real_angle_z;
+        setsize(self,self.mins,self.maxs);
     }
 
     // Limit pitch
@@ -317,6 +330,13 @@ float turret_stdproc_firecheck()
     if (self.firecheck_flags & TFL_FIRECHECK_REFIRE)
         if (self.attack_finished_single >= time) return 0;
 
+    // Special case..
+    if((self.shoot_flags & TFL_SHOOT_VOLLYALWAYS) && (self.volly_counter != self.shot_volly))
+    {
+        return 1;
+    }
+
+
     //
     if (self.firecheck_flags & TFL_FIRECHECK_DEAD)
         if (self.enemy.deadflag != DEAD_NO) return 0;
@@ -329,17 +349,17 @@ float turret_stdproc_firecheck()
     if (self.firecheck_flags & TFL_FIRECHECK_OWM_AMMO)
         if (self.ammo < self.shot_dmg) return 0;
 
-    // Other's ammo? (carefull using this...)
+    // Other's ammo? (support-supply units)
     if (self.firecheck_flags & TFL_FIRECHECK_OTHER_AMMO)
         if (self.enemy.ammo >= self.enemy.ammo_max) return 0;
 
     if (self.firecheck_flags & TFL_FIRECHECK_DISTANCES)
     {
         // Not close enougth?
-        if (self.tur_dist_enemy > self.target_range_fire) return 0;
+        if (self.tur_dist_aimpos > self.target_range_fire) return 0;
 
         // To close?
-        if (self.tur_dist_enemy < self.target_range_min) return 0;
+        if (self.tur_dist_aimpos < self.target_range_min) return 0;
     }
 
     // Try to avoid FF?
@@ -348,7 +368,7 @@ float turret_stdproc_firecheck()
 
     // aim<->predicted impact
     if (self.firecheck_flags & TFL_FIRECHECK_AIMDIST)
-        if (self.tur_dist_toaimpos  > self.aim_firetolerance_dist) return 0;
+        if (self.tur_dist_impact_to_aimpos  > self.aim_firetolerance_dist) return 0;
 
     // Volly status
     if (self.shot_volly > 1)
@@ -643,8 +663,31 @@ void turret_think()
     }
     else
     {
+        // Special case for volly always. if it fired once it must compleate the volly.
+        if((self.shoot_flags & TFL_SHOOT_VOLLYALWAYS) && (self.volly_counter != self.shot_volly))
+        {
+            // Predict or whatnot
+            if not((self.aim_flags & TFL_AIM_NO))
+                self.tur_aimpos = turret_stdproc_aim_generic();
+
+
+            // Turn & pitch
+            if (!self.track_flags & TFL_TRACK_NO)
+                turret_stdproc_track();
+
+            turret_do_updates(self);
+
+            // Fire!
+            if (self.turret_firecheckfunc() != 0)
+                turret_fire();
+
+            self.turret_postthink();
+
+            return;
+        }
+
         // Check if we have a vailid enemy, and try to find one if we dont.
-        if ((turret_validate_target(self,self.enemy,self.target_validate_flags) <= 0) || (self.cnt < time))
+        if ((turret_validate_target(self,self.enemy,self.target_validate_flags) <= 0) && (self.cnt < time))
         {
             self.enemy = turret_select_target();
             self.cnt = time + cvar("g_turrets_targetscan_mindelay");
@@ -665,19 +708,19 @@ void turret_think()
             return;
         }
         else
-            self.lip = time; // Keep track of the last time we had a target.
+            self.lip = time + cvar("g_turrets_aimidle_delay"); // Keep track of the last time we had a target.
 
-        turret_do_updates(self);
+        //turret_do_updates(self);
 
         // Predict or whatnot
         if not((self.aim_flags & TFL_AIM_NO))
             self.tur_aimpos = turret_stdproc_aim_generic();
 
         // Fire?
-        if (self.turret_firecheckfunc() != 0)
-            turret_fire();
+        //if (self.turret_firecheckfunc() != 0)
+        //    turret_fire();
 
-        turret_do_updates(self);
+        //turret_do_updates(self);
 
         // Turn & pitch
         if (!self.track_flags & TFL_TRACK_NO)
@@ -696,20 +739,23 @@ void turret_think()
 
 void turret_fire()
 {
-    if (cvar("g_turrets_nofire") != 0)   return;
-    if ((!self.tur_active) || (self.deadflag != DEAD_NO)) return;
+    if (cvar("g_turrets_nofire") != 0)
+        return;
+
+    if ((!self.tur_active) || (self.deadflag != DEAD_NO))
+        return;
 
     self.turret_firefunc();
 
-    self.attack_finished_single    = time + self.shot_refire;
-    self.ammo               = self.ammo - self.shot_dmg;
-    self.volly_counter      = self.volly_counter - 1;
-
-
+    self.attack_finished_single = time + self.shot_refire;
+    self.ammo                   = self.ammo - self.shot_dmg;
+    self.volly_counter          = self.volly_counter - 1;
     if (self.volly_counter <= 0)
     {
         self.volly_counter = self.shot_volly;
-        if (self.shoot_flags & TFL_SHOOT_CLEARTARGET) self.enemy = world;
+
+        if (self.shoot_flags & TFL_SHOOT_CLEARTARGET)
+            self.enemy = world;
 
         if (self.shot_volly > 1)
             self.attack_finished_single = time + self.shot_volly_refire;
@@ -717,7 +763,7 @@ void turret_fire()
 
 
 #ifdef TURRET_DEBUG
-    if (self.enemy) paint_target3(self.tur_aimpos ,64,self.tur_dbg_rvec,self.tur_impacttime+0.25);
+    if (self.enemy) paint_target3(self.tur_aimpos, 64, self.tur_dbg_rvec, self.tur_impacttime + 0.25);
 #endif
 }
 

@@ -3,7 +3,7 @@
 
 #ifdef TTURRETS_ENABLED
 
-#message "with tZork turrets rc2"
+#message "with tZork turrets"
 
 vector real_origin(entity ent);
 
@@ -39,9 +39,9 @@ vector real_origin(entity ent);
 #define TFL_AIM_NO                  1
 /// Go for ground, not direct hit
 #define TFL_AIM_GROUND              2
-/// Go for ground, not direct hit if target is on ground too
+/// Go for ground, not direct hit, but only if target is on ground.
 #define TFL_AIM_GROUND2              4
-/// Use balistic aim (not implemented)
+/// Use balistic aim. FIXME: not implemented
 #define TFL_AIM_BALISTIC            8
 /// Try to predict target movement (does not account for gravity)
 #define TFL_AIM_LEAD                16
@@ -53,9 +53,9 @@ vector real_origin(entity ent);
 #define TFL_AIM_BEHIND              128
 /// blend real and predicted z positions. (fake bounce prediction)
 #define TFL_AIM_ZEASE               256
-/// Try to do real prediction of targets z pos at impact.
+// Try to do real prediction of targets z pos at impact.
 //#define TFL_AIM_ZPREDICT            256
-/// Just poitn at target's current location
+/// Simply aim at target's current location
 #define TFL_AIM_SIMPLE              512
 
 /// track (turn and pitch head) flags
@@ -73,7 +73,7 @@ vector real_origin(entity ent);
 #define TFL_TRACKTYPE_STEPMOTOR    1
 /// Smoth absolute movement. Looks ok, fair accuracy.
 #define TFL_TRACKTYPE_FLUIDPRECISE 2
-/// Simulated inertia. "Wobbly mode" Looks kool, can mean terrible accuracy depending on how the feilds below are set
+/// Simulated inertia. "Wobbly mode" Looks kool, can mean really bad accuracy depending on how the feilds below are set
 #define TFL_TRACKTYPE_FLUIDINERTIA 3
 /// TFL_TRACKTYPE_FLUIDINERTIA: pitch multiplier
 .float track_accel_pitch;
@@ -191,7 +191,7 @@ vector real_origin(entity ent);
 #define  TFL_DMG_RETALIATEONTEAM 16
 /// Loses target when damaged
 #define  TFL_DMG_TARGETLOSS      32
-/// Reciving damage trows off aim
+/// Reciving damage trows off aim (pointless atm, aim gets recalculated to fast). not implemented.
 #define  TFL_DMG_AIMSHAKE        64
 /// Reciving damage slaps the head arround
 #define  TFL_DMG_HEADSHAKE       128
@@ -212,32 +212,49 @@ vector real_origin(entity ent);
 */
 /// Turrets internal ai speed
 .float      ticrate;
-/// Where to point the head when no target
+
+/// Where to point the when no target
 .vector     idle_aim;
+
 /// Top part of turret
 .entity     tur_head;
+
 /// Start/respawn health
 .float      tur_health;
+
 /// Defend this entity (or ratehr this entitys position)
 .entity     tur_defend;
+
 /// on/off toggle.
 .float      tur_active;
+
 /// Aim from this point,
 .vector     tur_aimorg;
+
 /// and shoot from here. (could be non constant, think MLRS)
 .vector     tur_shotorg;
+
 /// Aim at this spot
 .vector     tur_aimpos;
+
 /// Predicted time the round will impact
 .float      tur_impacttime;
+
 /// Predicted place the round will impact
 .vector     tur_impactpoint;
+
 /// What entity the aimtrace hit, if any.
 .entity     tur_impactent;
+
 /// Distance to enemy
 .float      tur_dist_enemy;
+
+/// Distance to aimspot
+.float      tur_dist_aimpos;
+
 /// Distance impact<->aim
-.float      tur_dist_toaimpos;
+.float      tur_dist_impact_to_aimpos;
+
 /// Decresment counter form .shot_volly to 0.
 .float      volly_counter;
 
@@ -261,7 +278,7 @@ vector real_origin(entity ent);
 .float shot_force;
 /// < 1 = shoot # times at target (if possible)
 .float shot_volly;
-/// Refire after a compleated or borken volly.
+/// Refire after a compleated volly.
 .float shot_volly_refire;
 
 /// Consider targets within this range
@@ -294,7 +311,7 @@ vector real_origin(entity ent);
 */
 /// Maximum offset between impact and aim spot to fire
 .float aim_firetolerance_dist;
-/// Maximum angular offset between head and aimspot to fire
+// Maximum angular offset between head and aimspot to fire
 //.float aim_firetolerance_angle;
 /// How fast can i rotate/pitch (per second in stepmotor mode, base force in smooth modes)
 .float aim_speed;
@@ -340,7 +357,7 @@ void turret_fire();
 .float() turret_firecheckfunc;
 // Execure BEFORE main ai loop. return 0 to cancel any following proccessing.
 //.float() turret_prethink;
-/// Execure AFTER main AI loop UNLESS turret_prethink returnd 0
+/// Execure AFTER main AI loop
 .void()  turret_postthink;
 
 /// Add a target
@@ -373,7 +390,7 @@ void turret_fire();
 
 removed.
 */
-/// function used to aim, usualy turret_stdproc_aim_generic
+// function used to aim, usualy turret_stdproc_aim_generic
 //.vector() turret_aim;
 
 /*
