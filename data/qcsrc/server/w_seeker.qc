@@ -141,7 +141,7 @@ void Seeker_Missile_Animate()
 	if(self.frame == 5)
 	{
 		self.think           = Seeker_Missile_Think;
-		self.nextthink       = time + cvar("g_balance_seeker_missile_activate_delay");
+		self.nextthink       = time;// + cvar("g_balance_seeker_missile_activate_delay"); // cant dealy with csqc projectiles
 
 		if (cvar("g_balance_seeker_guided_proxy"))
 			self.movetype    = MOVETYPE_BOUNCEMISSILE;
@@ -177,7 +177,7 @@ void Seeker_Fire_Missile(vector f_org)
 	missile.touch           = Seeker_Missile_Touch;
 
 	missile.event_damage    = Seeker_Missile_Damage;
-	missile.nextthink       = time + 0.2;// + cvar("g_balance_seeker_missile_activate_delay");
+	missile.nextthink       = time;// + 0.2;// + cvar("g_balance_seeker_missile_activate_delay");
 	missile.cnt             = time + cvar("g_balance_seeker_missile_lifetime");
 	missile.enemy           = self.enemy;
 	missile.switchweapon           = cvar("g_balance_seeker_missile_speed");
