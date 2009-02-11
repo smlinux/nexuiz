@@ -333,7 +333,8 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 			self.velocity = v0;
 			self.gravity = g0;
 
-			zcurveparticles_from_tracetoss(particleeffectnum("tr_bullet"), self.origin, trace_endpos, self.velocity);
+			if(vlen(trace_endpos - self.origin) > 32)
+				zcurveparticles_from_tracetoss(particleeffectnum("tr_bullet"), self.origin, trace_endpos, self.velocity);
 			if(trace_fraction == 1)
 				break;
 				// won't hit anything anytime soon (DP's
