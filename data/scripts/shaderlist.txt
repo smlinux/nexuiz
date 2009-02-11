@@ -52,3 +52,5 @@ tree
 turrets
 tznex01
 water
+caverna
+hlac

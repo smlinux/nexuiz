@@ -1967,3 +1967,35 @@ float MoveToRandomMapLocation(entity e, float goodcontents, float badcontents, f
 	else
 		return FALSE;
 }
+
+void zcurveparticles(float effectno, vector start, vector end, float end_dz)
+{
+	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte(MSG_BROADCAST, TE_CSQC_ZCURVEPARTICLES);
+	WriteShort(MSG_BROADCAST, effectno);
+	WriteCoord(MSG_BROADCAST, start_x);
+	WriteCoord(MSG_BROADCAST, start_y);
+	WriteCoord(MSG_BROADCAST, start_z);
+	WriteCoord(MSG_BROADCAST, end_x);
+	WriteCoord(MSG_BROADCAST, end_y);
+	WriteCoord(MSG_BROADCAST, end_z);
+	WriteCoord(MSG_BROADCAST, end_dz);
+}
+
+void zcurveparticles_from_tracetoss(float effectno, vector start, vector end, vector vel)
+{
+	float end_dz;
+	vector vecxy, velxy;
+
+	vecxy = end - start; vecxy_z = 0;
+	velxy = vel;         velxy_z = 0;
+
+	if(vlen(velxy) < 0.000001 * fabs(vel_z))
+	{
+		trailparticles(world, effectno, start, end);
+		return;
+	}
+
+	end_dz = vlen(vecxy) / vlen(velxy) * vel_z - (end_z - start_z);
+	zcurveparticles(effectno, start, end, end_dz);
+}

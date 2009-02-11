@@ -192,6 +192,10 @@ float W_BallisticBullet_LeaveSolid(entity e, vector vel, float constant)
 	float maxdist;
 	float E0_m, Es_m;
 
+	// outside the world? forget it
+	if(self.origin_x > world.maxs_x || self.origin_y > world.maxs_y || self.origin_z > world.maxs_z || self.origin_x < world.mins_x || self.origin_y < world.mins_y || self.origin_z < world.mins_z)
+		return 0;
+
 	// E(s) = E0 - constant * s, constant = area of bullet circle * material constant / mass
 	v0 = vlen(vel);
 
@@ -315,7 +319,27 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 
 		for(;;)
 		{
+			// DP tracetoss is stupid and always traces in 0.05s
+			// ticks. This makes it trace in 0.05*0.125s ticks
+			// instead.
+			vector v0;
+			float g0;
+			v0 = self.velocity;
+			g0 = self.gravity;
+			self.velocity = self.velocity * 0.125;
+			self.gravity *= 0.125 * 0.125;
+			trace_fraction = 0;
 			tracetoss(self, oldself);
+			self.velocity = v0;
+			self.gravity = g0;
+
+			zcurveparticles_from_tracetoss(particleeffectnum("TR_VORESPIKE"), self.origin, trace_endpos, self.velocity);
+			if(trace_fraction == 1)
+				break;
+				// won't hit anything anytime soon (DP's
+				// tracetoss does 200 tics of, here,
+				// 0.05*0.125s, that is, 1.25 seconds
+
 			other = trace_ent;
 			dt = vlen(trace_endpos - self.origin) / vlen(self.velocity); // this is only approximate!
 			setorigin(self, trace_endpos);

@@ -45,6 +45,7 @@ const float AS_FLOAT		= 8;
 const float TE_CSQC_PICTURE = 100;
 const float TE_CSQC_RACE = 101;
 const float TE_CSQC_SPAWN = 102;
+const float TE_CSQC_ZCURVEPARTICLES = 103;
 
 const float RACE_NET_CHECKPOINT_HIT_QUALIFYING = 0; // byte checkpoint, short time, short recordtime, string recordholder
 const float RACE_NET_CHECKPOINT_CLEAR = 1;
