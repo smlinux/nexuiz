@@ -190,7 +190,8 @@ void Ent_RainOrSnow()
 		self.draw = Draw_Snow;
 }
 
-void zcurveparticles(float effectnum, vector start, vector end, float end_dz, float depth)
+entity zcurve;
+void zcurveparticles(float effectnum, vector start, vector end, float end_dz, float speed, float depth)
 {
 	// end_dz:
 	//   IF IT WERE A STRAIGHT LINE, it'd end end_dz above end
@@ -207,12 +208,13 @@ void zcurveparticles(float effectnum, vector start, vector end, float end_dz, fl
 	// currently: 0.081 degrees
 	// 0.99999 would be 0.256 degrees and is visible
 	{
-		trailparticles(world, effectnum, start, end);
+		zcurve.velocity = speed * normalize(end - start);
+		trailparticles(zcurve, effectnum, start, end);
 	}
 	else
 	{
-		zcurveparticles(effectnum, start, mid, end_dz, depth);
-		zcurveparticles(effectnum, mid, end, end_dz, depth);
+		zcurveparticles(effectnum, start, mid, end_dz, speed, depth);
+		zcurveparticles(effectnum, mid, end, end_dz, speed, depth);
 	}
 }
 
@@ -220,7 +222,13 @@ void Net_ReadZCurveParticles()
 {
 	vector start, end;
 	float end_dz;
-	float effectnum;
+	float effectnum, speed;
+
+	if(!zcurve)
+	{
+		zcurve = spawn();
+		zcurve.classname = "zcurve";
+	}
 
 	effectnum = ReadShort();
 
@@ -231,6 +239,7 @@ void Net_ReadZCurveParticles()
 	end_y = ReadCoord();
 	end_z = ReadCoord();
 	end_dz = ReadCoord();
+	speed = ReadShort() * 16;
 
-	zcurveparticles(effectnum, start, end, end_dz, 5); // at most 32 segments
+	zcurveparticles(effectnum, start, end, end_dz, speed, 5); // at most 32 segments
 }

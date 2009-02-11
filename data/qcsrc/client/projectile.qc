@@ -59,6 +59,10 @@ void Projectile_DrawTrail(vector to)
 		case PROJECTILE_HAGAR_BOUNCING:
 			trailparticles(self, particleeffectnum("TR_GRENADE"), from, to);
 			break;
+		case PROJECTILE_BULLET:
+		case PROJECTILE_BULLET_GLOWING:
+			trailparticles(self, particleeffectnum("tr_bullet"), from, to);
+			break;
 		default:
 			break;
 	}

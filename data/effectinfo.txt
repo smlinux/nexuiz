@@ -3152,4 +3152,12 @@ velocityoffset 0 0 80
 velocityjitter 256 256 256
 
 
-
+// bullet trail (somewhat like a tracer)
+effect tr_bullet
+trailspacing 16
+type spark
+color 0x800000 0xFF8020
+alpha 256 256 10240
+size 2 2
+stretchfactor 0.3
+velocitymultiplier 1
