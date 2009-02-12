@@ -80,8 +80,6 @@ void CSQC_Init(void)
 	//registercmd("ctf_menu");
 	registercmd("ons_map");
 	//registercmd("menu_action");
-	registercmd("sbar_columns_set");
-	registercmd("sbar_columns_help");
 
 	registercmd("+button3");
 	registercmd("-button3");
