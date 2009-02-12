@@ -99,6 +99,7 @@ entity GetPlayer(string name)
 
 //float ctf_clientcommand();
 float readyrestart_happened;
+.float lms_spectate_warning;
 void SV_ParseClientCommand(string s) {
 	local string cmd;
 	local float tokens, f, effectnum;
@@ -158,8 +159,22 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "spectate") {
 		if not(self.flags & FL_CLIENT)
 			return;
-		if(g_lms || g_arena)
-			return; // don't allow spectating in lms, unless player runs out of lives
+		if(g_arena)
+			return;
+		if(g_lms)
+		{
+			if(self.lms_spectate_warning)
+			{
+				// mark player as spectator
+				PlayerScore_Add(self, SP_LMS_RANK, 666 - PlayerScore_Add(self, SP_LMS_RANK, 0));
+			}
+			else
+			{
+				self.lms_spectate_warning = 1;
+				sprint(self, "WARNING: you won't be able to enter the game again after spectating in LMS. Use the same command again to spectate anyway.\n");
+				return;
+			}
+		}
 		if(self.classname == "player" && cvar("sv_spectate") == 1) {
 			if(self.flagcarried)
 				DropFlag(self.flagcarried, world, world);

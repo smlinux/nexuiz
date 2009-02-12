@@ -155,7 +155,7 @@ void ScoreRules_race()
 	}
 	else
 	{
-		ScoreInfo_SetLabel_TeamScore(  ST_RACE_LAPS,    "laps",      0);
+		//ScoreInfo_SetLabel_TeamScore(  ST_RACE_LAPS,    "laps",      0);
 		ScoreInfo_SetLabel_PlayerScore(SP_RACE_LAPS,    "laps",      SFL_SORT_PRIO_PRIMARY);
 		ScoreInfo_SetLabel_PlayerScore(SP_RACE_TIME,    "time",      SFL_SORT_PRIO_SECONDARY | SFL_LOWER_IS_BETTER | SFL_TIME);
 	}
