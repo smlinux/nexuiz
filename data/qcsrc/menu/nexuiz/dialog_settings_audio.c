@@ -147,6 +147,7 @@ void fillNexuizAudioSettingsTab(entity me)
 	me.TR(me);
 		sl = makeNexuizSlider(0.15, 1, 0.05, "cl_autotaunt");
 			sl.valueDisplayMultiplier = 100;
+			sl.valueDigits = 0;
 		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(0, 1, sl, "Automatic taunts"));
 		if(sl.value != e.savedValue)
 			e.savedValue = 0.65; // default
