@@ -356,9 +356,12 @@ string Sbar_DefaultColumnLayout()
 {
 	return strcat( // fteqcc sucks
 		"ping pl name | ",
-		"+noteams/kills +noteams/deaths +noteams/suicides -noteams,tdm/frags ", // tdm already has this in "score"
-		"+kh/caps +kh/pushes +kh/destroyed ",
+		"-teams,race/kills -teams,race/deaths -teams/suicides -race,dm,tdm/frags ", // tdm already has this in "score"
 		"+ctf/caps +ctf/pickups +ctf/fckills +ctf/returns ",
+		"+lms/lives +lms/rank ",
+		"+kh/caps +kh/pushes +kh/destroyed ",
+		"+race/laps +race/time +race/fastest ",
+		"+as/objectives ",
 		"-lms/score");
 }
 
