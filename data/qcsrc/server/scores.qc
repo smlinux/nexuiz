@@ -293,6 +293,7 @@ float PlayerScore_Add(entity player, float scorefield, float score)
 	entity s;
 
 	if(gameover)
+	if not(g_lms && scorefield == SP_LMS_RANK) // allow writing to this field in intermission as it is needed for newly joining players
 		score = 0;
 
 	if(!scores_initialized) return 0; // FIXME remove this when everything uses this system

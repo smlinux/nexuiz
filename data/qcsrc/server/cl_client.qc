@@ -1327,7 +1327,7 @@ void ClientConnect (void)
 		if(PlayerScore_Add(self, SP_LMS_LIVES, LMS_NewPlayerLives()) <= 0)
 		{
 			PlayerScore_Add(self, SP_LMS_RANK, 666);
-			self.frags = FRAGS_SPECTATOR; // FIXME do we still need this?
+			self.frags = FRAGS_SPECTATOR;
 		}
 	}
 
