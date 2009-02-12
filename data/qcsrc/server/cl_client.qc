@@ -584,7 +584,7 @@ void PutObserverInServer (void)
 		if(PlayerScore_Add(self, SP_LMS_RANK, 0) == 666)
 			self.frags = FRAGS_SPECTATOR;
 		else
-			self.frags = FRAGS_SPECTATOR; // this was -667 before, is this okay?
+			self.frags = FRAGS_LMS_LOSER;
 	}
 	else
 		self.frags = FRAGS_SPECTATOR;
