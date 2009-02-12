@@ -1740,7 +1740,7 @@ void Sbar_Draw (void)
 
 	sbar_fontsize = Sbar_GetFontsize("sbar_fontsize");
 	
-	if(spectatee_status)
+	if(spectatee_status && !intermission)
 	{
 		if(spectatee_status == -1)
 			s = "^1Observing";
@@ -1786,7 +1786,7 @@ void Sbar_Draw (void)
 			o = Sbar_DrawNoteLine(o, s);
 		}
 	}
-	if(warmup_stage)
+	if(warmup_stage && !intermission)
 	{
 		s = "^2Currently in ^1warmup^2 stage!";
 		o = Sbar_DrawNoteLine(o, s);
@@ -1801,7 +1801,7 @@ void Sbar_Draw (void)
 	else
 		blinkcolor = "^3";
 
-	if(ready_waiting)
+	if(ready_waiting && !intermission)
 	{
 		if(ready_waiting_for_me)
 		{
@@ -1819,7 +1819,7 @@ void Sbar_Draw (void)
 		}
 		o = Sbar_DrawNoteLine(o, s);
 	}
-	else if(warmup_stage) 
+	else if(warmup_stage && !intermission) 
 	{
 		s = strcat("^2Press ^3", getcommandkey("ready", "ready"), "^2 to end warmup");
 		o = Sbar_DrawNoteLine(o, s);
@@ -1846,7 +1846,7 @@ void Sbar_Draw (void)
 			o = Sbar_DrawNoteLine(o, s);
 		}
 	}
-	if(teamplay)
+	if(teamplay && !intermission)
 	{
 		entity tm;
 		float ts_min, ts_max;
