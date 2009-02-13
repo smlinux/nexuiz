@@ -472,6 +472,7 @@ void ReadyCount()
  */
 void restartTimer_Think() {
 	restart_mapalreadyrestarted = 1;
+	Score_ClearAll();
 	reset_map(TRUE);
 	remove(self);
 	return;
