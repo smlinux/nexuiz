@@ -2,6 +2,8 @@
 .void() havocbot_role;
 void() havocbot_chooserole;
 .float havocbot_keyboardskill;
+.float facingwalltime, ignoregoaltime;
+.entity ignoregoal;
 
 vector havocbot_dodge()
 {
@@ -237,6 +239,33 @@ void havocbot_movetogoal()
 				
 				traceline(self.origin + self.view_ofs , dst_ahead, TRUE, world);
 
+				// Check head-banging against walls
+				if(vlen(self.origin + self.view_ofs - trace_endpos) < 1.5)
+				{
+					if(self.facingwalltime && time > self.facingwalltime)
+					{
+						self.ignoregoal = self.goalcurrent;
+						self.ignoregoaltime = time + cvar("bot_ai_ignoregoal_timeout");
+						navigation_poproute();
+					}
+					else
+					{
+						self.facingwalltime = time + cvar("bot_ai_facingwall_timeout");
+					}
+				}
+				else
+				{
+					if(!self.ignoregoaltime)
+						self.facingwalltime = 0;
+
+					if(time > self.ignoregoaltime)
+					{
+						self.ignoregoal = world;
+						self.ignoregoaltime = 0;
+					}
+				}
+			
+				// Check for water/slime/lava and edges
 				if(trace_fraction == 1){
 					traceline(dst_ahead , dst_down, TRUE, world);
 					//	te_lightning2(world, self.origin, dst_ahead);	// Draw "ahead" look 

@@ -48,8 +48,8 @@ waypointsprites.qc
 bots.qc
 
 // LordHavoc's bots
-havocbot_roles.qc
 havocbot.qc
+havocbot_roles.qc
 
 g_subs.qc
 

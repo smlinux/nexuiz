@@ -102,7 +102,8 @@ void havocbot_goalrating_items(float ratingscale, vector org, float sradius)
 		friend_distance = 10000; enemy_distance = 10000;
 		rating = 0;
 	
-		if(!head.solid || distance > sradius ){
+		if(!head.solid || distance > sradius || head == self.ignoregoal )
+		{
 			head = head.chain;
 			continue;		
 		}
