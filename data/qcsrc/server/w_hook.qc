@@ -33,6 +33,7 @@ void W_Hook_Explode2 (void)
 {
 	self.event_damage = SUB_Null;
 	self.touch = SUB_Null;
+	self.effects |= EF_NODRAW;
 
 	self.think = W_Hook_ExplodeThink;
 	self.nextthink = time;

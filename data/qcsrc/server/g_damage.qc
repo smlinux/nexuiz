@@ -958,7 +958,10 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 			force = '0 0 -1';
 		else
 			force = normalize(force);
-		Damage_DamageInfo(blastorigin, coredamage, edgedamage, rad, forceintensity * force, deathtype);
+		if(forceintensity >= 0)
+			Damage_DamageInfo(blastorigin, coredamage, edgedamage, rad, forceintensity * force, deathtype);
+		else
+			Damage_DamageInfo(blastorigin, coredamage, edgedamage, -rad, (-forceintensity) * force, deathtype);
 	}
 
 	targ = findradius (blastorigin, rad);
