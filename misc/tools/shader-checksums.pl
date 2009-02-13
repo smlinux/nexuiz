@@ -48,7 +48,7 @@ nextline:
 	}
 
 	# in level 0, make the map name a separate token
-	if(@level == 0 && @line >= 2)
+	if($level == 0 && @line >= 2)
 	{
 		unshift @nextline, splice @line, 1;
 	}
