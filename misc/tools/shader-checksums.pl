@@ -31,10 +31,24 @@ while(<STDIN>)
 	next if /^$/;
 
 	my @line = map { s/"//g; $_; } split /\s+/, $_;
+	my @nextline = ();
+
+nextline:
+	# allow trailing } token
+	my $brace_index = [grep { $line[$_] eq "}" } 0..@line-1]->[0];
+	if(defined $brace_index)
+	{
+		@nextline = splice @line, $brace_index || 1;
+	}
+
+	# allow initial { token
+	if(@line >= 2 && $line[0] eq '{')
+	{
+		@nextline = splice @line, 1;
+	}
 
 	$shadertext .= "@line\n";
 
-again:
 	if($line[0] eq '{')
 	{
 		die "{ line without shader name"
@@ -42,11 +56,6 @@ again:
 		die "{ line in level $level"
 			if $level >= 2;
 		++$level;
-		if(@line > 1)
-		{
-			shift @line;
-			goto again;
-		}
 	}
 	elsif($line[0] eq '}')
 	{
@@ -107,6 +116,13 @@ again:
 			if defined $curshader;
 		$curshader = normalize_path $line[0];
 		$shadertext = "";
+	}
+
+	if(@nextline)
+	{
+		@line = @nextline;
+		@nextline = ();
+		goto nextline;
 	}
 }
 
