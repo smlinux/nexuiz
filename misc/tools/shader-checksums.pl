@@ -34,15 +34,19 @@ while(<STDIN>)
 
 	$shadertext .= "@line\n";
 
+again:
 	if($line[0] eq '{')
 	{
-		die "{ line contains other stuff"
-			unless @line == 1;
 		die "{ line without shader name"
 			unless defined $curshader;
 		die "{ line in level $level"
 			if $level >= 2;
 		++$level;
+		if(@line > 1)
+		{
+			shift @line;
+			goto again;
+		}
 	}
 	elsif($line[0] eq '}')
 	{
