@@ -38,13 +38,19 @@ nextline:
 	my $brace_index = [grep { $line[$_] eq "}" } 0..@line-1]->[0];
 	if(defined $brace_index)
 	{
-		@nextline = splice @line, $brace_index || 1;
+		unshift @nextline, splice @line, $brace_index || 1;
 	}
 
 	# allow initial { token
 	if(@line >= 2 && $line[0] eq '{')
 	{
-		@nextline = splice @line, 1;
+		unshift @nextline, splice @line, 1;
+	}
+
+	# in level 0, make the map name a separate token
+	if(@level == 0 && @line >= 2)
+	{
+		unshift @nextline, splice @line, 1;
 	}
 
 	$shadertext .= "@line\n";
