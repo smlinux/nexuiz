@@ -20,6 +20,13 @@ COMPAT_FILES="
 	gfx/inv_weapon13.tga
 	gfx/inv_weapon14.tga
 	gfx/inv_weapon9.tga
+	gfx/keys/key_backward.tga
+	gfx/keys/key_bg.tga
+	gfx/keys/key_crouch.tga
+	gfx/keys/key_forward.tga
+	gfx/keys/key_jump.tga
+	gfx/keys/key_left.tga
+	gfx/keys/key_right.tga
 	gfx/reslimed_mini.tga
 	gfx/runningman_1on1remix_mini.tga
 	gfx/runningmanctf_mini.tga
@@ -44,8 +51,8 @@ COMPAT_FILES="
 	models/ctf/flags.md3
 	models/ctf/flags.md3_0.skin
 	models/ctf/flags.md3_1.skin
-    models/hlac_bullet.md3
-    models/hlac_bullet.tga
+	models/hlac_bullet.md3
+	models/hlac_bullet.tga
 	models/player/carni.zym.sounds
 	models/player/headhunter.zym.sounds
 	models/player/insurrectionist.zym.sounds
@@ -118,8 +125,8 @@ COMPAT_FILES="
 	models/sprites/wpn-seeker_frame0.tga
 	models/sprites/wpn-shotgun_frame0.tga
 	models/sprites/wpn-uzi_frame0.tga
-    models/tagrocket.md3
-    models/tagrocket.tga
+	models/tagrocket.md3
+	models/tagrocket.tga
 	models/turrets/base-gib1.md3
 	models/turrets/base-gib2.md3
 	models/turrets/base-gib3.md3
@@ -156,23 +163,23 @@ COMPAT_FILES="
 	models/turrets/walker_props.md3
 	models/turrets/walker_spawn.md3
 	models/weapons/g_campingrifle.md3
-    models/weapons/g_hlac.md3
+	models/weapons/g_hlac.md3
 	models/weapons/g_hookgun.md3
 	models/weapons/g_minstanex.md3
 	models/weapons/g_porto.md3
-    models/weapons/g_seeker.md3
+	models/weapons/g_seeker.md3
 	models/weapons/v_campingrifle.md3
-    models/weapons/v_hlac.md3
+	models/weapons/v_hlac.md3
 	models/weapons/v_hookgun.md3
 	models/weapons/v_minstanex.md3
 	models/weapons/v_porto.md3
-    models/weapons/v_seeker.md3
+	models/weapons/v_seeker.md3
 	models/weapons/w_campingrifle.zym
-    models/weapons/w_hlac.zym
+	models/weapons/w_hlac.zym
 	models/weapons/w_hookgun.zym
 	models/weapons/w_minstanex.zym
 	models/weapons/w_porto.zym
-    models/weapons/w_seeker.zym
+	models/weapons/w_seeker.zym
 	particles/particlefont.tga
 	scripts/eggandbacon.shader
 	scripts/egyptsoc.shader
