@@ -1147,12 +1147,13 @@ void Sbar_Score(float margin)
 			if(me.sv_entnum == player_localentnum - 1)
 				break;
 		}
-		pl = players;
+		pl = players.sort_next;
 		if(pl == me)
 			pl = pl.sort_next;
 		
 		if(pl) {
-			distribution = me.(scores[ps_primary]) - pl.(scores[ps_primary]);
+			distribution = me.(scores[ps_primary]);
+			distribution -= pl.(scores[ps_primary]);
 		} else
 			distribution = 0;
 		
