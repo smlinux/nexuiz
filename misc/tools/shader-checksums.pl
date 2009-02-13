@@ -112,7 +112,7 @@ nextline:
 	}
 	elsif($level == 0)
 	{
-		die "shader name already set"
+		warn "shader name already set"
 			if defined $curshader;
 		$curshader = normalize_path $line[0];
 		$shadertext = "";
