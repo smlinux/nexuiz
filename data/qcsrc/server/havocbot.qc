@@ -240,7 +240,7 @@ void havocbot_movetogoal()
 				traceline(self.origin + self.view_ofs , dst_ahead, TRUE, world);
 
 				// Check head-banging against walls
-				if(vlen(self.origin + self.view_ofs - trace_endpos) < 1.5)
+				if(vlen(self.origin + self.view_ofs - trace_endpos) < 2)
 				{
 					if(self.facingwalltime && time > self.facingwalltime)
 					{
@@ -250,15 +250,14 @@ void havocbot_movetogoal()
 					}
 					else
 					{
-						self.facingwalltime = time + cvar("bot_ai_facingwall_timeout");
+						self.facingwalltime = time + 0.05;
 					}
 				}
 				else
 				{
-					if(!self.ignoregoaltime)
-						self.facingwalltime = 0;
+					self.facingwalltime = 0;
 
-					if(time > self.ignoregoaltime)
+					if(self.ignoregoal != world && time > self.ignoregoaltime)
 					{
 						self.ignoregoal = world;
 						self.ignoregoaltime = 0;
