@@ -1921,7 +1921,7 @@ airfriction 12
 effect TR_ROCKET
 trailspacing 5
 type alphastatic
-color 0x303030 0x000000
+color 0x000000 0x666666
 tex 0 8
 size 1 4
 bounce 1
