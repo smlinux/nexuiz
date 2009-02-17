@@ -138,6 +138,12 @@ void W_Electro_Attack2()
 	proj.event_damage = W_Plasma_Damage;
 	proj.flags = FL_PROJECTILE;
 
+	entity p2;
+	p2 = spawn();
+	copyentity(proj, p2);
+	setmodel(p2, "models/ebomb.mdl");
+	setsize(p2, proj.mins, proj.maxs);
+
 	CSQCProjectile(proj, TRUE, PROJECTILE_ELECTRO, FALSE); // no culling, it has sound
 }
 

@@ -64,6 +64,7 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 	player.angles = to_angles;
 	player.fixangle = TRUE;
 	player.velocity = to_velocity;
+	BITXOR_ASSIGN(player.effects, EF_TELEPORT_BIT);
 
 	UpdateCSQCProjectile(player);
 
@@ -71,10 +72,6 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 	{
 		if(player.takedamage && player.deadflag == DEAD_NO && !g_race)
 			tdeath(player, teleporter, telefragger, telefragmin, telefragmax);
-
-		// hide myself a tic
-		player.effects = player.effects | EF_NODRAW;
-		player.teleport_time = time + cvar("sys_ticrate");
 
 		// player no longer is on ground
 		player.flags &~= FL_ONGROUND;

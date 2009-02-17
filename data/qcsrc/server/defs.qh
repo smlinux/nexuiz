@@ -532,3 +532,7 @@ void SUB_UseTargets();
 void ClientData_Touch(entity e);
 
 vector debug_shotorg; // if non-zero, overrides the shot origin of all weapons
+
+// the QC VM sucks
+#define BITXOR(v,b)        ((v) + (b) - 2 * ((v) & (b)))
+#define BITXOR_ASSIGN(v,b) ((v) += ((b) - 2 * ((v) & (b))))

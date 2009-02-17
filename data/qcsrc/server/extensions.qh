@@ -183,6 +183,16 @@ float   EF_STARDUST     = 2048;
 //description:
 //entity emits bouncing sparkles in every direction
 
+//DP_EF_TELEPORT_BIT
+//idea: id software
+//darkplaces implementation: div0
+//effects bit:
+float   EF_TELEPORT_BIT = 2097152;
+//description:
+//when toggled, interpolation of the entity is skipped for one frame. Useful for teleporting.
+//to toggle this bit in QC, you can do:
+//  self.effects += (EF_TELEPORT_BIT - 2 * (self.effects & EF_TELEPORT_BIT));
+
 //DP_ENT_ALPHA
 //idea: Nehahra
 //darkplaces implementation: LordHavoc

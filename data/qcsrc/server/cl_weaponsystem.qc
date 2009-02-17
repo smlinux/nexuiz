@@ -254,6 +254,7 @@ float CL_Weaponentity_CustomizeEntityForClient()
 .string weaponname;
 void CL_Weaponentity_Think()
 {
+	float tb;
 	self.nextthink = time;
 	if (intermission_running)
 		self.frame = WFRAME_IDLE;
@@ -277,12 +278,12 @@ void CL_Weaponentity_Think()
 		else
 			self.model = "";
 	}
-	self.effects = self.owner.effects | EF_LOWPRECISION;
-	self.effects = self.effects - (self.effects & (EF_FULLBRIGHT)); // can mask team color, so get rid of it
 
-	if (self.owner.teleport_time)
-		// owner is currently being teleported, so don't apply EF_NODRAW otherwise the viewmodel would "blink"
-		self.effects &~= EF_NODRAW;
+	tb = (self.effects & EF_TELEPORT_BIT);
+	self.effects = self.owner.effects | EF_LOWPRECISION;
+	self.effects &~= EF_FULLBRIGHT; // can mask team color, so get rid of it
+	self.effects &~= EF_TELEPORT_BIT;
+	self.effects |= tb;
 
 	if(self.owner.alpha != 0)
 		self.alpha = self.owner.alpha;
@@ -553,7 +554,13 @@ void weapon_thinkf(float fr, float t, void() func)
 	if (fr >= 0)
 	{
 		if (self.weaponentity != world)
+		{
+			if(fr == WFRAME_FIRE1 || fr == WFRAME_FIRE2)
+			{
+				BITXOR_ASSIGN(self.weaponentity.effects, EF_TELEPORT_BIT);
+			}
 			self.weaponentity.frame = fr;
+		}
 	}
 
 	if(self.weapon_think == w_ready && func != w_ready && self.weaponentity.state == WS_RAISE)
