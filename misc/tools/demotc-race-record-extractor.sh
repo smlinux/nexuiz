@@ -2,7 +2,7 @@
 
 d=$1
 i=0
-perl demotc.pl grep "$d" '//RACE RECORD SET (.*)\n' | while IFS=" " read -r timecode result; do
+demotc.pl grep "$d" '//RACE RECORD SET (.*)\n' | while IFS=" " read -r timecode result; do
 	timecode=${timecode%:}
 	result=${result#\"}
 	result=${result%\"}
