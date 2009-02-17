@@ -204,11 +204,12 @@ void Ent_Projectile()
 	self.solid = SOLID_TRIGGER;
 	//self.effects = EF_NOMODELFLAGS;
 
-	// sv_gameplayfix_delayprojectiles
 	if(!self.move_time)
 	{
-		self.move_time = time + ticrate;
-		self.spawntime = time + ticrate;
+		// for some unknown reason, we don't need to care for
+		// sv_gameplayfix_delayprojectiles here.
+		self.move_time = time;
+		self.spawntime = time;
 	}
 	else
 		self.move_time = max(self.move_time, time);
