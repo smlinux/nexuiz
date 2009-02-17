@@ -1534,7 +1534,7 @@ void centerprint(string strMessage)
 
 	centerprint_fontsize = Sbar_GetFontsize("scr_centersize");
 
-	centerprint_expire = max(centerprint_expire, time); // if any of the returns happens, this message will fade out
+	centerprint_expire = min(centerprint_expire, time); // if any of the returns happens, this message will fade out
 
 	if(cvar("scr_centertime") <= 0)
 		return;
