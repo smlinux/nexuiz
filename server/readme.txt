@@ -46,7 +46,7 @@ rcon2irc.txt to learn how to setup and use it!
 rcon.pl is a perl script that implements rcon which can be used to
 remotely control your server.
 
-help.cfg is a nexuiz config file proving a simple help message system.
-It prints all the messages from a list, one after the other with an
-configureable delay between them.  Great to provide beginners with
-some hints.
+help.cfg is a Nexuiz config file providing a simple help message
+system.  It prints all the messages from a list, one after the other
+with an configureable delay between them.  Great to provide beginners
+with some hints.
