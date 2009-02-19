@@ -224,25 +224,31 @@ void SV_ParseClientCommand(string s) {
 		} else {
 			sprint( self, strcat( "selectteam none/red/blue/yellow/pink/auto - \"", argv(1), "\" not recognised\n" ) );
 		}
-	} else if(argv(0) == "ready") {
+	} else if((argv(0) == "ready") || (argv(0) == "unready")) {
 		if not(self.flags & FL_CLIENT)
 			return;
+
 		if((inWarmupStage && 0 <= g_warmup_limit) // with unlimited warmup players have to be able to restart
 		   || cvar("sv_ready_restart"))
 		{
-			if(timeoutStatus) {
-				return sprint(self, "^1You cannot reset the game while a timeout is active!\n");
-			}
-
+			if(!readyrestart_happened || cvar("sv_ready_restart_repeatable"))
 			{
-				if(!readyrestart_happened || cvar("sv_ready_restart_repeatable"))
+				if (argv(0) == "ready")
 				{
 					self.ready = TRUE;
 					bprint(self.netname, "^2 is ready\n");
-					ReadyCount();
-				} else {
-					sprint(self, "^1game has already been restarted\n");
 				}
+				else
+				{
+					self.ready = FALSE;
+					bprint(self.netname, "^2 is ^1NOT^2 ready\n");
+				}
+
+				// cannot reset the game while a timeout is active!
+				if(!timeoutStatus) {
+					ReadyCount();
+			} else {
+				sprint(self, "^1Game has already been restarted\n");
 			}
 		}
 	} else if(argv(0) == "maplist") {
