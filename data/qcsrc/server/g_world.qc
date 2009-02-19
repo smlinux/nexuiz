@@ -1344,7 +1344,7 @@ void InitiateOvertime()
 	//   again, if at the point at which timelimit would be extended again, still no winner was found
 	if ((checkrules_overtimesadded < cvar("timelimit_overtimes")) && cvar("timelimit_overtime") && (checkrules_status == WINNING_NEVER)) 
 	{
-		checkrules_overtimesadded++;
+		++checkrules_overtimesadded;
 		//add one more overtime by simply extending the timelimit
 		float tl;
 		tl = cvar("timelimit");
