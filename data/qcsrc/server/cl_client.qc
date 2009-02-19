@@ -74,7 +74,6 @@ void ClientData_Touch(entity e)
 
 #define SPAWNPOINT_SCORE frags
 
-.float wantswelcomemessage;
 .string netname_previous;
 
 void spawnfunc_info_player_survivor (void)
@@ -564,7 +563,6 @@ void PutObserverInServer (void)
 	self.punchvector = '0 0 0';
 	self.oldvelocity = self.velocity;
 	self.customizeentityforclient = Client_customizeentityforclient;
-	self.wantswelcomemessage = 1;
 
 	if(g_arena)
 	{
@@ -1869,7 +1867,6 @@ float SpectateNext() {
 		msg_entity = self;
 		WriteByte(MSG_ONE, SVC_SETVIEW);
 		WriteEntity(MSG_ONE, self.enemy);
-		self.wantswelcomemessage = 1;
 	 	//stuffcmd(self, "set viewsize $tmpviewsize \n");
 		if(!SpectateUpdate())
 			PutObserverInServer();
@@ -2029,10 +2026,7 @@ void ObserverThink()
 			self.flags |= FL_JUMPRELEASED;
 		}
 	}
-	if(self.BUTTON_ZOOM)
-		self.wantswelcomemessage = 0;
-	if(self.wantswelcomemessage)
-		PrintWelcomeMessage(self);
+	PrintWelcomeMessage(self);
 }
 
 void SpectatorThink()
@@ -2066,10 +2060,7 @@ void SpectatorThink()
 			self.flags |= FL_JUMPRELEASED;
 		}
 	}
-	if(self.BUTTON_ZOOM)
-		self.wantswelcomemessage = 0;
-	if(self.wantswelcomemessage)
-		PrintWelcomeMessage(self);
+	PrintWelcomeMessage(self);
 	self.flags |= FL_CLIENT | FL_NOTARGET;
 }
 
@@ -2150,12 +2141,7 @@ void PlayerPreThink (void)
 
 		CheckRules_Player();
 
-		if(self.BUTTON_INFO)
-			PrintWelcomeMessage(self);
-
-		if(g_lms || !cvar("sv_spectate"))
-		if((time - self.jointime) <= cvar("welcome_message_time"))
-			PrintWelcomeMessage(self);
+		PrintWelcomeMessage(self);
 
 		if (intermission_running)
 		{
@@ -2431,7 +2417,6 @@ void PlayerPostThink (void)
 		if (intermission_running)
 			return;		// intermission or finale
 
-		//PrintWelcomeMessage(self);
 		//if (TetrisPostFrame()) return;
 
 		// restart countdown

@@ -1764,6 +1764,9 @@ void Sbar_Draw (void)
 			s = strcat("^1Press ^3", getcommandkey("secondary fire", "+attack2"), "^1 to observe");
 		o = Sbar_DrawNoteLine(o, s);
 
+		s = strcat("^1Press ^3", getcommandkey("server info", "+show_info"), "^1 for gamemode info");
+		o = Sbar_DrawNoteLine(o, s);
+
 		if(gametype == GAME_ARENA)
 			s = "^1Wait for your turn to join";
 		else if(gametype == GAME_LMS)
