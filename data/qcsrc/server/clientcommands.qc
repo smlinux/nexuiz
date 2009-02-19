@@ -224,7 +224,7 @@ void SV_ParseClientCommand(string s) {
 		} else {
 			sprint( self, strcat( "selectteam none/red/blue/yellow/pink/auto - \"", argv(1), "\" not recognised\n" ) );
 		}
-	} else if((argv(0) == "ready") || (argv(0) == "unready")) {
+	} else if(argv(0) == "ready") {
 		if not(self.flags & FL_CLIENT)
 			return;
 
@@ -233,15 +233,15 @@ void SV_ParseClientCommand(string s) {
 		{
 			if(!readyrestart_happened || cvar("sv_ready_restart_repeatable"))
 			{
-				if (argv(0) == "ready")
-				{
-					self.ready = TRUE;
-					bprint(self.netname, "^2 is ready\n");
-				}
-				else
+				if (self.ready) // toggle
 				{
 					self.ready = FALSE;
 					bprint(self.netname, "^2 is ^1NOT^2 ready\n");
+				}
+				else
+				{
+					self.ready = TRUE;
+					bprint(self.netname, "^2 is ready\n");
 				}
 
 				// cannot reset the game while a timeout is active!
