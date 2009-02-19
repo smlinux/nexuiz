@@ -1326,25 +1326,57 @@ void CheckRules_Player()
 float checkrules_oneminutewarning;
 
 float checkrules_equality;
-float checkrules_overtimewarning;
-float checkrules_overtimeend;
-
-void InitiateOvertime()
-{
-	if(!checkrules_overtimeend)
-		checkrules_overtimeend = time + 60 * cvar("timelimit_maxovertime");
-}
+float checkrules_suddendeathwarning;
+float checkrules_suddendeathend;
+float checkrules_overtimesadded; //how many overtimes have been already added
+float checkrules_status;
 
 float WINNING_NO = 0; // no winner, but time limits may terminate the game
 float WINNING_YES = 1; // winner found
 float WINNING_NEVER = 2; // no winner, enter overtime if time limit is reached
-float WINNING_STARTOVERTIME = 3; // no winner, enter overtime NOW
+float WINNING_STARTSUDDENDEATHOVERTIME = 3; // no winner, enter suddendeath overtime NOW
+
+void InitiateOvertime()
+{
+	// Check first whether normal overtimes could be added before initiating suddendeath mode
+	// - for this timelimit_overtime needs to be >0 of course
+	// - also check the winning condition calculated in the previous frame and only add normal overtime
+	//   again, if at the point at which timelimit would be extended again, still no winner was found
+	if ((checkrules_overtimesadded < cvar("timelimit_overtimes")) && cvar("timelimit_overtime") && (checkrules_status == WINNING_NEVER)) 
+	{
+		checkrules_overtimesadded++;
+		//add one more overtime by simply extending the timelimit
+		float tl;
+		tl = cvar("timelimit");
+		tl += cvar("timelimit_overtime");
+		cvar_set("timelimit", ftos(tl));
+		string minutesPlural;
+		if (cvar("timelimit_overtime") == 1)
+			minutesPlural = " ^3minute";
+		else
+			minutesPlural = " ^3minutes";
+		
+		bcenterprint(
+			strcat(
+				"^3Now playing ^1OVERTIME^3!\n\n^3Added ^1",
+				ftos(cvar("timelimit_overtime")),
+				minutesPlural,
+				" to the game!"
+			)
+		);
+	}
+	else 
+	{
+		if(!checkrules_suddendeathend)
+			checkrules_suddendeathend = time + 60 * cvar("timelimit_suddendeath");
+	}
+}
 
 float GetWinningCode(float fraglimitreached, float equality)
 {
 	if(equality)
 		if(fraglimitreached)
-			return WINNING_STARTOVERTIME;
+			return WINNING_STARTSUDDENDEATHOVERTIME;
 		else
 			return WINNING_NEVER;
 	else
@@ -1652,12 +1684,12 @@ float WinningCondition_Race(float fraglimit)
 	wc = WinningCondition_Scores(fraglimit);
 
 	// ALWAYS initiate overtime, unless EVERYONE has finished the race!
-	if(wc == WINNING_YES || wc == WINNING_STARTOVERTIME)
+	if(wc == WINNING_YES || wc == WINNING_STARTSUDDENDEATHOVERTIME)
 	// do NOT support equality when the laps are all raced!
 	{
 		FOR_EACH_PLAYER(p)
 			if not(p.race_completed)
-				return WINNING_STARTOVERTIME;
+				return WINNING_STARTSUDDENDEATHOVERTIME;
 		return WINNING_YES;
 	}
 	return wc;
@@ -1670,7 +1702,7 @@ float WinningCondition_QualifyingThenRace(float limit)
 	wc = WinningCondition_Scores(limit);
 
 	// NEVER initiate overtime
-	if(wc == WINNING_YES || wc == WINNING_STARTOVERTIME)
+	if(wc == WINNING_YES || wc == WINNING_STARTSUDDENDEATHOVERTIME)
 	{
 		return WINNING_YES;
 	}
@@ -1752,7 +1784,6 @@ Exit deathmatch games upon conditions
 */
 void CheckRules_World()
 {
-	local float status;
 	local float timelimit;
 	local float fraglimit;
 
@@ -1803,12 +1834,11 @@ void CheckRules_World()
 		return;
 	}
 
-	if(checkrules_overtimeend)
+	if(checkrules_suddendeathend)
 	{
-		if(!checkrules_overtimewarning)
+		if(!checkrules_suddendeathwarning)
 		{
-			checkrules_overtimewarning = TRUE;
-			//announceall("announcer/robotic/1minuteremains.wav");
+			checkrules_suddendeathwarning = TRUE;
 			if(g_race && !g_race_qualifying)
 				bcenterprint("^3Everyone, finish your lap! The race is over!");
 			else
@@ -1839,7 +1869,7 @@ void CheckRules_World()
 				// otherwise, the players should end the qualifying on their own
 				if(readyplayers || ((totalplayers >= 3) && (playerswithlaps * 3 >= totalplayers * 2)))
 				{
-					checkrules_overtimeend = 0;
+					checkrules_suddendeathend = 0;
 					ReadyRestart(); // go to race
 				}
 				else
@@ -1850,7 +1880,7 @@ void CheckRules_World()
 		}
 	}
 
-	if (checkrules_overtimeend && time >= checkrules_overtimeend)
+	if (checkrules_suddendeathend && time >= checkrules_suddendeathend)
 	{
 		NextLevel();
 		return;
@@ -1862,51 +1892,51 @@ void CheckRules_World()
 		play2all("announcer/robotic/1minuteremains.wav");
 	}
 
-	status = WinningCondition_RanOutOfSpawns();
-	if(status == WINNING_YES)
+	checkrules_status = WinningCondition_RanOutOfSpawns();
+	if(checkrules_status == WINNING_YES)
 	{
 		bprint("Hey! Someone ran out of spawns!\n");
 	}
 	else if(g_race && !g_race_qualifying && timelimit >= 0)
 	{
-		status = WinningCondition_Race(fraglimit);
+		checkrules_status = WinningCondition_Race(fraglimit);
 	}
 	else if(g_race && g_race_qualifying == 2 && timelimit >= 0)
 	{
-		status = WinningCondition_QualifyingThenRace(fraglimit);
+		checkrules_status = WinningCondition_QualifyingThenRace(fraglimit);
 	}
 	else if(g_assault)
 	{
-		status = WinningCondition_Assault(); // TODO remove this?
+		checkrules_status = WinningCondition_Assault(); // TODO remove this?
 	}
 	else if(g_lms)
 	{
-		status = WinningCondition_LMS();
+		checkrules_status = WinningCondition_LMS();
 	}
 	else if (g_onslaught)
 	{
-		status = WinningCondition_Onslaught(); // TODO remove this?
+		checkrules_status = WinningCondition_Onslaught(); // TODO remove this?
 	}
 	else
 	{
-		status = WinningCondition_Scores(fraglimit);
+		checkrules_status = WinningCondition_Scores(fraglimit);
 	}
 
-	if(status == WINNING_STARTOVERTIME)
+	if(checkrules_status == WINNING_STARTSUDDENDEATHOVERTIME)
 	{
-		status = WINNING_NEVER;
+		checkrules_status = WINNING_NEVER;
 		InitiateOvertime();
 	}
 
-	if(status == WINNING_NEVER)
+	if(checkrules_status == WINNING_NEVER)
 		// equality cases! Nobody wins if the overtime ends in a draw.
 		ClearWinners();
 
-	if(checkrules_overtimeend)
-		if(status != WINNING_NEVER || time >= checkrules_overtimeend)
-			status = WINNING_YES;
+	if(checkrules_suddendeathend)
+		if(checkrules_status != WINNING_NEVER || time >= checkrules_suddendeathend)
+			checkrules_status = WINNING_YES;
 
-	if(status == WINNING_YES)
+	if(checkrules_status == WINNING_YES)
 		NextLevel();
 };
 
