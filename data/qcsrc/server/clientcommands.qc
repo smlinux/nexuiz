@@ -245,7 +245,7 @@ void SV_ParseClientCommand(string s) {
 				}
 
 				// cannot reset the game while a timeout is active!
-				if(!timeoutStatus) {
+				if(!timeoutStatus)
 					ReadyCount();
 			} else {
 				sprint(self, "^1Game has already been restarted\n");
