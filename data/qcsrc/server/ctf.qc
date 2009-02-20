@@ -739,7 +739,7 @@ void spawnfunc_item_flag_team1()
 	if(self.spawnflags & 1)
 		self.noalign = 1;
 	if (!self.model)
-		self.model = "models/ctf/flags.md3";
+		self.model = cvar_string("g_ctf_flag_mdl_red");
 	if (!self.noise)
 		self.noise = "ctf/take.wav";
 	if (!self.noise1)
@@ -837,7 +837,7 @@ void spawnfunc_item_flag_team2()
 	if(self.spawnflags & 1)
 		self.noalign = 1;
 	if (!self.model)
-		self.model = "models/ctf/flags.md3";
+		self.model = cvar_string("g_ctf_flag_mdl_blue");
 	if (!self.noise)
 		self.noise = "ctf/take.wav";
 	if (!self.noise1)
