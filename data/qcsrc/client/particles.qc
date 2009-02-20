@@ -243,3 +243,18 @@ void Net_ReadZCurveParticles()
 
 	zcurveparticles(effectnum, start, end, end_dz, speed, 5); // at most 32 segments
 }
+
+void Net_ReadNexgunBeamParticle()
+{
+	vector shotorg, endpos;
+	shotorg_x = ReadCoord(); shotorg_y = ReadCoord(); shotorg_z = ReadCoord();
+	endpos_x = ReadCoord(); endpos_y = ReadCoord(); endpos_z = ReadCoord();
+	
+	pointparticles(particleeffectnum("nex_muzzleflash"), shotorg, normalize(endpos - shotorg) * 1000, 1);
+	
+	//draw either the old v2.3 beam or the new beam
+	if (cvar("cl_particles_oldnexbeam") && (getstati(STAT_ALLOW_OLDNEXBEAM) || isdemo()))
+		trailparticles(world, particleeffectnum("TE_TEI_G3"), shotorg, endpos);
+	else
+		trailparticles(world, particleeffectnum("nex_beam"), shotorg, endpos);
+}

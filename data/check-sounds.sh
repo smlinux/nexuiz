@@ -87,25 +87,32 @@ for S in models/player/*.sounds sound/player/default.sounds; do
 						;;
 					//*)
 						identifiers_seen="$identifiers_seen ${TITLE#//}"
-						good=false
-						case "$COUNT" in
-							0)
-								if psoundtry "$SOUND"; then
-									good=false
-								fi
-								;;
-							*)
-								for i in `seq 1 $COUNT`; do
-									if psoundtry "$SOUND$i"; then
-										good=true
-									fi
-								done
-								;;
-						esac
+						for X in $allidentifiers; do
+							if [ "$X" = "${TITLE#//}" ]; then
+								good=true
+							fi
+						done
 						if $good; then
-							echo "$S references existing sound $SOUND but commented out"
-						else
-							echo "$S does not have a sound for ${TITLE#//} yet"
+							good=false
+							case "$COUNT" in
+								0)
+									if psoundtry "$SOUND"; then
+										good=false
+									fi
+									;;
+								*)
+									for i in `seq 1 $COUNT`; do
+										if psoundtry "$SOUND$i"; then
+											good=true
+										fi
+									done
+									;;
+							esac
+							if $good; then
+								echo "$S references existing sound $SOUND but commented out"
+							else
+								echo "$S does not have a sound for ${TITLE#//} yet"
+							fi
 						fi
 						;;
 					*)

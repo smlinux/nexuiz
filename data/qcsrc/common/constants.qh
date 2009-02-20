@@ -46,6 +46,7 @@ const float TE_CSQC_PICTURE = 100;
 const float TE_CSQC_RACE = 101;
 const float TE_CSQC_SPAWN = 102;
 const float TE_CSQC_ZCURVEPARTICLES = 103;
+const float TE_CSQC_NEXGUNBEAMPARTICLE = 104;
 
 const float RACE_NET_CHECKPOINT_HIT_QUALIFYING = 0; // byte checkpoint, short time, short recordtime, string recordholder
 const float RACE_NET_CHECKPOINT_CLEAR = 1;
@@ -242,6 +243,7 @@ const float STAT_GAMESTARTTIME = 37;
 const float STAT_STRENGTH_FINISHED = 38;
 const float STAT_INVINCIBLE_FINISHED = 39;
 const float STAT_PRESSED_KEYS = 42;
+const float STAT_ALLOW_OLDNEXBEAM = 43; // this stat could later contain some other bits of info, like, more server-side particle config
 const float CTF_STATE_ATTACK = 1;
 const float CTF_STATE_DEFEND = 2;
 const float CTF_STATE_COMMANDER = 3;

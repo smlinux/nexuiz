@@ -1,3 +1,15 @@
+void SendCSQCNexBeamParticle() {
+	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte(MSG_BROADCAST, TE_CSQC_NEXGUNBEAMPARTICLE);
+	
+	WriteCoord(MSG_BROADCAST, w_shotorg_x);
+	WriteCoord(MSG_BROADCAST, w_shotorg_y);
+	WriteCoord(MSG_BROADCAST, w_shotorg_z);
+	WriteCoord(MSG_BROADCAST, trace_endpos_x);
+	WriteCoord(MSG_BROADCAST, trace_endpos_y);
+	WriteCoord(MSG_BROADCAST, trace_endpos_z);
+}
+
 void W_Nex_Attack (void)
 {
 	float flying;
@@ -11,10 +23,9 @@ void W_Nex_Attack (void)
 	if(yoda && flying)
 		announce(self, "announcer/male/yoda.wav");
 
-	pointparticles(particleeffectnum("nex_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
-
-	// beam effect
-	trailparticles(world, particleeffectnum("nex_beam"), w_shotorg, trace_endpos);
+	//beam and muzzle flash done on client
+	SendCSQCNexBeamParticle();
+	
 	// flash and burn the wall
 	if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
 		Damage_DamageInfo(trace_endpos, cvar("g_balance_nex_damage"), 0, 0, cvar("g_balance_nex_force") * w_shotdir, WEP_NEX);
