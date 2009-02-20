@@ -1,4 +1,4 @@
-CHANGES since 2.4.2 to r5703:
+CHANGES since 2.4.2 to r5904:
 compat-q3a: switch crylink/hagar, as crylink is closer to BFG and hagar is closer to Plasmagun
 game: airshot announcer
 game: all projectiles are clientside now, massive bandwidth reduction
