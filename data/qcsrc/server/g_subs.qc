@@ -568,6 +568,11 @@ void LODmodel_attach()
 		}
 	}
 
+	if(cvar("loddebug") < 0)
+	{
+		self.lodmodel1 = self.lodmodel2 = ""; // don't even initialize
+	}
+
 	if(self.lodmodel1 != "")
 	{
 		vector mi, ma;
