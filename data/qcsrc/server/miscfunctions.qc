@@ -705,6 +705,8 @@ float g_pickup_armorsmall;
 float g_pickup_armorsmall_max;
 float g_pickup_armormedium;
 float g_pickup_armormedium_max;
+float g_pickup_armorbig;
+float g_pickup_armorbig_max;
 float g_pickup_armorlarge;
 float g_pickup_armorlarge_max;
 float g_pickup_healthsmall;
@@ -1058,6 +1060,8 @@ void readlevelcvars(void)
 	g_pickup_armorsmall_max            = cvar("g_pickup_armorsmall_max");
 	g_pickup_armormedium               = cvar("g_pickup_armormedium");
 	g_pickup_armormedium_max           = cvar("g_pickup_armormedium_max");
+	g_pickup_armorbig                  = cvar("g_pickup_armorbig");
+	g_pickup_armorbig_max              = cvar("g_pickup_armorbig_max");
 	g_pickup_armorlarge                = cvar("g_pickup_armorlarge");
 	g_pickup_armorlarge_max            = cvar("g_pickup_armorlarge_max");
 	g_pickup_healthsmall               = cvar("g_pickup_healthsmall");

@@ -321,6 +321,20 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/items/g_a25.md3"
 */
 
+/*QUAKED item_armor_big (.4 .8 .4) (-30 -30 0) (30 30 32) FLOATING
+Big Armor (default 50 armor points)
+-------- KEYS --------
+respawntime: time till it respawns (default: 20)
+armorvalue: amount of armor it gives (default: 50 (g_pickup_armorlarge))
+max_armorvalue: max of armor it increases to (default: 999 (g_pickup_armorlarge_max))
+team: out of items with the same value here, only one (random one) will spawn. Useful to put multiple items on one spot.
+cnt: weight of this item for random selection using "team". Set to a lower value for items you want to see less likely.
+-------- SPAWNFLAGS --------
+FLOATING: the item will float in air, instead of aligning to the floor by falling
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/items/g_a50.md3"
+*/
+
 /*QUAKED item_armor_medium (.4 .8 .4) (-30 -30 0) (30 30 32) FLOATING
 Medium Armor (default 25 armor points)
 -------- KEYS --------
