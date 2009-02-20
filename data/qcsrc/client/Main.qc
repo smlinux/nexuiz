@@ -661,6 +661,8 @@ void Ent_ClientData()
 		angles_held_y = ReadAngle();
 		angles_held_z = 0;
 	}
+	else
+		angles_held_status = 0;
 	
 	if(newspectatee_status != spectatee_status)
 	{

@@ -2,6 +2,8 @@ entity porto;
 vector polyline[16];
 float trace_dphitcontents;
 float Q3SURFACEFLAG_SLICK = 2; // low friction surface
+float DPCONTENTS_SOLID = 1; // blocks player movement
+float DPCONTENTS_BODY = 32; // blocks player movement
 float DPCONTENTS_PLAYERCLIP = 256; // blocks player movement
 void Porto_Draw()
 {
@@ -29,7 +31,7 @@ void Porto_Draw()
 	for(;;)
 	{
 		dir = nextdir;
-		traceline(p, p + 65536 * dir, TRUE, world);
+		traceline(p, p + 65536 * dir, TRUE, porto);
 		if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 			return;
 		nextdir = dir - 2 * (dir * trace_plane_normal) * trace_plane_normal; // mirror dir at trace_plane_normal
@@ -94,8 +96,6 @@ void CheckForGamestartChange() {
 	previous_game_starttime = startTime;
 }
 
-float DPCONTENTS_SOLID = 1; // hit a bmodel, not a bounding box
-float DPCONTENTS_BODY = 32; // hit a bounding box, not a bmodel
 void Porto_Init()
 {
 	porto = spawn();

@@ -216,7 +216,6 @@ float w_porto(float req)
 		{
 			if(!self.BUTTON_ATCK2)
 			{
-				msg_entity = self;
 				self.porto_v_angle_held = 0;
 
 				ClientData_Touch(self);
@@ -227,7 +226,6 @@ float w_porto(float req)
 			if(self.BUTTON_ATCK2)
 			{
 				self.porto_v_angle = self.v_angle;
-				msg_entity = self;
 				self.porto_v_angle_held = 1;
 
 				ClientData_Touch(self);
