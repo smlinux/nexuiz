@@ -422,8 +422,6 @@ float next_pingtime;
 #define ALLPLAYERSOUNDS \
 		_VOICEMSG(death) \
 		_VOICEMSG(drown) \
-		_VOICEMSG(fall) \
-		_VOICEMSG(falling) \
 		_VOICEMSG(gasp) \
 		_VOICEMSG(jump) \
 		_VOICEMSG(pain25) \
@@ -433,29 +431,35 @@ float next_pingtime;
 #define ALLVOICEMSGS \
 		_VOICEMSG(attack) \
 		_VOICEMSG(attackinfive) \
-		_VOICEMSG(coverme) \
-		_VOICEMSG(defend) \
-		_VOICEMSG(freelance) \
-		_VOICEMSG(incoming) \
 		_VOICEMSG(meet) \
-		_VOICEMSG(needhelp) \
 		_VOICEMSG(seenflag) \
 		_VOICEMSG(taunt) \
-		_VOICEMSG(teamshoot) \
-		_VOICEMSG(attacking) \
-		_VOICEMSG(defending) \
-		_VOICEMSG(roaming) \
-		_VOICEMSG(affirmative) \
-		_VOICEMSG(negative) \
-		_VOICEMSG(onmyway) \
-		_VOICEMSG(seenenemy) \
-		_VOICEMSG(getflag) \
-		_VOICEMSG(droppedflag) \
-		_VOICEMSG(flagcarriertakingdamage)
+		_VOICEMSG(teamshoot)
+
 #define _VOICEMSG(m) .string playersound_##m;
 ALLPLAYERSOUNDS
 ALLVOICEMSGS
 #undef _VOICEMSG
+
+// reserved sound names for the future (models lack sounds for them):
+//		_VOICEMSG(affirmative) \
+//		_VOICEMSG(attacking) \
+//		_VOICEMSG(defending) \
+//		_VOICEMSG(roaming) \
+//		_VOICEMSG(onmyway) \
+//		_VOICEMSG(droppedflag) \
+//		_VOICEMSG(flagcarriertakingdamage) \
+//		_VOICEMSG(negative) \
+//		_VOICEMSG(seenenemy) \
+//		_VOICEMSG(fall) \
+//		_VOICEMSG(getflag) \
+//		_VOICEMSG(incoming) \
+//		_VOICEMSG(coverme) \
+//		_VOICEMSG(needhelp) \
+//		_VOICEMSG(defend) \
+//		_VOICEMSG(freelance) \
+//		_VOICEMSG(falling) \
+
 string globalsound_fall;
 string globalsound_metalfall;
 string globalsound_step;
