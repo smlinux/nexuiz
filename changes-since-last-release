@@ -159,8 +159,44 @@ menu: wicked skins (7 different)
 menu: blueplastic skin
 misc: +exec benchmark.cfg
 misc: new color codes ^xRGB
-misc: capturing to ogg/theora video (cl_capturevideo_ogg; requires theora and vorbisenc dlls)
 models: new flag model
 models: specop now knows that she is female
 rcon2irc: disconnect fix
 rcon2irc: irc_trigger
+
+engine: Blub's "deflate" extension to the download system. Currently only provides csprogs.dat in deflated form. Compatible in both directions, compression is only done if both client and server use this new code.
+engine: Q3's EF_TELEPORT_BIT added, to skip interpolation for a frame
+engine: Q3BSP: only generate the shadow mesh if on a client. Skip that part on the dedicated server. Reduces load time and memory usage on a dedicated server.
+engine: add a half-baked "commandmode" (currently it has, like messagemode, no history, no line editing)
+engine: added blend and orientation commands for effectinfo.txt (overrides the defaults chosen by the particle type)
+engine: added cvar sv_gameplayfix_gravityunaffectedbyticrate - off by default
+engine: added shader keywords dpshadow and dpnoshadow (no parameters), these modify the shadowing properties of a mesh, regardless of its other properties
+engine: allow cl_maxfps and cl_maxidlefps to be 0, meaning unlimited (like in many QW clients)
+engine: capturing to ogg/theora video (cl_capturevideo_ogg; requires theora and vorbisenc dlls), ogg and avi capturing are now modules in the engine
+engine: cl_demo_mousegrab
+engine: csqc can get bone infos
+engine: cvarlist now accepts wildcards
+engine: demo recording: stuff csprogs.dat files into .dem files so demos can always be played back
+engine: disable DGA mouse by default
+engine: effectinfo: add "stretchfactor"
+engine: fix a possible bug with zym model animation (this looks like a typo, and fixing it makes the shotgun anim in nexuiz appear more consistent)
+engine: fix bugs with q1bsp/hlbsp rotating submodels
+engine: fix memory corruption when using trailparticles with an effect that has a dlight
+engine: fixed crash with ATI drivers on shutdown or vid_restart
+engine: fixed pointsound in csqc
+engine: fixed several collision bug regarding non solid players
+engine: get rid of skinframe loading spam on dedicated servers
+engine: if in menu, make con_closeontoggleconsole.integer also enable the toggleconsole key
+engine: implemented occlusion query support on corona rendering, this enables coronas to fade according to the percentage of occluded pixels around the light origin, giving a more realistic corona behavior
+engine: implemented zpass shadowing, not used yet
+engine: mod_q3bsp_nolightmaps: do not load lightmaps, use the bad q3map2-written vertex lighting instead (you have been warned). Mostly useful for maps with HUUUUGE lightmaps on low-end systems.
+engine: model_brush: use the same tesselation number for patches in the same LOD group (q3map2 writes the same mins/maxs for any patch inside a LOD group, and this fact is used for identifying LOD groups)
+engine: new command by terrencehill: "status 1" and "status 2" as alternate, more readable status displays. "status" unchanged.
+engine: new tcmod: "tcmod page <width> <height> <time>", as poor man's animmap alternative (stores all frames in ONE image in a <width>x<height> grid, and switches to the next frame every <time> seconds)
+engine: open client sockets before video starts, so that the Windows Firewall prompt will occur before video starts (it tends to screw up graphics contexts otherwise)
+engine: r_shadows 2: cast shadows always DOWN, ignore level lighting
+engine: r_showsurfaces 3 "eeepc mode"
+engine: showtopspeed variable added
+engine: snd_spatialization_control: earphone friendly mode, reduces spatialization for distant objects
+engine: sv_status_privacy", "0", "do not show IP addresses in 'status' replies to clients
+engine: vid_netwmfullscreen, optional fullscreen mode for linux/glx allowing to alt-tab away from the game
