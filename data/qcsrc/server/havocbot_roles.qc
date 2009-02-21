@@ -76,12 +76,14 @@ float havocbot_pickupevalfunc(entity item)
 		rating = rating + max(0, 1 - self.ammo_cells / g_pickup_cells_max);
 
 	if (item.armorvalue)
-	if (self.armorvalue < item.max_armorvalue)
-		rating = rating + max(0, 1 - self.armorvalue / item.max_armorvalue);
+	if (self.armorvalue < item.max_armorvalue * 0.5)
+		rating = rating + max(0, 1 - self.armorvalue / (item.max_armorvalue * 0.5));
 
 	if (item.health)
-	if (self.health < item.max_health)
-		rating = rating + max(0, 1 - self.health / item.max_health);
+	if (self.health < item.max_health * 0.5)
+	{
+		rating = rating + max(0, 1 - self.health / (item.max_health * 0.5));
+	}
 
 	// TODO: if the item is not recognized then default to item.bot_pickupevalfunc(self, item);
 		
@@ -199,7 +201,7 @@ void havocbot_goalrating_items(float ratingscale, vector org, float sradius)
 
 		if(rating > 0)
 			navigation_routerating(head, rating * ratingscale, 2000);
-			
+
 		head = head.chain;
 	}
 };
@@ -714,7 +716,7 @@ void havocbot_role_dm()
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
 		navigation_goalrating_start();
 		havocbot_goalrating_items(10000, self.origin, 10000);
-		havocbot_goalrating_enemyplayers(5000, self.origin, 20000);
+		havocbot_goalrating_enemyplayers(5000, self.origin, 10000);
 		//havocbot_goalrating_waypoints(1, self.origin, 1000);
 		navigation_goalrating_end();
 	}

@@ -1,9 +1,12 @@
-
 .void() havocbot_role;
 void() havocbot_chooserole;
 .float havocbot_keyboardskill;
 .float facingwalltime, ignoregoaltime;
 .entity ignoregoal;
+
+#ifdef DEBUG_BOT_GOALSTACK
+void debuggoalstack();
+#endif
 
 vector havocbot_dodge()
 {
@@ -132,6 +135,123 @@ void havocbot_keyboard_movement(vector destorg)
 	self.movement = self.movement + (keyboard - self.movement) * blend;
 };
 
+.entity bot_lastseengoal;
+.float bot_timelastseengoal;
+.float bot_canruntogoal;
+void havocbot_bunnyhop(vector dir)
+{
+	local float distance;
+	local vector deviation;
+
+	if(self.goalcurrent.classname == "player")
+		return;
+
+	if(self.bot_lastseengoal != self.goalcurrent && !(self.aistatus & AI_STATUS_RUNNING))
+	{
+		self.bot_canruntogoal = 0;
+		self.bot_timelastseengoal = 0;
+	}
+
+	distance = vlen(self.origin - self.goalcurrent.origin);
+
+	// Run only to visible goals
+	traceline(self.origin + self.view_ofs , self.goalcurrent.origin, TRUE, world);
+	if(self.flags & FL_ONGROUND)
+	if(trace_fraction == 1)
+	{
+			self.bot_lastseengoal = self.goalcurrent;
+
+			// seen it before
+			if(self.bot_timelastseengoal)
+			{
+				// for a period of time
+				if(time - self.bot_timelastseengoal > cvar("bot_ai_bunnyhop_firstjumpdelay"))
+				{
+					local float checkdistance;
+					checkdistance = TRUE;
+
+					// don't run if it is too close
+					if(self.bot_canruntogoal==0)
+					{
+						if(distance > cvar("bot_ai_bunnyhop_startdistance"))
+							self.bot_canruntogoal = 1;
+						else	
+							self.bot_canruntogoal = -1;
+					}
+
+					if(self.bot_canruntogoal != 1)
+						return;
+
+					if(self.aistatus & AI_STATUS_ROAMING)
+					if(self.goalcurrent.classname=="waypoint")
+					if(fabs(self.goalcurrent.origin_z - self.origin_z) < self.maxs_z - self.mins_z)
+					if(self.goalstack01!=world)
+					{
+						deviation = self.goalstack01.origin - (self.origin + self.view_ofs);
+						deviation = vectoangles(deviation) - self.v_angle;
+						while (deviation_y < -180) deviation_y = deviation_y + 360;
+						while (deviation_y > 180) deviation_y = deviation_y - 360;
+
+						if(deviation_y < 20 && deviation_y > -20)
+						if(distance < vlen(self.origin - self.goalstack01.origin))
+						if(fabs(self.goalstack01.origin_z - self.goalcurrent.origin_z) < self.maxs_z - self.mins_z)
+						{
+							traceline(self.origin + self.view_ofs , self.goalstack01.origin, TRUE, world);
+							if(trace_fraction==1)
+							{
+								checkdistance = FALSE;
+							}
+						}
+					}
+
+					if(checkdistance)
+					{
+						self.aistatus &~= AI_STATUS_RUNNING;
+						if(distance > cvar("bot_ai_bunnyhop_stopdistance"))
+							self.BUTTON_JUMP = TRUE;
+					}
+					else
+					{
+						self.aistatus |= AI_STATUS_RUNNING;
+						self.BUTTON_JUMP = TRUE;
+					}
+				}
+			}
+			else
+			{
+				self.bot_timelastseengoal = time;
+			}
+	}
+	else
+	{
+		self.bot_timelastseengoal = 0;
+	}
+
+	// Release jump button
+	if(self.flags & FL_ONGROUND == 0)
+	{
+		if(self.velocity_z < 0)
+			self.BUTTON_JUMP = FALSE;
+
+		// Strafe 
+		local float maxspeed;
+		maxspeed = cvar("sv_maxspeed");
+
+		if(self.aistatus & AI_STATUS_RUNNING)
+		if(vlen(self.velocity)>maxspeed)
+		{
+			deviation = vectoangles(dir) - self.v_angle;
+			while (deviation_y < -180) deviation_y = deviation_y + 360;
+			while (deviation_y > 180) deviation_y = deviation_y - 360;
+
+			if ( deviation_y > 2 )
+				self.movement_y = maxspeed;
+			if ( deviation_y < -2 )
+				self.movement_y = maxspeed * -1;
+		}
+	}
+};
+
 //.float havocbotignoretime;
 //.vector bot_dodgevector;
 //.float bot_dodgevector_time;
@@ -182,8 +302,10 @@ void havocbot_movetogoal()
 		return;
 	}
 
-//	te_wizspike(self.goalcurrent.origin);
-//	te_lightning2(world, self.origin, self.goalcurrent.origin);
+#ifdef DEBUG_BOT_GOALSTACK
+	debuggoalstack();
+#endif
+//	te_lightning2(world, self.goalcurrent.origin + self.goalcurrent.mins, self.goalcurrent.origin + self.goalcurrent.maxs);
 
 	m1 = self.goalcurrent.origin + self.goalcurrent.mins;
 	m2 = self.goalcurrent.origin + self.goalcurrent.maxs;
@@ -313,7 +435,6 @@ void havocbot_movetogoal()
 	//dir = self.bot_dodgevector;
 	//if (self.bot_dodgevector_jumpbutton)
 	//	self.BUTTON_JUMP = 1;
-
 	self.movement_x = dir * v_forward * maxspeed;
 	self.movement_y = dir * v_right * maxspeed;
 	self.movement_z = dir * v_up * maxspeed;
@@ -321,6 +442,11 @@ void havocbot_movetogoal()
 	// Emulate keyboard interface
 	if (skill < 10)
 		havocbot_keyboard_movement(destorg);
+
+	// Bunnyhop!
+//	if(self.aistatus & AI_STATUS_ROAMING)
+	if(skill >= cvar("bot_ai_bunnyhop_skilloffset"))
+		havocbot_bunnyhop(dir);
 
 	if ((dir * v_up) >= cvar("sv_jumpvelocity")*0.5 && (self.flags & FL_ONGROUND)) self.BUTTON_JUMP=1;
 	if (((dodge * v_up) > 0) && random()*frametime >= 0.2*bound(0,(10-skill)*0.1,1)) self.BUTTON_JUMP=TRUE;
@@ -650,6 +776,9 @@ void havocbot_ai()
 	lag_update();
 	if (self.bot_aimtarg)
 	{
+		self.aistatus |= AI_STATUS_ATTACKING;
+		self.aistatus &~= AI_STATUS_ROAMING;
+
 		weapon_action(self.weapon, WR_AIM);
 		if (cvar("bot_nofire") || IS_INDEPENDENT_PLAYER(self))
 		{
@@ -659,13 +788,16 @@ void havocbot_ai()
 	}
 	else if (self.goalcurrent)
 	{
+		self.aistatus |= AI_STATUS_ROAMING;
+		self.aistatus &~= AI_STATUS_ATTACKING;
+
 		local vector now,v,next;//,heading;
 		local float distance,skillblend,distanceblend,blend;
 		next = now = self.goalcurrent.origin - (self.origin + self.view_ofs);
 		distance = vlen(now);
 		//heading = self.velocity;
 		//dprint(self.goalstack01.classname,etos(self.goalstack01),"\n");
-		if(self.goalstack01 != self && self.goalstack01 != world)
+		if(self.goalstack01 != self && self.goalstack01 != world && self.aistatus & AI_STATUS_RUNNING == 0)
 			next = self.goalstack01.origin - (self.origin + self.view_ofs);
 		skillblend=bound(0,(skill-2.5)*0.5,1); //lower skill player can't preturn
 		distanceblend=bound(0,distance/cvar("bot_ai_keyboard_distance"),1);
@@ -694,3 +826,69 @@ void havocbot_setupbot()
 	self.havocbot_keyboardskill=random()-0.5;
 	havocbot_chooserole();
 }
+
+
+#ifdef DEBUG_BOT_GOALSTACK
+
+.float goalcounter;
+.vector lastposition;
+
+// Debug the goal stack visually
+void debuggoalstack()
+{
+	local entity target;
+	local vector org;
+
+	if(self.goalcounter==0)target=self.goalcurrent;
+	else if(self.goalcounter==1)target=self.goalstack01;
+	else if(self.goalcounter==2)target=self.goalstack02;
+	else if(self.goalcounter==3)target=self.goalstack03;
+	else if(self.goalcounter==4)target=self.goalstack04;
+	else if(self.goalcounter==5)target=self.goalstack05;
+	else if(self.goalcounter==6)target=self.goalstack06;
+	else if(self.goalcounter==7)target=self.goalstack07;
+	else if(self.goalcounter==8)target=self.goalstack08;
+	else if(self.goalcounter==9)target=self.goalstack09;
+	else if(self.goalcounter==10)target=self.goalstack10;
+	else if(self.goalcounter==11)target=self.goalstack11;
+	else if(self.goalcounter==12)target=self.goalstack12;
+	else if(self.goalcounter==13)target=self.goalstack13;
+	else if(self.goalcounter==14)target=self.goalstack14;
+	else if(self.goalcounter==15)target=self.goalstack15;
+	else if(self.goalcounter==16)target=self.goalstack16;
+	else if(self.goalcounter==17)target=self.goalstack17;
+	else if(self.goalcounter==18)target=self.goalstack18;
+	else if(self.goalcounter==19)target=self.goalstack19;
+	else if(self.goalcounter==20)target=self.goalstack20;
+	else if(self.goalcounter==21)target=self.goalstack21;
+	else if(self.goalcounter==22)target=self.goalstack22;
+	else if(self.goalcounter==23)target=self.goalstack23;
+	else if(self.goalcounter==24)target=self.goalstack24;
+	else if(self.goalcounter==25)target=self.goalstack25;
+	else if(self.goalcounter==26)target=self.goalstack26;
+	else if(self.goalcounter==27)target=self.goalstack27;
+	else if(self.goalcounter==28)target=self.goalstack28;
+	else if(self.goalcounter==29)target=self.goalstack29;
+	else if(self.goalcounter==30)target=self.goalstack30;
+	else if(self.goalcounter==31)target=self.goalstack31;
+
+	if(target==world)
+	{
+		self.goalcounter = 0;
+		self.lastposition='0 0 0';
+		return;
+	}
+
+	if(self.lastposition=='0 0 0')
+		org = self.origin;
+	else
+		org = self.lastposition;
+
+
+	te_lightning2(world, org, target.origin);
+	self.lastposition = target.origin;
+
+	self.goalcounter++;
+}
+
+#endif
