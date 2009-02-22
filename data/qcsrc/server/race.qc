@@ -152,8 +152,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 						bprint(e.netname, "^7 set the all-time fastest lap record with ", mmsss(t), "\n");
 						db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/time"), ftos(t));
 						db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"), e.netname);
-						GameLogEcho(strcat(":recordset:", ftos(e.playerid), ":", ftos(t / 10)));
-						stuffcmd(e, strcat("//RACE RECORD SET ", mmsss(t), "\n"));
+						write_recordmarker(e, time - t/10, t/10);
 					}
 					else if(t < grecordtime)
 					{
@@ -163,8 +162,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 							bprint(e.netname, "^7 broke ", grecordholder, "^7's all-time fastest lap record with ", mmsss(t), "\n");
 						db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/time"), ftos(t));
 						db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"), e.netname);
-						GameLogEcho(strcat(":recordset:", ftos(e.playerid), ":", ftos(t / 10)));
-						stuffcmd(e, strcat("//RACE RECORD SET ", mmsss(t), "\n"));
+						write_recordmarker(e, time - t/10, t/10);
 					}
 					else
 					{

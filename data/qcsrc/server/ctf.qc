@@ -427,7 +427,7 @@ void FlagTouch()
 		{
 			return;
 		}
-		if(player_count - currentbots <= 1) // at most one human
+		if(cvar("g_ctf_captimerecord_allow_assisted") || player_count - currentbots <= 1) // at most one human
 		{
 			t = time - other.flagcarried.flagpickuptime;
 			s = ftos_decimals(t, 2);
@@ -444,7 +444,7 @@ void FlagTouch()
 				flagcaptimerecord = t;
 				db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time"), ftos(t));
 				db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), h1);
-				GameLogEcho(strcat(":recordset:", ftos(other.playerid), ":", ftos(t)));
+				write_recordmarker(other, time - t, t);
 			}
 			else if (t < flagcaptimerecord)
 			{
@@ -452,7 +452,7 @@ void FlagTouch()
 				flagcaptimerecord = t;
 				db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time"), ftos(t));
 				db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), h1);
-				GameLogEcho(strcat(":recordset:", ftos(other.playerid), ":", ftos(t)));
+				write_recordmarker(other, time - t, t);
 			}
 			else
 			{

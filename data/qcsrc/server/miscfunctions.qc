@@ -2004,3 +2004,15 @@ void zcurveparticles_from_tracetoss(float effectno, vector start, vector end, ve
 	end_dz = vlen(vecxy) / vlen(velxy) * vel_z - (end_z - start_z);
 	zcurveparticles(effectno, start, end, end_dz, vlen(vel));
 }
+
+string GetGametype(); // g_world.qc
+void write_recordmarker(entity pl, float tstart, float dt)
+{
+	GameLogEcho(strcat(":recordset:", ftos(pl.playerid), ":", ftos(dt / 10)));
+
+	// also write a marker into demo files for demotc-race-record-extractor to find
+	stuffcmd(pl,
+		strcat(
+			strcat("//", strconv(2, 0, 0, GetGametype()), " RECORD SET ", mmsss(dt * 10)),
+			" ", ftos(tstart), " ", ftos(dt), "\n"));
+}
