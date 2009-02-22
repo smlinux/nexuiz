@@ -15,6 +15,7 @@ demotc.pl grep "$d" "$PATTERN" | while IFS=" " read -r timecode result; do
 	timecode=${timecode%:}
 	result=${result#\"}
 	result=${result%\"}
+	result=${result%% *}
 
 	echo "Possible record found at $timecode: $result, extracting..."
 
