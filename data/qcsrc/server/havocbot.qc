@@ -146,6 +146,9 @@ void havocbot_bunnyhop(vector dir)
 	if(self.goalcurrent.classname == "player")
 		return;
 
+	if(self.aistatus & AI_STATUS_DANGER_AHEAD)
+		return;
+
 	if(self.bot_lastseengoal != self.goalcurrent && !(self.aistatus & AI_STATUS_RUNNING))
 	{
 		self.bot_canruntogoal = 0;
@@ -305,7 +308,6 @@ void havocbot_movetogoal()
 #ifdef DEBUG_BOT_GOALSTACK
 	debuggoalstack();
 #endif
-//	te_lightning2(world, self.goalcurrent.origin + self.goalcurrent.mins, self.goalcurrent.origin + self.goalcurrent.maxs);
 
 	m1 = self.goalcurrent.origin + self.goalcurrent.mins;
 	m2 = self.goalcurrent.origin + self.goalcurrent.maxs;
@@ -353,63 +355,61 @@ void havocbot_movetogoal()
 
 			// avoiding dangers and obstacles
 			// TODO: don't make this check every frame
-			if(self.flags & FL_ONGROUND)
-			{
-				local vector dst_ahead, dst_down;
-				dst_ahead = self.origin + self.view_ofs + (self.velocity * 0.3);
-				dst_down = dst_ahead + '0 0 -1500';				
-				
-				traceline(self.origin + self.view_ofs , dst_ahead, TRUE, world);
+			local vector dst_ahead, dst_down;
+			dst_ahead = self.origin + self.view_ofs + (self.velocity * 0.32);
+			dst_down = dst_ahead + '0 0 -1500';				
+			
+			traceline(self.origin + self.view_ofs , dst_ahead, TRUE, world);
 
-				// Check head-banging against walls
-				if(vlen(self.origin + self.view_ofs - trace_endpos) < 2)
+			// Check head-banging against walls
+			if(vlen(self.origin + self.view_ofs - trace_endpos) < 2)
+			{
+				if(self.facingwalltime && time > self.facingwalltime)
 				{
-					if(self.facingwalltime && time > self.facingwalltime)
-					{
-						self.ignoregoal = self.goalcurrent;
-						self.ignoregoaltime = time + cvar("bot_ai_ignoregoal_timeout");
-						navigation_poproute();
-					}
-					else
-					{
-						self.facingwalltime = time + 0.05;
-					}
+					self.ignoregoal = self.goalcurrent;
+					self.ignoregoaltime = time + cvar("bot_ai_ignoregoal_timeout");
+					navigation_poproute();
 				}
 				else
 				{
-					self.facingwalltime = 0;
-
-					if(self.ignoregoal != world && time > self.ignoregoaltime)
-					{
-						self.ignoregoal = world;
-						self.ignoregoaltime = 0;
-					}
+					self.facingwalltime = time + 0.05;
 				}
-			
-				// Check for water/slime/lava and edges
-				if(trace_fraction == 1){
-					traceline(dst_ahead , dst_down, TRUE, world);
-					//	te_lightning2(world, self.origin, dst_ahead);	// Draw "ahead" look 
-					s = pointcontents(trace_endpos + '0 0 1');
-					if (s != CONTENT_SOLID)
-					if (s == CONTENT_LAVA || s == CONTENT_SLIME)
-						evadelava = normalize(self.velocity) * -1;
-					else if (s == CONTENT_SKY)
-						evadeobstacle = normalize(self.velocity) * -1;
-					else if (tracebox_hits_trigger_hurt(dst_ahead, self.mins, self.maxs, trace_endpos))
+			}
+			else
+			{
+				self.facingwalltime = 0;
+
+				if(self.ignoregoal != world && time > self.ignoregoaltime)
+				{
+					self.ignoregoal = world;
+					self.ignoregoaltime = 0;
+				}
+			}
+		
+			// Check for water/slime/lava and edges
+			self.aistatus &~= AI_STATUS_DANGER_AHEAD;
+			if(trace_fraction == 1){
+				traceline(dst_ahead , dst_down, TRUE, world);
+				//	te_lightning2(world, self.origin, dst_ahead);	// Draw "ahead" look 
+				s = pointcontents(trace_endpos + '0 0 1');
+				if (s != CONTENT_SOLID)
+				if (s == CONTENT_LAVA || s == CONTENT_SLIME)
+					evadelava = normalize(self.velocity) * -1;
+				else if (s == CONTENT_SKY)
+					evadeobstacle = normalize(self.velocity) * -1;
+				else if (tracebox_hits_trigger_hurt(dst_ahead, self.mins, self.maxs, trace_endpos))
+				{
+					//	te_lightning2(world, dst_ahead, dst_down);	// Draw "downwards" look
+					// if ain't a safe goal with "holes" (like the soylent jumpad)
+					if(!boxesoverlap(dst_ahead - self.view_ofs + self.mins, dst_ahead - self.view_ofs + self.maxs, 
+							self.goalcurrent.absmin, self.goalcurrent.absmax))
 					{
-						//	te_lightning2(world, dst_ahead, dst_down);	// Draw "downwards" look
-						// if ain't a safe goal with "holes" (like the soylent jumpad)
-						if(!boxesoverlap(dst_ahead - self.view_ofs + self.mins, dst_ahead - self.view_ofs + self.maxs, 
-								self.goalcurrent.absmin, self.goalcurrent.absmax))
-						{
-							// Remove dangerous dynamic goals from stack
-							if (self.goalcurrent.classname == "player" || self.goalcurrent.classname == "droppedweapon")
-								navigation_poproute();
-							// try to stop
-							flatdir = '0 0 0';
-							evadeobstacle = normalize(self.velocity) * -1;
-						}
+						// Remove dangerous dynamic goals from stack
+						if (self.goalcurrent.classname == "player" || self.goalcurrent.classname == "droppedweapon")
+							navigation_poproute();
+						// try to stop
+						flatdir = '0 0 0';
+						evadeobstacle = normalize(self.velocity) * -1;
 					}
 				}
 			}
@@ -418,6 +418,9 @@ void havocbot_movetogoal()
 			evadeobstacle_z = 0;
 			evadelava_z = 0;
 			makevectors(self.v_angle_y * '0 1 0');
+
+			if(evadeobstacle!='0 0 0'||evadelava!='0 0 0')
+				self.aistatus |= AI_STATUS_DANGER_AHEAD;
 		}
 
 		dodge = havocbot_dodge();

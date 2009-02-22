@@ -1,7 +1,8 @@
 .float aistatus;
-float AI_STATUS_ROAMING		= 1;
-float AI_STATUS_ATTACKING	= 2;
-float AI_STATUS_RUNNING		= 4;
+float AI_STATUS_ROAMING			= 1;	// Bot is just crawling the map. No enemies at sight
+float AI_STATUS_ATTACKING		= 2;	// There are enemies at sight
+float AI_STATUS_RUNNING			= 4;	// Bot is bunny hopping
+float AI_STATUS_DANGER_AHEAD	= 8;	// There is lava/slime/abism ahead
 
 .string netname_freeme;
 
