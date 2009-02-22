@@ -735,11 +735,11 @@ void spawnfunc_item_flag_team1()
 	}
 	self.netname = "^1RED^7 flag";
 	self.target = "###item###";
-	self.skin = 0;
+	self.skin = cvar("g_ctf_flag_red_skin");
 	if(self.spawnflags & 1)
 		self.noalign = 1;
 	if (!self.model)
-		self.model = cvar_string("g_ctf_flag_mdl_red");
+		self.model = cvar_string("g_ctf_flag_red_model");
 	if (!self.noise)
 		self.noise = "ctf/take.wav";
 	if (!self.noise1)
@@ -833,11 +833,11 @@ void spawnfunc_item_flag_team2()
 	}
 	self.netname = "^4BLUE^7 flag";
 	self.target = "###item###";
-	self.skin = 1;
+	self.skin = cvar("g_ctf_flag_blue_skin");
 	if(self.spawnflags & 1)
 		self.noalign = 1;
 	if (!self.model)
-		self.model = cvar_string("g_ctf_flag_mdl_blue");
+		self.model = cvar_string("g_ctf_flag_blue_model");
 	if (!self.noise)
 		self.noise = "ctf/take.wav";
 	if (!self.noise1)
