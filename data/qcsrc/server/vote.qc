@@ -497,7 +497,7 @@ void VoteStop(entity stopper) {
 	if(stopper == votecaller) {
 		// no wait for next vote so you can correct your vote
 		if(votecaller) {
-			votecaller.vote_next = 0;
+			votecaller.vote_next = time + cvar("sv_vote_stop");;
 		}
 	}
 	VoteReset();
