@@ -5,5 +5,5 @@ case "$(uname -m)" in
   *)		executable="nexuiz-linux-686-dedicated" ;;
 esac
 
-cd `dirname "${0}"`
+cd "`dirname "${0}"`"
 exec ./${executable} +exec server.cfg "${@}"

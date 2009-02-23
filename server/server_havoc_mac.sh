@@ -1,1 +1,6 @@
-#!/bin/shexecutable="nexuiz-osx-dedicated"cd `dirname "${0}"`exec ./${executable} -game havoc +exec server.cfg "${@}"
+#!/bin/sh
+
+executable="nexuiz-osx-dedicated"
+
+cd "`dirname "${0}"`"
+exec ./${executable} -game havoc +exec server.cfg "${@}"
