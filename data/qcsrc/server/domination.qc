@@ -270,9 +270,9 @@ void dom_controlpoint_setup()
 		self.wait = 5;
 
 	if(!self.t_width)
-		self.t_width = 0.1; // frame animation rate
+		self.t_width = 0.02; // frame animation rate
 	if(!self.t_length)
-		self.t_length = 119; // maximum frame
+		self.t_length = 239; // maximum frame
 
 	self.think = dompointthink;
 	self.nextthink = time;
@@ -497,7 +497,9 @@ void spawnfunc_dom_controlpoint()
 
 	//if(!self.glow_size)
 	//	self.glow_size = cvar("g_domination_point_glow");
-	self.effects = self.effects | EF_FULLBRIGHT | EF_LOWPRECISION;
+	self.effects = self.effects | EF_LOWPRECISION;
+	if (cvar("g_domination_point_fullbright"))
+		self.effects |= EF_FULLBRIGHT;
 };
 
 // code from here on is just to support maps that don't have control point and team entities
