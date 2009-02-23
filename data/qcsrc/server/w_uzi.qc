@@ -22,8 +22,7 @@ void W_Uzi_Attack (float deathtype)
 		else
 			self.ammo_nails = self.ammo_nails - cvar("g_balance_uzi_sustained_ammo");
 	}
-	W_SetupShot (self, '25 5.5 -8', TRUE, 0, "weapons/uzi_fire.wav");
-	//W_SetupShot (self, '25 8 -8', TRUE, 0, "weapons/uzi_fire.wav"); // TODO: move model to the right a little
+	W_SetupShot (self, '23 8 -9.5', TRUE, 0, "weapons/uzi_fire.wav");
 	if (!g_norecoil)
 	{
 		self.punchangle_x = random () - 0.5;
@@ -42,13 +41,12 @@ void W_Uzi_Attack (float deathtype)
 
 	// muzzle flash for 1st person view
 	flash = spawn();
-	setorigin(flash, '53 5 0');
+	setorigin(flash, '5 0 0');
 	setmodel(flash, "models/uziflash.md3"); // precision set below
-	setattachment(flash, self.weaponentity, "bone01");
+	setattachment(flash, self.weaponentity, "bone02");
 	flash.owner = self;
 	flash.viewmodelforclient = self;
 	flash.customizeentityforclient = CL_Weaponentity_CustomizeEntityForClient;
-	flash.scale = 1.2;
 	//SUB_SetFade(flash, time + 0.06, 0);
 	flash.think = W_Uzi_Flash_Go;
 	flash.nextthink = time + 0.02;

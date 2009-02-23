@@ -66,7 +66,7 @@ void W_Crylink_Attack (void)
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_primary_ammo");
 
-	W_SetupShot (self, '25 8 -8', FALSE, 2, "weapons/crylink_fire.wav");
+	W_SetupShot (self, '23 8 -10', FALSE, 2, "weapons/crylink_fire.wav");
 	forward = v_forward;
 	right = v_right;
 	up = v_up;

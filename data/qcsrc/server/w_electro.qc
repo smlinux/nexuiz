@@ -72,7 +72,7 @@ void W_Electro_Attack()
 {
 	local entity proj;
 
-	W_SetupShot (self, '25 8 -8', FALSE, 2, "weapons/electro_fire.wav");
+	W_SetupShot (self, '24 8 -9.5', FALSE, 2, "weapons/electro_fire.wav");
 
 	pointparticles(particleeffectnum("electro_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 

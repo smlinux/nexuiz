@@ -198,8 +198,7 @@ void W_Rocket_Attack (void)
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_rocketlauncher_ammo");
 
-	W_SetupShot (self, '34.0 8.5 -11.0', FALSE, 5, "weapons/rocket_fire.wav");
-	//W_SetupShot (self, '25 8 -8', FALSE, 5, "weapons/rocket_fire.wav"); // TODO: move model to the right a little
+	W_SetupShot (self, '27.0 8 -10.0', FALSE, 5, "weapons/rocket_fire.wav");
 	pointparticles(particleeffectnum("rocketlauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
 	missile = spawn ();
@@ -241,15 +240,14 @@ void W_Rocket_Attack (void)
 
 	// muzzle flash for 1st person view
 	flash = spawn ();
-	flash.scale = 1.2;
-	flash.angles_z = 180;
+	flash.angles_z = flash.v_angle_z + random() * 180;
 	flash.owner = self;
 	flash.viewmodelforclient = self;
 	flash.customizeentityforclient = CL_Weaponentity_CustomizeEntityForClient;
-	setorigin (flash, '35 8 0');
+	setorigin (flash, '5 0 0');
 	setmodel (flash, "models/flash.md3"); // precision set below
-	setattachment(flash, self.weaponentity, "bone01");
-	SUB_SetFade (flash, time, 0.4);
+	setattachment(flash, self.weaponentity, "bone02");
+	SUB_SetFade (flash, time, 0.1);
 
 	// muzzle flash for 3rd person view
 	flash2 = spawn ();

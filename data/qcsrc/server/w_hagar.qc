@@ -51,8 +51,7 @@ void W_Hagar_Attack (void)
 
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_hagar_primary_ammo");
-	W_SetupShot (self, '25 5 -8', FALSE, 2, "weapons/hagar_fire.wav");
-	//W_SetupShot (self, '25 8 -8', FALSE, 2, "weapons/hagar_fire.wav"); // TODO: move model a little to the right
+	W_SetupShot (self, '22 8 -10', FALSE, 2, "weapons/hagar_fire.wav");
 
 	pointparticles(particleeffectnum("hagar_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 

@@ -36,7 +36,7 @@ void W_HLAC_Attack (void)
     if(self.crouch)
         spread = spread * cvar("g_balance_hlac_primary_spread_crouchmod");
 
-	W_SetupShot (self, '25 8 -8', FALSE, 3, "weapons/lasergun_fire.wav");
+	W_SetupShot (self, '24 8 -11', FALSE, 3, "weapons/lasergun_fire.wav");
 	pointparticles(particleeffectnum("laser_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 	if (!g_norecoil)
 	{
