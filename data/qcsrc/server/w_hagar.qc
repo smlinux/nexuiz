@@ -149,7 +149,7 @@ float w_hagar(float req)
 		if (weapon_prepareattack(1, cvar("g_balance_hagar_secondary_refire")))
 		{
 			W_Hagar_Attack2();
-			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_hagar_secondary_refire"), w_ready);
+			weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_hagar_secondary_refire"), w_ready);
 		}
 	}
 	else if (req == WR_PRECACHE)

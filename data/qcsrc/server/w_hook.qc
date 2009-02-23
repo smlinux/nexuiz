@@ -130,7 +130,7 @@ float w_hook(float req)
 			if (weapon_prepareattack(1, cvar("g_balance_hook_secondary_refire")))
 			{
 				W_Hook_Attack2();
-				weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_hook_secondary_animtime"), w_ready);
+				weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_hook_secondary_animtime"), w_ready);
 			}
 		}
 

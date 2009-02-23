@@ -438,7 +438,7 @@ float w_seeker(float req)
 			if (weapon_prepareattack(1, cvar("g_balance_seeker_flac_refire")))
 			{
 				Seeker_Fire_Flac();
-				weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_seeker_flac_animtime"), w_ready);
+				weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_seeker_flac_animtime"), w_ready);
 			}
 
 	}

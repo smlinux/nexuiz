@@ -109,18 +109,18 @@ float w_uzi(float req)
 	else if (req == WR_THINK)
 	{
 		if (self.BUTTON_ATCK)
-		if (weapon_prepareattack(0, cvar("g_balance_uzi_refire")))
+		if (weapon_prepareattack(0, 0))
 		{
 			self.uzi_bulletcounter = 1;
-			W_Uzi_Attack(WEP_UZI);
+			W_Uzi_Attack(WEP_UZI); // sets attack_finished
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_uzi_sustained_refire"), uzi_fire1_02);
 		}
 		if (self.BUTTON_ATCK2)
-		if (weapon_prepareattack(1, cvar("g_balance_uzi_refire")))
+		if (weapon_prepareattack(1, 0))
 		{
 			self.uzi_bulletcounter = 1;
-			W_Uzi_Attack(WEP_UZI | HITTYPE_SECONDARY);
-			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_uzi_sustained_refire"), w_ready);
+			W_Uzi_Attack(WEP_UZI | HITTYPE_SECONDARY); // sets attack_finished
+			weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_uzi_first_refire"), w_ready);
 		}
 	}
 	else if (req == WR_PRECACHE)

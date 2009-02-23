@@ -96,7 +96,7 @@ float w_laser(float req)
 				if (weapon_prepareattack(0, cvar("g_balance_laser_secondary_refire")))
 				{
 					W_Laser_Attack(TRUE);
-					weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_laser_secondary_animtime"), w_ready);
+					weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_laser_secondary_animtime"), w_ready);
 				}
 			}
 			else

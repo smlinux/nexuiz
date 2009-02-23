@@ -94,12 +94,12 @@ void W_Shotgun_Attack2 (void)
 void shotgun_fire2_03()
 {
 	W_Shotgun_Attack2();
-	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_shotgun_secondary_animtime"), w_ready);
+	weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_shotgun_secondary_animtime"), w_ready);
 }
 void shotgun_fire2_02()
 {
 	W_Shotgun_Attack2();
-	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_shotgun_secondary_animtime"), shotgun_fire2_03);
+	weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_shotgun_secondary_animtime"), shotgun_fire2_03);
 }
 
 void spawnfunc_weapon_shotgun(); // defined in t_items.qc
@@ -123,7 +123,7 @@ float w_shotgun(float req)
 		if (weapon_prepareattack(1, cvar("g_balance_shotgun_secondary_refire")))
 		{
 			W_Shotgun_Attack2();
-			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_shotgun_secondary_animtime"), shotgun_fire2_02);
+			weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_shotgun_secondary_animtime"), shotgun_fire2_02);
 		}
 	}
 	else if (req == WR_PRECACHE)
