@@ -116,6 +116,7 @@ void W_Porto_Touch (void)
 			centerprint(self.owner, "^1In^7-portal created.");
 			self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * norm);
 			self.angles = vectoangles(self.velocity - 2 * trace_plane_normal * (self.velocity * norm));
+			CSQCProjectile(self, TRUE, PROJECTILE_PORTO_BLUE, TRUE); // change type
 		}
 		else
 		{
@@ -123,7 +124,6 @@ void W_Porto_Touch (void)
 			trace_plane_normal = norm;
 			W_Porto_Fail(0);
 		}
-		CSQCProjectile(self, TRUE, PROJECTILE_PORTO_BLUE, TRUE); // change type
 	}
 	else
 	{
