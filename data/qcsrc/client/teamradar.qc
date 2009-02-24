@@ -79,7 +79,6 @@ void draw_teamradar_background(float bg, float fg)
 			fgc = '1 1 1';
 			R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE);
 		}
-		print(vtos(fgc), "\n");
 		if(v_flipped)
 		{
 			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord3), yinvert(mi_pictexcoord3), fgc, fga);
