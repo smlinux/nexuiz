@@ -398,6 +398,7 @@ void Nixnex_ChooseNextWeapon()
 	{
 		if(j == WEP_LASER && g_nixnex_with_laser)
 			continue;
+		e = get_weaponinfo(j);
 		if(!e.weapons) // skip dummies
 			continue;
 		RandomSelection_Add(world, j, 1, 0);
