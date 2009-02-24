@@ -384,7 +384,13 @@ void ShotOrg_Draw2D()
 
 	fs = '1 1 0' * ((coord2d_topright_x - coord2d_topleft_x) / stringwidth(s, FALSE));
 
-	coord2d = coord2d_topleft - '0 1 0' * fs_y;
+	coord2d = coord2d_topleft;
+	if(fs_x < 8)
+	{
+		coord2d_x += (coord2d_topright_x - coord2d_topleft_x) * (1 - 8 / fs_x) * 0.5;
+		fs = '8 8 0';
+	}
+	coord2d_y -= fs_y;
 	coord2d_z = 0;
 	drawstring(coord2d, s, fs, '1 1 1', 1, 0);
 }

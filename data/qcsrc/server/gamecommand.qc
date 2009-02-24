@@ -578,6 +578,7 @@ void GameCommand(string command)
 {
 	float argc;
 	entity client, e;
+	vector v;
 	float entno, i;
 	argc = tokenize_sane(command);
 
@@ -842,11 +843,15 @@ void GameCommand(string command)
 		i = gettagindex(e, argv(3));
 		if(i)
 		{
+			v = gettaginfo(e, i);
 			print("model ", e.model, " frame ", ftos(e.frame), " tag ", argv(3));
 			print(" index = ", ftos(i));
-			print(" vector = ", vtos(gettaginfo(e, i)), "\n");
+			print(" vector = ", vtos(v), "\n");
 			if(argc >= 6)
-				localcmd(strcat(argv(4), vtos(gettaginfo(e, i)), argv(5), "\n"));
+			{
+				v_y = -v_y;
+				localcmd(strcat(argv(4), vtos(v), argv(5), "\n"));
+			}
 		}
 		else
 			print("bone not found\n");
