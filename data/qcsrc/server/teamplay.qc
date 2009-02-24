@@ -404,34 +404,34 @@ void PrintWelcomeMessage(entity pl)
 	}
 
 :normal
-	s = "";
+	modifications = "";
 	if(g_minstagib)
-		s = strcat(s, ", MinstaGib");
+		modifications = strcat(modifications, ", MinstaGib");
 	if(g_nixnex)
-		s = strcat(s, ", NixNex");
+		modifications = strcat(modifications, ", NixNex");
 	if(g_weaponarena)
-		s = strcat(s, ", ", g_weaponarena_list, " Arena");
+		modifications = strcat(modifications, ", ", g_weaponarena_list, " Arena");
 	if(cvar("sv_gravity") < 800)
-		s = strcat(s, ", Low gravity");
+		modifications = strcat(modifications, ", Low gravity");
 	if(g_cloaked)
-		s = strcat(s, ", Cloaked");
+		modifications = strcat(modifications, ", Cloaked");
 	if(g_footsteps)
-		s = strcat(s, ", Steps");
+		modifications = strcat(modifications, ", Steps");
 	if(g_grappling_hook)
-		s = strcat(s, ", Hook");
+		modifications = strcat(modifications, ", Hook");
 	if(g_laserguided_missile)
-		s = strcat(s, ", LG missiles");
+		modifications = strcat(modifications, ", LG missiles");
 	if(g_midair)
-		s = strcat(s, ", Midair");
+		modifications = strcat(modifications, ", Midair");
 	if(g_vampire)
-		s = strcat(s, ", Vampire");
+		modifications = strcat(modifications, ", Vampire");
 	if(g_pinata)
-		s = strcat(s, ", Pinata");
+		modifications = strcat(modifications, ", Pinata");
 	if(g_weapon_stay)
-		s = strcat(s, ", Weapons stay");
+		modifications = strcat(modifications, ", Weapons stay");
 	if(g_bloodloss > 0)
-		s = strcat(s, ", Bloodloss");
-	modifications = substring(s, 2, strlen(s) - 2);
+		modifications = strcat(modifications, ", Bloodloss");
+	modifications = substring(modifications, 2, strlen(modifications) - 2);
 
 	local string versionmessage;
 	versionmessage = GetClientVersionMessage();
