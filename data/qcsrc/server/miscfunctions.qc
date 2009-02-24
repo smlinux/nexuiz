@@ -934,6 +934,16 @@ void readplayerstartcvars()
 	if(start_weapons & WEPBIT_HOOK)
 	{
 		// can't have off-hand hook, if hook weapon is enabled
+
+		// note: if g_grappling_hook is 1, also give some initial cells
+		if(g_grappling_hook)
+		{
+			if(!start_ammo_cells)
+				start_ammo_cells = g_pickup_cells;
+			if(!warmup_start_ammo_cells)
+				warmup_start_ammo_cells = g_pickup_cells;
+		}
+
 		g_grappling_hook = 0;
 	}
 
