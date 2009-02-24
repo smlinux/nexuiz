@@ -53,6 +53,8 @@ vector yinvert(vector v)
 
 void draw_teamradar_background(float bg, float fg)
 {
+	float fga;
+	vector fgc;
 	if(bg > 0)
 	{
 		R_BeginPolygon("", 0);
@@ -66,22 +68,31 @@ void draw_teamradar_background(float bg, float fg)
 	if(fg > 0 && minimapname != "")
 	{
 		if(csqc_flags & CSQC_FLAG_READPICTURE) // not 2.4.2
-			R_BeginPolygon(minimapname, DRAWFLAG_SCREEN | DRAWFLAG_MIPMAP);
-		else
-			R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE);
-		if(v_flipped)
 		{
-			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord3), yinvert(mi_pictexcoord3), '1 1 1', fg);
-			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord2), yinvert(mi_pictexcoord2), '1 1 1', fg);
-			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord1), yinvert(mi_pictexcoord1), '1 1 1', fg);
-			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord0), yinvert(mi_pictexcoord0), '1 1 1', fg);
+			fga = 1;
+			fgc = '1 1 1' * fg;
+			R_BeginPolygon(minimapname, DRAWFLAG_SCREEN | DRAWFLAG_MIPMAP);
 		}
 		else
 		{
-			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord0), yinvert(mi_pictexcoord0), '1 1 1', fg);
-			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord1), yinvert(mi_pictexcoord1), '1 1 1', fg);
-			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord2), yinvert(mi_pictexcoord2), '1 1 1', fg);
-			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord3), yinvert(mi_pictexcoord3), '1 1 1', fg);
+			fga = fg;
+			fgc = '1 1 1';
+			R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE);
+		}
+		print(vtos(fgc), "\n");
+		if(v_flipped)
+		{
+			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord3), yinvert(mi_pictexcoord3), fgc, fga);
+			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord2), yinvert(mi_pictexcoord2), fgc, fga);
+			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord1), yinvert(mi_pictexcoord1), fgc, fga);
+			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord0), yinvert(mi_pictexcoord0), fgc, fga);
+		}
+		else
+		{
+			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord0), yinvert(mi_pictexcoord0), fgc, fga);
+			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord1), yinvert(mi_pictexcoord1), fgc, fga);
+			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord2), yinvert(mi_pictexcoord2), fgc, fga);
+			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord3), yinvert(mi_pictexcoord3), fgc, fga);
 		}
 		R_EndPolygon();
 	}
