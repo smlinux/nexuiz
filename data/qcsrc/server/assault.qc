@@ -51,6 +51,11 @@ void assault_objective_use() {
 }
 
 void spawnfunc_target_objective() {
+	if(!g_assault)
+	{
+		remove(self);
+		return;
+	}
 	self.classname = "target_objective";
 	self.use = assault_objective_use;
 	assault_objective_reset();
@@ -155,6 +160,11 @@ void target_objective_decrease_findtarget()
 //=============================================================================
 
 void spawnfunc_target_objective_decrease() {
+	if(!g_assault)
+	{
+		remove(self);
+		return;
+	}
 
 	self.classname = "target_objective_decrease";
 
@@ -171,6 +181,11 @@ void spawnfunc_target_objective_decrease() {
 
 // destructible walls that can be used to trigger target_objective_decrease
 void spawnfunc_func_assault_destructible() {
+	if(!g_assault)
+	{
+		remove(self);
+		return;
+	}
 	self.spawnflags = 3;
 	spawnfunc_func_breakable();
 }
@@ -188,6 +203,11 @@ void assault_wall_think() {
 }
 
 void spawnfunc_func_assault_wall() {
+	if(!g_assault)
+	{
+		remove(self);
+		return;
+	}
 	self.classname = "func_assault_wall";
 	self.mdl = self.model;
 	setmodel(self, self.mdl);
@@ -209,6 +229,11 @@ void target_assault_roundend_use() {
 }
 
 void spawnfunc_target_assault_roundend() {
+	if(!g_assault)
+	{
+		remove(self);
+		return;
+	}
 	self.winning = 0; // round not yet won by attackers
 	self.classname = "target_assault_roundend";
 	self.use = target_assault_roundend_use;
@@ -250,6 +275,11 @@ entity ent,oldself;
 }
 
 void spawnfunc_target_assault_roundstart() {
+	if(!g_assault)
+	{
+		remove(self);
+		return;
+	}
 	assault_attacker_team = COLOR_TEAM1;
 	self.classname = "target_assault_roundstart";
 	self.use = assault_roundstart_use;
