@@ -156,7 +156,8 @@ float w_hook(float req)
 				{
 					if ( self.ammo_cells >= 1 )
 					{
-						self.ammo_cells -= 1;
+						if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
+							self.ammo_cells -= 1;
 						self.hook_time_ammodecrease = time + hooked_ammodecrease_delay;
 					}
 					else
