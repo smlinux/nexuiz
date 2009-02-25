@@ -133,7 +133,7 @@ To watch demos you can choose a demo file in the |Settings / Demos| and click th
 
 ** How do I start a server?
 Use the |Multiplayer / Create| menu to start a |listen server|.  You will always have to play yourself in a |listen server|.
-If you want to create a server without being forced to play yourself please take a look at the file |readme.txt| in the |Docs/server/| directory where the |dedicated server| is explained.
+If you want to create a server without being forced to play yourself please take a look at the file |readme.txt| in the |Nexuiz/server/| directory where the |dedicated server| is explained.
 
 ** Which ports do I have to open in firewall/forward from my router to run a server?
 The default port is 26000 UDP.  You can change that in the |Multiplayer / Create| menu or by starting Nexuiz with the parameter |-port <port>| or having a line |port <port>| in the server config file.
