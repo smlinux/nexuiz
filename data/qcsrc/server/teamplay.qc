@@ -919,7 +919,7 @@ void SV_ChangeTeam(float _color)
 		steam = 2;
 	else if(scolor == COLOR_TEAM3 - 1)
 		steam = 3;
-	else if(scolor == COLOR_TEAM4 - 1)
+	else // if(scolor == COLOR_TEAM4 - 1)
 		steam = 4;
 	if(dcolor == COLOR_TEAM1 - 1)
 		dteam = 1;
@@ -927,7 +927,7 @@ void SV_ChangeTeam(float _color)
 		dteam = 2;
 	else if(dcolor == COLOR_TEAM3 - 1)
 		dteam = 3;
-	else if(dcolor == COLOR_TEAM4 - 1)
+	else // if(dcolor == COLOR_TEAM4 - 1)
 		dteam = 4;
 
 	CheckAllowedTeams(self);

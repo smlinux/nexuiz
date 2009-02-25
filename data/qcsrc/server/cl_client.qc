@@ -1207,13 +1207,27 @@ void ClientConnect (void)
 	//if(g_domination)
 	//	dom_player_join_team(self);
 
-	//JoinBestTeam(self, FALSE, FALSE);
-	//
 	if((cvar("sv_spectate") == 1 && !g_lms) || cvar("g_campaign")) {
 		self.classname = "observer";
 	} else {
-		self.classname = "player";
-		campaign_bots_may_start = 1;
+		if(cvar("teamplay"))
+		{
+			if(cvar("g_balance_teams") || cvar("g_balance_teams_force"))
+			{
+				self.classname = "player";
+				campaign_bots_may_start = 1;
+				JoinBestTeam(self, FALSE, TRUE);
+			}
+			else
+			{
+				self.classname = "observer"; // do it anyway
+			}
+		}
+		else
+		{
+			self.classname = "player";
+			campaign_bots_may_start = 1;
+		}
 	}
 
 	self.playerid = (playerid_last = playerid_last + 1);
