@@ -325,6 +325,7 @@ void RandomSeed_Spawn()
 	self = oldself;
 }
 
+void Map_MarkAsRecent(string m);
 float world_already_spawned;
 void RegisterWeapons();
 void Nagger_Init();
@@ -430,6 +431,8 @@ void spawnfunc_worldspawn (void)
 
 	if(cvar("g_campaign"))
 		CampaignPreInit();
+
+	Map_MarkAsRecent(mapname);
 
 	InitGameplayMode();
 	readlevelcvars();
@@ -717,7 +720,7 @@ float strhasword(string s, string w)
 
 void Map_MarkAsRecent(string m)
 {
-	cvar_set("g_maplist_mostrecent", strwords(strcat(m, " ", cvar_string("g_maplist_mostrecent")), cvar("g_maplist_mostrecent_count")));
+	cvar_set("g_maplist_mostrecent", strwords(strcat(m, " ", cvar_string("g_maplist_mostrecent")), max(0, cvar("g_maplist_mostrecent_count"))));
 }
 
 float Map_IsRecent(string m)
@@ -732,8 +735,6 @@ float Map_Check(float position, float pass)
 	map_next = argv(position);
 	if(pass <= 1)
 	{
-		if(map_next == Map_Current_Name) // same map again in first pass?
-			return 0;
 		if(Map_IsRecent(map_next))
 			return 0;
 	}
@@ -778,7 +779,6 @@ void GameResetCfg()
 
 void Map_Goto()
 {
-	Map_MarkAsRecent(getmapname_stored);
 	GameResetCfg();
 	MapInfo_LoadMap(getmapname_stored);
 }
