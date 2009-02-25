@@ -68,15 +68,11 @@ void func_breakable_colormod()
 void func_breakable_look_destroyed()
 {
 	if(self.mdl_dead == "")
-	{
 		self.model = "";
-		self.solid = SOLID_NOT;
-	}
 	else
-	{
 		setmodel(self, self.mdl_dead);
-		self.solid = SOLID_BSP;
-	}
+		
+	self.solid = SOLID_NOT;
 }
 
 void func_breakable_look_restore()
