@@ -153,7 +153,7 @@ void func_breakable_damage(entity inflictor, entity attacker, float damage, floa
 	self.health = self.health - damage;
 	func_breakable_colormod();
 
-	if(self.health < 1)
+	if(self.health <= 0)
 		W_PrepareExplosionByDamage(attacker, func_breakable_destroy);
 }
 
