@@ -190,6 +190,7 @@ void StartFrame (void)
 
 .vector originjitter;
 .vector anglesjitter;
+.float anglejitter;
 .string gametypefilter;
 void SV_OnEntityPreSpawnFunction()
 {
@@ -206,4 +207,5 @@ void SV_OnEntityPreSpawnFunction()
 	self.angles_x = self.angles_x + (random() * 2 - 1) * self.anglesjitter_x;
 	self.angles_y = self.angles_y + (random() * 2 - 1) * self.anglesjitter_y;
 	self.angles_z = self.angles_z + (random() * 2 - 1) * self.anglesjitter_z;
+	self.angles_y = self.angles_y + (random() * 2 - 1) * self.anglejitter;
 }
