@@ -144,11 +144,11 @@ float GameCommand_Vote(string s, entity e) {
 	float argc;
 	argc = tokenize_sane(s);
 	if(argv(0) == "help") {
-		print_to(e, "  vote COMMANDS ARGUMENTS. See 'vote help' for more info.");
+		print_to(e, "  vote COMMANDS ARGUMENTS. See 'vhelp' for more info.");
 		return TRUE;
 	} else if(argv(0) == "vote") {
 		if(argv(1) == "") {
-			print_to(e, "^1You have to supply a vote command. See help for more info.");
+			print_to(e, "^1You have to supply a vote command. 'vhelp' for more info.");
 		} else if(argv(1) == "help") {
 			VoteHelp(e);
 		} else if(argv(1) == "status") {
@@ -171,12 +171,12 @@ float GameCommand_Vote(string s, entity e) {
 					local string vote;
 					vote = VoteParse(s, argc);
 					if(vote == "") {
-						print_to(e, "^1Your vote is empty. See help for more info.");
+						print_to(e, "^1Your vote is empty. See 'vhelp' for more info.");
 					} else if(e
 						&& time < e.vote_next) {
 							print_to(e, strcat("^1You have to wait ^2", ftos(e.vote_next - time), "^1 seconds before you can again call a vote."));
 					} else if(VoteCheckNasty(vote)) {
-						print_to(e, "Syntax error in command. See help for more info.");
+						print_to(e, "Syntax error in command. See 'vhelp' for more info.");
 					} else if(RemapVote(vote, "vcall", e)) {
 						votecalledvote = strzone(RemapVote_vote);
 						votecalledvote_display = strzone(RemapVote_display);
@@ -194,7 +194,7 @@ float GameCommand_Vote(string s, entity e) {
 						VoteCount(); // needed if you are the only one
 						Nagger_VoteChanged();
 					} else {
-						print_to(e, "^1This vote is not ok. See help for more info.");
+						print_to(e, "^1This vote is not ok. See 'vhelp' for more info.");
 					}
 				}
 			} else {
@@ -241,19 +241,19 @@ float GameCommand_Vote(string s, entity e) {
 				local string dovote;
 				dovote = VoteParse(s, argc);
 				if(dovote == "") {
-					print_to(e, "^1Your command was empty. See help for more info.");
+					print_to(e, "^1Your command was empty. See 'vhelp' for more info.");
 				} else if(VoteCheckNasty(dovote)) {
-					print_to(e, "Syntax error in command. See help for more info.");
+					print_to(e, "Syntax error in command. See 'vhelp' for more info.");
 				} else if(RemapVote(dovote, "vdo", e)) { // strcat seems to be necessary
 					bprint("\{1}^2* ^3", VoteNetname(e), "^2 used his ^3master^2 status to do \"^2", RemapVote_display, "^2\".\n");
 					if(cvar("sv_eventlog"))
 						GameLogEcho(strcat(":vote:vdo:", ftos(e.playerid), ":", RemapVote_display));
 					localcmd(strcat(RemapVote_vote, "\n"));
 				} else {
-					print_to(e, "^1This command is not ok. See help for more info.");
+					print_to(e, "^1This command is not ok. See 'vhelp' for more info.");
 				}
 			} else {
-				print_to(e, "^1You are NOT a master.  You might need to login or vote to become master first. See help for more info.");
+				print_to(e, "^1You are NOT a master.  You might need to login or vote to become master first. See 'vhelp' for more info.");
 			}
 		} else if(argv(1) == "login") {
 			local string masterpwd;
