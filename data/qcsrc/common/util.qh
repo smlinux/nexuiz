@@ -150,3 +150,5 @@ string textShortenToWidth(string theText, float maxWidth, textLengthUpToWidth_wi
 
 string getWrappedLine_remaining;
 string getWrappedLine(float w, textLengthUpToWidth_widthFunction_t tw);
+
+float isGametypeInFilter(float gt, float tp, string pattern);

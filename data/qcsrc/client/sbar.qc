@@ -408,12 +408,6 @@ void Cmd_Sbar_SetFields(float argc)
 	drawfont = sbar_font;
 	digit = stringwidth("0123456789", FALSE) / 10;
 
-	subpattern = strcat(",", GametypeNameFromType(gametype), ",");
-	if(teamplay)
-		subpattern2 = ",teams,";
-	else
-		subpattern2 = ",noteams,";
-
 	for(i = 0; i < argc - 1; ++i)
 	{
 		str = argv(i+1);
@@ -424,22 +418,8 @@ void Cmd_Sbar_SetFields(float argc)
 			pattern = substring(str, 0, slash);
 			str = substring(str, slash + 1, strlen(str) - (slash + 1));
 
-			if(substring(pattern, 0, 1) == "-")
-			{
-				pattern = substring(pattern, 1, strlen(pattern) - 1);
-				if(strstrofs(strcat(",", pattern, ","), subpattern, 0) >= 0)
-					continue;
-				if(strstrofs(strcat(",", pattern, ","), subpattern2, 0) >= 0)
-					continue;
-			}
-			else
-			{
-				if(substring(pattern, 0, 1) == "+")
-					pattern = substring(pattern, 1, strlen(pattern) - 1);
-				if(strstrofs(strcat(",", pattern, ","), subpattern, 0) < 0)
-				if(strstrofs(strcat(",", pattern, ","), subpattern2, 0) < 0)
-					continue;
-			}
+			if not(isGametypeInFilter(gametype, teamplay, pattern))
+				continue;
 		}
 
 		strunzone(sbar_title[sbar_num_fields]);

@@ -1470,3 +1470,31 @@ string textShortenToWidth(string theText, float maxWidth, textLengthUpToWidth_wi
 	else
 		return strcat(substring(theText, 0, textLengthUpToWidth(theText, maxWidth - tw("..."), tw)), "...");
 }
+
+float isGametypeInFilter(float gt, float tp, string pattern)
+{
+	string subpattern, subpattern2;
+	subpattern = strcat(",", GametypeNameFromType(gt), ",");
+	if(tp)
+		subpattern2 = ",teams,";
+	else
+		subpattern2 = ",noteams,";
+
+	if(substring(pattern, 0, 1) == "-")
+	{
+		pattern = substring(pattern, 1, strlen(pattern) - 1);
+		if(strstrofs(strcat(",", pattern, ","), subpattern, 0) >= 0)
+			return 0;
+		if(strstrofs(strcat(",", pattern, ","), subpattern2, 0) >= 0)
+			return 0;
+	}
+	else
+	{
+		if(substring(pattern, 0, 1) == "+")
+			pattern = substring(pattern, 1, strlen(pattern) - 1);
+		if(strstrofs(strcat(",", pattern, ","), subpattern, 0) < 0)
+		if(strstrofs(strcat(",", pattern, ","), subpattern2, 0) < 0)
+			return 0;
+	}
+	return 1;
+}
