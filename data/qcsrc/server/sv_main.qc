@@ -200,10 +200,10 @@ void SV_OnEntityPreSpawnFunction()
 		return;
 	}
 
-	self.origin_x += (random() * 2 - 1) * self.originjitter_x;
-	self.origin_y += (random() * 2 - 1) * self.originjitter_y;
-	self.origin_z += (random() * 2 - 1) * self.originjitter_z;
-	self.angles_x += (random() * 2 - 1) * self.anglesjitter_x;
-	self.angles_y += (random() * 2 - 1) * self.anglesjitter_y;
-	self.angles_z += (random() * 2 - 1) * self.anglesjitter_z;
+	self.origin_x = self.origin_x + (random() * 2 - 1) * self.originjitter_x;
+	self.origin_y = self.origin_y + (random() * 2 - 1) * self.originjitter_y;
+	self.origin_z = self.origin_z + (random() * 2 - 1) * self.originjitter_z;
+	self.angles_x = self.angles_x + (random() * 2 - 1) * self.anglesjitter_x;
+	self.angles_y = self.angles_y + (random() * 2 - 1) * self.anglesjitter_y;
+	self.angles_z = self.angles_z + (random() * 2 - 1) * self.anglesjitter_z;
 }
