@@ -148,7 +148,7 @@ float GameCommand_Vote(string s, entity e) {
 		return TRUE;
 	} else if(argv(0) == "vote") {
 		if(argv(1) == "") {
-			print_to(e, "^1You have to supply a vote command. 'vhelp' for more info.");
+			print_to(e, "^1You have to supply a vote command. See 'vhelp' for more info.");
 		} else if(argv(1) == "help") {
 			VoteHelp(e);
 		} else if(argv(1) == "status") {
