@@ -187,3 +187,16 @@ void StartFrame (void)
 	FOR_EACH_PLAYER(self)
 		self.porto_forbidden = max(0, self.porto_forbidden - 1);
 }
+
+.vector originjitter;
+.vector anglesjitter;
+.string gametypefilter;
+void SV_OnEntityPreSpawnFunction()
+{
+	self.origin_x += (random() * 2 - 1) * self.originjitter_x;
+	self.origin_y += (random() * 2 - 1) * self.originjitter_y;
+	self.origin_z += (random() * 2 - 1) * self.originjitter_z;
+	self.angles_x += (random() * 2 - 1) * self.anglesjitter_x;
+	self.angles_y += (random() * 2 - 1) * self.anglesjitter_y;
+	self.angles_z += (random() * 2 - 1) * self.anglesjitter_z;
+}
