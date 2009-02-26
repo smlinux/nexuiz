@@ -193,6 +193,13 @@ void StartFrame (void)
 .string gametypefilter;
 void SV_OnEntityPreSpawnFunction()
 {
+	if(self.gametypefilter != "")
+	if not(isGametypeInFilter(game, teamplay, self.gametypefilter))
+	{
+		remove(self);
+		return;
+	}
+
 	self.origin_x += (random() * 2 - 1) * self.originjitter_x;
 	self.origin_y += (random() * 2 - 1) * self.originjitter_y;
 	self.origin_z += (random() * 2 - 1) * self.originjitter_z;
