@@ -168,7 +168,7 @@ void W_BallisticBullet_LeaveSolid_think()
 	{
 		float f;
 		f = pow(bound(0, vlen(self.velocity) / vlen(self.oldvelocity), 1), 2); // energy multiplier
-		Damage_DamageInfo(self.origin, 0, 0, 0, self.dmg_force * normalize(self.velocity) * f, self.projectiledeathtype);
+		Damage_DamageInfo(self.origin, 0, 0, 0, self.dmg_force * normalize(self.velocity) * -f, self.projectiledeathtype);
 	}
 	
 	UpdateCSQCProjectile(self);
