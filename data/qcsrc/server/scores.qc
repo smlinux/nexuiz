@@ -450,9 +450,7 @@ void WinningConditionHelper()
 				s = strcat(s, ":human");
 			else
 				s = strcat(s, ":bot");
-			if(p.classname == "player" || g_arena || g_lms)
-				s = strcat(s, ":", ftos(p.team));
-			else
+			if(p.classname != "player" && !g_arena && !g_lms)
 				s = strcat(s, ":spectator");
 		}
 		else
