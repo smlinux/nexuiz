@@ -116,10 +116,17 @@ void drawListBoxItemNexuizPlayerList(entity me, float i, vector absSize, float i
 	s = me.getPlayerList(me, i, PLAYERPARM_NAME);
 	score = me.getPlayerList(me, i, PLAYERPARM_SCORE);
 
-	if((t = strstrofs(score, ":", 0)) >= 0)
-		score = substring(score, 0, t);
-	if((t = strstrofs(score, ",", 0)) >= 0)
-		score = substring(score, 0, t);
+	if(substring(score, strlen(score) - 10, 10) == ":spectator")
+	{
+		score = "-666";
+	}
+	else
+	{
+		if((t = strstrofs(score, ":", 0)) >= 0)
+			score = substring(score, 0, t);
+		if((t = strstrofs(score, ",", 0)) >= 0)
+			score = substring(score, 0, t);
+	}
 
 	s = draw_TextShortenToWidth(s, (me.columnNameSize / me.realFontSize_x), 1);
 	score = draw_TextShortenToWidth(score, me.columnScoreSize / me.realFontSize_x, 0);
