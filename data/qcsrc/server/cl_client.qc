@@ -1208,7 +1208,7 @@ void ClientConnect (void)
 	//if(g_domination)
 	//	dom_player_join_team(self);
 
-	JoinBestTeam(self, FALSE, TRUE);
+	JoinBestTeam(self, FALSE, FALSE); // if the team number is valid, keep it
 
 	if((cvar("sv_spectate") == 1 && !g_lms) || cvar("g_campaign")) {
 		self.classname = "observer";
