@@ -147,7 +147,11 @@ void havocbot_bunnyhop(vector dir)
 		return;
 
 	if(self.aistatus & AI_STATUS_DANGER_AHEAD)
+	{
+		self.aistatus &~= AI_STATUS_RUNNING;
+		self.BUTTON_JUMP = FALSE;
 		return;
+	}
 
 	if(self.bot_lastseengoal != self.goalcurrent && !(self.aistatus & AI_STATUS_RUNNING))
 	{
@@ -354,11 +358,11 @@ void havocbot_movetogoal()
 			}
 
 			// avoiding dangers and obstacles
-			// TODO: don't make this check every frame
 			local vector dst_ahead, dst_down;
 			dst_ahead = self.origin + self.view_ofs + (self.velocity * 0.32);
 			dst_down = dst_ahead + '0 0 -1500';				
 			
+			// Look ahead
 			traceline(self.origin + self.view_ofs , dst_ahead, TRUE, world);
 
 			// Check head-banging against walls
@@ -386,30 +390,39 @@ void havocbot_movetogoal()
 				}
 			}
 		
-			// Check for water/slime/lava and edges
+			// Check for water/slime/lava and dangerous edges
+			// (only when the bot is on the ground or jumping intentionally)
 			self.aistatus &~= AI_STATUS_DANGER_AHEAD;
-			if(trace_fraction == 1){
+
+			if(trace_fraction == 1)
+			if(self.flags & FL_ONGROUND || self.aistatus & AI_STATUS_RUNNING || self.BUTTON_JUMP == TRUE)
+			{
+				// Look downwards
 				traceline(dst_ahead , dst_down, TRUE, world);
 				//	te_lightning2(world, self.origin, dst_ahead);	// Draw "ahead" look 
-				s = pointcontents(trace_endpos + '0 0 1');
-				if (s != CONTENT_SOLID)
-				if (s == CONTENT_LAVA || s == CONTENT_SLIME)
-					evadelava = normalize(self.velocity) * -1;
-				else if (s == CONTENT_SKY)
-					evadeobstacle = normalize(self.velocity) * -1;
-				else if (tracebox_hits_trigger_hurt(dst_ahead, self.mins, self.maxs, trace_endpos))
+				//	te_lightning2(world, dst_ahead, dst_down);		// Draw "downwards" look
+				if(trace_endpos_z < self.origin_z + self.mins_z)
 				{
-					//	te_lightning2(world, dst_ahead, dst_down);	// Draw "downwards" look
-					// if ain't a safe goal with "holes" (like the soylent jumpad)
-					if(!boxesoverlap(dst_ahead - self.view_ofs + self.mins, dst_ahead - self.view_ofs + self.maxs, 
-							self.goalcurrent.absmin, self.goalcurrent.absmax))
-					{
-						// Remove dangerous dynamic goals from stack
-						if (self.goalcurrent.classname == "player" || self.goalcurrent.classname == "droppedweapon")
-							navigation_poproute();
-						// try to stop
-						flatdir = '0 0 0';
+					s = pointcontents(trace_endpos + '0 0 1');
+					if (s != CONTENT_SOLID)
+					if (s == CONTENT_LAVA || s == CONTENT_SLIME)
+						evadelava = normalize(self.velocity) * -1;
+					else if (s == CONTENT_SKY)
 						evadeobstacle = normalize(self.velocity) * -1;
+					else if (!boxesoverlap(dst_ahead - self.view_ofs + self.mins, dst_ahead - self.view_ofs + self.maxs, 
+								self.goalcurrent.absmin, self.goalcurrent.absmax))
+					{
+						// if ain't a safe goal with "holes" (like the jumpad on soylent)
+						// and there is a trigger_hurt below
+						if(tracebox_hits_trigger_hurt(dst_ahead, self.mins, self.maxs, trace_endpos))
+						{
+							// Remove dangerous dynamic goals from stack
+							if (self.goalcurrent.classname == "player" || self.goalcurrent.classname == "droppedweapon")
+								navigation_poproute();
+							// try to stop
+							flatdir = '0 0 0';
+							evadeobstacle = normalize(self.velocity) * -1;
+						}
 					}
 				}
 			}
