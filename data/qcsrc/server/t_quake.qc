@@ -56,5 +56,11 @@ void junk_function ()
 	self.cvar_cl_weaponpriorities = "";
 	self.scores = 0;
 	self.teamscores = 0;
+	gettaginfo_parent = 0;
+	gettaginfo_name = "";
+	gettaginfo_offset = '0 0 0';
+	gettaginfo_forward = '0 0 0';
+	gettaginfo_right = '0 0 0';
+	gettaginfo_up = '0 0 0';
 }
 

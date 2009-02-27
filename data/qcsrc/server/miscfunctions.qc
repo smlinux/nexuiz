@@ -1274,7 +1274,6 @@ void precache_all_models(string pattern)
 void precache()
 {
 	// gamemode related things
-	precache_model ("null");
 	precache_model ("models/misc/chatbubble.spr");
 	precache_model ("models/misc/teambubble.spr");
 	if (g_runematch)
@@ -1538,7 +1537,7 @@ void make_safe_for_remove(entity e)
 		{
 			if((ent == e) || ((ent.classname == "initialize_entity") && (ent.enemy == e)))
 			{
-				print("make_safe_for_remove: getting rid of initializer ", etos(ent), "\n");
+				//print("make_safe_for_remove: getting rid of initializer ", etos(ent), "\n");
 				// skip it in linked list
 				if(prev)
 				{

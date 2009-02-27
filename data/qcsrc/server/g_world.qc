@@ -434,6 +434,7 @@ void spawnfunc_worldspawn (void)
 
 	Map_MarkAsRecent(mapname);
 
+	precache_model ("null"); // we need this one before InitGameplayMode
 	InitGameplayMode();
 	readlevelcvars();
 	GrappleHookInit();
