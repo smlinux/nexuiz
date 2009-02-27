@@ -196,6 +196,7 @@ void cvar_changes_init()
 		BADPREFIX("userbind");
 		BADPREFIX("v_");
 		BADPREFIX("vid_");
+		BADPREFIX("crosshair");
 		BADCVAR("mod_q3bsp_lightmapmergepower");
 		BADCVAR("mod_q3bsp_nolightmaps");
 
@@ -1166,7 +1167,7 @@ void DumpStats(float final)
 		}
 	}
 
-	if(teamplay)
+	if(teams_matter)
 	{
 		s = strcat(":labels:teamscores:", GetTeamScoreString(0, 0));
 		if(to_console)

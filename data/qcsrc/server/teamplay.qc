@@ -12,7 +12,7 @@ float IsTeamBalanceForced()
 {
 	if(intermission_running)
 		return 0; // no rebalancing whatsoever please
-	if(!cvar("teamplay"))
+	if(!teams_matter)
 		return 0;
 	if(cvar("g_campaign"))
 		return 0;
@@ -486,7 +486,7 @@ void SetPlayerColors(entity pl, float _color)
 	shirt = _color & 0xF0;
 
 
-	if(teamplay) {
+	if(teams_matter) {
 		setcolor(pl, 16*pants + pants);
 	} else {
 		setcolor(pl, shirt + pants);
@@ -824,7 +824,7 @@ float JoinBestTeam(entity pl, float only_return_best, float forcebestteam)
 	float smallest, selectedteam;
 
 	// don't join a team if we're not playing a team game
-	if(!cvar("teamplay") && !g_domination && !g_ctf && !g_keyhunt)
+	if(!teams_matter)
 		return 0;
 
 	// find out what teams are available
@@ -905,7 +905,7 @@ void SV_ChangeTeam(float _color)
 	float scolor, dcolor, steam, dteam, dbotcount, scount, dcount;
 
 	// in normal deathmatch we can just apply the color and we're done
-	if(!cvar("teamplay")) {
+	if(!teams_matter) {
 		SetPlayerColors(self, _color);
 		return;
 	}
@@ -945,7 +945,7 @@ void SV_ChangeTeam(float _color)
 		return;
 	}
 
-	if(cvar("teamplay"))
+	if(teams_matter)
 	{
 		if(cvar("g_campaign") || cvar("g_changeteam_banned"))
 		{
@@ -1014,7 +1014,7 @@ void SV_ChangeTeam(float _color)
 
 //	bprint("allow change teams from ", ftos(steam), " to ", ftos(dteam), "\n");
 
-	if(cvar("teamplay") && self.classname == "player" && steam != dteam)
+	if(teams_matter && self.classname == "player" && steam != dteam)
 	{
 		// reduce frags during a team change
 		TeamchangeFrags(self);
@@ -1022,7 +1022,7 @@ void SV_ChangeTeam(float _color)
 
 	SetPlayerTeam(self, dteam, steam, FALSE);
 
-	if(cvar("teamplay") && self.classname == "player" && steam != dteam)
+	if(teams_matter && self.classname == "player" && steam != dteam)
 	{
 		// kill player when changing teams
 		if(self.deadflag == DEAD_NO)

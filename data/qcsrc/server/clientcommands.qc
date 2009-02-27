@@ -138,7 +138,7 @@ void SV_ParseClientCommand(string s) {
 			PutClientInServer();
 		} else if(cvar("g_campaign") || cvar("g_balance_teams") || cvar("g_balance_teams_force")) {
 			//JoinBestTeam(self, FALSE, TRUE);
-		} else if(cvar("teamplay") && !cvar("sv_spectate")) {
+		} else if(teams_matter && !cvar("sv_spectate")) {
 			self.classname = "observer";
 			stuffcmd(self,"menu_showteamselect\n");
 		}
@@ -205,7 +205,7 @@ void SV_ParseClientCommand(string s) {
 	} else if( argv(0) == "selectteam" ) {
 		if not(self.flags & FL_CLIENT)
 			return;
-		if( !cvar("teamplay") ) {
+		if( !teams_matter ) {
 			sprint( self, "selecteam can only be used in teamgames\n");
 		} else if(cvar("g_campaign")) {
 			//JoinBestTeam(self, 0);

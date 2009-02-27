@@ -605,7 +605,7 @@ void dom_init()
 	InitializeEntity(world, dom_delayedinit, INITPRIO_GAMETYPE);
 
 	// teamplay is always on in domination, defaults to hurt self but not teammates
-	//if(!cvar("teamplay"))
+	//if(!teams_matter)
 	//	cvar_set("teamplay", "3");
 };
 

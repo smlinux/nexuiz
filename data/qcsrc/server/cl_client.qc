@@ -1091,7 +1091,7 @@ void ClientKill (void)
 void DoTeamChange(float destteam)
 {
 	float t, c0;
-	if(!cvar("teamplay"))
+	if(!teams_matter)
 	{
 		if(destteam >= 0)
 			SetPlayerColors(self, destteam);
@@ -1174,6 +1174,7 @@ void DecodeLevelParms (void);
 void ClientConnect (void)
 {
 	local string s;
+	float t;
 
 	if(self.flags & FL_CLIENT)
 	{
@@ -1207,16 +1208,17 @@ void ClientConnect (void)
 	//if(g_domination)
 	//	dom_player_join_team(self);
 
+	JoinBestTeam(self, FALSE, TRUE);
+
 	if((cvar("sv_spectate") == 1 && !g_lms) || cvar("g_campaign")) {
 		self.classname = "observer";
 	} else {
-		if(cvar("teamplay"))
+		if(teams_matter)
 		{
 			if(cvar("g_balance_teams") || cvar("g_balance_teams_force"))
 			{
 				self.classname = "player";
 				campaign_bots_may_start = 1;
-				JoinBestTeam(self, FALSE, TRUE);
 			}
 			else
 			{
@@ -1280,18 +1282,10 @@ void ClientConnect (void)
 	GetCvars(0);
 
 	// set cvar for team scoreboard
-	if (teams_matter)
-	{
-		local float t;
-		t = cvar("teamplay");
-		// we have to stuff the correct teamplay value because if this is a listen server, this changes the teamplay mode of the server itself, which is bad
-		stuffcmd(self, strcat("set teamplay ", ftos(t), "\n"));
-	}
-	else
-		stuffcmd(self, "set teamplay 0\n");
+	stuffcmd(self, strcat("set teamplay ", ftos(teamplay), "\n"));
 
 	// notify about available teams
-	if(teamplay)
+	if(teams_matter)
 	{
 		CheckAllowedTeams(self);
 		t = 0; if(c1 >= 0) t |= 1; if(c2 >= 0) t |= 2; if(c3 >= 0) t |= 4; if(c4 >= 0) t |= 8;
@@ -1491,10 +1485,10 @@ float TeamBubble_customizeentityforclient()
 
 void UpdateTeamBubble()
 {
-	if (!self.modelindex || !cvar("teamplay"))
+	if (!self.modelindex || !teams_matter)
 		return;
 	// spawn a teambubble entity if needed
-	if (!self.teambubbleentity && cvar("teamplay"))
+	if (!self.teambubbleentity && teams_matter)
 	{
 		self.teambubbleentity = spawn();
 		self.teambubbleentity.owner = self;
@@ -1519,7 +1513,7 @@ void UpdateTeamBubble()
 	local float c;
 	c = self.clientcolors & 15;
 	// LordHavoc: only bothering to support white, green, red, yellow, blue
-	     if (teamplay == 0) self.colormod = '0 0 0';
+	     if (!teams_matter) self.colormod = '0 0 0';
 	else if (c ==  0) self.colormod = '1.00 1.00 1.00';
 	else if (c ==  3) self.colormod = '0.10 1.73 0.10';
 	else if (c ==  4) self.colormod = '1.73 0.10 0.10';
@@ -1919,7 +1913,7 @@ void ShowRespawnCountdown()
 void LeaveSpectatorMode()
 {
 	if(isJoinAllowed()) {
-		if(!cvar("teamplay") || cvar("g_campaign") || cvar("g_balance_teams")) {
+		if(!teams_matter || cvar("g_campaign") || cvar("g_balance_teams")) {
 			self.classname = "player";
 			if(cvar("g_campaign") || cvar("g_balance_teams") || cvar("g_balance_teams_force"))
 				JoinBestTeam(self, FALSE, TRUE);

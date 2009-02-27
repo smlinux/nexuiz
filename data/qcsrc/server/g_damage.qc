@@ -296,7 +296,7 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 		}
 		else if (attacker.classname == "player" || attacker.classname == "gib")
 		{
-			if(teamplay && attacker.team == targ.team)
+			if(teams_matter && attacker.team == targ.team)
 			{
 				if(sv_gentle) {
 					centerprint(attacker, strcat(DAMAGE_CENTERPRINT_SPACER, "^1Moron! You went against a team mate!"));

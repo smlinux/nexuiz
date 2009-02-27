@@ -154,6 +154,12 @@ void StartFrame (void)
 
 	sv_stopspeed = cvar ("sv_stopspeed");
 	teamplay = cvar ("teamplay");
+
+	if(teams_matter && !teamplay)
+		teamplay = 3;
+	if(!teams_matter && teamplay)
+		teamplay = 0;
+
 	skill = cvar("skill");
 
 	Spawnqueue_Check();
@@ -195,7 +201,7 @@ void StartFrame (void)
 void SV_OnEntityPreSpawnFunction()
 {
 	if(self.gametypefilter != "")
-	if not(isGametypeInFilter(game, teamplay, self.gametypefilter))
+	if not(isGametypeInFilter(game, teams_matter, self.gametypefilter))
 	{
 		remove(self);
 		return;

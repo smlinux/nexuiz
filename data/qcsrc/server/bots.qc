@@ -1627,11 +1627,11 @@ float bot_shouldattack(entity e)
 	{
 		if (e == self)
 			return FALSE;
-		if (teamplay)
+		if (teams_matter)
 		if (e.team != 0)
 			return FALSE;
 	}
-	if(!teamplay)
+	if(!teams_matter)
 		if(bot_ignore_bots)
 			if(clienttype(e) == CLIENTTYPE_BOT)
 				return FALSE;

@@ -725,7 +725,7 @@ void GameCommand(string command)
 	}
 	if (argv(0) == "lockteams")
 	{
-		if(teamplay)
+		if(teams_matter)
 		{
 			lockteams = 1;
 			bprint("^1The teams are now locked.\n");
@@ -736,7 +736,7 @@ void GameCommand(string command)
 	}
 	if (argv(0) == "unlockteams")
 	{
-		if(teamplay)
+		if(teams_matter)
 		{
 			lockteams = 0;
 			bprint("^1The teams are now unlocked.\n");
