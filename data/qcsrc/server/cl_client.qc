@@ -722,6 +722,7 @@ void PutClientInServer (void)
 		self.campingrifle_bulletcounter = 0;
 
 		self.classname = "player";
+		self.wasplayer = TRUE;
 		self.iscreature = TRUE;
 		self.movetype = MOVETYPE_WALK;
 		self.solid = SOLID_SLIDEBOX;
@@ -1913,7 +1914,7 @@ void ShowRespawnCountdown()
 void LeaveSpectatorMode()
 {
 	if(isJoinAllowed()) {
-		if(!teams_matter || cvar("g_campaign") || cvar("g_balance_teams")) {
+		if(!teams_matter || cvar("g_campaign") || cvar("g_balance_teams") || (self.wasplayer && cvar("g_changeteam_banned"))) {
 			self.classname = "player";
 			if(cvar("g_campaign") || cvar("g_balance_teams") || cvar("g_balance_teams_force"))
 				JoinBestTeam(self, FALSE, TRUE);

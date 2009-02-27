@@ -945,76 +945,79 @@ void SV_ChangeTeam(float _color)
 		return;
 	}
 
-	if(teams_matter)
+	if(cvar("g_campaign"))
 	{
-		if(cvar("g_campaign") || cvar("g_changeteam_banned"))
+		sprint(self, "Team changes not allowed\n");
+		return; // changing teams is not allowed
+	}
+
+	if(cvar("g_changeteam_banned") && self.wasplayer)
+	{
+		sprint(self, "Team changes not allowed\n");
+		return;
+	}
+
+	if(cvar("g_balance_teams_prevent_imbalance"))
+	{
+		// only allow changing to a smaller or equal size team
+
+		// find out what teams are available
+		//CheckAllowedTeams();
+		// count how many players on each team
+		GetTeamCounts(world);
+
+		// get desired team
+		if(dteam == 1 && c1 >= 0)//dcolor == COLOR_TEAM1 - 1)
 		{
-			sprint(self, "Team changes not allowed\n");
-			return; // changing teams is not allowed
+			dcount = c1;
+			dbotcount = cb1;
+		}
+		else if(dteam == 2 && c2 >= 0)//dcolor == COLOR_TEAM2 - 1)
+		{
+			dcount = c2;
+			dbotcount = cb2;
+		}
+		else if(dteam == 3 && c3 >= 0)//dcolor == COLOR_TEAM3 - 1)
+		{
+			dcount = c3;
+			dbotcount = cb3;
+		}
+		else if(dteam == 4 && c4 >= 0)//dcolor == COLOR_TEAM4 - 1)
+		{
+			dcount = c4;
+			dbotcount = cb4;
+		}
+		else
+		{
+			sprint(self, "Cannot change to an invalid team\n");
+
+			return;
 		}
 
-		if(!cvar("g_campaign") && cvar("g_balance_teams_prevent_imbalance"))
+		// get starting team
+		if(steam == 1)//scolor == COLOR_TEAM1 - 1)
+			scount = c1;
+		else if(steam == 2)//scolor == COLOR_TEAM2 - 1)
+			scount = c2;
+		else if(steam == 3)//scolor == COLOR_TEAM3 - 1)
+			scount = c3;
+		else if(steam == 4)//scolor == COLOR_TEAM4 - 1)
+			scount = c4;
+
+		if(scount) // started at a valid, nonempty team
 		{
-			// only allow changing to a smaller or equal size team
-
-			// find out what teams are available
-			//CheckAllowedTeams();
-			// count how many players on each team
-			GetTeamCounts(world);
-
-			// get desired team
-			if(dteam == 1 && c1 >= 0)//dcolor == COLOR_TEAM1 - 1)
+			// check if we're trying to change to a larger team that doens't have bots to swap with
+			if(dcount >= scount && dbotcount <= 0)
 			{
-				dcount = c1;
-				dbotcount = cb1;
-			}
-			else if(dteam == 2 && c2 >= 0)//dcolor == COLOR_TEAM2 - 1)
-			{
-				dcount = c2;
-				dbotcount = cb2;
-			}
-			else if(dteam == 3 && c3 >= 0)//dcolor == COLOR_TEAM3 - 1)
-			{
-				dcount = c3;
-				dbotcount = cb3;
-			}
-			else if(dteam == 4 && c4 >= 0)//dcolor == COLOR_TEAM4 - 1)
-			{
-				dcount = c4;
-				dbotcount = cb4;
-			}
-			else
-			{
-				sprint(self, "Cannot change to an invalid team\n");
-
-				return;
-			}
-
-			// get starting team
-			if(steam == 1)//scolor == COLOR_TEAM1 - 1)
-				scount = c1;
-			else if(steam == 2)//scolor == COLOR_TEAM2 - 1)
-				scount = c2;
-			else if(steam == 3)//scolor == COLOR_TEAM3 - 1)
-				scount = c3;
-			else if(steam == 4)//scolor == COLOR_TEAM4 - 1)
-				scount = c4;
-
-			if(scount) // started at a valid, nonempty team
-			{
-				// check if we're trying to change to a larger team that doens't have bots to swap with
-				if(dcount >= scount && dbotcount <= 0)
-				{
-					sprint(self, "Cannot change to a larger team\n");
-					return; // can't change to a larger team
-				}
+				sprint(self, "Cannot change to a larger team\n");
+				return; // can't change to a larger team
 			}
 		}
 	}
 
 //	bprint("allow change teams from ", ftos(steam), " to ", ftos(dteam), "\n");
 
-	if(teams_matter && self.classname == "player" && steam != dteam)
+	if(self.classname == "player" && steam != dteam)
 	{
 		// reduce frags during a team change
 		TeamchangeFrags(self);
@@ -1022,7 +1025,7 @@ void SV_ChangeTeam(float _color)
 
 	SetPlayerTeam(self, dteam, steam, FALSE);
 
-	if(teams_matter && self.classname == "player" && steam != dteam)
+	if(self.classname == "player" && steam != dteam)
 	{
 		// kill player when changing teams
 		if(self.deadflag == DEAD_NO)
