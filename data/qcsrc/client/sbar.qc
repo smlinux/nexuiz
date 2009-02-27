@@ -356,19 +356,19 @@ string Sbar_DefaultColumnLayout()
 {
 	return strcat( // fteqcc sucks
 		"ping pl name | ",
-		"-teams,race,lms/kills -teams,race,lms/deaths -teams,lms/suicides -race,dm,tdm/frags ", // tdm already has this in "score"
+		"-teams,race,lms/kills -teams,lms/deaths -teams,lms,race/suicides -race,dm,tdm/frags ", // tdm already has this in "score"
 		"+ctf/caps +ctf/pickups +ctf/fckills +ctf/returns ",
 		"+lms/lives +lms/rank ",
 		"+kh/caps +kh/pushes +kh/destroyed ",
-		"+race/laps +race/time +race/fastest ",
+		"?+race/laps ?+race/time ?+race/fastest ",
 		"+as/objectives ",
-		"-lms/score");
+		"-lms,race/score");
 }
 
 void Cmd_Sbar_SetFields(float argc)
 {
 	float i, j, slash;
-	string str, pattern, subpattern, subpattern2;
+	string str, pattern;
 	float digit;
 	float have_name, have_primary, have_secondary, have_separator;
 	float missing;
@@ -410,7 +410,15 @@ void Cmd_Sbar_SetFields(float argc)
 
 	for(i = 0; i < argc - 1; ++i)
 	{
+		float nocomplain;
 		str = argv(i+1);
+
+		nocomplain = FALSE;
+		if(substring(str, 0, 1) == "?")
+		{
+			nocomplain = TRUE;
+			str = substring(str, 1, strlen(str) - 1);
+		}
 
 		slash = strstrofs(str, "/", 0);
 		if(slash >= 0)
@@ -451,7 +459,8 @@ void Cmd_Sbar_SetFields(float argc)
 			}
 			else
 			{
-				print(strcat("^1Error:^7 Unknown score field: '", str, "'\n"));
+				if not(nocomplain)
+					print(strcat("^1Error:^7 Unknown score field: '", str, "'\n"));
 				continue;
 			}
 :found
@@ -1693,7 +1702,6 @@ vector Sbar_DrawNoteLine(vector offset, string s)
 void Sbar_DrawPressedKeys(void)
 {
 	vector pos, bgsize;
-	float center_y;
 	float pressedkeys;
 	
 	pos = stov(cvar_string("cl_showpressedkeys_position"));

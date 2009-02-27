@@ -571,7 +571,7 @@ void CSQC_kh_hud(void)
 }
 
 // following vectors must be global to allow seamless switching between camera modes
-vector camera_offset, current_camera_offset, mouse_angles, current_angles, current_origin, camera_position, current_position;
+vector camera_offset, current_camera_offset, mouse_angles, current_angles, current_origin, current_position;
 void CSQC_Demo_Camera()
 {
 	float speed, attenuation, dimensions;
