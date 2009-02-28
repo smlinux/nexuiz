@@ -2,11 +2,13 @@ accident
 blacksky
 common
 desertfactory
+domination
 dsi
 e7
 eggandbacon
 egyptsoc
 el3dm1
+electro
 evil1_grates
 evil2
 evil3
@@ -21,6 +23,7 @@ evil8_base
 eX
 final_rage
 flags
+flamethrower
 harlequin_sky
 hlac
 kaznexctf2
@@ -40,6 +43,7 @@ savdm6ish
 sav-graysky1
 sav-liquids
 sfx
+shotgun
 stralenex1
 stralenex8
 strength
