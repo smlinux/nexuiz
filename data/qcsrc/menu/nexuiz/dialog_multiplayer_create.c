@@ -100,7 +100,7 @@ void fillNexuizServerCreateTab(entity me)
 		me.TD(me, 1, 2.8, e = makeNexuizSliderCheckBox(-1, 0, me.sliderFraglimit, "Use map specified default"));
 	me.TR(me);
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Number of players:"));
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Player slots:"));
 		me.TD(me, 1, 2, makeNexuizSlider(1, 32, 1, "menu_maxplayers"));
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Number of bots:"));

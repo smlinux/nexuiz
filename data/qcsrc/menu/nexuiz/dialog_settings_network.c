@@ -39,7 +39,7 @@ void fillNexuizNetworkSettingsTab(entity me)
 			e.addValue(e, "Broadband", "25000");
 			e.configureNexuizTextSliderValues(e);
     me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Outgoing packets/s:"));
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Input packets/s:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(20, 120, 1, "cl_netfps"));
 	me.TR(me);
 	me.TR(me);

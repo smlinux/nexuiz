@@ -77,7 +77,7 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Zoom Factor:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(2, 16, 0.5, "cl_zoomfactor"));
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Zoom Sensitivity:"));
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Zoom Sens.:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0, 1, 0.01, "cl_zoomsensitivity"));
 	me.TR(me);
 		sl = makeNexuizSlider(1, 8, 0.5, "cl_zoomspeed");

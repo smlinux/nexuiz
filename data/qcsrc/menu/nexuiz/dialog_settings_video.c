@@ -82,10 +82,10 @@ void fillNexuizVideoSettingsTab(entity me)
 			setDependent(e, "r_glsl", 1, 1);
 	me.TR(me);
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Ambient lighting:"));
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Ambient:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0, 20.0, 1.0, "r_ambient"));
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Scene brightness:"));
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Intensity:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0.5, 2.0, 0.05, "r_hdr_scenebrightness"));
 	me.TR(me);
 	me.TR(me);
