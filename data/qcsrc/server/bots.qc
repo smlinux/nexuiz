@@ -3,9 +3,9 @@ float AI_STATUS_ROAMING			= 1;	// Bot is just crawling the map. No enemies at si
 float AI_STATUS_ATTACKING		= 2;	// There are enemies at sight
 float AI_STATUS_RUNNING			= 4;	// Bot is bunny hopping
 float AI_STATUS_DANGER_AHEAD	= 8;	// There is lava/slime/abism ahead
+float AI_STATUS_BAD_JUMPPAD		= 16;	// Trying to get out of a "vertical" jump pad
 
 .string netname_freeme;
-
 // rough simulation of walking from one point to another to test if a path
 // can be traveled, used by havocbot
 

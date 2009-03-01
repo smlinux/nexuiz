@@ -199,7 +199,7 @@ void havocbot_bunnyhop(vector dir)
 						while (deviation_y < -180) deviation_y = deviation_y + 360;
 						while (deviation_y > 180) deviation_y = deviation_y - 360;
 
-						if(deviation_y < 20 && deviation_y > -20)
+						if(fabs(deviation_y) < 15)
 						if(distance < vlen(self.origin - self.goalstack01.origin))
 						if(fabs(self.goalstack01.origin_z - self.goalcurrent.origin_z) < self.maxs_z - self.mins_z)
 						{
@@ -285,16 +285,72 @@ void havocbot_movetogoal()
 	if(self.jumppadcount)
 	{
 		if(self.flags & FL_ONGROUND)
+		{
 			self.jumppadcount = FALSE;
+			if(self.aistatus & AI_STATUS_BAD_JUMPPAD)
+				self.aistatus &~= AI_STATUS_BAD_JUMPPAD;
+		}
+
+		// If got stuck on the jump pad try to reach the farther visible item
+		if(self.aistatus & AI_STATUS_BAD_JUMPPAD)
+		{
+			if(fabs(self.velocity_z)<50)
+			{
+				local entity head, newgoal;
+				local float distance, bestdistance;
+
+				for (head = findchainfloat(bot_pickup, TRUE); head; head = head.chain)
+				{
+					if(head.classname=="worldspawn")
+						continue;
+
+					distance = vlen(head.origin - self.origin);
+					if(distance>1000)
+						continue;
+
+					traceline(self.origin + self.view_ofs , head.origin, TRUE, world);
+
+					if(trace_fraction<1)
+						continue;
+
+					if(distance>bestdistance)
+					{
+						newgoal = head;
+						bestdistance = distance;
+					}
+				}
+
+				if(newgoal)
+				{
+					self.ignoregoal = self.goalcurrent;
+					self.ignoregoaltime = time + cvar("bot_ai_ignoregoal_timeout");
+					navigation_routetogoal(newgoal);
+					self.aistatus &~= AI_STATUS_BAD_JUMPPAD;
+				}
+			}
+			else
+				return;
+		}
 		else
-			return;
+		{
+			if(self.velocity_z>0)
+			{
+				local float threshold;
+				threshold = maxspeed * 0.3;
+				if(fabs(self.velocity_x) < threshold  &&  fabs(self.velocity_y) < threshold)
+					self.aistatus |= AI_STATUS_BAD_JUMPPAD;
+				return;
+			}
+		}
 	}
 
 	if (self.goalcurrent == world)
 		return;
 
 	navigation_poptouchedgoals();
-	if (self.goalcurrent == world)
+
+	if(self.goalcurrent == world)
+	if(self.flags & FL_ONGROUND || self.aistatus & AI_STATUS_RUNNING || self.BUTTON_JUMP == TRUE)
 	{
 		if(self.alternativegoal==world)
 		{

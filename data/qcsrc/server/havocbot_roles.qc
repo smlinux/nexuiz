@@ -104,7 +104,7 @@ void havocbot_goalrating_items(float ratingscale, vector org, float sradius)
 		friend_distance = 10000; enemy_distance = 10000;
 		rating = 0;
 	
-		if(!head.solid || distance > sradius || head == self.ignoregoal )
+		if(!head.solid || distance > sradius || (head == self.ignoregoal && time < self.ignoregoaltime) )
 		{
 			head = head.chain;
 			continue;		
@@ -716,7 +716,7 @@ void havocbot_role_dm()
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
 		navigation_goalrating_start();
 		havocbot_goalrating_items(10000, self.origin, 10000);
-		havocbot_goalrating_enemyplayers(5000, self.origin, 10000);
+		havocbot_goalrating_enemyplayers(20000, self.origin, 20000);
 		//havocbot_goalrating_waypoints(1, self.origin, 1000);
 		navigation_goalrating_end();
 	}
