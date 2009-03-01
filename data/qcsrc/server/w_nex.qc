@@ -15,7 +15,7 @@ void W_Nex_Attack (void)
 	float flying;
 	flying = IsFlying(self); // do this BEFORE to make the trace values from FireRailgunBullet last
 
-	W_SetupShot (self, '52 9 -9', TRUE, 5, "weapons/nexfire.wav");
+	W_SetupShot (self, '33 8 -9', TRUE, 5, "weapons/nexfire.wav");
 
 	yoda = 0;
 	FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, cvar("g_balance_nex_damage"), cvar("g_balance_nex_force"), WEP_NEX);
