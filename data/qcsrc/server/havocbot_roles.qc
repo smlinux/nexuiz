@@ -250,11 +250,16 @@ void havocbot_goalrating_enemyplayers(float ratingscale, vector org, float sradi
 
 	FOR_EACH_PLAYER(head)
 	{
+		// TODO: Merge this logic with the bot_shouldattack function
 		if (self != head)
 		if (head.health > 0)
 		if ((noteam && (!bot_ignore_bots || clienttype(head) == CLIENTTYPE_REAL)) || head.team != self.team)
 		{
 			if (vlen(head.origin - org) > sradius)
+				continue;
+
+			if(g_minstagib)
+			if(head.items & IT_STRENGTH)
 				continue;
 				
 			// rate only visible enemies
