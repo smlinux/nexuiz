@@ -28,19 +28,26 @@ void drawNexuizPlayerSettingsTab(entity me)
 		me.playerNameLabel.alpha = me.playerNameLabelAlpha;
 	drawContainer(me);
 }
+string getPlayerName(entity me)
+{
+	return cvar_string("_cl_name");
+}
 void fillNexuizPlayerSettingsTab(entity me)
 {
 	entity e, pms, sl, eName, e0, box;
 	float i, n;
 
+	eName = spawn();
+	eName.toString = getPlayerName;
+
 	me.TR(me);
 		me.TD(me, 1, 0.5, me.playerNameLabel = makeNexuizTextLabel(0, "Name:"));
 			me.playerNameLabelAlpha = me.playerNameLabel.alpha;
-		me.TD(me, 1, 2.5, eName = makeNexuizTextLabel(0, string_null));
-			eName.textEntity = main.namesDialog;
-			eName.allowCut = 1;
-			eName.allowColors = 1;
-			eName.alpha = 1;
+		me.TD(me, 1, 2.5, e = makeNexuizTextLabel(0, string_null));
+			e.textEntity = eName;
+			e.allowCut = 1;
+			e.allowColors = 1;
+			e.alpha = 1;
 	me.TR(me);
 		me.TD(me, 1, 3.0, box = makeNexuizInputBox(1, "_cl_name"));
 			box.forbiddenCharacters = "\r\n\\\"$"; // don't care, isn't getting saved

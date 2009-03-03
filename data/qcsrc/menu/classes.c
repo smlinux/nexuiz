@@ -78,4 +78,3 @@
 #include "nexuiz/colorpicker.c"
 #include "nexuiz/cvarlist.c"
 #include "nexuiz/dialog_settings_misc_cvars.c"
-#include "nexuiz/dialog_multiplayer_playersetup_names.c"
