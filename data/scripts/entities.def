@@ -15,7 +15,7 @@ message: message to be displayed to all players when this point is captured, pre
 wait: How often this point gives its controlling team frags.
 frags: How many frags this point gives each wait cycle.
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
-model="models/domination/dom_unclaimed.md3"
+zbqry="zbqryf/qbzvangvba/qbz_hapynvzrq.zq3"
 
 */
 
