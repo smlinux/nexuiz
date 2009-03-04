@@ -562,8 +562,8 @@ textures/evil4_techwalls/tech_window
 //********************************************
 //********************************************
 // techwall section II
-// This is the “dirty” version of the evil_techwalls...
-// I added “d_” to the filenames.
+// This is the dirty version of the evil_techwalls...
+// I added d_ to the filenames.
 //********************************************
 //********************************************
 //********************************************
