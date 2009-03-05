@@ -710,7 +710,7 @@ void UpdateSelectedPlayer()
 .float floodcontrol_chatteam;
 void Say(entity source, float teamsay, string msgin, float floodcontrol)
 {
-	string msgstr, colorstr, cmsgstr, namestr;
+	string msgstr, colorstr, cmsgstr, namestr, fullmsgstr, sourcemsgstr, fullcmsgstr, sourcecmsgstr;
 	float flood;
 	entity head;
 
@@ -757,9 +757,14 @@ void Say(entity source, float teamsay, string msgin, float floodcontrol)
 		cmsgstr = strcat(colorstr, "(^3", namestr, colorstr, ")\n^7", msgin);
 	}
 	else
+	{
 		msgstr = strcat("\{1}", namestr, "^7: ", msgin);
+		cmsgstr = "";
+	}
 	
 	msgstr = strcat(strreplace("\n", " ", msgstr), "\n"); // newlines only are good for centerprint
+	fullmsgstr = msgstr;
+	fullcmsgstr = cmsgstr;
 
 	// FLOOD CONTROL
 	flood = 0;
@@ -786,63 +791,92 @@ void Say(entity source, float teamsay, string msgin, float floodcontrol)
 		}
 		flood_burst = max(0, flood_burst - 1);
 		// to match explanation in default.cfg, a value of 3 must allow three-line bursts and not four!
-		lines = ceil(strlennocol(msgstr) / 75);
-		if(flood_lmax && lines > flood_lmax)
+
+		// do flood control for the default line size
+		getWrappedLine_remaining = msgstr;
+		msgstr = "";
+		lines = 0;
+		while(getWrappedLine_remaining && (!flood_lmax || lines <= flood_lmax))
+		{
+			msgstr = strcat(msgstr, " ", getWrappedLine(82.4289758859709, strlennocol)); // perl averagewidth.pl < gfx/vera-sans.width
+			++lines;
+		}
+		msgstr = substring(msgstr, 1, strlen(msgstr) - 1);
+
+		if(getWrappedLine_remaining != "")
 			flood = 2;
-		else if(time >= self.flood_field)
+
+		if(time >= self.flood_field)
 			self.flood_field = max(time - flood_burst * flood_spl, self.flood_field) + lines * flood_spl;
 		else
 			flood = 1;
 	}
 
-	if(flood)
+	if(flood == 2)
 	{
 		if(cvar("g_chat_flood_notify_flooder"))
 		{
-			if(flood == 1)
-				sprint(self, strcat("^3FLOOD CONTROL: ^7wait ^1", ftos(self.flood_field - time), "^3 seconds\n"));
-			else if(flood == 2)
-				sprint(self, "^3FLOOD CONTROL: ^7message too long\n");
-		}
-		else
-			sprint(self, msgstr);
-		print("NOTE: ", playername(self), "^7 is flooding.\n");
-	}
-	else if(teamsay)
-	{
-		if(source.classname == "player")
-		{
-			FOR_EACH_REALPLAYER(head)
-			{
-				if(head.team == source.team)
-				{
-					sprint(head, msgstr);
-					centerprint(head, cmsgstr);
-				}
-			}
+			sourcemsgstr = strcat(msgstr, "\n^3FLOOD CONTROL: ^7message too long, trimmed\n");
+			sourcecmsgstr = "";
 		}
 		else
 		{
-			FOR_EACH_REALCLIENT(head) if(head.classname != "player")
-			{
-				sprint(head, msgstr);
-				centerprint(head, cmsgstr);
-			}
+			sourcemsgstr = fullmsgstr;
+			sourcecmsgstr = fullcmsgstr;
 		}
+		cmsgstr = "";
 	}
 	else
 	{
-		if(
-			(cvar("g_chat_nospectators") == 1 && source.classname != "player")
-			|| (cvar("g_chat_nospectators") == 2 && source.classname != "player" && !inWarmupStage)
-		) {
-			FOR_EACH_REALCLIENT(head) if(head.classname != "player") {
-				sprint(head, msgstr);
-			}
-		}
-		else
-			bprint(msgstr);
+		sourcemsgstr = msgstr;
+		sourcecmsgstr = cmsgstr;
 	}
+
+	if(source.classname != "player")
+	{
+		if(teamsay || (cvar("g_chat_nospectators") == 1) || (cvar("g_chat_nospectators") == 2 && !inWarmupStage))
+			teamsay = -1; // spectators
+	}
+
+	if(flood)
+		print("NOTE: ", playername(self), "^7 is flooding.\n");
+
+	if(flood == 1)
+	{
+		if(cvar("g_chat_flood_notify_flooder"))
+			sprint(self, strcat("^3FLOOD CONTROL: ^7wait ^1", ftos(self.flood_field - time), "^3 seconds\n"));
+		else
+			sprint(self, fullmsgstr);
+	}
+	else if(teamsay > 0)
+	{
+		sprint(source, sourcemsgstr);
+		if(sourcecmsgstr != "")
+			centerprint(source, sourcecmsgstr);
+		FOR_EACH_REALPLAYER(head) if(head.team == source.team)
+			if(head != source)
+			{
+				sprint(head, msgstr);
+				if(cmsgstr != "")
+					centerprint(head, cmsgstr);
+			}
+	}
+	else if(teamsay < 0)
+	{
+		sprint(source, sourcemsgstr);
+		FOR_EACH_REALCLIENT(head) if(head.classname != "player")
+			if(head != source)
+				sprint(head, msgstr);
+	}
+	else if(sourcemsgstr != msgstr)
+	{
+		sprint(source, sourcemsgstr);
+		FOR_EACH_REALCLIENT(head)
+			if(head != source)
+				sprint(head, msgstr);
+	}
+	else
+		bprint(msgstr);
 }
 
 float GetVoiceMessageVoiceType(string type)
