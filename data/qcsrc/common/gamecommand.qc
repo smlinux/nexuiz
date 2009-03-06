@@ -80,6 +80,7 @@ float GameCommand_Generic(string command)
 		print("  maplist add map\n");
 		print("  maplist remove map\n");
 		print("  maplist shuffle\n");
+		print("  maplist cleanup\n");
 		return TRUE;
 	}
 	
@@ -107,22 +108,14 @@ float GameCommand_Generic(string command)
 			s2 = "";
 			for(i = 0; i < n; ++i)
 				if(argv(i) != s)
-				{
 					s2 = strcat(s2, " ", argv(i));
-				}
 			s2 = substring(s2, 1, strlen(s2) - 1);
 			cvar_set("g_maplist", s2);
 			return TRUE;
 		}
 		else if(argv(1) == "shuffle" && argc == 2)
 		{
-			n = tokenizebyseparator(cvar_string("g_maplist"), " ");
-			shufflearray_build(n); 
-			s2 = "";
-			for(i = 0; i < n; ++i)
-				s2 = strcat(s2, " ", argv(shufflearray[i]));
-			s = substring(s2, 1, strlen(s2) - 1);
-			cvar_set("g_maplist", s);
+			cvar_set("g_maplist", shufflewords(cvar_string("g_maplist")));
 			return TRUE;
 		}
 		else if(argv(1) == "cleanup")

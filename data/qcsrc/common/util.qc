@@ -1515,26 +1515,40 @@ void shuffle(float n, shuffle_swapfunc_t swap)
 		//     q.e.d.
 		j = floor(random() * (i + 1));
 		if(j != i)
-			swap(i, j);
+			swap(j, i);
 	}
 }
 
-void shufflearray_init(float n)
+string substring_range(string s, float b, float e)
 {
-	float i;
-	for(i = 0; i < n; ++i)
-		shufflearray[i] = i;
-}
-void shufflearray_swap(float i, float j)
-{
-	float h;
-	h = shufflearray[i];
-	shufflearray[i] = shufflearray[j];
-	shufflearray[j] = h;
+	return substring(s, b, e - b);
 }
 
-void shufflearray_build(float n)
+string swapwords(string str, float i, float j)
 {
-	shufflearray_init(n);
-	shuffle(n, shufflearray_swap);
+	float n;
+	string s1, s2, s3, s4, s5;
+	n = tokenizebyseparator(str, " "); // must match g_maplist processing in ShuffleMaplist and "shuffle"
+	s1 = substring_range(str, argv_start_index(0), argv_start_index(i));
+	s2 = substring_range(str, argv_start_index(i), argv_end_index(i));
+	s3 = substring_range(str, argv_end_index(i), argv_start_index(j));
+	s4 = substring_range(str, argv_start_index(j), argv_end_index(j));
+	s5 = substring_range(str, argv_end_index(j), argv_end_index(n));
+	return strcat(s1, s4, s3, s2, s5);
+}
+
+string _shufflewords_str;
+void _shufflewords_swapfunc(float i, float j)
+{
+	_shufflewords_str = swapwords(_shufflewords_str, i, j);
+}
+string shufflewords(string str)
+{
+	float n;
+	_shufflewords_str = str;
+	n = tokenizebyseparator(str, " ");
+	shuffle(n, _shufflewords_swapfunc);
+	str = _shufflewords_str;
+	_shufflewords_str = string_null;
+	return str;
 }

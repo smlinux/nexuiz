@@ -153,8 +153,10 @@ string getWrappedLine(float w, textLengthUpToWidth_widthFunction_t tw);
 
 float isGametypeInFilter(float gt, float tp, string pattern);
 
-typedef void(float i1, float i2) shuffle_swapfunc_t;
+typedef void(float i1, float i2) shuffle_swapfunc_t; // is only ever called for i1 < i2
 void shuffle(float n, shuffle_swapfunc_t swap);
 
-float shufflearray[1024];
-void shufflearray_build(float n);
+string swapwords(string str, float i, float j);
+string shufflewords(string str);
+
+string substring_range(string s, float b, float e);

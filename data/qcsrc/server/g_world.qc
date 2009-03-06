@@ -1625,16 +1625,7 @@ float WinningCondition_LMS()
 
 void ShuffleMaplist()
 {
-	float n, i;
-	string s, s2;
-
-	n = tokenizebyseparator(cvar_string("g_maplist"), " ");
-	shufflearray_build(n); 
-	s2 = "";
-	for(i = 0; i < n; ++i)
-		s2 = strcat(s2, " ", argv(shufflearray[i]));
-	s = substring(s2, 1, strlen(s2) - 1);
-	cvar_set("g_maplist", s);
+	cvar_set("g_maplist", shufflewords(cvar_string("g_maplist")));
 }
 
 float leaderfrags;
