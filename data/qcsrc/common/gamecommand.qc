@@ -81,6 +81,7 @@ float GameCommand_Generic(string command)
 		print("  maplist remove map\n");
 		print("  maplist shuffle\n");
 		print("  maplist cleanup\n");
+		print("  addtolist variable addedvalue\n");
 		return TRUE;
 	}
 	
