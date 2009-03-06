@@ -1625,37 +1625,16 @@ float WinningCondition_LMS()
 
 void ShuffleMaplist()
 {
-	string result;
-	float start;
-	float litems;
-	float selected;
-	float i;
+	float n, i;
+	string s, s2;
 
-	result = cvar_string("g_maplist");
-	litems = tokenizebyseparator(result, " ");
-
-	for(start = 0; start < litems - 1; ++start)
-	{
-		result = "";
-
-		// select a random item
-		selected = floor(random() * (litems - start) + start);
-
-		// shift this item to the place start
-		for(i = 0; i < start; ++i)
-			result = strcat(result, " ", argv(i));
-		result = strcat(result, " ", argv(selected));
-		for(i = start; i < litems; ++i)
-			if(i != selected)
-				result = strcat(result, " ", argv(i));
-		result = substring(result, 1, strlen(result) - 1);
-
-		litems = tokenizebyseparator(result, " ");
-
-		//dprint(result, "\n");
-	}
-
-	cvar_set("g_maplist", result);
+	n = tokenizebyseparator(cvar_string("g_maplist"), " ");
+	shufflearray_build(n); 
+	s2 = "";
+	for(i = 0; i < n; ++i)
+		s2 = strcat(s2, " ", argv(shufflearray[i]));
+	s = substring(s2, 1, strlen(s2) - 1);
+	cvar_set("g_maplist", s);
 }
 
 float leaderfrags;

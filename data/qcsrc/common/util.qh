@@ -152,3 +152,9 @@ string getWrappedLine_remaining;
 string getWrappedLine(float w, textLengthUpToWidth_widthFunction_t tw);
 
 float isGametypeInFilter(float gt, float tp, string pattern);
+
+typedef void(float i1, float i2) shuffle_swapfunc_t;
+void shuffle(float n, shuffle_swapfunc_t swap);
+
+float shufflearray[1024];
+void shufflearray_build(float n);

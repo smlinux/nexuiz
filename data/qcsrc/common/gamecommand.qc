@@ -116,28 +116,12 @@ float GameCommand_Generic(string command)
 		}
 		else if(argv(1) == "shuffle" && argc == 2)
 		{
-			// TODO make this work for huge lists
-			s = cvar_string("g_maplist");
-			for(i = 1; i < (n = tokenizebyseparator(s, " ")); ++i)
-			{
-				// swap i-th item at a random position from 0 to i
-				// proof for even distribution:
-				//   n = 1: obvious
-				//   n -> n+1:
-				//     item n+1 gets at any position with chance 1/(n+1)
-				//     all others will get their 1/n chance reduced by factor n/(n+1)
-				//     to be on place n+1, their chance will be 1/(n+1)
-				//     1/n * n/(n+1) = 1/(n+1)
-				//     q.e.d.
-				f = floor(random() * (i + 1)); // 0 to i
-				if(f == i)
-					continue; // no change
-
-				s2 = "";
-				for(j = 0; j < n; ++j)
-					s2 = strcat(s2, " ", argv((j == i) ? f : (j == f) ? i : j));
-				s = substring(s2, 1, strlen(s2) - 1);
-			}
+			n = tokenizebyseparator(cvar_string("g_maplist"), " ");
+			shufflearray_build(n); 
+			s2 = "";
+			for(i = 0; i < n; ++i)
+				s2 = strcat(s2, " ", argv(shufflearray[i]));
+			s = substring(s2, 1, strlen(s2) - 1);
 			cvar_set("g_maplist", s);
 			return TRUE;
 		}

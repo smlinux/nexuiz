@@ -1498,3 +1498,43 @@ float isGametypeInFilter(float gt, float tp, string pattern)
 	}
 	return 1;
 }
+
+void shuffle(float n, shuffle_swapfunc_t swap)
+{
+	float i, j;
+	for(i = 1; i < n; ++i)
+	{
+		// swap i-th item at a random position from 0 to i
+		// proof for even distribution:
+		//   n = 1: obvious
+		//   n -> n+1:
+		//     item n+1 gets at any position with chance 1/(n+1)
+		//     all others will get their 1/n chance reduced by factor n/(n+1)
+		//     to be on place n+1, their chance will be 1/(n+1)
+		//     1/n * n/(n+1) = 1/(n+1)
+		//     q.e.d.
+		j = floor(random() * (i + 1));
+		if(j != i)
+			swap(i, j);
+	}
+}
+
+void shufflearray_init(float n)
+{
+	float i;
+	for(i = 0; i < n; ++i)
+		shufflearray[i] = i;
+}
+void shufflearray_swap(float i, float j)
+{
+	float h;
+	h = shufflearray[i];
+	shufflearray[i] = shufflearray[j];
+	shufflearray[j] = h;
+}
+
+void shufflearray_build(float n)
+{
+	shufflearray_init(n);
+	shuffle(n, shufflearray_swap);
+}
