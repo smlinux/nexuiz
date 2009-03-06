@@ -1,0 +1,12 @@
+{
+"classname" "__init_dedicated_server"
+// brush 0
+{
+( 0 0 0 ) ( 0 1 0 ) ( 0 0 1 ) common/caulk 0 0 0 0.5 0.5 0 0 0
+( 0 0 0 ) ( 1 0 0 ) ( 0 1 0 ) common/caulk 0 0 0 0.5 0.5 0 0 0
+( 0 0 0 ) ( 0 0 1 ) ( 1 0 0 ) common/caulk 0 0 0 0.5 0.5 0 0 0
+( 1 1 1 ) ( 1 1 0 ) ( 1 0 1 ) common/caulk 0 0 0 0.5 0.5 0 0 0
+( 1 1 1 ) ( 1 0 1 ) ( 0 1 1 ) common/caulk 0 0 0 0.5 0.5 0 0 0
+( 1 1 1 ) ( 0 1 1 ) ( 1 1 0 ) common/caulk 0 0 0 0.5 0.5 0 0 0
+}
+}
