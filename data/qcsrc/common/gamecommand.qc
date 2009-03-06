@@ -630,6 +630,22 @@ float GameCommand_Generic(string command)
 			}
 			return TRUE;
 		}
+	} else if(argv(0) == "addtolist") {
+		if(argc >= 2)
+		{
+			s = argv(1);
+			s2 = argv(2);
+			if(cvar_string(s) == "")
+				cvar_set(s, s2);
+			else {
+				n = tokenizebyseparator(cvar_string(s), " ");
+				for(i = 0; i < n; ++i)
+					if(argv(i) == s2)
+						return TRUE; // already in list
+				cvar_set(s, strcat(s2, " ", cvar_string(s)));
+			}
+		}
+		return TRUE;
 #ifdef MENUQC
 	} else if(argv(0) == "cp") {
 		if(argc >= 2)
