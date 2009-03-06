@@ -116,6 +116,7 @@ float GameCommand_Generic(string command)
 		}
 		else if(argv(1) == "shuffle" && argc == 2)
 		{
+			// TODO make this work for huge lists
 			s = cvar_string("g_maplist");
 			for(i = 1; i < (n = tokenizebyseparator(s, " ")); ++i)
 			{
