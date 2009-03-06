@@ -199,7 +199,7 @@ string MapInfo_FilterGametype_Recursive(float pGametype, float pFeatures, float 
 		return HugeSetOfIntegers_concat(l, r);
 }
 
-float MapInfo_FilterGametype(float pGametype, float pFeatures, pFlagsRequired, pFlagsForbidden, float pAbortOnGenerate)
+float MapInfo_FilterGametype(float pGametype, float pFeatures, float pFlagsRequired, float pFlagsForbidden, float pAbortOnGenerate)
 {
 	if(_MapInfo_filtered)
 		strunzone(_MapInfo_filtered);
