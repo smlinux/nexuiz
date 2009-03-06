@@ -1532,10 +1532,10 @@ string swapwords(string str, float i, float j)
 	n = tokenizebyseparator(str, " "); // must match g_maplist processing in ShuffleMaplist and "shuffle"
 	si = argv_start_index(i);
 	sj = argv_start_index(j);
-	ei = argv_end_index(i) + 1;
-	ej = argv_end_index(j) + 1;
+	ei = argv_end_index(i);
+	ej = argv_end_index(j);
 	s0 = argv_start_index(0);
-	en = argv_end_index(n-1) + 1;
+	en = argv_end_index(n-1);
 	s1 = substring_range(str, s0, si);
 	s2 = substring_range(str, si, ei);
 	s3 = substring_range(str, ei, sj);
