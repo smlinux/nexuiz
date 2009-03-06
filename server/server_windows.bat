@@ -5,4 +5,4 @@ set executable=nexuiz -dedicated
 
 %~d0
 cd "%~p0"
-.\%executable% %*
+.\%executable% +serverconfig server.cfg %*

@@ -6,4 +6,4 @@ case "$(uname -m)" in
 esac
 
 cd "`dirname "${0}"`"
-exec ./${executable} "${@}"
+exec ./${executable} +serverconfig server.cfg "${@}"

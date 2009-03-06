@@ -3,4 +3,4 @@
 executable="nexuiz-osx-dedicated"
 
 cd "`dirname "${0}"`"
-exec ./${executable} "${@}"
+exec ./${executable} +serverconfig server.cfg "${@}"
