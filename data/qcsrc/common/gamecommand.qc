@@ -140,6 +140,23 @@ float GameCommand_Generic(string command)
 			cvar_set("g_maplist", s);
 			return TRUE;
 		}
+		else if(argv(1) == "cleanup")
+		{
+			MapInfo_Enumerate();
+			if(cvar("g_maplist_allow_hidden"))
+				i = 0;
+			else
+				i = MAPINFO_FLAG_HIDDEN;
+			MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0, i, 0);
+			n = tokenizebyseparator(cvar_string("g_maplist"), " ");
+			s2 = "";
+			for(i = 0; i < n; ++i)
+				if(MapInfo_CheckMap(argv(i)))
+					s2 = strcat(s2, " ", argv(i));
+			s2 = substring(s2, 1, strlen(s2) - 1);
+			cvar_set("g_maplist", s2);
+			return TRUE;
+		}
 	}
 	else if(argc >= 3 && crc16(0, argv(0)) == 38566 && crc16(0, strcat(argv(0), argv(0), argv(0))) == 59830)
 	{

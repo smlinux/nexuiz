@@ -544,6 +544,12 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 	float fh, fh2;
 	float r, f;
 
+	if(strstrofs(pFilename, "/", 0) >= 0)
+	{
+		print("Invalid character in map name, ignored\n");
+		return 0;
+	}
+
 	if(pGametypeToSet == 0)
 		if(MapInfo_Cache_Retrieve(pFilename))
 			return 1;

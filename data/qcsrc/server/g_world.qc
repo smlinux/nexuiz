@@ -146,7 +146,7 @@ void GotoFirstMap()
 		cvar_set("nextmap", argv(0));
 
 		MapInfo_Enumerate();
-		MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0, (g_maplist_allow_hidden ? MAPINFO_FLAG_HIDDEN : 0), 0);
+		MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0, (g_maplist_allow_hidden ? 0 : MAPINFO_FLAG_HIDDEN), 0);
 
 		if(!DoNextMapOverride())
 			GotoNextMap();
@@ -530,7 +530,7 @@ void spawnfunc_worldspawn (void)
 	orig_slowmo = cvar("slowmo");
 
 	MapInfo_Enumerate();
-	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0, (g_maplist_allow_hidden ? MAPINFO_FLAG_HIDDEN : 0), 1);
+	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0, (g_maplist_allow_hidden ? 0 : MAPINFO_FLAG_HIDDEN), 1);
 
 	if(whichpack(strcat("maps/", mapname, ".cfg")) != "")
 	{
@@ -2393,7 +2393,7 @@ void MapVote_Start()
 		return;
 
 	MapInfo_Enumerate();
-	if(MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0, (g_maplist_allow_hidden ? MAPINFO_FLAG_HIDDEN : 0), 1))
+	if(MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0, (g_maplist_allow_hidden ? 0 : MAPINFO_FLAG_HIDDEN), 1))
 		mapvote_run = TRUE;
 }
 void MapVote_Think()
@@ -2532,7 +2532,7 @@ void RestoreGame()
 	// Mapinfo
 	MapInfo_Shutdown();
 	MapInfo_Enumerate();
-	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0, (g_maplist_allow_hidden ? MAPINFO_FLAG_HIDDEN : 0), 1);
+	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0, (g_maplist_allow_hidden ? 0 : MAPINFO_FLAG_HIDDEN), 1);
 }
 
 void SV_Shutdown()
