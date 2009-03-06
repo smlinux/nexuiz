@@ -257,13 +257,13 @@ cp -r "$mingwdlls"/* .
 # fix up permissions
 chmod 644 *.dll *.exe
 
-mkdir unsupported
-cd unsupported
-wget http://svn.icculus.org/netradiant/files/netradiant-${netradiant_release}-win32.zip
+mkdir extra
+cd extra
+wget http://www.icculus.org/netradiant/files/netradiant-${netradiant_release}-win32.zip
 unzip netradiant-${netradiant_release}-win32.zip
 mv NetRadiant netradiant-${netradiant_release}-win32
 rm -f netradiant-${netradiant_release}-win32.zip
-wget http://svn.icculus.org/netradiant/files/netradiant-${netradiant_release}-osxintel.zip
+wget http://www.icculus.org/netradiant/files/netradiant-${netradiant_release}-osxintel.zip
 unzip netradiant-${netradiant_release}-osxintel.zip
 mv NetRadiant.app NetRadiant-${netradiant_release}-osxintel.app
 rm -f netradiant-${netradiant_release}-osxintel.zip
@@ -284,7 +284,7 @@ mv * Nexuiz/ || true
 find . -name .svn -exec rm -rf {} \; -prune
 
 rm -f "$zipdir/nexuiz$date$ext.zip"
-zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/server Nexuiz/data/data$tag$date.pk3 Nexuiz/data/common-spog.pk3 Nexuiz/havoc/* Nexuiz/unsupported/*
+zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/server Nexuiz/data/data$tag$date.pk3 Nexuiz/data/common-spog.pk3 Nexuiz/havoc/* Nexuiz/extra/*
 ln -snf nexuiz$date$ext.zip "$zipdir/nexuiz-$newest.zip"
 
 rm -f "$zipdir/nexuizengineonly$date$ext.zip"
