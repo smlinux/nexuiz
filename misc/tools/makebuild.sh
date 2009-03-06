@@ -10,6 +10,7 @@ set -e
 base=`pwd`
 
 # customizable specific stuff
+netradiant_release=1.5.0-svn212
 basepk3=$base/data20080229.pk3 # 2.4
 hotbasepk3= # hotfix
 nexdir=$base/nexuiz
@@ -256,6 +257,26 @@ cp -r "$mingwdlls"/* .
 # fix up permissions
 chmod 644 *.dll *.exe
 
+mkdir unsupported
+cd unsupported
+wget http://svn.icculus.org/netradiant/files/netradiant-${netradiant_release}-win32.zip
+unzip netradiant-${netradiant_release}-win32.zip
+mv NetRadiant netradiant-${netradiant_release}-win32
+rm -f netradiant-${netradiant_release}-win32.zip
+wget http://svn.icculus.org/netradiant/files/netradiant-${netradiant_release}-osxintel.zip
+unzip netradiant-${netradiant_release}-osxintel.zip
+mv NetRadiant.app NetRadiant-${netradiant_release}-osxintel.app
+rm -f netradiant-${netradiant_release}-osxintel.zip
+cat >> unsupported.txt
+This directory contains NetRadiant, a stabilized Q3 map editor,
+configured for Nexuiz.
+
+It is not officially supported by Alientrap.
+
+Website: http://www.icculus.org/netradiant/
+EOF
+cd ..
+
 # make main structure
 mkdir Nexuiz
 mv * Nexuiz/ || true
@@ -263,7 +284,7 @@ mv * Nexuiz/ || true
 find . -name .svn -exec rm -rf {} \; -prune
 
 rm -f "$zipdir/nexuiz$date$ext.zip"
-zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/server Nexuiz/data/data$tag$date.pk3 Nexuiz/data/common-spog.pk3 Nexuiz/havoc/*
+zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/server Nexuiz/data/data$tag$date.pk3 Nexuiz/data/common-spog.pk3 Nexuiz/havoc/* Nexuiz/unsupported/*
 ln -snf nexuiz$date$ext.zip "$zipdir/nexuiz-$newest.zip"
 
 rm -f "$zipdir/nexuizengineonly$date$ext.zip"
