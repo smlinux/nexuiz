@@ -75,6 +75,9 @@ float GameCommand_Generic(string command)
 		print("    x dbins --------------------------->     : moves the top into the DB\n");
 		print("    dbext|dbread ----------------------> x   : extract/get from the DB's cursor\n");
 		print("    f dbmov|dbgoto -------------------->     : move or set the DB's cursor\n");
+		print("    s localtime -----------------------> s   : formats the current local time\n");
+		print("    s gmtime --------------------------> s   : formats the current UTC time\n");
+		print("    time ------------------------------> f   : seconds since VM start\n");
 		print("    Set operations operate on 'such''strings'.\n");
 		print("    Unknown tokens insert their cvar value.\n");
 		print("  maplist add map\n");
@@ -611,6 +614,12 @@ float GameCommand_Generic(string command)
 							rpn_error = TRUE;
 						}
 					}
+				} else if(rpncmd == "localtime") {
+					rpn_set(strftime(TRUE, rpn_get()));
+				} else if(rpncmd == "gmtime") {
+					rpn_set(strftime(FALSE, rpn_get()));
+				} else if(rpncmd == "time") {
+					rpn_pushf(time);
 				} else {
 					rpn_push(cvar_string(rpncmd));
 				}

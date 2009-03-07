@@ -316,6 +316,8 @@ string(string in) uri_unescape = #511;
 string(string, float) netaddress_resolve = #625;
 string(string search, string replace, string subject) strreplace = #484;
 
+string(float uselocaltime, string format, ...) strftime = #478;
+
 #ifdef FIXEDFOPEN
 float 	fopen( string filename, float mode ) =
 {
