@@ -43,6 +43,7 @@ void fillNexuizAudioSettingsTab(entity me)
 		me.TDempty(me, 0.2);
 		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "snd_worldchannel0volume");
 		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Info:"));
+		makeMulti(s, "snd_csqcchannel0volume");
 		me.TD(me, 1, 2, s);
 		setDependentStringNotEqual(e, "volume", "0");
 		setDependentStringNotEqual(s, "volume", "0");

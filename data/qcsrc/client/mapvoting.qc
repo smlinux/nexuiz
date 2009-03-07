@@ -266,6 +266,8 @@ void MapVote_Init()
 	float i, power;
 	string map, pk3, ssdir;
 
+	precache_sound ("misc/invshot.wav");
+
 	registercmd("+showscores");
 	registercmd("-showscores");
 
@@ -323,10 +325,23 @@ void MapVote_Init()
 
 void MapVote_UpdateMask()
 {
+	float i, power;
+	float oldmask;
+
+	oldmask = mv_maps_mask;
 	if(mv_num_maps <= 8)
 		mv_maps_mask = ReadByte();
 	else
 		mv_maps_mask = ReadShort();
+
+	if(oldmask & mv_maps_mask != oldmask)
+		if(oldmask & mv_maps_mask == mv_maps_mask)
+			 sound(world, CHAN_AUTO, "misc_invshot.wav", VOL_BASE, ATTN_NONE);
+
+	// remove votes that no longer apply
+	for(i = 0, power = 1; i < mv_num_maps; ++i, power *= 2)
+		if not(mv_maps_mask & power)
+			mv_votes[i] = -1;
 }
 
 void MapVote_UpdateVotes()

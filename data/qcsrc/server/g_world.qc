@@ -2112,6 +2112,9 @@ float MapVote_SendEntity(entity to, float sf)
 	string mapfile, pakfile;
 	float i, o;
 
+	if(sf & 1)
+		sf &~= 2; // if we send 1, we don't need to also send 2
+
 	WriteByte(MSG_ENTITY, ENT_CLIENT_MAPVOTE);
 	WriteByte(MSG_ENTITY, sf);
 
@@ -2334,10 +2337,6 @@ void MapVote_Tick()
 				WriteString(MSG_ONE, "");
 			}
 		}
-
-		// notify about keep-two
-		if(keeptwo != 0 && mapvote_keeptwotime == 0)
-			play2(other, "misc/invshot.wav");
 
 		// clear possibly invalid votes
 		if(mapvote_maps[other.mapvote - 1] == "")
