@@ -55,6 +55,7 @@ for(@words)
 print "Total chars: $chars\n";
 print "Total width: $width\n";
 print "Average: @{[$width / $chars]}\n";
+print "Chat line width: @{[800 * 0.6 / 10 / ($width / $chars)]}\n";
 
 __DATA__
 		    GNU GENERAL PUBLIC LICENSE

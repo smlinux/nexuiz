@@ -60,7 +60,7 @@ void W_Hook_Attack2()
 
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_hook_secondary_ammo");
-	W_SetupShot (self, '21 8 -9.5', FALSE, 4, "weapons/hookbomb_fire.wav");
+	W_SetupShot (self, '21 8 -8.5', FALSE, 4, "weapons/hookbomb_fire.wav");
 
 	gren = spawn ();
 	gren.owner = self;
