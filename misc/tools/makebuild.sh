@@ -267,7 +267,7 @@ wget http://www.icculus.org/netradiant/files/netradiant-${netradiant_release}-os
 unzip netradiant-${netradiant_release}-osxintel.zip
 mv NetRadiant.app NetRadiant-${netradiant_release}-osxintel.app
 rm -f netradiant-${netradiant_release}-osxintel.zip
-cat >> unsupported.txt
+cat >> unsupported.txt <<EOF
 This directory contains NetRadiant, a stabilized Q3 map editor,
 configured for Nexuiz.
 
