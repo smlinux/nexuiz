@@ -407,11 +407,22 @@ void CSQC_UpdateView(float w, float h)
 	self = e;
 	
 	// draw radar
-	if(teamplay || cvar("cl_teamradar") == 2)
-	{
-		if((cvar_string("cl_teamradar") != "0" && !scoreboard_active) || ons_showmap)
-			teamradar_view();
-	}
+	if(
+		ons_showmap
+		||
+		(
+			!scoreboard_active
+			&&
+			cvar_string("cl_teamradar") != "0"
+			&&
+			(
+				cvar("cl_teamradar") == 2
+				||
+				teamplay
+			)
+		)
+	)
+		teamradar_view();
 
 	if (cvar("cl_showpressedkeys")) // draw pressed keys when spectating and playing
 	{
