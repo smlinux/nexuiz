@@ -602,7 +602,7 @@ float GameCommand_Generic(string command)
 						s = substring(s, 1, 99999);
 					rpn_set(s);
 					tokenize_sane(command);
-					} else if(rpncmd == "fexists_assert") {
+				} else if(rpncmd == "fexists_assert") {
 					s = rpn_pop();
 					if(!rpn_error)
 					{
@@ -612,6 +612,18 @@ float GameCommand_Generic(string command)
 						else {
 							print("rpn: ERROR: ", s, " does not exist!\n");
 							rpn_error = TRUE;
+						}
+					}
+				} else if(rpncmd == "fexists") {
+					s = rpn_get();
+					if(!rpn_error)
+					{
+						f = fopen(s, FILE_READ);
+						if(f != -1) {
+							fclose(f);
+							rpn_setf(1);
+						} else {
+							rpn_setf(0);
 						}
 					}
 				} else if(rpncmd == "localtime") {
