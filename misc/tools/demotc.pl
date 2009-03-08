@@ -77,11 +77,26 @@ my $demo_started = 0;
 my $demo_stopped = 0;
 my $inject_buffer = "";
 
+use constant DEMOMSG_CLIENT_TO_SERVER => 0x80000000;
 for(;;)
 {
 	last
 		unless 4 == read $infh, my $length, 4;
 	$length = unpack("V", $length);
+	if($length & DEMOMSG_CLIENT_TO_SERVER)
+	{
+		# client-to-server packet
+		$length = $length & ~DEMOMSG_CLIENT_TO_SERVER;
+		die "Invalid demo packet"
+			unless 12 == read $infh, my $angles, 12;
+		die "Invalid demo packet"
+			unless $length == read $infh, my($data), $length;
+
+		next if $mode eq 'grep';
+		print $outfh pack("V", length($data) | DEMOMSG_CLIENT_TO_SERVER);
+		print $outfh $angles;
+		print $outfh $data;
+	}
 	die "Invalid demo packet"
 		unless 12 == read $infh, my $angles, 12;
 	die "Invalid demo packet"
