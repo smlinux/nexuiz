@@ -1,7 +1,7 @@
 #ifdef INTERFACE
 CLASS(NexuizNetworkSettingsTab) EXTENDS(NexuizTab)
 	METHOD(NexuizNetworkSettingsTab, fill, void(entity))
-	ATTRIB(NexuizNetworkSettingsTab, title, string, "Audio")
+	ATTRIB(NexuizNetworkSettingsTab, title, string, "Network")
 	ATTRIB(NexuizNetworkSettingsTab, intendedWidth, float, 0.9)
 	ATTRIB(NexuizNetworkSettingsTab, rows, float, 17)
 	ATTRIB(NexuizNetworkSettingsTab, columns, float, 6.5)
@@ -40,7 +40,7 @@ void fillNexuizNetworkSettingsTab(entity me)
 			e.configureNexuizTextSliderValues(e);
     me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Input packets/s:"));
-		me.TD(me, 1, 2, e = makeNexuizSlider(20, 120, 1, "cl_netfps"));
+		me.TD(me, 1, 2, e = makeNexuizSlider(20, 100, 1, "cl_netfps"));
 	me.TR(me);
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizTextLabel(0, "HTTP downloads:"));
