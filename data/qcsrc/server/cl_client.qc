@@ -1615,7 +1615,11 @@ void player_powerups (void)
 		return;
 	}
 
-	self.effects = self.effects - (self.effects & (EF_RED | EF_BLUE | EF_ADDITIVE | EF_FULLBRIGHT));
+	self.effects &~= (EF_RED | EF_BLUE | EF_ADDITIVE | EF_FULLBRIGHT);
+
+	if(!self.modelindex) // don't apply the flags if the player is gibbed
+		return;
+
 	if (self.items & IT_STRENGTH)
 	{
 		self.effects = self.effects | (EF_BLUE | EF_ADDITIVE | EF_FULLBRIGHT);
