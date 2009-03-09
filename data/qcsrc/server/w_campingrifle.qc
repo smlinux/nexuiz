@@ -8,7 +8,7 @@ void W_Campingrifle_ReloadedAndReady()
 {
 	float t;
 	self.campingrifle_bulletcounter = 0;
-	t = ATTACK_FINISHED(self) - cvar("g_balance_campingrifle_reloadtime") + 1;
+	t = ATTACK_FINISHED(self) - cvar("g_balance_campingrifle_reloadtime") - 1;
 	ATTACK_FINISHED(self) = t;
 	w_ready();
 }
