@@ -2133,16 +2133,24 @@ float MapVote_SendEntity(entity to, float sf)
 		for(i = 0; i < mapvote_count; ++i)
 			if(mapvote_maps[i] != "")
 			{
-				WriteString(MSG_ENTITY, mapvote_maps[i]);
-				mapfile = strcat(mapvote_screenshot_dir, "/", mapvote_maps[i]);
-				pakfile = whichpack(strcat(mapfile, ".tga"));
-				if(pakfile == "")
-					pakfile = whichpack(strcat(mapfile, ".jpg"));
-				if(pakfile == "")
-					pakfile = whichpack(strcat(mapfile, ".png"));
-				for(o = strstr(pakfile, "/", 0)+1; o > 0; o = strstr(pakfile, "/", 0)+1)
-					pakfile = substring(pakfile, o, 999);
-				WriteString(MSG_ENTITY, pakfile);
+				if(mapvote_abstain && i == mapvote_count - 1)
+				{
+					WriteString(MSG_ENTITY, ""); // abstain needs no text
+					WriteString(MSG_ENTITY, ""); // abstain needs no pack
+				}
+				else
+				{
+					WriteString(MSG_ENTITY, mapvote_maps[i]);
+					mapfile = strcat(mapvote_screenshot_dir, "/", mapvote_maps[i]);
+					pakfile = whichpack(strcat(mapfile, ".tga"));
+					if(pakfile == "")
+						pakfile = whichpack(strcat(mapfile, ".jpg"));
+					if(pakfile == "")
+						pakfile = whichpack(strcat(mapfile, ".png"));
+					for(o = strstr(pakfile, "/", 0)+1; o > 0; o = strstr(pakfile, "/", 0)+1)
+						pakfile = substring(pakfile, o, 999);
+					WriteString(MSG_ENTITY, pakfile);
+				}
 			}
 	}
 
