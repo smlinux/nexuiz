@@ -834,7 +834,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		UpdateCSQCProjectile(self);
 	}
 	// apply damage
-	if (damage != 0)
+	if (damage != 0 || (self.damageforcescale && vlen(force)))
 	if (self.event_damage)
 		self.event_damage (inflictor, attacker, damage, deathtype, hitloc, force);
 	self = oldself;
