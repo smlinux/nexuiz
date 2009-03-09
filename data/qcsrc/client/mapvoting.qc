@@ -18,7 +18,12 @@ string MapVote_FormatMapItem(float id, string map, float count, float maxwidth)
 	string pre, post;
 	pre = strcat(ftos(id+1), ". ");
 	if(mv_detail)
-		post = strcat(" (", ftos(count), " votes)");
+	{
+		if(count == 1)
+			post = strcat(" (1 vote)");
+		else
+			post = strcat(" (", ftos(count), " votes)");
+	}
 	else
 		post = "";
 	maxwidth -= stringwidth(pre, FALSE) + stringwidth(post, FALSE);
