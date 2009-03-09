@@ -470,7 +470,13 @@ void GrappleHookInit()
 	if(g_grappling_hook)
 		hook_shotorigin = '8 -8 -12';
 	else
+	{
 		hook_shotorigin = '21 8 -8.5';
+		if(cvar("g_shootfromcenter"))
+			hook_shotorigin_y = 0;
+		if(cvar("g_shootfromeye"))
+			hook_shotorigin_y = hook_shotorigin_z = 0;
+	}
 }
 
 void SetGrappleHookBindings()

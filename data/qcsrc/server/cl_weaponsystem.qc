@@ -45,7 +45,7 @@ void W_SetupShot(entity ent, vector vecs, float antilag, float recoil, string sn
 	if (cvar("g_shootfromeye"))
 		w_shotorg = ent.origin + ent.view_ofs;
 	else if (cvar("g_shootfromcenter"))
-		w_shotorg = ent.origin + ent.view_ofs + '0 0 1' * vecs_z;
+		w_shotorg = ent.origin + ent.view_ofs + v_up * vecs_z;
 	else
 		w_shotorg = ent.origin + ent.view_ofs + v_right * vecs_y + v_up * vecs_z;
 	// now move the shotorg forward as much as requested if possible
@@ -277,6 +277,26 @@ void CL_Weaponentity_Think()
 			setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".zym")); // precision set below
 		else
 			self.model = "";
+
+		if(cvar("g_shootfromcenter") || cvar("g_shootfromeye"))
+		{
+			entity e;
+			e = spawn();
+			e.modelindex = self.modelindex;
+			float idx;
+			vector v;
+			idx = gettagindex(e, "bone02");
+			if(idx)
+			{
+				v = gettaginfo(e, idx);
+				setorigin(self, '0 -1 0' * v_y);
+			}
+			else
+				setorigin(self, '0 0 0');
+			remove(e);
+		}
+		else
+			setorigin(self, '0 0 0');
 	}
 
 	tb = (self.effects & EF_TELEPORT_BIT);
@@ -369,7 +389,6 @@ void CL_SpawnWeaponentity()
 	self.weaponentity.think = CL_Weaponentity_Think;
 	self.weaponentity.customizeentityforclient = CL_Weaponentity_CustomizeEntityForClient;
 	self.weaponentity.nextthink = time;
-	self.weaponentity.scale = 0.61;
 
 	self.exteriorweaponentity = spawn();
 	self.exteriorweaponentity.classname = "exteriorweaponentity";
