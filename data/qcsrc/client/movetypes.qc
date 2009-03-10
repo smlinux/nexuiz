@@ -214,7 +214,7 @@ void _Movetype_Physics_Toss(float dt) // SV_Physics_Toss
 {
 	if(self.move_flags & FL_ONGROUND)
 	{
-		if(self.velocity_z >= 1/32)
+		if(self.move_velocity_z >= 1/32)
 			self.move_flags &~= FL_ONGROUND;
 		else if(!self.move_groundentity)
 			return;
