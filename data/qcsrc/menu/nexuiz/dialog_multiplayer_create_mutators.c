@@ -228,7 +228,7 @@ void fillNexuizMutatorsDialog(entity me)
 		me.TD(me, 1, 3.8, e = makeNexuizCheckBox(0, "g_nixnex_with_laser", "with laser"));
 			setDependent(e, "g_nixnex", 1, 1);
 	me.TR(me);
-		me.TD(me, 1, 4, e = makeNexuizRadioButton(1, "g_weaponarena", "all", "All weapons"));
+		me.TD(me, 1, 4, e = makeNexuizRadioButton(1, "g_weaponarena", "most", "Most weapons"));
 			e.cvarOffValue = "0";
 
 	me.gotoRC(me, me.rows - 1, 0);
