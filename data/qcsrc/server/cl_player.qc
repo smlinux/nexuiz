@@ -65,30 +65,6 @@ void CopyBody(float keepvelocity)
 	self = oldself;
 }
 
-float animparseerror;
-vector animparseline(float animfile)
-{
-	local string line;
-	local float c;
-	local vector anim;
-	if (animfile < 0)
-		return '0 1 2';
-	line = fgets(animfile);
-	c = tokenize_sane(line);
-	if (c != 3)
-	{
-		animparseerror = TRUE;
-		return '0 1 2';
-	}
-	anim_x = stof(argv(0));
-	anim_y = stof(argv(1));
-	anim_z = stof(argv(2));
-	// don't allow completely bogus values
-	if (anim_x < 0 || anim_y < 1 || anim_z < 0.001)
-		anim = '0 1 2';
-	return anim;
-};
-
 void player_setupanimsformodel()
 {
 	local string animfilename;
@@ -155,43 +131,14 @@ void player_setupanimsformodel()
 	else
 		dprint("File ", animfilename, " not found, assuming legacy .zym model animation timings\n");
 	// reset animstate now
-	player_setanim(self.anim_idle, TRUE, FALSE, TRUE);
-};
-
-void player_setanim(vector anim, float looping, float override, float restart)
-{
-	if (!restart)
-	if (anim_x == self.animstate_startframe)
-	if (anim_y == self.animstate_numframes)
-	if (anim_z == self.animstate_framerate)
-		return;
-	self.animstate_startframe = anim_x;
-	self.animstate_numframes = anim_y;
-	self.animstate_framerate = anim_z;
-	self.animstate_starttime = time;
-	self.animstate_endtime = time + self.animstate_numframes / self.animstate_framerate;
-	self.animstate_looping = looping;
-	self.animstate_override = override;
-	self.frame = self.animstate_startframe;
-};
-
-void player_updateframe()
-{
-	if (time >= self.animstate_endtime)
-	{
-		if (self.animstate_looping)
-		{
-			self.animstate_starttime = self.animstate_endtime;
-			self.animstate_endtime = self.animstate_endtime + self.animstate_numframes / self.animstate_framerate;
-		}
-		self.animstate_override = FALSE;
-	}
-	self.frame = self.animstate_startframe + bound(0, (time - self.animstate_starttime) * self.animstate_framerate, self.animstate_numframes - 1);
+	setanim(self, self.anim_idle, TRUE, FALSE, TRUE);
 };
 
 void player_anim (void)
 {
-	player_updateframe();
+	updateanim(self);
+	if (self.weaponentity)
+		updateanim(self.weaponentity);
 
 	if (self.deadflag != DEAD_NO)
 	{
@@ -212,43 +159,46 @@ void player_anim (void)
 		if (!(self.flags & FL_ONGROUND))
 		{
 			if (self.crouch)
-				player_setanim(self.anim_duckjump, FALSE, TRUE, FALSE);
+				setanim(self, self.anim_duckjump, FALSE, TRUE, FALSE);
 			else
-				player_setanim(self.anim_jump, FALSE, TRUE, FALSE);
+				setanim(self, self.anim_jump, FALSE, TRUE, FALSE);
 		}
 		else if (self.crouch)
 		{
 			if (self.movement_x * self.movement_x + self.movement_y * self.movement_y > 20)
-				player_setanim(self.anim_duckwalk, TRUE, FALSE, FALSE);
+				setanim(self, self.anim_duckwalk, TRUE, FALSE, FALSE);
 			else
-				player_setanim(self.anim_duckidle, TRUE, FALSE, FALSE);
+				setanim(self, self.anim_duckidle, TRUE, FALSE, FALSE);
 		}
 		else if ((self.movement_x * self.movement_x + self.movement_y * self.movement_y) > 20)
 		{
 			if (self.movement_x > 0 && self.movement_y == 0)
-				player_setanim(self.anim_run, TRUE, FALSE, FALSE);
+				setanim(self, self.anim_run, TRUE, FALSE, FALSE);
 			else if (self.movement_x < 0 && self.movement_y == 0)
-				player_setanim(self.anim_runbackwards, TRUE, FALSE, FALSE);
+				setanim(self, self.anim_runbackwards, TRUE, FALSE, FALSE);
 			else if (self.movement_x == 0 && self.movement_y > 0)
-				player_setanim(self.anim_straferight, TRUE, FALSE, FALSE);
+				setanim(self, self.anim_straferight, TRUE, FALSE, FALSE);
 			else if (self.movement_x == 0 && self.movement_y < 0)
-				player_setanim(self.anim_strafeleft, TRUE, FALSE, FALSE);
+				setanim(self, self.anim_strafeleft, TRUE, FALSE, FALSE);
 			else if (self.movement_x > 0 && self.movement_y > 0)
-				player_setanim(self.anim_forwardright, TRUE, FALSE, FALSE);
+				setanim(self, self.anim_forwardright, TRUE, FALSE, FALSE);
 			else if (self.movement_x > 0 && self.movement_y < 0)
-				player_setanim(self.anim_forwardleft, TRUE, FALSE, FALSE);
+				setanim(self, self.anim_forwardleft, TRUE, FALSE, FALSE);
 			else if (self.movement_x < 0 && self.movement_y > 0)
-				player_setanim(self.anim_backright, TRUE, FALSE, FALSE);
+				setanim(self, self.anim_backright, TRUE, FALSE, FALSE);
 			else if (self.movement_x < 0 && self.movement_y < 0)
-				player_setanim(self.anim_backleft, TRUE, FALSE, FALSE);
+				setanim(self, self.anim_backleft, TRUE, FALSE, FALSE);
 			else
-				player_setanim(self.anim_run, TRUE, FALSE, FALSE);
+				setanim(self, self.anim_run, TRUE, FALSE, FALSE);
 		}
 		else
-			player_setanim(self.anim_idle, TRUE, FALSE, FALSE);
+			setanim(self, self.anim_idle, TRUE, FALSE, FALSE);
 	}
+
+	if (self.weaponentity)
+	if (!self.weaponentity.animstate_override)
+		setanim(self, self.anim_idle, TRUE, FALSE, FALSE);
 }
-//End change by Supajoe on 11:44 PM EST 11/16/03 (Subject: Player animations)
 
 void SpawnThrownWeapon (vector org, float w)
 {
@@ -371,9 +321,9 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 
 				if(sv_gentle < 1) {		
 					if (random() > 0.5)
-						player_setanim(self.anim_pain1, FALSE, TRUE, TRUE);
+						setanim(self, self.anim_pain1, FALSE, TRUE, TRUE);
 					else
-						player_setanim(self.anim_pain2, FALSE, TRUE, TRUE);
+						setanim(self, self.anim_pain2, FALSE, TRUE, TRUE);
 
 					if(!DEATH_ISWEAPON(deathtype, WEP_LASER) || attacker != self || self.health < 2 * cvar("g_balance_laser_primary_damage") * cvar("g_balance_selfdamagepercent") + 1)
 					// exclude pain sounds for laserjumps as long as you aren't REALLY low on health and would die of the next two
@@ -520,12 +470,12 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 			self.respawn_countdown = -1; // do not count down
 		if (random() < 0.5)
 		{
-			player_setanim(self.anim_die1, FALSE, TRUE, TRUE);
+			setanim(self, self.anim_die1, FALSE, TRUE, TRUE);
 			self.dead_frame = self.anim_dead1_x;
 		}
 		else
 		{
-			player_setanim(self.anim_die2, FALSE, TRUE, TRUE);
+			setanim(self, self.anim_die2, FALSE, TRUE, TRUE);
 			self.dead_frame = self.anim_dead2_x;
 		}
 		// set damage function to corpse damage

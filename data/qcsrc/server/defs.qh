@@ -147,8 +147,14 @@ float maxclients;
 .vector anim_backright; // player running backward and right
 .vector anim_backleft; // player running back and left
 
+// weapon animation vectors:
+.vector anim_fire1;
+.vector anim_fire2;
+.vector anim_idle;
+.vector anim_reload;
+
 void() player_setupanimsformodel;
-void player_setanim(vector anim, float looping, float override, float restart);
+void setanim(entity e, vector anim, float looping, float override, float restart);
 
 .string mdl;
 

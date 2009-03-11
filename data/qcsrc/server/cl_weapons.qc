@@ -307,7 +307,7 @@ void W_WeaponFrame()
 	{
 		if (self.weaponentity.state == WS_CLEAR)
 		{
-			player_setanim(self.anim_draw, FALSE, TRUE, TRUE);
+			setanim(self, self.anim_draw, FALSE, TRUE, TRUE);
 			self.weaponentity.state = WS_RAISE;
 			weapon_action(self.switchweapon, WR_SETUP);
 			// VorteX: add player model weapon select frame here

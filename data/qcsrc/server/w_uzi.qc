@@ -1,3 +1,4 @@
+
 // leilei's fancy muzzleflash stuff
 void W_Uzi_Flash_Go() {
 	if (self.frame > 10){
@@ -128,11 +129,13 @@ float w_uzi(float req)
 		precache_model ("models/uziflash.md3");
 		precache_model ("models/weapons/g_uzi.md3");
 		precache_model ("models/weapons/v_uzi.md3");
-		precache_model ("models/weapons/w_uzi.zym");
+		precache_model ("models/weapons/w_uzi.dpm");
 		precache_sound ("weapons/uzi_fire.wav");
 	}
 	else if (req == WR_SETUP)
+	{
 		weapon_setup(WEP_UZI);
+	}
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_nails >= cvar("g_balance_uzi_first_ammo");
 	else if (req == WR_CHECKAMMO2)

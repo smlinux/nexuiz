@@ -257,7 +257,7 @@ void CL_Weaponentity_Think()
 	float tb;
 	self.nextthink = time;
 	if (intermission_running)
-		self.frame = WFRAME_IDLE;
+		self.frame = self.anim_idle_x;
 	if (self.owner.weaponentity != self)
 	{
 		remove(self);
@@ -273,10 +273,39 @@ void CL_Weaponentity_Think()
 		self.cnt = self.owner.weapon;
 		self.dmg = self.owner.modelindex;
 		self.deadflag = self.owner.deadflag;
+
+		string animfilename;
+		float animfile;
 		if (self.owner.weaponname != "")
-			setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".zym")); // precision set below
+		{
+			animfilename = strcat("models/weapons/w_", self.owner.weaponname, ".dpm.animinfo");
+			animfile = fopen(animfilename, FILE_READ);
+			if (animfile >= 0)
+			{
+				animparseerror = FALSE;
+				self.anim_fire1  = animparseline(animfile);
+				self.anim_fire2  = animparseline(animfile);
+				self.anim_idle   = animparseline(animfile);
+				self.anim_reload = animparseline(animfile);
+				fclose(animfile);
+				if (animparseerror)
+					print("Parse error in ", animfilename, ", some player animations are broken\n");
+				setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".dpm")); // precision set below
+			}
+			else
+			{
+				self.anim_fire1  = '0 1 10';
+				self.anim_fire2  = '1 1 10';
+				self.anim_idle   = '2 1 10';
+				self.anim_reload = '3 1 10';
+				setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".zym")); // precision set below
+			}
+		}
 		else
 			self.model = "";
+
+		// reset animstate now
+		setanim(self, self.anim_idle, TRUE, FALSE, TRUE);
 
 		if(cvar("g_shootfromcenter") || cvar("g_shootfromeye"))
 		{
@@ -570,15 +599,29 @@ float weapon_prepareattack(float secondary, float attacktime)
 
 void weapon_thinkf(float fr, float t, void() func)
 {
-	if (fr >= 0)
+	vector a;
+	float restartanim;
+
+	if (fr == WFRAME_FIRE1 || fr == WFRAME_FIRE2)
+		restartanim = TRUE;
+	else
+		restartanim = FALSE;
+
+	if (self.weaponentity)
 	{
-		if (self.weaponentity != world)
+		if (fr == WFRAME_IDLE)
+			a = self.weaponentity.anim_idle;
+		else if (fr == WFRAME_FIRE1)
+			a = self.weaponentity.anim_fire1;
+		else if (fr == WFRAME_FIRE2)
+			a = self.weaponentity.anim_fire2;
+		else if (fr == WFRAME_RELOAD)
+			a = self.weaponentity.anim_reload;
+		setanim(self.weaponentity, a, restartanim == FALSE, restartanim, restartanim);
+
+		if(reset)
 		{
-			if(fr == WFRAME_FIRE1 || fr == WFRAME_FIRE2)
-			{
-				BITXOR_ASSIGN(self.weaponentity.effects, EF_TELEPORT_BIT);
-			}
-			self.weaponentity.frame = fr;
+			BITXOR_ASSIGN(self.weaponentity.effects, EF_TELEPORT_BIT);
 		}
 	}
 
@@ -617,14 +660,14 @@ void weapon_thinkf(float fr, float t, void() func)
 	self.weapon_think = func;
 	//dprint("next ", ftos(self.weapon_nextthink), "\n");
 
-	if (fr == WFRAME_FIRE1 || fr == WFRAME_FIRE2)
+	if (reset)
 	if (t)
 	if (!self.crouch) // shoot anim stands up, this looks bad
 	{
 		local vector anim;
 		anim = self.anim_shoot;
 		anim_z = anim_y / t;
-		player_setanim(anim, FALSE, TRUE, TRUE);
+		setanim(self, anim, FALSE, TRUE, TRUE);
 	}
 };
 

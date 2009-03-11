@@ -1,0 +1,12 @@
+
+/*
+Generated header file for w_uzi
+This file contains animation definitions for use in code referencing the model, simply add this file to your progs.src before use.
+*/
+
+vector anim_w_uzi_ref1 = '0 1 20';
+vector anim_w_uzi_fire = '1 12 40';
+vector anim_w_uzi_fire2 = '13 12 40';
+vector anim_w_uzi_idle = '25 48 20';
+
+// end of animation definitions for w_uzi

@@ -12,6 +12,61 @@ void spawnfunc_info_null (void)
 	// if anything breaks, tell the mapper to fix his map! info_null is meant to remove itself immediately.
 }
 
+void setanim(entity e, vector anim, float looping, float override, float restart)
+{
+	if (!restart)
+	if (anim_x == e.animstate_startframe)
+	if (anim_y == e.animstate_numframes)
+	if (anim_z == e.animstate_framerate)
+		return;
+	e.animstate_startframe = anim_x;
+	e.animstate_numframes = anim_y;
+	e.animstate_framerate = anim_z;
+	e.animstate_starttime = time;
+	e.animstate_endtime = time + e.animstate_numframes / e.animstate_framerate;
+	e.animstate_looping = looping;
+	e.animstate_override = override;
+	e.frame = e.animstate_startframe;
+};
+
+void updateanim(entity e)
+{
+	if (time >= e.animstate_endtime)
+	{
+		if (e.animstate_looping)
+		{
+			e.animstate_starttime = e.animstate_endtime;
+			e.animstate_endtime = e.animstate_endtime + e.animstate_numframes / e.animstate_framerate;
+		}
+		e.animstate_override = FALSE;
+	}
+	e.frame = e.animstate_startframe + bound(0, (time - e.animstate_starttime) * e.animstate_framerate, e.animstate_numframes - 1);
+};
+
+float animparseerror;
+vector animparseline(float animfile)
+{
+	local string line;
+	local float c;
+	local vector anim;
+	if (animfile < 0)
+		return '0 1 2';
+	line = fgets(animfile);
+	c = tokenize_sane(line);
+	if (c != 3)
+	{
+		animparseerror = TRUE;
+		return '0 1 2';
+	}
+	anim_x = stof(argv(0));
+	anim_y = stof(argv(1));
+	anim_z = stof(argv(2));
+	// don't allow completely bogus values
+	if (anim_x < 0 || anim_y < 1 || anim_z < 0.001)
+		anim = '0 1 2';
+	return anim;
+};
+
 /*
 ==================
 SUB_Remove

@@ -83,9 +83,9 @@ void PlayerJump (void)
 	self.flags &~= FL_JUMPRELEASED;
 
 	if (self.crouch)
-		player_setanim(self.anim_duckjump, FALSE, TRUE, TRUE);
+		setanim(self, self.anim_duckjump, FALSE, TRUE, TRUE);
 	else
-		player_setanim(self.anim_jump, FALSE, TRUE, TRUE);
+		setanim(self, self.anim_jump, FALSE, TRUE, TRUE);
 
 	if(g_jump_grunt)
 		PlayerSound(playersound_jump, CHAN_PLAYER, VOICETYPE_PLAYERSOUND);
