@@ -204,7 +204,6 @@ void CSQC_UpdateView(float w, float h)
 	entity e;
 	float fov;
 	float f;
-	vector v1, v2;
 
 	dprint_load();
 	WaypointSprite_Load();
@@ -223,23 +222,17 @@ void CSQC_UpdateView(float w, float h)
 		view_set = 1;
 	}
 
-	f = floor(cvar("v_flipped"));
-	cvar_set("v_flipped", ftos(!f));
-	v1 = cs_unproject('-100 -100 1000');
-	cvar_set("v_flipped", ftos(f));
-	v2 = cs_unproject('-100 -100 1000');
-
-	if(v1 == v2)
-	{
-		// non-supporting engine
-		vid_width = cvar("vid_width");
-		vid_height = cvar("vid_height");
-	}
-	else
+	if(csqc_flags & CSQC_FLAG_COLORCODES)
 	{
 		// supporting engine
 		vid_width = w;
 		vid_height = h;
+	}
+	else
+	{
+		// non-supporting engine
+		vid_width = cvar("vid_width");
+		vid_height = cvar("vid_height");
 	}
 
 #ifdef BLURTEST
