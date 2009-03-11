@@ -81,25 +81,6 @@ sv_stats.qc
 
 g_triggers.qc
 
-// model animation files
-../../models/weapons/w_campingrifle.qh
-../../models/weapons/w_crylink.qh
-../../models/weapons/w_electro.qh
-../../models/weapons/w_flamethrower.qh
-../../models/weapons/w_gl.qh
-../../models/weapons/w_hagar.qh
-../../models/weapons/w_hlac.qh
-../../models/weapons/w_hlacmod.qh
-../../models/weapons/w_hookgun.qh
-../../models/weapons/w_laser.qh
-../../models/weapons/w_minstanex.qh
-../../models/weapons/w_nex.qh
-../../models/weapons/w_porto.qh
-../../models/weapons/w_rl.qh
-../../models/weapons/w_seeker.qh
-../../models/weapons/w_shotgun.qh
-../../models/weapons/w_uzi.qh
-
 cl_weaponsystem.qc
 w_common.qc
 
