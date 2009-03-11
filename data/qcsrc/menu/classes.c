@@ -23,6 +23,7 @@
 #include "nexuiz/bigbutton.c"
 #include "nexuiz/commandbutton.c"
 #include "nexuiz/bigcommandbutton.c"
+#include "nexuiz/modbutton.c"
 #include "nexuiz/dialog_teamselect.c"
 #include "nexuiz/dialog_settings.c"
 #include "nexuiz/dialog_settings_video.c"
