@@ -210,6 +210,7 @@ float _Movetype_PushEntity(vector push, float failonstartsolid) // SV_PushEntity
 	return trace_fraction;
 }
 
+#define MAX_CLIP_PLANES 32
 void _Movetype_Physics_Toss(float dt) // SV_Physics_Toss
 {
 	if(self.move_flags & FL_ONGROUND)
@@ -240,23 +241,29 @@ void _Movetype_Physics_Toss(float dt) // SV_Physics_Toss
 
 	self.move_angles = self.move_angles + self.move_avelocity * dt;
 
-	vector move;
-	move = self.move_velocity * dt;
-
-	_Movetype_PushEntity(move, TRUE);
-	if(wasfreed(self))
-		return;
-	
-	if(trace_startsolid)
+	float movetime, bump;
+	movetime = dt;
+	for(bump = 0; bump < MAX_CLIP_PLANES && movetime > 0; ++bump)
 	{
-		_Movetype_UnstickEntity();
-		_Movetype_PushEntity(move, FALSE);
+		vector move;
+		move = self.move_velocity * movetime;
+		_Movetype_PushEntity(move, TRUE);
 		if(wasfreed(self))
 			return;
-	}
+	
+		if(trace_startsolid)
+		{
+			_Movetype_UnstickEntity();
+			_Movetype_PushEntity(move, FALSE);
+			if(wasfreed(self))
+				return;
+		}
 
-	if(trace_fraction < 1)
-	{
+		if(trace_fraction == 1)
+			break;
+
+		movetime *= 1 - min(1, trace_fraction);
+
 		if(self.move_movetype == MOVETYPE_BOUNCEMISSILE)
 		{
 			self.move_velocity = _Movetype_ClipVelocity(self.move_velocity, trace_plane_normal, 2.0);
@@ -267,7 +274,11 @@ void _Movetype_Physics_Toss(float dt) // SV_Physics_Toss
 			float d, bouncefac, bouncestop;
 
 			bouncefac = self.move_bounce_factor;     if(!bouncefac)  bouncefac = 0.5;
-			bouncestop = self.move_bounce_stopspeed; if(!bouncestop) bouncestop = 60;
+			bouncestop = self.move_bounce_stopspeed; if(!bouncestop) bouncestop = 60 / 800;
+			if(self.gravity)
+				bouncestop *= self.gravity * getstatf(STAT_MOVEVARS_GRAVITY);
+			else
+				bouncestop *= getstatf(STAT_MOVEVARS_GRAVITY);
 
 			self.move_velocity = _Movetype_ClipVelocity(self.move_velocity, trace_plane_normal, 1 + bouncefac);
 
