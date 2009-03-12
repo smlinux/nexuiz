@@ -350,8 +350,20 @@ void CL_Weaponentity_Think()
 		else
 			self.model = "";
 
+		// check if an instant weapon switch occurred
+		if (self.state == WS_READY)
+		{
+			self.angles = '0 0 0';
+			makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0' + self.angles_z * '0 0 1');
+			setorigin(self, weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust);
+		}
 		// reset animstate now
 		self.wframe = WFRAME_IDLE;
+		self.weapon_morph0time = 0;
+		self.weapon_morph1time = 0;
+		self.weapon_morph2time = 0;
+		self.weapon_morph3time = 0;
+		self.weapon_morph4time = 0;
 		setanim(self, self.anim_idle, TRUE, FALSE, TRUE);
 
 		if(cvar("g_shootfromcenter") || cvar("g_shootfromeye"))
@@ -794,10 +806,10 @@ void weapon_thinkf(float fr, float t, void() func)
 	vector of, or, ou;
 	float restartanim;
 
-	if (fr == WFRAME_FIRE1 || fr == WFRAME_FIRE2)
-		restartanim = TRUE;
-	else
+	if (fr == WFRAME_IDLE)
 		restartanim = FALSE;
+	else
+		restartanim = TRUE;
 
 	of = v_forward;
 	or = v_right;
