@@ -2,6 +2,7 @@
 void W_Shotgun_Attack (void)
 {
 	float	sc;
+	float	ammo;
 	float	bullets;
 	float	d;
 	float	f;
@@ -10,6 +11,7 @@ void W_Shotgun_Attack (void)
 	float	bulletconstant;
 	local entity flash;
 
+	ammo = cvar("g_balance_shotgun_primary_ammo");
 	bullets = cvar("g_balance_shotgun_primary_bullets");
 	d = cvar("g_balance_shotgun_primary_damage");
 	f = cvar("g_balance_shotgun_primary_force");
@@ -21,13 +23,14 @@ void W_Shotgun_Attack (void)
 	for (sc = 0;sc < bullets;sc = sc + 1)
 		fireBallisticBullet(w_shotorg, w_shotdir, spread, bulletspeed, 5, d, 0, f, WEP_SHOTGUN, 0, 1, bulletconstant);
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
-		self.ammo_shells = self.ammo_shells - cvar("g_balance_shotgun_primary_ammo");
+		self.ammo_shells = self.ammo_shells - ammo;
 
 	pointparticles(particleeffectnum("shotgun_muzzleflash"), w_shotorg, w_shotdir * 1000, cvar("g_balance_shotgun_primary_ammo"));
 
 	// casing code
 	if (cvar("g_casings") >= 1)
-		SpawnCasing (w_shotorg - v_forward * 10, ((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
+		for (sc = 0;sc < ammo;sc = sc + 1)
+			SpawnCasing (w_shotorg - v_forward * 10, ((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
 
 	// muzzle flash for 1st person view
 	flash = spawn();
