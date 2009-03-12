@@ -197,7 +197,7 @@ void player_anim (void)
 
 	if (self.weaponentity)
 	if (!self.weaponentity.animstate_override)
-		setanim(self, self.anim_idle, TRUE, FALSE, FALSE);
+		setanim(self.weaponentity, self.weaponentity.anim_idle, TRUE, FALSE, FALSE);
 }
 
 void SpawnThrownWeapon (vector org, float w)
