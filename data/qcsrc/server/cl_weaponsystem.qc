@@ -251,7 +251,26 @@ float CL_Weaponentity_CustomizeEntityForClient()
 	return TRUE;
 }
 
+float qcweaponanimation;
+vector weapon_offset = '0 -10 0';
+vector weapon_adjust = '10 0 -15';
+.vector weapon_morph0origin;
+.vector weapon_morph0angles;
+.float  weapon_morph0time;
+.vector weapon_morph1origin;
+.vector weapon_morph1angles;
+.float  weapon_morph1time;
+.vector weapon_morph2origin;
+.vector weapon_morph2angles;
+.float  weapon_morph2time;
+.vector weapon_morph3origin;
+.vector weapon_morph3angles;
+.float  weapon_morph3time;
+.vector weapon_morph4origin;
+.vector weapon_morph4angles;
+.float  weapon_morph4time;
 .string weaponname;
+
 void CL_Weaponentity_Think()
 {
 	float tb;
@@ -278,27 +297,32 @@ void CL_Weaponentity_Think()
 		float animfile;
 		if (self.owner.weaponname != "")
 		{
-			animfilename = strcat("models/weapons/w_", self.owner.weaponname, ".dpm.animinfo");
-			animfile = fopen(animfilename, FILE_READ);
-			if (animfile >= 0)
-			{
-				animparseerror = FALSE;
-				self.anim_fire1  = animparseline(animfile);
-				self.anim_fire2  = animparseline(animfile);
-				self.anim_idle   = animparseline(animfile);
-				self.anim_reload = animparseline(animfile);
-				fclose(animfile);
-				if (animparseerror)
-					print("Parse error in ", animfilename, ", some player animations are broken\n");
-				setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".dpm")); // precision set below
-			}
+			if (qcweaponanimation)
+				setmodel(self, strcat("models/weapons/v_", self.owner.weaponname, ".md3")); // precision set below
 			else
 			{
-				self.anim_fire1  = '0 1 10';
-				self.anim_fire2  = '1 1 10';
-				self.anim_idle   = '2 1 10';
-				self.anim_reload = '3 1 10';
-				setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".zym")); // precision set below
+				animfilename = strcat("models/weapons/w_", self.owner.weaponname, ".dpm.animinfo");
+				animfile = fopen(animfilename, FILE_READ);
+				if (animfile >= 0)
+				{
+					animparseerror = FALSE;
+					self.anim_fire1  = animparseline(animfile);
+					self.anim_fire2  = animparseline(animfile);
+					self.anim_idle   = animparseline(animfile);
+					self.anim_reload = animparseline(animfile);
+					fclose(animfile);
+					if (animparseerror)
+						print("Parse error in ", animfilename, ", some player animations are broken\n");
+					setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".dpm")); // precision set below
+				}
+				else
+				{
+					self.anim_fire1  = '0 1 10';
+					self.anim_fire2  = '1 1 10';
+					self.anim_idle   = '2 1 10';
+					self.anim_reload = '3 1 10';
+					setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".zym")); // precision set below
+				}
 			}
 		}
 		else
@@ -329,7 +353,7 @@ void CL_Weaponentity_Think()
 	}
 
 	tb = (self.effects & EF_TELEPORT_BIT);
-	self.effects = self.owner.effects | EF_LOWPRECISION;
+	self.effects = self.owner.effects - (self.owner.effects & EF_LOWPRECISION);// | EF_LOWPRECISION;
 	self.effects &~= EF_FULLBRIGHT; // can mask team color, so get rid of it
 	self.effects &~= EF_TELEPORT_BIT;
 	self.effects |= tb;
@@ -345,12 +369,144 @@ void CL_Weaponentity_Think()
 	local float f;
 	f = 0;
 	if (self.state == WS_RAISE)
+	{
 		f = (self.owner.weapon_nextthink - time) / cvar("g_balance_weaponswitchdelay");
+		self.angles_x = -90 * f * f;
+		makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0' + self.angles_z * '0 0 1');
+		setorigin(self, weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust);
+	}
 	else if (self.state == WS_DROP)
+	{
 		f = 1 - (self.owner.weapon_nextthink - time) / cvar("g_balance_weaponswitchdelay");
+		self.angles_x = -90 * f * f;
+		makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0' + self.angles_z * '0 0 1');
+		setorigin(self, weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust);
+	}
 	else if (self.state == WS_CLEAR)
+	{
 		f = 1;
-	self.angles_x = -90 * f * f;
+		self.angles_x = -90 * f * f;
+		makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0' + self.angles_z * '0 0 1');
+		setorigin(self, weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust);
+	}
+	else if (time < self.owner.weapon_morph1time)
+	{
+		f = (time - self.owner.weapon_morph0time) / (self.owner.weapon_morph1time - self.owner.weapon_morph0time);
+		self.angles = self.owner.weapon_morph0angles * (1 - f) + self.owner.weapon_morph1angles * f;
+		setorigin(self, self.owner.weapon_morph0origin * (1 - f) + self.owner.weapon_morph1origin * f);
+	}
+	else if (time < self.owner.weapon_morph2time)
+	{
+		f = (time - self.owner.weapon_morph1time) / (self.owner.weapon_morph2time - self.owner.weapon_morph1time);
+		self.angles = self.owner.weapon_morph1angles * (1 - f) + self.owner.weapon_morph2angles * f;
+		setorigin(self, self.owner.weapon_morph1origin * (1 - f) + self.owner.weapon_morph2origin * f);
+	}
+	else if (time < self.owner.weapon_morph3time)
+	{
+		f = (time - self.owner.weapon_morph2time) / (self.owner.weapon_morph3time - self.owner.weapon_morph2time);
+		self.angles = self.owner.weapon_morph2angles * (1 - f) + self.owner.weapon_morph3angles * f;
+		setorigin(self, self.owner.weapon_morph2origin * (1 - f) + self.owner.weapon_morph3origin * f);
+	}
+	else if (time < self.owner.weapon_morph4time)
+	{
+		f = (time - self.owner.weapon_morph3time) / (self.owner.weapon_morph4time - self.owner.weapon_morph3time);
+		self.angles = self.owner.weapon_morph3angles * (1 - f) + self.owner.weapon_morph4angles * f;
+		setorigin(self, self.owner.weapon_morph3origin * (1 - f) + self.owner.weapon_morph4origin * f);
+	}
+	else if (qcweaponanimation)
+	{
+		// begin a new idle morph
+		self.owner.weapon_morph0time   = time;
+		self.owner.weapon_morph0angles = self.angles;
+		self.owner.weapon_morph0origin = self.origin;
+
+		float r;
+		float t;
+
+		r = random();
+		if (r < 0.1)
+		{
+			// turn gun to the left to look at it
+			t = 2;
+			self.owner.weapon_morph1time   = time + t * 0.2;
+			self.owner.weapon_morph1angles = randomvec() * 3 + '-5 30 0';
+			makevectors(self.owner.weapon_morph1angles_x * '-1 0 0' + self.owner.weapon_morph1angles_y * '0 1 0' + self.owner.weapon_morph1angles_z * '0 0 1');
+			self.owner.weapon_morph1origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+
+			self.owner.weapon_morph2time   = time + t * 0.6;
+			self.owner.weapon_morph2angles = randomvec() * 3 + '-5 30 0';
+			makevectors(self.owner.weapon_morph2angles_x * '-1 0 0' + self.owner.weapon_morph2angles_y * '0 1 0' + self.owner.weapon_morph2angles_z * '0 0 1');
+			self.owner.weapon_morph2origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+
+			self.owner.weapon_morph3time   = time + t;
+			self.owner.weapon_morph3angles = '0 0 0';
+			makevectors(self.owner.weapon_morph3angles_x * '-1 0 0' + self.owner.weapon_morph3angles_y * '0 1 0' + self.owner.weapon_morph3angles_z * '0 0 1');
+			self.owner.weapon_morph3origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+		}
+		else if (r < 0.2)
+		{
+			// raise the gun a bit
+			t = 2;
+			self.owner.weapon_morph1time   = time + t * 0.2;
+			self.owner.weapon_morph1angles = randomvec() * 3 + '30 -10 0';
+			makevectors(self.owner.weapon_morph1angles_x * '-1 0 0' + self.owner.weapon_morph1angles_y * '0 1 0' + self.owner.weapon_morph1angles_z * '0 0 1');
+			self.owner.weapon_morph1origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+
+			self.owner.weapon_morph2time   = time + t * 0.5;
+			self.owner.weapon_morph2angles = randomvec() * 3 + '30 -10 5';
+			makevectors(self.owner.weapon_morph2angles_x * '-1 0 0' + self.owner.weapon_morph2angles_y * '0 1 0' + self.owner.weapon_morph2angles_z * '0 0 1');
+			self.owner.weapon_morph2origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+
+			self.owner.weapon_morph3time   = time + t;
+			self.owner.weapon_morph3angles = '0 0 0';
+			makevectors(self.owner.weapon_morph3angles_x * '-1 0 0' + self.owner.weapon_morph3angles_y * '0 1 0' + self.owner.weapon_morph3angles_z * '0 0 1');
+			self.owner.weapon_morph3origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+		}
+		else if (r < 0.3)
+		{
+			// tweak it a bit
+			t = 5;
+			self.owner.weapon_morph1time   = time + t * 0.3;
+			self.owner.weapon_morph1angles = randomvec() * 6;
+			makevectors(self.owner.weapon_morph1angles_x * '-1 0 0' + self.owner.weapon_morph1angles_y * '0 1 0' + self.owner.weapon_morph1angles_z * '0 0 1');
+			self.owner.weapon_morph1origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+
+			self.owner.weapon_morph2time   = time + t * 0.7;
+			self.owner.weapon_morph2angles = randomvec() * 6;
+			makevectors(self.owner.weapon_morph2angles_x * '-1 0 0' + self.owner.weapon_morph2angles_y * '0 1 0' + self.owner.weapon_morph2angles_z * '0 0 1');
+			self.owner.weapon_morph2origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+
+			self.owner.weapon_morph3time   = time + t;
+			self.owner.weapon_morph3angles = '0 0 0';
+			makevectors(self.owner.weapon_morph3angles_x * '-1 0 0' + self.owner.weapon_morph3angles_y * '0 1 0' + self.owner.weapon_morph3angles_z * '0 0 1');
+			self.owner.weapon_morph3origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+		}
+		else
+		{
+			// hold it mostly steady
+			t = random() * 6 + 4;
+			self.owner.weapon_morph1time   = time + t * 0.2;
+			self.owner.weapon_morph1angles = randomvec() * 1;
+			makevectors(self.owner.weapon_morph1angles_x * '-1 0 0' + self.owner.weapon_morph1angles_y * '0 1 0' + self.owner.weapon_morph1angles_z * '0 0 1');
+			self.owner.weapon_morph1origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+
+			self.owner.weapon_morph2time   = time + t * 0.5;
+			self.owner.weapon_morph2angles = randomvec() * 1;
+			makevectors(self.owner.weapon_morph2angles_x * '-1 0 0' + self.owner.weapon_morph2angles_y * '0 1 0' + self.owner.weapon_morph2angles_z * '0 0 1');
+			self.owner.weapon_morph2origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+
+			self.owner.weapon_morph3time   = time + t * 0.7;
+			self.owner.weapon_morph3angles = randomvec() * 1;
+			makevectors(self.owner.weapon_morph3angles_x * '-1 0 0' + self.owner.weapon_morph3angles_y * '0 1 0' + self.owner.weapon_morph3angles_z * '0 0 1');
+			self.owner.weapon_morph3origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+		}
+
+		self.owner.weapon_morph4time   = time + t;
+		self.owner.weapon_morph4angles = '0 0 0';
+		makevectors(self.owner.weapon_morph4angles_x * '-1 0 0' + self.owner.weapon_morph4angles_y * '0 1 0' + self.owner.weapon_morph4angles_z * '0 0 1');
+		self.owner.weapon_morph4origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+
+	}
 
 	// create or update the lasertarget entity
 	LaserTarget_Think();
@@ -536,6 +692,7 @@ void w_ready()
 void weapon_setup(float windex)
 {
 	entity e;
+	qcweaponanimation = cvar("sv_qcweaponanimation");
 	e = get_weaponinfo(windex);
 	self.items &~= IT_AMMO;
 	self.items = self.items | e.items;
@@ -609,19 +766,100 @@ void weapon_thinkf(float fr, float t, void() func)
 
 	if (self.weaponentity)
 	{
-		if (fr == WFRAME_IDLE)
-			a = self.weaponentity.anim_idle;
-		else if (fr == WFRAME_FIRE1)
-			a = self.weaponentity.anim_fire1;
-		else if (fr == WFRAME_FIRE2)
-			a = self.weaponentity.anim_fire2;
-		else if (fr == WFRAME_RELOAD)
-			a = self.weaponentity.anim_reload;
-		setanim(self.weaponentity, a, restartanim == FALSE, restartanim, restartanim);
-
-		if(reset)
+		if (qcweaponanimation)
 		{
-			BITXOR_ASSIGN(self.weaponentity.effects, EF_TELEPORT_BIT);
+			self.weaponentity.frame = fr;
+			if (fr != WFRAME_IDLE)
+			{
+				vector of, or, ou;
+				of = v_forward;
+				or = v_right;
+				ou = v_up;
+				self.weaponentity.frame = fr;
+				self.weapon_morph0time = time;
+				self.weapon_morph0angles = self.weaponentity.angles;
+				self.weapon_morph0origin = self.weaponentity.origin;
+		
+				self.weapon_morph1angles = '0 0 0';
+				self.weapon_morph1time = time + t;
+				makevectors(self.weapon_morph1angles_x * '-1 0 0' + self.weapon_morph1angles_y * '0 1 0' + self.weapon_morph1angles_z * '0 0 1');
+				self.weapon_morph1origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+		
+				self.weapon_morph2angles = '0 0 0';
+				self.weapon_morph2time = time + t;
+				makevectors(self.weapon_morph2angles_x * '-1 0 0' + self.weapon_morph2angles_y * '0 1 0' + self.weapon_morph2angles_z * '0 0 1');
+				self.weapon_morph2origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+		
+				self.weapon_morph3angles = '0 0 0';
+				self.weapon_morph3time = time + t;
+				makevectors(self.weapon_morph3angles_x * '-1 0 0' + self.weapon_morph3angles_y * '0 1 0' + self.weapon_morph3angles_z * '0 0 1');
+				self.weapon_morph3origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+		
+				self.weapon_morph4angles = '0 0 0';
+				self.weapon_morph4time = time + t + 1;
+				makevectors(self.weapon_morph4angles_x * '-1 0 0' + self.weapon_morph4angles_y * '0 1 0' + self.weapon_morph4angles_z * '0 0 1');
+				self.weapon_morph4origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+		
+				if (fr == WFRAME_FIRE1)
+				{
+					self.weapon_morph1angles = '5 0 0';
+					self.weapon_morph1time = time + t * 0.1;
+					makevectors(self.weapon_morph1angles_x * '-1 0 0' + self.weapon_morph1angles_y * '0 1 0' + self.weapon_morph1angles_z * '0 0 1');
+					self.weapon_morph1origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+				}
+				else if (fr == WFRAME_FIRE2)
+				{
+					self.weapon_morph1angles = '10 0 0';
+					self.weapon_morph1time = time + t * 0.1;
+					makevectors(self.weapon_morph1angles_x * '-1 0 0' + self.weapon_morph1angles_y * '0 1 0' + self.weapon_morph1angles_z * '0 0 1');
+					self.weapon_morph1origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+				}
+				else if (fr == WFRAME_RELOAD)
+				{
+					self.weapon_morph1time = time + t * 0.05;
+					self.weapon_morph1angles = '-10 40 0';
+					makevectors(self.weapon_morph1angles_x * '-1 0 0' + self.weapon_morph1angles_y * '0 1 0' + self.weapon_morph1angles_z * '0 0 1');
+					self.weapon_morph1origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+
+					self.weapon_morph2time = time + t * 0.15;
+					self.weapon_morph2angles = '-10 40 5';
+					makevectors(self.weapon_morph2angles_x * '-1 0 0' + self.weapon_morph2angles_y * '0 1 0' + self.weapon_morph2angles_z * '0 0 1');
+					self.weapon_morph2origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+		
+					self.weapon_morph3time = time + t * 0.25;
+					self.weapon_morph3angles = '-10 40 0';
+					makevectors(self.weapon_morph3angles_x * '-1 0 0' + self.weapon_morph3angles_y * '0 1 0' + self.weapon_morph3angles_z * '0 0 1');
+					self.weapon_morph3origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+
+					self.weapon_morph4time = time + t;
+				}
+
+				v_forward = of;
+				v_right = or;
+				v_up = ou;
+
+				if(reset)
+				{
+					BITXOR_ASSIGN(self.weaponentity.effects, EF_TELEPORT_BIT);
+				}
+			}
+		}
+		else
+		{
+			if (fr == WFRAME_IDLE)
+				a = self.weaponentity.anim_idle;
+			else if (fr == WFRAME_FIRE1)
+				a = self.weaponentity.anim_fire1;
+			else if (fr == WFRAME_FIRE2)
+				a = self.weaponentity.anim_fire2;
+			else if (fr == WFRAME_RELOAD)
+				a = self.weaponentity.anim_reload;
+			setanim(self.weaponentity, a, restartanim == FALSE, restartanim, restartanim);
+
+			if(reset)
+			{
+				BITXOR_ASSIGN(self.weaponentity.effects, EF_TELEPORT_BIT);
+			}
 		}
 	}
 
