@@ -269,6 +269,8 @@ void havocbot_bunnyhop(vector dir)
 //.vector bot_dodgevector;
 //.float bot_dodgevector_time;
 //.float bot_dodgevector_jumpbutton;
+.float ladder_time;
+.entity ladder_entity;
 void havocbot_movetogoal()
 {
 	local vector destorg;
@@ -551,6 +553,20 @@ void havocbot_movetogoal()
 		dir = normalize(dir + dodge + evadeobstacle + evadelava);
 	//	self.bot_dodgevector = dir;
 	//	self.bot_dodgevector_jumpbutton = self.BUTTON_JUMP;
+	}
+
+	if(time < self.ladder_time)
+	{
+		if(self.goalcurrent.origin_z + self.goalcurrent.mins_z > self.origin_z + self.mins_z)
+		{
+			if(self.origin_z + self.mins_z  < self.ladder_entity.origin_z + self.ladder_entity.maxs_z)
+				dir = '0 0 1';
+		}
+		else
+		{
+			if(self.origin_z + self.mins_z  > self.ladder_entity.origin_z + self.ladder_entity.mins_z)
+				dir = '0 0 -1';
+		}
 	}
 
 	//dir = self.bot_dodgevector;
