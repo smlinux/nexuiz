@@ -3,7 +3,8 @@ float AI_STATUS_ROAMING			= 1;	// Bot is just crawling the map. No enemies at si
 float AI_STATUS_ATTACKING		= 2;	// There are enemies at sight
 float AI_STATUS_RUNNING			= 4;	// Bot is bunny hopping
 float AI_STATUS_DANGER_AHEAD	= 8;	// There is lava/slime/abism ahead
-float AI_STATUS_BAD_JUMPPAD		= 16;	// Trying to get out of a "vertical" jump pad
+float AI_STATUS_OUT_JUMPPAD		= 16;	// Trying to get out of a "vertical" jump pad
+float AI_STATUS_OUT_WATER		= 32;	// Trying to get out of water
 
 .string netname_freeme;
 // rough simulation of walking from one point to another to test if a path
@@ -106,7 +107,6 @@ float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float 
 					//particle(org, move * 64, 104, 4);
 					te_gunshot(org);
 				}
-				// failed
 				return 0;
 			}
 			org = trace_endpos;
@@ -115,8 +115,10 @@ float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float 
 		{
 			move = dir * stepdist + org;
 			tracebox(org, m1, m2, move, movemode, e);
+			// hit something
 			if (trace_fraction < 1)
 			{
+				// check if we can walk over this obstacle
 				tracebox(org + stepheightvec, m1, m2, move + stepheightvec, movemode, e);
 				if (trace_fraction < 1 || trace_startsolid)
 				{
@@ -124,15 +126,33 @@ float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float 
 					{
 						if (navigation_testtracewalk > 1)
 							dprint("hit-something\n");
-						//move = normalize(end - org);
-						//particle(org, move * 64, 104, 4);
-						te_gunshot(org);
+					//	move = normalize(end - org);
+					//	particle(org, move * 64, 104, 4);
+					//	te_gunshot(org);
 					}
-					// failed
-					return 0;
+
+					// check for doors
+					traceline( org, move, movemode, e);
+					if ( trace_ent.classname == "door_rotating" || trace_ent.classname == "door")
+					{
+						local vector nextmove;
+						move = trace_endpos;
+						while(trace_ent.classname == "door_rotating" || trace_ent.classname == "door")
+						{
+							nextmove = move + (dir * stepdist);
+							traceline( move, nextmove, movemode, e);
+							move = nextmove;
+						}
+					}
+					else
+						return 0; // failed
 				}
+				else
+					move = trace_endpos;
 			}
-			move = trace_endpos;
+			else
+				move = trace_endpos;
+
 			// trace down from stepheight as far as possible and move there,
 			// if this starts in solid we try again without the stepup, and
 			// if that also fails we assume it is a wall
@@ -1092,7 +1112,7 @@ float navigation_markroutes_nearestwaypoints(entity waylist, float maxdist)
 	local entity head;
 	local vector v, m1, m2, diff;
 	local float c;
-	//navigation_testtracewalk = TRUE;
+//	navigation_testtracewalk = TRUE;
 	c = 0;
 	head = waylist;
 	while (head)
@@ -1175,7 +1195,7 @@ void navigation_markroutes()
 	}
 	// try a short range search for the nearest waypoints, and expand the
 	// search repeatedly if none are found
-	if (!navigation_markroutes_nearestwaypoints(waylist, 250))
+	if (!navigation_markroutes_nearestwaypoints(waylist, 500))
 		if (!navigation_markroutes_nearestwaypoints(waylist, 1000))
 			navigation_markroutes_nearestwaypoints(waylist, 1000000);
 	searching = TRUE;
@@ -1553,10 +1573,10 @@ void bot_custom_weapon_priority_setup()
 
 	bot_distance_far = stof(argv(0));
 	bot_distance_close = stof(argv(1));
-	
+
 	if(bot_distance_far < bot_distance_close){
 		bot_distance_far = stof(argv(1));
-		bot_distance_close = stof(argv(0));	
+		bot_distance_close = stof(argv(0));
 	}
 
 	// Initialize list of weapons
@@ -1979,10 +1999,10 @@ void bot_think()
 		{
 			self.BUTTON_JUMP = 1; // press jump to respawn
 			self.bot_strategytime = 0;
-			return;
 		}
+		return;
 	}
-	
+
 	// now call the current bot AI (havocbot for example)
 	self.bot_ai();
 };
