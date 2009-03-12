@@ -423,24 +423,28 @@ void CL_Weaponentity_Think()
 	else if (time < self.owner.weapon_morph1time)
 	{
 		f = (time - self.owner.weapon_morph0time) / (self.owner.weapon_morph1time - self.owner.weapon_morph0time);
+		f = 1 - pow(1 - f, 3);
 		self.angles = self.owner.weapon_morph0angles * (1 - f) + self.owner.weapon_morph1angles * f;
 		setorigin(self, self.owner.weapon_morph0origin * (1 - f) + self.owner.weapon_morph1origin * f);
 	}
 	else if (time < self.owner.weapon_morph2time)
 	{
 		f = (time - self.owner.weapon_morph1time) / (self.owner.weapon_morph2time - self.owner.weapon_morph1time);
+		f = 1 - pow(1 - f, 3);
 		self.angles = self.owner.weapon_morph1angles * (1 - f) + self.owner.weapon_morph2angles * f;
 		setorigin(self, self.owner.weapon_morph1origin * (1 - f) + self.owner.weapon_morph2origin * f);
 	}
 	else if (time < self.owner.weapon_morph3time)
 	{
 		f = (time - self.owner.weapon_morph2time) / (self.owner.weapon_morph3time - self.owner.weapon_morph2time);
+		f = 1 - pow(1 - f, 3);
 		self.angles = self.owner.weapon_morph2angles * (1 - f) + self.owner.weapon_morph3angles * f;
 		setorigin(self, self.owner.weapon_morph2origin * (1 - f) + self.owner.weapon_morph3origin * f);
 	}
 	else if (time < self.owner.weapon_morph4time)
 	{
 		f = (time - self.owner.weapon_morph3time) / (self.owner.weapon_morph4time - self.owner.weapon_morph3time);
+		f = 1 - pow(1 - f, 3);
 		self.angles = self.owner.weapon_morph3angles * (1 - f) + self.owner.weapon_morph4angles * f;
 		setorigin(self, self.owner.weapon_morph3origin * (1 - f) + self.owner.weapon_morph4origin * f);
 	}
@@ -878,7 +882,7 @@ void weapon_thinkf(float fr, float t, void() func)
 			setanim(self.weaponentity, a, restartanim == FALSE, restartanim, restartanim);
 		}
 
-		if(reset)
+		if(restartanim)
 		{
 			BITXOR_ASSIGN(self.weaponentity.effects, EF_TELEPORT_BIT);
 		}
@@ -923,7 +927,7 @@ void weapon_thinkf(float fr, float t, void() func)
 	self.weapon_think = func;
 	//dprint("next ", ftos(self.weapon_nextthink), "\n");
 
-	if (reset)
+	if (restartanim)
 	if (t)
 	if (!self.crouch) // shoot anim stands up, this looks bad
 	{
