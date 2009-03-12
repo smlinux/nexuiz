@@ -381,10 +381,10 @@ void spawnfunc_worldspawn (void)
 	if(cvar_string("cvar_check_default") != "bypass")
 	{
 		if(cvar_string("cvar_check_default") != CVAR_CHECK_DEFAULT)
-			error("Config file mismatch! Please update defaultNexuiz.cfg to match the QuakeC code!");
+			error("Config file mismatch! Please update defaultNexuiz.cfg to match the QuakeC code, and restart the engine!");
 
 		if(cvar_string("cvar_check_weapons") != CVAR_CHECK_WEAPONS)
-			error("Config file mismatch! Please update weapons.cfg and weaponsPro.cfg to match the QuakeC code!");
+			error("Config file mismatch! Please update weapons.cfg and weaponsPro.cfg to match the QuakeC code, and restart the engine!");
 	}
 
 	compressShortVector_init();
