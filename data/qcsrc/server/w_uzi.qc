@@ -44,7 +44,15 @@ void W_Uzi_Attack (float deathtype)
 	flash = spawn();
 	setorigin(flash, '5 0 0');
 	setmodel(flash, "models/uziflash.md3"); // precision set below
-	setattachment(flash, self.weaponentity, "bone02");
+	if (gettagindex(self.weaponentity, "shot"))
+		setattachment(flash, self.weaponentity, "shot");
+	else if (gettagindex(self.weaponentity, "bone02"))
+		setattachment(flash, self.weaponentity, "bone02");
+	else
+	{
+		setorigin(flash, '48 0 5');
+		setattachment(flash, self.weaponentity, "");
+	}
 	flash.owner = self;
 	flash.viewmodelforclient = self;
 	flash.customizeentityforclient = CL_Weaponentity_CustomizeEntityForClient;

@@ -280,12 +280,16 @@ void CL_Weaponentity_Think()
 		self.frame = self.anim_idle_x;
 	if (self.owner.weaponentity != self)
 	{
+		if (self.weaponentity)
+			remove(self.weaponentity);
 		remove(self);
 		return;
 	}
 	if (self.owner.deadflag != DEAD_NO)
 	{
 		self.model = "";
+		if (self.weaponentity)
+			self.weaponentity.model = "";
 		return;
 	}
 	if (self.cnt != self.owner.weapon || self.dmg != self.owner.modelindex || self.deadflag != self.owner.deadflag)
@@ -298,12 +302,30 @@ void CL_Weaponentity_Think()
 		float animfile;
 		if (self.owner.weaponname != "")
 		{
+			// if there is a child entity, hide it until we're sure we use it
+			if (self.weaponentity)
+				self.weaponentity.model = "";
 			if (qcweaponanimation)
 				setmodel(self, strcat("models/weapons/v_", self.owner.weaponname, ".md3")); // precision set below
 			else
 			{
-				animfilename = strcat("models/weapons/w_", self.owner.weaponname, ".dpm.animinfo");
+				animfilename = strcat("models/weapons/h_", self.owner.weaponname, ".dpm.animinfo");
 				animfile = fopen(animfilename, FILE_READ);
+				if (animfile >= 0)
+				{
+					if (!self.weaponentity)
+						self.weaponentity = spawn();
+					setmodel(self, strcat("models/weapons/h_", self.owner.weaponname, ".dpm")); // precision set below
+					setmodel(self.weaponentity, strcat("models/weapons/v_", self.owner.weaponname, ".md3")); // precision does not matter
+					setattachment(self.weaponentity, self, "weapon");
+				}
+				else
+				{
+					animfilename = strcat("models/weapons/w_", self.owner.weaponname, ".dpm.animinfo");
+					animfile = fopen(animfilename, FILE_READ);
+					if (animfile >= 0)
+						setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".dpm")); // precision set below
+				}
 				if (animfile >= 0)
 				{
 					animparseerror = FALSE;
@@ -314,7 +336,6 @@ void CL_Weaponentity_Think()
 					fclose(animfile);
 					if (animparseerror)
 						print("Parse error in ", animfilename, ", some player animations are broken\n");
-					setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".dpm")); // precision set below
 				}
 				else
 				{
@@ -340,7 +361,9 @@ void CL_Weaponentity_Think()
 			e.modelindex = self.modelindex;
 			float idx;
 			vector v;
-			idx = gettagindex(e, "bone02");
+			idx = gettagindex(e, "shot");
+			if (!idx)
+				idx = gettagindex(e, "bone02");
 			if(idx)
 			{
 				v = gettaginfo(e, idx);
@@ -366,6 +389,12 @@ void CL_Weaponentity_Think()
 		self.alpha = 1;
 	
 	self.colormap = self.owner.colormap;
+	if (self.weaponentity)
+	{
+		self.weaponentity.effects = self.effects & EF_ADDITIVE;
+		self.weaponentity.alpha = self.alpha;
+		self.weaponentity.colormap = self.colormap;
+	}
 
 	self.angles = '0 0 0';
 	local float f;
@@ -567,7 +596,6 @@ void CL_SpawnWeaponentity()
 	self.weaponentity.classname = "weaponentity";
 	self.weaponentity.solid = SOLID_NOT;
 	self.weaponentity.owner = self;
-	self.weaponentity.weaponentity = self.weaponentity;
 	setmodel(self.weaponentity, ""); // precision set when changed
 	self.weaponentity.origin = '0 0 0';
 	self.weaponentity.angles = '0 0 0';

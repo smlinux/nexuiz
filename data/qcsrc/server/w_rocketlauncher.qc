@@ -246,7 +246,15 @@ void W_Rocket_Attack (void)
 	flash.customizeentityforclient = CL_Weaponentity_CustomizeEntityForClient;
 	setorigin (flash, '5 0 0');
 	setmodel (flash, "models/flash.md3"); // precision set below
-	setattachment(flash, self.weaponentity, "bone02");
+	if (gettagindex(self.weaponentity, "shot"))
+		setattachment(flash, self.weaponentity, "shot");
+	else if (gettagindex(self.weaponentity, "bone02"))
+		setattachment(flash, self.weaponentity, "bone02");
+	else
+	{
+		setorigin(flash, '27 0 5');
+		setattachment(flash, self.weaponentity, "");
+	}
 	SUB_SetFade (flash, time, 0.1);
 
 	// muzzle flash for 3rd person view

@@ -556,6 +556,7 @@ void PutObserverInServer (void)
 	self.weapon = 0;
 	self.weaponmodel = "";
 	self.weaponentity = world;
+	self.exteriorweaponentity = world;
 	self.killcount = -666;
 	self.velocity = '0 0 0';
 	self.avelocity = '0 0 0';
