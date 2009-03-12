@@ -22,7 +22,7 @@ void W_Campingrifle_Reload()
 	
 	if (self.weaponentity)
 	{
-		if (self.weaponentity.frame == WFRAME_RELOAD)
+		if (self.weaponentity.wframe == WFRAME_RELOAD)
 			return;
 
 		// allow to switch away while reloading, but this will cause a new reload!

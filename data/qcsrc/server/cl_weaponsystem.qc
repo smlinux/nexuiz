@@ -20,6 +20,7 @@ float WFRAME_FIRE1 = 0;
 float WFRAME_FIRE2 = 1;
 float WFRAME_IDLE = 2;
 float WFRAME_RELOAD = 3;
+.float wframe;
 
 void(float fr, float t, void() func) weapon_thinkf;
 
@@ -329,6 +330,7 @@ void CL_Weaponentity_Think()
 			self.model = "";
 
 		// reset animstate now
+		self.wframe = WFRAME_IDLE;
 		setanim(self, self.anim_idle, TRUE, FALSE, TRUE);
 
 		if(cvar("g_shootfromcenter") || cvar("g_shootfromeye"))
@@ -757,6 +759,7 @@ float weapon_prepareattack(float secondary, float attacktime)
 void weapon_thinkf(float fr, float t, void() func)
 {
 	vector a;
+	vector of, or, ou;
 	float restartanim;
 
 	if (fr == WFRAME_FIRE1 || fr == WFRAME_FIRE2)
@@ -764,48 +767,48 @@ void weapon_thinkf(float fr, float t, void() func)
 	else
 		restartanim = FALSE;
 
+	of = v_forward;
+	or = v_right;
+	ou = v_up;
+
 	if (self.weaponentity)
 	{
+		self.weaponentity.wframe = fr;
 		if (qcweaponanimation)
 		{
-			self.weaponentity.frame = fr;
 			if (fr != WFRAME_IDLE)
 			{
-				vector of, or, ou;
-				of = v_forward;
-				or = v_right;
-				ou = v_up;
-				self.weaponentity.frame = fr;
 				self.weapon_morph0time = time;
 				self.weapon_morph0angles = self.weaponentity.angles;
 				self.weapon_morph0origin = self.weaponentity.origin;
-		
+
 				self.weapon_morph1angles = '0 0 0';
 				self.weapon_morph1time = time + t;
 				makevectors(self.weapon_morph1angles_x * '-1 0 0' + self.weapon_morph1angles_y * '0 1 0' + self.weapon_morph1angles_z * '0 0 1');
 				self.weapon_morph1origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
-		
+
 				self.weapon_morph2angles = '0 0 0';
 				self.weapon_morph2time = time + t;
 				makevectors(self.weapon_morph2angles_x * '-1 0 0' + self.weapon_morph2angles_y * '0 1 0' + self.weapon_morph2angles_z * '0 0 1');
 				self.weapon_morph2origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
-		
+
 				self.weapon_morph3angles = '0 0 0';
 				self.weapon_morph3time = time + t;
 				makevectors(self.weapon_morph3angles_x * '-1 0 0' + self.weapon_morph3angles_y * '0 1 0' + self.weapon_morph3angles_z * '0 0 1');
 				self.weapon_morph3origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
-		
+
 				self.weapon_morph4angles = '0 0 0';
-				self.weapon_morph4time = time + t + 1;
+				self.weapon_morph4time = time + t;
 				makevectors(self.weapon_morph4angles_x * '-1 0 0' + self.weapon_morph4angles_y * '0 1 0' + self.weapon_morph4angles_z * '0 0 1');
 				self.weapon_morph4origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
-		
+
 				if (fr == WFRAME_FIRE1)
 				{
 					self.weapon_morph1angles = '5 0 0';
 					self.weapon_morph1time = time + t * 0.1;
 					makevectors(self.weapon_morph1angles_x * '-1 0 0' + self.weapon_morph1angles_y * '0 1 0' + self.weapon_morph1angles_z * '0 0 1');
 					self.weapon_morph1origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+					self.weapon_morph4time = time + t + 1; // delay idle effect
 				}
 				else if (fr == WFRAME_FIRE2)
 				{
@@ -813,6 +816,7 @@ void weapon_thinkf(float fr, float t, void() func)
 					self.weapon_morph1time = time + t * 0.1;
 					makevectors(self.weapon_morph1angles_x * '-1 0 0' + self.weapon_morph1angles_y * '0 1 0' + self.weapon_morph1angles_z * '0 0 1');
 					self.weapon_morph1origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+					self.weapon_morph4time = time + t + 1; // delay idle effect
 				}
 				else if (fr == WFRAME_RELOAD)
 				{
@@ -830,17 +834,6 @@ void weapon_thinkf(float fr, float t, void() func)
 					self.weapon_morph3angles = '-10 40 0';
 					makevectors(self.weapon_morph3angles_x * '-1 0 0' + self.weapon_morph3angles_y * '0 1 0' + self.weapon_morph3angles_z * '0 0 1');
 					self.weapon_morph3origin = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
-
-					self.weapon_morph4time = time + t;
-				}
-
-				v_forward = of;
-				v_right = or;
-				v_up = ou;
-
-				if(reset)
-				{
-					BITXOR_ASSIGN(self.weaponentity.effects, EF_TELEPORT_BIT);
 				}
 			}
 		}
@@ -855,13 +848,17 @@ void weapon_thinkf(float fr, float t, void() func)
 			else if (fr == WFRAME_RELOAD)
 				a = self.weaponentity.anim_reload;
 			setanim(self.weaponentity, a, restartanim == FALSE, restartanim, restartanim);
+		}
 
-			if(reset)
-			{
-				BITXOR_ASSIGN(self.weaponentity.effects, EF_TELEPORT_BIT);
-			}
+		if(reset)
+		{
+			BITXOR_ASSIGN(self.weaponentity.effects, EF_TELEPORT_BIT);
 		}
 	}
+
+	v_forward = of;
+	v_right = or;
+	v_up = ou;
 
 	if(self.weapon_think == w_ready && func != w_ready && self.weaponentity.state == WS_RAISE)
 	{
