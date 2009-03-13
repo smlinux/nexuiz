@@ -109,7 +109,7 @@ game: hook is no longer "seta"
 game: hook jitter-less (full client side drawing)
 game: hook sky-attach bug fixed
 game: hook weapon consumes cell ammo
-game: improved bot ai: teamworking, items rating, weapon combos, swimming, basic handling of ladders, better handling of jumpads, better detection of dangers 
+game: improved bot ai: teamworking, items rating, weapon combos, swimming, basic handling of ladders, better handling of jumpads, better detection of dangers, recognition of doors
 game: improved weapon system, new weapons Port-O-Launch, MinstaNex, On-hand hook, TAG Seeker, HLAC, Camping Rifle; now up to 24 weapons supported
 game: IP ban syncing support (servers can share a ban list, can be used as a kind of global IP ban system)
 game: item respawn: 20s for 50health and 25armor
