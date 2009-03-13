@@ -2266,6 +2266,9 @@ float MapVote_CheckRules_2()
 	float mapvote_voters_real;
 	string result;
 
+	if(mapvote_count_real == 1)
+		return MapVote_Finished(0);
+
 	mapvote_voters_real = mapvote_voters;
 	if(mapvote_abstain)
 		mapvote_voters_real -= mapvote_votes[mapvote_count - 1];
