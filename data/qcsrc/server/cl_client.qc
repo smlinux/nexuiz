@@ -2186,7 +2186,8 @@ void PlayerPreThink (void)
 		if (self.deadflag != DEAD_NO)
 		{
 			float button_pressed, force_respawn;
-			player_anim();
+			if(frametime)
+				player_anim();
 			button_pressed = (self.BUTTON_ATCK || self.BUTTON_JUMP || self.BUTTON_ATCK2 || self.BUTTON_HOOK || self.BUTTON_USE);
 			force_respawn = (g_lms || cvar("g_forced_respawn"));
 			if (self.deadflag == DEAD_DYING)
@@ -2305,11 +2306,13 @@ void PlayerPreThink (void)
 
 		GrapplingHookFrame();
 
-		W_WeaponFrame();
+		if(frametime)
+			W_WeaponFrame();
 
 		player_powerups();
 		player_regen();
-		player_anim();
+		if(frametime)
+			player_anim();
 
 		if (g_minstagib)
 			minstagib_ammocheck();
