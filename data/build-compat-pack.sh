@@ -4,16 +4,16 @@
 
 COMPAT_FILES="
 	effectinfo.txt
-	gfx/aggressor_mini.tga
-	gfx/aneurysm_mini.tga
-	gfx/basementctf_mini.tga
-	gfx/bleach_mini.tga
-	gfx/bloodprisonctf_mini.tga
-	gfx/bloodprison_mini.tga
-	gfx/bluesky_mini.tga
-	gfx/dieselpower_mini.tga
-	gfx/dismal_mini.tga
-	gfx/final_rage_mini.tga
+	gfx/aggressor_radar.tga
+	gfx/aneurysm_radar.tga
+	gfx/basementctf_radar.tga
+	gfx/bleach_radar.tga
+	gfx/bloodprisonctf_radar.tga
+	gfx/bloodprison_radar.tga
+	gfx/bluesky_radar.tga
+	gfx/dieselpower_radar.tga
+	gfx/dismal_radar.tga
+	gfx/final_rage_radar.tga
 	gfx/inv_weapon10.tga
 	gfx/inv_weapon11.tga
 	gfx/inv_weapon12.tga
@@ -27,10 +27,10 @@ COMPAT_FILES="
 	gfx/keys/key_jump.tga
 	gfx/keys/key_left.tga
 	gfx/keys/key_right.tga
-	gfx/reslimed_mini.tga
-	gfx/runningman_1on1remix_mini.tga
-	gfx/runningmanctf_mini.tga
-	gfx/runningman_mini.tga
+	gfx/reslimed_radar.tga
+	gfx/runningman_1on1remix_radar.tga
+	gfx/runningmanctf_radar.tga
+	gfx/runningman_radar.tga
 	gfx/sb_flag_blue_shielded.tga
 	gfx/sb_flag_red_shielded.tga
 	gfx/sb_kh_full.tga
@@ -39,14 +39,14 @@ COMPAT_FILES="
 	gfx/sb_playercolor_base.tga
 	gfx/sb_playercolor_pants.tga
 	gfx/sb_playercolor_shirt.tga
-	gfx/silvercity_mini.tga
-	gfx/stormkeep_mini.tga
-	gfx/strength_mini.tga
+	gfx/silvercity_radar.tga
+	gfx/stormkeep_radar.tga
+	gfx/strength_radar.tga
 	gfx/teamradar_icon_1.tga
 	gfx/teamradar_icon_2.tga
 	gfx/teamradar_ping.tga
-	gfx/toxic_mini.tga
-	gfx/warfare_mini.tga
+	gfx/toxic_radar.tga
+	gfx/warfare_radar.tga
 	maps/eggandbacon.bsp
 	models/ctf/flags.md3
 	models/ctf/flags.md3_0.skin
