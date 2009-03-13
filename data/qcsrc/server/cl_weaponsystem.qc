@@ -351,6 +351,7 @@ void CL_Weaponentity_Think()
 			self.model = "";
 
 		// check if an instant weapon switch occurred
+		if (qcweaponanimation)
 		if (self.state == WS_READY)
 		{
 			self.angles = '0 0 0';
@@ -415,45 +416,54 @@ void CL_Weaponentity_Think()
 	{
 		f = (self.owner.weapon_nextthink - time) / cvar("g_balance_weaponswitchdelay");
 		self.angles_x = -90 * f * f;
-		makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0' + self.angles_z * '0 0 1');
-		setorigin(self, weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust);
+		if (qcweaponanimation)
+		{
+			makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0' + self.angles_z * '0 0 1');
+			setorigin(self, weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust);
+		}
 	}
 	else if (self.state == WS_DROP)
 	{
 		f = 1 - (self.owner.weapon_nextthink - time) / cvar("g_balance_weaponswitchdelay");
 		self.angles_x = -90 * f * f;
-		makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0' + self.angles_z * '0 0 1');
-		setorigin(self, weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust);
+		if (qcweaponanimation)
+		{
+			makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0' + self.angles_z * '0 0 1');
+			setorigin(self, weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust);
+		}
 	}
 	else if (self.state == WS_CLEAR)
 	{
 		f = 1;
 		self.angles_x = -90 * f * f;
-		makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0' + self.angles_z * '0 0 1');
-		setorigin(self, weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust);
+		if (qcweaponanimation)
+		{
+			makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0' + self.angles_z * '0 0 1');
+			setorigin(self, weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust);
+		}
 	}
-	else if (time < self.owner.weapon_morph1time)
+	else if (qcweaponanimation && time < self.owner.weapon_morph1time)
 	{
 		f = (time - self.owner.weapon_morph0time) / (self.owner.weapon_morph1time - self.owner.weapon_morph0time);
 		f = 1 - pow(1 - f, 3);
 		self.angles = self.owner.weapon_morph0angles * (1 - f) + self.owner.weapon_morph1angles * f;
 		setorigin(self, self.owner.weapon_morph0origin * (1 - f) + self.owner.weapon_morph1origin * f);
 	}
-	else if (time < self.owner.weapon_morph2time)
+	else if (qcweaponanimation && time < self.owner.weapon_morph2time)
 	{
 		f = (time - self.owner.weapon_morph1time) / (self.owner.weapon_morph2time - self.owner.weapon_morph1time);
 		f = 1 - pow(1 - f, 3);
 		self.angles = self.owner.weapon_morph1angles * (1 - f) + self.owner.weapon_morph2angles * f;
 		setorigin(self, self.owner.weapon_morph1origin * (1 - f) + self.owner.weapon_morph2origin * f);
 	}
-	else if (time < self.owner.weapon_morph3time)
+	else if (qcweaponanimation && time < self.owner.weapon_morph3time)
 	{
 		f = (time - self.owner.weapon_morph2time) / (self.owner.weapon_morph3time - self.owner.weapon_morph2time);
 		f = 1 - pow(1 - f, 3);
 		self.angles = self.owner.weapon_morph2angles * (1 - f) + self.owner.weapon_morph3angles * f;
 		setorigin(self, self.owner.weapon_morph2origin * (1 - f) + self.owner.weapon_morph3origin * f);
 	}
-	else if (time < self.owner.weapon_morph4time)
+	else if (qcweaponanimation && time < self.owner.weapon_morph4time)
 	{
 		f = (time - self.owner.weapon_morph3time) / (self.owner.weapon_morph4time - self.owner.weapon_morph3time);
 		f = 1 - pow(1 - f, 3);
