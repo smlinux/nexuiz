@@ -1,4 +1,4 @@
-1 6 40 // fire
-7 6 40 // fire2
-13 100 10 // idle
-113 24 20 // reload
+1 8 20 // fire
+9 5 20 // fire2
+15 200 20 // idle
+215 40 20 // reload
