@@ -43,8 +43,7 @@ game: antilag improved
 game: assault bugfixed
 game: ballistics for bullets (but antilagged by default), that is all bullet guns (shotgun, machinegun, campingrifle) are affected by gravity and can pierce walls and players up to a certain thickness depending on gun)
 game: better visual hint for unbalanced teams
-game: bots can now bunnyhop
-game: bots try to not take items near team mates
+game: bots can do bunnyhopping now
 game: carrying strength and shield has less of a performance impact now
 game: cl_gentle, clientside gib replacement for general audiences
 game: cmd maplist improved
@@ -110,7 +109,7 @@ game: hook is no longer "seta"
 game: hook jitter-less (full client side drawing)
 game: hook sky-attach bug fixed
 game: hook weapon consumes cell ammo
-game: improved bot ai: teamworking, items rating and weapon combos
+game: improved bot ai: teamworking, items rating, weapon combos, swimming, basic handling of ladders, better handling of jumpads, better detection of dangers 
 game: improved weapon system, new weapons Port-O-Launch, MinstaNex, On-hand hook, TAG Seeker, HLAC, Camping Rifle; now up to 24 weapons supported
 game: IP ban syncing support (servers can share a ban list, can be used as a kind of global IP ban system)
 game: item respawn: 20s for 50health and 25armor
