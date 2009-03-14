@@ -1196,7 +1196,7 @@ void navigation_markroutes()
 	}
 	// try a short range search for the nearest waypoints, and expand thesearch repeatedly if none are found
 	increment = 500;
-	for(i=increment;navigation_markroutes_nearestwaypoints(waylist, i)&&i<50000;i+=increment);
+	for(i=increment;!navigation_markroutes_nearestwaypoints(waylist, i)&&i<50000;i+=increment);
 
 	searching = TRUE;
 	while (searching)
