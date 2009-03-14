@@ -412,7 +412,7 @@ void CL_Weaponentity_Think()
 		if(self.movedir_x >= 0)
 		{
 			self.view_ofs_y = -self.movedir_y;
-			self.movedir_y = 0;
+			self.movedir += self.view_ofs;
 		}
 
 		if(cvar("g_shootfromeye"))
