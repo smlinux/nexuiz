@@ -323,14 +323,13 @@ void CL_Weaponentity_Think()
 				if (modelfile >= 0)
 				{
 					fclose(modelfile);
-					self.anim_fire1  = '0 1 10';
-					self.anim_fire2  = '1 1 10';
-					self.anim_idle   = '2 1 10';
-					self.anim_reload = '3 1 10';
-					setmodel(self, strcat("models/weapons/h_", self.owner.weaponname, ".zym")); // precision set below
+					self.anim_fire1  = '0 1 0.01';
+					self.anim_fire2  = '1 1 0.01';
+					self.anim_idle   = '2 1 0.01';
+					self.anim_reload = '3 1 0.01';
 					if (!self.weaponentity)
 						self.weaponentity = spawn();
-					setmodel(self, strcat("models/weapons/h_", self.owner.weaponname, ".dpm")); // precision set below
+					setmodel(self, strcat("models/weapons/h_", self.owner.weaponname, ".zym")); // precision set below
 					setmodel(self.weaponentity, strcat("models/weapons/v_", self.owner.weaponname, ".md3")); // precision does not matter
 					setattachment(self.weaponentity, self, "weapon");
 				}
@@ -366,10 +365,10 @@ void CL_Weaponentity_Think()
 					}
 					else
 					{
-						self.anim_fire1  = '0 1 10';
-						self.anim_fire2  = '1 1 10';
-						self.anim_idle   = '2 1 10';
-						self.anim_reload = '3 1 10';
+						self.anim_fire1  = '0 1 0.01';
+						self.anim_fire2  = '1 1 0.01';
+						self.anim_idle   = '2 1 0.01';
+						self.anim_reload = '3 1 0.01';
 						setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".zym")); // precision set below
 					}
 				}
