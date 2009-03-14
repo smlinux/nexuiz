@@ -846,7 +846,7 @@ void GameCommand(string command)
 			v = gettaginfo(e, i);
 			print("model ", e.model, " frame ", ftos(e.frame), " tag ", argv(3));
 			print(" index = ", ftos(i));
-			print(" vector = ", vtos(v), "\n");
+			print(" vector = ", ftos(v_x), " ", ftos(v_y), " ", ftos(v_z), "\n");
 			if(argc >= 6)
 			{
 				v_y = -v_y;
