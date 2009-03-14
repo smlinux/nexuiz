@@ -308,6 +308,7 @@ void CL_Weaponentity_Think()
 
 		string animfilename;
 		float animfile;
+		float modelfile;
 		if (self.owner.weaponname != "")
 		{
 			// if there is a child entity, hide it until we're sure we use it
@@ -317,10 +318,16 @@ void CL_Weaponentity_Think()
 				setmodel(self, strcat("models/weapons/v_", self.owner.weaponname, ".md3")); // precision set below
 			else
 			{
-				animfilename = strcat("models/weapons/h_", self.owner.weaponname, ".dpm.animinfo");
-				animfile = fopen(animfilename, FILE_READ);
-				if (animfile >= 0)
+				animfilename = strcat("models/weapons/h_", self.owner.weaponname, ".zym");
+				modelfile = fopen(animfilename, FILE_READ);
+				if (modelfile >= 0)
 				{
+					fclose(modelfile);
+					self.anim_fire1  = '0 1 10';
+					self.anim_fire2  = '1 1 10';
+					self.anim_idle   = '2 1 10';
+					self.anim_reload = '3 1 10';
+					setmodel(self, strcat("models/weapons/h_", self.owner.weaponname, ".zym")); // precision set below
 					if (!self.weaponentity)
 						self.weaponentity = spawn();
 					setmodel(self, strcat("models/weapons/h_", self.owner.weaponname, ".dpm")); // precision set below
@@ -329,29 +336,42 @@ void CL_Weaponentity_Think()
 				}
 				else
 				{
-					animfilename = strcat("models/weapons/w_", self.owner.weaponname, ".dpm.animinfo");
+					animfilename = strcat("models/weapons/h_", self.owner.weaponname, ".dpm.animinfo");
 					animfile = fopen(animfilename, FILE_READ);
 					if (animfile >= 0)
-						setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".dpm")); // precision set below
-				}
-				if (animfile >= 0)
-				{
-					animparseerror = FALSE;
-					self.anim_fire1  = animparseline(animfile);
-					self.anim_fire2  = animparseline(animfile);
-					self.anim_idle   = animparseline(animfile);
-					self.anim_reload = animparseline(animfile);
-					fclose(animfile);
-					if (animparseerror)
-						print("Parse error in ", animfilename, ", some player animations are broken\n");
-				}
-				else
-				{
-					self.anim_fire1  = '0 1 10';
-					self.anim_fire2  = '1 1 10';
-					self.anim_idle   = '2 1 10';
-					self.anim_reload = '3 1 10';
-					setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".zym")); // precision set below
+					{
+						if (!self.weaponentity)
+							self.weaponentity = spawn();
+						setmodel(self, strcat("models/weapons/h_", self.owner.weaponname, ".dpm")); // precision set below
+						setmodel(self.weaponentity, strcat("models/weapons/v_", self.owner.weaponname, ".md3")); // precision does not matter
+						setattachment(self.weaponentity, self, "weapon");
+					}
+					else
+					{
+						animfilename = strcat("models/weapons/w_", self.owner.weaponname, ".dpm.animinfo");
+						animfile = fopen(animfilename, FILE_READ);
+						if (animfile >= 0)
+							setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".dpm")); // precision set below
+					}
+					if (animfile >= 0)
+					{
+						animparseerror = FALSE;
+						self.anim_fire1  = animparseline(animfile);
+						self.anim_fire2  = animparseline(animfile);
+						self.anim_idle   = animparseline(animfile);
+						self.anim_reload = animparseline(animfile);
+						fclose(animfile);
+						if (animparseerror)
+							print("Parse error in ", animfilename, ", some player animations are broken\n");
+					}
+					else
+					{
+						self.anim_fire1  = '0 1 10';
+						self.anim_fire2  = '1 1 10';
+						self.anim_idle   = '2 1 10';
+						self.anim_reload = '3 1 10';
+						setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".zym")); // precision set below
+					}
 				}
 			}
 		}
