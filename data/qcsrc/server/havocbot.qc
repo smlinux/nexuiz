@@ -905,7 +905,6 @@ void havocbot_ai()
 		if(self.goalcurrent==world)
 		if(self.waterlevel==2 || self.aistatus & AI_STATUS_OUT_WATER)
 		{
-			// TODO: Make the bots detect and handle ladders and/or platforms
 			// Look for the closest waypoint out of water
 			local entity newgoal, head;
 			local float bestdistance, distance;
