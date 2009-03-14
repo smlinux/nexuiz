@@ -134,6 +134,9 @@ entity SelectSpawnPoint (float anypoint);
 void StartFrame (void)
 {
 	remove = remove_unsafely; // not during spawning!
+	serverprevtime = servertime;
+	servertime = time;
+	serverframetime = frametime;
 
 	dprint_load(); // load dprint status from cvar
 
