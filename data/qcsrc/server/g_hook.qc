@@ -471,7 +471,7 @@ void GrappleHookInit()
 		hook_shotorigin = '8 -8 -12';
 	else
 	{
-		hook_shotorigin = '21 8 -8.5';
+		hook_shotorigin = '26.2148 9.2059 -15.9772';
 		if(cvar("g_shootfromcenter"))
 			hook_shotorigin_y = 0;
 		if(cvar("g_shootfromeye"))
