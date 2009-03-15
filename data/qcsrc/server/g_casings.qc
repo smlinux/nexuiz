@@ -17,7 +17,7 @@ void SpawnCasing(vector vel, float randomvel, vector ang, vector avel, float ran
 	entity e;
 	vector org;
 
-	org = self.origin + self.weaponentity.spawnorigin_x * v_forward - self.weaponentity.spawnorigin_y * v_right + self.weaponentity.spawnorigin_z * v_up;
+	org = self.origin + self.view_ofs + self.weaponentity.spawnorigin_x * v_forward - self.weaponentity.spawnorigin_y * v_right + self.weaponentity.spawnorigin_z * v_up;
 
 	e = spawn();
 	e.state = casingtype;
