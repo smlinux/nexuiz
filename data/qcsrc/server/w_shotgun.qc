@@ -19,7 +19,7 @@ void W_Shotgun_Attack (void)
 	bulletspeed = cvar("g_balance_shotgun_primary_speed");
 	bulletconstant = cvar("g_balance_shotgun_primary_bulletconstant");
 
-	W_SetupShot (self, '28 8 -10', TRUE, 5, "weapons/shotgun_fire.wav");
+	W_SetupShot (self, TRUE, 5, "weapons/shotgun_fire.wav");
 	for (sc = 0;sc < bullets;sc = sc + 1)
 		fireBallisticBullet(w_shotorg, w_shotdir, spread, bulletspeed, 5, d, 0, f, WEP_SHOTGUN, 0, 1, bulletconstant);
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
@@ -30,21 +30,13 @@ void W_Shotgun_Attack (void)
 	// casing code
 	if (cvar("g_casings") >= 1)
 		for (sc = 0;sc < ammo;sc = sc + 1)
-			SpawnCasing (w_shotorg - v_forward * 10, ((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
+			SpawnCasing (((random () * 50 - 100) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
 
 	// muzzle flash for 1st person view
 	flash = spawn();
 	setorigin(flash, '5 0 0');
 	setmodel(flash, "models/uziflash.md3"); // precision set below
-	if (gettagindex(self.weaponentity, "shot"))
-		setattachment(flash, self.weaponentity, "shot");
-	else if (gettagindex(self.weaponentity, "bone02"))
-		setattachment(flash, self.weaponentity, "bone02");
-	else
-	{
-		setorigin(flash, '48 0 5');
-		setattachment(flash, self.weaponentity, "");
-	}
+	setattachment(flash, self.weaponentity, "shot");
 	flash.owner = self;
 	flash.viewmodelforclient = self;
 	flash.customizeentityforclient = CL_Weaponentity_CustomizeEntityForClient;
@@ -76,7 +68,7 @@ void W_Shotgun_Attack2 (void)
 	bulletspeed = cvar("g_balance_shotgun_secondary_speed");
 	bulletconstant = cvar("g_balance_shotgun_secondary_bulletconstant");
 
-	W_SetupShot (self, '25 8 -8', TRUE, 5, "weapons/shotgun_fire.wav");
+	W_SetupShot (self, TRUE, 5, "weapons/shotgun_fire.wav");
 	for (sc = 0;sc < bullets;sc = sc + 1)
 		fireBallisticBullet(w_shotorg, w_shotdir, spread, bulletspeed, 5, d, 0, f, WEP_SHOTGUN | HITTYPE_SECONDARY, 0, 1, bulletconstant);
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
@@ -87,20 +79,12 @@ void W_Shotgun_Attack2 (void)
 	// casing code
 	if (cvar("g_casings") >= 1)
 		for (sc = 0;sc < ammo;sc = sc + 1)
-			SpawnCasing (w_shotorg - v_forward * 10, ((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
+			SpawnCasing (((random () * 50 - 100) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
 
 	flash = spawn();
 	setorigin(flash, '5 0 0');
 	setmodel(flash, "models/uziflash.md3"); // precision set below
-	if (gettagindex(self.weaponentity, "shot"))
-		setattachment(flash, self.weaponentity, "shot");
-	else if (gettagindex(self.weaponentity, "bone02"))
-		setattachment(flash, self.weaponentity, "bone02");
-	else
-	{
-		setorigin(flash, '48 0 5');
-		setattachment(flash, self.weaponentity, "");
-	}
+	setattachment(flash, self.weaponentity, "shot");
 	flash.owner = self;
 	flash.viewmodelforclient = self;
 	flash.customizeentityforclient = CL_Weaponentity_CustomizeEntityForClient;

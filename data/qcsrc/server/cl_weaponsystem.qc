@@ -31,11 +31,12 @@ vector w_shotdir;
 // this function calculates w_shotorg and w_shotdir based on the weapon model
 // offset, trueaim and antilag, and won't put w_shotorg inside a wall.
 // make sure you call makevectors first (FIXME?)
-void W_SetupShot(entity ent, vector vecs, float antilag, float recoil, string snd)
+void W_SetupShot(entity ent, float antilag, float recoil, string snd)
 {
 	float nudge = 1; // added to traceline target and subtracted from result
 	local vector trueaimpoint;
 	local float oldsolid;
+	vector vecs;
 	oldsolid = self.dphitcontentsmask;
 	self.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE;
 	traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, self);
@@ -47,7 +48,7 @@ void W_SetupShot(entity ent, vector vecs, float antilag, float recoil, string sn
 		vecs_y = -vecs_y;
 	}
 	else
-		vecs = shotorg_adjust(vecs, TRUE, FALSE);
+		vecs = '0 0 0';
 
 	if(debug_shotorg != '0 0 0')
 		vecs = debug_shotorg;
@@ -381,27 +382,39 @@ void CL_Weaponentity_Think()
 			makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0' + self.angles_z * '0 0 1');
 			self.movedir = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
 			self.movedir_x += 30;
+			self.spawnorigin = self.movedir;
 		}
 		else
 		{
+			self.origin = '0 0 0';
+			self.angles = '0 0 0';
+			self.frame = 0;
+			self.viewmodelforclient = world;
+
 			float idx;
 			idx = gettagindex(self, "shot");
-			if(!idx)
-			{
-				print("WARNING: the weapon ", self.model, " does not support the correct shot origin tag.\n");
-				idx = gettagindex(self, "bone02");
-			}
 			if(idx)
 			{
-				self.origin = '0 0 0';
-				self.angles = '0 0 0';
-				self.frame = 0;
-				self.viewmodelforclient = world;
 				self.movedir = gettaginfo(self, idx);
-				self.viewmodelforclient = self.owner;
 			}
 			else
+			{
+				print("WARNING: weapon model ", self.model, " does not support the 'shot' tag\n");
 				self.movedir = '0 0 0';
+			}
+
+			idx = gettagindex(self, "shell");
+			if(idx)
+			{
+				self.spawnorigin = gettaginfo(self, idx);
+			}
+			else
+			{
+				print("WARNING: weapon model ", self.model, " does not support the 'shell' tag\n");
+				self.spawnorigin = self.movedir;
+			}
+
+			self.viewmodelforclient = self.owner;
 		}
 
 		self.view_ofs = '0 0 0';
@@ -413,6 +426,8 @@ void CL_Weaponentity_Think()
 			self.movedir = shotorg_adjust(v0, FALSE, FALSE);
 			self.view_ofs = shotorg_adjust(v0, FALSE, TRUE) - v0;
 		}
+
+		self.spawnorigin += self.view_ofs; // offset the casings origin by the same amount
 
 		// check if an instant weapon switch occurred
 		if (qcweaponanimation)

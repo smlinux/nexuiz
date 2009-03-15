@@ -22,7 +22,7 @@ void W_Uzi_Attack (float deathtype)
 		else
 			self.ammo_nails = self.ammo_nails - cvar("g_balance_uzi_sustained_ammo");
 	}
-	W_SetupShot (self, '23 8 -9.5', TRUE, 0, "weapons/uzi_fire.wav");
+	W_SetupShot (self, TRUE, 0, "weapons/uzi_fire.wav");
 	if (!g_norecoil)
 	{
 		self.punchangle_x = random () - 0.5;
@@ -43,17 +43,7 @@ void W_Uzi_Attack (float deathtype)
 	flash = spawn();
 	setorigin(flash, '5 0 0');
 	setmodel(flash, "models/uziflash.md3"); // precision set below
-	if (gettagindex(self.weaponentity, "shot"))
-		setattachment(flash, self.weaponentity, "shot");
-	else if (gettagindex(self.weaponentity, "bone02"))
-		setattachment(flash, self.weaponentity, "bone02");
-	else
-	{
-		setorigin(flash, shotorg + shotdir * 50);
-		flash.angles = vectoangles(shotdir);
-		//setorigin(flash, '48 0 5');
-		//setattachment(flash, self.weaponentity, "");
-	}
+	setattachment(flash, self.weaponentity, "shot");
 	flash.owner = self;
 	flash.viewmodelforclient = self;
 	flash.customizeentityforclient = CL_Weaponentity_CustomizeEntityForClient;
@@ -78,7 +68,7 @@ void W_Uzi_Attack (float deathtype)
 
 	// casing code
 	if (cvar("g_casings") >= 2)
-		SpawnCasing (w_shotorg - v_forward * 10, ((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 70) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 3);
+		SpawnCasing (((random () * 50 - 100) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 70) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 3);
 }
 
 // weapon frames

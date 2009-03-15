@@ -319,18 +319,17 @@ void SV_ParseClientCommand(string s) {
 		else
 			sprint(self, "Usage: sv_cheats 1; restart; cmd pointparticles effectname position(0..1) velocityvector multiplier\n");
 	} else if(argv(0) == "trailparticles") {
-		if(sv_cheats && tokens == 3)
+		if(sv_cheats && tokens == 2)
 		{
 			// arguments:
 			//   effectname
-			//   shot origin vector
 			effectnum = particleeffectnum(argv(1));
-			W_SetupShot(self, stov(argv(2)), FALSE, FALSE, "");
+			W_SetupShot(self,  FALSE, FALSE, "");
 			traceline(w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
 			trailparticles(self, effectnum, w_shotorg, trace_endpos);
 		}
 		else
-			sprint(self, "Usage: sv_cheats 1; restart; cmd trailparticles effectname shotorigin\n");
+			sprint(self, "Usage: sv_cheats 1; restart; cmd trailparticles effectname\n");
 	} else {
 		//if(ctf_clientcommand())
 		//	return;

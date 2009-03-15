@@ -66,7 +66,7 @@ void W_Crylink_Attack (void)
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_primary_ammo");
 
-	W_SetupShot (self, '23 8 -10', FALSE, 2, "weapons/crylink_fire.wav");
+	W_SetupShot (self, FALSE, 2, "weapons/crylink_fire.wav");
 	forward = v_forward;
 	right = v_right;
 	up = v_up;
@@ -132,7 +132,7 @@ void W_Crylink_Attack2 (void)
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_secondary_ammo");
 
-	W_SetupShot (self, '25 8 -8', FALSE, 2, "weapons/crylink_fire2.wav");
+	W_SetupShot (self, FALSE, 2, "weapons/crylink_fire2.wav");
 
 	shots = cvar("g_balance_crylink_secondary_shots");
 	pointparticles(particleeffectnum("crylink_muzzleflash"), w_shotorg, w_shotdir * 1000, shots);
@@ -180,7 +180,7 @@ void W_Crylink_Attack3 (void)
 {
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_primary_ammo");
-	W_SetupShot (self, '25 8 -8', TRUE, 0, "weapons/crylink_fire.wav");
+	W_SetupShot (self, TRUE, 0, "weapons/crylink_fire.wav");
 
 	traceline_antilag(self, w_shotorg, w_shotorg + w_shotdir * 1000, FALSE, self, self.ping * 0.001);
 
