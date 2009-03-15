@@ -93,6 +93,7 @@ William "Willis" Weilep - Master server host
 Severin "sev" Meyer - Artist
 Simon O'Callaghan - "egyptsoc" texture set
 Robert "ai" Kuroto - Various models
+Alexander "motorsep" Zubov - Weapon animation
 
 Qantourisc
 Tymo
