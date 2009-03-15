@@ -169,6 +169,35 @@ COMPAT_FILES="
 	models/weapons/g_porto.md3
 	models/weapons/g_seeker.md3
 	models/weapons/h_campingrifle.dpm
+	models/weapons/h_campingrifle.dpm.animinfo
+	models/weapons/h_crylink.dpm
+	models/weapons/h_crylink.dpm.animinfo
+	models/weapons/h_electro.dpm
+	models/weapons/h_electro.dpm.animinfo
+	models/weapons/h_gl.dpm
+	models/weapons/h_gl.dpm.animinfo
+	models/weapons/h_hagar.dpm
+	models/weapons/h_hagar.dpm.animinfo
+	models/weapons/h_hlac.dpm
+	models/weapons/h_hlac.dpm.animinfo
+	models/weapons/h_hookgun.dpm
+	models/weapons/h_hookgun.dpm.animinfo
+	models/weapons/h_laser.dpm
+	models/weapons/h_laser.dpm.animinfo
+	models/weapons/h_minstanex.dpm
+	models/weapons/h_minstanex.dpm.animinfo
+	models/weapons/h_nex.dpm
+	models/weapons/h_nex.dpm.animinfo
+	models/weapons/h_porto.dpm
+	models/weapons/h_porto.dpm.animinfo
+	models/weapons/h_rl.dpm
+	models/weapons/h_rl.dpm.animinfo
+	models/weapons/h_seeker.dpm
+	models/weapons/h_seeker.dpm.animinfo
+	models/weapons/h_shotgun.dpm
+	models/weapons/h_shotgun.dpm.animinfo
+	models/weapons/h_uzi.dpm
+	models/weapons/h_uzi.dpm.animinfo
 	models/weapons/v_campingrifle.md3
 	models/weapons/v_hlac.md3
 	models/weapons/v_hookgun.md3
@@ -181,7 +210,6 @@ COMPAT_FILES="
 	models/weapons/w_minstanex.zym
 	models/weapons/w_porto.zym
 	models/weapons/w_seeker.zym
-	models/weapons/w_uzi.dpm
 	particles/particlefont.tga
 	scripts/eggandbacon.shader
 	scripts/egyptsoc.shader
