@@ -1183,7 +1183,6 @@ void navigation_markroutes()
 	local entity w, wp, waylist;
 	local float searching, cost, cost2;
 	local vector p;
-	local float i, increment;
 	w = waylist = findchain(classname, "waypoint");
 	while (w)
 	{
@@ -1194,9 +1193,16 @@ void navigation_markroutes()
 		w.enemy = world;
 		w = w.chain;
 	}
+
 	// try a short range search for the nearest waypoints, and expand thesearch repeatedly if none are found
+	local float i, increment, maxdistance;
 	increment = 500;
-	for(i=increment;!navigation_markroutes_nearestwaypoints(waylist, i)&&i<50000;i+=increment);
+	if(self.flags & FL_ONGROUND)
+		maxdistance = 50000;
+	else
+		maxdistance = 1500;
+	
+	for(i=increment;!navigation_markroutes_nearestwaypoints(waylist, i)&&i<maxdistance;i+=increment);
 
 	searching = TRUE;
 	while (searching)
