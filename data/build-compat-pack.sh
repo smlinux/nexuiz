@@ -204,12 +204,6 @@ COMPAT_FILES="
 	models/weapons/v_minstanex.md3
 	models/weapons/v_porto.md3
 	models/weapons/v_seeker.md3
-	models/weapons/w_campingrifle.zym
-	models/weapons/w_hlac.zym
-	models/weapons/w_hookgun.zym
-	models/weapons/w_minstanex.zym
-	models/weapons/w_porto.zym
-	models/weapons/w_seeker.zym
 	particles/particlefont.tga
 	scripts/eggandbacon.shader
 	scripts/egyptsoc.shader
