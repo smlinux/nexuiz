@@ -46,10 +46,8 @@ void W_SetupShot(entity ent, vector vecs, float antilag, float recoil, string sn
 		vecs = ent.weaponentity.movedir;
 		vecs_y = -vecs_y;
 	}
-	else if (cvar("g_shootfromeye"))
-		vecs_y = vecs_z = 0;
-	else if (cvar("g_shootfromcenter"))
-		vecs_y = 0;
+	else
+		vecs = shotorg_adjust(vecs, TRUE, FALSE);
 
 	if(debug_shotorg != '0 0 0')
 		vecs = debug_shotorg;
@@ -408,16 +406,12 @@ void CL_Weaponentity_Think()
 
 		self.view_ofs = '0 0 0';
 
-		if(cvar("g_shootfromcenter") || cvar("g_shootfromeye"))
 		if(self.movedir_x >= 0)
 		{
-			self.view_ofs_y = -self.movedir_y;
-			self.movedir += self.view_ofs;
-		}
-
-		if(cvar("g_shootfromeye"))
-		{
-			self.movedir_z = 0;
+			vector v0;
+			v0 = self.movedir;
+			self.movedir = shotorg_adjust(v0, FALSE, FALSE);
+			self.view_ofs = shotorg_adjust(v0, FALSE, TRUE) - v0;
 		}
 
 		// check if an instant weapon switch occurred

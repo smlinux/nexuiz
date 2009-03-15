@@ -90,12 +90,12 @@ void W_Shotgun_Attack2 (void)
 			SpawnCasing (w_shotorg - v_forward * 10, ((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
 
 	flash = spawn();
-	setorigin(flash, '53 5 0');
+	setorigin(flash, '5 0 0');
 	setmodel(flash, "models/uziflash.md3"); // precision set below
 	if (gettagindex(self.weaponentity, "shot"))
 		setattachment(flash, self.weaponentity, "shot");
-	else if (gettagindex(self.weaponentity, "bone01"))
-		setattachment(flash, self.weaponentity, "bone01");
+	else if (gettagindex(self.weaponentity, "bone02"))
+		setattachment(flash, self.weaponentity, "bone02");
 	else
 	{
 		setorigin(flash, '48 0 5');

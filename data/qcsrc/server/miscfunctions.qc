@@ -2025,3 +2025,26 @@ void write_recordmarker(entity pl, float tstart, float dt)
 			strcat("//", strconv(2, 0, 0, GetGametype()), " RECORD SET ", mmsss(dt * 10)),
 			" ", ftos(tstart), " ", ftos(dt), "\n"));
 }
+
+vector shotorg_adjust(vector vecs, float y_is_right, float visual)
+{
+	if (cvar("g_shootfromeye"))
+	{
+		if(visual)
+		{
+			vecs_y = 0;
+			vecs_z -= 2;
+		}
+		else
+		{
+			vecs_y = 0;
+			vecs_z = 0;
+		}
+	}
+	else if (cvar("g_shootfromcenter"))
+	{
+		vecs_y = 0;
+		vecs_z -= 2;
+	}
+	return vecs;
+}
