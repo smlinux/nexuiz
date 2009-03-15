@@ -1191,6 +1191,7 @@ killtarget: points to the entity that is to be used as the source (e.g. a func_p
 */
 
 /*QUAKED weapon_minstanex (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
+Placing this entity on a map kills your cat, voids the warranty on your toaster, and makes your map an unenjoyable campers' paradise.
 the MinstaGib Nex. Always kills with one shot.
 -------- KEYS --------
 ammo_cells: initial cells of the weapon (if unset, g_pickup_cells is used)
