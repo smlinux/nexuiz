@@ -161,7 +161,7 @@ float w_minstanex(float req)
 		precache_model ("models/nexflash.md3");
 		precache_model ("models/weapons/g_minstanex.md3");
 		precache_model ("models/weapons/v_minstanex.md3");
-		precache_model ("models/weapons/w_minstanex.zym");
+		precache_model ("models/weapons/h_minstanex.dpm");
 		precache_sound ("weapons/minstanexfire.wav");
 		w_laser(WR_PRECACHE);
 	}

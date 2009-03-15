@@ -226,7 +226,7 @@ float w_crylink(float req)
 	{
 		precache_model ("models/weapons/g_crylink.md3");
 		precache_model ("models/weapons/v_crylink.md3");
-		precache_model ("models/weapons/w_crylink.zym");
+		precache_model ("models/weapons/h_crylink.dpm");
 		precache_sound ("weapons/crylink_fire.wav");
 		precache_sound ("weapons/crylink_fire2.wav");
 	}

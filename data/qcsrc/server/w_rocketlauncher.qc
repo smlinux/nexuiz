@@ -431,7 +431,7 @@ float w_rlauncher(float req)
 		precache_model ("models/flash.md3");
 		precache_model ("models/weapons/g_rl.md3");
 		precache_model ("models/weapons/v_rl.md3");
-		precache_model ("models/weapons/w_rl.zym");
+		precache_model ("models/weapons/h_rl.dpm");
 		precache_sound ("weapons/rocket_det.wav");
 		precache_sound ("weapons/rocket_fire.wav");
 		if (g_laserguided_missile)

@@ -137,7 +137,7 @@ float w_campingrifle(float req)
 	{		
 		precache_model ("models/weapons/g_campingrifle.md3");
 		precache_model ("models/weapons/v_campingrifle.md3");
-		precache_model ("models/weapons/w_campingrifle.zym");
+		precache_model ("models/weapons/h_campingrifle.dpm");
 		precache_sound ("weapons/campingrifle_reload.wav");
 		precache_sound ("weapons/campingrifle_fire.wav");
 	}

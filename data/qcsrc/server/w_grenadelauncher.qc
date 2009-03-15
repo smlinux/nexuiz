@@ -191,7 +191,7 @@ float w_glauncher(float req)
 	{
 		precache_model ("models/weapons/g_gl.md3");
 		precache_model ("models/weapons/v_gl.md3");
-		precache_model ("models/weapons/w_gl.zym");
+		precache_model ("models/weapons/h_gl.dpm");
 		precache_sound ("weapons/grenade_bounce1.wav");
 		precache_sound ("weapons/grenade_bounce2.wav");
 		precache_sound ("weapons/grenade_bounce3.wav");
