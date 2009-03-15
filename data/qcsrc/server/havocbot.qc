@@ -388,14 +388,10 @@ void havocbot_movetogoal()
 		}
 
 		// use the alternative goal
-		if (bot_strategytoken == self)
-		if (!bot_strategytoken_taken)
-		{
-			navigation_findnearestwaypoint(self.alternativegoal, TRUE);
-			navigation_routetogoal(self.alternativegoal);
-			self.alternativegoal = world;
-			bot_strategytoken_taken = TRUE;
-		}
+		navigation_findnearestwaypoint(self.alternativegoal, TRUE);
+		navigation_routetogoal(self.alternativegoal);
+		self.alternativegoal = world;
+		bot_strategytoken_taken = TRUE;
 
 		return;
 	}

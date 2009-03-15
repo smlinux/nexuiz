@@ -254,7 +254,7 @@ void havocbot_goalrating_waypoints(float ratingscale, vector org, float sradius)
 void havocbot_goalrating_enemyplayers(float ratingscale, vector org, float sradius)
 {
 	local entity head;
-	local float t, noteam;
+	local float t, noteam, distance;
 	noteam = ((self.team == 0) || !teams_matter); // fteqcc sucks
 
 	// don't chase players if we're under water
@@ -268,7 +268,8 @@ void havocbot_goalrating_enemyplayers(float ratingscale, vector org, float sradi
 		if (head.health > 0)
 		if ((noteam && (!bot_ignore_bots || clienttype(head) == CLIENTTYPE_REAL)) || head.team != self.team)
 		{
-			if (vlen(head.origin - org) > sradius)
+			distance = vlen(head.origin - org);
+			if (distance < 100 || distance > sradius)
 				continue;
 
 			if(g_minstagib)
