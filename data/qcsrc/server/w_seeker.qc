@@ -152,7 +152,7 @@ void Seeker_Missile_Animate()
 	UpdateCSQCProjectile(self);
 }
 
-void Seeker_Fire_Missile(vector f_org)
+void Seeker_Fire_Missile(vector f_diff)
 {
 	local entity missile;
 
@@ -160,7 +160,8 @@ void Seeker_Fire_Missile(vector f_org)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_seeker_missile_ammo");
 
 	makevectors(self.v_angle);
-	W_SetupShot (self, f_org, FALSE, 2, "weapons/seeker_fire.wav");
+	W_SetupShot (self, '38.75 13.25 -22', FALSE, 2, "weapons/seeker_fire.wav");
+	w_shotorg += f_diff;
 	pointparticles(particleeffectnum("seeker_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
 	//self.detornator         = FALSE;
@@ -229,17 +230,17 @@ void Seeker_Vollycontroler_Think()
 	switch(c)
 	{
 		case 0:
-			Seeker_Fire_Missile('37.5 17 -22');
+			Seeker_Fire_Missile('-1.25 -3.75 0');
 			break;
 		case 1:
-			Seeker_Fire_Missile('37.5 9.5 -22');
+			Seeker_Fire_Missile('+1.25 -3.75 0');
 			break;
 		case 2:
-			Seeker_Fire_Missile('40 17 -29');
+			Seeker_Fire_Missile('-1.25 +3.75 0');
 			break;
 		case 3:
 		default:
-			Seeker_Fire_Missile('40 9.5 -29');
+			Seeker_Fire_Missile('+1.25 +3.75 0');
 			break;
 	}
 
@@ -311,7 +312,7 @@ void Seeker_Fire_Tag()
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_seeker_tag_ammo");
 
-	W_SetupShot (self, '56 13 -15', FALSE, 2, "weapons/tag_fire.wav");
+	W_SetupShot (self, '38.75 13.25 -22', FALSE, 2, "weapons/tag_fire.wav");
 
 	missile                 = spawn();
 	missile.owner           = self;
@@ -361,7 +362,7 @@ void Seeker_Flac_Touch()
 void Seeker_Fire_Flac()
 {
 	local entity missile;
-	vector f_org;
+	vector f_diff;
 	float c;
 
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
@@ -370,21 +371,22 @@ void Seeker_Fire_Flac()
 	c = mod(self.bulletcounter, 4);
 	switch(c)
 	{
+		case 0:
+			f_diff = '-1.25 -3.75 0';
+			break;
 		case 1:
-			f_org = '37.5 17 -22';
+			f_diff = '+1.25 -3.75 0';
 			break;
 		case 2:
-			f_org = '37.5 9.5 -22';
+			f_diff = '-1.25 +3.75 0';
 			break;
 		case 3:
-			f_org = '40 17 -29';
-			break;
-		case 0:
 		default:
-			f_org = '40 9.5 -29';
+			f_diff = '+1.25 +3.75 0';
 			break;
 	}
-	W_SetupShot (self, f_org, FALSE, 2, "weapons/flac_fire.wav");
+	W_SetupShot (self, ''38.75 13.25 -22', FALSE, 2, "weapons/flac_fire.wav");
+	w_shotorg += f_diff;
 
 	pointparticles(particleeffectnum("hagar_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
