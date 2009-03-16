@@ -473,7 +473,13 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 
 		weaponsInMap |= weaponid;
 
-		if(g_lms || g_weaponarena)
+		if(g_lms)
+		{
+			startitem_failed = TRUE;
+			remove(self);
+			return;
+		}
+		else if (g_weaponarena && ((weaponid & WEPBIT_ALL) || (itemid & IT_AMMO)))
 		{
 			startitem_failed = TRUE;
 			remove(self);
