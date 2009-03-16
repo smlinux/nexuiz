@@ -279,9 +279,41 @@ vector weapon_adjust = '10 0 -15';
 .string weaponname;
 #define QCWEAPONANIMATION_ORIGIN(e) ((weapon_offset_x + e.view_ofs_x) * v_forward - (weapon_offset_y + e.view_ofs_y) * v_right + (weapon_offset_z + e.view_ofs_z) * v_up + weapon_adjust)
 
+/*
+ * supported formats:
+ *
+ * 1. simple animated model, muzzlr flash handling on h_ model:
+ *    h_tuba.dpm, h_tuba.dpm.animinfo - invisible model controlling the animation
+ *      tags:
+ *        shot = muzzle end (shot origin, also used for muzzle flashes)
+ *        shell = casings ejection point (must be on the right hand side of the gun)
+ *        weapon = attachment for v_tuba.md3
+ *    v_tuba.md3 - first and third person model
+ *    g_tuba.md3 - pickup model
+ *
+ * 2. fully animated model, muzzle flash handling on h_ model:
+ *    h_tuba.dpm, h_tuba.dpm.animinfo - animated first person model
+ *      tags:
+ *        shot = muzzle end (shot origin, also used for muzzle flashes)
+ *        shell = casings ejection point (must be on the right hand side of the gun)
+ *        handle = corresponding to the origin of v_tuba.md3 (used for muzzle flashes)
+ *    v_tuba.md3 - third person model
+ *    g_tuba.md3 - pickup model
+ *
+ * 3. fully animated model, muzzle flash handling on v_ model:
+ *    h_tuba.dpm, h_tuba.dpm.animinfo - animated first person model
+ *      tags:
+ *        shot = muzzle end (shot origin)
+ *        shell = casings ejection point (must be on the right hand side of the gun)
+ *    v_tuba.md3 - third person model
+ *      tags:
+ *        shot = muzzle end (for muzzle flashes)
+ *    g_tuba.md3 - pickup model
+ */
+
 void CL_Weaponentity_Think()
 {
-	float tb;
+	float tb, v_shot_idx;
 	self.nextthink = time;
 	if (intermission_running)
 		self.frame = self.anim_idle_x;
@@ -312,9 +344,9 @@ void CL_Weaponentity_Think()
 			// if there is a child entity, hide it until we're sure we use it
 			if (self.weaponentity)
 				self.weaponentity.model = "";
-			if (qcweaponanimation)
-				setmodel(self, strcat("models/weapons/v_", self.owner.weaponname, ".md3")); // precision set below
-			else
+			setmodel(self, strcat("models/weapons/v_", self.owner.weaponname, ".md3")); // precision set below
+			v_shot_idx = gettagindex(self, "shot"); // used later
+			if(!qcweaponanimation)
 			{
 				setmodel(self, strcat("models/weapons/h_", self.owner.weaponname, ".dpm")); // precision set below
 				animfilename = strcat("models/weapons/h_", self.owner.weaponname, ".dpm.animinfo");
@@ -326,8 +358,6 @@ void CL_Weaponentity_Think()
 				self.anim_reload = '3 1 0.01';
 				if (animfile >= 0)
 				{
-					if (!self.weaponentity)
-						self.weaponentity = spawn();
 					animparseerror = FALSE;
 					self.anim_fire1  = animparseline(animfile);
 					self.anim_fire2  = animparseline(animfile);
@@ -342,13 +372,26 @@ void CL_Weaponentity_Think()
 				// if we don't, this is a "real" animated model
 				if(gettagindex(self, "weapon"))
 				{
+					if (!self.weaponentity)
+						self.weaponentity = spawn();
 					setmodel(self.weaponentity, strcat("models/weapons/v_", self.owner.weaponname, ".md3")); // precision does not matter
 					setattachment(self.weaponentity, self, "weapon");
+				}
+				else
+				{
+					if(self.weaponentity)
+						remove(self.weaponentity);
+					self.weaponentity = world;
 				}
 			}
 		}
 		else
+		{
 			self.model = "";
+			if(self.weaponentity)
+				remove(self.weaponentity);
+			self.weaponentity = world;
+		}
 
 		if(qcweaponanimation)
 		{
@@ -374,7 +417,7 @@ void CL_Weaponentity_Think()
 			}
 			else
 			{
-				print("WARNING: weapon model ", self.model, " does not support the 'shot' tag\n");
+				print("WARNING: weapon model ", self.model, " does not support the 'shot' tag, will display shots TOTALLY wrong\n");
 				self.movedir = '0 0 0';
 			}
 
@@ -385,19 +428,29 @@ void CL_Weaponentity_Think()
 			}
 			else
 			{
-				print("WARNING: weapon model ", self.model, " does not support the 'shell' tag\n");
+				print("WARNING: weapon model ", self.model, " does not support the 'shell' tag, will display casings wrong\n");
 				self.spawnorigin = self.movedir;
 			}
 
-			float idx;
-			idx = gettagindex(self, "weapon");
-			if(idx)
+			if(v_shot_idx)
 			{
-				self.oldorigin = self.movedir - gettaginfo(self, idx);
+				self.oldorigin = '0 0 0';
 			}
 			else
 			{
-				self.oldorigin = self.movedir;
+				if(self.weaponentity)
+					idx = gettagindex(self, "weapon");
+				else
+					idx = gettagindex(self, "handle");
+				if(idx)
+				{
+					self.oldorigin = self.movedir - gettaginfo(self, idx);
+				}
+				else
+				{
+					print("WARNING: weapon model ", self.model, " does not support the 'handle' tag and neither does the v_ model support the 'shot' tag, will display muzzle flashes TOTALLY wrong\n");
+					self.oldorigin = '0 0 0'; // there is no way to recover from this
+				}
 			}
 
 			self.viewmodelforclient = self.owner;
@@ -1118,7 +1171,14 @@ void W_AttachToShotorg(entity flash, vector offset)
 
 		flash.viewmodelforclient = self;
 
-		setattachment(xflash, self.exteriorweaponentity, "");
-		setorigin(xflash, self.weaponentity.oldorigin + offset);
+		if(self.weaponentity.oldorigin_x > 0)
+		{
+			setattachment(xflash, self.exteriorweaponentity, "");
+			setorigin(xflash, self.weaponentity.oldorigin + offset);
+		}
+		else
+		{
+			setattachment(xflash, self.exteriorweaponentity, "shot");
+		}
 	}
 }
