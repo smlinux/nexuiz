@@ -34,17 +34,11 @@ void W_Shotgun_Attack (void)
 
 	// muzzle flash for 1st person view
 	flash = spawn();
-	setorigin(flash, '5 0 0');
 	setmodel(flash, "models/uziflash.md3"); // precision set below
-	setattachment(flash, self.weaponentity, "shot");
-	flash.owner = self;
-	flash.viewmodelforclient = self;
-	flash.customizeentityforclient = CL_Weaponentity_CustomizeEntityForClient;
 	flash.think = SUB_Remove;
 	flash.nextthink = time + 0.06;
-	flash.angles_z = flash.v_angle_z + random() * 180;
-	flash.alpha = 1;
 	flash.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
+	W_AttachToShotorg(flash, '5 0 0');
 
 }
 
@@ -82,18 +76,12 @@ void W_Shotgun_Attack2 (void)
 			SpawnCasing (((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
 
 	flash = spawn();
-	setorigin(flash, '5 0 0');
 	setmodel(flash, "models/uziflash.md3"); // precision set below
-	setattachment(flash, self.weaponentity, "shot");
-	flash.owner = self;
-	flash.viewmodelforclient = self;
-	flash.customizeentityforclient = CL_Weaponentity_CustomizeEntityForClient;
 	flash.scale = 1.2;
 	flash.think = SUB_Remove;
 	flash.nextthink = time + 0.06;
-	flash.angles_z = flash.v_angle_z + random() * 180;
-	flash.alpha = 1;
 	flash.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
+	W_AttachToShotorg(flash, '5 0 0');
 }
 
 // weapon frames

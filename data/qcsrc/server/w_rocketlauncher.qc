@@ -193,7 +193,7 @@ void W_Rocket_Damage (entity inflictor, entity attacker, float damage, float dea
 void W_Rocket_Attack (void)
 {
 	local entity missile;
-	local entity flash, flash2;
+	local entity flash;
 
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_rocketlauncher_ammo");
@@ -240,27 +240,12 @@ void W_Rocket_Attack (void)
 
 	// muzzle flash for 1st person view
 	flash = spawn ();
-	flash.angles_z = flash.v_angle_z + random() * 180;
-	flash.owner = self;
-	flash.viewmodelforclient = self;
-	flash.customizeentityforclient = CL_Weaponentity_CustomizeEntityForClient;
-	setorigin (flash, '5 0 0');
 	setmodel (flash, "models/flash.md3"); // precision set below
-	setattachment(flash, self.weaponentity, "shot");
 	SUB_SetFade (flash, time, 0.1);
-
-	// muzzle flash for 3rd person view
-	flash2 = spawn ();
-	flash2.scale = 0.8;
-	flash2.angles_y = 180;
-	flash2.angles_z = 90;
-	setorigin (flash2, '42 0 5');
-	setmodel (flash2, "models/flash.md3"); // precision set below
-	setattachment(flash2, self.exteriorweaponentity, "");
-	SUB_SetFade (flash2, time, 0.4);
+	flash.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
+	W_AttachToShotorg(flash, '5 0 0');
 
 	// common properties
-	flash.effects = flash2.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
 }
 
 void spawnfunc_weapon_rocketlauncher (void); // defined in t_items.qc

@@ -355,8 +355,9 @@ void CL_Weaponentity_Think()
 			self.angles = '0 0 0';
 			makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0' + self.angles_z * '0 0 1');
 			self.movedir = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
-			self.movedir_x += 30;
+			self.movedir_x += 32;
 			self.spawnorigin = self.movedir;
+			// oldorigin - not calculated here
 		}
 		else
 		{
@@ -386,6 +387,17 @@ void CL_Weaponentity_Think()
 			{
 				print("WARNING: weapon model ", self.model, " does not support the 'shell' tag\n");
 				self.spawnorigin = self.movedir;
+			}
+
+			float idx;
+			idx = gettagindex(self, "weapon");
+			if(idx)
+			{
+				self.oldorigin = self.movedir - gettaginfo(self, idx);
+			}
+			else
+			{
+				self.oldorigin = self.movedir;
 			}
 
 			self.viewmodelforclient = self.owner;
@@ -1083,4 +1095,30 @@ void W_SetupProjectileVelocity(entity missile)
 		error("Unowned missile");
 
 	missile.velocity = W_CalculateProjectileVelocity(missile.owner.velocity, missile.velocity);
+}
+
+void W_AttachToShotorg(entity flash, vector offset)
+{
+	entity xflash;
+	flash.owner = self;
+	flash.angles_z = random() * 360;
+	if(qcweaponanimation)
+	{
+		setorigin(flash, w_shotorg + w_shotdir * 50);
+		flash.angles = vectoangles(w_shotdir);
+		flash.angles_z = random() * 360;
+	}
+	else
+	{
+		setattachment(flash, self.weaponentity, "shot");
+		setorigin(flash, offset);
+
+		xflash = spawn();
+		copyentity(flash, xflash);
+
+		flash.viewmodelforclient = self;
+
+		setattachment(xflash, self.exteriorweaponentity, "");
+		setorigin(xflash, self.weaponentity.oldorigin + offset);
+	}
 }
