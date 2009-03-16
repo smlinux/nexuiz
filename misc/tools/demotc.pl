@@ -96,6 +96,7 @@ for(;;)
 		print $outfh pack("V", length($data) | DEMOMSG_CLIENT_TO_SERVER);
 		print $outfh $angles;
 		print $outfh $data;
+		next;
 	}
 	die "Invalid demo packet"
 		unless 12 == read $infh, my $angles, 12;
