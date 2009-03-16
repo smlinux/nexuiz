@@ -307,7 +307,6 @@ void CL_Weaponentity_Think()
 
 		string animfilename;
 		float animfile;
-		float modelfile;
 		if (self.owner.weaponname != "")
 		{
 			// if there is a child entity, hide it until we're sure we use it
@@ -317,59 +316,34 @@ void CL_Weaponentity_Think()
 				setmodel(self, strcat("models/weapons/v_", self.owner.weaponname, ".md3")); // precision set below
 			else
 			{
-				animfilename = strcat("models/weapons/h_", self.owner.weaponname, ".zym");
-				modelfile = fopen(animfilename, FILE_READ);
-				if (modelfile >= 0)
+				setmodel(self, strcat("models/weapons/h_", self.owner.weaponname, ".dpm")); // precision set below
+				animfilename = strcat("models/weapons/h_", self.owner.weaponname, ".dpm.animinfo");
+				animfile = fopen(animfilename, FILE_READ);
+				// preset some defaults that work great for renamed zym files (which don't need an animinfo)
+				self.anim_fire1  = '0 1 0.01';
+				self.anim_fire2  = '1 1 0.01';
+				self.anim_idle   = '2 1 0.01';
+				self.anim_reload = '3 1 0.01';
+				if (animfile >= 0)
 				{
-					fclose(modelfile);
-					self.anim_fire1  = '0 1 0.01';
-					self.anim_fire2  = '1 1 0.01';
-					self.anim_idle   = '2 1 0.01';
-					self.anim_reload = '3 1 0.01';
 					if (!self.weaponentity)
 						self.weaponentity = spawn();
-					setmodel(self, strcat("models/weapons/h_", self.owner.weaponname, ".zym")); // precision set below
+					animparseerror = FALSE;
+					self.anim_fire1  = animparseline(animfile);
+					self.anim_fire2  = animparseline(animfile);
+					self.anim_idle   = animparseline(animfile);
+					self.anim_reload = animparseline(animfile);
+					fclose(animfile);
+					if (animparseerror)
+						print("Parse error in ", animfilename, ", some player animations are broken\n");
+				}
+
+				// if we have a "weapon" tag, let's attach the v_ model to it ("invisible hand" style model)
+				// if we don't, this is a "real" animated model
+				if(gettagindex(self, "weapon"))
+				{
 					setmodel(self.weaponentity, strcat("models/weapons/v_", self.owner.weaponname, ".md3")); // precision does not matter
 					setattachment(self.weaponentity, self, "weapon");
-				}
-				else
-				{
-					animfilename = strcat("models/weapons/h_", self.owner.weaponname, ".dpm.animinfo");
-					animfile = fopen(animfilename, FILE_READ);
-					if (animfile >= 0)
-					{
-						if (!self.weaponentity)
-							self.weaponentity = spawn();
-						setmodel(self, strcat("models/weapons/h_", self.owner.weaponname, ".dpm")); // precision set below
-						setmodel(self.weaponentity, strcat("models/weapons/v_", self.owner.weaponname, ".md3")); // precision does not matter
-						setattachment(self.weaponentity, self, "weapon");
-					}
-					else
-					{
-						animfilename = strcat("models/weapons/w_", self.owner.weaponname, ".dpm.animinfo");
-						animfile = fopen(animfilename, FILE_READ);
-						if (animfile >= 0)
-							setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".dpm")); // precision set below
-					}
-					if (animfile >= 0)
-					{
-						animparseerror = FALSE;
-						self.anim_fire1  = animparseline(animfile);
-						self.anim_fire2  = animparseline(animfile);
-						self.anim_idle   = animparseline(animfile);
-						self.anim_reload = animparseline(animfile);
-						fclose(animfile);
-						if (animparseerror)
-							print("Parse error in ", animfilename, ", some player animations are broken\n");
-					}
-					else
-					{
-						self.anim_fire1  = '0 1 0.01';
-						self.anim_fire2  = '1 1 0.01';
-						self.anim_idle   = '2 1 0.01';
-						self.anim_reload = '3 1 0.01';
-						setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".zym")); // precision set below
-					}
 				}
 			}
 		}
@@ -452,7 +426,8 @@ void CL_Weaponentity_Think()
 	}
 
 	tb = (self.effects & EF_TELEPORT_BIT);
-	self.effects = self.owner.effects - (self.owner.effects & EF_LOWPRECISION);// | EF_LOWPRECISION;
+	self.effects = self.owner.effects;
+	self.effects &~= EF_LOWPRECISION;
 	self.effects &~= EF_FULLBRIGHT; // can mask team color, so get rid of it
 	self.effects &~= EF_TELEPORT_BIT;
 	self.effects |= tb;
@@ -465,7 +440,7 @@ void CL_Weaponentity_Think()
 	self.colormap = self.owner.colormap;
 	if (self.weaponentity)
 	{
-		self.weaponentity.effects = self.effects & EF_ADDITIVE;
+		self.weaponentity.effects = self.effects;
 		self.weaponentity.alpha = self.alpha;
 		self.weaponentity.colormap = self.colormap;
 	}

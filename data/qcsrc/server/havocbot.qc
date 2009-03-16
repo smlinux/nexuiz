@@ -140,7 +140,7 @@ void havocbot_keyboard_movement(vector destorg)
 .float bot_canruntogoal;
 void havocbot_bunnyhop(vector dir)
 {
-	local float distance;
+	local float bunnyhopdistance;
 	local vector deviation;
 
 	if(self.goalcurrent.classname == "player")
@@ -165,7 +165,7 @@ void havocbot_bunnyhop(vector dir)
 		self.bot_timelastseengoal = 0;
 	}
 
-	distance = vlen(self.origin - self.goalcurrent.origin);
+	bunnyhopdistance = vlen(self.origin - self.goalcurrent.origin);
 
 	// Run only to visible goals
 	traceline(self.origin + self.view_ofs , self.goalcurrent.origin, TRUE, world);
@@ -186,7 +186,7 @@ void havocbot_bunnyhop(vector dir)
 					// don't run if it is too close
 					if(self.bot_canruntogoal==0)
 					{
-						if(distance > cvar("bot_ai_bunnyhop_startdistance"))
+						if(bunnyhopdistance > cvar("bot_ai_bunnyhop_startdistance"))
 							self.bot_canruntogoal = 1;
 						else
 							self.bot_canruntogoal = -1;
@@ -206,7 +206,7 @@ void havocbot_bunnyhop(vector dir)
 						while (deviation_y > 180) deviation_y = deviation_y - 360;
 
 						if(fabs(deviation_y) < 15)
-						if(distance < vlen(self.origin - self.goalstack01.origin))
+						if(bunnyhopdistance < vlen(self.origin - self.goalstack01.origin))
 						if(fabs(self.goalstack01.origin_z - self.goalcurrent.origin_z) < self.maxs_z - self.mins_z)
 						{
 							traceline(self.origin + self.view_ofs , self.goalstack01.origin, TRUE, world);
@@ -220,7 +220,7 @@ void havocbot_bunnyhop(vector dir)
 					if(checkdistance)
 					{
 						self.aistatus &~= AI_STATUS_RUNNING;
-						if(distance > cvar("bot_ai_bunnyhop_stopdistance"))
+						if(bunnyhopdistance > cvar("bot_ai_bunnyhop_stopdistance"))
 							self.BUTTON_JUMP = TRUE;
 					}
 					else
@@ -970,15 +970,15 @@ void havocbot_ai()
 		self.aistatus &~= AI_STATUS_ATTACKING;
 
 		local vector now,v,next;//,heading;
-		local float distance,skillblend,distanceblend,blend;
+		local float aimdistance,skillblend,distanceblend,blend;
 		next = now = self.goalcurrent.origin - (self.origin + self.view_ofs);
-		distance = vlen(now);
+		aimdistance = vlen(now);
 		//heading = self.velocity;
 		//dprint(self.goalstack01.classname,etos(self.goalstack01),"\n");
 		if(self.goalstack01 != self && self.goalstack01 != world && self.aistatus & AI_STATUS_RUNNING == 0)
 			next = self.goalstack01.origin - (self.origin + self.view_ofs);
 		skillblend=bound(0,(skill-2.5)*0.5,1); //lower skill player can't preturn
-		distanceblend=bound(0,distance/cvar("bot_ai_keyboard_distance"),1);
+		distanceblend=bound(0,aimdistance/cvar("bot_ai_keyboard_distance"),1);
 		blend = skillblend * (1-distanceblend);
 		//v = (now * (distanceblend) + next * (1-distanceblend)) * (skillblend) + now * (1-skillblend);
 		//v = now * (distanceblend) * (skillblend) + next * (1-distanceblend) * (skillblend) + now * (1-skillblend);
