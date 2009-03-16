@@ -426,7 +426,7 @@ void CL_Weaponentity_Think()
 	}
 
 	tb = (self.effects & EF_TELEPORT_BIT);
-	self.effects = self.owner.effects;
+	self.effects = self.owner.effects & EFMASK_CHEAP;
 	self.effects &~= EF_LOWPRECISION;
 	self.effects &~= EF_FULLBRIGHT; // can mask team color, so get rid of it
 	self.effects &~= EF_TELEPORT_BIT;
