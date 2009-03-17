@@ -160,3 +160,9 @@ string swapwords(string str, float i, float j);
 string shufflewords(string str);
 
 string substring_range(string s, float b, float e);
+
+vector solve_quadratic(float a, float b, float c);
+// solution 1 -> x
+// solution 2 -> y
+// z = 1 if a real solution exists, 0 if not
+// if no real solution exists, x contains the real part and y the imaginary part of the complex solutions x+iy and x-iy

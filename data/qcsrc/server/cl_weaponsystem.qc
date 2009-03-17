@@ -1108,18 +1108,17 @@ vector W_CalculateProjectileVelocity(vector pvelocity, vector mvelocity)
 		// fire at smallest possible mspeed that works?
 		// |(mdirection * pvelocity) * pvelocity - pvelocity| = mspeed
 
-		float D;
-		float p;
-		float q;
-		p = mdirection * pvelocity;
-		q = pvelocity * pvelocity - mspeed * mspeed;
-		D = p * p - q;
-		if(D < 0)
+		vector solution;
+		solution = solve_quadratic(1, -2 * (mdirection * pvelocity), pvelocity * pvelocity - mspeed * mspeed);
+		if(solution_z)
+			outspeed = solution_y; // the larger one
+		else
 		{
+			//outspeed = 0; // slowest possible shot
+			outspeed = solution_x; // the real part (that is, the average!)
 			//dprint("impossible shot, adjusting\n");
-			D = 0;
 		}
-		outspeed = p + sqrt(D);
+
 		outspeed = bound(mspeed * 0.7, outspeed, mspeed * 5.0);
 		outvelocity = mdirection * outspeed;
 	}
