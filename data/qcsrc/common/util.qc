@@ -1602,6 +1602,7 @@ vector solve_quadratic(float a, float b, float c) // ax^2 + bx + c = 0
 		else
 		{
 			// complex solutions!
+			D = sqrt(-D);
 			v_x = -b / (2*a);
 			if(a > 0)
 				v_y =  D / (2*a);
