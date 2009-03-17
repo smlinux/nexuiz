@@ -25,8 +25,6 @@ void W_Crylink_Touch (void)
 	self.owner = world;
 	self.projectiledeathtype |= HITTYPE_BOUNCE;
 	//self.scale = 1 + self.cnt;
-
-	UpdateCSQCProjectile(self);
 }
 
 void W_Crylink_Touch2 (void)
@@ -52,8 +50,6 @@ void W_Crylink_Touch2 (void)
 	self.owner = world;
 	self.projectiledeathtype |= HITTYPE_BOUNCE;
 //	self.scale = 1 + 1 * self.cnt;
-
-	UpdateCSQCProjectile(self);
 }
 
 void W_Crylink_Attack (void)

@@ -200,9 +200,16 @@ void Ent_Projectile()
 	f = ReadByte();
 	self.count = (f & 0x80);
 	self.iflags = (self.iflags & IFLAG_INTERNALMASK) | IFLAG_AUTOANGLES | IFLAG_ANGLES;
-	self.move_flags &~= FL_ONGROUND;
 	self.solid = SOLID_TRIGGER;
 	//self.effects = EF_NOMODELFLAGS;
+
+	// this should make collisions with bmodels more exact, but it leads to
+	// projectiles no longer being able to lie on a bmodel
+	self.move_nomonsters = MOVE_WORLDONLY;
+	if(f & 0x40)
+		self.move_flags |= FL_ONGROUND;
+	else
+		self.move_flags &~= FL_ONGROUND;
 
 	if(!self.move_time)
 	{

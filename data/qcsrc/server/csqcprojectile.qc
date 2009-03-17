@@ -7,6 +7,9 @@ float CSQCProjectile_SendEntity(entity to, float sf)
 	if(self.csqcprojectile_clientanimate)
 		sf |= 0x80; // client animated, not interpolated
 
+	if(self.flags & FL_ONGROUND)
+		sf |= 0x40;
+
 	WriteByte(MSG_ENTITY, ENT_CLIENT_PROJECTILE);
 	WriteByte(MSG_ENTITY, sf);
 
@@ -31,6 +34,16 @@ float CSQCProjectile_SendEntity(entity to, float sf)
 	return 1;
 }
 
+.vector csqcprojectile_oldorigin;
+void CSQCProjectile_Check(entity e)
+{
+	if(e.csqcprojectile_clientanimate)
+	if(e.flags & FL_ONGROUND)
+	if(e.origin != e.csqcprojectile_oldorigin)
+		UpdateCSQCProjectile(e);
+	e.csqcprojectile_oldorigin = e.origin;
+}
+
 void CSQCProjectile(entity e, float clientanimate, float type, float docull)
 {
 	Net_LinkEntity(e, docull, 0, CSQCProjectile_SendEntity);
@@ -51,5 +64,17 @@ void CSQCProjectile(entity e, float clientanimate, float type, float docull)
 void UpdateCSQCProjectile(entity e)
 {
 	if(e.SendEntity == CSQCProjectile_SendEntity)
-		e.SendFlags |= 1; // send new origin data
+	{
+		// send new origin data
+		e.SendFlags |= 1;
+	}
+}
+
+void UpdateCSQCProjectileNextFrame(entity e)
+{
+	if(e.SendEntity == CSQCProjectile_SendEntity)
+	{
+		// send new origin data
+		e.NextFrameSendFlags |= 1;
+	}
 }

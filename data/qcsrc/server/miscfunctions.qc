@@ -1797,8 +1797,7 @@ float SUB_NoImpactCheck()
 
 #define SUB_OwnerCheck() (other && (other == self.owner))
 
-#define PROJECTILE_TOUCH do { if(SUB_OwnerCheck()) return; if(SUB_NoImpactCheck()) { remove(self); return; } } while(0)
-#define PROJECTILE_TOUCH_NOSOUND do { if(SUB_OwnerCheck()) return; if(SUB_NoImpactCheck()) { stopsound(self, CHAN_PAIN); remove(self); return; } } while(0)
+#define PROJECTILE_TOUCH do { if(SUB_OwnerCheck()) return; if(SUB_NoImpactCheck()) { remove(self); return; } if(trace_ent && trace_ent.solid > SOLID_TRIGGER) UpdateCSQCProjectileNextFrame(self); } while(0)
 
 float MAX_IPBAN_URIS = 16;
 

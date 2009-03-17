@@ -35,9 +35,6 @@ void W_Plasma_Touch (void)
 		sound (self, CHAN_PROJECTILE, "weapons/electro_bounce.wav", VOL_BASE, ATTN_NORM);
 		self.projectiledeathtype |= HITTYPE_BOUNCE;
 	}
-
-	if(trace_ent && trace_ent.solid > SOLID_TRIGGER) // CSQC doesn't know about these entities well enough
-		UpdateCSQCProjectile(self);
 }
 
 void W_Plasma_TouchExplode (void)
