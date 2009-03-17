@@ -2,7 +2,7 @@
 #--- WARNING: ALWAYS RUN AFT TWICE! (otherwise the toc is missing/not up to date)
 #--- use AFT v5.096 or later (http://www.maplefish.com/todd/aft.html)
 
-#---SET nexversion=3
+#---SET nexversion=2.5
 #---SET zipname=nexuiz-<version>.zip
 
 *Title: Nexuiz %nexversion% FAQ
