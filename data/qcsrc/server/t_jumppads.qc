@@ -24,7 +24,7 @@ float trigger_push_calculatevelocity_flighttime;
 
 vector trigger_push_calculatevelocity(vector org, entity tgt, float ht)
 {
-	local float grav, sdist, zdist, vs, vz, jumpheight, trajsign;
+	local float grav, sdist, zdist, vs, vz, jumpheight;
 	local vector sdir, torg;
 
 	torg = tgt.origin + (tgt.mins + tgt.maxs) * 0.5;
@@ -63,17 +63,19 @@ vector trigger_push_calculatevelocity(vector org, entity tgt, float ht)
 
 	// push him so high...
 	vz = sqrt(2 * grav * jumpheight); // NOTE: sqrt(positive)!
+	
+	// we start with downwards velocity only if it's a downjump and the jump apex should be outside the jump!
 	if(ht < 0)
 		if(zdist < 0)
 			vz = -vz;
 	
-	float vs2;
 	vector solution;
-	solution = solve_quadratic(0.5 * grav, -vz, zdist); // ALWAYS solvable because jumpheight >= zdist
+	solution = solve_quadratic(0.5 * grav, -vz, zdist); // equation "z(ti) = zdist"
+	// ALWAYS solvable because jumpheight >= zdist
 	if(!solution_z)
-		solution_y = solution_x; // just in case
+		solution_y = solution_x; // just in case it is not solvable due to roundoff errors, assume two equal solutions at their center (this is mainly for the usual case with ht == 0)
 	if(zdist == 0)
-		solution_x = solution_y;
+		solution_x = solution_y; // solution_x is 0 in this case, so don't use it, but rather use solution_y (which will be sqrt(0.5 * jumpheight / grav), actually)
 	
 	if(zdist < 0)
 	{
@@ -83,14 +85,14 @@ vector trigger_push_calculatevelocity(vector org, entity tgt, float ht)
 			// almost straight line type
 			// jump apex is before the jump
 			// we must take the larger one
-			vs2 = sdist / solution_y;
+			trigger_push_calculatevelocity_flighttime = solution_y;
 		}
 		else
 		{
 			// regular jump
 			// jump apex is during the jump
 			// we must take the larger one too
-			vs2 = sdist / solution_y;
+			trigger_push_calculatevelocity_flighttime = solution_y;
 		}
 	}
 	else
@@ -101,49 +103,17 @@ vector trigger_push_calculatevelocity(vector org, entity tgt, float ht)
 			// almost straight line type
 			// jump apex is after the jump
 			// we must take the smaller one
-			vs2 = sdist / solution_x;
+			trigger_push_calculatevelocity_flighttime = solution_x;
 		}
 		else
 		{
 			// regular jump
 			// jump apex is during the jump
 			// we must take the larger one
-			vs2 = sdist / solution_y;
+			trigger_push_calculatevelocity_flighttime = solution_y;
 		}
 	}
-
-	// how far to push him?
-	if(zdist == 0)
-	{
-		trigger_push_calculatevelocity_flighttime = sqrt(jumpheight * 8 / grav);
-		print(ftos(vs), "\n");
-		vs = sdist / trigger_push_calculatevelocity_flighttime;
-			// trajsign is ignored (the high point MUST be inside the jump!)
-	}
-	else
-	{
-		if(ht > 0)
-			trajsign = +1;
-		else
-			trajsign = -1;
-
-		// >0: the lower speed that achieves "it"
-		//     (parabola's maximum inside the jump)
-		// <0: the higher speed that achieves "it"
-		//     (parabola's maximum outside the jump)
-
-		vs = sqrt(jumpheight - zdist);
-		vs = sqrt(jumpheight) - trajsign * vs; // fteqcc sucks
-		vs = fabs(vs * sqrt(grav/2) / zdist);
-		//vs = fabs((sdist / zdist) * sqrt(grav/2) * (sqrt(jumpheight) - trajsign * sqrt(jumpheight - zdist)));
-		trigger_push_calculatevelocity_flighttime = 1 / vs;
-			// note: vs cannot be zero here. The difference between the sqrts is zero IFF zdist == 0, which we have excluded.
-		vs = vs * sdist;
-
-		// cases to test: "jump up", "jump down" with positive and negative height
-	}
-
-	dprint("jumppad new solution: vs=", ftos(vs), " vs2=", ftos(vs2), " should match\n");
+	vs = sdist / trigger_push_calculatevelocity_flighttime;
 
 	// finally calculate the velocity
 	return sdir * vs + '0 0 1' * vz;
