@@ -1,4 +1,4 @@
-Made using the included map file (edited to contain the name of the current gun) at fov 90, 1280x768.
+Made using the included map file (edited to contain the name of the current gun) at fov 90, 1280x768, normal settings except gl_picmip 0.
 
 Partial image cropped out, then edited using ImageMagick with the parameters
 
