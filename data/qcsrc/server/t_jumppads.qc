@@ -66,11 +66,57 @@ vector trigger_push_calculatevelocity(vector org, entity tgt, float ht)
 	if(ht < 0)
 		if(zdist < 0)
 			vz = -vz;
+	
+	float vs2;
+	vector solution;
+	solution = solve_quadratic(0.5 * grav, -vz, zdist); // ALWAYS solvable because jumpheight >= zdist
+	if(!solution_z)
+		solution_y = solution_x; // just in case
+	if(zdist == 0)
+		solution_x = solution_y;
+	
+	if(zdist < 0)
+	{
+		// down-jump
+		if(ht < 0)
+		{
+			// almost straight line type
+			// jump apex is before the jump
+			// we must take the larger one
+			vs2 = sdist / solution_y;
+		}
+		else
+		{
+			// regular jump
+			// jump apex is during the jump
+			// we must take the larger one too
+			vs2 = sdist / solution_y;
+		}
+	}
+	else
+	{
+		// up-jump
+		if(ht < 0)
+		{
+			// almost straight line type
+			// jump apex is after the jump
+			// we must take the smaller one
+			vs2 = sdist / solution_x;
+		}
+		else
+		{
+			// regular jump
+			// jump apex is during the jump
+			// we must take the larger one
+			vs2 = sdist / solution_y;
+		}
+	}
 
 	// how far to push him?
 	if(zdist == 0)
 	{
 		trigger_push_calculatevelocity_flighttime = sqrt(jumpheight * 8 / grav);
+		print(ftos(vs), "\n");
 		vs = sdist / trigger_push_calculatevelocity_flighttime;
 			// trajsign is ignored (the high point MUST be inside the jump!)
 	}
@@ -96,6 +142,8 @@ vector trigger_push_calculatevelocity(vector org, entity tgt, float ht)
 
 		// cases to test: "jump up", "jump down" with positive and negative height
 	}
+
+	dprint("jumppad new solution: vs=", ftos(vs), " vs2=", ftos(vs2), " should match\n");
 
 	// finally calculate the velocity
 	return sdir * vs + '0 0 1' * vz;
