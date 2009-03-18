@@ -551,5 +551,3 @@ vector debug_shotorg; // if non-zero, overrides the shot origin of all weapons
 .float wasplayer;
 
 float servertime, serverprevtime, serverframetime;
-
-.float NextFrameSendFlags;

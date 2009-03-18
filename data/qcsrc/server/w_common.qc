@@ -159,7 +159,7 @@ void W_BallisticBullet_LeaveSolid_think()
 	self.velocity = self.W_BallisticBullet_LeaveSolid_velocity;
 
 	self.think = self.W_BallisticBullet_LeaveSolid_think_save;
-	self.nextthink = max(time, self.W_BallisticBullet_LeaveSolid_nextthink_save) + 1;
+	self.nextthink = max(time, self.W_BallisticBullet_LeaveSolid_nextthink_save);
 	self.W_BallisticBullet_LeaveSolid_think_save = SUB_Null;
 
 	self.flags &~= FL_ONGROUND;

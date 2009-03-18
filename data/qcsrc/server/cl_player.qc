@@ -545,7 +545,7 @@ float UpdateSelectedPlayer_canSee(entity p, float mincosangle, float maxdist)
 		return -2;
 
 	// not visible in any way? forget it
-	if(!checkpvs(p, so))
+	if(!checkpvs(so, p))
 		return -2;
 
 	traceline(so, p.origin, MOVE_NOMONSTERS, self);
