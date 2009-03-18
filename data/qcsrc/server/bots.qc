@@ -486,6 +486,9 @@ void waypoint_addlink(entity from, entity to)
 	from.wp00 = to;from.wp00mincost = c;return;
 };
 
+// fields you can query using prvm_global server to get some statistics about waypoint linking culling
+float relink_total, relink_walkculled, relink_pvsculled, relink_lengthculled;
+
 // relink this spawnfunc_waypoint
 // (precompile a list of all reachable waypoints from this spawnfunc_waypoint)
 // (SLOW!)
@@ -496,9 +499,8 @@ void waypoint_think()
 	//dprint("waypoint_think wpisbox = ", ftos(self.wpisbox), "\n");
 	sm1 = self.origin + self.mins;
 	sm2 = self.origin + self.maxs;
-	e = find(world, classname, "waypoint");
 	stepheightvec = cvar("sv_stepheight") * '0 0 1';
-	while (e)
+	for(e = world; (e = find(e, classname, "waypoint")); )
 	{
 		if (boxesoverlap(self.absmin, self.absmax, e.absmin, e.absmax))
 		{
@@ -507,6 +509,12 @@ void waypoint_think()
 		}
 		else
 		{
+			++relink_total;
+			if(!checkpvs(self.origin, e))
+			{
+				++relink_pvsculled;
+				continue;
+			}
 			sv = e.origin;
 			sv_x = bound(sm1_x, sv_x, sm2_x);
 			sv_y = bound(sm1_y, sv_y, sm2_y);
@@ -519,38 +527,41 @@ void waypoint_think()
 			ev_z = bound(em1_z, ev_z, em2_z);
 			dv = ev - sv;
 			dv_z = 0;
-			if (vlen(dv) < 1050) // max search distance in XY
+			if (vlen(dv) >= 1050) // max search distance in XY
 			{
-				navigation_testtracewalk = 0;
-				if (!self.wpisbox)
-				{
-					tracebox(sv - PL_MIN_z * '0 0 1', PL_MIN, PL_MAX, sv, FALSE, self);
-					if (!trace_startsolid)
-					{
-						//dprint("sv deviation", vtos(trace_endpos - sv), "\n");
-						sv = trace_endpos + '0 0 1';
-					}
-				}
-				if (!e.wpisbox)
-				{
-					tracebox(ev - PL_MIN_z * '0 0 1', PL_MIN, PL_MAX, ev, FALSE, e);
-					if (!trace_startsolid)
-					{
-						//dprint("ev deviation", vtos(trace_endpos - ev), "\n");
-						ev = trace_endpos + '0 0 1';
-					}
-				}
-				//traceline(self.origin, e.origin, FALSE, world);
-				//if (trace_fraction == 1)
-				if (!self.wpisbox)
-				if (tracewalk(self, sv, PL_MIN, PL_MAX, ev, MOVE_NOMONSTERS))
-					waypoint_addlink(self, e);
-				if (!e.wpisbox)
-				if (tracewalk(e, ev, PL_MIN, PL_MAX, sv, MOVE_NOMONSTERS))
-					waypoint_addlink(e, self);
+				++relink_lengthculled;
+				continue;
 			}
+			navigation_testtracewalk = 0;
+			if (!self.wpisbox)
+			{
+				tracebox(sv - PL_MIN_z * '0 0 1', PL_MIN, PL_MAX, sv, FALSE, self);
+				if (!trace_startsolid)
+				{
+					//dprint("sv deviation", vtos(trace_endpos - sv), "\n");
+					sv = trace_endpos + '0 0 1';
+				}
+			}
+			if (!e.wpisbox)
+			{
+				tracebox(ev - PL_MIN_z * '0 0 1', PL_MIN, PL_MAX, ev, FALSE, e);
+				if (!trace_startsolid)
+				{
+					//dprint("ev deviation", vtos(trace_endpos - ev), "\n");
+					ev = trace_endpos + '0 0 1';
+				}
+			}
+			//traceline(self.origin, e.origin, FALSE, world);
+			//if (trace_fraction == 1)
+			if (!self.wpisbox && tracewalk(self, sv, PL_MIN, PL_MAX, ev, MOVE_NOMONSTERS))
+				waypoint_addlink(self, e);
+			else
+				relink_walkculled += 0.5;
+			if (!e.wpisbox && tracewalk(e, ev, PL_MIN, PL_MAX, sv, MOVE_NOMONSTERS))
+				waypoint_addlink(e, self);
+			else
+				relink_walkculled += 0.5;
 		}
-		e = find(e, classname, "waypoint");
 	}
 	navigation_testtracewalk = 0;
 };
@@ -759,6 +770,7 @@ void waypoint_removeall()
 void waypoint_schedulerelinkall()
 {
 	local entity head;
+	relink_total = relink_walkculled = relink_pvsculled = relink_lengthculled = 0;
 	head = findchain(classname, "waypoint");
 	while (head)
 	{
