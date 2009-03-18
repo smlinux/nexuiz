@@ -10,7 +10,7 @@ set -e
 base=`pwd`
 
 # customizable specific stuff
-netradiant_release=1.5.0-svn212
+netradiant_release=1.5.0-svn222
 basepk3=$base/data20080229.pk3 # 2.4
 hotbasepk3= # hotfix
 nexdir=$base/nexuiz
