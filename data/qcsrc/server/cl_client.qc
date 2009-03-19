@@ -2447,7 +2447,13 @@ void PlayerPostThink (void)
 					{
 						self.dragentity = self.cursor_trace_ent;
 						if(self.dragentity.tag_entity)
+						{
 							detach_sameorigin(self.dragentity);
+							if(self.dragentity.dragmovetype)
+								self.dragentity.movetype = self.dragentity.dragmovetype;
+						}
+						self.dragentity.dragmovetype = self.dragentity.movetype;
+						self.dragentity.movetype = MOVETYPE_NONE;
 						self.dragentity.draggedby = self;
 						self.dragcursor = spawn();
 						self.dragcursor.owner = self;
@@ -2491,6 +2497,8 @@ void PlayerPostThink (void)
 		else
 		{
 			self.dragentity.effects &~= EF_FLAME;
+			if(self.dragentity.dragmovetype)
+				self.dragentity.movetype = self.dragentity.dragmovetype;
 			detach_sameorigin(self.dragentity);
 			self.dragentity = world;
 			remove(self.dragcursor);

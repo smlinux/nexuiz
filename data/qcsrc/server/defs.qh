@@ -557,3 +557,4 @@ float servertime, serverprevtime, serverframetime;
 .float dragspeed;
 .entity dragcursor;
 .entity draggedby;
+.float dragmovetype;
