@@ -2377,35 +2377,21 @@ void PlayerPreThink (void)
 	}
 
 	target_voicescript_next(self);
-
-	if(sv_cheats)
-		if(self.BUTTON_DRAG)
-			if(!self.dragentity)
-				if(self.cursor_trace_ent)
-					if(!self.cursor_trace_ent.tag_index)
-					{
-						self.dragentity = self.cursor_trace_ent;
-						if(cvar("chase_active"))
-						{
-							if(gettagindex(self, "tag_weapon"))
-								attach_sameorigin(self.dragentity, self, "tag_weapon");
-							else
-								attach_sameorigin(self.dragentity, self, "");
-						}
-						else
-							attach_sameorigin(self.dragentity, self.weaponentity, "");
-						self.dragentity.effects |= EF_FLAME;
-					}
-	
-	if(!self.BUTTON_DRAG)
-		if(self.dragentity)
-		{
-			self.dragentity.effects &~= EF_FLAME;
-			detach_sameorigin(self.dragentity);
-			self.dragentity = world;
-		}
 }
 
+void DragCursor_Think()
+{
+	self.model = self.owner.dragentity.model;
+	self.modelindex = self.owner.dragentity.modelindex;
+	self.origin = self.owner.dragentity.origin;
+	self.angles = self.owner.dragentity.angles;
+	self.tag_entity = self.owner.dragentity.tag_entity;
+	self.tag_index = self.owner.dragentity.tag_index;
+	self.scale = self.owner.dragentity.scale;
+	detach_sameorigin(self);
+
+	self.nextthink = time;
+}
 
 /*
 =============
@@ -2451,6 +2437,62 @@ void PlayerPostThink (void)
 			centerprint_expire(self, CENTERPRIO_IDLEKICK);
 		}
 		self.idlekick_lasttimeleft = timeleft;
+	}
+
+	if(sv_cheats)
+		if(self.BUTTON_DRAG)
+			if(!self.dragentity)
+				if(self.cursor_trace_ent)
+					if(!self.cursor_trace_ent.tag_index)
+					{
+						self.dragentity = self.cursor_trace_ent;
+						self.dragcursor = spawn();
+						self.dragcursor.owner = self;
+						self.dragcursor.think = DragCursor_Think;
+						self.dragcursor.nextthink = time;
+						self.dragcursor.exteriormodeltoclient = self;
+						attach_sameorigin(self.dragentity, self.weaponentity, "");
+						self.dragentity.effects |= EF_FLAME;
+					}
+	
+	if(self.dragentity)
+	{
+		if(self.BUTTON_DRAG)
+		{
+			float f;
+			if(self.dragspeed == 0)
+				self.dragspeed = 16;
+			if(self.impulse == 10 || self.impulse == 15 || self.impulse == 18)
+			{
+				f = 1 + self.dragspeed / vlen(self.dragentity.origin);
+				self.dragentity.origin = self.dragentity.origin * f;
+				self.impulse = 0;
+			}
+			else if(self.impulse == 12 || self.impulse == 16 || self.impulse == 19)
+			{
+				f = 1 - self.dragspeed / vlen(self.dragentity.origin);
+				self.dragentity.origin = self.dragentity.origin * f;
+				self.impulse = 0;
+			}
+			else if(self.impulse >= 1 && self.impulse <= 9)
+			{
+				self.dragspeed = pow(2, self.impulse);
+				self.impulse = 0;
+			}
+			else if(self.impulse == 14)
+			{
+				self.dragspeed = pow(2, 10);
+				self.impulse = 0;
+			}
+		}
+		else
+		{
+			self.dragentity.effects &~= EF_FLAME;
+			detach_sameorigin(self.dragentity);
+			self.dragentity = world;
+			remove(self.dragcursor);
+			self.dragcursor = world;
+		}
 	}
 
 	if(self.classname == "player") {
