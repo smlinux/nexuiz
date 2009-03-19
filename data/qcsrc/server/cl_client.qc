@@ -2461,7 +2461,7 @@ void PlayerPostThink (void)
 		{
 			float f;
 			if(self.dragspeed == 0)
-				self.dragspeed = 16;
+				self.dragspeed = 32;
 			if(self.impulse == 10 || self.impulse == 15 || self.impulse == 18)
 			{
 				f = 1 + self.dragspeed / vlen(self.dragentity.origin);
