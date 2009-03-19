@@ -2497,7 +2497,7 @@ void PlayerPostThink (void)
 		else
 		{
 			self.dragentity.effects &~= EF_FLAME;
-			self.dragentity.flags &~= FL_ONGROUND;
+			//self.dragentity.flags &~= FL_ONGROUND;
 			if(self.dragentity.dragmovetype)
 				self.dragentity.movetype = self.dragentity.dragmovetype;
 			detach_sameorigin(self.dragentity);
