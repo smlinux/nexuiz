@@ -1183,11 +1183,16 @@ target4: trigger all entities with this targetname when starting the game
 wait: wait so many seconds before triggering
 */
 
-/*QUAKED misc_follow (.5 .5 .5) (-8 -8 -8) (8 8 8)
+/*QUAKED misc_follow (.5 .5 .5) (-8 -8 -8) (8 8 8) ATTACH LOCAL
 Makes one entity follow another. Will not work with all entities.
 -------- KEYS --------
 target: points to the entity to move (e.g. something that won't move by itself)
 killtarget: points to the entity that is to be used as the source (e.g. a func_plat)
+message: tag name to attach to (if ATTACH is used)
+punchangle: angle modifier (if LOCAL is used, and ATTACH is not)
+-------- SPAWNFLAGS --------
+ATTACH: attachment will be used instead of MOVETYPE_FOLLOW (mostly useful for attaching stuff to ZYM models)
+LOCAL: do not untransform the coordinates (that is, the map specifies local coordinates, not global ones). Mostly useful with ATTACH.
 */
 
 /*QUAKED weapon_minstanex (1 0 .5) (-30 -30 0) (30 30 32) FLOATING

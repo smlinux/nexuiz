@@ -2047,3 +2047,69 @@ vector shotorg_adjust(vector vecs, float y_is_right, float visual)
 	}
 	return vecs;
 }
+
+
+
+void attach_sameorigin(entity e, entity to, string tag)
+{
+	vector org, t_forward, t_left, t_up, e_forward, e_up;
+	vector org0, ang0;
+
+	ang0 = e.angles;
+	org0 = e.origin;
+
+	org = e.origin - gettaginfo(to, gettagindex(to, tag));
+	t_forward = v_forward;
+	t_left = v_right * -1;
+	t_up = v_up;
+
+	e.origin_x = org * t_forward;
+	e.origin_y = org * t_left;
+	e.origin_z = org * t_up;
+
+	// current forward and up directions
+	if(substring(e.model, 0, 1) == "*") // bmodels have their own rules
+		e.angles_x = -e.angles_x;
+	fixedmakevectors(e.angles);
+
+	// untransform forward, up!
+	e_forward_x = v_forward * t_forward;
+	e_forward_y = v_forward * t_left;
+	e_forward_z = v_forward * t_up;
+	e_up_x = v_up * t_forward;
+	e_up_y = v_up * t_left;
+	e_up_z = v_up * t_up;
+
+	e.angles = fixedvectoangles2(e_forward, e_up);
+	if(substring(e.model, 0, 1) == "*") // bmodels have their own rules
+		e.angles_x = -e.angles_x;
+
+	setattachment(e, to, tag);
+	setorigin(e, e.origin);
+}
+
+void detach_sameorigin(entity e)
+{
+	vector org;
+	org = gettaginfo(e, 0);
+	e.angles = fixedvectoangles2(v_forward, v_up);
+	if(substring(e.model, 0, 1) == "*") // bmodels have their own rules
+		e.angles_x = -e.angles_x;
+	e.origin = org;
+	setattachment(e, world, "");
+	setorigin(e, e.origin);
+}
+
+void follow_sameorigin(entity e, entity to)
+{
+	e.movetype = MOVETYPE_FOLLOW; // make the hole follow
+	e.aiment = to; // make the hole follow bmodel
+	e.punchangle = to.angles; // the original angles of bmodel
+	e.view_ofs = e.origin - to.origin; // relative origin
+	e.v_angle = e.angles - to.angles; // relative angles
+}
+
+void unfollow_sameorigin(entity e)
+{
+	e.movetype = MOVETYPE_NONE;
+}

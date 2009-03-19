@@ -1347,11 +1347,33 @@ void follow_init()
 		return;
 	}
 
-	dst.movetype = MOVETYPE_FOLLOW;
-	dst.aiment = src;
-	dst.punchangle = src.angles;
-	dst.view_ofs = dst.origin - src.origin;
-	dst.v_angle = dst.angles - src.angles;
+	if(self.spawnflags & 1)
+	{
+		// attach
+		if(self.spawnflags & 2)
+		{
+			setattachment(dst, src, self.message);
+		}
+		else
+		{
+			attach_sameorigin(dst, src, self.message);
+		}
+	}
+	else
+	{
+		if(self.spawnflags & 2)
+		{
+			dst.movetype = MOVETYPE_FOLLOW;
+			dst.aiment = src;
+			// dst.punchangle = '0 0 0'; // keep unchanged
+			dst.view_ofs = dst.origin;
+			dst.v_angle = dst.angles;
+		}
+		else
+		{
+			follow_sameorigin(dst, src);
+		}
+	}
 
 	remove(self);
 }

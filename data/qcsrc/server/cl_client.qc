@@ -2377,6 +2377,33 @@ void PlayerPreThink (void)
 	}
 
 	target_voicescript_next(self);
+
+	if(sv_cheats)
+		if(self.BUTTON_DRAG)
+			if(!self.dragentity)
+				if(self.cursor_trace_ent)
+					if(!self.cursor_trace_ent.tag_index)
+					{
+						self.dragentity = self.cursor_trace_ent;
+						if(cvar("chase_active"))
+						{
+							if(gettagindex(self, "tag_weapon"))
+								attach_sameorigin(self.dragentity, self, "tag_weapon");
+							else
+								attach_sameorigin(self.dragentity, self, "");
+						}
+						else
+							attach_sameorigin(self.dragentity, self.weaponentity, "");
+						self.dragentity.effects |= EF_FLAME;
+					}
+	
+	if(!self.BUTTON_DRAG)
+		if(self.dragentity)
+		{
+			self.dragentity.effects &~= EF_FLAME;
+			detach_sameorigin(self.dragentity);
+			self.dragentity = world;
+		}
 }
 
 
