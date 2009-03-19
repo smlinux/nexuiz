@@ -2446,6 +2446,9 @@ void PlayerPostThink (void)
 					if(!self.cursor_trace_ent.tag_index)
 					{
 						self.dragentity = self.cursor_trace_ent;
+						if(self.dragentity.tag_entity)
+							detach_sameorigin(self.dragentity);
+						self.dragentity.draggedby = self;
 						self.dragcursor = spawn();
 						self.dragcursor.owner = self;
 						self.dragcursor.think = DragCursor_Think;
@@ -2455,7 +2458,7 @@ void PlayerPostThink (void)
 						self.dragentity.effects |= EF_FLAME;
 					}
 	
-	if(self.dragentity)
+	if(self.dragentity.draggedby == self)
 	{
 		if(self.BUTTON_DRAG)
 		{

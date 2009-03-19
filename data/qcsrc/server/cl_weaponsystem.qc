@@ -346,7 +346,17 @@ void CL_Weaponentity_Think()
 				self.weaponentity.model = "";
 			setmodel(self, strcat("models/weapons/v_", self.owner.weaponname, ".md3")); // precision set below
 			v_shot_idx = gettagindex(self, "shot"); // used later
-			if(!qcweaponanimation)
+
+			if(qcweaponanimation)
+			{
+				self.angles = '0 0 0';
+				makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0' + self.angles_z * '0 0 1');
+				self.movedir = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
+				self.movedir_x += 32;
+				self.spawnorigin = self.movedir;
+				// oldorigin - not calculated here
+			}
+			else
 			{
 				setmodel(self, strcat("models/weapons/h_", self.owner.weaponname, ".dpm")); // precision set below
 				animfilename = strcat("models/weapons/h_", self.owner.weaponname, ".dpm.animinfo");
@@ -383,6 +393,57 @@ void CL_Weaponentity_Think()
 						remove(self.weaponentity);
 					self.weaponentity = world;
 				}
+
+				self.origin = '0 0 0';
+				self.angles = '0 0 0';
+				self.frame = 0;
+				self.viewmodelforclient = world;
+
+				float idx;
+				idx = gettagindex(self, "shot");
+				if(idx)
+				{
+					self.movedir = gettaginfo(self, idx);
+				}
+				else
+				{
+					print("WARNING: weapon model ", self.model, " does not support the 'shot' tag, will display shots TOTALLY wrong\n");
+					self.movedir = '0 0 0';
+				}
+
+				idx = gettagindex(self, "shell");
+				if(idx)
+				{
+					self.spawnorigin = gettaginfo(self, idx);
+				}
+				else
+				{
+					print("WARNING: weapon model ", self.model, " does not support the 'shell' tag, will display casings wrong\n");
+					self.spawnorigin = self.movedir;
+				}
+
+				if(v_shot_idx)
+				{
+					self.oldorigin = '0 0 0';
+				}
+				else
+				{
+					if(self.weaponentity)
+						idx = gettagindex(self, "weapon");
+					else
+						idx = gettagindex(self, "handle");
+					if(idx)
+					{
+						self.oldorigin = self.movedir - gettaginfo(self, idx);
+					}
+					else
+					{
+						print("WARNING: weapon model ", self.model, " does not support the 'handle' tag and neither does the v_ model support the 'shot' tag, will display muzzle flashes TOTALLY wrong\n");
+						self.oldorigin = '0 0 0'; // there is no way to recover from this
+					}
+				}
+
+				self.viewmodelforclient = self.owner;
 			}
 		}
 		else
@@ -391,69 +452,13 @@ void CL_Weaponentity_Think()
 			if(self.weaponentity)
 				remove(self.weaponentity);
 			self.weaponentity = world;
-		}
-
-		if(qcweaponanimation)
-		{
-			self.angles = '0 0 0';
-			makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0' + self.angles_z * '0 0 1');
-			self.movedir = weapon_offset_x * v_forward - weapon_offset_y * v_right + weapon_offset_z * v_up + weapon_adjust;
-			self.movedir_x += 32;
-			self.spawnorigin = self.movedir;
-			// oldorigin - not calculated here
-		}
-		else
-		{
-			self.origin = '0 0 0';
-			self.angles = '0 0 0';
-			self.frame = 0;
-			self.viewmodelforclient = world;
-
-			float idx;
-			idx = gettagindex(self, "shot");
-			if(idx)
-			{
-				self.movedir = gettaginfo(self, idx);
-			}
-			else
-			{
-				print("WARNING: weapon model ", self.model, " does not support the 'shot' tag, will display shots TOTALLY wrong\n");
-				self.movedir = '0 0 0';
-			}
-
-			idx = gettagindex(self, "shell");
-			if(idx)
-			{
-				self.spawnorigin = gettaginfo(self, idx);
-			}
-			else
-			{
-				print("WARNING: weapon model ", self.model, " does not support the 'shell' tag, will display casings wrong\n");
-				self.spawnorigin = self.movedir;
-			}
-
-			if(v_shot_idx)
-			{
-				self.oldorigin = '0 0 0';
-			}
-			else
-			{
-				if(self.weaponentity)
-					idx = gettagindex(self, "weapon");
-				else
-					idx = gettagindex(self, "handle");
-				if(idx)
-				{
-					self.oldorigin = self.movedir - gettaginfo(self, idx);
-				}
-				else
-				{
-					print("WARNING: weapon model ", self.model, " does not support the 'handle' tag and neither does the v_ model support the 'shot' tag, will display muzzle flashes TOTALLY wrong\n");
-					self.oldorigin = '0 0 0'; // there is no way to recover from this
-				}
-			}
-
-			self.viewmodelforclient = self.owner;
+			self.movedir = '0 0 0';
+			self.spawnorigin = '0 0 0';
+			self.oldorigin = '0 0 0';
+			self.anim_fire1  = '0 1 0.01';
+			self.anim_fire2  = '0 1 0.01';
+			self.anim_idle   = '0 1 0.01';
+			self.anim_reload = '0 1 0.01';
 		}
 
 		self.view_ofs = '0 0 0';
