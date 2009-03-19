@@ -8,17 +8,17 @@ float turret_tag_setup(float linked)
         return 0;
 
     f = gettagindex(self,"tag_head");
-    v = gettaginfo(self,f);
+    v = gettaginfo_relative(self,f);
     v = v + self.origin;
     setorigin(self.tur_head,v);
 
     f = gettagindex(self.tur_head,"tag_fire");
-    v = gettaginfo(self.tur_head,f) + (self.tur_head.origin - self.origin);
+    v = gettaginfo_relative(self.tur_head,f) + (self.tur_head.origin - self.origin);
     v_y *= -1;
     self.tur_shotorg = v;
 
     f = gettagindex(self.tur_head,"tag_aim");
-    v = gettaginfo(self.tur_head,f) + (self.tur_head.origin - self.origin);
+    v = gettaginfo_relative(self.tur_head,f) + (self.tur_head.origin - self.origin);
     self.tur_aimorg  = v;
 
     return 1;
@@ -30,12 +30,12 @@ float turret_tag_fire_update()
     float f;
 
     f = gettagindex(self.tur_head,"tag_fire");
-    v = gettaginfo(self.tur_head,f) + (self.tur_head.origin - self.origin);
+    v = gettaginfo_relative(self.tur_head,f) + (self.tur_head.origin - self.origin);
     v_y *= -1;
     self.tur_shotorg = v;
 
     f = gettagindex(self.tur_head,"tag_aim");
-    v = gettaginfo(self.tur_head,f) + (self.tur_head.origin - self.origin);
+    v = gettaginfo_relative(self.tur_head,f) + (self.tur_head.origin - self.origin);
     self.tur_aimorg  = v;
 
     return 1;

@@ -2113,3 +2113,14 @@ void unfollow_sameorigin(entity e)
 {
 	e.movetype = MOVETYPE_NONE;
 }
+
+entity gettaginfo_relative_ent;
+vector gettaginfo_relative(entity e, float tag)
+{
+	if(!gettaginfo_relative_ent)
+		gettaginfo_relative_ent = spawn();
+	gettaginfo_relative_ent.model = e.model;
+	gettaginfo_relative_ent.modelindex = e.modelindex;
+	gettaginfo_relative_ent.frame = e.frame;
+	return gettaginfo(gettaginfo_relative_ent, tag);
+}

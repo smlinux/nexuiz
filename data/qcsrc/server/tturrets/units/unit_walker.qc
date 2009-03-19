@@ -369,7 +369,7 @@ void rv_think()
     else
         f = gettagindex(self.owner,"tag_rocket02");
 
-    org = self.owner.origin + gettaginfo(self.owner,f);
+    org = self.owner.origin + gettaginfo_relative(self.owner,f);
 
     self.nextthink = time + 0.2;
     oldself = self;
@@ -711,7 +711,7 @@ void turret_walker_dinit()
     vector v;
     float f;
     f = gettagindex(self.tur_head,"tag_fire");
-    v = gettaginfo(self.tur_head,f);
+    v = gettaginfo_relative(self.tur_head,f);
     v_y = v_y * -1;
 
     setsize(self,WALKER_MIN,WALKER_MAX);

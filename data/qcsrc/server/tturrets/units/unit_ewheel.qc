@@ -29,7 +29,7 @@ void ewheel_attack()
     for (i=0;i<1;++i)
     {
         f = gettagindex(self.tur_head,"tag_fire");
-        v = gettaginfo(self.tur_head,f);
+        v = gettaginfo_relative(self.tur_head,f);
         v_y = v_y * -1;
         self.tur_shotorg = v;
         turret_do_updates(self);
@@ -292,7 +292,7 @@ void turret_ewheel_dinit()
     vector v;
     float f;
     f = gettagindex(self.tur_head,"tag_fire");
-    v = gettaginfo(self.tur_head,f);
+    v = gettaginfo_relative(self.tur_head,f);
     v_y = v_y * -1;
 
     //setsize(self,WALKER_MIN,WALKER_MAX);
