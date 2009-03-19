@@ -2470,7 +2470,7 @@ void PlayerPostThink (void)
 			}
 			else if(self.impulse == 12 || self.impulse == 16 || self.impulse == 19)
 			{
-				f = 1 - self.dragspeed / vlen(self.dragentity.origin);
+				f = max(0.5, 1 - self.dragspeed / vlen(self.dragentity.origin));
 				self.dragentity.origin = self.dragentity.origin * f;
 				self.impulse = 0;
 			}
