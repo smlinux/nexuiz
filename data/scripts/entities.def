@@ -1255,7 +1255,7 @@ $E
 $E.field
 $E.field+offset
 $E.field+offset+randomoffset
-where "E" can be self, activator, target (the entity being created/modified) and pusher.
+where "E" can be self, activator, target (the entity being created/modified), killtarget, target2, target3, target4 and pusher.
 Example is a Mario-style question mark block which could throw a new weapon_nex when activated like this:
 {
 "classname" "func_button"
@@ -1277,6 +1277,10 @@ targetname: used to trigger this
 message: entity field list
 target: when set, target_spawn edits entities, instead of creating new ones
 count: make sure no more than count entities have been created by this (refuse to spawn new ones if exceeded)
+killtarget: reference entity (can be used as $killtarget)
+target2: reference entity (can be used as $target2)
+target3: reference entity (can be used as $target3)
+target4: reference entity (can be used as $target4)
 -------- SPAWNFLAGS --------
 ONLOAD: create a first entity on map load
 */
