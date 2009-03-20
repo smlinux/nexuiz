@@ -552,3 +552,5 @@ vector debug_shotorg; // if non-zero, overrides the shot origin of all weapons
 .float wasplayer;
 
 float servertime, serverprevtime, serverframetime;
+
+void Drag_MoveDrag(entity from, entity to);

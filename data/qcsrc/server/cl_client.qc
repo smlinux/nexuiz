@@ -2385,11 +2385,9 @@ void PlayerPreThink (void)
 .float dragdistance; // distance of dragentity's draglocalvector from view_ofs
 .vector draglocalvector; // local attachment vector of the dragentity
 .float draglocalangle;
-
 // on draggee:
 .entity draggedby;
 .float dragmovetype;
-
 void Drag_Begin(entity dragger, entity draggee, vector touchpoint)
 {
 	float tagscale;
@@ -2408,7 +2406,6 @@ void Drag_Begin(entity dragger, entity draggee, vector touchpoint)
 	dragger.draglocalvector_x = touchpoint * v_forward * tagscale;
 	dragger.draglocalvector_y = touchpoint * v_right * tagscale;
 	dragger.draglocalvector_z = touchpoint * v_up * tagscale;
-	print(vtos(v_forward), "\n");
 
 	dragger.dragspeed = 64;
 }
@@ -2456,6 +2453,13 @@ float Drag_IsDraggable(entity draggee)
 		return FALSE;
 	if(draggee.model == "")
 		return FALSE;
+	if(draggee.classname == "spectator")
+		return FALSE;
+	if(draggee.classname == "observer")
+		return FALSE;
+	if(draggee.classname == "exteriorweaponentity")
+		return FALSE;
+
 	return TRUE;
 }
 
@@ -2516,6 +2520,11 @@ void Drag_Update(entity dragger)
 	te_lightning1(dragger, dragger.origin + dragger.view_ofs, curorigin);
 }
 
+float Drag_CanDrag(entity dragger)
+{
+	return (dragger.deadflag == DEAD_NO) || (dragger.classname == "player");
+}
+
 float Drag_IsDragging(entity dragger)
 {
 	if(!dragger.dragentity)
@@ -2525,12 +2534,22 @@ float Drag_IsDragging(entity dragger)
 		dragger.dragentity = world;
 		return FALSE;
 	}
-	if(!Drag_IsDraggable(dragger.dragentity))
+	if(!Drag_CanDrag(dragger) || !Drag_IsDraggable(dragger.dragentity))
 	{
 		Drag_Finish(dragger);
 		return FALSE;
 	}
 	return TRUE;
+}
+
+void Drag_MoveDrag(entity from, entity to)
+{
+	if(from.draggedby)
+	{
+		to.draggedby = from.draggedby;
+		to.draggedby.dragentity = to;
+		from.draggedby = world;
+	}
 }
 
 /*
@@ -2580,17 +2599,18 @@ void PlayerPostThink (void)
 	}
 
 	if(sv_cheats)
-		if(self.BUTTON_DRAG)
-			if(!self.dragentity)
-				if(self.cursor_trace_ent)
-					if(Drag_IsDraggable(self.cursor_trace_ent))
-					{
-						if(self.cursor_trace_ent.draggedby)
-							Drag_Finish(self.cursor_trace_ent.draggedby);
-						if(self.cursor_trace_ent.tag_entity)
-							detach_sameorigin(self.cursor_trace_ent);
-						Drag_Begin(self, self.cursor_trace_ent, self.cursor_trace_endpos);
-					}
+		if(Drag_CanDrag(self))
+			if(self.BUTTON_DRAG)
+				if(!self.dragentity)
+					if(self.cursor_trace_ent)
+						if(Drag_IsDraggable(self.cursor_trace_ent))
+						{
+							if(self.cursor_trace_ent.draggedby)
+								Drag_Finish(self.cursor_trace_ent.draggedby);
+							if(self.cursor_trace_ent.tag_entity)
+								detach_sameorigin(self.cursor_trace_ent);
+							Drag_Begin(self, self.cursor_trace_ent, self.cursor_trace_endpos);
+						}
 	
 	if(Drag_IsDragging(self))
 	{
