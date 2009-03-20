@@ -552,9 +552,3 @@ vector debug_shotorg; // if non-zero, overrides the shot origin of all weapons
 .float wasplayer;
 
 float servertime, serverprevtime, serverframetime;
-
-.entity dragentity;
-.float dragspeed;
-.entity dragcursor;
-.entity draggedby;
-.float dragmovetype;
