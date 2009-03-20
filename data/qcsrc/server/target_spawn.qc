@@ -30,9 +30,15 @@ void target_spawn_useon(entity e)
 	vector data, data2;
 	entity oldself;
 	entity oldactivator;
+	entity kt, t2, t3, t4;
 
 	n = tokenize_sane(self.message);
 	self.target_spawn_activator = activator;
+
+	kt = find(world, targetname, self.killtarget);
+	t2 = find(world, targetname, self.target2);
+	t3 = find(world, targetname, self.target3);
+	t4 = find(world, targetname, self.target4);
 
 	for(i = 0; i < n-1; i += 2)
 	{
@@ -109,6 +115,26 @@ void target_spawn_useon(entity e)
 				else if(value == "target")
 				{
 					valueent = e;
+					value = "";
+				}
+				else if(value == "killtarget")
+				{
+					valueent = kt;
+					value = "";
+				}
+				else if(value == "target2")
+				{
+					valueent = t2;
+					value = "";
+				}
+				else if(value == "target3")
+				{
+					valueent = t3;
+					value = "";
+				}
+				else if(value == "target4")
+				{
+					valueent = t4;
 					value = "";
 				}
 				else if(value == "time")
