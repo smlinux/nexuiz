@@ -2403,7 +2403,7 @@ void Drag_Begin(entity dragger, entity draggee, vector touchpoint)
 	float tagscale;
 
 	draggee.dragmovetype = draggee.movetype;
-	draggee.movetype = MOVETYPE_BOUNCEMISSILE;
+	draggee.movetype = MOVETYPE_FLY;
 	draggee.flags &~= FL_ONGROUND;
 	draggee.draggedby = dragger;
 
