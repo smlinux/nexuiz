@@ -2391,6 +2391,7 @@ void PlayerPreThink (void)
 
 // on dragger:
 .entity dragentity;
+.float draggravity;
 .float dragspeed; // speed of mouse wheel action
 .float dragdistance; // distance of dragentity's draglocalvector from view_ofs
 .vector draglocalvector; // local attachment vector of the dragentity
@@ -2403,7 +2404,9 @@ void Drag_Begin(entity dragger, entity draggee, vector touchpoint)
 	float tagscale;
 
 	draggee.dragmovetype = draggee.movetype;
-	draggee.movetype = MOVETYPE_FLY;
+	draggee.draggravity = draggee.gravity;
+	draggee.movetype = MOVETYPE_WALK;
+	draggee.gravity = 0.00001;
 	draggee.flags &~= FL_ONGROUND;
 	draggee.draggedby = dragger;
 
@@ -2428,6 +2431,7 @@ void Drag_Finish(entity dragger)
 		dragger.dragentity = world;
 	draggee.draggedby = world;
 	draggee.movetype = draggee.dragmovetype;
+	draggee.gravity = draggee.draggravity;
 
 	switch(draggee.movetype)
 	{
