@@ -2476,11 +2476,7 @@ float Drag_IsDraggable(entity draggee)
 float Drag_MayChangeAngles(entity draggee)
 {
 	// TODO add more checks for bad stuff here
-	if(draggee.classname == "door")
-		return FALSE;
-	if(draggee.classname == "plat")
-		return FALSE;
-	if(draggee.classname == "func_button")
+	if(substring(draggee.model, 0, 1) == "*")
 		return FALSE;
 	return TRUE;
 }
