@@ -2503,6 +2503,7 @@ void Drag_Update(entity dragger)
 	entity draggee;
 
 	draggee = dragger.dragentity;
+	draggee.flags &~= FL_ONGROUND;
 
 	curorigin = gettaginfo(draggee, 0);
 	curorigin = curorigin + v_forward * dragger.draglocalvector_x + v_right * dragger.draglocalvector_y + v_up * dragger.draglocalvector_z;
