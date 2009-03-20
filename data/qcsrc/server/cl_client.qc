@@ -2026,8 +2026,7 @@ void ObserverThink()
 		if (self.BUTTON_JUMP && !self.version_mismatch) {
 			self.welcomemessage_time = 0;
 			self.flags &~= FL_JUMPRELEASED;
-			LeaveSpectatorMode();
-			return;
+			self.flags |= FL_SPAWNING;
 		} else if(self.BUTTON_ATCK && !self.version_mismatch) {
 			self.welcomemessage_time = 0;
 			self.flags &~= FL_JUMPRELEASED;
@@ -2038,6 +2037,12 @@ void ObserverThink()
 	} else {
 		if (!(self.BUTTON_ATCK || self.BUTTON_JUMP)) {
 			self.flags |= FL_JUMPRELEASED;
+			if(self.flags & FL_SPAWNING)
+			{
+				self.flags &~= FL_SPAWNING;
+				LeaveSpectatorMode();
+				return;
+			}
 		}
 	}
 	PrintWelcomeMessage(self);
@@ -2049,8 +2054,7 @@ void SpectatorThink()
 		if (self.BUTTON_JUMP && !self.version_mismatch) {
 			self.welcomemessage_time = 0;
 			self.flags &~= FL_JUMPRELEASED;
-			LeaveSpectatorMode();
-			return;
+			self.flags |= FL_SPAWNING;
 		} else if(self.BUTTON_ATCK) {
 			self.welcomemessage_time = 0;
 			self.flags &~= FL_JUMPRELEASED;
@@ -2072,6 +2076,12 @@ void SpectatorThink()
 	} else {
 		if (!(self.BUTTON_ATCK || self.BUTTON_ATCK2)) {
 			self.flags |= FL_JUMPRELEASED;
+			if(self.flags & FL_SPAWNING)
+			{
+				self.flags &~= FL_SPAWNING;
+				LeaveSpectatorMode();
+				return;
+			}
 		}
 	}
 	PrintWelcomeMessage(self);

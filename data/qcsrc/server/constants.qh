@@ -21,6 +21,7 @@ float	FL_POWERUP				= 16384;
 float	FL_PROJECTILE				= 32768;
 float	FL_TOSSED				= 65536;
 float   FL_NO_WEAPON_STAY       = 131072;
+float   FL_SPAWNING       = 262144;
 
 float	MOVETYPE_NONE				= 0;
 float	MOVETYPE_ANGLENOCLIP			= 1;
