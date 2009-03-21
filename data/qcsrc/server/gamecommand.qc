@@ -859,6 +859,18 @@ void GameCommand(string command)
 		return;
 	}
 
+	if(argv(0) == "time")
+	{
+		print("time = ", ftos(time), "\n");
+		print("frame start = ", ftos(gettime(GETTIME_FRAMESTART)), "\n");
+		print("realtime = ", ftos(gettime(GETTIME_REALTIME)), "\n");
+		print("hires = ", ftos(gettime(GETTIME_HIRES)), "\n");
+		print("uptime = ", ftos(gettime(GETTIME_UPTIME)), "\n");
+		print("localtime = ", strftime(TRUE, "%a %b %e %H:%M:%S %Z %Y"), "\n");
+		print("gmtime = ", strftime(FALSE, "%a %b %e %H:%M:%S %Z %Y"), "\n");
+		return;
+	}
+
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");
 }
 

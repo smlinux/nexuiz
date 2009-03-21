@@ -763,6 +763,19 @@ vector gettaginfo_up;
 //gettaginfo_name is set to the name of the bone whose index had been specified in gettaginfo
 //gettaginfo_offset, gettaginfo_forward, gettaginfo_right, gettaginfo_up contain the transformation matrix of the bone relative to its parent. Note that the matrix may contain a scaling component.
 
+//DP_QC_GETTIME
+//idea: tZork
+//darkplaces implementation: tZork, div0
+//constant definitions:
+float GETTIME_FRAMESTART = 0; // time of start of frame
+float GETTIME_REALTIME = 1; // current time (may be OS specific)
+float GETTIME_HIRES = 2; // like REALTIME, but may reset between QC invocations and thus can be higher precision
+float GETTIME_UPTIME = 3; // time since start of the engine
+//builtin definitions:
+float(float tmr) gettime = #519;
+//description:
+//some timers to query...
+
 //DP_QC_MINMAXBOUND
 //idea: LordHavoc
 //darkplaces implementation: LordHavoc
