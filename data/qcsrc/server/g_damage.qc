@@ -75,7 +75,7 @@ float IsFlying(entity a)
 {
 	if(a.flags & FL_ONGROUND)
 		return 0;
-	if(a.waterlevel >= 2)
+	if(a.waterlevel >= WATERLEVEL_SWIMMING)
 		return 0;
 	traceline(a.origin, a.origin - '0 0 48', MOVE_NORMAL, a);
 	if(trace_fraction < 1)

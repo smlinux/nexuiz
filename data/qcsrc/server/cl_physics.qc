@@ -33,7 +33,7 @@ void PlayerJump (void)
 	float mjumpheight;
 
 	mjumpheight = cvar("sv_jumpvelocity");
-	if (self.waterlevel >= 2)
+	if (self.waterlevel >= WATERLEVEL_SWIMMING)
 	{
 		if (self.watertype == CONTENT_WATER)
 			self.velocity_z = 200;
@@ -490,7 +490,7 @@ void SV_PlayerPhysics()
 	{
 		self.wasFlying = 0;
 
-		if(self.waterlevel < 2)
+		if(self.waterlevel < WATERLEVEL_SWIMMING)
 		if(time >= self.ladder_time)
 		if not(self.hook)
 		{
@@ -525,7 +525,7 @@ void SV_PlayerPhysics()
 		else
 			self.flags |= FL_JUMPRELEASED;
 
-		if (self.waterlevel == 2)
+		if (self.waterlevel == WATERLEVEL_SWIMMING)
 			CheckWaterJump ();
 	}
 
@@ -533,7 +533,7 @@ void SV_PlayerPhysics()
 	{
 		self.velocity_x = self.movedir_x;
 		self.velocity_y = self.movedir_y;
-		if (time > self.teleport_time || self.waterlevel == 0)
+		if (time > self.teleport_time || self.waterlevel == WATERLEVEL_NONE)
 		{
 			self.flags &~= FL_WATERJUMP;
 			self.teleport_time = 0;
@@ -564,7 +564,7 @@ void SV_PlayerPhysics()
 				self.velocity = self.velocity + wishdir * min(f, sv_accelerate*maxspd_mod * frametime * wishspeed);
 		}
 	}
-	else if (self.waterlevel >= 2)
+	else if (self.waterlevel >= WATERLEVEL_SWIMMING)
 	{
 		// swimming
 		self.flags &~= FL_ONGROUND;
@@ -611,14 +611,14 @@ void SV_PlayerPhysics()
 			self.watertype = self.ladder_entity.skin;
 			f = self.ladder_entity.origin_z + self.ladder_entity.maxs_z;
 			if ((self.origin_z + self.view_ofs_z) < f)
-				self.waterlevel = 3;
+				self.waterlevel = WATERLEVEL_SUBMERGED;
 			else if ((self.origin_z + (self.mins_z + self.maxs_z) * 0.5) < f)
-				self.waterlevel = 2;
+				self.waterlevel = WATERLEVEL_SWIMMING;
 			else if ((self.origin_z + self.mins_z + 1) < f)
-				self.waterlevel = 1;
+				self.waterlevel = WATERLEVEL_WETFEET;
 			else
 			{
-				self.waterlevel = 0;
+				self.waterlevel = WATERLEVEL_NONE;
 				self.watertype = CONTENT_EMPTY;
 			}
 		}

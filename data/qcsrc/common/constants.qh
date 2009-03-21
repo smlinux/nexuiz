@@ -417,3 +417,9 @@ float HITTYPE_RESERVED = 0x1000; // unused yet
 
 //misc. stuff
 #define NEWLINES "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+
+// water levels
+float WATERLEVEL_NONE = 0;
+float WATERLEVEL_WETFEET = 1;
+float WATERLEVEL_SWIMMING = 2;
+float WATERLEVEL_SUBMERGED = 3;

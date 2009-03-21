@@ -153,7 +153,7 @@ void havocbot_bunnyhop(vector dir)
 		return;
 	}
 
-	if(self.waterlevel > 1)
+	if(self.waterlevel > WATERLEVEL_WETFEET)
 	{
 		self.aistatus &~= AI_STATUS_RUNNING;
 		return;
@@ -357,9 +357,9 @@ void havocbot_movetogoal()
 	if(self.goalcurrent==world)
 	{
 		dir = '0 0 0';
-		if(self.waterlevel>2)
+		if(self.waterlevel>WATERLEVEL_SWIMMING)
 			dir_z = 1;
-		else if(self.velocity_z >= 0 && !(self.waterlevel == 1 && self.watertype == CONTENT_WATER))
+		else if(self.velocity_z >= 0 && !(self.waterlevel == WATERLEVEL_WETFEET && self.watertype == CONTENT_WATER))
 			self.BUTTON_JUMP = TRUE;
 		else
 			self.BUTTON_JUMP = FALSE;
@@ -421,7 +421,7 @@ void havocbot_movetogoal()
 
 		if (self.waterlevel)
 		{
-			if(self.waterlevel>2)
+			if(self.waterlevel>WATERLEVEL_SWIMMING)
 			{
 			//	flatdir_z = 1;
 				self.aistatus |= AI_STATUS_OUT_WATER;
@@ -429,7 +429,7 @@ void havocbot_movetogoal()
 			else
 			{
 				if(self.velocity_z >= 0 && !(self.watertype == CONTENT_WATER && self.goalcurrent.origin_z < self.origin_z) &&
-					( !(self.waterlevel == 1 && self.watertype == CONTENT_WATER) || self.aistatus & AI_STATUS_OUT_WATER))
+					( !(self.waterlevel == WATERLEVEL_WETFEET && self.watertype == CONTENT_WATER) || self.aistatus & AI_STATUS_OUT_WATER))
 					self.BUTTON_JUMP = TRUE;
 				else
 					self.BUTTON_JUMP = FALSE;
@@ -899,7 +899,7 @@ void havocbot_ai()
 		// TODO: tracewalk() should take care of this job (better path finding under water)
 		// if we don't have a goal and we're under water look for a waypoint near the "shore" and push it
 		if(self.goalcurrent==world)
-		if(self.waterlevel==2 || self.aistatus & AI_STATUS_OUT_WATER)
+		if(self.waterlevel==WATERLEVEL_SWIMMING || self.aistatus & AI_STATUS_OUT_WATER)
 		{
 			// Look for the closest waypoint out of water
 			local entity newgoal, head;
@@ -987,7 +987,7 @@ void havocbot_ai()
 		//dprint(etos(self), " ");
 		//dprint(vtos(now), ":", vtos(next), "=", vtos(v), " (blend ", ftos(blend), ")\n");
 		//v = now * (distanceblend) + next * (1-distanceblend);
-		if (self.waterlevel < 2)
+		if (self.waterlevel < WATERLEVEL_SWIMMING)
 			v_z = 0;
 		//dprint("walk at:", vtos(v), "\n");
 		//te_lightning2(world, self.origin, self.goalcurrent.origin);
