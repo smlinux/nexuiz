@@ -40,10 +40,11 @@ entity goal_node;
 entity best_open_node;
 .float is_path_node;
 
-float edge_show(vector point,float fsize);
 
-//#define DEBUGPATHING
+
+#define DEBUGPATHING
 #ifdef DEBUGPATHING
+float edge_show(vector point,float fsize);
 void mark_error(vector where,float lifetime);
 void mark_info(vector where,float lifetime);
 entity mark_misc(vector where,float lifetime);
@@ -203,7 +204,7 @@ float edge_check(vector point,float fsize)
     return 0;
 }
 
-/*
+#ifdef DEBUGPATHING
 #define _pshow(p) mark_error(p,10)
 float edge_show(vector point,float fsize)
 {
@@ -221,7 +222,7 @@ float edge_show(vector point,float fsize)
 
     return 0;
 }
-*/
+#endif
 
 var vector pathlib_movenode(vector start,vector end,float doedge);
 vector pathlib_wateroutnode(vector start,vector end)
@@ -565,7 +566,9 @@ void dumpnode(entity n)
     ++pathlib_scraplist_cnt;
     n.owner = scraplist;
 #else
-    remove(n);
+    n.is_path_node = FALSE;
+    n.think = SUB_Remove;
+    n.nextthink= time;
 #endif
 }
 
@@ -827,9 +830,6 @@ void pathlib_cleanup()
 {
     entity node;
 
-    if(best_open_node != world)
-        remove(best_open_node);
-
     best_open_node = world;
 
     node = findfloat(world,is_path_node, TRUE);
@@ -839,8 +839,7 @@ void pathlib_cleanup()
         node.path_prev = world;
         node.is_path_node = FALSE;
         dumpnode(node);
-        //remove(node);
-        node = findfloat(world,is_path_node, TRUE);
+        node = findfloat(node,is_path_node, TRUE);
     }
 
     if(openlist)
@@ -927,8 +926,6 @@ entity pathlib_astar(vector from,vector to)
     else
         pathlib_expandnode_star(n,from,to);
 
-    //pathlib_expandnode(n,from,to);
-
     while(pathlib_open_cnt)
     {
         best_open_node = pathlib_getbestopen();
@@ -971,21 +968,21 @@ entity pathlib_astar(vector from,vector to)
             pathlib_cleanup();
 
 #ifdef DEBUGPATHING
-            bprint("Chain done..\n");
+            dprint("Chain done..\n");
             pathlib_showpath2(path);
 
 
-            bprint("           Nodes reused: ", ftos(pathlib_recycle_cnt),"\n");
-            bprint("          Nodes created: ", ftos(pathlib_made_cnt),"\n");
-            bprint("       Nodes make/reuse: ", ftos(pathlib_made_cnt / pathlib_recycle_cnt),"\n");
-            bprint("             Nodes open: ", ftos(pathlib_open_cnt),"\n");
-            bprint("           Nodes merged: ", ftos(pathlib_merge_cnt),"\n");
-            bprint("           Nodes closed: ", ftos(pathlib_closed_cnt),"\n");
-            bprint("         Nodes searched: ", ftos(pathlib_searched_cnt),"\n");
-            bprint("Nodes bestopen searched: ", ftos(pathlib_bestopen_seached),"\n");
-            bprint("    Nodes bestcash hits: ", ftos(pathlib_bestcash_hits),"\n");
-            bprint("    Nodes bestcash save: ", ftos(pathlib_bestcash_saved),"\n");
-            bprint("AStar done. ", ftos(pathlib_scraplist_cnt), " nodes on scrap\n\n");
+            dprint("           Nodes reused: ", ftos(pathlib_recycle_cnt),"\n");
+            dprint("          Nodes created: ", ftos(pathlib_made_cnt),"\n");
+            dprint("       Nodes make/reuse: ", ftos(pathlib_made_cnt / pathlib_recycle_cnt),"\n");
+            dprint("             Nodes open: ", ftos(pathlib_open_cnt),"\n");
+            dprint("           Nodes merged: ", ftos(pathlib_merge_cnt),"\n");
+            dprint("           Nodes closed: ", ftos(pathlib_closed_cnt),"\n");
+            dprint("         Nodes searched: ", ftos(pathlib_searched_cnt),"\n");
+            dprint("Nodes bestopen searched: ", ftos(pathlib_bestopen_seached),"\n");
+            dprint("    Nodes bestcash hits: ", ftos(pathlib_bestcash_hits),"\n");
+            dprint("    Nodes bestcash save: ", ftos(pathlib_bestcash_saved),"\n");
+            dprint("AStar done. ", ftos(pathlib_scraplist_cnt), " nodes on scrap\n\n");
 
 #endif
             return path;
