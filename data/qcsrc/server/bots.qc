@@ -2,7 +2,7 @@
 float AI_STATUS_ROAMING			= 1;	// Bot is just crawling the map. No enemies at sight
 float AI_STATUS_ATTACKING		= 2;	// There are enemies at sight
 float AI_STATUS_RUNNING			= 4;	// Bot is bunny hopping
-float AI_STATUS_DANGER_AHEAD	= 8;	// There is lava/slime/abism ahead
+float AI_STATUS_DANGER_AHEAD	= 8;	// There is lava/slime/trigger_hurt ahead
 float AI_STATUS_OUT_JUMPPAD		= 16;	// Trying to get out of a "vertical" jump pad
 float AI_STATUS_OUT_WATER		= 32;	// Trying to get out of water
 
@@ -1213,7 +1213,7 @@ void navigation_markroutes()
 		maxdistance = 50000;
 	else
 		maxdistance = 1500;
-	
+
 	for(i=increment;!navigation_markroutes_nearestwaypoints(waylist, i)&&i<maxdistance;i+=increment);
 
 	searching = TRUE;
@@ -1714,6 +1714,7 @@ void bot_lagfunc(float t, float f1, float f2, entity e1, vector v1, vector v2, v
 .float bot_nextthink;
 .float bot_badaimtime;
 .float bot_aimthinktime;
+.float bot_prevaimtime;
 .vector bot_mouseaim;
 .vector bot_badaimoffset;
 .vector bot_1st_order_aimfilter;
@@ -1724,39 +1725,9 @@ void bot_lagfunc(float t, float f1, float f2, entity e1, vector v1, vector v2, v
 .vector bot_olddesiredang;
 float bot_aimdir(vector v, float maxfiredeviation)
 {
-/*
-	local float snapcos;
-	local vector olddir, newdir, desireddir;
-
-	makevectors(self.v_angle);
-	olddir = newdir = v_forward;
-	desireddir = normalize(v);
-	snapcos = cos(cvar("bot_ai_aimskill_snapangle") * frametime * (skill + 1) * 0.5);
-	if (desireddir * olddir < v_forward_x)
-		newdir = desireddir;
-	else
-	{
-		local float blendrate;
-		blendrate = cvar("bot_ai_aimskill_blendrate") * frametime * (skill + 1) * 0.5;
-		newdir = olddir + (desireddir - olddir) * bound(0, blendrate, 1);
-	}
-
-	// decide whether to fire this time
-	if ((desireddir * newdir) >= cos(maxfiredeviation))
-		self.bot_firetimer = time + 0.3;
-
-	self.v_angle = vectoangles(newdir);
-	self.v_angle_x = self.v_angle_x * -1;
-
-	makevectors(self.v_angle);
-	shotorg = self.origin + self.view_ofs;
-	shotdir = newdir;
-
-	return time < self.bot_firetimer;
-*/
-
-	local float dist;
+	local float dist, delta_t, blend;
 	local vector desiredang, diffang;
+	local float delta_t;
 
 	//dprint("aim ", self.netname, ": old:", vtos(self.v_angle));
 	// make sure v_angle is sane first
@@ -1796,9 +1767,11 @@ float bot_aimdir(vector v, float maxfiredeviation)
 	self.bot_olddesiredang = desiredang;
 	//dprint(" diff:", vtos(diffang));
 
+	delta_t = time-self.bot_prevaimtime;
+	self.bot_prevaimtime = time;
 	// Here we will try to anticipate the comming aiming direction
 	self.bot_1st_order_aimfilter= self.bot_1st_order_aimfilter
-		+ (diffang * (1 / frametime)    - self.bot_1st_order_aimfilter) * bound(0, cvar("bot_ai_aimskill_order_filter_1st"),1);
+		+ (diffang * (1 / delta_t)    - self.bot_1st_order_aimfilter) * bound(0, cvar("bot_ai_aimskill_order_filter_1st"),1);
 	self.bot_2nd_order_aimfilter= self.bot_2nd_order_aimfilter
 		+ (self.bot_1st_order_aimfilter - self.bot_2nd_order_aimfilter) * bound(0, cvar("bot_ai_aimskill_order_filter_2nd"),1);
 	self.bot_3th_order_aimfilter= self.bot_3th_order_aimfilter
@@ -1808,7 +1781,6 @@ float bot_aimdir(vector v, float maxfiredeviation)
 	self.bot_5th_order_aimfilter= self.bot_5th_order_aimfilter
 		+ (self.bot_4th_order_aimfilter - self.bot_5th_order_aimfilter) * bound(0, cvar("bot_ai_aimskill_order_filter_5th"),1);
 
-	local float blend;
 	//blend = (bound(0,skill,10)*0.1)*pow(1-bound(0,skill,10)*0.05,2.5)*5.656854249; //Plot formule before changing !
 	blend = bound(0,skill,10)*0.1;
 	desiredang = desiredang + blend *
@@ -1861,7 +1833,7 @@ float bot_aimdir(vector v, float maxfiredeviation)
 	blendrate = cvar("bot_ai_aimskill_blendrate");
 	r = max(fixedrate, blendrate);
 	//self.v_angle = self.v_angle + diffang * bound(frametime, r * frametime * (2+skill*skill*0.05-random()*0.05*(10-skill)), 1);
-	self.v_angle = self.v_angle + diffang * bound(frametime, r * frametime * (2+pow(skill+self.bot_mouseskill,3)*0.005-random()), 1);
+	self.v_angle = self.v_angle + diffang * bound(delta_t, r * delta_t * (2+pow(skill+self.bot_mouseskill,3)*0.005-random()), 1);
 	self.v_angle = self.v_angle * bound(0,cvar("bot_ai_aimskill_mouse"),1) + desiredang * bound(0,(1-cvar("bot_ai_aimskill_mouse")),1);
 	//self.v_angle = self.v_angle + diffang * bound(0, r * frametime * (skill * 0.5 + 2), 1);
 	//self.v_angle = self.v_angle + diffang * (1/ blendrate);
