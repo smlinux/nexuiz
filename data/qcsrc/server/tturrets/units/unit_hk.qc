@@ -90,7 +90,7 @@ void turret_hk_attack()
     missile                    = spawn ();
     missile.solid            = SOLID_BBOX;
     setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
-    setorigin(missile, self.tur_shotorg_updated);
+    setorigin(missile, self.tur_shotorg);
 
     missile.scale            = 1;
     missile.classname        = "hk_missile";

@@ -11,14 +11,14 @@ void turret_flac_attack()
 
     sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", VOL_BASE, ATTN_NORM);
     proj = spawn ();
-    setorigin(proj, self.tur_shotorg_updated);
+    setorigin(proj, self.tur_shotorg);
     // setmodel(proj, "models/turrets/pd_proj.md3");
     setsize(proj, '0 0 0', '0 0 0');
-    proj.classname          = "turret_fire";
+    proj.classname          = "flac_projectile";
     proj.owner              = self;
     proj.bot_dodge          = TRUE;
     proj.bot_dodgerating    = self.shot_dmg;
-    proj.solid              = SOLID_NOT;
+    proj.solid              = SOLID_BBOX;
     proj.movetype           = MOVETYPE_FLYMISSILE;
     proj.flags              = FL_PROJECTILE;
     // proj.effects            = EF_LOWPRECISION;
@@ -44,13 +44,15 @@ void turret_flac_projectile_explode()
     float ftmp;
 
     // FIXME: tur_impacttime is not accurate enougth, this is a dirty hakk to make flac work.
+
     if(self.enemy != world)
     if(self.cnt < time)
-    if(vlen(self.origin - self.enemy.origin) > self.owner.shot_radius * 0.5)
+    if(vlen(self.origin - self.enemy.origin) > self.owner.shot_radius * 0.25)
     {
         self.nextthink = time; //vlen(self.origin - self.enemy.origin) / self.owner.shot_speed;
         return;
     }
+
 
     te_explosion (self.origin);
 

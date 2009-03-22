@@ -7,31 +7,51 @@
 
 vector real_origin(entity ent);
 
+/// Map time control over pain inflicted
+.float turret_scale_damage;
+/// Map time control targetting range
+.float turret_scale_range;
+/// Map time control refire
+.float turret_scale_refire;
+/// Map time control ammo held and recharged
+.float turret_scale_ammo;
+/// Map time control aim speed
+.float turret_scale_aim;
+/// Map time control health
+.float turret_scale_health;
+/// Map time control respawn time
+.float turret_scale_respawn;
+
+/// Used for cvar reloading
+.string cvar_basename;
+
 /// target selection flags
 .float target_select_flags;
 .float target_validate_flags;
 /// Dont select a target on its own.
-#define TFL_TARGETSELECT_NO            1024
+#define TFL_TARGETSELECT_NO            2
 /// Need line of sight
-#define TFL_TARGETSELECT_LOS           2
+#define TFL_TARGETSELECT_LOS           4
 /// Players are valid targets
-#define TFL_TARGETSELECT_PLAYERS       4
+#define TFL_TARGETSELECT_PLAYERS       8
 /// Missiles are valid targets
-#define TFL_TARGETSELECT_MISSILES      8
+#define TFL_TARGETSELECT_MISSILES      16
 /// Responds to turret_trigger_target events
-#define TFL_TARGETSELECT_TRIGGERTARGET 16
+#define TFL_TARGETSELECT_TRIGGERTARGET 32
 /// Angular limitations of turret head limits target selection
-#define TFL_TARGETSELECT_ANGLELIMITS   32
+#define TFL_TARGETSELECT_ANGLELIMITS   64
 /// Range limits apply in targetselection
-#define TFL_TARGETSELECT_RANGELIMTS    64
+#define TFL_TARGETSELECT_RANGELIMTS    128
 /// DOnt select targets with a .team matching its own
-#define TFL_TARGETSELECT_TEAMCHECK     4096
+#define TFL_TARGETSELECT_TEAMCHECK     256
 /// Cant select targets on its own. needs to be triggerd or slaved.
-#define TFL_TARGETSELECT_NOBUILTIN     256
+#define TFL_TARGETSELECT_NOBUILTIN     512
 /// TFL_TARGETSELECT_TEAMCHECK is inverted (selects only mebers of own .team)
-#define TFL_TARGETSELECT_OWNTEAM       2048
+#define TFL_TARGETSELECT_OWNTEAM       1024
 /// Turrets aren't valid targets
-#define TFL_TARGETSELECT_NOTURRETS     128
+#define TFL_TARGETSELECT_NOTURRETS     2048
+/// Use feild of view
+#define TFL_TARGETSELECT_FOV           4096
 
 /// aim flags
 .float aim_flags;
@@ -40,7 +60,7 @@ vector real_origin(entity ent);
 /// Go for ground, not direct hit
 #define TFL_AIM_GROUND              2
 /// Go for ground, not direct hit, but only if target is on ground.
-#define TFL_AIM_GROUND2              4
+#define TFL_AIM_GROUND2             4
 /// Use balistic aim. FIXME: not implemented
 #define TFL_AIM_BALISTIC            8
 /// Try to predict target movement (does not account for gravity)
@@ -53,10 +73,10 @@ vector real_origin(entity ent);
 #define TFL_AIM_BEHIND              128
 /// blend real and predicted z positions. (fake bounce prediction)
 #define TFL_AIM_ZEASE               256
-// Try to do real prediction of targets z pos at impact.
-//#define TFL_AIM_ZPREDICT            256
+/// Try to do real prediction of targets z pos at impact.
+#define TFL_AIM_ZPREDICT            512
 /// Simply aim at target's current location
-#define TFL_AIM_SIMPLE              512
+#define TFL_AIM_SIMPLE              1024
 
 /// track (turn and pitch head) flags
 .float track_flags;
@@ -84,8 +104,6 @@ vector real_origin(entity ent);
 
 /// How prefire check is preformed
 .float firecheck_flags;
-/// Dont do any chekcs
-#define TFL_FIRECHECK_NO          8192
 /// Dont kill the world
 #define TFL_FIRECHECK_WORLD       2
 /// Dont kill the dead
@@ -110,6 +128,10 @@ vector real_origin(entity ent);
 #define TFL_FIRECHECK_OTHER_AMMO 2048
 /// Check own .attack_finished_single vs time
 #define TFL_FIRECHECK_REFIRE     4096
+/// Move the acctual target to aimspot before tracing impact (and back after)
+#define TFL_FIRECHECK_VERIFIED   8192
+/// Dont do any chekcs
+#define TFL_FIRECHECK_NO         16384
 
 /// How shooting is done
 .float shoot_flags;
@@ -160,7 +182,7 @@ vector real_origin(entity ent);
 #define TFL_TURRCAPS_MOVE 16384
 /// Will roam arround even if not chasing anyting
 #define TFL_TURRCAPS_ROAM 32768
-#define TFL_TURRCAPS_LINKED 65536
+#define TFL_TURRCAPS_HEADATTACHED 65536
 
 /// Ammo types needed and/or provided
 .float ammo_flags;
@@ -198,7 +220,7 @@ vector real_origin(entity ent);
 /// Die and stay dead.
 #define  TFL_DMG_DEATH_NORESPAWN 256
 /// Supress std turret gibs on death
-#define  RFL_DMG_DEATH_NOGIBS    512
+#define  TFL_DMG_DEATH_NOGIBS    512
 
 // Spawnflags
 /// Spawn in teambased modes
@@ -208,7 +230,7 @@ vector real_origin(entity ent);
 
 
 /*
-* Fields commnly used by turrets
+* Fields used by turrets
 */
 /// Turrets internal ai speed
 .float      ticrate;
@@ -228,8 +250,8 @@ vector real_origin(entity ent);
 /// on/off toggle.
 .float      tur_active;
 
-/// Aim from this point,
-.vector     tur_aimorg;
+// Aim from this point,
+//.vector     tur_aimorg;
 
 /// and shoot from here. (could be non constant, think MLRS)
 .vector     tur_shotorg;
@@ -305,6 +327,8 @@ vector real_origin(entity ent);
 .float target_select_missilebias;
 /// (dis)Favot living players (-1 to diable targeting compleatly)
 .float target_select_playerbias;
+/// Field of view
+//.float target_select_fov;
 
 /*
 * Aim refers to real aiming, not gun pos (thats done by track)
@@ -433,14 +457,15 @@ void turret_stdproc_nothing();
 /*
 * Target selection
 */
-/// "closeer is beter" selection
-float   turret_stdproc_targetscore_close(entity e_turret, entity e_target);
-/// "further is beter" selection
-float   turret_stdproc_targetscore_far(entity e_turret, entity e_target);
-/// only target_range_optimal
-float   turret_stdproc_targetscore_optimal(entity e_turret, entity e_target);
-/// defendpos
-float   turret_stdproc_targetscore_defend(entity e_turret, entity e_target);
+// noting uses the following atm.
+// "closeer is beter" selection
+//float   turret_stdproc_targetscore_close(entity e_turret, entity e_target);
+// "further is beter" selection
+//float   turret_stdproc_targetscore_far(entity e_turret, entity e_target);
+// only target_range_optimal
+//float   turret_stdproc_targetscore_optimal(entity e_turret, entity e_target);
+// defendpos
+//float   turret_stdproc_targetscore_defend(entity e_turret, entity e_target);
 /// Generic fairly smart bias-aware target selection.
 float   turret_stdproc_targetscore_generic(entity e_turret, entity e_target);
 /// Experimental supportunits targetselector
@@ -482,9 +507,14 @@ float  tvt_dist;
 
 /// updates aim org, shot org, shot dir and enemy org for selected turret
 void turret_do_updates(entity e_turret);
-.vector tur_aimorg_updated;
-.vector tur_shotorg_updated;
+//.vector tur_aimorg_updated; // creates to much aim issues. using tur_shotorg_updated insted.
+//.vector tur_shotorg_updated; // DP8815 fixes gettaginfo, no longer needed.
 .vector tur_shotdir_updated;
 
 void turrets_precash();
+
+
+
 #endif // TTURRETS_ENABLED
+
+

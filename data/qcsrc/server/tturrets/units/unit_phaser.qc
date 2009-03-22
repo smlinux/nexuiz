@@ -60,8 +60,8 @@ void beam_think()
     entity oldself;
     oldself = self;
     self = self.owner;
-    FireImoBeam (   self.tur_shotorg_updated,
-                    self.tur_shotorg_updated + self.tur_shotdir_updated * self.target_range_fire,
+    FireImoBeam (   self.tur_shotorg,
+                    self.tur_shotorg + self.tur_shotdir_updated * self.target_range_fire,
                     '-1 -1 -1' * self.shot_radius,
                     '1 1 1' * self.shot_radius,
                     self.shot_force,
@@ -69,7 +69,7 @@ void beam_think()
                     0.75,
                     DEATH_TURRET);
     self = oldself;
-    self.scale = vlen(self.owner.tur_shotorg_updated - trace_endpos) / 256;
+    self.scale = vlen(self.owner.tur_shotorg - trace_endpos) / 256;
 
 }
 

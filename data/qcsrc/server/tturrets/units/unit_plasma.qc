@@ -17,6 +17,9 @@ void turret_plasma_postthink()
     if (self.tur_head.frame > 5)
         self.tur_head.frame = 0;
 
+    setsize(self,self.mins,self.maxs);
+    setsize(self.tur_head,self.tur_head.mins,self.tur_head.maxs);
+
     /*
     float h;
     h = self.health / self.tur_health;
@@ -48,11 +51,11 @@ void turret_plasma_attack()
     turret_tag_fire_update();
 
     sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", VOL_BASE, ATTN_NORM);
-    pointparticles(particleeffectnum("laser_muzzleflash"), self.tur_shotorg_updated, self.tur_shotdir_updated * 1000, 1);
+    pointparticles(particleeffectnum("laser_muzzleflash"), self.tur_shotorg, self.tur_shotdir_updated * 1000, 1);
 
     proj                    = spawn ();
-    setorigin(proj, self.tur_shotorg_updated);
-    setsize(proj, '-0.5 -0.5 -0.5', '0.5 0.5 0.5');
+    setorigin(proj, self.tur_shotorg);
+    setsize(proj, '-1 -1 -1', '1 1 1');
     //setmodel(proj, "models/elaser.mdl"); // precision set above
     proj.classname       = "plasmabomb";
     proj.owner           = self;
@@ -89,7 +92,7 @@ void turret_plasma_dual_attack()
 
     sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", VOL_BASE, ATTN_NORM);
     proj                    = spawn ();
-    setorigin(proj, self.tur_shotorg_updated);
+    setorigin(proj, self.tur_shotorg);
     setsize(proj, '0 0 0', '0 0 0');
     //setmodel(proj, "models/elaser.mdl"); // precision set above
     proj.classname       = "plasmabomb";
@@ -100,7 +103,8 @@ void turret_plasma_dual_attack()
     proj.nextthink       = time + 9;
     proj.solid           = SOLID_BBOX;
     proj.movetype        = MOVETYPE_FLYMISSILE;
-    proj.velocity        = normalize(self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
+    //proj.velocity        = normalize(self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
+    proj.velocity        = self.tur_shotdir_updated  * self.shot_speed;
     proj.angles          = vectoangles(proj.velocity);
     proj.touch           = turret_plasma_projectile_explode;
     proj.flags           = FL_PROJECTILE;
@@ -150,16 +154,22 @@ void turret_plasma_std_init()
     self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
 
     // How to aim
-    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_ZEASE | TFL_AIM_GROUND2;
-
-    self.damage_flags |= TFL_DMG_HEADSHAKE;
+    //self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE;// | TFL_AIM_ZPREDICT | TFL_AIM_GROUND2;
+    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_GROUND2;
+    self.turrcaps_flags = TFL_TURRCAPS_MISSILEKILL | TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_MEDPROJ | TFL_TURRCAPS_PLAYERKILL;
 
     if (turret_stdproc_init("plasma_std") == 0)
     {
         remove(self);
         return;
     }
+
+    self.damage_flags    |= TFL_DMG_HEADSHAKE;
+    //self.firecheck_flags |= (TFL_FIRECHECK_AFF | TFL_FIRECHECK_VERIFIED);
     self.firecheck_flags |= TFL_FIRECHECK_AFF;
+
+    //self.target_select_flags |= TFL_TARGETSELECT_FOV;
+    //self.target_select_fov    = 45;
 
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/plasma.md3");
@@ -172,6 +182,7 @@ void turret_plasma_std_init()
 
     // Custom per turret frame stuff. usualy animation.
     self.turret_postthink = turret_plasma_postthink;
+    turret_do_updates(self);
 }
 
 
@@ -183,15 +194,18 @@ void turret_plasma_dual_init()
     self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
 
     // How to aim at targets
-    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_ZEASE | TFL_AIM_GROUND2;
-
-    self.damage_flags |= TFL_DMG_HEADSHAKE;
+    self.aim_flags      = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_ZPREDICT | TFL_AIM_GROUND2 | TFL_AIM_INFRONT;
+    self.turrcaps_flags = TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_MEDPROJ | TFL_TURRCAPS_PLAYERKILL;
 
     if (turret_stdproc_init("plasma_dual") == 0)
     {
         remove(self);
         return;
     }
+
+    self.damage_flags    |= TFL_DMG_HEADSHAKE;
+    self.firecheck_flags |= (TFL_FIRECHECK_AFF | TFL_FIRECHECK_VERIFIED);
+    //self.firecheck_flags |= TFL_FIRECHECK_AFF;
 
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/plasmad.md3");
@@ -218,6 +232,7 @@ void turret_plasma_dual_init()
 */
 void spawnfunc_turret_plasma()
 {
+    g_turrets_common_precash();
     //precache_model ("models/turrets/plasma.md3");
     //precache_model ("models/turrets/base.md3");
 
@@ -229,6 +244,7 @@ void spawnfunc_turret_plasma()
 */
 void spawnfunc_turret_plasma_dual()
 {
+
     //precache_model ("models/turrets/plasmad.md3");
     //precache_model ("models/turrets/base.md3");
 

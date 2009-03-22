@@ -7,8 +7,6 @@
 #include "../system/system_scoreprocs.qc" /// Target calssification
 #include "../system/system_damage.qc"     /// Outch, they are hurting me! what should i do?
 
-#include "../units/unit_common.qc"   /// Some "make life easyer" funcs.
-
 // Non combat units
 #include "../units/unit_fusionreactor.qc"  /// Supply unites that need it with power
 #include "../units/unit_targettrigger.qc"  /// Hit me!

@@ -37,9 +37,8 @@ float turret_stdproc_targetscore_generic(entity e_turret,entity e_target)
 
     float score;        // Total score
     float d_score;      // Distance score
-    //float da_score;     // Distance from aimpoint score
+    //float da_score;   // Distance from aimpoint score
     float a_score;      // Angular score
-    //float s_score;      // samescore (same target as last time)
     float m_score;      // missile score
     float p_score;      // player score
 
@@ -84,18 +83,16 @@ float turret_stdproc_targetscore_generic(entity e_turret,entity e_target)
         p_score = 1;
 
     d_score = max(d_score,0);
-    //s_score = max(s_score,0);
     a_score = max(a_score,0);
     m_score = max(m_score,0);
     p_score = max(p_score,0);
 
-    // (s_score * e_turret.target_select_samebias) +
     score = (d_score * e_turret.target_select_rangebias) +
             (a_score * e_turret.target_select_anglebias) +
             (m_score * e_turret.target_select_missilebias) +
             (p_score * e_turret.target_select_playerbias);
 
-    if(e_turret.target_range_fire < vlen(e_turret.tur_shotorg_updated - real_origin(e_target)))
+    if(e_turret.target_range_fire < vlen(e_turret.tur_shotorg - real_origin(e_target)))
         score *= 0.1;
 
 #ifdef TURRET_DEBUG
@@ -137,6 +134,7 @@ float turret_stdproc_targetscore_generic(entity e_turret,entity e_target)
     return score;
 }
 
+/*
 float turret_stdproc_targetscore_close(entity e_turret,entity e_target)
 {
     return 1 - (tvt_dist / e_turret.target_range);
@@ -162,3 +160,4 @@ float turret_stdproc_targetscore_defend(entity e_turret,entity e_target)
     return 0;
     //min(e_target.origin,e_turret.tur_defend.origin) / max(e_target.origin,e_turret.tur_defend.origin);
 }
+*/

@@ -156,7 +156,7 @@ void turret_stdproc_die()
 
 // Trow fake parts arround
     // base
-    if not(self.damage_flags & RFL_DMG_DEATH_NOGIBS)
+    if not(self.damage_flags & TFL_DMG_DEATH_NOGIBS)
     {
         makevectors(self.angles);
         if (random() > 0.5)
@@ -284,8 +284,13 @@ void turret_stdproc_damage (entity inflictor, entity attacker, float damage, flo
     else
         baseent = self;
 
+    // Enougth allready!
+    if (self.health <= 0)
+        return;
 
-    if (self.health <= 0) return;
+    // Inactive turrets take no damage. (hm..)
+    if not (baseent.tur_active)
+        return;
 
     if (teamplay != 0)
     if (self.team == attacker.team)
@@ -307,8 +312,10 @@ void turret_stdproc_damage (entity inflictor, entity attacker, float damage, flo
     if (self.classname == "turret_head")
         if (baseent.damage_flags & TFL_DMG_HEADSHAKE)
         {
-            self.angles_x = self.angles_x + random() * damage;
-            self.angles_y = self.angles_y + random() * damage;
+            //baseent.tur_aimoff_x += (random() * damage);
+            //baseent.tur_aimoff_y += ((random()*0.75) * damage);
+            self.angles_x = self.angles_x + (-0.5 + random()) * damage;
+            self.angles_y = self.angles_y + (-0.5 + random()) * damage;
         }
 
     if (baseent.turrcaps_flags & TFL_TURRCAPS_MOVE)

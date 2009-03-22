@@ -65,10 +65,10 @@ teamplay.qc
 cl_physics.qc
 
 // tZork's libs
+verbstack.qc
 movelib.qc
 steerlib.qc
 pathlib.qc
-//animation.qc
 
 g_world.qc
 g_casings.qc

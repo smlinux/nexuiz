@@ -2,6 +2,7 @@ void spawnfunc_turret_mlrs();
 void turret_mlrs_dinit();
 void turret_mlrs_attack();
 void turret_mlrs_rocket_explode();
+void turret_mlrs_rocket_touch();
 
 void turret_mlrs_postthink()
 {
@@ -19,8 +20,9 @@ void turret_mlrs_attack()
     sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", VOL_BASE, ATTN_NORM);
 
     missile                    = spawn ();
+    //setsize (missile, '0 0 0', '0 0 0'); // give it some size so it can be shot
     setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
-    setorigin(missile, self.tur_shotorg_updated);
+    setorigin(missile, self.tur_shotorg);
     missile.classname          = "mlrs_missile";
     missile.owner              = self;
     missile.bot_dodge          = TRUE;
@@ -37,7 +39,7 @@ void turret_mlrs_attack()
     missile.movetype           = MOVETYPE_FLYMISSILE;
     missile.velocity           = normalize(self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
     missile.angles             = vectoangles(missile.velocity);
-    missile.touch              = turret_mlrs_rocket_explode;
+    missile.touch              = turret_mlrs_rocket_touch;
     missile.flags              = FL_PROJECTILE;
     missile.solid              = SOLID_BBOX;
     missile.enemy              = self.enemy;
@@ -47,6 +49,16 @@ void turret_mlrs_attack()
     te_explosion (missile.origin);
 
     //self.tur_head.frame = 7 - self.volly_counter;
+}
+
+void turret_mlrs_rocket_touch()
+{
+    if( (other == self.owner) || (other == self.owner.tur_head) )
+        return;
+
+    PROJECTILE_TOUCH;
+
+    turret_mlrs_rocket_explode();
 }
 
 void turret_mlrs_rocket_explode()

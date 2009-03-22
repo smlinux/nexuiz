@@ -23,22 +23,17 @@ void turret_ewheel_projectile_explode()
 void ewheel_attack()
 {
     entity proj;
-    vector v;
-    float f,i;
+    float i;
 
     for (i=0;i<1;++i)
     {
-        f = gettagindex(self.tur_head,"tag_fire");
-        v = gettaginfo_relative(self.tur_head,f);
-        v_y = v_y * -1;
-        self.tur_shotorg = v;
         turret_do_updates(self);
 
         sound (self, CHAN_WEAPON, "weapons/lasergun_fire.wav", VOL_BASE, ATTN_NORM);
-        pointparticles(particleeffectnum("laser_muzzleflash"), self.tur_shotorg_updated, self.tur_shotdir_updated * 1000, 1);
+        pointparticles(particleeffectnum("laser_muzzleflash"), self.tur_shotorg, self.tur_shotdir_updated * 1000, 1);
 
         proj                    = spawn ();
-        setorigin(proj, self.tur_shotorg_updated);
+        setorigin(proj, self.tur_shotorg);
         //setsize(proj, '-0.5 -0.5 -0.5', '0.5 0.5 0.5');
         //setmodel(proj, "models/laser.mdl"); // precision set above
         proj.classname       = "ewheel bolt";
@@ -66,12 +61,13 @@ void ewheel_attack()
 
 }
 
-#define EWHEEL_MASS 50
+#define EWHEEL_MASS 25
 #define EWHEEL_MAXSPEED 800
-#define EWHEEL_ACCEL_SLOW 25
-#define EWHEEL_ACCEL_FAST 100
-#define EWHEEL_BREAK_SLOW 100
+#define EWHEEL_ACCEL_SLOW 100
+#define EWHEEL_ACCEL_FAST 350
+#define EWHEEL_BREAK_SLOW 150
 #define EWHEEL_BREAK_FAST 250
+#define EWHEEL_DRAG 0.25
 
 void ewheel_enemymove()
 {
@@ -116,33 +112,31 @@ void ewheel_enemymove()
     self.angles_y = (self.angles_y + real_angle_y);
 
     // Simulate banking
-    self.angles_z = bound(-45,real_angle_y * -1,45);
-
+    self.angles_z = bound(-45,real_angle_y * -2,45);
 
     if (self.frame > 40)
         self.frame = 1;
 
     makevectors(self.angles);
-
     if (self.tur_dist_aimpos > self.target_range_optimal)
     {
-        if ( angle_ofs < 10 )
+        if ( angle_ofs < 1 )
         {
             self.frame += 2;
-            movelib_move(v_forward * EWHEEL_ACCEL_FAST,EWHEEL_MAXSPEED,0,EWHEEL_MASS,0);
+            movelib_move(v_forward * EWHEEL_ACCEL_FAST,EWHEEL_MAXSPEED,EWHEEL_DRAG,EWHEEL_MASS,0);
         }
-        else if (angle_ofs < 16)
+        else if (angle_ofs < 2)
         {
-            self.frame += 0.5;
-            movelib_move(v_forward,EWHEEL_MAXSPEED,0,EWHEEL_MASS,EWHEEL_BREAK_SLOW);
+            self.frame += 1;
+            movelib_move(v_forward * EWHEEL_ACCEL_SLOW,EWHEEL_MAXSPEED,EWHEEL_DRAG,EWHEEL_MASS,EWHEEL_BREAK_SLOW);
         }
         else
         {
-            movelib_move('0 0 0',EWHEEL_MAXSPEED,0,EWHEEL_MASS,EWHEEL_BREAK_FAST);
+            movelib_move('0 0 0',EWHEEL_MAXSPEED,EWHEEL_DRAG,EWHEEL_MASS,EWHEEL_BREAK_FAST);
         }
     }
     else
-        movelib_move('0 0 0',EWHEEL_MAXSPEED,0,EWHEEL_MASS,EWHEEL_BREAK_FAST);
+        movelib_move('0 0 0',EWHEEL_MAXSPEED,EWHEEL_DRAG,EWHEEL_MASS,EWHEEL_BREAK_FAST);
 }
 
 void ewheel_roammove()
@@ -225,13 +219,16 @@ void ewheel_postthink()
 void ewheel_respawnhook()
 {
     setorigin(self,self.pos1);
-
-    //self.angles = self.wkr_spawn.angles;
-
 }
 
 void ewheel_diehook()
 {
+}
+
+float ewheel_firecheck()
+{
+    bprint("Firecheck\n");
+    return 1;
 }
 
 void turret_ewheel_dinit()
@@ -258,8 +255,8 @@ void turret_ewheel_dinit()
     }
 
     self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
-    self.turrcaps_flags = TFL_TURRCAPS_PLAYERKILL | TFL_TURRCAPS_MOVE | TFL_TURRCAPS_ROAM | TFL_TURRCAPS_LINKED;
-    self.aim_flags = TFL_AIM_SIMPLE;// TFL_AIM_LEAD | TFL_AIM_ZEASE;
+    self.turrcaps_flags = TFL_TURRCAPS_PLAYERKILL | TFL_TURRCAPS_MOVE | TFL_TURRCAPS_ROAM | TFL_TURRCAPS_HEADATTACHED;
+    //self.aim_flags = TFL_AIM_SIMPLE;// TFL_AIM_LEAD | TFL_AIM_ZEASE;
 
     self.turret_respawnhook = ewheel_respawnhook;
     self.turret_diehook = ewheel_diehook;
@@ -270,10 +267,11 @@ void turret_ewheel_dinit()
         remove(self);
         return;
     }
+    //self.turret_firecheckfunc = ewheel_firecheck;
 
     self.target_select_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK | TFL_TARGETSELECT_LOS;
     self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK | TFL_TARGETSELECT_LOS;
-    self.damage_flags |= RFL_DMG_DEATH_NOGIBS;
+    self.damage_flags |= TFL_DMG_DEATH_NOGIBS;
 
     //self.flags      = FL_CLIENT;
     self.iscreature = TRUE;
@@ -288,22 +286,6 @@ void turret_ewheel_dinit()
     setattachment(self.tur_head,self,"tag_head");
 
     self.pos1 = self.origin;
-
-    vector v;
-    float f;
-    f = gettagindex(self.tur_head,"tag_fire");
-    v = gettaginfo_relative(self.tur_head,f);
-    v_y = v_y * -1;
-
-    //setsize(self,WALKER_MIN,WALKER_MAX);
-    //setsize(self,'-70 -70 0','70 70 55');
-
-    self.tur_shotorg = v;
-    self.tur_aimorg  = v;
-
-    self.tur_aimorg_x = 0;
-    self.tur_aimorg_y = 0;
-    self.tur_aimorg_z = 25;
 
     self.idle_aim = '0 0 0';
 

@@ -1,38 +1,4 @@
 /*
-* Straight line, Dead-on (no prediction)
-* Usefull for "stupid turrets" or ones
-* that launch guided weapons and just need to apeer to
-* somewhat face (and/or track) the target.
-
-supports:
-TFL_AIM_NO
-*/
-/*
-vector turret_stdproc_aim_simple()
-{
-    float s_bu;     // Solidity backup (for ground shooters)
-    vector aim_pos;
-
-    if (self.aim_flags & TFL_AIM_NO) return self.idle_aim;
-
-    aim_pos = self.enemy.origin;
-
-    // Target ground?
-    if (self.aim_flags & TFL_AIM_GROUND)
-    {
-        s_bu = self.enemy.solid;
-        self.enemy.solid = SOLID_NOT;
-        traceline(self.enemy.origin + '0 0 128',self.enemy.origin + '0 0 -99999',1,self.enemy);
-        self.enemy.solid = s_bu;
-        aim_pos = trace_endpos;
-    }
-
-    // This is where its at.
-    return aim_pos;
-}
-*/
-
-/*
 * Generic aim
 
 supports:
@@ -47,36 +13,35 @@ TFL_AIM_ZEASE
 not supported:
 TFL_AIM_BALISTIC
 */
-
-
 vector turret_stdproc_aim_generic()
 {
-    vector pre_pos;
+
+    vector pre_pos,prep;
     float distance,impact_time,i,mintime;
-    vector prep;
 
-    //if (self.aim_flags == TFL_AIM_NO)
-    //  return self.idle_aim;
-
-    // Baseline
-    pre_pos = real_origin(self.enemy);
+    turret_tag_fire_update();
 
     if(self.aim_flags & TFL_AIM_SIMPLE)
-        return pre_pos;
+        return real_origin(self.enemy);
 
-    // This is not accurate enougth
-    //pre_pos = bot_shotlead(pre_pos, self.enemy.velocity, self.shot_speed, 0.01); //self.enemy.velocity;  * (self.tur_dist_aimpos / self.shot_speed);
-
-    // Keep track of when we can shoot the next tim and
+    // Keep track of when we can shoot the next time and
     // try to predict where the target will be then, so we can put our aimpoint there.
-    // + sys_ticrate becouse projectiles dont move during the first tic of their life.
-    mintime = max(self.attack_finished_single - time,0) + (sys_ticrate * 2);
+    // + sys_ticrate for non hitscan, becouse spawned
+    // projectiles dont move during the first tic of their life.
+    if (self.turrcaps_flags & TFL_TURRCAPS_HITSCAN)
+        mintime = max(self.attack_finished_single - time,0);
+    else
+        mintime = max(self.attack_finished_single - time,0) + sys_ticrate;
+
+    // Baseline
+    pre_pos = real_origin(self.enemy) + (self.enemy.velocity * mintime);
 
     if (self.aim_flags & TFL_AIM_INFRONT)   // Aim a bit in front of the target
-        pre_pos += normalize(normalize(self.enemy.velocity) * 16);
+        pre_pos = pre_pos + (normalize(self.enemy.velocity) * 64);
+
 
     if (self.aim_flags & TFL_AIM_BEHIND)    // Aim a bit behind the target
-        pre_pos -= normalize(normalize(self.enemy.velocity) * 16);
+        pre_pos = pre_pos - (normalize(self.enemy.velocity) * 32);
 
     // Lead?
     if (self.aim_flags & TFL_AIM_LEAD)
@@ -84,74 +49,71 @@ vector turret_stdproc_aim_generic()
     {
         // FIXME: this cant be the best way to do this..
         prep = pre_pos;
-        for(i = 0; i < 3; ++i)
+        for(i = 0; i < 4; ++i)
         {
-            distance = vlen(prep - self.tur_shotorg_updated);
+            distance = vlen(prep - self.tur_shotorg);
             impact_time = distance / self.shot_speed;
-            prep = pre_pos + self.enemy.velocity * (impact_time + mintime);
-
-
+            prep = pre_pos + self.enemy.velocity * impact_time;
         }
 
-        /* no worky well :/
-        if not(self.enemy.flags & FL_ONGROUND)
-        {
-            float z;
-            z = self.enemy.velocity_z;
-            z = z - (sv_gravity * impact_time);
-            prep_z += z;
-        }
+        /*
+        // tnx and all credit to Rudolf "div0" Polzer for this solution.
+        // hmm tobad it dont work.
+        q = solve_quadratic(self.enemy.velocity*self.enemy.velocity - self.shot_speed*self.shot_speed, 2*(pre_pos*self.enemy.velocity), pre_pos * pre_pos);
+        if(q_x > 0)
+            impact_time = q_x;
+        else
+            impact_time = q_y;
+
+        prep = self.enemy.origin + (self.enemy.velocity * impact_time);
         */
+
+        if(self.aim_flags & TFL_AIM_ZPREDICT)
+        if not(self.enemy.flags & FL_ONGROUND)
+        if(self.enemy.movetype == MOVETYPE_WALK || self.enemy.movetype == MOVETYPE_TOSS || self.enemy.movetype == MOVETYPE_BOUNCE)
+        {
+            float vz;
+            prep_z = pre_pos_z;
+            vz = self.enemy.velocity_z;
+            for(i = 0; i < impact_time; i += sys_ticrate)
+            {
+                vz = vz - (sv_gravity * sys_ticrate);
+                prep_z = prep_z + vz * sys_ticrate;
+            }
+        }
 
 
         pre_pos = prep;
     }
     else
-    {
         pre_pos = pre_pos + self.enemy.velocity * mintime;
-    }
-
 
     // Smooth out predict-Z?
+    /*
     if (self.aim_flags & TFL_AIM_ZEASE)
+    if (self.enemy.flags & FL_CLIENT)
     {
         vector v;
         v = real_origin(self.enemy);
         pre_pos_z = (pre_pos_z + v_z) * 0.5;
     }
+    */
 
-    // This turret should hit the ground neer a target rather the do a direct hit
-    if ( (self.aim_flags & TFL_AIM_GROUND) ||
-         ((self.aim_flags & TFL_AIM_GROUND2) && (self.enemy.flags & FL_ONGROUND)) )
+    if(self.aim_flags & TFL_AIM_GROUND2)
     {
-        traceline(pre_pos + '0 0 8',pre_pos - '0 0 10000',1,self.enemy);
-        pre_pos = trace_endpos;
+        tracebox(pre_pos + '0 0 32',self.enemy.mins,self.enemy.maxs,pre_pos -'0 0 48',MOVE_WORLDONLY,self.enemy);
+        if(trace_fraction != 1.0)
+            pre_pos = trace_endpos;
     }
 
-    return pre_pos;
-}
-
-
-/*
-* Aim where it is
-supports:
-TFL_AIM_NO
-*/
-/*
-vector turret_stdproc_aim_rail()
-{
-    vector pre_pos;
-
-    if (self.aim_flags & TFL_AIM_NO)
-        return self.idle_aim;
-
-    pre_pos = real_origin(self.enemy);
-
-    self.tur_dist_impact_to_aimpos = vlen(self.enemy.origin - self.tur_aimorg_updated);
-
-    self.tur_impacttime = time;
+    /*
+    // This turret should hit the ground neer a target rather the do a direct hit
+    if (self.aim_flags & TFL_AIM_GROUND)
+    {
+        traceline(pre_pos + '0 0 8',pre_pos - '0 0 10000',MOVE_WORLDONLY,self.enemy);
+        pre_pos = trace_endpos;
+    }
+    */
 
     return pre_pos;
-
 }
-*/

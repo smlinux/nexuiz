@@ -1,20 +1,21 @@
 //--// Some support routines //--//
-
 float shortangle_f(float ang1,float ang2)
 {
+
     if(ang1 > ang2)
     {
-        if(ang1 >= 180)
+        if(ang1 > 180)
             return ang1 - 360;
     }
     else
     {
-        if(ang1 <= -180)
+        if(ang1 < -180)
             return ang1 + 360;
     }
 
     return ang1;
 }
+
 vector shortangle_v(vector ang1,vector ang2)
 {
     vector vtmp;
@@ -24,7 +25,6 @@ vector shortangle_v(vector ang1,vector ang2)
 
     return vtmp;
 }
-
 
 // Get real origin
 vector real_origin(entity ent)
@@ -42,13 +42,80 @@ vector real_origin(entity ent)
     //v = v + ent.origin;
     v = v + ((ent.absmin + ent.absmax) * 0.5);
     return v;
-
 }
 
-// Plug this into wherever precashing is done.
+// Plug this into wherever precache is done.
 void g_turrets_common_precash()
 {
     precache_model ("models/turrets/c512.md3");
+    precache_model ("models/marker.md3");
+}
+
+void SUB_Remove();
+void marker_think()
+{
+    if(self.cnt)
+    if(self.cnt < time)
+    {
+        self.think = SUB_Remove;
+        self.nextthink = time;
+        return;
+    }
+
+    self.frame += 1;
+    if(self.frame > 29)
+        self.frame = 0;
+
+    self.nextthink = time;
+}
+
+void mark_error(vector where,float lifetime)
+{
+    entity err;
+
+    err = spawn();
+    err.classname = "error_marker";
+    setmodel(err,"models/marker.md3");
+    setorigin(err,where);
+    err.movetype = MOVETYPE_NONE;
+    err.think = marker_think;
+    err.nextthink = time;
+    err.skin = 0;
+    if(lifetime)
+        err.cnt = lifetime + time;
+}
+
+void mark_info(vector where,float lifetime)
+{
+    entity err;
+
+    err = spawn();
+    err.classname = "info_marker";
+    setmodel(err,"models/marker.md3");
+    setorigin(err,where);
+    err.movetype = MOVETYPE_NONE;
+    err.think = marker_think;
+    err.nextthink = time;
+    err.skin = 1;
+    if(lifetime)
+        err.cnt = lifetime + time;
+}
+
+entity mark_misc(vector where,float lifetime)
+{
+    entity err;
+
+    err = spawn();
+    err.classname = "mark_misc";
+    setmodel(err,"models/marker.md3");
+    setorigin(err,where);
+    err.movetype = MOVETYPE_NONE;
+    err.think = marker_think;
+    err.nextthink = time;
+    err.skin = 3;
+    if(lifetime)
+        err.cnt = lifetime + time;
+    return err;
 }
 
 /*
@@ -147,3 +214,160 @@ vector angleofs2(entity from, vector to)
     return v_res;
 }
 
+vector angleofs3(vector from,vector from_a, entity to)
+{
+    vector v_res;
+
+    // makevectors(from.angles);
+    v_res = normalize(to.origin - from);
+    v_res = vectoangles(v_res);
+    v_res = v_res - from_a;
+
+    if (v_res_x < 0) v_res_x += 360;
+    if (v_res_x > 180) v_res_x -= 360;
+
+    if (v_res_y < 0) v_res_y += 360;
+    if (v_res_y > 180) v_res_y -= 360;
+
+    return v_res;
+}
+
+float turret_tag_setup(float linked)
+{
+    vector v;
+    float f;
+
+    // Laters dooz
+    if (linked)
+        return 0;
+
+    f = gettagindex(self,"tag_head");
+    v = gettaginfo(self,f);
+    setorigin(self.tur_head,v);
+
+    f = gettagindex(self.tur_head,"tag_fire");
+    v = gettaginfo(self.tur_head,f);
+    self.tur_shotorg = v;
+
+    return 1;
+}
+
+float turret_tag_fire_update()
+{
+    vector v;
+    float f;
+
+    f = gettagindex(self.tur_head,"tag_fire");
+    v = gettaginfo(self.tur_head,f);
+
+    self.tur_shotorg = v;
+
+    return 1;
+}
+
+void FireImoBeam (vector start,vector end,vector smin,vector smax,
+                  float bforce,float f_dmg,float f_velfactor, float deathtype)
+
+{
+    local vector hitloc, force, endpoint, dir;
+    local entity ent;
+
+    dir = normalize(end - start);
+    force = dir * bforce;
+
+    // go a little bit into the wall because we need to hit this wall later
+    end = end + dir;
+
+    // trace multiple times until we hit a wall, each obstacle will be made unsolid.
+    // note down which entities were hit so we can damage them later
+    while (1)
+    {
+        tracebox(start, smin, smax, end, FALSE, self);
+
+        // if it is world we can't hurt it so stop now
+        if (trace_ent == world || trace_fraction == 1)
+            break;
+
+        if (trace_ent.solid == SOLID_BSP)
+            break;
+
+        // make the entity non-solid so we can hit the next one
+        trace_ent.railgunhit = TRUE;
+        trace_ent.railgunhitloc = end;
+        trace_ent.railgunhitsolidbackup = trace_ent.solid;
+
+        // stop if this is a wall
+
+        // make the entity non-solid
+        trace_ent.solid = SOLID_NOT;
+    }
+
+    endpoint = trace_endpos;
+
+    // find all the entities the railgun hit and restore their solid state
+    ent = findfloat(world, railgunhit, TRUE);
+    while (ent)
+    {
+        // restore their solid type
+        ent.solid = ent.railgunhitsolidbackup;
+        ent = findfloat(ent, railgunhit, TRUE);
+    }
+
+    // find all the entities the railgun hit and hurt them
+    ent = findfloat(world, railgunhit, TRUE);
+    while (ent)
+    {
+        // get the details we need to call the damage function
+        hitloc = ent.railgunhitloc;
+        ent.railgunhitloc = '0 0 0';
+        ent.railgunhitsolidbackup = SOLID_NOT;
+        ent.railgunhit = FALSE;
+
+        // apply the damage
+        if (ent.takedamage)
+        {
+            Damage (ent, self, self, f_dmg, deathtype, hitloc, force);
+            ent.velocity = ent.velocity * f_velfactor;
+            //ent.alpha = 0.25 + random() * 0.75;
+        }
+
+        // advance to the next entity
+        ent = findfloat(ent, railgunhit, TRUE);
+    }
+    trace_endpos = endpoint;
+}
+
+void turrets_precash()
+{
+    precache_model ("models/turrets/c512.md3");
+
+    precache_sound ("turrets/phaser.ogg");
+
+    precache_model ("models/turrets/base-gib1.md3");
+    precache_model ("models/turrets/base-gib2.md3");
+    precache_model ("models/turrets/base-gib3.md3");
+    precache_model ("models/turrets/base-gib4.md3");
+
+    precache_model ("models/turrets/head-gib1.md3");
+    precache_model ("models/turrets/head-gib2.md3");
+    precache_model ("models/turrets/head-gib3.md3");
+    precache_model ("models/turrets/head-gib4.md3");
+
+    precache_model ("models/turrets/base.md3");
+    precache_model ("models/turrets/flac.md3");
+    precache_model ("models/turrets/pd_proj.md3");
+    precache_model ("models/turrets/reactor.md3");
+    precache_model ("models/turrets/mlrs_rocket.md3");
+    precache_model ("models/turrets/hellion.md3");
+    precache_model ("models/turrets/hunter2.md3");
+    precache_model ("models/turrets/hk.md3");
+    precache_model ("models/turrets/machinegun.md3");
+    precache_model ("models/turrets/rocket.md3");
+    precache_model ("models/turrets/mlrs.md3");
+    precache_model ("models/turrets/phaser.md3");
+    precache_model ("models/turrets/phaser_beam.md3");
+    precache_model ("models/turrets/plasmad.md3");
+    precache_model ("models/turrets/plasma.md3");
+    precache_model ("models/turrets/tesla_head.md3");
+    precache_model ("models/turrets/tesla_base.md3");
+}

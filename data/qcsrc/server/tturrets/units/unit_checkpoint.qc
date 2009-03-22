@@ -14,6 +14,7 @@
 #define pathgoal    goalstack01
 #define pathcurrent goalstack02
 
+/*
 entity path_makeorcache(entity forwho,entity start, entity end)
 {
     entity oldself;
@@ -21,11 +22,12 @@ entity path_makeorcache(entity forwho,entity start, entity end)
     oldself = self;
     self = forwho;
 
-    pth = pathlib_makepath(start.origin,end.origin,PFL_GROUNDSNAP,500,1.5,PT_QUICKSTAR);
+    //pth = pathlib_makepath(start.origin,end.origin,PFL_GROUNDSNAP,500,1.5,PT_QUICKSTAR);
 
     self = oldself;
     return pth;
 }
+*/
 
 void turret_checkpoint_use()
 {
@@ -42,6 +44,9 @@ If the checkpoint chain in not looped, the unit will go "Roaming" when the last 
 */
 void turret_checkpoint_init()
 {
+    traceline(self.origin, self.origin - '0 0 1024', MOVE_WORLDONLY, self);
+    setorigin(self,trace_endpos + '0 0 8');
+
     if(self.target != "")
     {
         self.enemy = find(world,targetname,self.target);
@@ -54,7 +59,7 @@ void spawnfunc_turret_checkpoint()
 {
     setorigin(self,self.origin);
     self.think = turret_checkpoint_init;
-    self.nextthink = time + 0.25;
+    self.nextthink = time + 0.1;
 }
 
 // Compat.

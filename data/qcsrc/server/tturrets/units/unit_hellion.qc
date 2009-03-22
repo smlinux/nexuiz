@@ -30,7 +30,7 @@ void turret_hellion_attack()
     sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", VOL_BASE, ATTN_NORM);
 
     missile = spawn ();
-    setorigin(missile, self.tur_shotorg_updated);
+    setorigin(missile, self.tur_shotorg);
     setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
 
     missile.classname          = "hellion_missile";

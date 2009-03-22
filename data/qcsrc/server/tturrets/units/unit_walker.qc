@@ -1,35 +1,43 @@
-//#define rocket_rack tur_head.enemy
-
 #define ANIM_NO 0
-#define ANIM_WALK 1
-#define ANIM_RUN 1.1
-#define ANIM_STRAFE_L 2
-#define ANIM_STRAFE_R 3
-#define ANIM_TURN 2
-#define ANIM_JUMP 4
-#define ANIM_LAND 5
-#define ANIM_PAIN 6
-#define ANIM_MEELE 7
+#define ANIM_REVERSE 1
+#define ANIM_WALK 2
+#define ANIM_RUN 3
+#define ANIM_STRAFE_L 4
+#define ANIM_STRAFE_R 5
+#define ANIM_TURN 6
+#define ANIM_JUMP 7
+#define ANIM_LAND 8
+#define ANIM_PAIN 9
+#define ANIM_MEELE 10
+#define ANIM_SWIM 11
+#define ANIM_ROAM 12
+
+#define WVM_IDLE_UP 25
+#define WVM_IDLE    50
+
+#define WVM_PATH  1000
+#define WVM_ENEMY 2000
+#define WVM_STOP  3000
+#define WVM_DODGE 4000
+#define walker_verbs_move verbs_move
+
+#define WVA_MINIGUN 1
+#define WVA_ROCKET  10
+#define WVA_MEELE   20
+#define walker_verbs_attack verbs_attack
+
+#define WVI_IDLE 1
+#define WVI_ROAM 10
+#define walker_verbs_idle verbs_idle
 
 .float animflag;
-
 .entity wkr_props;
 .entity wkr_spawn;
 
 #define WALKER_MIN '-70 -70 5'
 #define WALKER_MAX '70 70 70'
 
-/*
-.entity goalcurrent, goalstack01, goalstack02, goalstack03;
-.entity goalstack04, goalstack05, goalstack06, goalstack07;
-.entity goalstack08, goalstack09, goalstack10, goalstack11;
-.entity goalstack12, goalstack13, goalstack14, goalstack15;
-.entity goalstack16, goalstack17, goalstack18, goalstack19;
-.entity goalstack20, goalstack21, goalstack22, goalstack23;
-.entity goalstack24, goalstack25, goalstack26, goalstack27;
-.entity goalstack28, goalstack29, goalstack30, goalstack31;
-*/
-
+#define WALKER_PATH(s,e) pathlib_astar(s,e)
 
 float walker_firecheck()
 {
@@ -43,84 +51,202 @@ void walker_meele_do_dmg()
     makevectors(self.angles);
     where = self.origin + v_forward * 128;
 
-    e = findradius(where,128);
+    e = findradius(where,64);
     while (e)
     {
         if (turret_validate_target(self,e,self.target_validate_flags))
-            if (e != self)
+            if (e != self && e.owner != self)
                 Damage(e,self,self,cvar("g_turrets_unit_walker_std_meele_dmg"),DEATH_TURRET,'0 0 0', v_forward * cvar("g_turrets_unit_walker_std_meele_force") );
 
         e = e.chain;
     }
 }
 
+.vector moveto;
+.vector steerto;
 void walker_animate()
 {
+    vector wish_angle,real_angle;
+    float vz;
+
+    wish_angle = self.steerto;
+    real_angle = wish_angle - self.angles;
+    vz = self.velocity_z;
+
+    if (self.tur_head.frame != 0)
+        self.tur_head.frame = self.tur_head.frame +1;
+
+    if (self.tur_head.frame > 12)
+        self.tur_head.frame = 0;
 
     switch (self.animflag)
     {
     case ANIM_NO:
         if(self.frame != 0)
             self.frame = 0;
+
+        movelib_beak_simple(cvar("g_turrets_unit_walker_speed_stop"));
         break;
 
-    case ANIM_WALK:
-        self.frame = self.frame + 1;
+    case ANIM_REVERSE:
+        if ((self.frame < 5) || (self.frame > 25))
+            self.frame = 5;
+
+        self.frame = self.frame +1;
+        movelib_move_simple(v_forward * -1 ,cvar("g_turrets_unit_walker_speed_walk"),0.6);
+
         if (self.frame > 25)
             self.frame = 5;
         break;
 
+    case ANIM_TURN:
+
+        if (self.frame < 30)
+            self.frame = 30;
+
+        self.frame = self.frame + 1;
+
+        self.angles_y += bound(-15,shortangle_f(real_angle_y,self.angles_y),15);
+
+        movelib_beak_simple(cvar("g_turrets_unit_walker_speed_stop"));
+
+        if (self.frame > 55)
+            self.frame = 35;
+
+        break;
+
+    case ANIM_WALK:
+        if ((self.frame < 5) || (self.frame > 25))
+            self.frame = 5;
+
+        self.frame = self.frame +1;
+        self.angles_y += bound(-10,shortangle_f(real_angle_y,self.angles_y),10);
+        movelib_move_simple(v_forward ,cvar("g_turrets_unit_walker_speed_walk"),0.6);
+
+        if (self.frame > 25)
+            self.frame = 5;
+        break;
+
+    case ANIM_ROAM:
+        if ((self.frame < 5) || (self.frame > 25))
+            self.frame = 5;
+
+        self.frame = self.frame +1;
+
+        self.angles_y += bound(-15,shortangle_f(real_angle_y,self.angles_y),15);
+
+        movelib_move_simple(v_forward ,cvar("g_turrets_unit_walker_speed_roam"),0.5);
+
+        if (self.frame > 25)
+            self.frame = 5;
+        break;
+
+    case ANIM_SWIM:
+        if (self.frame < 142)
+            self.frame = 142;
+
+        self.frame = self.frame +1;
+        self.angles_y += bound(-10,shortangle_f(real_angle_y,self.angles_y),10);
+        self.angles_x += bound(-10,shortangle_f(real_angle_x,self.angles_x),10);
+        movelib_move_simple(v_forward, cvar("g_turrets_unit_walker_speed_swim"),0.3);
+        vz = self.velocity_z + sin(time * 4) * 8;
+
+        if (self.frame > 151)
+            self.frame = 146;
+        break;
+
     case ANIM_RUN:
 
-        self.frame = self.frame + 2;
+        if ((self.frame < 5) || (self.frame > 25))
+            self.frame = 5;
+
+        self.angles_y += bound(-5,shortangle_f(real_angle_y,self.angles_y),5);
+        movelib_move_simple(v_forward, cvar("g_turrets_unit_walker_speed_run"),0.6);
+
         if (self.frame > 25)
             self.frame = 5;
         break;
 
     case ANIM_STRAFE_L:
-        if (self.frame < 35) self.frame = 35;
+        if (self.frame < 30)
+            self.frame = 30;
+
         self.frame = self.frame + 1;
-        if (self.frame > 55) self.frame = 35;
+        self.angles_y += bound(-2.5,shortangle_f(real_angle_y,self.angles_y),2.5);
+        movelib_move_simple(v_right * -1, cvar("g_turrets_unit_walker_speed_walk"),0.8);
+
+        if (self.frame > 55)
+            self.frame = 35;
         break;
 
     case ANIM_STRAFE_R:
-        if (self.frame < 65) self.frame = 65;
+        if (self.frame < 60)
+            self.frame = 60;
+
         self.frame = self.frame + 1;
-        if (self.frame > 85) self.frame = 65;
+        self.angles_y += bound(-2.5,shortangle_f(real_angle_y,self.angles_y),2.5);
+        movelib_move_simple(v_right, cvar("g_turrets_unit_walker_speed_walk"),0.8);
+
+        if (self.frame > 85)
+            self.frame = 65;
+
         break;
 
     case ANIM_JUMP:
-        if (self.frame < 95) self.frame = 95;
+        if (self.frame < 95)
+            self.frame = 95;
+
+        self.velocity += '0 0 1' * cvar("g_turrets_unit_walker_speed_jump");
+
         if (self.frame > 100)
             self.frame = self.frame + 1;
 
         break;
 
     case ANIM_LAND:
-        if (self.frame < 100) self.frame = 100;
+        if (self.frame < 100)
+            self.frame = 100;
+
         self.frame = self.frame + 1;
+
         if (self.frame > 107)
             self.animflag = ANIM_NO;
+
         break;
 
     case ANIM_PAIN:
-        if (self.frame < 60) self.frame = 90;
+        if (self.frame < 60)
+            self.frame = 90;
+
         self.frame = self.frame + 1;
+
         if (self.frame > 95)
             self.animflag = ANIM_NO;
+
         break;
 
     case ANIM_MEELE:
-        if (self.frame < 123) self.frame = 123;
-        self.frame = self.frame + 1;
+        movelib_beak_simple(250);
+
+        if (self.frame < 123)
+            self.frame = 123;
+
+        self.frame = self.frame + 2;
 
         if (self.frame == 133)
             walker_meele_do_dmg();
 
         if (self.frame > 140)
+        {
             self.animflag = ANIM_NO;
-
+            self.frame = 0;
+        }
     }
+    self.velocity_z = vz;
+
+    if(self.flags & FL_ONGROUND)
+        movelib_groundalign4point(300,100);
+
 }
 
 
@@ -154,7 +280,6 @@ void walker_rocket_damage (entity inflictor, entity attacker, float damage, floa
         walker_rocket_explode();
 }
 
-//#define WALKER_ROCKET_MOVE movelib_move(newdir * 275,900,0.1,10)
 #define WALKER_ROCKET_MOVE movelib_move_simple(newdir,1000,cvar("g_turrets_unit_walker_std_rocket_tunrate")); UpdateCSQCProjectile(self)
 void walker_rocket_loop();
 void walker_rocket_think()
@@ -202,12 +327,8 @@ void walker_rocket_think()
     // Enemy dead? just keep on the current heading then.
     if ((self.enemy == world) || (self.enemy.deadflag != DEAD_NO))
     {
-
         // Make sure we dont return to tracking a respawned player
         self.enemy = world;
-
-        // Turn model
-        self.angles = vectoangles(self.velocity);
     }
 
     if (self.enemy)
@@ -220,12 +341,7 @@ void walker_rocket_think()
         newdir  = normalize(self.velocity);
     }
 
-    // Turn model
-    self.angles = vectoangles(self.velocity);
-
-
     WALKER_ROCKET_MOVE;
-    //UpdateCSQCProjectile(self);
 }
 
 void walker_rocket_loop3()
@@ -270,8 +386,6 @@ void walker_rocket_loop2()
         self.think = walker_rocket_loop3;
         return;
     }
-
-    self.angles = vectoangles(self.velocity);
     newdir = steerlib_pull(self.tur_shotorg);
     WALKER_ROCKET_MOVE;
 }
@@ -290,9 +404,9 @@ void walker_fire_rocket(vector org)
     entity rocket;
 
 
-    //self.angles_x *= -1;
+    self.angles_x *= -1;
     makevectors(self.angles);
-    //self.angles_x *= -1;
+    self.angles_x *= -1;
 
     te_explosion (org);
 
@@ -325,7 +439,7 @@ void walker_fire_rocket(vector org)
 
     rocket.nextthink          = time;// + 0.25;
     rocket.movetype           = MOVETYPE_FLY;
-    rocket.velocity           = normalize((v_forward + v_up * 0.25) + (randomvec() * 0.1)) * cvar("g_turrets_unit_walker_std_rocket_speed");
+    rocket.velocity           = normalize((v_forward + v_up * 0.5) + (randomvec() * 0.2)) * cvar("g_turrets_unit_walker_std_rocket_speed");
     rocket.angles             = vectoangles(rocket.velocity);
     rocket.touch              = walker_rocket_explode;
     rocket.flags              = FL_PROJECTILE;
@@ -334,15 +448,6 @@ void walker_fire_rocket(vector org)
 
 	CSQCProjectile(rocket, FALSE, PROJECTILE_ROCKET, FALSE); // no culling, has fly sound
 }
-
-/*
-#define s_turn 10
-#define s_walk 100
-#define s_run 300
-#define s_accel1 8
-#define s_accel2 16
-#define s_decel 8
-*/
 
 void rv_think()
 {
@@ -369,7 +474,7 @@ void rv_think()
     else
         f = gettagindex(self.owner,"tag_rocket02");
 
-    org = self.owner.origin + gettaginfo_relative(self.owner,f);
+    org = gettaginfo(self.owner,f);
 
     self.nextthink = time + 0.2;
     oldself = self;
@@ -379,68 +484,110 @@ void rv_think()
 }
 
 /*
-void acb_run()
+void walker_move()
 {
-    //bprint("run\n");
-    animation_set(self,5,25,40,AF_ENDCALLBACK,5);
-}
-void acb_walk()
-{
-    bprint("walk\n");
-    animation_set(self,5,25,20,AF_ENDCALLBACK,5);
-}
-void acb_meele()
-{
-    walker_do_meele();
-}
+    vector major,minor,f,b,l,r;
+    float lf,lb,lr,ll,bl,tl;
 
-void set_acb(void() acb_func)
-{
-    self.animator_callback = acb_func;
-    if(animation_query(self) != AS_RUNNING)
+    if(self.animflag == ANIM_MEELE)
+        return;
+
+    tl = vlen(self.origin - self.moveto);
+    switch(self.waterlevel)
     {
-        bprint("Not running\n");
-        acb_func();
+        case 0:
+            self.animflag = ANIM_WALK;
+        case 1:
+        case 2:
+            if(self.animflag == ANIM_WALK)
+                self.animflag = ANIM_WALK;
+            else
+                self.animflag = ANIM_SWIM;
+            break;
+        case 3:
+            self.animflag = ANIM_SWIM;
+    }
+
+    if(self.animflag == ANIM_SWIM)
+    {
+        self.steerto = vectoangles(steerlib_attract2(self.moveto,0.5,500,0.95));
+        return;
+    }
+
+    if(tl < 250)
+    {
+        self.animflag = ANIM_WALK;
     }
     else
     {
-        if not(self.animator.anim_flags & AF_ENDCALLBACK)
-            self.animator.anim_flags = self.animator.anim_flags | AF_ENDCALLBACK;
+        self.animflag = ANIM_RUN;
     }
+
+    self.steerto = vectoangles(steerlib_attract2(self.moveto,0.5,500,0.95));
+    f = self.origin + v_forward;
+    lf = vlen(self.moveto - f);
+    bl = lf;
+    major = v_forward;
+    minor = major;
+
+    b = self.origin - v_forward;
+    lb = vlen(self.moveto - b);
+    if(bl > lb)
+    {
+        minor = major;
+        major = v_forward * -1;
+        bl = lb;
+    }
+
+    r = self.origin + v_right;
+    lr = vlen(self.moveto - r);
+    if(bl > lr)
+    {
+
+        minor = major;
+        major = v_right;
+        bl = lr;
+        self.steerto = vectoangles(v_right);
+        self.animflag = ANIM_STRAFE_R;
+
+    }
+
+    l = self.origin - v_right;
+    ll = vlen(self.moveto - l);
+    if(bl > ll)
+    {
+
+        minor = major;
+        major = v_right * -1;
+        bl = ll;
+        self.steerto = vectoangles(v_right*-1);
+        self.animflag = ANIM_STRAFE_L;
+
+    }
+
 }
 */
 
-void walker_postthink()
+float walker_moveverb_path(float eval)
 {
-    vector wish_angle;
-    vector real_angle;
-    vector steer;
-    float vel;
-
-    //if (self.flags & FL_ONGROUND)
-    //if (self.animflag != ANIM_MEELE)
-    //    self.animflag = ANIM_NO;
-
-    if (self.tur_head.attack_finished_single < time)
-    if (self.enemy)
+    if(eval)
     {
-        entity rv;
+        if(self.animflag == ANIM_MEELE)
+            return VS_CALL_NO;
 
-        rv = spawn();
-        rv.think = rv_think;
-        rv.nextthink = time;
-        rv.cnt = 4;
-        rv.owner = self;
+        if(self.pathcurrent)
+            return verb.verb_static_value;
 
-        self.tur_head.attack_finished_single = time + cvar("g_turrets_unit_walker_std_rocket_refire");
+        return VS_CALL_NO;
     }
 
     // Do we have a path?
-    if (self.pathcurrent)
+    if not(self.pathcurrent)
     {
-        //set_acb(acb_walk);
-        self.animflag = ANIM_WALK;
-
+        return VS_CALL_NO;
+    }
+    else
+    {
         // Are we close enougth to a path node to switch to the next?
         if (vlen(self.origin  - self.pathcurrent.origin) < 64)
             if (self.pathcurrent.path_next == world)
@@ -456,7 +603,7 @@ void walker_postthink()
 
                     if(self.pathgoal.enemy)
                     {
-                        self.pathcurrent = pathlib_makepath(self.pathgoal.origin,self.pathgoal.enemy.origin,PFL_GROUNDSNAP,1500,2,PT_QUICKBOX);
+                        self.pathcurrent = WALKER_PATH(self.pathgoal.origin,self.pathgoal.enemy.origin);
                         self.pathgoal = self.pathgoal.enemy;
                     }
                 }
@@ -465,103 +612,234 @@ void walker_postthink()
             }
             else
                 self.pathcurrent = self.pathcurrent.path_next;
-
-        steer = steerlib_attract2(self.pathcurrent.origin,0.5,2000,0.95);
-        vel = 150;
     }
-    else // Roaming mode
-    {
-        if (self.enemy)
-        {
-            wish_angle = angleofs(self,self.enemy);
-            steer = steerlib_pull(self.enemy.origin);
 
-            if (self.tur_dist_aimpos < cvar("g_turrets_unit_walker_std_meele_range"))
-            {
-                if (fabs(wish_angle_y) < 15)
-                {
-                    vel = 0;
-                    //set_acb(acb_meele);
-                    //walker_do_meele();
-                    self.animflag = ANIM_MEELE;
-                    return;
-                }
-            }
-            else
-            {
-                if (fabs(wish_angle_y) < 15)
-                {
-                    //set_acb(acb_run);
-                    self.animflag = ANIM_RUN;
-                    vel = 300;
-                }
-                else if (fabs(wish_angle_y) < 30)
-                {
-                    //set_acb(acb_walk);
+
+    if (self.pathcurrent)
+    {
+        switch(self.waterlevel)
+        {
+            case 0:
+                self.animflag = ANIM_WALK;
+            case 1:
+            case 2:
+                if(self.animflag == ANIM_WALK)
                     self.animflag = ANIM_WALK;
-                    vel = 150;
-                }
                 else
-                {
-                    //set_acb(acb_walk);
-                    self.animflag = ANIM_WALK;
-                    vel = 50;
-                }
-            }
+                    self.animflag = ANIM_SWIM;
+                break;
+            case 3:
+                self.animflag = ANIM_SWIM;
         }
-        else
-        {
-            vel = 0;
 
-            if(self.animflag != ANIM_MEELE)
-                self.animflag = ANIM_NO;
-        }
-    }
+        self.moveto = self.pathcurrent.origin;
+        self.steerto = vectoangles(steerlib_attract2(self.moveto,0.5,500,0.95));
 
-    // Align the walker to the ground
-
-    self.angles_x = self.angles_x  * -1;
-    makevectors(self.angles);
-    self.angles_x = self.angles_x  * -1;
-
-    traceline(self.origin + '0 0 15', self.origin - '0 0 150' ,MOVE_WORLDONLY,self);
-    wish_angle = (trace_endpos);
-    traceline(self.origin  + v_forward * 10 + '0 0 15', self.origin + v_forward * 10 - '0 0 150' ,MOVE_WORLDONLY,self);
-    real_angle = vectoangles(normalize( trace_endpos - wish_angle));
-
-    self.angles_x = real_angle_x;
-    self.angles_z = real_angle_z;
-
-    if(vel == 0)
-    {
-        self.velocity = '0 0 0';
-        //animator_remove(self);
+        return VS_CALL_YES_DOING;
     }
     else
+        return VS_CALL_YES_DONE;
+}
+
+float walker_moveverb_enemy(float eval)
+{
+    if(eval)
     {
-        steer  = steer * 0.5  + steerlib_traceavoid(0.3,256);
-        float vz;
-        vz = self.velocity_z;
-        movelib_move_simple(steer * 200,vel,0.5);
-        self.velocity_z = vz;
+        if(self.animflag == ANIM_MEELE)
+            return VS_CALL_NO;
 
-        wish_angle = vectoangles(self.velocity);
+        if(self.enemy == world)
+            return VS_CALL_NO;
 
-        real_angle = wish_angle - self.angles;
+        if(tracewalk(self.enemy, self.origin, self.mins, self.maxs, self.enemy.origin, MOVE_NORMAL))
+            return verb.verb_static_value;
 
-        real_angle_y = shortangle_f(real_angle_y,self.angles_y);
-
-        self.angles_y = self.angles_y + bound(-5,real_angle_y,5);
+        return VS_CALL_NO;
     }
+
+    switch(self.waterlevel)
+    {
+        case 0:
+            if(self.tur_dist_enemy > 500)
+                self.animflag = ANIM_RUN;
+            else
+                self.animflag = ANIM_WALK;
+        case 1:
+        case 2:
+            if(self.animflag == ANIM_WALK)
+                self.animflag = ANIM_WALK;
+            else
+                self.animflag = ANIM_SWIM;
+            break;
+        case 3:
+            self.animflag = ANIM_SWIM;
+    }
+
+    self.moveto = self.enemy.origin;
+    self.steerto = vectoangles(steerlib_attract2(self.moveto,0.5,500,0.95));
+
+    return VS_CALL_YES_DOING;
+}
+
+float walker_moveverb_idle_pause(float eval)
+{
+    if(eval)
+    {
+        if(self.animflag == ANIM_MEELE)
+            return VS_CALL_NO;
+
+        return verb.verb_static_value;
+
+    }
+
+    self.moveto = self.origin;
+    self.steerto = v_forward;
+    self.animflag = ANIM_NO;
+
+    return VS_CALL_YES_DOING;
+}
+
+float walker_moveverb_idle_roam(float eval)
+{
+    if(eval)
+    {
+        if(self.animflag == ANIM_MEELE)
+            return VS_CALL_NO;
+
+        return verb.verb_static_value;
+    }
+
+    vector v;
+    v_x = (random() * 32) - (random() * 32);
+    v_y = (random() * 32) - (random() * 32);
+    v = self.origin + v_forward * 64 + v;
+    self.pos1 = self.pos1 * 0.9 + v * 0.1;
+
+    self.moveto = self.origin + v_forward * 10;
+    v = self.angles;
+    v_y += random() * 15;
+    v_y -= random() * 15;
+    self.steerto = v;
+
+
+    switch(self.waterlevel)
+    {
+        case 0:
+            self.animflag = ANIM_ROAM;
+        case 1:
+        case 2:
+            if(self.animflag != ANIM_SWIM)
+                self.animflag = ANIM_ROAM;
+
+            break;
+        case 3:
+            self.animflag = ANIM_SWIM;
+    }
+
+    return VS_CALL_YES_DOING;
+}
+
+float walker_moveverb_idle(float eval)
+{
+    if(eval)
+    {
+        if(self.animflag == ANIM_MEELE)
+            return VS_CALL_NO;
+
+        return verb.verb_static_value;
+    }
+
+    if(verb.wait < time)
+    {
+        verb.wait = random() * 10;
+
+        if(random() < 0.5)
+            verbstack_push(self.walker_verbs_move, walker_moveverb_idle_pause,   WVM_IDLE + WVM_IDLE_UP, verb.wait);
+        else
+            verbstack_push(self.walker_verbs_move, walker_moveverb_idle_roam,   WVM_IDLE + WVM_IDLE_UP, verb.wait);
+
+        verb.wait += time;
+    }
+
+    return VS_CALL_YES_DOING;
+}
+float walker_attackverb_meele(float eval)
+{
+    if(eval)
+    {
+        if(cvar("g_turrets_nofire"))
+            return VS_CALL_NO;
+
+        if(self.animflag == ANIM_SWIM || self.animflag == ANIM_MEELE)
+            return VS_CALL_NO;
+
+        if(!self.enemy)
+            return VS_CALL_NO;
+
+        vector wish_angle;
+        wish_angle = angleofs(self,self.enemy);
+
+        if (self.tur_dist_enemy < cvar("g_turrets_unit_walker_std_meele_range"))
+            if (fabs(wish_angle_y) < 15)
+                return verb.verb_static_value;
+
+        return VS_CALL_NO;
+    }
+
+    self.moveto = self.enemy.origin;
+    self.steerto = vectoangles(steerlib_attract2(self.moveto,0.5,500,0.95));
+
+    self.animflag = ANIM_MEELE;
+
+    return VS_CALL_YES_DOING;
+}
+
+float walker_attackverb_rockets(float eval)
+{
+    if(eval)
+    {
+        if (self.tur_head.attack_finished_single > time)
+            return VS_CALL_NO;
+
+        if not(self.enemy)
+            return VS_CALL_NO;
+
+        if (cvar("g_turrets_nofire"))
+            return VS_CALL_NO;
+
+        if (self.tur_dist_enemy < cvar("g_turrets_unit_walker_std_rockets_range_min"))
+            return VS_CALL_NO;
+
+        if (self.tur_dist_enemy > cvar("g_turrets_unit_walker_std_rockets_range"))
+            return VS_CALL_NO;
+
+        return verb.verb_static_value;
+    }
+
+    entity rv;
+    rv           = spawn();
+    rv.think     = rv_think;
+    rv.nextthink = time;
+    rv.cnt       = 4;
+    rv.owner     = self;
+
+    self.tur_head.attack_finished_single = time + cvar("g_turrets_unit_walker_std_rocket_refire");
+
+    return VS_CALL_YES_DONE;
+
+}
+
+void walker_postthink()
+{
+
+    self.angles_x *= -1;
+    makevectors(self.angles);
+    self.angles_x *= -1;
+
+    verbstack_pop(self.walker_verbs_attack);
+    verbstack_pop(self.walker_verbs_move);
+
     walker_animate();
-
-    if (self.tur_head.frame != 0)
-        self.tur_head.frame = self.tur_head.frame +1;
-
-    if (self.tur_head.frame > 12)
-        self.tur_head.frame = 0;
-
-
 }
 
 void walker_attack()
@@ -574,13 +852,13 @@ void walker_attack()
 
     sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", VOL_BASE, ATTN_NORM);
 
-    fireBallisticBullet (self.tur_shotorg_updated, self.tur_shotdir_updated,self.shot_spread, self.shot_speed, 5, self.shot_dmg, 0, self.shot_force, DEATH_TURRET, 0, 1, cvar("g_balance_uzi_bulletconstant"));
-    te_smallflash(self.tur_shotorg_updated);
+    fireBallisticBullet (self.tur_shotorg, self.tur_shotdir_updated,self.shot_spread, self.shot_speed, 5, self.shot_dmg, 0, self.shot_force, DEATH_TURRET, 0, 1, cvar("g_balance_uzi_bulletconstant"));
+    //te_smallflash(self.tur_shotorg_updated);
 
     if (!(self.uzi_bulletcounter & 3))
     {
 
-        trailparticles(self,particleeffectnum("EF_MGTURRETTRAIL"),self.tur_shotorg_updated,trace_endpos);
+        //trailparticles(self,particleeffectnum("EF_MGTURRETTRAIL"),self.tur_shotorg_updated,trace_endpos);
         // te_lightning1(self,self.tur_shotorg_updated,trace_endpos);
         flash = spawn();
         setmodel(flash, "models/uziflash.md3"); // precision set below
@@ -603,15 +881,13 @@ void walker_respawnhook()
     vector vtmp;
     entity e;
 
-    //load_unit_settings(self.rocket_rack,"walker_std_rocket",1);
-
     self.origin = self.wkr_spawn.origin;
     self.wkr_props.solid = SOLID_BBOX;
     self.wkr_props.alpha = 1;
 
     self.angles = self.wkr_spawn.angles;
-    vtmp = self.origin;
-    vtmp_z +=self.wkr_spawn.origin_z + self.wkr_spawn.maxs_z;
+    vtmp = self.wkr_spawn.origin;
+    vtmp_z += self.wkr_spawn.maxs_z;
     setorigin(self,vtmp);
 
     if (self.target != "")
@@ -619,7 +895,7 @@ void walker_respawnhook()
         e = find(world,targetname,self.target);
         if (!e)
         {
-            bprint("Warning! initital waypoint for Walker does NOT exsist!\n");
+            dprint("Warning! initital waypoint for Walker does NOT exsist!\n");
             self.target = "";
         }
 
@@ -627,15 +903,13 @@ void walker_respawnhook()
             dprint("Warning: not a turrret path\n");
         else
         {
-            self.pathcurrent = pathlib_makepath(self.origin,e.origin,PFL_GROUNDSNAP,500,2,PT_QUICKBOX);
+            self.pathcurrent = WALKER_PATH(self.origin,e.origin);
             self.pathgoal = e;
         }
     }
 }
 void walker_diehook()
 {
-    //animator_remove(self);
-
     if(self.pathcurrent)
         pathlib_deletepath(self.pathcurrent.owner);
 
@@ -646,15 +920,15 @@ void walker_diehook()
 
     if(self.damage_flags & TFL_DMG_DEATH_NORESPAWN)
     {
-
         remove(self.wkr_props);
-        //remove(self.rocket_rack);
         remove(self.wkr_spawn);
+        remove(self.walker_verbs_move);
+        remove(self.walker_verbs_attack);
+        remove(self.walker_verbs_idle);
     }
 
 }
 
-//.string target_start;
 void turret_walker_dinit()
 {
 
@@ -662,13 +936,18 @@ void turret_walker_dinit()
 
     if (self.netname == "")      self.netname     = "Walker Turret";
 
-
     self.wkr_props = spawn();
     self.wkr_spawn = spawn();
 
     self.ammo_flags = TFL_AMMO_BULLETS | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
-    self.turrcaps_flags = TFL_TURRCAPS_PLAYERKILL | TFL_TURRCAPS_MOVE | TFL_TURRCAPS_ROAM | TFL_TURRCAPS_LINKED;
-    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_ZEASE | TFL_AIM_SHOTTIMECOMPENSATE;
+    self.turrcaps_flags = TFL_TURRCAPS_PLAYERKILL | TFL_TURRCAPS_MOVE | TFL_TURRCAPS_HEADATTACHED;
+    self.aim_flags = TFL_AIM_LEAD;
+
+    if(cvar("g_antilag_bullets"))
+        self.turrcaps_flags |= TFL_TURRCAPS_HITSCAN;
+    else
+        self.aim_flags      |= TFL_AIM_SHOTTIMECOMPENSATE;
+
 
     self.turret_respawnhook = walker_respawnhook;
     self.turret_diehook = walker_diehook;
@@ -679,10 +958,22 @@ void turret_walker_dinit()
         remove(self);
         return;
     }
-    self.damage_flags |= RFL_DMG_DEATH_NOGIBS;
+
+    self.walker_verbs_move   = spawn();
+    self.walker_verbs_attack = spawn();
+    self.walker_verbs_idle   = spawn();
+
+    verbstack_push(self.walker_verbs_move, walker_moveverb_idle,   WVM_IDLE, 0);
+    verbstack_push(self.walker_verbs_move, walker_moveverb_enemy,  WVM_ENEMY, 0);
+    verbstack_push(self.walker_verbs_move, walker_moveverb_path,   WVM_PATH,  0);
+
+    verbstack_push(self.walker_verbs_attack, walker_attackverb_meele,   WVA_MEELE,  0);
+    verbstack_push(self.walker_verbs_attack, walker_attackverb_rockets, WVA_ROCKET, 0);
+
+    self.damage_flags |= TFL_DMG_DEATH_NOGIBS;
 
     self.target_select_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK | TFL_TARGETSELECT_LOS;
-    self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK;// | TFL_TARGETSELECT_LOS;
+    self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK    | TFL_TARGETSELECT_LOS;
 
     //self.flags      = FL_CLIENT;
     self.iscreature = TRUE;
@@ -690,46 +981,27 @@ void turret_walker_dinit()
     self.solid      = SOLID_SLIDEBOX;
     self.takedamage = DAMAGE_AIM;
 
+    setmodel(self,"models/turrets/walker_body.md3");
+    setmodel(self.tur_head,"models/turrets/walker_head_minigun.md3");
     setmodel(self.wkr_props,"models/turrets/walker_props.md3");
     setmodel(self.wkr_spawn,"models/turrets/walker_spawn.md3");
     setorigin(self.wkr_spawn,self.origin);
+    setattachment(self.tur_head,self,"tag_head");
+    setattachment(self.wkr_props,self,"tag_head");
 
     self.wkr_spawn.angles   = self.angles;
     self.wkr_spawn.solid    = SOLID_NOT;
 
-
-    traceline(self.wkr_spawn.origin + '0 0 16', self.wkr_spawn.origin - '0 0 10000', MOVE_NOMONSTERS, self);
+    traceline(self.wkr_spawn.origin + '0 0 16', self.wkr_spawn.origin - '0 0 10000', MOVE_WORLDONLY, self);
     setorigin(self.wkr_spawn,trace_endpos + '0 0 4');
     setorigin(self,self.wkr_spawn.origin);
 
-    setmodel(self,"models/turrets/walker_body.md3");
-    setmodel(self.tur_head,"models/turrets/walker_head_minigun.md3");
-
-    setattachment(self.tur_head,self,"tag_head");
-    setattachment(self.wkr_props,self,"tag_head");
-
-    vector v;
-    float f;
-    f = gettagindex(self.tur_head,"tag_fire");
-    v = gettaginfo_relative(self.tur_head,f);
-    v_y = v_y * -1;
-
     setsize(self,WALKER_MIN,WALKER_MAX);
-    //setsize(self,'-70 -70 0','70 70 55');
-
-    self.tur_shotorg = v;
-    self.tur_aimorg  = v;// + '0 0 10';
 
     self.idle_aim = '0 0 0';
-
-//    self.v_home = self.origin;
-
-    self.turret_firecheckfunc   = walker_firecheck;
-
-    // Our fire routine
-    self.turret_firefunc  = walker_attack;
-
-    self.turret_postthink = walker_postthink;
+    self.turret_firecheckfunc = walker_firecheck;
+    self.turret_firefunc      = walker_attack;
+    self.turret_postthink     = walker_postthink;
 
     if (self.target != "")
     {
@@ -744,7 +1016,7 @@ void turret_walker_dinit()
             dprint("Warning: not a turrret path\n");
         else
         {
-            self.pathcurrent = pathlib_makepath(self.origin,e.origin,PFL_GROUNDSNAP,500,2,PT_QUICKBOX);
+            self.pathcurrent = WALKER_PATH(self.origin,e.origin);
             self.pathgoal = e;
         }
     }
@@ -756,12 +1028,13 @@ void turret_walker_dinit()
 
 void spawnfunc_turret_walker()
 {
+    g_turrets_common_precash();
     precache_model ("models/turrets/walker_head_minigun.md3");
     precache_model ("models/turrets/walker_body.md3");
     precache_model ("models/turrets/walker_props.md3");
     precache_model ("models/turrets/walker_spawn.md3");
     precache_model ( "models/turrets/rocket.md3");
-
+    precache_sound ( "weapons/rocket_impact.wav" );
     self.think = turret_walker_dinit;
     self.nextthink = time + 0.5;
 }
