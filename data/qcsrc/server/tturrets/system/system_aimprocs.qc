@@ -34,11 +34,10 @@ vector turret_stdproc_aim_generic()
         mintime = max(self.attack_finished_single - time,0) + sys_ticrate;
 
     // Baseline
-    pre_pos = real_origin(self.enemy) + (self.enemy.velocity * mintime);
+    pre_pos = real_origin(self.enemy);// + (self.enemy.velocity * mintime);
 
     if (self.aim_flags & TFL_AIM_INFRONT)   // Aim a bit in front of the target
         pre_pos = pre_pos + (normalize(self.enemy.velocity) * 64);
-
 
     if (self.aim_flags & TFL_AIM_BEHIND)    // Aim a bit behind the target
         pre_pos = pre_pos - (normalize(self.enemy.velocity) * 32);
@@ -48,6 +47,8 @@ vector turret_stdproc_aim_generic()
     if (self.aim_flags & TFL_AIM_SHOTTIMECOMPENSATE)       // Need to conpensate for shot traveltime
     {
         // FIXME: this cant be the best way to do this..
+
+
         prep = pre_pos;
         for(i = 0; i < 4; ++i)
         {
@@ -56,17 +57,19 @@ vector turret_stdproc_aim_generic()
             prep = pre_pos + self.enemy.velocity * impact_time;
         }
 
-        /*
+
         // tnx and all credit to Rudolf "div0" Polzer for this solution.
         // hmm tobad it dont work.
+        /*
+        vector q;
         q = solve_quadratic(self.enemy.velocity*self.enemy.velocity - self.shot_speed*self.shot_speed, 2*(pre_pos*self.enemy.velocity), pre_pos * pre_pos);
         if(q_x > 0)
             impact_time = q_x;
         else
             impact_time = q_y;
-
-        prep = self.enemy.origin + (self.enemy.velocity * impact_time);
         */
+
+        prep = pre_pos + (self.enemy.velocity * (impact_time+mintime));
 
         if(self.aim_flags & TFL_AIM_ZPREDICT)
         if not(self.enemy.flags & FL_ONGROUND)
@@ -101,7 +104,7 @@ vector turret_stdproc_aim_generic()
 
     if(self.aim_flags & TFL_AIM_GROUND2)
     {
-        tracebox(pre_pos + '0 0 32',self.enemy.mins,self.enemy.maxs,pre_pos -'0 0 48',MOVE_WORLDONLY,self.enemy);
+        tracebox(pre_pos + '0 0 32',self.enemy.mins,self.enemy.maxs,pre_pos -'0 0 64',MOVE_WORLDONLY,self.enemy);
         if(trace_fraction != 1.0)
             pre_pos = trace_endpos;
     }

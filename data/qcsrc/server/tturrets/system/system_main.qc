@@ -116,12 +116,14 @@ void turret_do_updates(entity t_turret)
         makevectors(self.tur_head.angles);
         self.tur_head.angles_x = self.tur_head.angles_x * -1;
     }
+
     enemy_pos = real_origin(self.enemy);
 
     turret_tag_fire_update();
-    self.tur_shotdir_updated = normalize(v_forward);
 
-    self.tur_dist_enemy = vlen(self.tur_shotorg - enemy_pos);
+    self.tur_shotdir_updated = v_forward;
+
+    self.tur_dist_enemy  = vlen(self.tur_shotorg - enemy_pos);
     self.tur_dist_aimpos = vlen(self.tur_shotorg - self.tur_aimpos);
 
     if(self.firecheck_flags & TFL_FIRECHECK_VERIFIED)
@@ -131,6 +133,8 @@ void turret_do_updates(entity t_turret)
         setorigin(self.enemy,self.tur_aimpos);
     }
 
+    //dprint("NN: ", self.netname," THVN: ",self.tur_head.classname," frame:",ftos(self.tur_head.frame),"\n");
+    //dprint("self.tur_shotorg: ",vtos(self.tur_shotorg),"\n");
     tracebox(self.tur_shotorg, '-1 -1 -1','1 1 1',self.tur_shotorg + (self.tur_shotdir_updated * self.tur_dist_aimpos),MOVE_NORMAL,self);
 
     if(self.firecheck_flags & TFL_FIRECHECK_VERIFIED)
@@ -143,7 +147,6 @@ void turret_do_updates(entity t_turret)
     self.tur_impacttime            = vlen(self.tur_shotorg - trace_endpos) / self.shot_speed;
 
     self = oldself;
-
 }
 
 /*
@@ -224,43 +227,9 @@ void turret_stdproc_track()
     vector real_angle;  // This is where we can aim
     float f_tmp;
 
-    /*
-    if(!self.aim_mark)
-    {
-        self.aim_mark = mark_misc(self.tur_aimpos,0);
-        self.aim_mark.colormod = '1 1 0';
-    }
-    */
-
-
     if (self.track_flags == TFL_TRACK_NO)
         return;
 
-    /*
-    if not(self.tur_active)
-    {
-        wish_angle = self.idle_aim - ('1 0 0' * self.aim_maxpitch);
-    }
-    else if (self.enemy == world)
-    {
-        if (self.turrcaps_flags & TFL_TURRCAPS_HEADATTACHED)
-            wish_angle = self.idle_aim + self.angles;
-        else
-            if(time > self.lip)
-            {
-                if(self.target_select_flags & TFL_TARGETSELECT_FOV)
-                    wish_angle = self.idle_aim; //turret_fovsearch_steprot();
-            }
-            else
-            {
-                //wish_angle = self.tur_head.angles;
-                wish_angle = self.idle_aim;
-                //wish_angle = normalize(self.tur_aimpos - self.tur_head.origin);
-                //wish_angle = vectoangles(wish_angle); // And make a angle
-            }
-    }
-    else
-    */
 
     if(!self.tur_active)
     {
@@ -274,7 +243,7 @@ void turret_stdproc_track()
             else
                 wish_angle = self.idle_aim;
         else
-            wish_angle = vectoangles(self.tur_aimpos - self.tur_head.origin);
+            wish_angle = vectoangles(normalize(self.tur_aimpos - self.tur_head.origin));
     }
     else
     {
@@ -287,6 +256,9 @@ void turret_stdproc_track()
         wish_angle = normalize(self.tur_aimpos - self.tur_shotorg);
         wish_angle = vectoangles(wish_angle); // And make a angle
     }
+
+    self.tur_head.angles_x = anglemods(self.tur_head.angles_x);
+    self.tur_head.angles_y = anglemods(self.tur_head.angles_y);
 
     // Find the diffrence between where we currently aim and where we want to aim
     if (self.turrcaps_flags & TFL_TURRCAPS_HEADATTACHED)
@@ -618,7 +590,7 @@ float turret_validate_target(entity e_turret,entity e_target,float validate_flag
         return -20;
 
 #ifdef TURRET_DEBUG_TARGETSELECT
-    bprint("Target:",e_target.netname," is a valid target for ",e_turret.netname,"\n");
+    dprint("Target:",e_target.netname," is a valid target for ",e_turret.netname,"\n");
 #endif
 
     return 1;
@@ -650,7 +622,6 @@ entity turret_select_target()
         f = turret_validate_target(self,e,self.target_select_flags);
         if (f > 0)
         {
-            bprint(e.netname," = ",ftos(f),"\n");
             score = self.turret_score_target(self,e);
             if ((score > m_score) && (score > 0))
             {
