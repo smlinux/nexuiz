@@ -94,48 +94,55 @@ void turret_stdproc_nothing()
 ** updates enemy distances, predicted impact point/time
 ** and updated aim<->predict impact distance.
 **/
-void turret_do_updates(entity e_turret)
+void turret_do_updates(entity t_turret)
 {
     vector enemy_pos;
-    if (e_turret.turrcaps_flags & TFL_TURRCAPS_HEADATTACHED)
+    entity oldself;
+
+    oldself = self;
+    self = t_turret;
+
+    if (self.turrcaps_flags & TFL_TURRCAPS_HEADATTACHED)
     {
-        e_turret.tur_head.angles_x = e_turret.tur_head.angles_x * -1;
-        e_turret.angles_x = e_turret.angles_x * -1;
-        makevectors(e_turret.tur_head.angles + e_turret.angles);
-        e_turret.tur_head.angles_x = e_turret.tur_head.angles_x * -1;
-        e_turret.angles_x = e_turret.angles_x * -1;
+        self.tur_head.angles_x = self.tur_head.angles_x * -1;
+        self.angles_x = self.angles_x * -1;
+        makevectors(self.tur_head.angles + self.angles);
+        self.tur_head.angles_x = self.tur_head.angles_x * -1;
+        self.angles_x = self.angles_x * -1;
     }
     else
     {
-        e_turret.tur_head.angles_x = e_turret.tur_head.angles_x * -1;
-        makevectors(e_turret.tur_head.angles);
-        e_turret.tur_head.angles_x = e_turret.tur_head.angles_x * -1;
+        self.tur_head.angles_x = self.tur_head.angles_x * -1;
+        makevectors(self.tur_head.angles);
+        self.tur_head.angles_x = self.tur_head.angles_x * -1;
     }
-    enemy_pos = real_origin(e_turret.enemy);
+    enemy_pos = real_origin(self.enemy);
 
     turret_tag_fire_update();
-    e_turret.tur_shotdir_updated = normalize(v_forward);
+    self.tur_shotdir_updated = normalize(v_forward);
 
-    e_turret.tur_dist_enemy = vlen(e_turret.tur_shotorg - enemy_pos);
-    e_turret.tur_dist_aimpos = vlen(e_turret.tur_shotorg - e_turret.tur_aimpos);
+    self.tur_dist_enemy = vlen(self.tur_shotorg - enemy_pos);
+    self.tur_dist_aimpos = vlen(self.tur_shotorg - self.tur_aimpos);
 
-    if(e_turret.firecheck_flags & TFL_FIRECHECK_VERIFIED)
-    if(e_turret.enemy)
+    if(self.firecheck_flags & TFL_FIRECHECK_VERIFIED)
+    if(self.enemy)
     {
-        enemy_pos = e_turret.enemy.origin;
-        setorigin(e_turret.enemy,e_turret.tur_aimpos);
+        enemy_pos = self.enemy.origin;
+        setorigin(self.enemy,self.tur_aimpos);
     }
 
-    tracebox(e_turret.tur_shotorg, '-1 -1 -1','1 1 1',e_turret.tur_shotorg + (e_turret.tur_shotdir_updated * e_turret.tur_dist_aimpos),MOVE_NORMAL,e_turret);
+    tracebox(self.tur_shotorg, '-1 -1 -1','1 1 1',self.tur_shotorg + (self.tur_shotdir_updated * self.tur_dist_aimpos),MOVE_NORMAL,self);
 
-    if(e_turret.firecheck_flags & TFL_FIRECHECK_VERIFIED)
-        if(e_turret.enemy)
-            setorigin(e_turret.enemy,enemy_pos);
+    if(self.firecheck_flags & TFL_FIRECHECK_VERIFIED)
+        if(self.enemy)
+            setorigin(self.enemy,enemy_pos);
 
-    e_turret.tur_impactpoint           = trace_endpos;
-    e_turret.tur_impactent             = trace_ent;
-    e_turret.tur_dist_impact_to_aimpos = vlen(trace_endpos - e_turret.tur_aimpos);
-    e_turret.tur_impacttime            = vlen(e_turret.tur_shotorg - trace_endpos) / e_turret.shot_speed;
+    self.tur_impactpoint           = trace_endpos;
+    self.tur_impactent             = trace_ent;
+    self.tur_dist_impact_to_aimpos = vlen(trace_endpos - self.tur_aimpos);
+    self.tur_impacttime            = vlen(self.tur_shotorg - trace_endpos) / self.shot_speed;
+
+    self = oldself;
 
 }
 
