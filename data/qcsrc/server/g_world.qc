@@ -619,6 +619,7 @@ void spawnfunc_worldspawn (void)
 		}
 	}
 	maplist_reply = strzone(strcat(maplist_reply, "\n"));
+	MapInfo_ClearTemps();
 
 	records_reply = strzone(getrecords());
 

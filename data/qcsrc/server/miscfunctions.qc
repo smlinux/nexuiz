@@ -1877,6 +1877,7 @@ string getrecords()
 			}
 		}
 	}
+	MapInfo_ClearTemps();
 
 	if(s == "")
 		return "No records are available on this server.\n";

@@ -189,6 +189,7 @@ void InitGameplayMode()
 		else
 			world.fog = strzone(MapInfo_Map_fog);
 	clientstuff = strzone(MapInfo_Map_clientstuff);
+
 	MapInfo_ClearTemps();
 
 	// in case mapinfo switched the type
