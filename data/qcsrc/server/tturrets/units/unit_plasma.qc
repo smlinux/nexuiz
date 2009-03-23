@@ -37,7 +37,7 @@ void turret_plasma_postthink()
 
 void turret_plasma_dual_postthink()
 {
-    if (self.tur_head.frame != 0)
+    if ((self.tur_head.frame != 0) && (self.tur_head.frame != 3))
         self.tur_head.frame = self.tur_head.frame + 1;
 
     if (self.tur_head.frame > 6)
@@ -66,10 +66,9 @@ void turret_plasma_attack()
     proj.solid           = SOLID_BBOX;
     proj.movetype        = MOVETYPE_FLYMISSILE;
     proj.velocity        = normalize(self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
-    proj.angles          = vectoangles(proj.velocity);
+    //proj.velocity        = self.tur_shotdir_updated  * self.shot_speed;
     proj.touch           = turret_plasma_projectile_explode;
     proj.flags           = FL_PROJECTILE;
-    //proj.effects         = EF_LOWPRECISION |  EF_BRIGHTFIELD;
     proj.enemy           = self.enemy;
     proj.flags           = FL_PROJECTILE | FL_NOTARGET;
 
@@ -83,18 +82,12 @@ void turret_plasma_dual_attack()
 {
     entity proj;
 
-    if (self.tur_head.frame != 0)
-        self.tur_head.frame = 3;
-    else
-        self.tur_head.frame = 1;
-
-    turret_tag_fire_update();
+    //turret_tag_fire_update();
 
     sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", VOL_BASE, ATTN_NORM);
     proj                    = spawn ();
     setorigin(proj, self.tur_shotorg);
     setsize(proj, '0 0 0', '0 0 0');
-    //setmodel(proj, "models/elaser.mdl"); // precision set above
     proj.classname       = "plasmabomb";
     proj.owner           = self;
     proj.bot_dodge       = TRUE;
@@ -103,14 +96,14 @@ void turret_plasma_dual_attack()
     proj.nextthink       = time + 9;
     proj.solid           = SOLID_BBOX;
     proj.movetype        = MOVETYPE_FLYMISSILE;
-    //proj.velocity        = normalize(self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
-    proj.velocity        = self.tur_shotdir_updated  * self.shot_speed;
-    proj.angles          = vectoangles(proj.velocity);
+    proj.velocity        = normalize(self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
+    //proj.velocity        = self.tur_shotdir_updated  * self.shot_speed;
     proj.touch           = turret_plasma_projectile_explode;
     proj.flags           = FL_PROJECTILE;
-    // proj.effects         = EF_LOWPRECISION |  EF_BRIGHTFIELD;
     proj.enemy           = self.enemy;
     proj.flags           = FL_PROJECTILE | FL_NOTARGET;
+
+    self.tur_head.frame += 1;
 
     CSQCProjectile(proj, TRUE, PROJECTILE_ELECTRO_BEAM, TRUE);
 }
@@ -155,8 +148,8 @@ void turret_plasma_std_init()
 
     // How to aim
     //self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE;// | TFL_AIM_ZPREDICT | TFL_AIM_GROUND2;
-    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_GROUND2;
-    self.turrcaps_flags = TFL_TURRCAPS_MISSILEKILL | TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_MEDPROJ | TFL_TURRCAPS_PLAYERKILL;
+    self.aim_flags      = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_GROUND2;
+    self.turrcaps_flags = TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_MEDPROJ | TFL_TURRCAPS_PLAYERKILL;// | TFL_TURRCAPS_MISSILEKILL;
 
     if (turret_stdproc_init("plasma_std") == 0)
     {
@@ -166,7 +159,7 @@ void turret_plasma_std_init()
 
     self.damage_flags    |= TFL_DMG_HEADSHAKE;
     //self.firecheck_flags |= (TFL_FIRECHECK_AFF | TFL_FIRECHECK_VERIFIED);
-    self.firecheck_flags |= TFL_FIRECHECK_AFF;
+    //  self.firecheck_flags |= TFL_FIRECHECK_AFF;
 
     //self.target_select_flags |= TFL_TARGETSELECT_FOV;
     //self.target_select_fov    = 45;
@@ -194,7 +187,7 @@ void turret_plasma_dual_init()
     self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
 
     // How to aim at targets
-    self.aim_flags      = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_ZPREDICT | TFL_AIM_GROUND2 | TFL_AIM_INFRONT;
+    self.aim_flags      = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE  | TFL_AIM_GROUND2 ;
     self.turrcaps_flags = TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_MEDPROJ | TFL_TURRCAPS_PLAYERKILL;
 
     if (turret_stdproc_init("plasma_dual") == 0)
@@ -204,7 +197,7 @@ void turret_plasma_dual_init()
     }
 
     self.damage_flags    |= TFL_DMG_HEADSHAKE;
-    self.firecheck_flags |= (TFL_FIRECHECK_AFF | TFL_FIRECHECK_VERIFIED);
+    //self.firecheck_flags |= (TFL_FIRECHECK_AFF | TFL_FIRECHECK_VERIFIED);
     //self.firecheck_flags |= TFL_FIRECHECK_AFF;
 
     setmodel(self,"models/turrets/base.md3");
