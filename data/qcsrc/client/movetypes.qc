@@ -373,6 +373,9 @@ void Movetype_Physics(float matchserver) // SV_Physics_Entity
 		}
 	}
 
+	if(wasfreed(self))
+		return;
+
 	self.avelocity = self.move_avelocity;
 
 	if(dt > 0 && self.move_movetype != MOVETYPE_NONE)
@@ -404,7 +407,4 @@ void Movetype_Physics(float matchserver) // SV_Physics_Entity
 		self.angles = self.move_angles;
 		self.origin = self.move_origin;
 	}
-
-	if(!wasfreed(self))
-		setorigin(self, self.origin);
 }

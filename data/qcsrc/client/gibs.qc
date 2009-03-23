@@ -26,6 +26,8 @@ void Gib_Draw()
 	oldorg = self.origin;
 
 	Movetype_Physics(FALSE);
+	if(wasfreed(self))
+		return;
 	
 	if(self.touch == Gib_Touch) // don't do this for the "chunk" thingie...
 		trailparticles(self, particleeffectnum("TR_SLIGHTBLOOD"), oldorg, self.origin);
