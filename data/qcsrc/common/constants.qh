@@ -88,6 +88,7 @@ const float RADARICON_HELPME = 1;
 const float RADARICON_CONTROLPOINT = 1;
 const float RADARICON_GENERATOR = 1;
 const float RADARICON_OBJECTIVE = 1;
+const float RADARICON_DOMPOINT = 1;
 
 ///////////////////////////
 // key constants

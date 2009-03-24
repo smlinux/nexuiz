@@ -5,6 +5,7 @@ _diameter 2466.622070
 _spawnpoints 5
 has weapons
 type dm 30 20
+type tdm 50 20
 type dom 200 20
 type rune 200 20
 type lms 9 20
