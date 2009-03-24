@@ -4,6 +4,7 @@
 // used in qcsrc/server/bots.qc:				te_wizspike(org)
 // used in qcsrc/server/bots.qc:	//te_wizspike(e.origin)
 // used in qcsrc/server/bots.qc:		//te_wizspike(e.nearestwaypoint.wpnearestpoint)
+// used in qcsrc/server/havocbot.qc:			//	te_wizspike(newgoal.origin)
 effect TE_WIZSPIKE
 countabsolute 1
 type static
@@ -31,6 +32,7 @@ velocityjitter 32 32 32
 // used in qcsrc/server/bots.qc:			te_knightspike(start)
 // used in qcsrc/server/bots.qc:						te_knightspike(org)
 // used in qcsrc/server/bots.qc:		te_knightspike(org)
+// used in qcsrc/server/w_seeker.qc:	te_knightspike(org2)
 effect TE_KNIGHTSPIKE
 countabsolute 1
 type decal
@@ -237,7 +239,7 @@ velocityjitter 64 64 64
 // used in qcsrc/server/bots.qc:			//te_gunshot(org)
 // used in qcsrc/server/bots.qc:					te_gunshot(org)
 // used in qcsrc/server/bots.qc:					te_gunshot(org)
-// used in qcsrc/server/bots.qc:						te_gunshot(org)
+// used in qcsrc/server/bots.qc:					//	te_gunshot(org)
 // used in qcsrc/server/bots.qc:		//te_gunshot(end)
 effect TE_GUNSHOT
 countabsolute 1
@@ -315,7 +317,7 @@ velocityjitter 128 128 128
 
 // mortar/hagar explosion (smaller than rocket)
 // decal
-// used nowhere in code
+// used in qcsrc/server/cl_client.qc:	te_explosion(org)
 effect TE_EXPLOSION
 countabsolute 1
 type decal
@@ -596,6 +598,7 @@ velocityjitter 0 0 256
 
 // nex beam
 // used in qcsrc/server/w_minstanex.qc:	trailparticles(world, particleeffectnum("TE_TEI_G3"), w_shotorg, trace_endpos)
+// used in qcsrc/client/particles.qc:		trailparticles(world, particleeffectnum("TE_TEI_G3"), shotorg, endpos)
 effect TE_TEI_G3
 countabsolute 1
 type beam
@@ -740,9 +743,8 @@ velocityjitter 512 512 512
 
 
 // bloody impact effect indicating damage
-// used in qcsrc/server/cl_player.qc:		pointparticles(particleeffectnum("blood"), hitloc, force, bound(0, damage, 200))
-// used in qcsrc/server/cl_player.qc:		pointparticles(particleeffectnum("blood"), hitloc, force, bound(0, damage, 200))
-// used in qcsrc/server/g_violence.qc:		pointparticles(particleeffectnum("blood"), self.origin + '0 0 1', '0 0 30', 10)
+// used in qcsrc/client/gibs.qc:	pointparticles(particleeffectnum("blood"), self.origin + '0 0 1', '0 0 30', 10)
+// used in qcsrc/client/gibs.qc:			pointparticles(particleeffectnum("blood"), org, vel, amount * 16)
 effect blood
 count 0.333
 type blood
@@ -766,8 +768,8 @@ originjitter 11 11 11
 
 
 // player teleport effect
-// used in qcsrc/server/t_teleporters.qc:	pointparticles(particleeffectnum("teleport"), player.origin, '0 0 0', 1)
-// used in qcsrc/server/t_teleporters.qc:	pointparticles(particleeffectnum("teleport"), to + v_forward * 32, '0 0 0', 1)
+// used in qcsrc/server/t_teleporters.qc:		pointparticles(particleeffectnum("teleport"), player.origin, '0 0 0', 1)
+// used in qcsrc/server/t_teleporters.qc:		pointparticles(particleeffectnum("teleport"), to + v_forward * 32, '0 0 0', 1)
 effect teleport
 count 1000
 type spark
@@ -820,7 +822,6 @@ velocitymultiplier 0.5
 
 
 // func_stardust effect, used in some maps to indicate teleporters
-// used in qcsrc/server/assault.qc:		//self.effects = EF_STARDUST
 // used in qcsrc/server/g_triggers.qc:	self.effects = EF_STARDUST
 // used in qcsrc/server/portals.qc:	portal.effects = EF_STARDUST | EF_BLUE
 effect EF_STARDUST
@@ -869,6 +870,8 @@ lightcolor 2 2 2
 
 
 
+// used in qcsrc/server/w_hlac.qc:	pointparticles(particleeffectnum("laser_muzzleflash"), w_shotorg, w_shotdir * 1000, 1)
+// used in qcsrc/server/w_hlac.qc:	pointparticles(particleeffectnum("laser_muzzleflash"), w_shotorg, w_shotdir * 1000, 1)
 // used in qcsrc/server/w_laser.qc:	pointparticles(particleeffectnum("laser_muzzleflash"), w_shotorg, w_shotdir * 1000, 1)
 effect laser_muzzleflash
 count 1
@@ -888,7 +891,8 @@ lightcolor 3 0.1 0.1
 
 
 // decal
-// used in qcsrc/server/w_laser.qc:	pointparticles(particleeffectnum("laser_impact"), org2, normal * 1000, 1)
+// used in qcsrc/client/damage.qc:				pointparticles(particleeffectnum("laser_impact"), org2, backoff * 1000, 1)
+// used in qcsrc/client/damage.qc:				pointparticles(particleeffectnum("laser_impact"), org2, backoff * 1000, 1)
 effect laser_impact
 countabsolute 1
 type decal
@@ -933,6 +937,7 @@ sizeincrease 6
 
 
 
+// used in qcsrc/server/w_campingrifle.qc:	pointparticles(particleeffectnum("shotgun_muzzleflash"), w_shotorg, w_shotdir * 2000, 1)
 // used in qcsrc/server/w_shotgun.qc:	pointparticles(particleeffectnum("shotgun_muzzleflash"), w_shotorg, w_shotdir * 1000, cvar("g_balance_shotgun_primary_ammo"))
 // used in qcsrc/server/w_shotgun.qc:	pointparticles(particleeffectnum("shotgun_muzzleflash"), w_shotorg, w_shotdir * 1000, cvar("g_balance_shotgun_secondary_ammo"))
 effect shotgun_muzzleflash
@@ -967,7 +972,7 @@ airfriction 5
 
 // shotgun pellet impact
 // decal
-// used in qcsrc/server/w_common.qc:				pointparticles(particleeffectnum("shotgun_impact"), trace_endpos, trace_plane_normal * 1000, 1)
+// used in qcsrc/client/damage.qc:				pointparticles(particleeffectnum("shotgun_impact"), org2, backoff * 1000, 1)
 effect shotgun_impact
 countabsolute 1
 type decal
@@ -1049,7 +1054,8 @@ airfriction 12
 
 // decal
 // used in qcsrc/server/cl_client.qc:	//pointparticles(particleeffectnum("machinegun_impact"), self.origin + self.view_ofs + '0 0 7', '0 0 0', 1)
-// used in qcsrc/server/w_common.qc:				pointparticles(particleeffectnum("machinegun_impact"), trace_endpos, trace_plane_normal * 1000, 1)
+// used in qcsrc/client/damage.qc:				pointparticles(particleeffectnum("machinegun_impact"), org2, backoff * 1000, 1)
+// used in qcsrc/client/damage.qc:				pointparticles(particleeffectnum("machinegun_impact"), org2, backoff * 1000, 1)
 effect machinegun_impact
 countabsolute 1
 type decal
@@ -1134,9 +1140,7 @@ airfriction 12
 
 // hagar trail
 // smoke
-// used in qcsrc/server/w_hagar.qc:	missile.modelflags = MF_GRENADE
-// used in qcsrc/server/w_hagar.qc:	missile.modelflags = MF_GRENADE
-// used in qcsrc/server/w_porto.qc:	gren.modelflags = MF_GRENADE
+// used nowhere in code
 effect TR_GRENADE
 trailspacing 6
 type alphastatic
@@ -1181,9 +1185,7 @@ velocityjitter 16 16 16
 
 // mortar trail
 // smoke
-// used in qcsrc/server/w_grenadelauncher.qc:	gren.modelflags = MF_TRACER2
-// used in qcsrc/server/w_grenadelauncher.qc:	gren.modelflags = MF_TRACER2
-// used in qcsrc/server/w_hook.qc:	gren.modelflags = MF_TRACER2
+// used nowhere in code
 effect TR_KNIGHTSPIKE // used for MF_TRACER2
 notunderwater
 trailspacing 5
@@ -1224,8 +1226,7 @@ velocityjitter 16 16 16
 
 
 // decal
-// used in qcsrc/server/w_grenadelauncher.qc:	pointparticles(particleeffectnum("grenade_explode"), org2, '0 0 0', 1)
-// used in qcsrc/server/w_grenadelauncher.qc:	pointparticles(particleeffectnum("grenade_explode"), org2, '0 0 0', 1)
+// used in qcsrc/client/damage.qc:				pointparticles(particleeffectnum("grenade_explode"), org2, '0 0 0', 1)
 effect grenade_explode
 countabsolute 1
 type decal
@@ -1342,7 +1343,7 @@ airfriction 12
 
 // electro trail
 // glowing vapor trail
-// used nowhere in code
+// used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("TR_NEXUIZPLASMA"), from, to)
 effect TR_NEXUIZPLASMA
 trailspacing 2
 type static
@@ -1374,7 +1375,7 @@ velocityjitter 50 50 50
 
 
 // decal
-// used in qcsrc/server/w_electro.qc:		pointparticles(particleeffectnum("electro_impact"), org2, '0 0 0', 1)
+// used in qcsrc/client/damage.qc:						pointparticles(particleeffectnum("electro_impact"), org2, '0 0 0', 1)
 effect electro_impact
 countabsolute 1
 type decal
@@ -1421,7 +1422,7 @@ originjitter 20 20 20
 velocityjitter 320 320 320
 
 // decal
-// used in qcsrc/server/w_electro.qc:		pointparticles(particleeffectnum("electro_ballexplode"), org2, '0 0 0', 1)
+// used in qcsrc/client/damage.qc:					pointparticles(particleeffectnum("electro_ballexplode"), org2, '0 0 0', 1)
 effect electro_ballexplode
 countabsolute 1
 type decal
@@ -1466,7 +1467,7 @@ velocityjitter 32 32 32
 
 
 // decal
-// used in qcsrc/server/w_electro.qc:	pointparticles(particleeffectnum("electro_combo"), org2, '0 0 0', 1)
+// used in qcsrc/client/damage.qc:						pointparticles(particleeffectnum("electro_combo"), org2, '0 0 0', 1)
 effect electro_combo
 countabsolute 1
 type decal
@@ -1552,7 +1553,7 @@ airfriction 12
 
 // crylink impact effect
 // decal
-// used in qcsrc/server/w_crylink.qc:	pointparticles(particleeffectnum("crylink_impact"), self.origin, '0 0 0', 1)
+// used in qcsrc/client/damage.qc:					pointparticles(particleeffectnum("crylink_impact"), org2, '0 0 0', 1)
 effect crylink_impact
 countabsolute 1
 type decal
@@ -1601,7 +1602,7 @@ velocityjitter 32 32 32
 
 
 // used in qcsrc/server/w_minstanex.qc:	pointparticles(particleeffectnum("nex_muzzleflash"), w_shotorg, w_shotdir * 1000, 1)
-// used in qcsrc/server/w_nex.qc:	pointparticles(particleeffectnum("nex_muzzleflash"), w_shotorg, w_shotdir * 1000, 1)
+// used in qcsrc/client/particles.qc:	pointparticles(particleeffectnum("nex_muzzleflash"), shotorg, normalize(endpos - shotorg) * 1000, 1)
 effect nex_muzzleflash
 count 10
 type smoke
@@ -1638,7 +1639,7 @@ airfriction 9
 //size 6 6
 //alpha 128 128 192
 // nex beam: ring smoke
-// used in qcsrc/server/w_nex.qc:	trailparticles(world, particleeffectnum("nex_beam"), w_shotorg, trace_endpos)
+// used in qcsrc/client/particles.qc:		trailparticles(world, particleeffectnum("nex_beam"), shotorg, endpos)
 effect nex_beam
 trailspacing 32
 color 0x1680A0 0x1680A0
@@ -1680,8 +1681,8 @@ type snow
 
 // nex impact
 // decal
-// used in qcsrc/server/w_minstanex.qc:		pointparticles(particleeffectnum("nex_impact"), trace_endpos - w_shotdir * 6, '0 0 0', 1)
-// used in qcsrc/server/w_nex.qc:		pointparticles(particleeffectnum("nex_impact"), trace_endpos - w_shotdir * 6, '0 0 0', 1)
+// used in qcsrc/client/damage.qc:				pointparticles(particleeffectnum("nex_impact"), org2, '0 0 0', 1)
+// used in qcsrc/client/damage.qc:				pointparticles(particleeffectnum("nex_impact"), org2, '0 0 0', 1)
 effect nex_impact
 countabsolute 1
 type decal
@@ -1738,6 +1739,7 @@ airfriction 9
 
 // used in qcsrc/server/w_hagar.qc:	pointparticles(particleeffectnum("hagar_muzzleflash"), w_shotorg, w_shotdir * 1000, 1)
 // used in qcsrc/server/w_hagar.qc:	pointparticles(particleeffectnum("hagar_muzzleflash"), w_shotorg, w_shotdir * 1000, 1)
+// used in qcsrc/server/w_seeker.qc:	pointparticles(particleeffectnum("hagar_muzzleflash"), w_shotorg, w_shotdir * 1000, 1)
 effect hagar_muzzleflash
 count 4
 type smoke
@@ -1796,8 +1798,9 @@ airfriction 12
 
 
 // decal
-// used in qcsrc/server/w_hagar.qc:	pointparticles(particleeffectnum("hagar_explode"), org2, '0 0 0', 1)
-// used in qcsrc/server/w_hagar.qc:	pointparticles(particleeffectnum("hagar_explode"), org2, '0 0 0', 1)
+// used in qcsrc/client/damage.qc:				pointparticles(particleeffectnum("hagar_explode"), org2, '0 0 0', 1)
+// used in qcsrc/client/damage.qc:						pointparticles(particleeffectnum("hagar_explode"), org2, '0 0 0', 1)
+// used in qcsrc/client/damage.qc:						pointparticles(particleeffectnum("hagar_explode"), org2, '0 0 0', 1)
 effect hagar_explode
 countabsolute 1
 type decal
@@ -1978,9 +1981,11 @@ velocitymultiplier -0.31
 
 // rocket explosion (bigger than mortar and hagar)
 // decal
+// used in qcsrc/server/cl_impulse.qc:							pointparticles(particleeffectnum("rocket_explode"), org, '0 0 0', 1)
 // used in qcsrc/server/cl_player.qc:				pointparticles(particleeffectnum("rocket_explode"), self.origin, '0 0 0', 1)
 // used in qcsrc/server/portals.qc:		pointparticles(particleeffectnum("rocket_explode"), portal.origin + v_forward * 16, v_forward * 1024, 4)
-// used in qcsrc/server/w_rocketlauncher.qc:	pointparticles(particleeffectnum("rocket_explode"), org2, '0 0 0', 1)
+// used in qcsrc/server/steerlib.qc:	pointparticles(particleeffectnum("rocket_explode"), self.origin, '0 0 0', 1)
+// used in qcsrc/client/damage.qc:				pointparticles(particleeffectnum("rocket_explode"), org2, '0 0 0', 1)
 effect rocket_explode
 countabsolute 1
 type decal
@@ -2312,7 +2317,7 @@ velocitymultiplier 100
 
 // bigger crylink impact effect
 // decal
-// used in qcsrc/server/w_crylink.qc:	pointparticles(particleeffectnum("crylink_impactbig"), self.origin, '0 0 0', 1)
+// used in qcsrc/client/damage.qc:					pointparticles(particleeffectnum("crylink_impactbig"), org2, '0 0 0', 1)
 effect crylink_impactbig
 countabsolute 1
 type decal
@@ -2361,7 +2366,7 @@ velocityjitter 256 256 256
 // Zero-violence effects
 
 // impact effect indicating damage
-// used in qcsrc/server/cl_player.qc:		pointparticles(particleeffectnum("damage_hit"), hitloc, force, bound(0, damage, 200))
+// used in qcsrc/client/gibs.qc:			pointparticles(particleeffectnum("damage_hit"), org, vel, amount * 16)
 effect damage_hit
 tex 48 55
 count 1
@@ -2404,9 +2409,9 @@ velocityjitter 256 256 256
 
 // effect for removing player model
 // "teleport"
-// used in qcsrc/server/cl_player.qc:			pointparticles(particleeffectnum("damage_dissolve"), self.origin, force, 1)
 
 // large sparks
+// used in qcsrc/client/gibs.qc:			pointparticles(particleeffectnum("damage_dissolve"), org, vel, amount)
 effect damage_dissolve
 tex 48 55
 count 30
@@ -2448,6 +2453,7 @@ liquidfriction 6
 velocityjitter 512 512 512
 
 // decal
+// used in qcsrc/server/g_triggers.qc:					self.cnt = particleeffectnum("laser_deadly")
 // used in qcsrc/server/g_triggers.qc:			self.cnt = particleeffectnum("laser_deadly")
 effect laser_deadly
 countabsolute 1
@@ -2535,7 +2541,7 @@ color 0x7cbaff 0xcfd1ff
 velocitymultiplier 2
 
 // decal
-// used in qcsrc/server/w_hook.qc:	pointparticles(particleeffectnum("hookbomb_explode"), org2, '0 0 0', 1)
+// used in qcsrc/client/damage.qc:				pointparticles(particleeffectnum("hookbomb_explode"), org2, '0 0 0', 1)
 effect hookbomb_explode
 count 50
 type static
@@ -2586,6 +2592,7 @@ airfriction 2
 
 
 // smoke
+// used nowhere in code
 effect EF_MGTURRETTRAIL
 notunderwater
 trailspacing 2
@@ -2610,6 +2617,7 @@ velocityjitter 16 16 16
 
 //fire_big
 //fire
+// used nowhere in code
 effect fire_big
 //notunderwater
 count 52
@@ -2639,6 +2647,7 @@ bounce 2
 
 //red_flare
 //smoke
+// used nowhere in code
 effect red_flare
 type alphastatic
 count 21
@@ -2654,6 +2663,7 @@ bounce 1
 
 //blue_flare
 //smoke
+// used nowhere in code
 effect blue_flare
 type alphastatic
 count 21
@@ -2669,6 +2679,7 @@ bounce 1
 
 //smoke_ring
 //smoke
+// used nowhere in code
 effect smoke_ring
 type smoke
 count 90
@@ -2686,6 +2697,7 @@ notunderwater
 
 //smoke_large
 //smoke
+// used nowhere in code
 effect smoke_large
 type alphastatic
 count 50
@@ -2702,6 +2714,7 @@ bounce 1.1
 notunderwater
 
 //sparks
+// used nowhere in code
 effect sparks
 count 30
 type spark
@@ -2717,6 +2730,7 @@ velocitymultiplier 1.5
 airfriction 3
 
 //sparks
+// used nowhere in code
 effect electricity_sparks
 count 70
 type spark
@@ -2732,6 +2746,7 @@ velocitymultiplier 0.5
 airfriction 3
 
 //steam, it needs direction
+// used nowhere in code
 effect steam
 effect steam
 type smoke
@@ -2750,6 +2765,7 @@ bounce 1.1
 notunderwater
 
 // smoke emiter
+// used nowhere in code
 effect smoking
 count 20
 type alphastatic
@@ -2766,6 +2782,7 @@ velocityjitter 5 5 20
 airfriction -1
 
 //golden dust (create it once per second to cover large area in small yellow particles)
+// used nowhere in code
 effect goldendust  
 count 50
 type snow
@@ -2781,6 +2798,7 @@ velocityjitter 0.1 0.1 0.1
 //velocitymultiplier -20
 //airfriction -0.1
 
+// used nowhere in code
 effect healing_fx
 count 50
 type spark
@@ -2796,6 +2814,7 @@ velocityjitter 50 50 0
 //velocitymultiplier 20
 airfriction -0.5
 
+// used nowhere in code
 effect armorrepair_fx
 count 50
 type spark
@@ -2811,6 +2830,7 @@ velocityjitter 50 50 0
 //velocitymultiplier 20
 airfriction -0.5
 
+// used nowhere in code
 effect ammoregen_fx
 count 50
 type spark
@@ -2827,6 +2847,7 @@ velocityjitter 50 50 0
 airfriction -0.5
 
 // red-yellow flame like fx
+// used nowhere in code
 effect rage
 count 5
 type smoke
@@ -2841,6 +2862,7 @@ velocityjitter 25 25 25
 airfriction 2
 
 // pieces of glass or ice falling on the floor 
+// used nowhere in code
 effect iceorglass
 count 30
 type alphastatic
@@ -2857,6 +2879,7 @@ velocityjitter 100 100 100
 airfriction 3
 
 // cover small area in poison gas, spawn it once per second
+// used nowhere in code
 effect poisonfield
 count 30
 type smoke
@@ -2872,6 +2895,7 @@ velocityjitter 5 5 5
 airfriction 1
 
 // cover small area in icy mist, spawn it once per second
+// used nowhere in code
 effect icefield
 count 20
 type smoke
@@ -2899,6 +2923,7 @@ originjitter 333 333 0
 
 // cover very small area in flames, spawn it 3 times per second (or more often to get better looking fire at cost of fps hit )
 // flames that go up
+// used nowhere in code
 effect firefield
 count 200
 type smoke
@@ -2936,6 +2961,7 @@ originjitter 180 180 0
 
 //flamethrower, spawn it as fast as you can  20 times per second or more, it needs direction
 //fast fire
+// used nowhere in code
 effect flamethrower
 count 6
 type smoke
@@ -3008,6 +3034,7 @@ airfriction 1
 
 // port-o-launch trail
 // glowing vapor trail
+// used nowhere in code
 effect TR_WIZSPIKE
 trailspacing 2
 type static
@@ -3038,6 +3065,7 @@ velocityjitter 50 50 50
 
 // TAG trail
 // glowing vapor trail
+// used nowhere in code
 effect TR_VORESPIKE
 trailspacing 2
 type static
@@ -3066,6 +3094,7 @@ airfriction 12
 originjitter 1 1 1
 velocityjitter 50 50 50
 
+// used in qcsrc/client/damage.qc:					pointparticles(particleeffectnum("flac_explode"), org2, '0 0 0', 1)
 effect flac_explode
 countabsolute 1
 type decal
@@ -3153,6 +3182,8 @@ velocityjitter 256 256 256
 
 
 // bullet trail (somewhat like a tracer)
+// used in qcsrc/server/w_common.qc:				zcurveparticles_from_tracetoss(particleeffectnum("tr_bullet"), self.origin, trace_endpos, self.velocity)
+// used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("tr_bullet"), from, to)
 effect tr_bullet
 trailspacing 128
 type spark
