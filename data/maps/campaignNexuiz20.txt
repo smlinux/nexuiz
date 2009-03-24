@@ -1,4 +1,4 @@
-"//campaign:Nexuiz Campaign"
+"//campaign:Nexuiz 2.0 Campaign"
 "//game","mapname","bots","skill","frag","mutator-sets","description","long description"
 "dm","downer","2","3","15",,"Downer","Welcome to your first taste of campaign deathmatch!\n\nYou will face off against two unskilled bots in the decaying industrial arena known as Downer with a fraglimit of 15, this should be good practice for later, so make the best of it."
 "dm","basement","3","3","10",,"Basement","Frenzied deathmatch in Basement against three bots, fraglimit is 10."
