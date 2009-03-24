@@ -73,8 +73,6 @@ void CampaignPreInit()
 		CampaignBailout("unknown map");
 		return;
 	}
-	if(Campaign_Invalid())
-		return;
 
 	baseskill = cvar("g_campaign_skill");
 	baseskill = baseskill + campaign_botskill[0];
@@ -95,6 +93,9 @@ void CampaignPreInit()
 	cvar_set("skill", ftos(baseskill));
 	cvar_set("bot_number", ftos(campaign_bots[0]));
 	MapInfo_SwitchGameType(MapInfo_Type_FromString(campaign_gametype[0]));
+
+	if(Campaign_Invalid())
+		return;
 
 	title = campaign_shortdesc[0];
 	title = strzone(strcat("Level ", ftos(campaign_level + 1), ": ", title));
