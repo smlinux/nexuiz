@@ -184,3 +184,10 @@ sprite wpn-minstanex      "MINSTANEX"     80ffff 000000 0.0 # bright cyan
 sprite wpn-hookgun        "HOOK"          008000 000000 0.0 # dark green
 sprite wpn-seeker         "SEEKER"        ff8000 000000 0.0 # orange
 sprite wpn-hlac           "HLAC"          00ff00 000000 0.0 # green
+sprite wpn-rifle          "RIFLE"         80ff00 000000 0.0 # orange
+
+sprite dom-neut           "CONTROL POINT" 00ffff 000000 0.0
+sprite dom-red            "CONTROL POINT" ff0000 000000 0.0
+sprite dom-blue           "CONTROL POINT" 0000ff 000000 0.0
+sprite dom-yellow         "CONTROL POINT" ffff00 000000 0.0
+sprite dom-pink           "CONTROL POINT" ff00ff 000000 0.0
