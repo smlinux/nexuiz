@@ -810,8 +810,6 @@ void Map_Goto_SetFloat(float position)
 void GameResetCfg()
 {
 	// settings persist, except...
-	if(cvar("g_campaign"))
-		localcmd("\nexec mutator_reset.cfg\n");
 	localcmd("\nsettemp_restore\n");
 };
 
