@@ -1,4 +1,4 @@
-"//campaign:Nexuiz Campaign"
+"//campaign:Nexuiz 2.5 Campaign"
 "//game","mapname","bots","skill","frag","mutator-sets","description","long description"
 "dm","runningman_1on1remix",1,1,10,,"DM: Running Man (1on1)","Welcome to the Nexuiz Campaign!\n\nFirst of all, you're going to learn the controls of the game by playing an easy 1on1 deathmatch against a single unskilled bot.\n\nFirst one to kill the other 10 times wins."
 "dm","darkzone",2,2,15,,"DM: Q1DM6 Remake","On this remake of a beloved level from the original Quake(r) from id Software, you'll face two bots on a somewhat higher skill level.\n\n15 frags will make you a winner here."
