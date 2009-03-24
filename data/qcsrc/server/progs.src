@@ -2,8 +2,10 @@
 
 ../common/util-pre.qh
 sys.qh
+pre-builtins.qh
 builtins.qh
 extensions.qh
+post-builtins.qh
 constants.qh
 ../common/constants.qh
 ../common/util.qh

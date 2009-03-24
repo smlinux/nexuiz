@@ -2317,9 +2317,8 @@ void bot_serverframe()
 	{
 		float a;
 		a = cvar("skill_auto");
-		if(!cvar("g_campaign"))
-			if(a)
-				autoskill(a);
+		if(a)
+			autoskill(a);
 		autoskill_nextthink = time + 5;
 	}
 

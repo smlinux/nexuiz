@@ -892,6 +892,25 @@ float MapInfo_CheckMap(string s) // returns 0 if the map can't be played with th
 	return r;
 }
 
+string MapInfo_GetGameTypeCvar(float t)
+{
+	switch(t)
+	{
+		case MAPINFO_TYPE_DEATHMATCH: return "g_dm";
+		case MAPINFO_TYPE_TEAM_DEATHMATCH: return "g_tdm";
+		case MAPINFO_TYPE_DOMINATION: return "g_domination";
+		case MAPINFO_TYPE_CTF: return "g_ctf";
+		case MAPINFO_TYPE_RUNEMATCH: return "g_runematch";
+		case MAPINFO_TYPE_LMS: return "g_lms";
+		case MAPINFO_TYPE_ARENA: return "g_arena";
+		case MAPINFO_TYPE_KEYHUNT: return "g_kh";
+		case MAPINFO_TYPE_ASSAULT: return "g_assault";
+		case MAPINFO_TYPE_ONSLAUGHT: return "g_onslaught";
+		case MAPINFO_TYPE_RACE: return "g_race";
+		default: return "";
+	}
+}
+
 void MapInfo_SwitchGameType(float t)
 {
 	cvar_set("gamecfg",      "0");
