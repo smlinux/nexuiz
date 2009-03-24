@@ -111,6 +111,8 @@ void CampaignPostInit()
 		return;
 	cvar_set("fraglimit", ftos(campaign_fraglimit[0]));
 	cvar_set("timelimit", "0");
+	cvar_set_builtin("fraglimit", ftos(campaign_fraglimit[0]));
+	cvar_set_builtin("timelimit", "0");
 }
 
 void CampaignSaveCvar(string cvarname, float value)
