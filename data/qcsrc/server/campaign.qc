@@ -9,14 +9,14 @@ float campaign_won;
 string campaign_index_var;
 float checkrules_equality;
 
-void CampaignBailout(string s)
+float CampaignBailout(string s)
 {
-	cvar_set("g_campaign", "0");
 	cvar = cvar_builtin;
 	cvar_string = cvar_string_builtin;
 	cvar_set = cvar_set_builtin;
+	cvar_set("g_campaign", "0");
 	print("campaign initialization failed: ", s, "\n");
-	return;
+	return 1;
 }
 
 string cvar_campaignwrapper_list; // string of format ; var value; var value; var value; 
@@ -47,6 +47,19 @@ void cvar_set_campaignwrapper(string theCvar, string theValue)
 	//print(cvar_campaignwrapper_list, "\n");
 }
 
+float Campaign_Invalid()
+{
+	string thismapname, wantedmapname;
+	thismapname = GetMapname();
+	wantedmapname = campaign_gametype[0];
+	if(MapInfo_CurrentGametype() != MapInfo_Type_FromString(wantedmapname))
+		return CampaignBailout("wrong game type!");
+	wantedmapname = campaign_mapname[0];
+	if(wantedmapname != thismapname)
+		return CampaignBailout(strcat("wrong map: ", wantedmapname, " != ", thismapname));
+	return 0;
+}
+
 void CampaignPreInit()
 {
 	float baseskill;
@@ -56,7 +69,12 @@ void CampaignPreInit()
 	campaign_index_var = strzone(strcat("g_campaign", campaign_name, "_index"));
 	CampaignFile_Load(campaign_level, 2);
 	if(campaign_entries < 1)
-		return CampaignBailout("unknown map");
+	{
+		CampaignBailout("unknown map");
+		return;
+	}
+	if(Campaign_Invalid())
+		return;
 
 	baseskill = cvar("g_campaign_skill");
 	baseskill = baseskill + campaign_botskill[0];
@@ -88,14 +106,8 @@ string GetMapname();
 void CampaignPostInit()
 {
 	// now some sanity checks
-	string thismapname, wantedmapname;
-	thismapname = GetMapname();
-	wantedmapname = campaign_gametype[0];
-	if(MapInfo_CurrentGametype() != MapInfo_Type_FromString(wantedmapname))
-		return CampaignBailout("wrong game type!");
-	wantedmapname = campaign_mapname[0];
-	if(wantedmapname != thismapname)
-		return CampaignBailout(strcat("wrong map: ", wantedmapname, " != ", thismapname));
+	if(Campaign_Invalid())
+		return;
 	cvar_set("fraglimit", ftos(campaign_fraglimit[0]));
 	cvar_set("timelimit", "0");
 }
