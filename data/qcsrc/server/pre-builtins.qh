@@ -1,0 +1,6 @@
+var float(string var) cvar;
+var string(string var) cvar_string;
+var void(string var, string val) cvar_set;
+#define cvar cvar_builtin
+#define cvar_string cvar_string_builtin
+#define cvar_set cvar_set_builtin
