@@ -18,6 +18,7 @@ Note: The only teams who can use dom control points are identified by spawnfunc_
 #define DOMPOINTFRAGS frags
 
 .float enemy_playerid;
+.entity sprite;
 
 void() dom_controlpoint_setup;
 
@@ -92,6 +93,24 @@ void dompoint_captured ()
 	SUB_UseTargets ();
 	self.delay = old_delay;
 	self.team = old_team;
+
+	switch(self.goalentity.team)
+	{
+		case COLOR_TEAM1:
+			WaypointSprite_UpdateSprites(self.sprite, "dom-red", "", "");
+			break;
+		case COLOR_TEAM2:
+			WaypointSprite_UpdateSprites(self.sprite, "dom-blue", "", "");
+			break;
+		case COLOR_TEAM3:
+			WaypointSprite_UpdateSprites(self.sprite, "dom-yellow", "", "");
+			break;
+		case COLOR_TEAM4:
+			WaypointSprite_UpdateSprites(self.sprite, "dom-pink", "", "");
+			break;
+	}
+	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_DOMPOINT, colormapPaletteColor(self.goalentity.team - 1, 0));
+	WaypointSprite_Ping(self.sprite);
 };
 
 void AnimateDomPoint()
@@ -184,6 +203,10 @@ void dompointtouch()
 		head = find(head, classname, "dom_team");
 	if(head == world)
 		return;
+
+	WaypointSprite_UpdateSprites(self.sprite, "dom-neut", "", "");
+	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_DOMPOINT, '0 1 1');
+	WaypointSprite_Ping(self.sprite);
 
 	self.goalentity = head;
 	self.model = head.mdl;
@@ -284,6 +307,8 @@ void dom_controlpoint_setup()
 	droptofloor();
 
 	waypoint_spawnforitem(self);
+	WaypointSprite_SpawnFixed("dom-neut", self.origin + '0 0 32', self, sprite);
+	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_DOMPOINT, '0 1 1');
 };
 
 
