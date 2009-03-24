@@ -1,14 +1,11 @@
 title <TITLE>
 description <DESCRIPTION>
 author <AUTHOR>
-cdtrack 6
-has weapons
-type dm 30 20
-type tdm 50 20 2
-type lms 9 20
-type kh 1000 20 3
+cdtrack 2
+// uncomment this if you added weapon pickups: has weapons
 // optional: fog density red green blue alpha mindist maxdist
 // optional: settemp_for_type (all|gametypename) cvarname value
 // optional: clientsettemp_for_type (all|gametypename) cvarname value
 // optional: size mins_x mins_y mins_z maxs_x maxs_y maxs_z
+// optional: hidden
 forbidden

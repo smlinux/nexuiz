@@ -657,6 +657,10 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 		{
 			MapInfo_Map_flags |= MAPINFO_FLAG_HIDDEN;
 		}
+		else if(t == "forbidden")
+		{
+			MapInfo_Map_flags |= MAPINFO_FLAG_FORBIDDEN;
+		}
 		else if(t == "type")
 		{
 			t = car(s); s = cdr(s);

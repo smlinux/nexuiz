@@ -2033,7 +2033,7 @@ vector shotorg_adjust(vector vecs, float y_is_right, float visual)
 		if(visual)
 		{
 			vecs_y = 0;
-			vecs_z -= 2;
+			vecs_z -= 4;
 		}
 		else
 		{
@@ -2044,7 +2044,7 @@ vector shotorg_adjust(vector vecs, float y_is_right, float visual)
 	else if (cvar("g_shootfromcenter"))
 	{
 		vecs_y = 0;
-		vecs_z -= 2;
+		vecs_z -= 4;
 	}
 	return vecs;
 }

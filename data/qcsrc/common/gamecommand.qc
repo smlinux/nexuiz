@@ -126,9 +126,9 @@ float GameCommand_Generic(string command)
 		{
 			MapInfo_Enumerate();
 			if(cvar("g_maplist_allow_hidden"))
-				i = 0;
+				i = MAPINFO_FLAG_FORBIDDEN;
 			else
-				i = MAPINFO_FLAG_HIDDEN;
+				i = MAPINFO_FLAG_HIDDEN | MAPINFO_FLAG_FORBIDDEN;
 			MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0, i, 0);
 			n = tokenizebyseparator(cvar_string("g_maplist"), " ");
 			s2 = "";
