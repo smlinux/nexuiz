@@ -564,7 +564,7 @@ void SV_PlayerPhysics()
 				self.ammo_cells -= frametime * cvar("g_jetpack_ammo") * f;
 				if(floor(c / 5) != floor(self.ammo_cells / 5))
 					sprint(self, "jetpack: less than ", ftos(floor(c)), " cells left\n");
-				else if(self.ammo_cells < 0.01)
+				else if(self.ammo_cells < 0.01 && cvar("g_jetpack_ammo"))
 					sprint(self, "jetpack: out of ammo\n");
 				self.flags &~= FL_ONGROUND;
 				self.modelflags |= MF_ROCKET;
