@@ -527,6 +527,44 @@ void SV_PlayerPhysics()
 
 		if (self.waterlevel == WATERLEVEL_SWIMMING)
 			CheckWaterJump ();
+
+		if (g_jetpack && self.BUTTON_HOOK)
+		{
+			self.flags &~= FL_ONGROUND;
+			//makevectors(self.v_angle_y * '0 1 0');
+			makevectors(self.v_angle);
+			wishvel = v_forward * self.movement_x + v_right * self.movement_y;
+			// add remaining speed as Z component
+			maxairspd = sv_maxairspeed*max(1, maxspd_mod);
+			wishvel_x *= 1 / maxairspd;
+			wishvel_y *= 1 / maxairspd;
+			wishvel_z = 0;
+			wishvel_z += sqrt(max(0, 1 - wishvel * wishvel));
+			wishvel_z += cvar("g_jetpack_accel_upadjust");
+			wishvel = normalize(wishvel);
+			wishvel_x *= cvar("g_jetpack_accel_side");
+			wishvel_y *= cvar("g_jetpack_accel_side");
+			wishvel_z *= cvar("g_jetpack_accel_up");
+
+			wishdir = normalize(wishvel);
+			wishspeed = vlen(wishvel);
+
+			f = (1 - (self.velocity * wishdir) / cvar("g_jetpack_maxspeed"));
+			if(cvar("g_jetpack_ammo"))
+			{
+				f = min(f, self.ammo_cells / (cvar("g_jetpack_ammo") * frametime));
+			}
+			if (f > 0)
+			{
+				self.velocity = self.velocity + wishvel * f * frametime;
+				self.ammo_cells -= frametime * cvar("g_jetpack_ammo") * f;
+				self.modelflags |= MF_ROCKET;
+			}
+			else
+				self.modelflags &~= MF_ROCKET;
+		}
+		else
+			self.modelflags &~= MF_ROCKET;
 	}
 
 	if (self.flags & FL_WATERJUMP )

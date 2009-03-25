@@ -755,6 +755,9 @@ void readplayerstartcvars()
 	start_health = cvar("g_balance_health_start");
 	start_armorvalue = cvar("g_balance_armor_start");
 
+	if(g_jetpack)
+		g_grappling_hook = 0;
+
 	g_weaponarena = 0;
 	s = cvar_string("g_weaponarena");
 	if(s == "0")
@@ -947,6 +950,12 @@ void readplayerstartcvars()
 		g_grappling_hook = 0;
 	}
 
+	if(g_jetpack)
+	{
+		start_weapons &~= WEPBIT_HOOK;
+		warmup_start_weapons &~= WEPBIT_HOOK;
+	}
+
 	if(g_weapon_stay == 2)
 	{
 		if(!start_ammo_shells) start_ammo_shells = g_pickup_shells;
@@ -1024,6 +1033,7 @@ void readlevelcvars(void)
 	g_jump_grunt = cvar("g_jump_grunt");
 	g_footsteps = cvar("g_footsteps");
 	g_grappling_hook = cvar("g_grappling_hook");
+	g_jetpack = cvar("g_jetpack");
 	g_laserguided_missile = cvar("g_laserguided_missile");
 	g_midair = cvar("g_midair");
 	g_minstagib = cvar("g_minstagib");
@@ -1427,7 +1437,7 @@ void precache()
 	// common weapon precaches
 	precache_sound ("weapons/weapon_switch.wav");
 	precache_sound ("weapons/weaponpickup.wav");
-	if (cvar("g_grappling_hook"))
+	if(g_grappling_hook)
 	{
 		precache_sound ("weapons/hook_fire.wav"); // hook
 		precache_sound ("weapons/hook_impact.wav"); // hook

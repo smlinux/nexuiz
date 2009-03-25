@@ -36,6 +36,7 @@ float g_pickup_respawntime_medium;
 float g_pickup_respawntime_long;
 float g_pickup_respawntime_powerup;
 float g_maplist_allow_hidden;
+float g_jetpack;
 
 float sv_clones;
 float sv_cheats;
