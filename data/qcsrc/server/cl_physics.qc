@@ -551,12 +551,21 @@ void SV_PlayerPhysics()
 			f = (1 - (self.velocity * wishdir) / cvar("g_jetpack_maxspeed"));
 			if(cvar("g_jetpack_ammo"))
 			{
-				f = min(f, self.ammo_cells / (cvar("g_jetpack_ammo") * frametime));
+				if(self.ammo_cells < 0.01)
+					f = 0;
+				else
+					f = min(f, self.ammo_cells / (cvar("g_jetpack_ammo") * frametime));
 			}
 			if (f > 0)
 			{
 				self.velocity = self.velocity + wishvel * f * frametime;
+				float c;
+				c = self.ammo_cells;
 				self.ammo_cells -= frametime * cvar("g_jetpack_ammo") * f;
+				if(floor(c / 5) != floor(self.ammo_cells / 5))
+					sprint(self, "jetpack: less than ", ftos(floor(c)), " cells left\n");
+				else if(self.ammo_cells < 0.01)
+					sprint(self, "jetpack: out of ammo\n");
 				self.flags &~= FL_ONGROUND;
 				self.modelflags |= MF_ROCKET;
 			}
