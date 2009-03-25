@@ -401,6 +401,8 @@ void Nixnex_ChooseNextWeapon()
 		e = get_weaponinfo(j);
 		if(!e.weapons) // skip dummies
 			continue;
+		if not(e.spawnflags & WEPSPAWNFLAG_NORMAL)
+			continue;
 		RandomSelection_Add(world, j, 1, 0);
 	}
 	nixnex_nextweapon = RandomSelection_chosen_float;

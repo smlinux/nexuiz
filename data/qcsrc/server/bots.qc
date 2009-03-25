@@ -1727,7 +1727,6 @@ float bot_aimdir(vector v, float maxfiredeviation)
 {
 	local float dist, delta_t, blend;
 	local vector desiredang, diffang;
-	local float delta_t;
 
 	//dprint("aim ", self.netname, ": old:", vtos(self.v_angle));
 	// make sure v_angle is sane first
