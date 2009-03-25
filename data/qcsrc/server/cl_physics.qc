@@ -530,7 +530,6 @@ void SV_PlayerPhysics()
 
 		if (g_jetpack && self.BUTTON_HOOK)
 		{
-			self.flags &~= FL_ONGROUND;
 			//makevectors(self.v_angle_y * '0 1 0');
 			makevectors(self.v_angle);
 			wishvel = v_forward * self.movement_x + v_right * self.movement_y;
@@ -558,6 +557,7 @@ void SV_PlayerPhysics()
 			{
 				self.velocity = self.velocity + wishvel * f * frametime;
 				self.ammo_cells -= frametime * cvar("g_jetpack_ammo") * f;
+				self.flags &~= FL_ONGROUND;
 				self.modelflags |= MF_ROCKET;
 			}
 			else
