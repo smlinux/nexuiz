@@ -908,7 +908,7 @@ killtarget: remove all entities with this targetname when triggered
 NOTOUCH: the trigger can only be triggered by other entities, not by touching or firing (you should probably use trigger_relay or trigger_delay instead)
 */
 
-/*QUAKED trigger_push (1 .5 0) ? 
+/*QUAKED trigger_push (1 .5 0) ? - - INVERT_TEAM
 Jump pad. What else?
 Can be used in three ways:
 Nexuiz "target/height" way: put the target_position where the player should land, and tune height to get a nice jump path. A good starting value for height is 100.
@@ -920,6 +920,10 @@ height: if height is 0, the (player's origin at the) apex of the jump will be at
 movedir: when target is not set, direction vector to push to
 speed: speed of jump pad (default: 1000)
 noise: sound to play when jump pad is used; default is misc/jumppad.wav; you can set it to "" to make the pad silent
+team: team that owns this jump pad (5 = red, 14 = blue, etc) (when set, only this team can teleport)
+targetname: when targeted by a func_button, pressing the button will reassign the teleporter to the team of the activator.
+-------- SPAWNFLAGS --------
+INVERT_TEAM: the team that owns the teleporter will NOT jump when touching this
 */
 
 /*QUAKED trigger_relay (.5 .5 .5) (-8 -8 -8) (8 8 8) 
@@ -945,11 +949,15 @@ swamp_interval: interval of damage when in swamp (default is 1)
 swamp_slowdown: amount of slowdown caused by the swamp (default is 0.5)
 */
 
-/*QUAKED trigger_teleport (.5 .5 .5) ? 
+/*QUAKED trigger_teleport (.5 .5 .5) ? - - INVERT_TEAM
 Touching this will teleport players to the location of the targeted misc_teleporter_dest entity.
 Note that in Nexuiz, teleporters preserve momentum of the player using them.
 -------- KEYS --------
 target: this must point to a misc_teleporter_dest entity. If it points to more than one, a destination is randomly selected on teleport.
+team: team that owns this teleporter (5 = red, 14 = blue, etc) (when set, only this team can teleport)
+targetname: when targeted by a func_button, pressing the button will reassign the teleporter to the team of the activator.
+-------- SPAWNFLAGS --------
+INVERT_TEAM: the team that owns the teleporter will NOT teleport when touching this
 */
 
 /*QUAKED weapon_crylink (1 0 .5) (-30 -30 0) (30 30 32) FLOATING

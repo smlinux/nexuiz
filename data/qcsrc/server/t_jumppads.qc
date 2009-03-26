@@ -8,6 +8,12 @@ void() SUB_UseTargets;
 
 float trigger_push_calculatevelocity_flighttime;
 
+void trigger_push_use()
+{
+	if(teams_matter)
+		self.team = activator.team;
+}
+
 /*
 	trigger_push_calculatevelocity
 
@@ -134,6 +140,10 @@ void trigger_push_touch()
 	if (other.deadflag && other.iscreature)
 		return;
 
+	if(self.team)
+		if(!(self.spawnflags & 4) == !(self.team == other.team))
+			return;
+
 	EXACTTRIGGER_TOUCH;
 
 	if(self.target)
@@ -259,6 +269,7 @@ void spawnfunc_trigger_push()
 
 	EXACTTRIGGER_INIT;
 
+	self.use = trigger_push_use;
 	self.touch = trigger_push_touch;
 
 	// normal push setup

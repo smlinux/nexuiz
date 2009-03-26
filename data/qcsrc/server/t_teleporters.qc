@@ -1,3 +1,9 @@
+void trigger_teleport_use()
+{
+	if(teams_matter)
+		self.team = activator.team;
+}
+
 void tdeath(entity player, entity teleporter, entity telefragger, vector telefragmin, vector telefragmax)
 {
 	entity head;
@@ -109,6 +115,10 @@ void Teleport_Touch (void)
 	if (!other.flags & FL_CLIENT)	// FIXME: Make missiles firable through the teleport too
 		return;
 
+	if(self.team)
+		if(!(self.spawnflags & 4) == !(self.team == other.team))
+			return;
+
 	EXACTTRIGGER_TOUCH;
 
 	makevectors(self.enemy.mangle);
@@ -219,6 +229,8 @@ void spawnfunc_trigger_teleport (void)
 	self.angles = '0 0 0';
 
 	EXACTTRIGGER_INIT;
+
+	self.use = trigger_teleport_use;
 
 	// this must be called to spawn the teleport waypoints for bots
 	InitializeEntity(self, teleport_findtarget, INITPRIO_FINDTARGET);
