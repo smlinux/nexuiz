@@ -154,16 +154,18 @@ float w_hook(float req)
 			{
 				if ( time > self.hook_time_ammodecrease )
 				{
-					if ( self.ammo_cells >= 1 )
+					if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 					{
-						if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
+						if ( self.ammo_cells >= frametime / hooked_ammodecrease_delay )
+						{
 							self.ammo_cells -= frametime / hooked_ammodecrease_delay;
-						// decrease next frame again
-					}
-					else
-					{
-						self.hook_state |= HOOK_REMOVING;
-						W_SwitchWeapon_Force(self, w_getbestweapon(self));
+							// decrease next frame again
+						}
+						else
+						{
+							self.hook_state |= HOOK_REMOVING;
+							W_SwitchWeapon_Force(self, w_getbestweapon(self));
+						}
 					}
 				}
 			}
