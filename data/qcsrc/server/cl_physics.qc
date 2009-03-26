@@ -649,7 +649,8 @@ void SV_PlayerPhysics()
 		// fix speedhacks :P
 		wishvel = normalize(wishvel) * min(vlen(wishvel) / maxairspd, 1);
 		// add the unused velocity as up component
-		wishvel_z += sqrt(max(0, 1 - wishvel * wishvel));
+		wishvel_z = 0;
+		wishvel_z = sqrt(max(0, 1 - wishvel * wishvel));
 		// it is now normalized, so...
 		wishvel_x *= cvar("g_jetpack_acceleration_side");
 		wishvel_y *= cvar("g_jetpack_acceleration_side");
