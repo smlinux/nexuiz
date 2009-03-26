@@ -5,7 +5,7 @@
 "+moveright"                            "strafe right"
 "+jump"                                 "jump / swim"
 "+crouch"                               "crouch / sink"
-"+hook"                                 "off-hand hook"
+"+hook"                                 "off-hand hook / jet pack"
 ""                                      ""
 ""                                      "Attacking"
 "+attack"                               "primary fire"
