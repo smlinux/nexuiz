@@ -529,49 +529,6 @@ void SV_PlayerPhysics()
 
 		if (self.waterlevel == WATERLEVEL_SWIMMING)
 			CheckWaterJump ();
-
-		if (g_jetpack && self.BUTTON_HOOK)
-		{
-			//makevectors(self.v_angle_y * '0 1 0');
-			makevectors(self.v_angle);
-			wishvel = v_forward * self.movement_x + v_right * self.movement_y;
-			// add remaining speed as Z component
-			maxairspd = sv_maxairspeed*max(1, maxspd_mod);
-			wishvel_x *= 1 / maxairspd;
-			wishvel_y *= 1 / maxairspd;
-			wishvel_z = 0;
-			wishvel_z += sqrt(max(0, 1 - wishvel * wishvel));
-			wishvel_z += cvar("g_jetpack_accel_upadjust");
-			wishvel = normalize(wishvel);
-			wishvel_x *= cvar("g_jetpack_accel_side");
-			wishvel_y *= cvar("g_jetpack_accel_side");
-			wishvel_z *= cvar("g_jetpack_accel_up");
-
-			wishdir = normalize(wishvel);
-			wishspeed = vlen(wishvel);
-
-			f = (1 - (self.velocity * wishdir) / cvar("g_jetpack_maxspeed"));
-			if(cvar("g_jetpack_ammo"))
-			{
-				if(self.ammo_cells < 0.01)
-					f = 0;
-				else
-					f = min(f, self.ammo_cells / (cvar("g_jetpack_ammo") * frametime));
-			}
-			if (f > 0)
-			{
-				self.velocity = self.velocity + wishvel * f * frametime;
-				float c;
-				c = self.ammo_cells;
-				self.ammo_cells -= frametime * cvar("g_jetpack_ammo") * f;
-				if(floor(c / 5) != floor(self.ammo_cells / 5))
-					sprint(self, "jetpack: less than ", ftos(floor(c)), " cells left\n");
-				else if(self.ammo_cells < 0.01 && cvar("g_jetpack_ammo"))
-					sprint(self, "jetpack: out of fuel\n");
-				self.flags &~= FL_ONGROUND;
-				self.modelflags |= MF_ROCKET;
-			}
-		}
 	}
 
 	if (self.flags & FL_WATERJUMP )
@@ -677,6 +634,61 @@ void SV_PlayerPhysics()
 			f = wishspeed - (self.velocity * wishdir);
 			if (f > 0)
 				self.velocity = self.velocity + wishdir * min(f, sv_accelerate*maxspd_mod * frametime * wishspeed);
+		}
+	}
+	else if (g_jetpack && self.BUTTON_HOOK && (!cvar("g_jetpack_ammo") || self.ammo_cells >= 0.01))
+	{
+		//makevectors(self.v_angle_y * '0 1 0');
+		makevectors(self.v_angle);
+		wishvel = v_forward * self.movement_x + v_right * self.movement_y;
+		// add remaining speed as Z component
+		maxairspd = sv_maxairspeed*max(1, maxspd_mod);
+		// fix speedhacks :P
+		wishvel = normalize(wishvel) * min(vlen(wishvel) / maxairspd, 1);
+		// add the unused velocity as up component
+		wishvel_z += sqrt(max(0, 1 - wishvel * wishvel));
+		// it is now normalized, so...
+		wishvel_x *= cvar("g_jetpack_acceleration_side");
+		wishvel_y *= cvar("g_jetpack_acceleration_side");
+		wishvel_z *= cvar("g_jetpack_acceleration_up");
+		wishvel_z += cvar("g_jetpack_antigravity") * sv_gravity;
+
+		float fxy, fz;
+		fxy = bound(0, 1 - (self.velocity * normalize(wishvel_x * '1 0 0' + wishvel_y * '0 1 0')) / cvar("g_jetpack_maxspeed_side"), 1);
+		if(wishvel_z - sv_gravity > 0)
+			fz = bound(0, 1 - self.velocity_z / cvar("g_jetpack_maxspeed_up"), 1);
+		else
+			fz = bound(0, 1 + self.velocity_z / cvar("g_jetpack_maxspeed_up"), 1);
+
+		float fvel;
+		fvel = vlen(wishvel);
+		wishvel_x *= fxy;
+		wishvel_y *= fxy;
+		wishvel_z = (wishvel_z - sv_gravity) * fz + sv_gravity;
+		fvel = vlen(wishvel) / fvel;
+
+		if(cvar("g_jetpack_ammo"))
+		{
+			if(self.ammo_cells < 0.01)
+				f = 0;
+			else
+				f = min(1, self.ammo_cells / (cvar("g_jetpack_ammo") * frametime * fvel));
+		}
+		else
+			f = 1;
+
+		if (f > 0 && wishvel != '0 0 0')
+		{
+			self.velocity = self.velocity + wishvel * f * frametime;
+			float c;
+			c = self.ammo_cells;
+			self.ammo_cells -= cvar("g_jetpack_ammo") * frametime * fvel * f;
+			if(floor(c / 5) != floor(self.ammo_cells / 5))
+				sprint(self, strcat("jetpack: less than ", ftos(floor(c)), " cells left\n"));
+			else if(self.ammo_cells < 0.01 && cvar("g_jetpack_ammo"))
+				sprint(self, "jetpack: out of fuel\n");
+			self.flags &~= FL_ONGROUND;
+			self.modelflags |= MF_ROCKET;
 		}
 	}
 	else if (self.flags & FL_ONGROUND)
