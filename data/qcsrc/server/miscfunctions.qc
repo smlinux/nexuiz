@@ -755,9 +755,6 @@ void readplayerstartcvars()
 	start_health = cvar("g_balance_health_start");
 	start_armorvalue = cvar("g_balance_armor_start");
 
-	if(g_jetpack)
-		g_grappling_hook = 0;
-
 	g_weaponarena = 0;
 	s = cvar_string("g_weaponarena");
 	if(s == "0")
@@ -951,10 +948,7 @@ void readplayerstartcvars()
 	}
 
 	if(g_jetpack)
-	{
-		start_weapons &~= WEPBIT_HOOK;
-		warmup_start_weapons &~= WEPBIT_HOOK;
-	}
+		g_grappling_hook = 0; // these two can't coexist, as they use the same button
 
 	if(g_weapon_stay == 2)
 	{
