@@ -388,6 +388,8 @@ void SV_PlayerPhysics()
 	if (clienttype(self) == CLIENTTYPE_BOT)
 		bot_think();
 
+	self.modelflags &~= MF_ROCKET;
+
 	if (self.movetype == MOVETYPE_NONE && self.disableclientprediction != 2)
 		return;
 
@@ -569,11 +571,7 @@ void SV_PlayerPhysics()
 				self.flags &~= FL_ONGROUND;
 				self.modelflags |= MF_ROCKET;
 			}
-			else
-				self.modelflags &~= MF_ROCKET;
 		}
-		else
-			self.modelflags &~= MF_ROCKET;
 	}
 
 	if (self.flags & FL_WATERJUMP )
