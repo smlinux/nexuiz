@@ -52,9 +52,7 @@ void fillNexuizMiscSettingsTab(entity me)
 		me.TD(me, 1, 2.8/3, e = makeNexuizRadioButton(1, "showspeed", "5", "knots"));
 	me.TR(me);
 		me.TDempty(me, 0.2);
-		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(0, "showtopspeed", "Also show top speed"));
-			e.yesValue = -1;
-			e.noValue = 0;
+		me.TD(me, 1, 2.8, e = makeNexuizCheckBoxEx(-1, 0, "showtopspeed", "Also show top speed"));
 			setDependent(e, "showspeed", 0.5, -0.5);
 	me.TR(me);
 	me.TR(me);

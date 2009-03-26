@@ -173,7 +173,7 @@ void fillNexuizMutatorsDialog(entity me)
 	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_pinata", "Pinata"));
 	me.TR(me);
-		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_weapon_stay", "Weapons stay"));
+		me.TD(me, 1, 2, e = makeNexuizCheckBoxEx(2, 0, "g_weapon_stay", "Weapons stay"));
 	me.TR(me);
 		s = makeNexuizSlider(10, 50, 1, "g_bloodloss");
 		me.TD(me, 1, 2, e = makeNexuizSliderCheckBox(0, 1, s, "Blood loss"));

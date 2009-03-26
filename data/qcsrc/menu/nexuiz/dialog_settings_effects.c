@@ -139,8 +139,7 @@ void fillNexuizEffectsSettingsTab(entity me)
 
 	me.TR(me);
 		if(cvar("developer"))
-			me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_showsurfaces", "Show surfaces"));
-				e.yesValue = 3;
+			me.TD(me, 1, 3, e = makeNexuizCheckBoxEx(3, 0, "r_showsurfaces", "Show surfaces"));
 
 	me.TR(me);
 		me.TD(me, 1, 1.5, e = makeNexuizCheckBox(0, "r_glsl_offsetmapping", "Offset mapping"));
