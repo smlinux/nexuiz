@@ -665,7 +665,7 @@ void SV_PlayerPhysics()
 		wishvel_x *= fxy;
 		wishvel_y *= fxy;
 		wishvel_z = (wishvel_z - sv_gravity) * fz + sv_gravity;
-		fvel = vlen(wishvel) / fvel;
+		fvel = min(1, vlen(wishvel) / fvel);
 
 		if(cvar("g_jetpack_ammo"))
 		{
