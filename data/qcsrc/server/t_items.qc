@@ -729,7 +729,7 @@ void weapon_defaultspawnfunc(float wpn)
 	if(self.team)
 		self.flags |= FL_NO_WEAPON_STAY;
 
-	if(g_weapon_stay == 2)
+	if(g_weapon_stay == 2 && self.classname != "droppedweapon")
 	{
 		self.ammo_shells = 0;
 		self.ammo_nails = 0;
