@@ -639,7 +639,7 @@ void SV_PlayerPhysics()
 				self.velocity = self.velocity + wishdir * min(f, sv_accelerate*maxspd_mod * frametime * wishspeed);
 		}
 	}
-	else if (g_jetpack && self.BUTTON_HOOK && (!cvar("g_jetpack_ammo") || self.ammo_cells >= 0.01))
+	else if (g_jetpack && self.BUTTON_HOOK && (!cvar("g_jetpack_ammo") || self.ammo_cells >= 0.01 || self.items & IT_UNLIMITED_WEAPON_AMMO))
 	{
 		//makevectors(self.v_angle_y * '0 1 0');
 		makevectors(self.v_angle);
@@ -670,7 +670,7 @@ void SV_PlayerPhysics()
 		wishvel_z = (wishvel_z - sv_gravity) * fz + sv_gravity;
 		fvel = min(1, vlen(wishvel) / fvel);
 
-		if(cvar("g_jetpack_ammo"))
+		if(cvar("g_jetpack_ammo") && !(self.items & IT_UNLIMITED_WEAPON_AMMO))
 		{
 			if(self.ammo_cells < 0.01)
 				f = 0;
@@ -683,7 +683,8 @@ void SV_PlayerPhysics()
 		if (f > 0 && wishvel != '0 0 0')
 		{
 			self.velocity = self.velocity + wishvel * f * frametime;
-			self.ammo_cells -= cvar("g_jetpack_ammo") * frametime * fvel * f;
+			if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
+				self.ammo_cells -= cvar("g_jetpack_ammo") * frametime * fvel * f;
 			self.flags &~= FL_ONGROUND;
 			self.modelflags |= MF_ROCKET;
 			self.items |= IT_USING_JETPACK;
