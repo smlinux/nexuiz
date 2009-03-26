@@ -368,6 +368,7 @@ void W_WeaponFrame()
 	//	self.weapon_nextthink = time;
 
 	// update currentammo incase it has changed
+#if 0
 	if (self.items & IT_CELLS)
 		self.currentammo = self.ammo_cells;
 	else if (self.items & IT_ROCKETS)
@@ -378,7 +379,7 @@ void W_WeaponFrame()
 		self.currentammo = self.ammo_shells;
 	else
 		self.currentammo = 1;
-
+#endif
 };
 
 float nixnex_weapon;

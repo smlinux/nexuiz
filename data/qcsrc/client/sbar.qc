@@ -1967,7 +1967,16 @@ void Sbar_Draw (void)
 				}
 
 				// ammo
-				x = getstati(STAT_AMMO);
+				if (stat_items & IT_SHELLS)
+					x = getstati(STAT_SHELLS);
+				else if (stat_items & IT_NAILS)
+					x = getstati(STAT_NAILS);
+				else if (stat_items & IT_ROCKETS)
+					x = getstati(STAT_ROCKETS);
+				else if (stat_items & IT_CELLS)
+					x = getstati(STAT_CELLS);
+				else
+					x = 0;
 				if ((stat_items & IT_AMMO) || x != 0)
 				{
 					if (stat_items & IT_SHELLS)
@@ -1982,6 +1991,18 @@ void Sbar_Draw (void)
 						Sbar_DrawXNum('224 0 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
 					else
 						Sbar_DrawXNum('224 0 0', x, 3, 24, '0.7 0 0', 1, 0);
+				}
+
+				// jetpack cells
+				if(stat_items & IT_USING_JETPACK)
+				if not(stat_items & IT_CELLS)
+				{
+					x = getstati(STAT_CELLS);
+					drawpic(sbar + '296 -30 0', "gfx/sb_cells", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
+					if(x > 10)
+						Sbar_DrawXNum('224 -30 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
+					else
+						Sbar_DrawXNum('224 -30 0', x, 3, 24, '0.7 0 0', 1, 0);
 				}
 
 				if (sbar_x + 320 + 160 <= vid_conwidth)
@@ -2034,7 +2055,16 @@ void Sbar_Draw (void)
 				else
 					Sbar_DrawXNum('81 12 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
 
-				x = getstati(STAT_AMMO);
+				if (stat_items & IT_SHELLS)
+					x = getstati(STAT_SHELLS);
+				else if (stat_items & IT_NAILS)
+					x = getstati(STAT_NAILS);
+				else if (stat_items & IT_ROCKETS)
+					x = getstati(STAT_ROCKETS);
+				else if (stat_items & IT_CELLS)
+					x = getstati(STAT_CELLS);
+				else
+					x = 0;
 				if ((stat_items & IT_AMMO) || x != 0)
 				{
 					// (519-3*24) = 447
@@ -2050,6 +2080,18 @@ void Sbar_Draw (void)
 						Sbar_DrawXNum('447 12 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
 					else
 						Sbar_DrawXNum('447 12 0', x, 3, 24, '0.7 0 0', 1, 0);
+				}
+
+				// jetpack cells
+				if(stat_items & IT_USING_JETPACK)
+				if not(stat_items & IT_CELLS)
+				{
+					x = getstati(STAT_CELLS);
+					drawpic(sbar + '519 -40 0', "gfx/sb_cells", '0 0 0', '1 1 1', sbar_alpha_fg, 0);
+					if(x > 10)
+						Sbar_DrawXNum('447 -28 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
+					else
+						Sbar_DrawXNum('447 -28 0', x, 3, 24, '0.7 0 0', 1, 0);
 				}
 
 				if (sb_lines > 24)

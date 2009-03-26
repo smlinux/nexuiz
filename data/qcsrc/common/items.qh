@@ -30,6 +30,8 @@ float	IT_UNLIMITED_SUPERWEAPONS = 2;
 float	IT_UNLIMITED_AMMO         = 3;
 // both of these combined
 float	IT_CTF_SHIELDED           = 4; // set for the flag shield
+// using jetpack
+float   IT_USING_JETPACK          = 8;
 float	IT_SHELLS				= 256;
 float	IT_NAILS				= 512;
 float	IT_ROCKETS				= 1024;

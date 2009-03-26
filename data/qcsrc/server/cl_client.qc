@@ -1829,7 +1829,10 @@ spectate mode routines
 void SpectateCopy(entity spectatee) {
 	self.armortype = spectatee.armortype;
 	self.armorvalue = spectatee.armorvalue;
-	self.currentammo = spectatee.currentammo;
+	self.ammo_cells = spectatee.ammo_cells;
+	self.ammo_shells = spectatee.ammo_shells;
+	self.ammo_nails = spectatee.ammo_nails;
+	self.ammo_rockets = spectatee.ammo_rockets;
 	self.effects = spectatee.effects & EFMASK_CHEAP; // eat performance
 	self.health = spectatee.health;
 	self.impulse = 0;

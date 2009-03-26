@@ -356,6 +356,7 @@ void SV_PlayerPhysics()
 	local vector wishvel, wishdir, v;
 	local float wishspeed, f, maxspd_mod, spd, maxairspd, airaccel, swampspd_mod, shtest_score, buttons;
 	string temps;
+	float buttons_prev;
 
 	buttons = self.BUTTON_ATCK + 2 * self.BUTTON_JUMP + 4 * self.BUTTON_ATCK2 + 8 * self.BUTTON_ZOOM + 16 * self.BUTTON_CROUCH + 32 * self.BUTTON_HOOK + 64 * self.BUTTON_USE;
 	if(!sv_maxidle_spectatorsareidle || self.movetype == MOVETYPE_WALK)
@@ -363,6 +364,7 @@ void SV_PlayerPhysics()
 		if(buttons != self.buttons_old || self.movement != self.movement_old || self.v_angle != self.v_angle_old)
 			self.parm_idlesince = time;
 	}
+	buttons_prev = self.buttons_old;
 	self.buttons_old = buttons;
 	self.movement_old = self.movement;
 	self.v_angle_old = self.v_angle;
@@ -389,6 +391,7 @@ void SV_PlayerPhysics()
 		bot_think();
 
 	self.modelflags &~= MF_ROCKET;
+	self.items &~= IT_USING_JETPACK;
 
 	if (self.movetype == MOVETYPE_NONE && self.disableclientprediction != 2)
 		return;
@@ -680,19 +683,18 @@ void SV_PlayerPhysics()
 		if (f > 0 && wishvel != '0 0 0')
 		{
 			self.velocity = self.velocity + wishvel * f * frametime;
-			float c;
-			c = self.ammo_cells;
 			self.ammo_cells -= cvar("g_jetpack_ammo") * frametime * fvel * f;
-			if(floor(c / 5) != floor(self.ammo_cells / 5))
-				sprint(self, strcat("jetpack: less than ", ftos(floor(c)), " cells left\n"));
-			else if(self.ammo_cells < 0.01 && cvar("g_jetpack_ammo"))
-				sprint(self, "jetpack: out of fuel\n");
 			self.flags &~= FL_ONGROUND;
 			self.modelflags |= MF_ROCKET;
+			self.items |= IT_USING_JETPACK;
 		}
 	}
 	else if (self.flags & FL_ONGROUND)
 	{
+		// we get here if we ran out of ammo
+		if(g_jetpack && self.BUTTON_HOOK && !(buttons_prev & 32))
+			sprint(self, "You don't have any fuel for the ^2Jetpack\n");
+
 		// walking
 		makevectors(self.v_angle_y * '0 1 0');
 		wishvel = v_forward * self.movement_x + v_right * self.movement_y;
@@ -739,6 +741,10 @@ void SV_PlayerPhysics()
 	}
 	else
 	{
+		// we get here if we ran out of ammo
+		if(g_jetpack && self.BUTTON_HOOK && !(buttons_prev & 32))
+			sprint(self, "You don't have any fuel for the ^2Jetpack\n");
+
 		if(maxspd_mod < 1)
 		{
 			maxairspd = sv_maxairspeed*maxspd_mod;
