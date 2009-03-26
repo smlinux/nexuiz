@@ -82,6 +82,14 @@ while(@ARGV)
 	{
 		$options->{light} = undef;
 	}
+	elsif($_ =~ /^-(-.*)/)
+	{
+		if($curmode eq 'maps')
+		{
+			$curmode = 'bsp';
+		}
+		push @{$options->{$curmode}}, $1;
+	}
 	elsif($_ =~ /^-/ and $curmode eq 'maps')
 	{
 		$curmode = 'bsp';
