@@ -1578,6 +1578,22 @@ string getTimeoutText(float addOneSecond) {
 
 void player_powerups (void)
 {
+	if((self.items & IT_USING_JETPACK) && !self.deadflag)
+	{
+		SoundEntity_StartSound(self, CHAN_PLAYER, "misc/jetpack_fly.wav", VOL_BASE, ATTN_IDLE);
+		self.modelflags |= MF_ROCKET;
+	}
+	else
+	{
+		SoundEntity_StopSound(self, CHAN_PLAYER);
+		self.modelflags &~= MF_ROCKET;
+	}
+
+	self.effects &~= (EF_RED | EF_BLUE | EF_ADDITIVE | EF_FULLBRIGHT);
+
+	if(!self.modelindex || self.deadflag) // don't apply the flags if the player is gibbed
+		return;
+
 	if (g_minstagib)
 	{
 		if (self.items & IT_STRENGTH)
@@ -1619,22 +1635,6 @@ void player_powerups (void)
 		}
 		return;
 	}
-
-	self.effects &~= (EF_RED | EF_BLUE | EF_ADDITIVE | EF_FULLBRIGHT);
-
-	if(self.items & IT_USING_JETPACK)
-	{
-		SoundEntity_StartSound(self, CHAN_PLAYER, "misc/jetpack_fly.wav", VOL_BASE, ATTN_IDLE);
-		self.modelflags |= MF_ROCKET;
-	}
-	else
-	{
-		SoundEntity_StopSound(self, CHAN_PLAYER);
-		self.modelflags &~= MF_ROCKET;
-	}
-
-	if(!self.modelindex) // don't apply the flags if the player is gibbed
-		return;
 
 	if (self.items & IT_STRENGTH)
 	{
@@ -2211,6 +2211,8 @@ void PlayerPreThink (void)
 			self.fixangle = TRUE;
 		}
 
+		player_powerups();
+
 		if (self.deadflag != DEAD_NO)
 		{
 			float button_pressed, force_respawn;
@@ -2337,7 +2339,6 @@ void PlayerPreThink (void)
 		if(frametime)
 			W_WeaponFrame();
 
-		player_powerups();
 		player_regen();
 		if(frametime)
 			player_anim();
