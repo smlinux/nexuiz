@@ -7,6 +7,8 @@
     .entity path_prev;
 #endif
 
+#define medium spawnshieldtime
+
 entity openlist;
 entity closedlist;
 entity scraplist;
@@ -40,16 +42,12 @@ entity goal_node;
 entity best_open_node;
 .float is_path_node;
 
-
-
-#define DEBUGPATHING
+//#define DEBUGPATHING
 #ifdef DEBUGPATHING
 float edge_show(vector point,float fsize);
 void mark_error(vector where,float lifetime);
 void mark_info(vector where,float lifetime);
 entity mark_misc(vector where,float lifetime);
-
-
 
 void pathlib_showpath(entity start)
 {
@@ -91,19 +89,6 @@ void pathlib_showpath2(entity path)
 
 #endif
 
-/*
-float pathlib_stdproc_path_validate(vector start,vector end)
-{
-    tracebox(start, self.mins * 2, self.maxs * 2, end, MOVE_WORLDONLY, self);
-
-    if(vlen(trace_endpos - end) < 5)
-        return 1;
-
-    return 0;
-}
-*/
-
-
 void pathlib_deletepath(entity start)
 {
     entity e;
@@ -133,16 +118,13 @@ vector vsnap(vector point,float fsize)
     return vret;
 }
 
-
-#define floor_failmask (DPCONTENTS_SLIME | DPCONTENTS_LAVA)
-// | DPCONTENTS_MONSTERCLIP | DPCONTENTS_DONOTENTER
-float walknode_stepsize;
+float  walknode_stepsize;
 vector walknode_stepup;
 vector walknode_maxdrop;
 vector walknode_boxup;
 vector walknode_boxmax;
 vector walknode_boxmin;
-float pathlib_movenode_goodnode;
+float  pathlib_movenode_goodnode;
 
 float floor_ok(vector point)
 {
@@ -173,15 +155,16 @@ float floor_ok(vector point)
     return 0;
 }
 
+#define inwater(point) (pointcontents(point) == CONTENT_WATER)
+/*
 float inwater(vector point)
 {
     if(pointcontents(point) == CONTENT_WATER)
         return 1;
-
     return 0;
 }
+*/
 
-//#define _pcheck(p) traceline(p+z_up,p-z_down,MOVE_WORLDONLY,self); if(trace_fraction == 1.0) return 1
 #define _pcheck(p) traceline(p+z_up,p-z_down,MOVE_WORLDONLY,self); if not(floor_ok(trace_endpos)) return 1
 float edge_check(vector point,float fsize)
 {
@@ -245,17 +228,13 @@ vector pathlib_wateroutnode(vector start,vector end)
         if(pointcontents(surface) == CONTENT_EMPTY)
             break;
     }
-    //mark_error(surface,10);
 
     if(pointcontents(surface + '0 0 1') != CONTENT_EMPTY)
         return end;
 
     tracebox(start + '0 0 64', walknode_boxmin,walknode_boxmax, end + '0 0 64', MOVE_WORLDONLY, self);
     if(trace_fraction == 1)
-    {
         pathlib_movenode_goodnode = 1;
-        //mark_error(end + '0 0 64',30);
-    }
 
     if(fabs(surface_z - end_z) > 32)
         pathlib_movenode_goodnode = 0;
@@ -287,13 +266,6 @@ vector pathlib_flynode(vector start,vector end)
 {
     pathlib_movenode_goodnode = 0;
 
-    /*
-    if(pointcontents(start) == CONTENT_EMPTY)
-        return end;
-
-    if(pointcontents(end) == CONTENT_EMPTY)
-        return end;
-    */
     end_x = fsnap(end_x, pathlib_gridsize);
     end_y = fsnap(end_y, pathlib_gridsize);
 
@@ -394,24 +366,48 @@ float pathlib_g_static(entity parent,vector to, float static_cost)
         return parent.pathlib_node_g + static_cost;
 }
 
+float pathlib_g_static_water(entity parent,vector to, float static_cost)
+{
+    if(inwater(to))
+        return parent.pathlib_node_g + static_cost * pathlib_movecost_waterfactor;
+    else
+        return parent.pathlib_node_g + static_cost;
+}
+
 float pathlib_g_euclidean(entity parent,vector to, float static_cost)
 {
-    return vlen(parent.origin - to);
+    return parent.pathlib_node_g + vlen(parent.origin - to);
+}
+float pathlib_g_euclidean_water(entity parent,vector to, float static_cost)
+{
+    if(inwater(to))
+        return parent.pathlib_node_g + vlen(parent.origin - to) * pathlib_movecost_waterfactor;
+    else
+        return parent.pathlib_node_g + vlen(parent.origin - to);
 }
 
 var float(vector from,vector to) pathlib_heuristic;
+
+/**
+    Manhattan Menas we expect to move up,down left or right
+    No diagonal moves espected. (like moving bewteen city blocks)
+**/
 float pathlib_h_manhattan(vector a,vector b)
 {
     //h(n) = D * (abs(n.x-goal.x) + abs(n.y-goal.y))
 
     float h;
-    h = fabs(a_x - b_x);
-    h = h + fabs(a_y - b_y);
-    h = pathlib_gridsize * h;
+    h  = fabs(a_x - b_x);
+    h += fabs(a_y - b_y);
+    h *= pathlib_gridsize;
 
     return h;
 }
 
+/**
+    This heuristic consider both stright and disagonal moves
+    to have teh same cost.
+**/
 float pathlib_h_diagonal(vector a,vector b)
 {
     //h(n) = D * max(abs(n.x-goal.x), abs(n.y-goal.y))
@@ -424,11 +420,20 @@ float pathlib_h_diagonal(vector a,vector b)
     return h;
 }
 
+/**
+    This heuristic only considers the stright line distance.
+    Will usualy mean a lower H then G meaning A* Will speand more
+    and run slower.
+**/
 float pathlib_h_euclidean(vector a,vector b)
 {
     return vlen(a - b);
 }
 
+/**
+    This heuristic consider both stright and disagonal moves,
+    But has a separate cost for diagonal moves.
+**/
 float pathlib_h_diagonal2(vector a,vector b)
 {
     float h_diag,h_str,h,x,y;
@@ -451,35 +456,12 @@ float pathlib_h_diagonal2(vector a,vector b)
     return h;
 }
 
-float pathlib_h_diagonal2tbs(vector start,vector point,vector end)
-{
-    float h_diag,h_str,h,x,y;
+/**
+    This heuristic consider both stright and disagonal moves,
+    But has a separate cost for diagonal moves.
 
-    /*
-    h_diagonal(n) = min(abs(n.x-goal.x), abs(n.y-goal.y))
-    h_straight(n) = (abs(n.x-goal.x) + abs(n.y-goal.y))
-    h(n) = D2 * h_diagonal(n) + D * (h_straight(n) - 2*h_diagonal(n)))
-    */
 
-    float dx1,dx2,dy1,dy2,fcross;
-    dx1 = point_x - end_x;
-    dy1 = point_y - end_y;
-    dx2 = start_x - end_x;
-    dy2 = start_y - end_y;
-    fcross = fabs(dx1*dy2 - dx2*dy1);
-
-    x = fabs(point_x - end_x);
-    y = fabs(point_y - end_y);
-
-    h_diag = min(x,y);
-    h_str = x + y;
-
-    h =  pathlib_movecost_diag * h_diag;
-    h += pathlib_movecost * (h_str - 2 * h_diag);
-
-    return h + (fcross * 0.001);
-}
-
+**/
 float pathlib_h_diagonal2sdp(vector preprev,vector prev,vector point,vector end)
 {
     float h_diag,h_str,h,x,y,z;
@@ -501,12 +483,10 @@ float pathlib_h_diagonal2sdp(vector preprev,vector prev,vector point,vector end)
     float m;
     vector d1,d2;
 
-    m = 0.999;
-    d1 = normalize(preprev - prev);
-    d2 = normalize(prev - point);
-    if(vlen(d1-d2) > 0.6)
-        m = 1;
-
+    d1 = normalize(preprev - point);
+    d2 = normalize(prev    - point);
+    m = vlen(d1-d2);
+    //bprint("pathlib_h_diagonal2sdp-M = ",ftos(m),"\n");
 
     return h * m;
 }
@@ -530,13 +510,11 @@ float pathlib_h_diagonal3(vector a,vector b)
     h =  pathlib_movecost_diag * h_diag;
     h += pathlib_movecost * (h_str - 2 * h_diag);
 
-    //if(inwater(a))
-    //h =
-
     return h;
 }
 
 //#define PATHLIB_USE_NODESCRAP
+#define PATHLIB_NODEEXPIRE 0.05
 float pathlib_scraplist_cnt;
 entity newnode()
 {
@@ -557,6 +535,9 @@ entity newnode()
 #endif
     ++pathlib_made_cnt;
     n = spawn();
+#ifdef PATHLIB_NODEEXPIRE
+    n.think      = SUB_Remove;
+    n.nextthink  = time + PATHLIB_NODEEXPIRE;
     return n;
 }
 
@@ -564,11 +545,15 @@ void dumpnode(entity n)
 {
 #ifdef PATHLIB_USE_NODESCRAP
     ++pathlib_scraplist_cnt;
-    n.owner = scraplist;
-#else
+
+    n.path_next    = world;
+    n.path_prev    = world;
     n.is_path_node = FALSE;
-    n.think = SUB_Remove;
-    n.nextthink= time;
+    n.owner        = scraplist;
+#else
+    //n.is_path_node = FALSE;
+    n.think        = SUB_Remove;
+    n.nextthink    = time;
 #endif
 }
 
@@ -585,19 +570,17 @@ entity pathlib_mknode(vector where,entity parent)
 
     ++pathlib_open_cnt;
 
-    //if(inwater(where))
-    //{
-        //node.waterlevel = 1;
-        //mark_info(where,5);
-    //}
-    //mark_info(where,30);
+    node.medium = pointcontents(where);
+
     return node;
 }
+
 var float pathlib_expandnode(entity node, vector start, vector goal);
 float pathlib_expandnode_star(entity node, vector start, vector goal);
 float pathlib_expandnode_box(entity node, vector start, vector goal);
 
-float pathlib_makenode(entity parent,vector start, vector to, vector goal,float cost)
+var float pathlib_makenode(entity parent,vector start, vector to, vector goal,float cost);
+float pathlib_makenode_adaptive(entity parent,vector start, vector to, vector goal,float cost)
 {
     entity node;
     float h,g,f,doedge;
@@ -607,32 +590,19 @@ float pathlib_makenode(entity parent,vector start, vector to, vector goal,float 
 
     if(inwater(parent.origin))
     {
-        if(inwater(to))
-        {
-            //bprint("Switch to water tracing\n");
-            pathlib_expandnode = pathlib_expandnode_box;
-            pathlib_movenode   = pathlib_swimnode;
-        }
-        else
-        {
-
-            //bprint("Switch to get out of water tracing\n");
-            pathlib_expandnode = pathlib_expandnode_box;
-            pathlib_movenode   = pathlib_swimnode;
-        }
+        pathlib_expandnode = pathlib_expandnode_box;
+        pathlib_movenode   = pathlib_swimnode;
     }
     else
     {
         if(inwater(to))
         {
-            //bprint("Switch to get into water tracing\n");
             pathlib_expandnode = pathlib_expandnode_box;
             pathlib_movenode   = pathlib_swimnode;
         }
         else
         {
 
-            //bprint("Switch to land tracing\n");
             pathlib_expandnode = pathlib_expandnode_star;
             pathlib_movenode   = pathlib_walknode;
             doedge = 1;
@@ -641,26 +611,16 @@ float pathlib_makenode(entity parent,vector start, vector to, vector goal,float 
 
     where = pathlib_movenode(parent.origin,to,0);
     if not(pathlib_movenode_goodnode)
-    {
-        //mark_error(where,15);
         return 0;
-    }
 
     if(doedge)
     if(edge_check(where,pathlib_edge_check_size))
         return 0;
 
-    h = pathlib_heuristic(where,goal);
-
-    /*
     if(parent.path_prev)
-        h = pathlib_h_diagonal2sdp(parent.path_prev.origin,parent.origin,where,goal);
-    else
-        h = pathlib_heuristic(where,goal);
-    */
+        pathlib_h_diagonal2sdp(parent.path_prev.origin,parent.origin,where,goal);
 
-
-    //h = 0;
+    h = pathlib_heuristic(where,goal);
     g = pathlib_cost(parent,where,cost);
     f = g + h;
 
@@ -692,7 +652,6 @@ float pathlib_makenode(entity parent,vector start, vector to, vector goal,float 
     }
 
     node = pathlib_mknode(where,parent);
-
     node.pathlib_node_h = h;
     node.pathlib_node_g = g;
     node.pathlib_node_f = f;
@@ -754,14 +713,14 @@ void pathlib_close_node(entity node,vector goal)
 
     if(vlen(node.origin - goal) <= pathlib_gridsize)
     {
-        //if(vlen(node.origin - goal) < 128)
         vector goalmove;
+
         goalmove = pathlib_walknode(node.origin,goal,1);
         if(pathlib_movenode_goodnode)
-            {
-                goal_node         = node;
-                pathlib_foundgoal = TRUE;
-            }
+        {
+            goal_node         = node;
+            pathlib_foundgoal = TRUE;
+        }
     }
 }
 
@@ -830,14 +789,9 @@ void pathlib_cleanup()
 {
     entity node;
 
-    best_open_node = world;
-
     node = findfloat(world,is_path_node, TRUE);
     while(node)
     {
-        node.path_next = world;
-        node.path_prev = world;
-        node.is_path_node = FALSE;
         dumpnode(node);
         node = findfloat(node,is_path_node, TRUE);
     }
@@ -847,19 +801,95 @@ void pathlib_cleanup()
 
     if(closedlist)
         remove(closedlist);
+
+    best_open_node = world;
+    openlist       = world;
+    closedlist     = world;
+}
+
+var float buildpath_nodefilter(vector n,vector c,vector p);
+float buildpath_nodefilter_directional(vector n,vector c,vector p)
+{
+    vector d1,d2;
+
+    d2 = normalize(p - c);
+    d1 = normalize(c - n);
+
+    if(vlen(d1-d2) < 0.25)
+        return 1;
+
+    return 0;
+}
+
+float buildpath_nodefilter_moveskip(vector n,vector c,vector p)
+{
+    pathlib_walknode(p,n,1);
+    if(pathlib_movenode_goodnode)
+        return 1;
+
+    return 0;
+}
+
+entity path_build(entity next, vector where, entity prev, entity start)
+{
+    entity path;
+
+    if(prev && next)
+        if(buildpath_nodefilter)
+            if(buildpath_nodefilter(next.origin,where,prev.origin))
+                return next;
+
+
+    path           = spawn();
+    path.owner     = start;
+    path.path_next = next;
+
+    setorigin(path,where);
+
+    if(!next)
+        path.classname = "path_end";
+    else
+    {
+        if(!prev)
+            path.classname = "path_start";
+        else
+            path.classname = "path_node";
+    }
+
+    return path;
 }
 
 entity pathlib_astar(vector from,vector to)
 {
-    entity path;
-    entity open,n;
+    entity path, start, end, open, n, ln;
+    float ptime, ftime, ctime;
+
+    ptime = gettime(GETTIME_REALTIME);
 
     pathlib_cleanup();
 
-    pathlib_heuristic  = pathlib_h_diagonal3;
-    pathlib_cost       = pathlib_g_static;
-    pathlib_expandnode = pathlib_expandnode_star;
-    pathlib_movenode   = pathlib_walknode;
+    // Select water<->land capable node make/link
+    pathlib_makenode     = pathlib_makenode_adaptive;
+    // Select XYZ cost estimate
+    pathlib_heuristic    = pathlib_h_diagonal3;
+    // Select distance + waterfactor cost
+    pathlib_cost         = pathlib_g_euclidean_water;
+    // Select star expander
+    pathlib_expandnode   = pathlib_expandnode_star;
+    // Select walk simulation movement test
+    pathlib_movenode     = pathlib_walknode;
+    // Filter final nodes by direction
+    buildpath_nodefilter = buildpath_nodefilter_directional;
+
+    // If the start is in water we need diffrent settings
+    if(inwater(from))
+    {
+        // Select volumetric node expaner
+        pathlib_expandnode = pathlib_expandnode_box;
+
+        // Water movement test
+        pathlib_movenode   = pathlib_swimnode;
+    }
 
     if not(openlist)
         openlist       = spawn();
@@ -879,7 +909,7 @@ entity pathlib_astar(vector from,vector to)
     pathlib_bestcash_saved = 0;
     pathlib_recycle_cnt    = 0;
 
-    pathlib_gridsize       = 192;
+    pathlib_gridsize       = 128;
     pathlib_movecost       = pathlib_gridsize;
     pathlib_movecost_diag  = vlen(('1 1 0' * pathlib_gridsize));
     pathlib_movecost_waterfactor = 1.1;
@@ -888,24 +918,31 @@ entity pathlib_astar(vector from,vector to)
     walknode_boxmax   = self.maxs * 1.5;
     walknode_boxmin   = self.mins * 1.5;
 
-    pathlib_edge_check_size = (vlen(walknode_boxmin - walknode_boxmax) * 0.25);
+    pathlib_edge_check_size = (vlen(walknode_boxmin - walknode_boxmax) * 0.5);
 
     walknode_boxup    = '0 0 2' * self.maxs_z;
     walknode_stepsize = 32;
     walknode_stepup   = '0 0 1' * walknode_stepsize;
     walknode_maxdrop  = '0 0 3' * walknode_stepsize;
 
+    from_x = fsnap(from_x,pathlib_gridsize);
+    from_y = fsnap(from_y,pathlib_gridsize);
+
+    to_x = fsnap(to_x,pathlib_gridsize);
+    to_y = fsnap(to_y,pathlib_gridsize);
+
     dprint("AStar init. ", ftos(pathlib_scraplist_cnt), " nodes on scrap\n");
     path = pathlib_mknode(from,world);
     pathlib_close_node(path,to);
     if(pathlib_foundgoal)
     {
-        dprint("A* Goal fond in first square!\n");
+        dprint("AStar: Goal found on first node!\n");
 
         open           = spawn();
         open.owner     = open;
         open.classname = "path_end";
         setorigin(open,path.origin);
+
         pathlib_cleanup();
 
         return open;
@@ -913,8 +950,9 @@ entity pathlib_astar(vector from,vector to)
 
     if(pathlib_expandnode(path,from,to) <= 0)
     {
-        dprint("A* pathing fail\n");
+        dprint("AStar path fail.\n");
         pathlib_cleanup();
+
         return world;
     }
 
@@ -939,53 +977,55 @@ entity pathlib_astar(vector from,vector to)
 
         if(pathlib_foundgoal)
         {
-            dprint("Path found, re-tracing...\n");
+            dprint("Target found. Rebuilding and filtering path...\n");
+            ftime = gettime(GETTIME_REALTIME);
+            ptime = ftime - ptime;
 
-            open              = goal_node;
-            open.is_path_node = FALSE;
-            open.classname    = "path_end";
-            open.owner        = path;
-            open.path_next    = world;
+            start = path_build(world,path.origin,world,world);
+            end   = path_build(world,goal_node.origin,world,start);
+            ln    = end;
 
-
-            while(open.path_prev != path)
+            open = goal_node;
+            for(open = goal_node; open.path_prev != path; open = open.path_prev)
             {
-                n                 = open;
-                open              = open.path_prev;
-                open.owner        = path;
-                open.path_next    = n;
-
-                open.is_path_node = FALSE;
-                open.classname    = "path_node";
+                n    = path_build(ln,open.origin,open.path_prev,start);
+                ln.path_prev = n;
+                ln = n;
             }
+            start.path_next = n;
+            n.path_prev = start;
+            ftime = gettime(GETTIME_REALTIME) - ftime;
 
-            open.path_prev    = path;
-            path.path_next    = open;
-            path.classname    = "path_master";
-            path.is_path_node = FALSE;
-            path.owner        = path;
-
+            ctime = gettime(GETTIME_REALTIME);
             pathlib_cleanup();
+            ctime = gettime(GETTIME_REALTIME) - ctime;
+
 
 #ifdef DEBUGPATHING
-            dprint("Chain done..\n");
-            pathlib_showpath2(path);
+            pathlib_showpath2(start);
 
+            dprint("Time used -      pathfinding: ", ftos(ptime),"\n");
+            dprint("Time used - rebuild & filter: ", ftos(ftime),"\n");
+            dprint("Time used -          cleanup: ", ftos(ctime),"\n");
+            dprint("Time used -            total: ", ftos(ptime + ftime + ctime),"\n");
+            dprint("Time used -         # frames: ", ftos(ceil((ptime + ftime + ctime) / sys_ticrate)),"\n\n");
+            dprint("Nodes -         created: ", ftos(pathlib_made_cnt),"\n");
+            dprint("Nodes -            open: ", ftos(pathlib_open_cnt),"\n");
+            dprint("Nodes -          merged: ", ftos(pathlib_merge_cnt),"\n");
+            dprint("Nodes -          closed: ", ftos(pathlib_closed_cnt),"\n");
+            dprint("Nodes -        searched: ", ftos(pathlib_searched_cnt),"\n");
 
-            dprint("           Nodes reused: ", ftos(pathlib_recycle_cnt),"\n");
-            dprint("          Nodes created: ", ftos(pathlib_made_cnt),"\n");
-            dprint("       Nodes make/reuse: ", ftos(pathlib_made_cnt / pathlib_recycle_cnt),"\n");
-            dprint("             Nodes open: ", ftos(pathlib_open_cnt),"\n");
-            dprint("           Nodes merged: ", ftos(pathlib_merge_cnt),"\n");
-            dprint("           Nodes closed: ", ftos(pathlib_closed_cnt),"\n");
-            dprint("         Nodes searched: ", ftos(pathlib_searched_cnt),"\n");
+        if(pathlib_recycle_cnt)
+            dprint("Nodes -      make/reuse: ", ftos(pathlib_made_cnt / pathlib_recycle_cnt),"\n");
+        if(pathlib_recycle_cnt)
+            dprint("Nodes -          reused: ", ftos(pathlib_recycle_cnt),"\n");
+
             dprint("Nodes bestopen searched: ", ftos(pathlib_bestopen_seached),"\n");
-            dprint("    Nodes bestcash hits: ", ftos(pathlib_bestcash_hits),"\n");
-            dprint("    Nodes bestcash save: ", ftos(pathlib_bestcash_saved),"\n");
+            dprint("Nodes bestcash -   hits: ", ftos(pathlib_bestcash_hits),"\n");
+            dprint("Nodes bestcash -   save: ", ftos(pathlib_bestcash_saved),"\n");
             dprint("AStar done. ", ftos(pathlib_scraplist_cnt), " nodes on scrap\n\n");
-
 #endif
-            return path;
+            return start;
         }
     }
 
@@ -995,4 +1035,6 @@ entity pathlib_astar(vector from,vector to)
 
     return world;
 }
+
+
 

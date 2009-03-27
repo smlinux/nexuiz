@@ -1,3 +1,5 @@
+.vector steerto;
+
 /**
     Uniform pull towards a point
 **/
@@ -261,6 +263,44 @@ vector steerlib_traceavoid(float pitch,float length)
     return (upwish+leftwish+downwish+rightwish) * 0.25;
 
 }
+
+/**
+    Steer towards the direction least obstructed.
+    Run two tracelines in a forward trident, bias each diretion negative if something is found there.
+**/
+vector steerlib_traceavoid_flat(float pitch, float length, vector vofs)
+{
+    vector vt_left, vt_right,vt_front;
+    float f_left, f_right,f_front;
+    vector leftwish, rightwish,frontwish, v_left;
+
+    v_left = v_right * -1;
+
+
+    vt_front = v_forward * length;
+    traceline(self.origin + vofs, self.origin + vofs + vt_front,MOVE_NOMONSTERS,self);
+    f_front = trace_fraction;
+
+    vt_left = (v_forward + (v_left * pitch)) * length;
+    traceline(self.origin + vofs, self.origin + vofs + vt_left,MOVE_NOMONSTERS,self);
+    f_left = trace_fraction;
+
+    //te_lightning1(world,self.origin, trace_endpos);
+
+    vt_right = (v_forward + (v_right * pitch)) * length;
+    traceline(self.origin + vofs, self.origin + vofs + vt_right ,MOVE_NOMONSTERS,self);
+    f_right = trace_fraction;
+
+    //te_lightning1(world,self.origin, trace_endpos);
+
+    leftwish  = v_left    * f_left;
+    rightwish = v_right   * f_right;
+    frontwish = v_forward * f_front;
+
+    return normalize(leftwish + rightwish + frontwish);
+
+}
+
 
 
 

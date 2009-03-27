@@ -1,3 +1,5 @@
+.vector moveto;
+
 /**
     Simulate drag
     self.velocity = movelib_vdrag(self.velocity,0.02,0.5);
@@ -61,18 +63,18 @@ void movelib_move(vector force,float max_velocity,float drag,float mass,float br
     deltatime = time - self.movelib_lastupdate;
     if (deltatime > 0.15) deltatime = 0;
     self.movelib_lastupdate = time;
-    if(!deltatime) return;
+    if (!deltatime) return;
 
     mspeed = vlen(self.velocity);
 
-    if(mass)
+    if (mass)
         acceleration = vlen(force) / mass;
     else
         acceleration = vlen(force);
 
-    if(self.flags & FL_ONGROUND)
+    if (self.flags & FL_ONGROUND)
     {
-        if(breakforce)
+        if (breakforce)
         {
             breakvec = (normalize(self.velocity) * (breakforce / mass) * deltatime);
             self.velocity = self.velocity - breakvec;
@@ -81,10 +83,10 @@ void movelib_move(vector force,float max_velocity,float drag,float mass,float br
         self.velocity = self.velocity + force * (acceleration * deltatime);
     }
 
-    if(drag)
+    if (drag)
         self.velocity = movelib_dragvec(drag, 1);
 
-    if(self.waterlevel > 1)
+    if (self.waterlevel > 1)
     {
         self.velocity = self.velocity + force * (acceleration * deltatime);
         self.velocity = self.velocity + '0 0 0.05' * sv_gravity * deltatime;
@@ -94,8 +96,8 @@ void movelib_move(vector force,float max_velocity,float drag,float mass,float br
 
     mspeed = vlen(self.velocity);
 
-    if(max_velocity)
-        if(mspeed > max_velocity)
+    if (max_velocity)
+        if (mspeed > max_velocity)
             self.velocity = normalize(self.velocity) * (mspeed - 50);//* max_velocity;
 }
 
@@ -176,28 +178,37 @@ void movelib_beak_simple(float force)
 
 void movelib_groundalign4point(float spring_length,float spring_up)
 {
-    vector a,b,c,d,e,r,push_angle;
+    vector a,b,c,d,e,r,push_angle, ahead,side;
+
     push_angle_y = 0;
     r = (self.absmax + self.absmin) * 0.5 + (v_up * spring_up);
     e = v_up * spring_length;
 
-    a = r + (v_forward * self.maxs_x) + (v_right * self.maxs_y);
-    b = r + (v_forward * self.maxs_x) - (v_right * self.maxs_y);
-    c = r - (v_forward * self.maxs_x) + (v_right * self.maxs_y);
-    d = r - (v_forward * self.maxs_x) - (v_right * self.maxs_y);
+    // Put springs slightly inside bbox
+    ahead = v_forward * (self.maxs_x * 0.85);
+    side  = v_right   * (self.maxs_y * 0.85);
+
+    a = r + ahead + side;
+    b = r + ahead - side;
+    c = r - ahead + side;
+    d = r - ahead - side;
 
     traceline(a, a - e,MOVE_NORMAL,self);
     a_z =  (1 - trace_fraction);
     r = trace_endpos;
+
     traceline(b, b - e,MOVE_NORMAL,self);
     b_z =  (1 - trace_fraction);
     r += trace_endpos;
+
     traceline(c, c - e,MOVE_NORMAL,self);
     c_z =  (1 - trace_fraction);
     r += trace_endpos;
+
     traceline(d, d - e,MOVE_NORMAL,self);
     d_z =  (1 - trace_fraction);
     r += trace_endpos;
+
     a_x = r_z;
     r = self.origin;
     r_z = r_z;
