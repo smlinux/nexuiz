@@ -269,10 +269,14 @@ void postMenuDraw()
 void preMenuDraw()
 {
 	vector fs, sz, line, mid;
-	Item_Nex_ExtResponseSystem_CheckForResponse();
-	if(!_Nex_ExtResponseSystem_VersionHandled)
-		if(time > _Nex_ExtResponseSystem_RetryTime)
-			Item_Nex_ExtResponseSystem_SendQuery();
+
+	if(!cvar("menu_updatecheck"))
+	{
+		Item_Nex_ExtResponseSystem_CheckForResponse();
+		if(!_Nex_ExtResponseSystem_VersionHandled)
+			if(time > _Nex_ExtResponseSystem_RetryTime)
+				Item_Nex_ExtResponseSystem_SendQuery();
+	}
 
 	if(_Nex_ExtResponseSystem_UpdateTo != "")
 	{
