@@ -45,6 +45,8 @@ void turret_flac_projectile_explode()
 
     // FIXME: tur_impacttime is not accurate enougth, this is a dirty hakk to make flac work.
 
+    //w_deathtypestring = "got caught in the flack.";
+
     if(self.enemy != world)
     if(self.cnt < time)
     if(vlen(self.origin - self.enemy.origin) > self.owner.shot_radius * 0.25)
@@ -100,7 +102,7 @@ void turret_flac_dinit()
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/flac.md3");
 
-    if (!turret_tag_setup(0))
+    if (!turret_tag_setup())
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
     // Our fire routine

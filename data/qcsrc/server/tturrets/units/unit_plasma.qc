@@ -9,30 +9,11 @@ void turret_plasma_projectile_explode();
 
 void turret_plasma_postthink()
 {
-
-
     if (self.tur_head.frame != 0)
         self.tur_head.frame = self.tur_head.frame + 1;
 
     if (self.tur_head.frame > 5)
         self.tur_head.frame = 0;
-
-    setsize(self,self.mins,self.maxs);
-    setsize(self.tur_head,self.tur_head.mins,self.tur_head.maxs);
-
-    /*
-    float h;
-    h = self.health / self.tur_health;
-    if(h<0.95)
-    {
-        if( (0.5 + random()) > h)
-        {
-            //bprint("Spark!\n");
-            //void(vector org, vector vel, float howmany) te_spark = #411;
-            te_spark(0.5 * (self.absmin + self.absmax) + (randomvec() * 64),randomvec() * 256,(1 - h) * 50);
-        }
-    }
-    */
 }
 
 void turret_plasma_dual_postthink()
@@ -48,15 +29,12 @@ void turret_plasma_attack()
 {
     entity proj;
 
-    turret_tag_fire_update();
-
     sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", VOL_BASE, ATTN_NORM);
     pointparticles(particleeffectnum("laser_muzzleflash"), self.tur_shotorg, self.tur_shotdir_updated * 1000, 1);
 
     proj                    = spawn ();
     setorigin(proj, self.tur_shotorg);
     setsize(proj, '-1 -1 -1', '1 1 1');
-    //setmodel(proj, "models/elaser.mdl"); // precision set above
     proj.classname       = "plasmabomb";
     proj.owner           = self;
     proj.bot_dodge       = TRUE;
@@ -81,8 +59,6 @@ void turret_plasma_attack()
 void turret_plasma_dual_attack()
 {
     entity proj;
-
-    //turret_tag_fire_update();
 
     sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", VOL_BASE, ATTN_NORM);
     proj                    = spawn ();
@@ -124,7 +100,7 @@ void turret_plasma_projectile_explode()
     WriteByte (MSG_BROADCAST, 155);
 
     self.event_damage = SUB_Null;
-
+    //w_deathtypestring = "ate to much plasma";
 #ifdef TURRET_DEBUG
     float d;
 
@@ -147,9 +123,9 @@ void turret_plasma_std_init()
     self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
 
     // How to aim
-    //self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE;// | TFL_AIM_ZPREDICT | TFL_AIM_GROUND2;
+    //self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_ZPREDICT | TFL_AIM_GROUND2;
     self.aim_flags      = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_GROUND2;
-    self.turrcaps_flags = TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_MEDPROJ | TFL_TURRCAPS_PLAYERKILL;// | TFL_TURRCAPS_MISSILEKILL;
+    self.turrcaps_flags = TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_MEDPROJ | TFL_TURRCAPS_PLAYERKILL | TFL_TURRCAPS_MISSILEKILL;
 
     if (turret_stdproc_init("plasma_std") == 0)
     {
@@ -158,8 +134,9 @@ void turret_plasma_std_init()
     }
 
     self.damage_flags    |= TFL_DMG_HEADSHAKE;
+
     //self.firecheck_flags |= (TFL_FIRECHECK_AFF | TFL_FIRECHECK_VERIFIED);
-    //  self.firecheck_flags |= TFL_FIRECHECK_AFF;
+    self.firecheck_flags |= TFL_FIRECHECK_AFF;
 
     //self.target_select_flags |= TFL_TARGETSELECT_FOV;
     //self.target_select_fov    = 45;
@@ -167,7 +144,7 @@ void turret_plasma_std_init()
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/plasma.md3");
 
-    if (!turret_tag_setup(0))
+    if (!turret_tag_setup())
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
     // Our fireing routine
@@ -204,7 +181,7 @@ void turret_plasma_dual_init()
     setmodel(self.tur_head,"models/turrets/plasmad.md3");
 
 
-    if (!turret_tag_setup(0))
+    if (!turret_tag_setup())
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
     // Our fireing routine

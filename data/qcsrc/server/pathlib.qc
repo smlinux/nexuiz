@@ -9,6 +9,8 @@
 
 #define medium spawnshieldtime
 
+//#define DEBUGPATHING
+
 entity openlist;
 entity closedlist;
 entity scraplist;
@@ -23,6 +25,10 @@ float pathlib_made_cnt;
 float pathlib_merge_cnt;
 float pathlib_recycle_cnt;
 float pathlib_searched_cnt;
+
+#ifdef DEBUGPATHING
+
+#endif
 
 float pathlib_bestopen_seached;
 float pathlib_bestcash_hits;
@@ -42,7 +48,7 @@ entity goal_node;
 entity best_open_node;
 .float is_path_node;
 
-//#define DEBUGPATHING
+
 #ifdef DEBUGPATHING
 float edge_show(vector point,float fsize);
 void mark_error(vector where,float lifetime);
@@ -900,14 +906,15 @@ entity pathlib_astar(vector from,vector to)
     if not(scraplist)
         scraplist      = spawn();
 
-    pathlib_closed_cnt     = 0;
-    pathlib_open_cnt       = 0;
-    pathlib_made_cnt       = 0;
-    pathlib_merge_cnt      = 0;
-    pathlib_searched_cnt   = 0;
-    pathlib_bestcash_hits  = 0;
-    pathlib_bestcash_saved = 0;
-    pathlib_recycle_cnt    = 0;
+    pathlib_closed_cnt       = 0;
+    pathlib_open_cnt         = 0;
+    pathlib_made_cnt         = 0;
+    pathlib_merge_cnt        = 0;
+    pathlib_searched_cnt     = 0;
+    pathlib_bestopen_seached = 0;
+    pathlib_bestcash_hits    = 0;
+    pathlib_bestcash_saved   = 0;
+    pathlib_recycle_cnt      = 0;
 
     pathlib_gridsize       = 128;
     pathlib_movecost       = pathlib_gridsize;

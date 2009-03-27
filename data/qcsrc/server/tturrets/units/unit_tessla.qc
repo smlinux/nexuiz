@@ -17,9 +17,8 @@ entity toast(entity from, float range, float damage)
         if ((e.toasted != 1) && (e != from))
             if (turret_validate_target(self,e,self.target_validate_flags) > 0)
             {
-
-                traceline(from.origin,e.origin,0,from);
-                if (trace_fraction > 0.9)
+                traceline(from.origin,e.origin,MOVE_WORLDONLY,from);
+                if (trace_fraction == 1.0)
                 {
                     d = vlen(e.origin - from.origin);
                     if (d < dd)
@@ -35,7 +34,7 @@ entity toast(entity from, float range, float damage)
     if (etarget)
     {
         te_smallflash(etarget.origin);
-        te_lightning1(world,from.origin,etarget.origin);
+        te_csqc_lightningarc(from.origin,etarget.origin);
         Damage(etarget,self,self,damage,DEATH_TURRET,etarget.origin,'0 0 0');
         etarget.toasted = 1;
     }
@@ -43,20 +42,34 @@ entity toast(entity from, float range, float damage)
     return etarget;
 }
 
+float turret_tesla_firecheck()
+{
+    if not (turret_stdproc_firecheck())
+        return 0;
+
+    self.target_select_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_MISSILES |
+                                 TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK;
+
+    self.enemy = turret_select_target();
+
+    if(self.enemy)
+        return 1;
+
+    return 0;
+
+}
+
 void turret_tesla_fire()
 {
     entity e,t;
     float d,r,i;
 
-    if (cvar("g_turrets_nofire") != 0)
-        return;
-
-    if (self.attack_finished_single > time) return;
+    //w_deathtypestring = "discoverd how a tesla coil works";
 
     d = self.shot_dmg;
     r = self.target_range;
     e = spawn();
-    setorigin(e,self.origin + self.tur_shotorg);
+    setorigin(e,self.tur_shotorg);
 
 
     self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_MISSILES |
@@ -71,11 +84,10 @@ void turret_tesla_fire()
                                  TFL_TARGETSELECT_TEAMCHECK;
 
     self.attack_finished_single = time + self.shot_refire;
-    self.ammo = self.ammo - self.shot_dmg;
-    for (i = 0;i < 10;i = i + 1)
+    for (i = 0; i < 10; ++i)
     {
         d *= 0.5;
-        r *= 0.75;
+        r *= 0.85;
         t = toast(t,r,d);
         if (t == world) break;
     }
@@ -90,15 +102,30 @@ void turret_tesla_fire()
 
 void turret_tesla_postthink()
 {
-    turret_tesla_fire();
+    if not (self.tur_active)
+    {
+        self.tur_head.avelocity = '0 0 0';
+        return;
+    }
 
-    self.tur_head.frame = self.tur_head.frame + 1;
+    if(self.ammo < self.shot_dmg)
+    {
+        self.tur_head.avelocity = '0 9 0' * (self.ammo / self.shot_dmg);
+    }
+    else
+    {
+        self.tur_head.avelocity = '0 90 0' * (self.ammo / self.shot_dmg);
 
-    if (self.tur_head.frame >= 11)
-        self.tur_head.frame = 0;
+        if(self.attack_finished_single > time)
+            return;
 
-    if (self.tur_head.avelocity == '0 0 0')
-        self.tur_head.avelocity = '0 35 0';
+        float f;
+        f = (self.ammo / self.ammo_max);
+        f = f*f;
+        if(f > random())
+            if(random() < 0.1)
+                te_csqc_lightningarc(self.tur_shotorg,self.tur_shotorg + (randomvec() * 350));
+    }
 }
 
 
@@ -106,13 +133,16 @@ void turret_tesla_dinit()
 {
     if (self.netname == "")      self.netname     = "Tesla Coil";
 
-    self.turrcaps_flags = TFL_TURRCAPS_HITSCAN | TFL_TURRCAPS_PLAYERKILL | TFL_TURRCAPS_MISSILEKILL;
-    self.target_select_flags = TFL_TARGETSELECT_NO;
-    self.firecheck_flags = TFL_FIRECHECK_REFIRE;
-    self.shoot_flags = TFL_SHOOT_CUSTOM;
-    self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
-    self.aim_flags = TFL_AIM_NO;
-    self.track_flags = TFL_TRACK_NO;
+    self.turrcaps_flags      = TFL_TURRCAPS_HITSCAN | TFL_TURRCAPS_PLAYERKILL | TFL_TURRCAPS_MISSILEKILL;
+
+    self.target_select_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_MISSILES |
+                               TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK;
+
+    self.firecheck_flags     = TFL_FIRECHECK_REFIRE | TFL_FIRECHECK_OWM_AMMO;
+    self.shoot_flags         = TFL_SHOOT_CUSTOM;
+    self.ammo_flags          = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
+    self.aim_flags           = TFL_AIM_NO;
+    self.track_flags         = TFL_TRACK_NO;
 
     if (turret_stdproc_init("tesla_std") == 0)
     {
@@ -126,11 +156,12 @@ void turret_tesla_dinit()
     self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_MISSILES |
                                  TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK;
 
-    if (!turret_tag_setup(0))
+    if (!turret_tag_setup())
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
-    self.turret_firefunc = turret_stdproc_nothing;
-    self.turret_postthink = turret_tesla_postthink;
+    self.turret_firefunc      = turret_tesla_fire;
+    self.turret_postthink     = turret_tesla_postthink;
+    self.turret_firecheckfunc = turret_tesla_firecheck;
 }
 
 /*QUAKED turret_tesla (0 .5 .8) ?

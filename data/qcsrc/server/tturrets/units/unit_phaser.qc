@@ -60,6 +60,7 @@ void beam_think()
     entity oldself;
     oldself = self;
     self = self.owner;
+    //w_deathtypestring = "was phased out of existence";
     FireImoBeam (   self.tur_shotorg,
                     self.tur_shotorg + self.tur_shotdir_updated * self.target_range_fire,
                     '-1 -1 -1' * self.shot_radius,
@@ -124,7 +125,7 @@ void turret_phaser_dinit()
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/phaser.md3");
 
-    if (!turret_tag_setup(0))
+    if (!turret_tag_setup())
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
     self.turret_firecheckfunc = turret_phaser_firecheck;

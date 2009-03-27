@@ -448,11 +448,11 @@ wkacked to save mem.
 * Stuff to plug into requierd but unused callbacks.
 */
 /// Always return 1
-float turret_stdproc_true();
+//float turret_stdproc_true();
 /// Always return 0
-float turret_stdproc_false();
+//float turret_stdproc_false();
 /// Always return nothing at all
-void turret_stdproc_nothing();
+//void turret_stdproc_nothing();
 
 /*
 * Target selection

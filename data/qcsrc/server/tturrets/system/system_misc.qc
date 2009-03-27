@@ -1,6 +1,20 @@
-//--// Some supptort routines //--//
+//--// Some support routines //--//
 
-#define anglemods(a) (a - floor(a / 360) * 360)
+#define anglemodss(a) (a - floor(a / 360) * 360)
+float(float v) anglemods =
+{
+	v = v - 360 * floor(v / 360);
+	return v;
+};
+float safeangle(float a)
+{
+    if((a > -361) && (a < 361))
+        return a;
+
+    a -= (360 * floor(a / 360));
+
+    return a;
+}
 
 float shortangle_f(float ang1,float ang2)
 {
@@ -25,6 +39,16 @@ vector shortangle_v(vector ang1,vector ang2)
     vtmp_x = shortangle_f(ang1_x,ang2_x);
     vtmp_y = shortangle_f(ang1_y,ang2_y);
     vtmp_z = shortangle_f(ang1_z,ang2_z);
+
+    return vtmp;
+}
+
+vector shortangle_vxy(vector ang1,vector ang2)
+{
+    vector vtmp;
+
+    vtmp_x = shortangle_f(ang1_x,ang2_x);
+    vtmp_y = shortangle_f(ang1_y,ang2_y);
 
     return vtmp;
 }
@@ -235,14 +259,19 @@ vector angleofs3(vector from,vector from_a, entity to)
     return v_res;
 }
 
-float turret_tag_setup(float linked)
+float turret_tag_setup()
 {
-    // Laters dooz
-    if (linked)
+    if(!self.tur_head)
+    {
+        dprint("Call to turret_tag_setup with self.tur_head missing!\n");
+        self.tur_shotorg = '0 0 0';
         return 0;
+    }
 
     setorigin(self.tur_head,gettaginfo(self,gettagindex(self,"tag_head")));
     self.tur_shotorg = gettaginfo(self.tur_head,gettagindex(self.tur_head,"tag_fire"));
+
+    v_forward = normalize(v_forward);
 
     return 1;
 }
@@ -251,11 +280,14 @@ float turret_tag_fire_update()
 {
     if(!self.tur_head)
     {
+        dprint("Call to turret_tag_fire_update with self.tur_head missing!\n");
         self.tur_shotorg = '0 0 0';
-        return 1;
+        return 0;
     }
 
     self.tur_shotorg = gettaginfo(self.tur_head,gettagindex(self.tur_head,"tag_fire"));
+    v_forward = normalize(v_forward);
+
     //dprint("update: tur_shotorg: ",vtos(self.tur_shotorg)," origin:", vtos(self.tur_head.origin), " angels: ", vtos(self.tur_head.angles),"\n");
 
     return 1;

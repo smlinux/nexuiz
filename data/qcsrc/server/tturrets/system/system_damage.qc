@@ -180,7 +180,7 @@ void turret_stdproc_die()
     }
 
 // Go boom
-    RadiusDamage (self,self, min(self.ammo,50),min(self.ammo,50) * 0.25,250,world,min(self.ammo,50)*5,0,world);
+    RadiusDamage (self,self, min(self.ammo,50),min(self.ammo,50) * 0.25,250,world,min(self.ammo,50)*5,DEATH_TURRET,world);
 
     if(self.damage_flags & TFL_DMG_DEATH_NORESPAWN)
     {
@@ -336,5 +336,3 @@ void turret_stdproc_damage (entity inflictor, entity attacker, float damage, flo
         baseent.think = turret_stdproc_die;
     }
 }
-
-

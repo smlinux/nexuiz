@@ -14,7 +14,8 @@ void turret_targettrigger_touch()
         if (e.turrcaps_flags & TFL_TURRCAPS_RECIVETARGETS)
         {
             self = e;
-            e.turret_addtarget(other,oldself);
+            if(e.turret_addtarget)
+                e.turret_addtarget(other,oldself);
         }
 
         e = find(e, targetname, oldself.target);

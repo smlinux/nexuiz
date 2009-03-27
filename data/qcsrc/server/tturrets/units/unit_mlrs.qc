@@ -77,7 +77,7 @@ void turret_mlrs_rocket_explode()
     sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
     org2 = findbetterlocation (self.origin, 16);
     pointparticles(particleeffectnum("rocket_explode"), org2, '0 0 0', 1);
-
+    //w_deathtypestring = "dident escape the rocket barrage";
 #ifdef TURRET_DEBUG
     float d;
 
@@ -117,7 +117,7 @@ void turret_mlrs_dinit()
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/mlrs.md3");
 
-    if (!turret_tag_setup(0))
+    if (!turret_tag_setup())
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
     // Our fire routine

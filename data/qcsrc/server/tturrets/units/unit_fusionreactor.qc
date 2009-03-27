@@ -58,7 +58,7 @@ void turret_fusionreactor_dinit()
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/reactor.md3");
 
-    //if(!turret_tag_setup(0))
+    //if(!turret_tag_setup())
     //    dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
     self.tur_head.scale = 0.75;

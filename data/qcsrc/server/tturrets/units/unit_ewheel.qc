@@ -4,7 +4,7 @@ void turret_ewheel_projectile_explode()
 
     org2 = findbetterlocation (self.origin, 8);
     pointparticles(particleeffectnum("laser_impact"), org2, trace_plane_normal * 1000, 1);
-
+    //w_deathtypestring = "saw the eweel. to late.";
 #ifdef TURRET_DEBUG
     float d;
 
@@ -61,183 +61,277 @@ void ewheel_attack()
 
 }
 
-#define EWHEEL_MASS 25
-#define EWHEEL_MAXSPEED 800
-#define EWHEEL_ACCEL_SLOW 100
-#define EWHEEL_ACCEL_FAST 350
-#define EWHEEL_BREAK_SLOW 150
-#define EWHEEL_BREAK_FAST 250
-#define EWHEEL_DRAG 0.25
-
-void ewheel_enemymove()
+float ewheel_moveverb_path(float eval)
 {
-    vector wish_angle,real_angle,steer,avoid;
-    float turn_limit,angle_ofs;
-
-    //steer = steerlib_attract2(point,0.5,2000,0.95);
-    steer = steerlib_pull(self.enemy.origin);
-    avoid = steerlib_traceavoid(0.3,350);
-
-    wish_angle = normalize(avoid * 0.5 + steer);
-    wish_angle = vectoangles(wish_angle);
-    real_angle = wish_angle - self.angles;
-
-    if (real_angle_x > self.angles_x)
+    switch (eval)
     {
-        if (real_angle_x >= 180)
-            real_angle_x -= 360;
-    }
-    else
-    {
-        if (real_angle_x <= -180)
-            real_angle_x += 360;
-    }
+    case VCM_EVAL:
 
-    if (real_angle_y > self.tur_head.angles_y)
-    {
-        if (real_angle_y >= 180)
-            real_angle_y -= 360;
-    }
-    else
-    {
-        if (real_angle_y <= -180)
-            real_angle_y += 360;
-    }
+        if (self.pathcurrent)
+            return verb.verb_static_value;
 
-    turn_limit = cvar("g_turrets_unit_ewheel_turnrate");
-    // Convert from dgr / sec to dgr / tic
-    turn_limit    = turn_limit / (1 / self.ticrate);
-    angle_ofs     = fabs(real_angle_y);
-    real_angle_y  = bound(turn_limit * -1,real_angle_y,turn_limit);
-    self.angles_y = (self.angles_y + real_angle_y);
+        return VS_CALL_NO;
+        break;
 
-    // Simulate banking
-    self.angles_z = bound(-45,real_angle_y * -2,45);
-
-    if (self.frame > 40)
-        self.frame = 1;
-
-    makevectors(self.angles);
-    if (self.tur_dist_aimpos > self.target_range_optimal)
-    {
-        if ( angle_ofs < 1 )
-        {
-            self.frame += 2;
-            movelib_move(v_forward * EWHEEL_ACCEL_FAST,EWHEEL_MAXSPEED,EWHEEL_DRAG,EWHEEL_MASS,0);
-        }
-        else if (angle_ofs < 2)
-        {
-            self.frame += 1;
-            movelib_move(v_forward * EWHEEL_ACCEL_SLOW,EWHEEL_MAXSPEED,EWHEEL_DRAG,EWHEEL_MASS,EWHEEL_BREAK_SLOW);
-        }
+    case VCM_DO:
+        // Do we have a path?
+        if not(self.pathcurrent)
+            return VS_CALL_NO;
         else
         {
-            movelib_move('0 0 0',EWHEEL_MAXSPEED,EWHEEL_DRAG,EWHEEL_MASS,EWHEEL_BREAK_FAST);
+            // Are we close enougth to a path node to switch to the next?
+            if (vlen(self.origin  - self.pathcurrent.origin) < 32)
+                if (self.pathcurrent.path_next == world)
+                {
+                    // Path endpoint reached
+                    pathlib_deletepath(self.pathcurrent.owner);
+                    self.pathcurrent = world;
+
+                    if (self.pathgoal)
+                    {
+                        if (self.pathgoal.use)
+                            self.pathgoal.use();
+
+                        if (self.pathgoal.enemy)
+                        {
+                            self.pathcurrent = pathlib_astar(self.pathgoal.origin,self.pathgoal.enemy.origin);
+                            self.pathgoal = self.pathgoal.enemy;
+                        }
+                    }
+                    else
+                        self.pathgoal = world;
+                }
+                else
+                    self.pathcurrent = self.pathcurrent.path_next;
         }
+
+
+        if (self.pathcurrent)
+        {
+            switch (self.waterlevel)
+            {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            }
+
+            self.moveto = self.pathcurrent.origin;
+            self.steerto = steerlib_attract2(self.moveto,0.5,500,0.95);
+
+            self.frame += 1;
+            movelib_move_simple(v_forward,cvar("g_turrets_unit_ewheel_speed_slow"),0.4);
+
+            return VS_CALL_YES_DOING;
+        }
+        else
+            return VS_CALL_YES_DONE;
+
+        break;
+
+    case VCM_REMOVE:
+
+        if (self.pathcurrent)
+            pathlib_deletepath(self.pathcurrent.owner);
+
+        self.pathcurrent = world;
+
+        return VS_CALL_YES_DONE;
+
+        break;
     }
-    else
-        movelib_move('0 0 0',EWHEEL_MAXSPEED,EWHEEL_DRAG,EWHEEL_MASS,EWHEEL_BREAK_FAST);
+
+    return VS_CALL_YES_DONE;
 }
 
-void ewheel_roammove()
+float ewheel_moveverb_enemy(float eval)
 {
-    movelib_move(v_forward,EWHEEL_MAXSPEED,0,EWHEEL_MASS,EWHEEL_BREAK_SLOW);
-    self.angles_z = 0;
-
-    /*
-    vector wish_angle,real_angle,steer,avoid;
-    float turn_limit,angle_ofs;
-    float dist;
-
-    return;
-
-    dist = vlen(self.origin - self.pos1);
-
-    //steer = steerlib_attract2(point,0.5,2000,0.95);
-    steer = steerlib_pull(self.pos1);
-    avoid = steerlib_traceavoid(0.3,350);
-
-    wish_angle = normalize(avoid * 0.5 + steer);
-    wish_angle = vectoangles(wish_angle);
-    real_angle = wish_angle - self.angles;
-
-    real_angle_y = shortangle_f(real_angle_y,self.angles_y);
-
-    turn_limit = cvar("g_turrets_unit_ewheel_turnrate");
-    // Convert from dgr/sec to dgr/tic
-    turn_limit  = turn_limit / (1 / self.ticrate);
-    angle_ofs = fabs(real_angle_y);
-
-    real_angle_y = bound(turn_limit * -1,real_angle_y,turn_limit);
-    self.angles_y = (self.angles_y + real_angle_y);
-
-    self.angles_z = bound(-12,real_angle_y * -1,12);
-
-    if(self.frame > 40)
-        self.frame = 1;
-
-    makevectors(self.angles);
-    float lspeed;
-    lspeed = vlen(self.velocity);
-
-    if((dist < 64)||(self.phase < time))
+    switch (eval)
     {
-        movelib_move('0 0 0',150,0,50,200);
-        self.pos1 = self.origin + v_forward * 256 + randomvec() * 128;
-        self.pos1_z = self.origin_z;
-        self.phase = time + 5;
-    }
-    else if(dist < 128)
-    {
-        self.frame += 1;
-        if(lspeed > 100)
-            movelib_move(v_forward * 50,150,0,50,50);
+    case VCM_EVAL:
+            if(self.enemy)
+                return verb.verb_static_value;
+
+        return VS_CALL_NO;
+
+        break;
+
+    case VCM_DO:
+
+        self.moveto  = self.enemy.origin;
+        self.steerto = steerlib_arrive(self.enemy.origin,self.target_range_optimal);
+
+        if (self.tur_dist_enemy > self.target_range_optimal)
+        {
+            if ( self.tur_head.spawnshieldtime < 1 )
+            {
+                self.frame += 2;
+                movelib_move_simple(v_forward ,cvar("g_turrets_unit_ewheel_speed_fast"),0.4);
+            }
+            else if (self.tur_head.spawnshieldtime < 2)
+            {
+                self.frame += 1;
+                movelib_move_simple(v_forward,cvar("g_turrets_unit_ewheel_speed_slow"),0.4);
+            }
+            else
+            {
+                self.frame += 1;
+                movelib_move_simple(v_forward,cvar("g_turrets_unit_ewheel_speed_slower"),0.4);
+            }
+        }
+        else if (self.tur_dist_enemy < self.target_range_min)
+        {
+            self.frame -= 1;
+            movelib_move_simple(v_forward * -1,cvar("g_turrets_unit_ewheel_speed_slow"),0.4);
+        }
         else
-            movelib_move(v_forward * 100,150,0,50,0);
+        {
+            movelib_beak_simple(cvar("g_turrets_unit_ewheel_speed_stop"));
+        }
+
+        return VS_CALL_YES_DOING;
     }
-    else
+
+
+    return VS_CALL_YES_DONE;
+}
+
+float ewheel_moveverb_runaway(float eval)
+{
+    switch (eval)
     {
-        self.frame += 1;
-        if(angle_ofs > 10)
-            movelib_move(v_forward * 50,150,0,50,50);
-        else
-            movelib_move(v_forward * 250,150,0,50,0);
+    case VCM_EVAL:
+            if(self.enemy)
+            if(self.health < 50)
+                return verb.verb_static_value;
+
+            return VS_CALL_NO;
+        break;
+
+    case VCM_DO:
+        self.steerto = (steerlib_push(self.enemy.origin) * 0.7) + (steerlib_traceavoid_flat(0.3, 500, '0 0 128') * 0.3);
+        self.moveto  = self.origin + self.steerto * 1000;
+
+        self.frame += 2;
+        movelib_move_simple(v_forward ,cvar("g_turrets_unit_ewheel_speed_fast"),0.4);
+
+        return VS_CALL_YES_DOING;
+
+        break;
     }
-    */
+
+    return VS_CALL_YES_DONE;
+}
+
+float ewheel_moveverb_idle(float eval)
+{
+    switch (eval)
+    {
+    case VCM_EVAL:
+            if(self.enemy)
+                return VS_CALL_NO;
+
+        return verb.verb_static_value;
+
+        break;
+
+    case VCM_DO:
+        self.moveto = self.origin;
+
+        if(vlen(self.velocity))
+            movelib_beak_simple(cvar("g_turrets_unit_ewheel_speed_stop"));
+
+        return VS_CALL_YES_DOING;
+    }
+
+    return VS_CALL_YES_DONE;
 }
 
 void ewheel_postthink()
 {
-    if (self.enemy)
-        ewheel_enemymove();
-    else
-        ewheel_roammove();
+    float vz;
+    vector wish_angle,real_angle;
 
+    vz = self.velocity_z;
+
+    self.angles_x = anglemods(self.angles_x);
+    self.angles_y = anglemods(self.angles_y);
+
+    self.angles_x *= -1;
+    makevectors(self.angles);
+    self.angles_x *= -1;
+
+    wish_angle = normalize(self.steerto);
+    wish_angle = vectoangles(wish_angle);
+    real_angle = wish_angle - self.angles;
+    real_angle = shortangle_vxy(real_angle,self.tur_head.angles);
+
+    self.tur_head.spawnshieldtime = fabs(real_angle_y);
+    real_angle_y  = bound(self.tur_head.aim_speed * -1,real_angle_y,self.tur_head.aim_speed);
+    self.angles_y = (self.angles_y + real_angle_y);
+
+    // Simulate banking
+    self.angles_z = bound(-45,real_angle_y * -2.5,45);
+
+    verbstack_pop(self.verbs_move);
+
+    if (self.frame > 40)
+        self.frame = 1;
+
+    if (self.frame < 1)
+        self.frame = 40;
+
+
+    self.velocity_z = vz;
 }
-
 
 void ewheel_respawnhook()
 {
+    entity e;
+
     setorigin(self,self.pos1);
+
+    if (self.target != "")
+    {
+        e = find(world,targetname,self.target);
+        if (!e)
+        {
+            dprint("Initital waypoint for ewheel does NOT exsist, fix your map!\n");
+            self.target = "";
+        }
+
+        if (e.classname != "turret_checkpoint")
+            dprint("Warning: not a turrret path\n");
+        else
+        {
+            self.pathcurrent = WALKER_PATH(self.origin,e.origin);
+            self.pathgoal = e;
+        }
+    }
 }
 
 void ewheel_diehook()
 {
-}
+    turret_trowgib2(self.origin,self.velocity + v_up * 400,'-0.6 -0.2 -02',self,time + random() * 2 +3);
 
-float ewheel_firecheck()
-{
-    bprint("Firecheck\n");
-    return 1;
+    if (self.pathcurrent)
+        pathlib_deletepath(self.pathcurrent.owner);
+
+    self.pathcurrent = world;
+
+    if (self.damage_flags & TFL_DMG_DEATH_NORESPAWN)
+    {
+        verbstack_flush(self.verbs_move);
+        remove(self.verbs_move);
+    }
+
 }
 
 void turret_ewheel_dinit()
 {
     entity e;
 
-    if (self.netname == "")      self.netname     = "Ewheel Turret";
-
-    // self.ticrate = 0.05;
+    if (self.netname == "")      self.netname     = "eWheel Turret";
 
     if (self.target != "")
     {
@@ -261,28 +355,23 @@ void turret_ewheel_dinit()
     self.turret_respawnhook = ewheel_respawnhook;
     self.turret_diehook = ewheel_diehook;
 
-    self.ticrate = 0.05;
     if (turret_stdproc_init("ewheel_std") == 0)
     {
         remove(self);
         return;
     }
-    //self.turret_firecheckfunc = ewheel_firecheck;
 
-    self.target_select_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK | TFL_TARGETSELECT_LOS;
+    self.target_select_flags   = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK | TFL_TARGETSELECT_LOS;
     self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK | TFL_TARGETSELECT_LOS;
-    self.damage_flags |= TFL_DMG_DEATH_NOGIBS;
+    self.damage_flags          |= TFL_DMG_DEATH_NOGIBS;
 
-    //self.flags      = FL_CLIENT;
     self.iscreature = TRUE;
     self.movetype   = MOVETYPE_WALK;
-    self.gravity = 0.01;
     self.solid      = SOLID_SLIDEBOX;
     self.takedamage = DAMAGE_AIM;
 
     setmodel(self,"models/turrets/ewheel-base.md3");
     setmodel(self.tur_head,"models/turrets/ewheel-gun1.md3");
-
     setattachment(self.tur_head,self,"tag_head");
 
     self.pos1 = self.origin;
@@ -293,8 +382,35 @@ void turret_ewheel_dinit()
     self.turret_firefunc  = ewheel_attack;
     self.turret_postthink = ewheel_postthink;
     self.tur_head.frame = 1;
-}
 
+    self.verbs_move = spawn();
+    verbstack_push(self.verbs_move, ewheel_moveverb_idle,   WVM_IDLE,  0);
+    verbstack_push(self.verbs_move, ewheel_moveverb_enemy,  WVM_ENEMY, 0);
+    verbstack_push(self.verbs_move, ewheel_moveverb_path,   WVM_PATH,  0);
+    verbstack_push(self.verbs_move, ewheel_moveverb_runaway,WVM_PANIC,  0);
+
+    // Convert from dgr / sec to dgr / tic
+    self.tur_head.aim_speed = cvar("g_turrets_unit_ewheel_turnrate");
+    self.tur_head.aim_speed = self.tur_head.aim_speed / (1 / self.ticrate);
+
+    if (self.target != "")
+    {
+        e = find(world,targetname,self.target);
+        if (!e)
+        {
+            dprint("Initital waypoint for ewheel does NOT exsist, fix your map!\n");
+            self.target = "";
+        }
+
+        if (e.classname != "turret_checkpoint")
+            dprint("Warning: not a turrret path\n");
+        else
+        {
+            self.pathcurrent = WALKER_PATH(self.origin,e.origin);
+            self.pathgoal = e;
+        }
+    }
+}
 
 void spawnfunc_turret_ewheel()
 {

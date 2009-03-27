@@ -363,6 +363,7 @@ void turret_hk_missile_explode()
     if ((other == self.owner)||(other == self.owner.tur_head))
         return;
 
+    //w_deathtypestring = "got hunted to extinction";
     //vector	org2;
     sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
     org2 = findbetterlocation (self.origin, 16);
@@ -443,7 +444,7 @@ void turret_hk_dinit()
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/hk.md3");
 
-    if (!turret_tag_setup(0))
+    if (!turret_tag_setup())
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
     // Our fire routine

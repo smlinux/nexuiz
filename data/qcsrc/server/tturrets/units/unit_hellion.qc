@@ -159,6 +159,7 @@ void turret_hellion_missile_explode()
     WriteCoord (MSG_BROADCAST, org2_y);
     WriteCoord (MSG_BROADCAST, org2_z);
 
+    //w_deathtypestring = "could not dodge the twin missiles.";
     self.event_damage = SUB_Null;
     d = RadiusDamage (self, self.owner, self.owner.shot_dmg, 0, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET, world);
 
@@ -196,7 +197,7 @@ void turret_hellion_dinit()
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/hellion.md3");
 
-    if (!turret_tag_setup(0))
+    if (!turret_tag_setup())
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
     // Our fire routine
