@@ -19,6 +19,7 @@ Note: The only teams who can use dom control points are identified by spawnfunc_
 
 .float enemy_playerid;
 .entity sprite;
+.float captime;
 
 void() dom_controlpoint_setup;
 
@@ -111,6 +112,8 @@ void dompoint_captured ()
 	}
 	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_DOMPOINT, colormapPaletteColor(self.goalentity.team - 1, 0));
 	WaypointSprite_Ping(self.sprite);
+
+	self.captime = time;
 };
 
 void AnimateDomPoint()
@@ -175,6 +178,9 @@ void dompointtouch()
 	if (other.classname != "player")
 		return;
 	if (other.health < 1)
+		return;
+	
+	if(time < self.captime + 0.3)
 		return;
 
 	// only valid teams can claim it
