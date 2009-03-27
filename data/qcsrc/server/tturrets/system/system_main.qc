@@ -636,7 +636,8 @@ void turret_think()
             {
 
                 load_unit_settings(e,e.cvar_basename,1);
-                e.turret_postthink();
+                if(e.turret_postthink)
+                    e.turret_postthink();
             }
 
             e = nextent(e);
@@ -735,7 +736,8 @@ void turret_think()
                 if (self.turret_firecheckfunc() != 0)
                     turret_fire();
 
-                self.turret_postthink();
+                if(self.turret_postthink)
+                    self.turret_postthink();
 
                 return;
             }
@@ -756,7 +758,8 @@ void turret_think()
                 turret_stdproc_track();
 
             // do any per-turret stuff
-            self.turret_postthink();
+            if(self.turret_postthink)
+                self.turret_postthink();
 
             // And bail.
             return;
