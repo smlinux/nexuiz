@@ -116,7 +116,7 @@ void Teleport_Touch (void)
 		return;
 
 	if(self.team)
-		if(!(self.spawnflags & 4) == !(self.team == other.team))
+		if((self.spawnflags & 4 == 0) == (self.team != other.team))
 			return;
 
 	EXACTTRIGGER_TOUCH;
