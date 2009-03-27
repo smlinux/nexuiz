@@ -16,6 +16,7 @@ all: qc
 
 .PHONY: update-cvarcount
 update-cvarcount:
+	! [ -f ../misc/netradiant-NexuizPack/nexuiz.game/data/entities.def ] || diff ../misc/netradiant-NexuizPack/nexuiz.game/data/entities.def scripts/entities.def || { echo entities.def mismatch, please merge ../misc/netradiant-NexuizPack/nexuiz.game/data/entities.def and scripts/entities.def; exit 1; }
 	DO_NOT_RUN_MAKE=1 sh update-cvarcount.sh
 
 .PHONY: qc
