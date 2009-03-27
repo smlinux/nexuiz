@@ -22,6 +22,7 @@ campaign.qh
 ../common/util.qc
 
 csqcprojectile.qh
+csqceffects.qc
 
 portals.qh
 
