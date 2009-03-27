@@ -1622,6 +1622,17 @@ void player_powerups (void)
 
 	self.effects &~= (EF_RED | EF_BLUE | EF_ADDITIVE | EF_FULLBRIGHT);
 
+	if(self.items & IT_USING_JETPACK)
+	{
+		SoundEntity_StartSound(self, CHAN_PLAYER, "misc/jetpack_fly.wav", VOL_BASE, ATTN_IDLE);
+		self.modelflags |= MF_ROCKET;
+	}
+	else
+	{
+		SoundEntity_StopSound(self, CHAN_PLAYER);
+		self.modelflags &~= MF_ROCKET;
+	}
+
 	if(!self.modelindex) // don't apply the flags if the player is gibbed
 		return;
 
@@ -1675,17 +1686,6 @@ void player_powerups (void)
 	if (time >= game_starttime)
 	if (time < self.spawnshieldtime)
 		self.effects = self.effects | (EF_ADDITIVE | EF_FULLBRIGHT);
-
-	if(self.items & IT_USING_JETPACK)
-	{
-		SoundEntity_StartSound(self, CHAN_PLAYER, "misc/jetpack_fly.wav", VOL_BASE, ATTN_IDLE);
-		self.modelflags |= MF_ROCKET;
-	}
-	else
-	{
-		SoundEntity_StopSound(self, CHAN_PLAYER);
-		self.modelflags &~= MF_ROCKET;
-	}
 }
 
 float CalcRegen(float current, float stable, float regenfactor)
