@@ -390,7 +390,6 @@ void SV_PlayerPhysics()
 	if (clienttype(self) == CLIENTTYPE_BOT)
 		bot_think();
 
-	self.modelflags &~= MF_ROCKET;
 	self.items &~= IT_USING_JETPACK;
 
 	if (self.movetype == MOVETYPE_NONE && self.disableclientprediction != 2)
@@ -481,7 +480,7 @@ void SV_PlayerPhysics()
 
 	// if dead, behave differently
 	if (self.deadflag)
-		return;
+		goto end;
 
 	if (!self.fixangle && !g_bugrigs)
 	{
@@ -687,7 +686,6 @@ void SV_PlayerPhysics()
 			if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 				self.ammo_cells -= cvar("g_jetpack_ammo") * frametime * fvel * f;
 			self.flags &~= FL_ONGROUND;
-			self.modelflags |= MF_ROCKET;
 			self.items |= IT_USING_JETPACK;
 		}
 	}
@@ -799,6 +797,7 @@ void SV_PlayerPhysics()
 		}
 	}
 
+:end
 	if(self.flags & FL_ONGROUND)
 		self.lastground = time;
 

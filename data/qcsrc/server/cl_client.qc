@@ -1341,6 +1341,8 @@ void ClientConnect (void)
 
 	if(!sv_foginterval && world.fog != "")
 		stuffcmd(self, strcat("\nfog ", world.fog, "\nr_fog_exp2 0\nr_drawfog 1\n"));
+
+	SoundEntity_Attach(self);
 }
 
 /*
@@ -1370,6 +1372,8 @@ void ClientDisconnect (void)
 		GameLogEcho(strcat(":part:", ftos(self.playerid)));
 	bprint ("^4",self.netname);
 	bprint ("^4 disconnected\n");
+	
+	SoundEntity_Detach(self);
 
 	DropAllRunes(self);
 	kh_Key_DropAll(self, TRUE);
@@ -1671,6 +1675,17 @@ void player_powerups (void)
 	if (time >= game_starttime)
 	if (time < self.spawnshieldtime)
 		self.effects = self.effects | (EF_ADDITIVE | EF_FULLBRIGHT);
+
+	if(self.items & IT_USING_JETPACK)
+	{
+		SoundEntity_StartSound(self, CHAN_PLAYER, "misc/jetpack_fly.wav", VOL_BASE, ATTN_IDLE);
+		self.modelflags |= MF_ROCKET;
+	}
+	else
+	{
+		SoundEntity_StopSound(self, CHAN_PLAYER);
+		self.modelflags &~= MF_ROCKET;
+	}
 }
 
 float CalcRegen(float current, float stable, float regenfactor)
