@@ -56,7 +56,7 @@ void CSQC_Init(void)
 	}
 #pragma target FTE
 #endif
-	
+
 	float i;
 	CSQC_CheckEngine();
 	dprint_load();
@@ -114,7 +114,7 @@ void CSQC_Init(void)
 
 	teams = Sort_Spawn();
 	players = Sort_Spawn();
-	
+
 	GetTeam(COLOR_SPECTATOR, true); // add specs first
 
 	cvar_clientsettemp("_supports_weaponpriority", "1");
@@ -292,7 +292,7 @@ float CSQC_ConsoleCommand(string strMessage)
 	// Tokenize String
 	//argc = tokenize(strMessage);
 	argc = tokenize_sane(strMessage);
-	
+
 	// Acquire Command
 	local string strCmd;
 	strCmd = argv(0);
@@ -498,7 +498,7 @@ void GameCommand(string msg)
 	{
 		print("Invalid command. For a list of supported commands, try cl_cmd help.\n");
 	}
-	
+
 	return;
 }
 
@@ -512,7 +512,7 @@ float CSQC_InputEvent(float bInputType, float nPrimary, float nSecondary)
 {
 	local float bSkipKey;
 	bSkipKey = false;
-	
+
 	if(menu_visible)
 		if(menu_action(bInputType, nPrimary, nSecondary))
 			return TRUE;
@@ -605,7 +605,7 @@ void Ent_ReadPlayerScore()
 
 	if(o.sort_prev)
 		Sbar_UpdatePlayerPos(o); // if not registered, we cannot do this yet!
-	
+
 	self.entremove = Ent_RemovePlayerScore;
 }
 
@@ -613,7 +613,7 @@ void Ent_ReadTeamScore()
 {
 	float i;
 	entity o;
-	
+
 	self.team = ReadByte();
 	o = self.owner = GetTeam(self.team, true);
 
@@ -669,7 +669,7 @@ void Ent_ClientData()
 	}
 	else
 		angles_held_status = 0;
-	
+
 	if(newspectatee_status != spectatee_status)
 	{
 		// clear race stuff
@@ -779,7 +779,7 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 			error(strcat("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n"));
 			break;
 	}
-	
+
 	time = savetime;
 };
 // Destructor, but does NOT deallocate the entity by calling remove(). Also
@@ -829,7 +829,7 @@ void CSQC_Parse_Print(string strMessage)
 	print(ColorTranslateRGB(strMessage));
 }
 
-// CSQC_Parse_CenterPrint : Provides the centerprint string in the first parameter that the server provided.  
+// CSQC_Parse_CenterPrint : Provides the centerprint string in the first parameter that the server provided.
 void CSQC_Parse_CenterPrint(string strMessage)
 {
 	centerprint(strMessage);
@@ -1019,12 +1019,16 @@ float CSQC_Parse_TempEntity()
 			Net_ReadNexgunBeamParticle();
 			bHandled = true;
 			break;
+        case TE_CSQC_LIGHTNINGARC:
+            Net_ReadLightningarc();
+            bHandled = true;
+            break;
 		default:
 			// No special logic for this temporary entity; return 0 so the engine can handle it
 			bHandled = false;
 			break;
 	}
-		
+
 	return bHandled;
 }
 
@@ -1053,13 +1057,13 @@ string getcommandkey(string text, string command)
 	keys = db_get(binddb, command);
 	if(csqc_flags & CSQC_FLAG_READPICTURE)
 	{
-		if (!keys) 
+		if (!keys)
 		{
 			n = tokenize_insane(findkeysforcommand(command)); // uses '...' strings
 			for(j = 0; j < n; ++j)
 			{
 				k = stof(argv(j));
-				if(k != -1) 
+				if(k != -1)
 				{
 					if ("" == keys)
 						keys = keynumtostring(k);
@@ -1069,12 +1073,12 @@ string getcommandkey(string text, string command)
 					++l;
 					if (sbar_showbinds_limit > 0 && sbar_showbinds_limit >= l) break;
 				}
-			
+
 			}
 			db_put(binddb, command, keys);
 		}
 	}
-	
+
 	if ("" == keys) {
 		if (sbar_showbinds > 1)
 			return strcat(text, " (not bound)");
