@@ -6,9 +6,61 @@ float AI_STATUS_DANGER_AHEAD	= 8;	// There is lava/slime/trigger_hurt ahead
 float AI_STATUS_OUT_JUMPPAD		= 16;	// Trying to get out of a "vertical" jump pad
 float AI_STATUS_OUT_WATER		= 32;	// Trying to get out of water
 
-.string netname_freeme;
+// utilities for path debugging
+#ifdef DEBUG_TRACEWALK
+
+float DEBUG_NODE_SUCCESS	= 1;
+float DEBUG_NODE_WARNING	= 2;
+float DEBUG_NODE_FAIL		= 3;
+
+vector debuglastnode;
+
+void debugresetnodes()
+{
+	debuglastnode = '0 0 0';
+}
+
+void debugnode(vector node)
+{
+	if not(self.classname=="player")
+		return;
+
+	if(debuglastnode=='0 0 0')
+	{
+		debuglastnode = node;
+		return;
+	}
+
+	te_lightning2(world, node, debuglastnode);
+	debuglastnode = node;
+}
+
+void debugnodestatus(vector position, float status)
+{
+	vector color;
+
+	switch (status)
+	{
+		case DEBUG_NODE_SUCCESS:
+			color = '0 15 0';
+			break;
+		case DEBUG_NODE_WARNING:
+			color = '15 15 0';
+			break;
+		case DEBUG_NODE_FAIL:
+			color = '15 0 0';
+			break;
+		default:
+			color = '15 15 15';
+	}
+
+	te_customflash(position, 40,  2, color);
+}
+
+#endif
+
 // rough simulation of walking from one point to another to test if a path
-// can be traveled, used by havocbot
+// can be traveled, used for waypoint linking and havocbot
 
 vector stepheightvec;
 float navigation_testtracewalk;
@@ -22,14 +74,13 @@ float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float 
 	local float stepdist;
 	local float yaw;
 	local float ignorehazards;
-	if (navigation_testtracewalk)
-	{
-		if (navigation_testtracewalk > 1)
-			dprint("tracewalk: ");
-		//te_wizspike(start);
-		//te_knightspike(end);
-		//te_lightning2(world, start, end);
-	}
+	local float swimming;
+
+	#ifdef DEBUG_TRACEWALK
+		debugresetnodes();
+		debugnode(start);
+	#endif
+
 	move = end - start;
 	move_z = 0;
 	org = start;
@@ -37,45 +88,49 @@ float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float 
 	dir = normalize(move);
 	stepdist = 32;
 	ignorehazards = FALSE;
-	//self.angles = vectoangles(dir);
+
+	// Analyze starting point
 	traceline(start, start, MOVE_NORMAL, e);
 	if (trace_dpstartcontents & (DPCONTENTS_SLIME | DPCONTENTS_LAVA))
 		ignorehazards = TRUE;
+	else
+	{
+		traceline( start, start + '0 0 -65536', MOVE_NORMAL, e);
+		if (trace_dpstartcontents & (DPCONTENTS_SLIME | DPCONTENTS_LAVA))
+		{
+			ignorehazards = TRUE;
+			swimming = TRUE;
+		}
+	}
 	tracebox(start, m1, m2, start, MOVE_NOMONSTERS, e);
 	if (trace_startsolid)
 	{
-		// failed - bad start
-		if (navigation_testtracewalk)
-		{
-			if (navigation_testtracewalk > 1)
-				dprint("bad-start\n");
-			te_knightspike(start);
-		}
-		return 0;
+		// Bad start
+		#ifdef DEBUG_TRACEWALK
+			debugnodestatus(start, DEBUG_NODE_FAIL);
+		#endif
+		return FALSE;
 	}
+
+	// Movement loop
 	yaw = vectoyaw(move);
 	move = end - org;
-	while (1)
+	for (;;)
 	{
 		if (boxesoverlap(end, end, org + m1 + '-1 -1 -1', org + m2 + '1 1 1'))
 		{
-			if (navigation_testtracewalk)
-			{
-				if (navigation_testtracewalk > 1)
-					dprint("success\n");
-				te_wizspike(org);
-			}
-			// succeeded
-			return 1;
+			// Succeeded
+			#ifdef DEBUG_TRACEWALK
+				debugnodestatus(org, DEBUG_NODE_SUCCESS);
+			#endif
+			return TRUE;
 		}
+		#ifdef DEBUG_TRACEWALK
+			debugnode(org);
+		#endif
+
 		if (dist <= 0)
 			break;
-		if (navigation_testtracewalk)
-		{
-			//dprint("trying ");
-			//te_gunshot(org);
-			particle(org, '0 0 0', 104, 8);
-		}
 		if (stepdist > dist)
 			stepdist = dist;
 		dist = dist - stepdist;
@@ -84,37 +139,57 @@ float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float 
 		{
 			if (trace_dpstartcontents & (DPCONTENTS_SLIME | DPCONTENTS_LAVA))
 			{
-				if (navigation_testtracewalk)
-				{
-					if (navigation_testtracewalk > 1)
-						dprint("hazard\n");
-					te_gunshot(org);
-				}
 				// hazards blocking path
-				return 0;
+				#ifdef DEBUG_TRACEWALK
+					debugnodestatus(org, DEBUG_NODE_FAIL);
+				#endif
+				return FALSE;
 			}
 		}
 		if (trace_dpstartcontents & DPCONTENTS_LIQUIDSMASK)
 		{
 			move = normalize(end - org);
 			tracebox(org, m1, m2, org + move * stepdist, movemode, e);
+
+			#ifdef DEBUG_TRACEWALK
+				debugnode(trace_endpos);
+			#endif
+
 			if (trace_fraction < 1)
 			{
-				if (navigation_testtracewalk)
+				swimming = TRUE;
+				org = trace_endpos - normalize(org - trace_endpos) * stepdist;
+				for(; org_z < end_z + self.maxs_z; org_z += stepdist)
 				{
-					if (navigation_testtracewalk > 1)
-						dprint("swimming-hit-something\n");
-					//particle(org, move * 64, 104, 4);
-					te_gunshot(org);
+						#ifdef DEBUG_TRACEWALK
+							debugnode(org);
+						#endif
+				        if(pointcontents(org) == CONTENT_EMPTY)
+							break;
 				}
-				return 0;
+
+				if not (pointcontents(org + '0 0 1') == CONTENT_EMPTY)
+				{
+					#ifdef DEBUG_TRACEWALK
+						debugnodestatus(org, DEBUG_NODE_FAIL);
+					#endif
+					return FALSE;
+				}
+				continue;
+
 			}
-			org = trace_endpos;
+			else
+				org = trace_endpos;
 		}
 		else
 		{
 			move = dir * stepdist + org;
 			tracebox(org, m1, m2, move, movemode, e);
+
+			#ifdef DEBUG_TRACEWALK
+				debugnode(trace_endpos);
+			#endif
+
 			// hit something
 			if (trace_fraction < 1)
 			{
@@ -122,14 +197,9 @@ float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float 
 				tracebox(org + stepheightvec, m1, m2, move + stepheightvec, movemode, e);
 				if (trace_fraction < 1 || trace_startsolid)
 				{
-					if (navigation_testtracewalk)
-					{
-						if (navigation_testtracewalk > 1)
-							dprint("hit-something\n");
-					//	move = normalize(end - org);
-					//	particle(org, move * 64, 104, 4);
-					//	te_gunshot(org);
-					}
+					#ifdef DEBUG_TRACEWALK
+						debugnodestatus(trace_endpos, DEBUG_NODE_WARNING);
+					#endif
 
 					// check for doors
 					traceline( org, move, movemode, e);
@@ -145,7 +215,12 @@ float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float 
 						}
 					}
 					else
-						return 0; // failed
+					{
+						#ifdef DEBUG_TRACEWALK
+							debugnodestatus(trace_endpos, DEBUG_NODE_FAIL);
+						#endif
+						return FALSE; // failed
+					}
 				}
 				else
 					move = trace_endpos;
@@ -158,40 +233,28 @@ float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float 
 			// if that also fails we assume it is a wall
 			// (this is the same logic as the Quake walkmove function used)
 			tracebox(move, m1, m2, move + '0 0 -65536', movemode, e);
-			/*
-			if (trace_startsolid)
-			{
-				tracebox(move, m1, m2, move + '0 0 -65536', FALSE, e);
-				if (trace_startsolid)
-				{
-					if (navigation_testtracewalk)
-					{
-						if (navigation_testtracewalk > 1)
-							dprint("hit-something\n");
-						//move = normalize(end - org);
-						//particle(org, move * 64, 104, 4);
-						te_knightspike(org);
-					}
-					// failed
-					return 0;
-				}
-			}
-			*/
+
 			// moved successfully
-			if (navigation_testtracewalk > 1)
-				dprint("moved ");
+			if(swimming)
+			{
+				local float c;
+				c = pointcontents(org + '0 0 1');
+				if not(c == CONTENT_WATER || c == CONTENT_LAVA || c == CONTENT_SLIME)
+					swimming = FALSE;
+				else
+					continue;
+			}
+
 			org = trace_endpos;
 		}
 	}
-	if (navigation_testtracewalk)
-	{
-		if (navigation_testtracewalk > 1)
-			dprint("wrong-place\n");
-		te_knightspike(org);
-		//te_gunshot(end);
-	}
+
 	// moved but didn't arrive at the intended destination
-	return 0;
+	#ifdef DEBUG_TRACEWALK
+		debugnodestatus(org, DEBUG_NODE_FAIL);
+	#endif
+
+	return FALSE;
 };
 
 
@@ -1391,9 +1454,6 @@ void navigation_goalrating_end()
 };
 
 
-
-
-
 //////////////////////////////////////////////////////////////////////////////
 // general bot functions
 //////////////////////////////////////////////////////////////////////////////
@@ -1403,6 +1463,7 @@ void navigation_goalrating_end()
 float skill;
 entity bot_list;
 .entity nextbot;
+.string netname_freeme;
 
 float sv_maxspeed;
 .float createdtime;
@@ -2157,7 +2218,7 @@ void botframe_showwaypointlinks()
 	while (player)
 	{
 		if (!player.isbot)
-		if (player.flags & FL_ONGROUND)
+		if (player.flags & FL_ONGROUND || player.waterlevel > WATERLEVEL_NONE)
 		{
 			//navigation_testtracewalk = TRUE;
 			head = navigation_findnearestwaypoint(player, FALSE);
