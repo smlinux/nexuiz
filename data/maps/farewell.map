@@ -12248,7 +12248,7 @@ e7/e7brnmetal
 }
 // entity 2
 {
-"classname" "item_armor_body"
+"classname" "item_armor_large"
 "origin" "696 512 48"
 }
 // entity 3
@@ -12265,86 +12265,86 @@ e7/e7brnmetal
 }
 // entity 5
 {
-"classname" "item_armor_shard"
+"classname" "item_armor_small"
 "origin" "-160 -656 208"
 }
 // entity 6
 {
-"classname" "item_armor_shard"
+"classname" "item_armor_small"
 "origin" "-352 -656 208"
 }
 // entity 7
 {
-"classname" "item_armor_shard"
+"classname" "item_armor_small"
 "origin" "-224 -656 208"
 }
 // entity 8
 {
-"classname" "item_armor_shard"
+"classname" "item_armor_small"
 "origin" "-288 -656 208"
 }
 // entity 9
 {
-"classname" "item_health"
+"classname" "item_health_medium"
 "origin" "64 384 48"
 }
 // entity 10
 {
-"classname" "target_location"
+"classname" "info_location"
 "message" "Stairs"
 "origin" "-968 -152 232"
 }
 // entity 11
 {
-"classname" "target_location"
+"classname" "info_location"
 "message" "Upper Atrium"
 "origin" "-24 -376 248"
 }
 // entity 12
 {
-"classname" "target_location"
+"classname" "info_location"
 "message" "Lower Atrium"
 "origin" "248 40 40"
 }
 // entity 13
 {
-"classname" "target_location"
+"classname" "info_location"
 "message" "Armor"
 "origin" "616 488 104"
 }
 // entity 14
 {
-"classname" "target_location"
+"classname" "info_location"
 "message" "Teleporter"
 "origin" "568 -184 40"
 }
 // entity 15
 {
-"classname" "target_location"
+"classname" "info_location"
 "message" "Machinegun"
 "origin" "580 -152 248"
 }
 // entity 16
 {
-"classname" "target_location"
+"classname" "info_location"
 "origin" "-456 -8 40"
 "message" "Rocketlauncher"
 }
 // entity 17
 {
-"classname" "target_location"
+"classname" "info_location"
 "message" "Grenadelauncher"
 "origin" "88 456 376"
 }
 // entity 18
 {
-"classname" "target_location"
+"classname" "info_location"
 "message" "Crylink"
 "origin" "-936 680 392"
 }
 // entity 19
 {
-"classname" "target_location"
+"classname" "info_location"
 "message" "Mega Health"
 "origin" "-1224 248 248"
 }
@@ -12411,29 +12411,29 @@ e7/e7brnmetal
 }
 // entity 31
 {
-"classname" "item_health"
+"classname" "item_health_medium"
 "origin" "-704 0 16"
 }
 // entity 32
 {
-"classname" "item_health"
+"classname" "item_health_medium"
 "origin" "320 720 352"
 "angle" "180"
 }
 // entity 33
 {
-"classname" "item_health"
+"classname" "item_health_medium"
 "origin" "320 640 352"
 "angle" "180"
 }
 // entity 34
 {
-"classname" "item_health"
+"classname" "item_health_medium"
 "origin" "-496 0 208"
 }
 // entity 35
 {
-"classname" "item_health"
+"classname" "item_health_medium"
 "origin" "-496 -80 208"
 }
 // entity 36
@@ -12852,55 +12852,55 @@ e7/e7arch01
 }
 // entity 51
 {
-"classname" "target_location"
+"classname" "info_location"
 "origin" "-120 136 40"
 "message" "Lower Atrium"
 }
 // entity 52
 {
-"classname" "target_location"
+"classname" "info_location"
 "origin" "-72 -216 40"
 "message" "Lower Atrium"
 }
 // entity 53
 {
-"classname" "target_location"
+"classname" "info_location"
 "origin" "-424 -88 248"
 "message" "Upper Atrium"
 }
 // entity 54
 {
-"classname" "target_location"
+"classname" "info_location"
 "origin" "-232 -536 248"
 "message" "Upper Atrium"
 }
 // entity 55
 {
-"classname" "target_location"
+"classname" "info_location"
 "origin" "-424 392 328"
 "message" "Upper Atrium"
 }
 // entity 56
 {
-"classname" "target_location"
+"classname" "info_location"
 "origin" "-168 424 376"
 "message" "Upper Atrium"
 }
 // entity 57
 {
-"classname" "target_location"
+"classname" "info_location"
 "message" "Upper Atrium"
 "origin" "232 648 376"
 }
 // entity 58
 {
-"classname" "target_location"
+"classname" "info_location"
 "origin" "-712 -136 120"
 "message" "Stairs"
 }
 // entity 59
 {
-"classname" "target_location"
+"classname" "info_location"
 "origin" "-728 -456 152"
 "message" "Stairs"
 }
@@ -13017,7 +13017,7 @@ e7/e7arch01
 }
 // entity 79
 {
-"classname" "target_location"
+"classname" "info_location"
 "origin" "-960 -336 112"
 "message" "Electro"
 }

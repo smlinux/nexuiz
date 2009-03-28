@@ -29477,7 +29477,7 @@ evil6_lights/e6v_light_s_nolight
 }
 // entity 21
 {
-"classname" "item_health100"
+"classname" "item_health_mega"
 "origin" "368.000000 368.000000 -240.000000"
 }
 // entity 22
@@ -29513,12 +29513,12 @@ evil6_lights/e6v_light_s_nolight
 }
 // entity 26
 {
-"classname" "item_health"
+"classname" "item_health_medium"
 "origin" "-912.000000 -208.000000 192.000000"
 }
 // entity 27
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "-2200.000000 -536.000000 128.000000"
 }
 // entity 28
@@ -29562,72 +29562,72 @@ evil6_lights/e6v_light_s_nolight
 }
 // entity 35
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "-160.000000 -208.000000 16.000000"
 }
 // entity 36
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-320.000000 -208.000000 -240.000000"
 }
 // entity 37
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-320.000000 -144.000000 -240.000000"
 }
 // entity 38
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-320.000000 -272.000000 -240.000000"
 }
 // entity 39
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-320.000000 -80.000000 -240.000000"
 }
 // entity 40
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-320.000000 -16.000000 -240.000000"
 }
 // entity 41
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-320.000000 -336.000000 -240.000000"
 }
 // entity 42
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-320.000000 -400.000000 -240.000000"
 }
 // entity 43
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "1344.000000 -88.000000 16.000000"
 }
 // entity 44
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1344.000000 -24.000000 16.000000"
 }
 // entity 45
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1344.000000 40.000000 16.000000"
 }
 // entity 46
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1344.000000 104.000000 16.000000"
 }
 // entity 47
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1344.000000 168.000000 16.000000"
 }
 // entity 48
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1344.000000 232.000000 16.000000"
 }
 // entity 49
@@ -29637,7 +29637,7 @@ evil6_lights/e6v_light_s_nolight
 }
 // entity 50
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "896.000000 -424.000000 208.000000"
 }
 // entity 51
@@ -29667,7 +29667,7 @@ evil6_lights/e6v_light_s_nolight
 }
 // entity 56
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "368.000000 192.000000 -416.000000"
 }
 // entity 57
@@ -29824,7 +29824,7 @@ evil6_lights/e6v_light_s_nolight
 }
 // entity 77
 {
-"classname" "item_health100"
+"classname" "item_health_mega"
 "origin" "-1296.000000 2032.000000 -240.000000"
 }
 // entity 78
@@ -29860,7 +29860,7 @@ evil6_lights/e6v_light_s_nolight
 }
 // entity 82
 {
-"classname" "item_health"
+"classname" "item_health_medium"
 "origin" "-1872.000000 752.000000 192.000000"
 }
 // entity 83
@@ -29904,72 +29904,72 @@ evil6_lights/e6v_light_s_nolight
 }
 // entity 90
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "-1872.000000 1504.000000 16.000000"
 }
 // entity 91
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-1872.000000 1344.000000 -240.000000"
 }
 // entity 92
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-1808.000000 1344.000000 -240.000000"
 }
 // entity 93
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-1936.000000 1344.000000 -240.000000"
 }
 // entity 94
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-1744.000000 1344.000000 -240.000000"
 }
 // entity 95
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-1680.000000 1344.000000 -240.000000"
 }
 // entity 96
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-2000.000000 1344.000000 -240.000000"
 }
 // entity 97
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-2064.000000 1344.000000 -240.000000"
 }
 // entity 98
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-1752.000000 3008.000000 16.000000"
 }
 // entity 99
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-1688.000000 3008.000000 16.000000"
 }
 // entity 100
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-1624.000000 3008.000000 16.000000"
 }
 // entity 101
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-1560.000000 3008.000000 16.000000"
 }
 // entity 102
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-1496.000000 3008.000000 16.000000"
 }
 // entity 103
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-1432.000000 3008.000000 16.000000"
 }
 // entity 104
@@ -29979,7 +29979,7 @@ evil6_lights/e6v_light_s_nolight
 }
 // entity 105
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-2088.000000 2560.000000 208.000000"
 }
 // entity 106
@@ -30009,7 +30009,7 @@ evil6_lights/e6v_light_s_nolight
 }
 // entity 111
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "-1472.000000 2032.000000 -416.000000"
 }
 // entity 112
@@ -30052,22 +30052,22 @@ evil6_lights/e6v_light_s_nolight
 }
 // entity 119
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-1456.000000 -208.000000 64.000000"
 }
 // entity 120
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-1520.000000 -208.000000 64.000000"
 }
 // entity 121
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-1872.000000 144.000000 64.000000"
 }
 // entity 122
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-1872.000000 208.000000 64.000000"
 }
 // entity 123
@@ -30089,37 +30089,37 @@ evil6_lights/e6v_light_s_nolight
 }
 // entity 126
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-440.000000 1032.000000 -240.000000"
 }
 // entity 127
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-472.000000 1064.000000 -240.000000"
 }
 // entity 128
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-504.000000 1096.000000 -240.000000"
 }
 // entity 129
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-536.000000 1128.000000 -240.000000"
 }
 // entity 130
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-568.000000 1160.000000 -240.000000"
 }
 // entity 131
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-600.000000 1192.000000 -240.000000"
 }
 // entity 132
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-632.000000 1224.000000 -240.000000"
 }
 // entity 133

@@ -6838,11 +6838,11 @@ evil8_lights/e8minitrimlight
 "origin" "32.000000 -752.000000 -104.000000"
 }
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "736.000000 -672.000000 96.000000"
 }
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "-688.000000 272.000000 96.000000"
 }
 {
@@ -6871,30 +6871,30 @@ evil8_lights/e8minitrimlight
 }
 {
 "angle" "360"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "448.000000 -672.000000 -208.000000"
 }
 {
 "angle" "360"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "448.000000 256.000000 -208.000000"
 }
 {
 "angle" "180"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-400.000000 288.000000 -224.000000"
 }
 {
 "angle" "180"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-400.000000 -640.000000 -224.000000"
 }
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-896.000000 384.000000 288.000000"
 }
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "960.000000 -704.000000 288.000000"
 }
 {
@@ -6948,11 +6948,11 @@ evil8_lights/e8minitrimlight
 "origin" "-224.000000 -800.000000 288.000000"
 }
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "272.000000 -464.000000 -368.000000"
 }
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-208.000000 -464.000000 -368.000000"
 }
 {

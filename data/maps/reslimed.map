@@ -21758,27 +21758,27 @@ morphed/gelslime_bright
 }
 // entity 18
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "524.000000 380.000000 352.000000"
 }
 // entity 19
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-688.000000 -400.000000 -48.000000"
 }
 // entity 20
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "224.000000 -384.000000 -48.000000"
 }
 // entity 21
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "152.000000 -424.000000 176.000000"
 }
 // entity 22
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-256.000000 -696.000000 376.000000"
 }
 // entity 23
@@ -22576,17 +22576,17 @@ morphed/gelslime_bright
 }
 // entity 32
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-16.000000 -832.000000 176.000000"
 }
 // entity 33
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-16.000000 -896.000000 176.000000"
 }
 // entity 34
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-16.000000 -960.000000 176.000000"
 }
 // entity 35
@@ -22602,7 +22602,7 @@ morphed/gelslime_bright
 }
 // entity 37
 {
-"classname" "item_health100"
+"classname" "item_health_mega"
 "origin" "-640.000000 932.000000 80.000000"
 }
 // entity 38
@@ -23021,7 +23021,7 @@ morphed/gelslime_bright
 }
 // entity 45
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "-1028.000000 -1724.000000 -56.000000"
 }
 // entity 46
@@ -23134,22 +23134,22 @@ morphed/gelslime_bright
 }
 // entity 47
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "984.000000 -1112.000000 160.000000"
 }
 // entity 48
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "576.000000 -1120.000000 176.000000"
 }
 // entity 49
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "512.000000 -1120.000000 176.000000"
 }
 // entity 50
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "448.000000 -1120.000000 176.000000"
 }
 // entity 51
@@ -23166,7 +23166,7 @@ morphed/gelslime_bright
 }
 // entity 53
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-1552.000000 -808.000000 40.000000"
 }
 // entity 54
@@ -23349,7 +23349,7 @@ morphed/gelslime_bright
 }
 // entity 84
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-1344.000000 -64.000000 -96.000000"
 "spawnflags" "1"
 }
@@ -23360,19 +23360,19 @@ morphed/gelslime_bright
 }
 // entity 86
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-1344.000000 -64.000000 -160.000000"
 "spawnflags" "1"
 }
 // entity 87
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-1344.000000 -64.000000 -32.000000"
 "spawnflags" "1"
 }
 // entity 88
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-1344.000000 -64.000000 32.000000"
 "spawnflags" "1"
 }
@@ -23496,7 +23496,7 @@ morphed/gelslime_bright
 }
 // entity 91
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-328.000000 -680.000000 384.000000"
 }
 // entity 92
@@ -23507,7 +23507,7 @@ morphed/gelslime_bright
 }
 // entity 93
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-1424.000000 -64.000000 -232.000000"
 "spawnflags" "1"
 }

@@ -8332,7 +8332,7 @@ evil8_trim/e8_btrim05
 }
 // entity 50
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "-1817.000000 6.000000 1139.000000"
 }
 // entity 51
@@ -8362,7 +8362,7 @@ evil8_trim/e8_btrim05
 }
 // entity 56
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "1810.000000 -2.000000 1139.000000"
 }
 // entity 57
@@ -8387,7 +8387,7 @@ evil8_trim/e8_btrim05
 }
 // entity 61
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "noalign" "1"
 "origin" "-9.000000 1722.000000 1417.000000"
 }
@@ -8398,22 +8398,22 @@ evil8_trim/e8_btrim05
 }
 // entity 63
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-605.000000 848.000000 -261.000000"
 }
 // entity 64
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-605.000000 668.000000 -261.000000"
 }
 // entity 65
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-508.000000 512.000000 -261.000000"
 }
 // entity 66
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-1490.000000 -1589.000000 -261.000000"
 }
 // entity 67
@@ -8448,7 +8448,7 @@ evil8_trim/e8_btrim05
 }
 // entity 73
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "-1985.000000 -230.000000 -300.000000"
 }
 // entity 74
@@ -8458,7 +8458,7 @@ evil8_trim/e8_btrim05
 }
 // entity 75
 {
-"classname" "item_health100"
+"classname" "item_health_mega"
 "origin" "-535.000000 -213.000000 59.000000"
 }
 // entity 76
@@ -8473,23 +8473,23 @@ evil8_trim/e8_btrim05
 }
 // entity 78
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "1566.000000 -439.000000 251.000000"
 }
 // entity 79
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "-1316.000000 868.000000 59.000000"
 }
 // entity 80
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "angle" "180"
 "origin" "-1316.000000 993.000000 59.000000"
 }
 // entity 81
 {
-"classname" "item_health100"
+"classname" "item_health_mega"
 "origin" "-545.000000 219.000000 1411.000000"
 }
 // entity 82
@@ -8504,7 +8504,7 @@ evil8_trim/e8_btrim05
 }
 // entity 84
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "519.000000 -1385.000000 -261.000000"
 }
 // entity 85
@@ -8524,7 +8524,7 @@ evil8_trim/e8_btrim05
 }
 // entity 88
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-1976.000000 -1984.000000 -59.000000"
 }
 // entity 89

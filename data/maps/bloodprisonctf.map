@@ -18368,7 +18368,7 @@
 }
 }
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "2864.000041 1920.000000 216.000010"
 }
 {
@@ -18386,7 +18386,7 @@
 "targetname" "blueteleport"
 }
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "4032.000326 960.000000 208.000005"
 }
 {
@@ -18394,27 +18394,27 @@
 "origin" "3136.000162 768.000031 224.000015"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "3168.000082 1408.000082 352.000020"
 }
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "3168.000082 1360.000102 352.000020"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "3168.000082 1312.000020 352.000020"
 }
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "3168.000082 1264.000041 352.000020"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "3168.000082 1216.000061 352.000020"
 }
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "3168.000082 1168.000082 352.000020"
 }
 {
@@ -18423,12 +18423,12 @@
 }
 {
 "angle" "180"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "3312.000122 2208.000082 352.000020"
 }
 {
 "angle" "180"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "3312.000122 2272.000122 352.000020"
 }
 {
@@ -18448,12 +18448,12 @@
 }
 {
 "angle" "360"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "4560.000000 1360.000102 208.000005"
 }
 {
 "angle" "180"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "4400.000000 944.000041 208.000005"
 }
 {
@@ -18485,12 +18485,12 @@
 }
 {
 "angle" "180"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "3448.000082 1600.000102 16.000001"
 }
 {
 "angle" "270"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "3824.000244 1360.000102 -48.000002"
 }
 {
@@ -18509,23 +18509,23 @@
 "origin" "2944.000041 816.000010 224.000015"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "3824.000244 2192.000122 352.000020"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "3872.000326 2144.000041 352.000020"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "3920.000000 2096.000162 352.000020"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "3968.000082 2048.000082 352.000020"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "4016.000163 2000.000000 352.000020"
 }
 {
@@ -18736,27 +18736,27 @@
 "origin" "2368.000082 2432.000122 224.000015"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "2336.000162 1792.000122 352.000020"
 }
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "2336.000162 1840.000000 352.000020"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "2336.000162 1888.000082 352.000020"
 }
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "2336.000162 1936.000162 352.000020"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "2336.000162 1984.000041 352.000020"
 }
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "2336.000162 2032.000122 352.000020"
 }
 {
@@ -18765,12 +18765,12 @@
 }
 {
 "angle" "180"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "2192.000122 992.000020 352.000020"
 }
 {
 "angle" "180"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "2192.000122 928.000082 352.000020"
 }
 {
@@ -18790,12 +18790,12 @@
 }
 {
 "angle" "360"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "944.000041 1840.000000 208.000005"
 }
 {
 "angle" "180"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "1104.000041 2256.000162 208.000005"
 }
 {
@@ -18827,12 +18827,12 @@
 }
 {
 "angle" "180"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "2048.000082 1600.000102 16.000001"
 }
 {
 "angle" "270"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "1680.000102 1840.000000 -48.000002"
 }
 {
@@ -18851,27 +18851,27 @@
 "origin" "2560.000000 2384.000041 224.000015"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1680.000102 1008.000082 352.000020"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1632.000020 1056.000061 352.000020"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1584.000041 1104.000041 352.000020"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1536.000061 1152.000020 352.000020"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1488.000082 1200.000000 352.000020"
 }
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "2640.000203 1280.000000 216.000010"
 }
 {
@@ -18889,7 +18889,7 @@
 "targetname" "redteleport"
 }
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "1472.000020 2240.000000 208.000005"
 }
 {
@@ -19084,7 +19084,7 @@
 "origin" "1856.000162 1600.000102 368.000005"
 }
 {
-"classname" "item_health100"
+"classname" "item_health_mega"
 "origin" "2752.000122 1600.000102 16.000001"
 }
 {

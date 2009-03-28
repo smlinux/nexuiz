@@ -7739,7 +7739,7 @@
 }
 // entity 58
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "-96.000000 -320.000000 -240.000000"
 }
 // entity 59
@@ -7767,7 +7767,7 @@
 }
 // entity 61
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "384.000000 192.000000 -48.000000"
 }
 // entity 62
@@ -7784,7 +7784,7 @@
 }
 // entity 64
 {
-"classname" "item_health100"
+"classname" "item_health_mega"
 "origin" "-96.000000 -192.000000 304.000000"
 }
 // entity 65
@@ -7858,24 +7858,24 @@
 }
 // entity 73
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "angle" "90"
 "origin" "80.000000 -336.000000 -144.000000"
 }
 // entity 74
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "angle" "180"
 "origin" "120.000000 80.000000 144.000000"
 }
 // entity 75
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-392.000000 608.000000 -48.000000"
 }
 // entity 76
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "angle" "-90"
 "origin" "384.000000 352.000000 -48.000000"
 }
@@ -7903,7 +7903,7 @@
 }
 // entity 81
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "64.000000 -128.000000 144.000000"
 }
 // entity 82
@@ -7975,42 +7975,42 @@
 }
 // entity 91
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-112.000000 1008.000000 -48.000000"
 }
 // entity 92
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-80.000000 1008.000000 -48.000000"
 }
 // entity 93
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-80.000000 976.000000 -48.000000"
 }
 // entity 94
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-112.000000 976.000000 -48.000000"
 }
 // entity 95
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-704.000000 352.000000 144.000000"
 }
 // entity 96
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-704.000000 320.000000 144.000000"
 }
 // entity 97
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-672.000000 320.000000 144.000000"
 }
 // entity 98
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-672.000000 352.000000 144.000000"
 }
 // entity 99

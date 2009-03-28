@@ -7927,22 +7927,22 @@ evil3_floors/bdirt
 }
 // entity 35
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "96.000000 1248.000000 216.000000"
 }
 // entity 36
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "96.000000 1200.000000 216.000000"
 }
 // entity 37
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "144.000000 1248.000000 216.000000"
 }
 // entity 38
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "144.000000 1200.000000 216.000000"
 }
 // entity 39
@@ -7957,47 +7957,47 @@ evil3_floors/bdirt
 }
 // entity 41
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "728.000000 928.000000 16.000000"
 }
 // entity 42
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "728.000000 872.000000 16.000000"
 }
 // entity 43
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "672.000000 872.000000 16.000000"
 }
 // entity 44
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-88.000000 1112.000000 16.000000"
 }
 // entity 45
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-88.000000 1044.000000 16.000000"
 }
 // entity 46
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-288.000000 1056.000000 248.000000"
 }
 // entity 47
 {
-"classname" "item_health100"
+"classname" "item_health_mega"
 "origin" "-624.000000 800.000000 248.000000"
 }
 // entity 48
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "-728.000000 296.000000 216.000000"
 }
 // entity 49
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "-128.000000 1632.000000 24.000000"
 }
 // entity 50
@@ -8007,22 +8007,22 @@ evil3_floors/bdirt
 }
 // entity 51
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-656.000000 808.000000 -152.000000"
 }
 // entity 52
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-656.000000 744.000000 -152.000000"
 }
 // entity 53
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-600.000000 744.000000 -152.000000"
 }
 // entity 54
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "-168.000000 1176.000000 -136.000000"
 }
 // entity 55
@@ -8037,7 +8037,7 @@ evil3_floors/bdirt
 }
 // entity 57
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "512.000000 480.000000 -208.000000"
 }
 // entity 58

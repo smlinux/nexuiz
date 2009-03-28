@@ -8570,7 +8570,7 @@ evil3_floors/cemdrk
 }
 // entity 75
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "0 64 -96"
 }
 // entity 76
@@ -8585,7 +8585,7 @@ evil3_floors/cemdrk
 }
 // entity 78
 {
-"classname" "item_health100"
+"classname" "item_health_mega"
 "origin" "16 880 -344"
 }
 // entity 79
@@ -8600,81 +8600,81 @@ evil3_floors/cemdrk
 }
 // entity 81
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "288 1056 -96"
 "angle" "315"
 }
 // entity 82
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "angle" "225"
 "origin" "1056 1056 -96"
 }
 // entity 83
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "384 48 -224"
 }
 // entity 84
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "320 48 -224"
 }
 // entity 85
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "256 48 -256"
 }
 // entity 86
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "192 48 -288"
 }
 // entity 87
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "128 48 -320"
 }
 // entity 88
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "64 48 -352"
 }
 // entity 89
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "96 1072 160"
 "angle" "270"
 }
 // entity 90
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "angle" "270"
 "origin" "-16 1072 160"
 }
 // entity 91
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1024 -64 -240"
 }
 // entity 92
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1024 -128 -240"
 }
 // entity 93
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1024 -192 -240"
 }
 // entity 94
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1024 -256 -240"
 }
 // entity 95
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1024 -320 -240"
 }
 // entity 96
@@ -8905,22 +8905,22 @@ evil3_support/mtlsupport_pipes
 }
 // entity 118
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-192 384 32"
 }
 // entity 119
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-192 320 32"
 }
 // entity 120
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-192 256 32"
 }
 // entity 121
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-192 192 32"
 }
 // entity 122
@@ -9130,7 +9130,7 @@ evil3_support/mtlsupport_pipes
 }
 // entity 146
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "848 432 -96"
 }
 // entity 147

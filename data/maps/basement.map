@@ -7214,7 +7214,7 @@ evil6_walls/e6girdersupport
 }
 // entity 82
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "424 348 80"
 }
 // entity 83
@@ -7224,7 +7224,7 @@ evil6_walls/e6girdersupport
 }
 // entity 84
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "1024 -448 -112"
 }
 // entity 85
@@ -7245,7 +7245,7 @@ evil6_walls/e6girdersupport
 }
 // entity 88
 {
-"classname" "item_health100"
+"classname" "item_health_mega"
 "origin" "416 -32 -120"
 }
 // entity 89
@@ -7275,18 +7275,18 @@ evil6_walls/e6girdersupport
 }
 // entity 94
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-91 587 -108"
 "angle" "-90"
 }
 // entity 95
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-84 -136 24"
 }
 // entity 96
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-84 -172 24"
 }
 // entity 97

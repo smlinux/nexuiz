@@ -2504,7 +2504,7 @@ dsi_textures/cretebase
 }
 // entity 2
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "-488.000000 -768.000000 2.000000"
 }
 // entity 3
@@ -2524,13 +2524,13 @@ dsi_textures/cretebase
 }
 // entity 6
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "angle" "-90"
 "origin" "192.000000 520.000000 2.000000"
 }
 // entity 7
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "angle" "90"
 "origin" "191.000000 -1278.000000 2.000000"
 }
@@ -2561,12 +2561,12 @@ dsi_textures/cretebase
 }
 // entity 13
 {
-"classname" "item_health100"
+"classname" "item_health_mega"
 "origin" "2480.000000 -400.000000 -72.000000"
 }
 // entity 14
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "angle" "90"
 "origin" "2544.000000 -1268.000000 8.000000"
 }
@@ -2577,7 +2577,7 @@ dsi_textures/cretebase
 }
 // entity 16
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "3224.000000 0.000000 8.000000"
 }
 // entity 17
@@ -2587,7 +2587,7 @@ dsi_textures/cretebase
 }
 // entity 18
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "angle" "-90"
 "origin" "2544.000000 508.000000 0.000000"
 }

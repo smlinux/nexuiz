@@ -25341,7 +25341,7 @@ common/clip
 }
 // entity 3
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "496 1680 400"
 }
 // entity 4
@@ -25392,13 +25392,13 @@ common/clip
 }
 // entity 9
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "2208 -64 -752"
 "angle" "180"
 }
 // entity 10
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "1920 -64 -624"
 }
 // entity 11
@@ -25443,7 +25443,7 @@ common/clip
 }
 // entity 17
 {
-"classname" "item_health100"
+"classname" "item_health_mega"
 "origin" "1184 168 152"
 }
 // entity 18
@@ -25484,27 +25484,27 @@ common/clip
 }
 // entity 24
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-800 -352 16"
 }
 // entity 25
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "560 128 24"
 }
 // entity 26
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "560 0 24"
 }
 // entity 27
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "560 -128 24"
 }
 // entity 28
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "560 -256 24"
 }
 // entity 29
@@ -25559,27 +25559,27 @@ common/clip
 }
 // entity 37
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "2504 -1288 -368"
 }
 // entity 38
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "1192 -1416 -424"
 }
 // entity 39
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1600 -1760 -208"
 }
 // entity 40
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1632 -1760 -208"
 }
 // entity 41
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1664 -1760 -208"
 }
 // entity 42
@@ -48100,16 +48100,16 @@ evil5_wall/crete_tek2btm
 }
 // entity 905
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "1184 1280 -104"
 }
 // entity 906
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "1040 -528 -432"
 }
 // entity 907
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "2168 -1208 -752"
 }

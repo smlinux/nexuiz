@@ -9903,27 +9903,27 @@ sav-liquids/glass_tube
 }
 // entity 20
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "-452.000000 12.000000 192.000000"
 }
 // entity 21
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-688.000000 -400.000000 -48.000000"
 }
 // entity 22
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "224.000000 -384.000000 -48.000000"
 }
 // entity 23
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "152.000000 -424.000000 176.000000"
 }
 // entity 24
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-128.000000 16.000000 368.000000"
 }
 // entity 25
@@ -10832,37 +10832,37 @@ sav-liquids/glass_tube
 }
 // entity 36
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-16.000000 -704.000000 176.000000"
 }
 // entity 37
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-16.000000 -768.000000 176.000000"
 }
 // entity 38
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-16.000000 -832.000000 176.000000"
 }
 // entity 39
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-16.000000 -896.000000 176.000000"
 }
 // entity 40
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-16.000000 -960.000000 176.000000"
 }
 // entity 41
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-16.000000 -1024.000000 176.000000"
 }
 // entity 42
 {
-"classname" "item_health100"
+"classname" "item_health_mega"
 "origin" "-640.000000 576.000000 0.000000"
 }
 // entity 43

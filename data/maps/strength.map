@@ -27177,57 +27177,57 @@ eX/eXmetalBase07rust
 }
 // entity 260
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "1504 1632 304"
 }
 // entity 261
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "832 1856 528"
 }
 // entity 262
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "896 1856 528"
 }
 // entity 263
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "1216 832 528"
 }
 // entity 264
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1280 832 528"
 }
 // entity 265
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "1344 832 528"
 }
 // entity 266
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1408 832 528"
 }
 // entity 267
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "1472 832 528"
 }
 // entity 268
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1536 832 560"
 }
 // entity 269
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "1600 832 592"
 }
 // entity 270
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1664 832 624"
 }
 // entity 271
@@ -27269,12 +27269,12 @@ eX/eXmetalBase07rust
 }
 // entity 277
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "928 576 144"
 }
 // entity 278
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "928 1088 144"
 }
 // entity 279
@@ -27301,42 +27301,42 @@ eX/eXmetalBase07rust
 }
 // entity 283
 {
-"classname" "item_health100"
+"classname" "item_health_mega"
 "origin" "1792 160 1440"
 }
 // entity 284
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "880 1248 1184"
 }
 // entity 285
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "784 1248 1184"
 }
 // entity 286
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "512 544 1168"
 }
 // entity 287
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "640 544 1168"
 }
 // entity 288
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "768 544 1168"
 }
 // entity 289
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "896 544 1168"
 }
 // entity 290
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1024 544 1168"
 }
 // entity 291
@@ -27370,7 +27370,7 @@ eX/eXmetalBase07rust
 }
 // entity 296
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "spawnflags" "1"
 "origin" "1344 1328 800"
 }
@@ -27398,32 +27398,32 @@ eX/eXmetalBase07rust
 }
 // entity 301
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "192 1408 144"
 }
 // entity 302
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "256 1408 144"
 }
 // entity 303
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "320 1408 144"
 }
 // entity 304
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "384 1408 144"
 }
 // entity 305
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "448 1408 144"
 }
 // entity 306
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "848 336 720"
 }
 // entity 307
@@ -27445,17 +27445,17 @@ eX/eXmetalBase07rust
 }
 // entity 310
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "144 208 1440"
 }
 // entity 311
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "256 96 1440"
 }
 // entity 312
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "1544 1856 1040"
 }
 // entity 313
@@ -27577,32 +27577,32 @@ eX/eXmetalBase07rust
 }
 // entity 333
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "1536 1088 1200"
 }
 // entity 334
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1536 1032 1200"
 }
 // entity 335
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1536 1144 1200"
 }
 // entity 336
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "1400 1856 1040"
 }
 // entity 337
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "1448 1856 1040"
 }
 // entity 338
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "1496 1856 1040"
 }
 // entity 339
@@ -28484,7 +28484,7 @@ eX/eXmetalBase07rust
 }
 // entity 415
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "224 320 160"
 }
 // entity 416
@@ -28583,22 +28583,22 @@ eX/eXmetalBase07rust
 }
 // entity 426
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1280 1952 1648"
 }
 // entity 427
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1184 1952 1648"
 }
 // entity 428
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1024 1952 1648"
 }
 // entity 429
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "1104 1952 1648"
 }
 // entity 430

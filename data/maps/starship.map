@@ -38652,22 +38652,22 @@ brushDef
 }
 // entity 1
 {
-"classname" "item_health100"
+"classname" "item_health_mega"
 "origin" "-320.000000 -352.000000 -176.000000"
 }
 // entity 2
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "1296.000000 576.000000 16.000000"
 }
 // entity 3
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "576.000000 -752.000000 -80.000000"
 }
 // entity 4
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-224.000000 -32.000000 16.000000"
 }
 // entity 5
@@ -38691,7 +38691,7 @@ brushDef
 }
 // entity 8
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "896.000000 -192.000000 -80.000000"
 }
 // entity 9
@@ -38701,17 +38701,17 @@ brushDef
 }
 // entity 10
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "608.000000 -128.000000 -80.000000"
 }
 // entity 11
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-320.000000 -768.000000 16.000000"
 }
 // entity 12
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "576.000000 -1344.000000 80.000000"
 }
 // entity 13
@@ -38749,17 +38749,17 @@ brushDef
 }
 // entity 16
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-416.000000 -32.000000 16.000000"
 }
 // entity 17
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "128.000000 128.000000 16.000000"
 }
 // entity 18
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "112.000000 432.000000 -176.000000"
 }
 // entity 19
@@ -38923,32 +38923,32 @@ brushDef
 }
 // entity 35
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "128.000000 -464.000000 -80.000000"
 }
 // entity 36
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-320.000000 768.000000 -176.000000"
 }
 // entity 37
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "1024.000000 768.000000 16.000000"
 }
 // entity 38
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-352.000000 480.000000 -176.000000"
 }
 // entity 39
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-672.000000 224.000000 16.000000"
 }
 // entity 40
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-160.000000 608.000000 16.000000"
 }
 // entity 41
@@ -39033,48 +39033,48 @@ brushDef
 }
 // entity 50
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "angle" "90"
 "origin" "704.000000 -1088.000000 -80.000000"
 }
 // entity 51
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "832.000000 -1344.000000 80.000000"
 }
 // entity 52
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "1104.000000 -1024.000000 80.000000"
 }
 // entity 53
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-320.000000 -896.000000 16.000000"
 }
 // entity 54
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-576.000000 -768.000000 16.000000"
 }
 // entity 55
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-576.000000 -896.000000 16.000000"
 }
 // entity 56
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "896.000000 -384.000000 -80.000000"
 }
 // entity 57
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "544.000000 656.000000 -144.000000"
 }
 // entity 58
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "544.000000 496.000000 -144.000000"
 }
 // entity 59
@@ -39449,7 +39449,7 @@ brushDef
 }
 // entity 113
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "1296.000000 192.000000 16.000000"
 }
 // entity 114

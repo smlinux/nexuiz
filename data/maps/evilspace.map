@@ -4794,7 +4794,7 @@ e8/e8_base1
 "origin" "-600.000000 462.000000 -56.000000"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-96.000000 -184.000000 -72.000000"
 }
 {
@@ -4819,20 +4819,20 @@ e8/e8_base1
 }
 {
 "angle" "90"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "582.000000 -122.000000 -64.000000"
 }
 {
 "angle" "90"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-626.000000 -122.000000 -64.000000"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-16.000000 -184.000000 -72.000000"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "64.000000 -184.000000 -72.000000"
 }
 {
@@ -4862,7 +4862,7 @@ e8/e8_base1
 }
 {
 "angle" "90"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-8.000000 152.000000 -408.000000"
 }
 {
@@ -4897,11 +4897,11 @@ e8/e8_base1
 }
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "904.000000 480.000000 -416.000000"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "904.000000 542.000000 -416.000000"
 }
 {
@@ -4921,24 +4921,24 @@ e8/e8_base1
 "origin" "-1296.000000 208.000000 -228.000000"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-926.000000 464.000000 -416.000000"
 }
 {
-"classname" "item_armor25"
+"classname" "item_armor_large"
 "origin" "-16.000000 704.000000 106.000000"
 "spawnflags" "1"
 }
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-1310.000000 676.000000 -226.000000"
 }
 {
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "-864.000000 400.000000 -416.000000"
 }
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "-352.000000 1008.000000 -416.000000"
 }
 {
@@ -5062,20 +5062,20 @@ e8/e8_base1
 "origin" "1392.000000 1040.000000 -224.000000"
 }
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "320.000000 1008.000000 -416.000000"
 }
 {
 "angle" "180"
-"classname" "item_health25"
+"classname" "item_health_medium"
 "origin" "832.000000 400.000000 -416.000000"
 }
 {
-"classname" "item_health1"
+"classname" "item_health_small"
 "origin" "1272.000000 676.000000 -226.000000"
 }
 {
-"classname" "item_armor1"
+"classname" "item_armor_small"
 "origin" "-926.000000 526.000000 -416.000000"
 }
 {
