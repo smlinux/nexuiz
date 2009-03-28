@@ -622,7 +622,7 @@ void FixPlayermodel()
 		}
 	}
 
-	if(self.modelindex == 0)
+	if(self.modelindex == 0 && self.deadflag == DEAD_NO)
 	{
 		if(self.model != "")
 			bprint("\{1}^1Player ", self.netname, "^1 has a zero modelindex, trying to fix...\n");
