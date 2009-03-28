@@ -154,7 +154,9 @@ You need [NetRadiant (http://icculus.org/netradiant/)], a stabilized Q3 map edit
 _Engine:_ instructions are available at http://icculus.org/twilight/darkplaces/download.html look for |Accessing the SVN server| (you will need a [svn client (http://subversion.tigris.org/project_packages.html)], beta builds are available [here (http://icculus.org/twilight/darkplaces/files/)])
 
 _Game data:_ to check out the Nexuiz svn, you'll need a [svn client (http://subversion.tigris.org/project_packages.html)].  To check out the repository with a command line svn client, do
+
 ^<<
 svn co svn://svn.icculus.org/nexuiz/trunk/
 ^>>
+
 To compile the game code you need [fteqcc (http://sourceforge.net/project/showfiles.php?group\_id=116842&package\_id=129507)].  Just download it and run it 3 times, once in |data/qcsrc/menu|, once in |data/qcsrc/server| and once in |data/qcsrc/client|.  Alternatively a Makefile is available in |data/| to perform directly the operation.
