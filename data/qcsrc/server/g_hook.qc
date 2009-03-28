@@ -470,7 +470,7 @@ void GrappleHookInit()
 	if(g_grappling_hook)
 		hook_shotorigin = '8 -8 -12';
 	else
-		hook_shotorigin = shotorg_adjust('26.2148 9.2059 -15.9772', FALSE, FALSE);
+		hook_shotorigin = shotorg_adjust('26.2148 9.2059 -15.9772', TRUE, FALSE);
 }
 
 void SetGrappleHookBindings()

@@ -2042,6 +2042,8 @@ void write_recordmarker(entity pl, float tstart, float dt)
 
 vector shotorg_adjust(vector vecs, float y_is_right, float visual)
 {
+	string s;
+	vector v;
 	if (cvar("g_shootfromeye"))
 	{
 		if(visual)
@@ -2059,6 +2061,16 @@ vector shotorg_adjust(vector vecs, float y_is_right, float visual)
 	{
 		vecs_y = 0;
 		vecs_z -= 4;
+	}
+	else if((s = cvar_string("g_shootfromfixedorigin")) != "")
+	{
+		v = stov(s);
+		if(y_is_right)
+			v_y = -v_y;
+		if(v_x != 0)
+			vecs_x = v_x;
+		vecs_y = v_y;
+		vecs_z = v_z;
 	}
 	return vecs;
 }
