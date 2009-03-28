@@ -44,12 +44,12 @@ This happens when the engine can't load the data*.pk3 file or has trouble to ini
 	4. the engine could not initialize OpenGL.  Please install the latest drivers for your graphic card.  You will probably find one for your card there: [intel (http://intel.com)] [ati (http://ati.com)] [nvidia (http://nvidia.com)]
 	5. your download might be corrupted, please download Nexuiz again
 
-** Using Linux i only see the map but no players and items
+** Using Linux I only see the map but no players and items
 This happens when the engine has trouble to initialize OpenGL.  The reasons could be:
 	1. the engine could not initialize OpenGL.  Please install the latest drivers for your graphic card.  You will probably find one for your card there: [intel (http://intel.com)] [ati (http://ati.com)] [nvidia (http://nvidia.com)]
 	2. You do not have permissions needed for 3d acceleration.  Usually you need to add yourself to the group |video|, you can do that via console as root like this: |usermod -a -G video YOURUSERNAME|.  You need to logoff/in afterwards.
 
-** When i start Nexuiz my screen is flickering
+** When I start Nexuiz my screen is flickering
 This is known to happen on Windows with Intel graphic chips and is a bug in the graphics drivers.  A workaround is to set |Flip-Policiy| to |blit|.  Open the control panel, there should be an icon called |Intel(R) GMA driver| (or something like that), double click it. Click on |3D Settings| to find the screen with those settings.
 
 ** How can I speed up my frame rate?
@@ -79,7 +79,7 @@ On Linux: In a xterm, |cd| into your Nexuiz installation directory, start |catch
 
 On Windows: Click Start->Run, and enter drwtsn32, click Ok in the next window, run Nexuiz and wait for the crash.  Then go to |C:\Documents and Settings\All Users\Application Data\Microsoft\Dr Watson| there should be a file called "drwtsn32.log", give that file along with the engine's build date to the developers.  You'll see that date when you open the ingame console ([How do I open the console?]).  Note that some folders of that path may be hidden or have a translated name if you're using a non-english windows.
 
-** Where can i get more help?
+** Where can I get more help?
 Visit [the official Nexuiz forum (http://alientrap.org/forum)] there is a [support and bug report area (http://alientrap.org/forum/viewforum.php?f=3)].  Or get on [IRC (http://en.wikipedia.org/wiki/Internet__Relay__Chat)] to chat with other or ask for help.  There is the normal users channel (irc://irc.quakenet.org/nexuiz) and the developers channel (irc://irc.anynet.org/alientrap)
 
 * General questions
@@ -124,10 +124,10 @@ Colors can be used in nicknames and chat messages via two ways: Either the simpl
 	! ^9     ! ^x444      ! dark grey         !
 	!--------!--------------------------------!
 
-** How do i watch/record demos?
-Demos are recordings of matches that you have played. To automatically record a demo each time you play enable the option |Record demos while playing| in the |Settings / Demos| menu. Or if you just want to record some matches open the console and type |rec <demos/name>| before playing. That is before starting a game or connecting to a server. The demo file will then be stored in |Nexuiz/data/demos/<name>.dem| (on Windows) or |~/.nexuiz/data/demos/<name>.dem| (on Linux, Mac).
+** How do I watch/record demos?
+Demos are recordings of matches that you have played. To automatically record a demo each time you play enable the option |Record demos while playing| in the |Multiplayer / Demos| menu. Or if you just want to record some matches open the console and type |rec <demos/name>| before playing. That is before starting a game or connecting to a server. The demo file will then be stored in |Nexuiz/data/demos/<name>.dem| (on Windows) or |~/.nexuiz/data/demos/<name>.dem| (on Linux, Mac).
 If you downloaded a demo, copy it to |Nexuiz/data/demos/<name>.dem| (on Linux, Mac, Windows) or |~/.nexuiz/data/demos/<name>.dem| (on Linux, Mac).  You might have to create this directory if you have never recorded a demo before.
-To watch demos you can choose a demo file in the |Settings / Demos| and click the play button. Also you can watch demos typing |ply <demos/name>| in the console ([How do I open the console?]). You can list all your demo files by typing |dem| on the console.Some useful key bindings for viewing demos and making videos are listed [here (http://www.alientrap.org/forum/viewtopic.php?p=357#357)].  A simple way to automatically record demos can be found [here (http://www.alientrap.org/forum/viewtopic.php?t=90)].
+To watch demos you can choose a demo file in the |Multiplayer / Demos| and click the play button. Also you can watch demos typing |ply <demos/name>| in the console ([How do I open the console?]). You can list all your demo files by typing |dem| on the console.Some useful key bindings for viewing demos and making videos are listed [here (http://www.alientrap.org/forum/viewtopic.php?p=357#357)].  A simple way to automatically record demos can be found [here (http://www.alientrap.org/forum/viewtopic.php?t=90)].
 
 * Server setup
 
@@ -142,20 +142,19 @@ If you follow the tutorial mentioned above you do not need this command line arg
 ** Is there some kind of rcon?
 Yes starting with Nexuiz 2.0 there is rcon (QuakeWorld compatible).  To use it you must enter |rcon__password <password>| in the server console or server config file.  The Nexuiz client has to set the same password in the same fashion.  You can then issue commands with |rcon <command>| if you are connected to the server or will have to set |rcon__address <ip/hostname>| or |rcon__address <ip/hostname>:<port>| to point to the server.  There are also external rcon tools but make sure you use a QW compatible rcon tool.
 
-** How can i kick people who are using special characters in their names?
+** How can I kick people who are using special characters in their names?
 Enter |status| at the server console.  You will see a list of all players.  In front of their names you will see a number (the player id).  You can kick the player you don't like with |kick # <player id> <reason>| (notice the space after #).
 
 * Development
 
-** How do i set up gtkradiant to create/edit Nexuiz maps?
-There's a [guide (http://www.alientrap.org/forum/viewtopic.php?t=10)] on gtkradiant setup in the forums.
-There are also [Windows tool (http://www.alientrap.org/forum/viewtopic.php?p=33)] that will help you to setup gtkradiant 1.4 and a [Linux script (http://www.alientrap.org/forum/viewtopic.php?p=841)] to configure gtkradiant 1.5.
+** How can I create or edit Nexuiz maps?
+You need [NetRadiant (http://icculus.org/netradiant/)], a stabilized Q3 map editor. For convenience, a snapshot configured for Nexuiz is included in |extra/| for Windows and MAC-Intel, but the program is not officially supported by Alientrap.
 
-** Where can i get latest development versions of the source code?
+** Where can I get latest development versions of the source code?
 _Engine:_ instructions are available at http://icculus.org/twilight/darkplaces/download.html look for |Accessing the SVN server| (you will need a [svn client (http://subversion.tigris.org/project_packages.html)], beta builds are available [here (http://icculus.org/twilight/darkplaces/files/)])
 
 _Game data:_ to check out the Nexuiz svn, you'll need a [svn client (http://subversion.tigris.org/project_packages.html)].  To check out the repository with a command line svn client, do
 ^<<
 svn co svn://svn.icculus.org/nexuiz/trunk/
 ^>>
-To compile the game code you need [fteqcc (http://sourceforge.net/project/showfiles.php?group\_id=116842&package\_id=129507)].  Just download it and run it twice, once in |data/qcsrc/menu| and once in |data/qcsrc/server|.
+To compile the game code you need [fteqcc (http://sourceforge.net/project/showfiles.php?group\_id=116842&package\_id=129507)].  Just download it and run it 3 times, once in |data/qcsrc/menu|, once in |data/qcsrc/server| and once in |data/qcsrc/client|.  Alternatively a Makefile is available in |data/| to perform directly the operation.
