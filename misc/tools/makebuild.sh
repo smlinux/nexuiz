@@ -10,7 +10,7 @@ set -e
 base=`pwd`
 
 # customizable specific stuff
-netradiant_release=1.5.0-svn222
+netradiant_release=1.5.0-svn227
 basepk3=$base/data20080229.pk3 # 2.4
 hotbasepk3= # hotfix
 nexdir=$base/nexuiz
@@ -178,6 +178,7 @@ make clean
 cd "$tmpdir"
 cp "$nexdir/"nexuiz-*.sh "$tmpdir/"
 cp "$nexdir/gpl.txt" "$tmpdir/"
+cp "$nexdir/readme.html" "$tmpdir/"
 
 # prepare data
 cd "$nexdir/data"
@@ -260,10 +261,14 @@ chmod 644 *.dll *.exe
 mkdir extra
 cd extra
 wget http://www.icculus.org/netradiant/files/netradiant-${netradiant_release}-win32.zip
+#echo "Downloading netradiant, press enter and type the PWs"
+#read -r DUMMY
+#scp divverent@icculus.org:netradiant-webspace/files/netradiant-${netradiant_release}-win32.zip .
 unzip netradiant-${netradiant_release}-win32.zip
 mv NetRadiant netradiant-${netradiant_release}-win32
 rm -f netradiant-${netradiant_release}-win32.zip
 wget http://www.icculus.org/netradiant/files/netradiant-${netradiant_release}-osxintel.zip
+#scp divverent@icculus.org:netradiant-webspace/files/netradiant-${netradiant_release}-osxintel.zip .
 unzip netradiant-${netradiant_release}-osxintel.zip
 mv NetRadiant.app NetRadiant-${netradiant_release}-osxintel.app
 rm -f netradiant-${netradiant_release}-osxintel.zip
@@ -284,7 +289,7 @@ mv * Nexuiz/ || true
 find . -name .svn -exec rm -rf {} \; -prune
 
 rm -f "$zipdir/nexuiz$date$ext.zip"
-zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/server Nexuiz/data/data$tag$date.pk3 Nexuiz/data/common-spog.pk3 Nexuiz/havoc/* Nexuiz/extra/*
+zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/readme.html Nexuiz/server Nexuiz/data/data$tag$date.pk3 Nexuiz/data/common-spog.pk3 Nexuiz/havoc/* Nexuiz/extra/*
 ln -snf nexuiz$date$ext.zip "$zipdir/nexuiz-$newest.zip"
 
 rm -f "$zipdir/nexuizengineonly$date$ext.zip"
@@ -328,15 +333,15 @@ if unzip "Nexuiz/data/data$tag$date.pk3" gfx/brand.tga; then
 fi
 
 rm -f "$zipdir/nexuizpatch$date$ext.zip"
-zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/server Nexuiz/data/datapatch$tag$date.pk3 Nexuiz/havoc/*
+zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/readme.html Nexuiz/server Nexuiz/data/datapatch$tag$date.pk3 Nexuiz/havoc/*
 ln -snf nexuizpatch$date$ext.zip "$zipdir/nexuizpatch-$newest.zip"
 
 [ -n "$hotbasepk3" ] && rm -f "$zipdir/nexuizhotfix$date$ext.zip"
-[ -n "$hotbasepk3" ] && zip $zipflags -9yr "$zipdir/nexuizhotfix$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/server Nexuiz/data/datapatch$tag$date""hotfix.pk3 Nexuiz/havoc/*
+[ -n "$hotbasepk3" ] && zip $zipflags -9yr "$zipdir/nexuizhotfix$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/readme.html Nexuiz/server Nexuiz/data/datapatch$tag$date""hotfix.pk3 Nexuiz/havoc/*
 [ -n "$hotbasepk3" ] && ln -snf nexuizhotfix$date$ext.zip "$zipdir/nexuizhotfix-$newest.zip"
 
 rm -f "$zipdir/nexuizdocs$date$ext.zip"
-zip $zipflags -9yr "$zipdir/nexuizdocs$date$ext.zip"       Nexuiz/gpl.txt Nexuiz/Docs
+zip $zipflags -9yr "$zipdir/nexuizdocs$date$ext.zip"       Nexuiz/gpl.txt Nexuiz/Docs Nexuiz/readme.html
 ln -snf nexuizdocs$date$ext.zip "$zipdir/nexuizdocs-$newest.zip"
 
 rm -f "$zipdir/nexuizdebug$date$ext.zip"
