@@ -519,13 +519,14 @@ float turret_validate_target(entity e_turret,entity e_target,float validate_flag
     if(e_turret.turrcaps_flags & TFL_TURRCAPS_HEADATTACHED)
     {
         tvt_thadv = angleofs3(e_turret.tur_head.origin,e_turret.angles + e_turret.tur_head.angles ,e_target);
+        //tvt_thadv = angleofs(e_turret.angles,e_target);
     }
     else
     {
         tvt_thadv = angleofs(e_turret.tur_head,e_target);
     }
 
-    tvt_tadv  = angleofs(e_turret,e_target);
+    tvt_tadv  = shortangle_vxy(angleofs(e_turret,e_target),e_turret.angles);
     tvt_thadf = vlen(tvt_thadv);
     tvt_tadf  = vlen(tvt_tadv);
 
@@ -656,6 +657,7 @@ void turret_think()
 #endif
 
     // Handle ammo
+    if not (self.spawnflags & TSF_NO_AMMO_REGEN)
     if (self.ammo < self.ammo_max)
         self.ammo = min(self.ammo + self.ammo_recharge,self.ammo_max);
 
@@ -858,7 +860,7 @@ float turret_stdproc_init (string cvar_base_name)
 
     // Terrainbase spawnflag. This puts a enlongated model
     // under the turret, so it looks ok on uneaven surfaces.
-    if (self.spawnflags & 2)
+    if (self.spawnflags & TSF_TERRAINBASE)
     {
         entity tb;
         precache_model("models/turrets/terrainbase.md3");

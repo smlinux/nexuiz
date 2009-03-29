@@ -145,7 +145,13 @@ float ewheel_moveverb_enemy(float eval)
     {
     case VCM_EVAL:
         if (self.enemy)
+        {
+            if (self.spawnflags & TSF_NO_PATHBREAK)
+                if (self.pathcurrent)
+                    return VS_CALL_NO;
+
             return verb.verb_static_value;
+        }
 
         return VS_CALL_NO;
 
@@ -194,6 +200,10 @@ float ewheel_moveverb_runaway(float eval)
     switch (eval)
     {
     case VCM_EVAL:
+        if (self.spawnflags & TSF_NO_PATHBREAK)
+            if (self.pathcurrent)
+                return VS_CALL_NO;
+
         if (self.enemy)
             if (self.health < 50)
                 return verb.verb_static_value;

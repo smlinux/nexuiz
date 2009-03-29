@@ -587,6 +587,11 @@ float walker_moveverb_enemy(float eval)
     {
     case VCM_EVAL:
 
+        if (self.enemy)
+            if (self.spawnflags & TSF_NO_PATHBREAK)
+                if (self.pathcurrent)
+                    return VS_CALL_NO;
+
         if (self.animflag == ANIM_MEELE)
             return VS_CALL_NO;
 
@@ -953,8 +958,8 @@ void turret_walker_dinit()
 
     self.damage_flags |= TFL_DMG_DEATH_NOGIBS;
 
-    //self.target_select_flags   = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK | TFL_TARGETSELECT_LOS;
-    //self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK | TFL_TARGETSELECT_LOS;
+    self.target_select_flags   = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK | TFL_TARGETSELECT_LOS;
+    self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK | TFL_TARGETSELECT_LOS;
 
     self.iscreature = TRUE;
     self.movetype   = MOVETYPE_WALK;

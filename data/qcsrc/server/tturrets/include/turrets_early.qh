@@ -25,8 +25,18 @@ vector real_origin(entity ent);
 /// Used for cvar reloading
 .string cvar_basename;
 
+//.float spawnflags
+/// Spawn a pillar model under the turret to make it look ok on uneven ground surfaces
+#define TSF_TERRAINBASE   2
+/// Disable builtin ammo regeneration
+#define TSF_NO_AMMO_REGEN 4
+/// Dont break path to chase enemys. will still fire at them if possible.
+#define TSF_NO_PATHBREAK  8
+
+
 /// target selection flags
 .float target_select_flags;
+/// target validatoin flags
 .float target_validate_flags;
 /// Dont select a target on its own.
 #define TFL_TARGETSELECT_NO            2
