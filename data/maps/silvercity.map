@@ -8531,6 +8531,7 @@ evil8_trim/e8_btrim05
 {
 "classname" "dom_team"
 "model" "models/domination/dom_unclaimed.md3"
+"origin" "0.000000 0.000000 -264.000000"
 }
 // entity 90
 {
@@ -8541,6 +8542,7 @@ evil8_trim/e8_btrim05
 "netname" "^4Blue Team^3"
 "noise" "domination/claim.wav"
 "noise1" "domination/claim.wav"
+"origin" "0.000000 0.000000 -232.000000"
 }
 // entity 91
 {
@@ -8551,6 +8553,7 @@ evil8_trim/e8_btrim05
 "netname" "^1Red Team^3"
 "noise" "domination/claim.wav"
 "noise1" "domination/claim.wav"
+"origin" "0.000000 0.000000 -200.000000"
 }
 // entity 92
 {
@@ -8561,6 +8564,7 @@ evil8_trim/e8_btrim05
 "netname" "^6Pink Team^3"
 "noise" "domination/claim.wav"
 "noise1" "domination/claim.wav"
+"origin" "0.000000 0.000000 -176.000000"
 }
 // entity 93
 {
@@ -8571,6 +8575,7 @@ evil8_trim/e8_btrim05
 "netname" "^3Yellow Team^3"
 "noise" "domination/claim.wav"
 "noise1" "domination/claim.wav"
+"origin" "0.000000 0.000000 -144.000000"
 }
 // entity 94
 {
@@ -8581,348 +8586,283 @@ evil8_trim/e8_btrim05
 // entity 95
 {
 "classname" "dom_controlpoint"
-"message" "^3 has captured the ^1Upper Megahealth"
-"origin" "-240.000000 -10.000000 1376.000000"
-}
-// entity 96
-{
-"classname" "dom_controlpoint"
-"angle" "45"
-"message" "^3 has captured a ^1 Platform"
-"origin" "1450.000000 1430.000000 984.000000"
-}
-// entity 97
-{
-"classname" "dom_controlpoint"
-"angle" "-45"
-"message" "^3 has captured a ^1Platform"
-"origin" "1450.000000 -1430.000000 984.000000"
-}
-// entity 98
-{
-"classname" "dom_controlpoint"
-"angle" "45"
-"message" "^3 has captured a ^1Platform"
-"origin" "-1450.000000 -1430.000000 984.000000"
-}
-// entity 99
-{
-"classname" "dom_controlpoint"
-"angle" "-45"
-"message" "^3 has captured a ^1Platform"
-"origin" "-1450.000000 1430.000000 984.000000"
-}
-// entity 100
-{
-"classname" "dom_controlpoint"
 "message" "^3 has captured a ^1Bottom Controlpoint"
 "origin" "1970.000000 -250.000000 -296.000000"
 }
-// entity 101
+// entity 96
 {
 "classname" "dom_controlpoint"
 "angle" "90"
 "message" "^3 has captured the ^1Bottom Mortar"
 "origin" "-1500.000000 -1800.000000 -296.000000"
 }
-// entity 102
-{
-"classname" "dom_controlpoint"
-"message" "^3 has captured the ^1Rocket Launcher"
-"origin" "330.000000 -220.000000 24.000000"
-}
-// entity 103
+// entity 97
 {
 "classname" "dom_controlpoint"
 "angle" "90"
 "message" "^3 has captured the ^1Hallway"
 "origin" "-1500.000000 -225.000000 24.000000"
 }
-// entity 104
+// entity 98
 {
 "classname" "dom_controlpoint"
 "angle" "90"
 "message" "^3 has captured a ^1Middle Controlpoint"
 "origin" "150.000000 1850.000000 24.000000"
 }
-// entity 105
-{
-"classname" "dom_controlpoint"
-"message" "^3 has captured a ^1Middle Controlpoint"
-"origin" "2000.000000 -230.000000 24.000000"
-}
-// entity 106
+// entity 99
 {
 "classname" "dom_controlpoint"
 "message" "^3 has captured the ^1Middle Mortar"
-"origin" "1060.000000 -140.000000 216.000000"
+"origin" "1216.000000 -256.000000 216.000000"
 }
-// entity 107
-{
-"classname" "dom_controlpoint"
-"angle" "90"
-"message" "^3 has captured a ^1Middle Controlpoint"
-"origin" "-1500.000000 -1800.000000 216.000000"
-}
-// entity 108
-{
-"classname" "dom_controlpoint"
-"message" "^3 has captured a ^1Middle Controlpoint"
-"origin" "-1500.000000 740.000000 216.000000"
-}
-// entity 109
-{
-"classname" "dom_controlpoint"
-"message" "^3 has captured the ^1 1337 Controlpoint"
-"origin" "1337.000000 1190.000000 216.000000"
-}
-// entity 110
+// entity 100
 {
 "classname" "light"
 "light" "400"
 "origin" "928 288 72"
 }
-// entity 111
+// entity 101
 {
 "classname" "light"
 "light" "400"
 "origin" "928 -224 72"
 }
-// entity 112
+// entity 102
 {
 "classname" "light"
 "light" "400"
 "origin" "928 -736 72"
 }
-// entity 113
+// entity 103
 {
 "classname" "light"
 "light" "400"
 "origin" "1440 288 72"
 }
-// entity 114
+// entity 104
 {
 "classname" "light"
 "light" "400"
 "origin" "1440 -224 72"
 }
-// entity 115
+// entity 105
 {
 "classname" "light"
 "light" "400"
 "origin" "1440 -736 72"
 }
-// entity 116
+// entity 106
 {
 "classname" "light"
 "light" "400"
 "origin" "416 288 72"
 }
-// entity 117
+// entity 107
 {
 "classname" "light"
 "light" "400"
 "origin" "416 -224 72"
 }
-// entity 118
+// entity 108
 {
 "classname" "light"
 "light" "400"
 "origin" "416 -736 72"
 }
-// entity 119
+// entity 109
 {
 "classname" "light"
 "light" "400"
 "origin" "-1504 288 72"
 }
-// entity 120
+// entity 110
 {
 "classname" "light"
 "light" "400"
 "origin" "-1504 -224 72"
 }
-// entity 121
+// entity 111
 {
 "classname" "light"
 "light" "400"
 "origin" "-1504 -736 72"
 }
-// entity 122
+// entity 112
 {
 "classname" "light"
 "light" "400"
 "origin" "-1504 1824 72"
 }
-// entity 123
+// entity 113
 {
 "classname" "light"
 "light" "400"
 "origin" "-1504 1312 72"
 }
-// entity 124
+// entity 114
 {
 "classname" "light"
 "light" "400"
 "origin" "-1504 800 72"
 }
-// entity 125
+// entity 115
 {
 "classname" "light"
 "light" "400"
 "origin" "1440 800 72"
 }
-// entity 126
+// entity 116
 {
 "classname" "light"
 "light" "400"
 "origin" "1440 1312 72"
 }
-// entity 127
+// entity 117
 {
 "classname" "light"
 "light" "800"
 "origin" "416 -224 -168"
 }
-// entity 128
+// entity 118
 {
 "classname" "light"
 "light" "800"
 "origin" "-96 -736 -168"
 }
-// entity 129
+// entity 119
 {
 "classname" "light"
 "light" "800"
 "origin" "-608 -224 -168"
 }
-// entity 130
+// entity 120
 {
 "classname" "light"
 "light" "800"
 "origin" "-96 288 -168"
 }
-// entity 131
+// entity 121
 {
 "classname" "light"
 "light" "800"
 "origin" "1312 -224 -168"
 }
-// entity 132
+// entity 122
 {
 "classname" "light"
 "light" "800"
 "origin" "864 -736 -168"
 }
-// entity 133
+// entity 123
 {
 "classname" "light"
 "light" "800"
 "origin" "864 288 -168"
 }
-// entity 134
+// entity 124
 {
 "classname" "light"
 "light" "800"
 "origin" "-1504 -224 -168"
 }
-// entity 135
+// entity 125
 {
 "classname" "light"
 "light" "800"
 "origin" "-1056 -736 -168"
 }
-// entity 136
+// entity 126
 {
 "classname" "light"
 "light" "800"
 "origin" "-1056 288 -168"
 }
-// entity 137
+// entity 127
 {
 "classname" "light"
 "light" "400"
 "origin" "-800 -1888 -64"
 }
-// entity 138
+// entity 128
 {
 "classname" "light"
 "light" "400"
 "origin" "-1504 -1760 72"
 }
-// entity 139
+// entity 129
 {
 "classname" "light"
 "light" "400"
 "origin" "-1504 -1760 -248"
 }
-// entity 140
+// entity 130
 {
 "classname" "light"
 "light" "800"
 "origin" "1928 -224 -168"
 }
-// entity 141
+// entity 131
 {
 "classname" "light"
 "light" "800"
 "origin" "-1504 800 -168"
 }
-// entity 142
+// entity 132
 {
 "classname" "light"
 "light" "800"
 "origin" "-1504 1824 -168"
 }
-// entity 143
+// entity 133
 {
 "classname" "light"
 "light" "800"
 "origin" "1312 1824 -168"
 }
-// entity 144
+// entity 134
 {
 "classname" "light"
 "light" "800"
 "origin" "608 1824 -168"
 }
-// entity 145
+// entity 135
 {
 "classname" "light"
 "light" "800"
 "origin" "-608 1824 -168"
 }
-// entity 146
+// entity 136
 {
 "classname" "light"
 "light" "800"
 "origin" "1440 800 -168"
 }
-// entity 147
+// entity 137
 {
 "classname" "light"
 "light" "800"
 "origin" "416 288 -168"
 }
-// entity 148
+// entity 138
 {
 "classname" "light"
 "light" "800"
 "origin" "416 -736 -168"
 }
-// entity 149
+// entity 139
 {
 "classname" "light"
 "light" "800"
 "origin" "-608 288 -168"
 }
-// entity 150
+// entity 140
 {
 "classname" "light"
 "light" "800"
 "origin" "-608 -736 -168"
 }
-// entity 151
+// entity 141
 {
 "classname" "light"
 "light" "800"
