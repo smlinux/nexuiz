@@ -35,7 +35,7 @@ void turret_machinegun_std_init()
 
     self.ammo_flags = TFL_AMMO_BULLETS | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
     self.turrcaps_flags = TFL_TURRCAPS_PLAYERKILL;// | TFL_TURRCAPS_MISSILEKILL;
-    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_ZEASE;
+    self.aim_flags = TFL_AIM_LEAD;
 
     if(cvar("g_antilag_bullets"))
         self.turrcaps_flags |= TFL_TURRCAPS_HITSCAN;

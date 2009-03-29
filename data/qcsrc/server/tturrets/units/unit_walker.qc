@@ -507,7 +507,6 @@ float walker_moveverb_path(float eval)
             return verb.verb_static_value;
 
         return VS_CALL_NO;
-        break;
 
     case VCM_DO:
         // Do we have a path?
@@ -569,8 +568,6 @@ float walker_moveverb_path(float eval)
         else
             return VS_CALL_YES_DONE;
 
-        break;
-
     case VCM_REMOVE:
 
         if (self.pathcurrent)
@@ -579,8 +576,6 @@ float walker_moveverb_path(float eval)
         self.pathcurrent = world;
 
         return VS_CALL_YES_DONE;
-
-        break;
     }
 
     return VS_CALL_YES_DONE;
@@ -602,8 +597,6 @@ float walker_moveverb_enemy(float eval)
             return verb.verb_static_value;
 
         return VS_CALL_NO;
-
-        break;
 
     case VCM_DO:
         switch (self.waterlevel)
@@ -628,7 +621,6 @@ float walker_moveverb_enemy(float eval)
         self.steerto = steerlib_attract2(self.moveto,0.5,500,0.95);
 
         return VS_CALL_YES_DOING;
-        break;
     }
 
     return VS_CALL_YES_DONE;
@@ -644,7 +636,6 @@ float walker_moveverb_idle_pause(float eval)
             return VS_CALL_NO;
 
         return verb.verb_static_value;
-        break;
 
     case VCM_DO:
 
@@ -653,7 +644,6 @@ float walker_moveverb_idle_pause(float eval)
         self.animflag = ANIM_NO;
 
         return VS_CALL_YES_DOING;
-        break;
     }
 
     return VS_CALL_YES_DONE;
@@ -669,7 +659,6 @@ float walker_moveverb_idle_roam(float eval)
             return VS_CALL_NO;
 
         return verb.verb_static_value;
-        break;
 
     case VCM_DO:
         if(verb.wait < time)
@@ -716,8 +705,6 @@ float walker_moveverb_idle_roam(float eval)
         }
 
         return VS_CALL_YES_DOING;
-
-        break;
     }
 
     return VS_CALL_YES_DONE;
@@ -734,8 +721,6 @@ float walker_moveverb_idle(float eval)
 
         return verb.verb_static_value;
 
-        break;
-
     case VCM_DO:
 
         //if (random() < 0.5)
@@ -744,8 +729,6 @@ float walker_moveverb_idle(float eval)
         //    verbstack_push(self.walker_verbs_move, walker_moveverb_idle_roam,   WVM_IDLE + WVM_IDLE_UP,  random() * 15);
 
         return VS_CALL_YES_DOING;
-
-        break;
     }
 
     return VS_CALL_YES_DONE;
@@ -776,8 +759,6 @@ float walker_attackverb_meele(float eval)
 
         return VS_CALL_NO;
 
-        break;
-
     case VCM_DO:
 
         self.moveto   = self.enemy.origin;
@@ -785,8 +766,6 @@ float walker_attackverb_meele(float eval)
         self.animflag = ANIM_MEELE;
 
         return VS_CALL_YES_DOING;
-
-        break;
     }
 
     return VS_CALL_YES_DONE;
@@ -814,8 +793,6 @@ float walker_attackverb_rockets(float eval)
 
         return verb.verb_static_value;
 
-        break;
-
     case VCM_DO:
 
         entity rv;
@@ -829,8 +806,6 @@ float walker_attackverb_rockets(float eval)
         self.tur_head.attack_finished_single = time + cvar("g_turrets_unit_walker_std_rocket_refire");
 
         return VS_CALL_YES_DONE;
-
-        break;
     }
 
     return VS_CALL_YES_DONE;

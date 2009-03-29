@@ -71,7 +71,6 @@ float ewheel_moveverb_path(float eval)
             return verb.verb_static_value;
 
         return VS_CALL_NO;
-        break;
 
     case VCM_DO:
         // Do we have a path?
@@ -127,8 +126,6 @@ float ewheel_moveverb_path(float eval)
         else
             return VS_CALL_YES_DONE;
 
-        break;
-
     case VCM_REMOVE:
 
         if (self.pathcurrent)
@@ -137,8 +134,6 @@ float ewheel_moveverb_path(float eval)
         self.pathcurrent = world;
 
         return VS_CALL_YES_DONE;
-
-        break;
     }
 
     return VS_CALL_YES_DONE;
@@ -149,12 +144,10 @@ float ewheel_moveverb_enemy(float eval)
     switch (eval)
     {
     case VCM_EVAL:
-            if(self.enemy)
-                return verb.verb_static_value;
+        if (self.enemy)
+            return verb.verb_static_value;
 
         return VS_CALL_NO;
-
-        break;
 
     case VCM_DO:
 
@@ -201,12 +194,11 @@ float ewheel_moveverb_runaway(float eval)
     switch (eval)
     {
     case VCM_EVAL:
-            if(self.enemy)
-            if(self.health < 50)
+        if (self.enemy)
+            if (self.health < 50)
                 return verb.verb_static_value;
 
-            return VS_CALL_NO;
-        break;
+        return VS_CALL_NO;
 
     case VCM_DO:
         self.steerto = (steerlib_push(self.enemy.origin) * 0.7) + (steerlib_traceavoid_flat(0.3, 500, '0 0 128') * 0.3);
@@ -217,7 +209,6 @@ float ewheel_moveverb_runaway(float eval)
 
         return VS_CALL_YES_DOING;
 
-        break;
     }
 
     return VS_CALL_YES_DONE;
@@ -228,17 +219,15 @@ float ewheel_moveverb_idle(float eval)
     switch (eval)
     {
     case VCM_EVAL:
-            if(self.enemy)
-                return VS_CALL_NO;
+        if (self.enemy)
+            return VS_CALL_NO;
 
         return verb.verb_static_value;
-
-        break;
 
     case VCM_DO:
         self.moveto = self.origin;
 
-        if(vlen(self.velocity))
+        if (vlen(self.velocity))
             movelib_beak_simple(cvar("g_turrets_unit_ewheel_speed_stop"));
 
         return VS_CALL_YES_DOING;
