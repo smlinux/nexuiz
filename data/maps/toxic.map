@@ -12646,21 +12646,10 @@ dsi/weapspawn01
 // entity 254
 {
 "classname" "dom_team"
-"cnt" "12"
-"message" "Yellow team has captured a control point"
-"noise1" "domination/claim.wav"
-"noise" "domination/claim.wav"
-"netname" "^3Yellow Team^3"
-"model" "models/domination/dom_yellow.md3"
-"origin" "672 -648 728"
-}
-// entity 255
-{
-"classname" "dom_team"
 "model" "models/domination/dom_unclaimed.md3"
 "origin" "672 -576 784"
 }
-// entity 256
+// entity 255
 {
 "classname" "dom_team"
 "cnt" "4"
@@ -12669,9 +12658,9 @@ dsi/weapspawn01
 "noise" "domination/claim.wav"
 "netname" "^1Red Team^3"
 "model" "models/domination/dom_red.md3"
-"origin" "672 -504 728"
+"origin" "672.000000 -576.000000 720.000000"
 }
-// entity 257
+// entity 256
 {
 "classname" "dom_team"
 "cnt" "13"
@@ -12680,73 +12669,50 @@ dsi/weapspawn01
 "noise" "domination/claim.wav"
 "netname" "^4Blue Team^3"
 "model" "models/domination/dom_blue.md3"
-"origin" "672 -552 728"
+"origin" "672.000000 -576.000000 752.000000"
 }
-// entity 258
-{
-"classname" "dom_team"
-"cnt" "9"
-"message" "Pink team has captured a control point"
-"noise1" "domination/claim.wav"
-"noise" "domination/claim.wav"
-"netname" "^6Pink Team^3"
-"model" "models/domination/dom_pink.md3"
-"origin" "672 -600 728"
-}
-// entity 259
+// entity 257
 {
 "classname" "dom_controlpoint"
 "message" "^3 has captured the ^1rocket launcher"
 "origin" "1280 -728 16"
 }
-// entity 260
-{
-"classname" "dom_controlpoint"
-"message" "^3 has captured the ^2slime"
-"origin" "-680 -576 320"
-}
-// entity 261
+// entity 258
 {
 "classname" "dom_controlpoint"
 "message" "^3 has captured the ^1west side"
-"origin" "760 -96 224"
+"origin" "896.000000 -96.000000 224.000000"
 }
-// entity 262
+// entity 259
 {
 "classname" "dom_controlpoint"
 "message" "^3 has captured the ^1east side"
-"origin" "384 -1048 224"
+"origin" "576.000000 -1048.000000 224.000000"
 }
-// entity 263
-{
-"classname" "dom_controlpoint"
-"message" "^3 has captured the ^1middle"
-"origin" "576 -576 224"
-}
-// entity 264
+// entity 260
 {
 "classname" "dom_controlpoint"
 "message" "^3 has captured the ^1roof"
 "origin" "968 -576 464"
 }
-// entity 265
+// entity 261
 {
 "classname" "item_health_medium"
 "origin" "-688 -696 192"
 }
-// entity 266
+// entity 262
 {
 "classname" "item_health_medium"
 "origin" "-688 -456 192"
 }
-// entity 267
+// entity 263
 {
 "classname" "misc_model"
 "angle" "-90"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "128 -0.5 96"
 }
-// entity 268
+// entity 264
 {
 "classname" "light"
 "_color" "0.7098 0.6431 0.6039"
@@ -12754,13 +12720,13 @@ dsi/weapspawn01
 "target" "t36"
 "origin" "576 -936 376"
 }
-// entity 269
+// entity 265
 {
 "classname" "info_null"
 "targetname" "t36"
 "origin" "576 -936 272"
 }
-// entity 270
+// entity 266
 {
 "classname" "light"
 "_color" "0.7098 0.6431 0.6039"
@@ -12768,13 +12734,13 @@ dsi/weapspawn01
 "target" "t39"
 "origin" "-424 -120 344"
 }
-// entity 271
+// entity 267
 {
 "classname" "info_null"
 "targetname" "t39"
 "origin" "-424 -120 240"
 }
-// entity 272
+// entity 268
 {
 "classname" "light"
 "_color" "0.7098 0.6431 0.6039"
@@ -12782,13 +12748,13 @@ dsi/weapspawn01
 "target" "t59"
 "origin" "-640 -1032 344"
 }
-// entity 273
+// entity 269
 {
 "classname" "info_null"
 "targetname" "t59"
 "origin" "-640 -1032 240"
 }
-// entity 274
+// entity 270
 {
 "classname" "light"
 "_color" "0.7098 0.6431 0.6039"
@@ -12796,13 +12762,13 @@ dsi/weapspawn01
 "target" "t56"
 "origin" "-424 -1032 344"
 }
-// entity 275
+// entity 271
 {
 "classname" "info_null"
 "targetname" "t56"
 "origin" "-424 -1032 240"
 }
-// entity 276
+// entity 272
 {
 "classname" "light"
 "origin" "472 -800 376"
@@ -12810,7 +12776,7 @@ dsi/weapspawn01
 "light" "280"
 "_color" "0.7098 0.6431 0.6039"
 }
-// entity 277
+// entity 273
 {
 "classname" "light"
 "_color" "0.7098 0.6431 0.6039"
@@ -12818,7 +12784,7 @@ dsi/weapspawn01
 "target" "t72"
 "origin" "472 -696 312"
 }
-// entity 278
+// entity 274
 {
 "classname" "light"
 "origin" "472 -904 312"
@@ -12826,19 +12792,19 @@ dsi/weapspawn01
 "light" "280"
 "_color" "0.7098 0.6431 0.6039"
 }
-// entity 279
+// entity 275
 {
 "classname" "info_null"
 "targetname" "t72"
 "origin" "472 -800 312"
 }
-// entity 280
+// entity 276
 {
 "classname" "info_null"
 "targetname" "t71"
 "origin" "472 -800 272"
 }
-// entity 281
+// entity 277
 {
 "classname" "light"
 "origin" "-280 -912 344"
@@ -12846,7 +12812,7 @@ dsi/weapspawn01
 "light" "280"
 "_color" "0.7098 0.6431 0.6039"
 }
-// entity 282
+// entity 278
 {
 "classname" "light"
 "origin" "-280 -1000 280"
@@ -12854,19 +12820,19 @@ dsi/weapspawn01
 "light" "280"
 "_color" "0.7098 0.6431 0.6039"
 }
-// entity 283
+// entity 279
 {
 "classname" "info_null"
 "targetname" "t74"
 "origin" "-280 -912 280"
 }
-// entity 284
+// entity 280
 {
 "classname" "info_null"
 "targetname" "t73"
 "origin" "-280 -912 240"
 }
-// entity 285
+// entity 281
 {
 "classname" "light"
 "origin" "-280 -912 344"
@@ -12874,7 +12840,7 @@ dsi/weapspawn01
 "light" "280"
 "_color" "0.7098 0.6431 0.6039"
 }
-// entity 286
+// entity 282
 {
 "classname" "light"
 "_color" "0.7098 0.6431 0.6039"
@@ -12882,7 +12848,7 @@ dsi/weapspawn01
 "target" "t76"
 "origin" "-280 -824 280"
 }
-// entity 287
+// entity 283
 {
 "classname" "light"
 "origin" "-280 -1000 280"
@@ -12890,96 +12856,96 @@ dsi/weapspawn01
 "light" "280"
 "_color" "0.7098 0.6431 0.6039"
 }
-// entity 288
+// entity 284
 {
 "classname" "info_null"
 "targetname" "t76"
 "origin" "-280 -912 280"
 }
-// entity 289
+// entity 285
 {
 "classname" "info_null"
 "targetname" "t75"
 "origin" "-280 -912 240"
 }
-// entity 290
+// entity 286
 {
 "classname" "item_health_small"
 "origin" "1184 -32 208"
 }
-// entity 291
+// entity 287
 {
 "classname" "target_speaker"
 "noise" "sound/ambient/machinerydrone01.wav"
 "origin" "1568 392 256"
 }
-// entity 292
+// entity 288
 {
 "classname" "target_speaker"
 "noise" "sound/ambient/sparks.ogg"
 "origin" "1120 -576 410"
 }
-// entity 293
+// entity 289
 {
 "classname" "target_speaker"
 "noise" "sound/ambient/machinerydrone01.wav"
 "origin" "-540 -572 256"
 }
-// entity 294
+// entity 290
 {
 "classname" "target_speaker"
 "noise" "sound/ambient/sparks.ogg"
 "origin" "1408 -840 170"
 }
-// entity 295
+// entity 291
 {
 "classname" "target_speaker"
 "noise" "sound/ambient/sparks.ogg"
 "origin" "1784 -704 306"
 }
-// entity 296
+// entity 292
 {
 "classname" "target_speaker"
 "noise" "sound/ambient/machine4.ogg"
 "origin" "-264 -912 280"
 }
-// entity 297
+// entity 293
 {
 "classname" "target_speaker"
 "noise" "sound/ambient/machine2.wav"
 "origin" "-264 -240 280"
 }
-// entity 298
+// entity 294
 {
 "classname" "target_speaker"
 "noise" "sound/ambient/machine4.ogg"
 "origin" "1608 -352 312"
 }
-// entity 299
+// entity 295
 {
 "classname" "target_speaker"
 "noise" "sound/ambient/machine3.wav"
 "origin" "456 -352 312"
 }
-// entity 300
+// entity 296
 {
 "classname" "target_speaker"
 "noise" "sound/ambient/machine2.wav"
 "origin" "1056 472 244"
 }
-// entity 301
+// entity 297
 {
 "classname" "target_speaker"
 "noise" "sound/ambient/sparks.ogg"
 "origin" "-184 -352 98"
 }
-// entity 302
+// entity 298
 {
 "classname" "target_speaker"
 "noise" "sound/ambient/machine2.wav"
 "origin" "456 -800 312"
 }
-// entity 303
+// entity 299
 {
 "classname" "target_speaker"
 "noise" "sound/ambient/machine2.wav"
