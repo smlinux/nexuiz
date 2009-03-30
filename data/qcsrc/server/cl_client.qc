@@ -2368,8 +2368,11 @@ void PlayerPreThink (void)
 		if(frametime)
 		{
 			W_WeaponFrame();
+
+			self.items &~= IT_FUEL; // TODO don't do this if the current weapon actually USES fuel...
 			if(self.items & IT_JETPACK)
-				self.items |= IT_FUEL;
+				if(self.items & IT_FUEL_REGEN || self.ammo_fuel >= 0.01)
+					self.items |= IT_FUEL;
 		}
 
 		player_regen();
