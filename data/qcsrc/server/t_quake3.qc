@@ -52,3 +52,5 @@ void spawnfunc_team_CTF_redplayer()  { spawnfunc_info_player_team1();  }
 void spawnfunc_team_CTF_blueplayer() { spawnfunc_info_player_team2();  }
 void spawnfunc_team_CTF_redspawn()   { spawnfunc_info_player_team1();  }
 void spawnfunc_team_CTF_bluespawn()  { spawnfunc_info_player_team2();  }
+
+void spawnfunc_item_flight()         { spawnfunc_item_jetpack();       }

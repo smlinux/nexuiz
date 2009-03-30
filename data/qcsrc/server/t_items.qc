@@ -164,7 +164,8 @@ float Item_GiveTo(entity item, entity player)
 		if (player.ammo_fuel < g_pickup_fuel_max)
 		{
 			pickedup = TRUE;
-			player.ammo_fuel = min (player.ammo_fuel + item.ammo_fuel, g_pickup_fuel_max);
+			player.ammo_fuel = min(player.ammo_fuel + item.ammo_fuel, g_pickup_fuel_max);
+			player.pauserotfuel_finished = max(player.pauserotfuel_finished, time + cvar("g_balance_pause_fuel_rot"));
 		}
 
 		if (item.flags & FL_WEAPON)
@@ -1301,4 +1302,23 @@ void spawnfunc_target_items (void)
 			}
 		}
 	}
+}
+
+void spawnfunc_item_fuel(void)
+{
+	if(!self.ammo_fuel)
+		self.ammo_fuel = g_pickup_fuel;
+	StartItem ("models/items/g_fuel.md3", "misc/itempickup.wav", g_pickup_respawntime_medium, "Fuel", IT_FUEL, 0, 0, commodity_pickupevalfunc, BOT_PICKUP_RATING_LOW);
+}
+
+void spawnfunc_item_fuel_regen(void)
+{
+	StartItem ("models/items/g_fuelregen.md3", "misc/itempickup.wav", g_pickup_respawntime_medium, "Fuel regenerator", IT_FUEL_REGEN, 0, 0, commodity_pickupevalfunc, BOT_PICKUP_RATING_LOW);
+}
+
+void spawnfunc_item_jetpack(void)
+{
+	if(!self.ammo_fuel)
+		self.ammo_fuel = g_pickup_fuel;
+	StartItem ("models/items/g_jetpack.md3", "misc/itempickup.wav", g_pickup_respawntime_medium, "Jet pack", IT_JETPACK, 0, 0, commodity_pickupevalfunc, BOT_PICKUP_RATING_LOW);
 }
