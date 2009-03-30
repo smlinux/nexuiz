@@ -98,6 +98,10 @@ sub markmap($$$$;$)
 			next if $l[9] < time() - 60; # too old
 			print "Cleaning up demos: protecting $_\n";
 			chmod 0444, $_;
+			open my $fh, ">", "$_.nick";
+			printf $fh "%s\n", color_dp2none($store{"playernickraw_byid_$id"});
+			close $fh;
+			chmod 0444, "$_.nick";
 		}
 	}
 	else

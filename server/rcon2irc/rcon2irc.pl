@@ -305,7 +305,7 @@ sub new($$)
 		(length($local) ? (LocalAddr => $local) : ()),
 		PeerAddr => $remote,
 		PeerPort => $defaultport
-	) or die "socket $proto/$local/$remote: $!";
+	) or die "socket $proto/$local/$remote/$defaultport: $!";
 	$sock->blocking(0);
 	my $you = {
 		# Mortal fool! Release me from this wretched tomb! I must be set free
@@ -621,7 +621,8 @@ package main;
 use strict;
 use warnings;
 use IO::Select;
-use Digest::MD5;
+use Digest::SHA;
+use Digest::HMAC;
 use Time::HiRes qw/time/;
 
 our @handlers = (); # list of [channel, expression, sub to handle result]
@@ -660,6 +661,7 @@ our %config = (
 
 	irc_admin_password => "",
 	irc_admin_timeout => 3600,
+	irc_admin_quote_re => "",
 
 	irc_reconnect_delay => 300,
 
@@ -940,9 +942,13 @@ sub irc_joinstage($)
 	{
 		if(defined $store{irc_quakenet_challenge})
 		{
-			if($store{irc_quakenet_challenge} =~ /^MD5 (.*)/)
+			if($store{irc_quakenet_challenge} =~ /^([0-9a-f]*)\b.*\bHMAC-SHA-256\b/)
 			{
-				out irc => 1, "$config{irc_quakenet_challengeauth} $config{irc_quakenet_authname} " . Digest::MD5::md5_hex("$config{irc_quakenet_password} $1");
+				my $challenge = $1;
+				my $hash1 = Digest::SHA::sha256_hex(substr $config{irc_quakenet_password}, 0, 10);
+				my $key = Digest::SHA::sha256_hex("@{[lc $config{irc_quakenet_authname}]}:$hash1");
+				my $digest = Digest::HMAC::hmac_hex($challenge, $key, \&Digest::SHA::sha256);
+				out irc => 1, "$config{irc_quakenet_challengeauth} $config{irc_quakenet_authname} $digest HMAC-SHA-256";
 			}
 		}
 		else
@@ -1165,6 +1171,21 @@ sub cond($)
 			return 0;
 		}
 
+		if($command =~ /^quote (.*)$/)
+		{
+			my ($cmd) = ($1);
+			if($cmd =~ /^(??{$config{irc_admin_quote_re}})$/si)
+			{
+				out irc => 0, $cmd;
+				out irc => 0, "PRIVMSG $nick :executed your command";
+			}
+			else
+			{
+				out irc => 0, "PRIVMSG $nick :permission denied";
+			}
+			return 0;
+		}
+
 		out irc => 0, "PRIVMSG $nick :unknown command (supported: status [substring], kick # id reason, kickban # id bantime mask reason, bans, unban banid)";
 
 		return -1;
@@ -1271,6 +1292,7 @@ sub cond($)
 	# chat: Nexuiz server -> IRC channel, nick set
 	[ dp => q{:join:(\d+):(\d+):([^:]*):(.*)} => sub {
 		my ($id, $slot, $ip, $nick) = @_;
+		$store{"playernickraw_byid_$id"} = $nick;
 		$nick = color_dp2irc $nick;
 		$store{"playernick_byid_$id"} = $nick;
 		$store{"playerip_byid_$id"} = $ip;
@@ -1282,6 +1304,7 @@ sub cond($)
 	# chat: Nexuiz server -> IRC channel, nick change/set
 	[ dp => q{:name:(\d+):(.*)} => sub {
 		my ($id, $nick) = @_;
+		$store{"playernickraw_byid_$id"} = $nick;
 		$nick = color_dp2irc $nick;
 		my $oldnick = $store{"playernick_byid_$id"};
 		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 is now known as $nick";
