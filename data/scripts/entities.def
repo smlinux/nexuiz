@@ -1236,12 +1236,13 @@ For the number fields, not specifying a value means not changing it. To clear ar
 You may want to target this by a race checkpoint, a teleporter, or a trigger_multiple with ALLENTS set (so it removes weapons thrown through the field to avoid getting a weapon through it).
 -------- KEYS --------
 targetname: used to trigger this
-netname: space separated list of items (either weapon short names (like in g_start_weapon_* cvars), or item short names "unlimited_ammo", "unlimited_weapon_ammo", "unlimited_superweapons", "invincible" and "strength"
+netname: space separated list of items (either weapon short names (like in g_start_weapon_* cvars), or item short names "unlimited_ammo", "unlimited_weapon_ammo", "unlimited_superweapons", "invincible", "strength", "jetpack" and "fuel_regen"
 message: message to print
 ammo_shells: amount of shells
 ammo_nails: amount of bullets
 ammo_rockets: amount of rockets
 ammo_cells: amount of cells
+ammo_fuel: amount of fuel
 health: amount of health
 armorvalue: amount of armor
 strength_finished: if "strength" is specified, the time in seconds for which the strength will hold
