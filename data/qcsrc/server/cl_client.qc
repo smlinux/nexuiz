@@ -760,6 +760,7 @@ void PutClientInServer (void)
 			self.armorvalue = start_armorvalue;
 			self.weapons = start_weapons;
 		}
+		self.ammo_fuel = start_fuel;
 		self.items = start_items;
 		self.switchweapon = w_getbestweapon(self);
 		self.cnt = self.switchweapon;

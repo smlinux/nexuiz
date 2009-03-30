@@ -683,8 +683,8 @@ void SV_PlayerPhysics()
 			self.flags &~= FL_ONGROUND;
 			self.items |= IT_USING_JETPACK;
 
-			// jetpack also inhibits health regeneration!
-			self.pauseregen_finished = max(self.pauseregen_finished, time + cvar("g_balance_pause_health_regen"));
+			// jetpack also inhibits health regeneration, but only for 1 second
+			self.pauseregen_finished = max(self.pauseregen_finished, time + cvar("g_balance_pause_fuel_regen"));
 		}
 	}
 	else if (self.flags & FL_ONGROUND)

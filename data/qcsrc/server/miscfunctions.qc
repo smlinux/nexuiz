@@ -735,6 +735,7 @@ float warmup_start_ammo_rockets;
 float warmup_start_ammo_cells;
 float warmup_start_health;
 float warmup_start_armorvalue;
+float start_fuel;
 float g_weapon_stay;
 
 entity get_weaponinfo(float w);
@@ -753,6 +754,7 @@ void readplayerstartcvars()
 	start_ammo_rockets = 0;
 	start_ammo_cells = 0;
 	start_health = cvar("g_balance_health_start");
+	start_fuel = cvar("g_balance_fuel_start");
 	start_armorvalue = cvar("g_balance_armor_start");
 
 	g_weaponarena = 0;
@@ -952,6 +954,7 @@ void readplayerstartcvars()
 		g_grappling_hook = 0; // these two can't coexist, as they use the same button
 		start_items |= IT_JETPACK;
 		start_items |= IT_FUEL_REGEN;
+		start_fuel = max(start_fuel, cvar("g_balance_fuel_stable"));
 	}
 
 	if(g_weapon_stay == 2)
