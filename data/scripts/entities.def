@@ -1472,7 +1472,7 @@ model="models/items/g_fuel.md3"
 /*QUAKED item_fuel_regen (1 .3 1) (-30 -30 0) (30 30 32) FLOATING
 Fuel regenerator
 -------- KEYS --------
-respawntime: time till it respawns (default: 15)
+respawntime: time till it respawns (default: 120)
 team: out of items with the same value here, only one (random one) will spawn. Useful to put multiple items on one spot.
 cnt: weight of this item for random selection using "team". Set to a lower value for items you want to see less likely.
 -------- SPAWNFLAGS --------
@@ -1485,7 +1485,7 @@ model="models/items/g_fuelregen.md3"
 Jetpack
 -------- KEYS --------
 ammo_fuel: fuel units gained by this item (if unset, g_pickup_fuel_jetpack is used)
-respawntime: time till it respawns (default: 15)
+respawntime: time till it respawns (default: 120)
 team: out of items with the same value here, only one (random one) will spawn. Useful to put multiple items on one spot.
 cnt: weight of this item for random selection using "team". Set to a lower value for items you want to see less likely.
 -------- SPAWNFLAGS --------

@@ -1308,17 +1308,17 @@ void spawnfunc_item_fuel(void)
 {
 	if(!self.ammo_fuel)
 		self.ammo_fuel = g_pickup_fuel;
-	StartItem ("models/items/g_fuel.md3", "misc/itempickup.wav", g_pickup_respawntime_medium, "Fuel", IT_FUEL, 0, 0, commodity_pickupevalfunc, BOT_PICKUP_RATING_LOW);
+	StartItem ("models/items/g_fuel.md3", "misc/itempickup.wav", g_pickup_respawntime_ammo, "Fuel", IT_FUEL, 0, 0, commodity_pickupevalfunc, BOT_PICKUP_RATING_LOW);
 }
 
 void spawnfunc_item_fuel_regen(void)
 {
-	StartItem ("models/items/g_fuelregen.md3", "misc/itempickup.wav", g_pickup_respawntime_medium, "Fuel regenerator", IT_FUEL_REGEN, 0, 0, commodity_pickupevalfunc, BOT_PICKUP_RATING_LOW);
+	StartItem ("models/items/g_fuelregen.md3", "misc/itempickup.wav", g_pickup_respawntime_powerup, "Fuel regenerator", IT_FUEL_REGEN, 0, 0, commodity_pickupevalfunc, BOT_PICKUP_RATING_LOW);
 }
 
 void spawnfunc_item_jetpack(void)
 {
 	if(!self.ammo_fuel)
 		self.ammo_fuel = g_pickup_fuel_jetpack;
-	StartItem ("models/items/g_jetpack.md3", "misc/itempickup.wav", g_pickup_respawntime_medium, "Jet pack", IT_JETPACK, 0, 0, commodity_pickupevalfunc, BOT_PICKUP_RATING_LOW);
+	StartItem ("models/items/g_jetpack.md3", "misc/itempickup.wav", g_pickup_respawntime_powerup, "Jet pack", IT_JETPACK, 0, 0, commodity_pickupevalfunc, BOT_PICKUP_RATING_LOW);
 }
