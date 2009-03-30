@@ -100,29 +100,41 @@ You can get a list of variables by entering |cvarlist| on the console ([How do I
 ** How can I use colors in my nickname and messages?
 Colors can be used in nicknames and chat messages via two ways: Either the simple way by typing ^ followed by a number between 0 and 9 or by typing ^x followed by three hexadecimal numbers (0-F) representing red, green and blue components of the color before the text. The second way allows for much more colors. For example if you type ^xF00message the text "message" will be displayed in red color. Simple examples:
 
-	!        !            !                   !
-	! code   ! rgb code   ! color             !
-	!--------!--------------------------------!
-	! ^0     ! ^x000      ! black             !
-	!--------!--------------------------------!
-	! ^1     ! ^xF00      ! red               !
-	!--------!--------------------------------!
-	! ^2     ! ^x0F0      ! green             !
-	!--------!--------------------------------!
-	! ^3     ! ^xFF0      ! yellow            !
-	!--------!--------------------------------!
-	! ^4     ! ^x00F      ! blue              !
-	!--------!--------------------------------!
-	! ^5     ! ^x0FF      ! aqua              !
-	!--------!--------------------------------!
-	! ^6     ! ^xF0C      ! pink              !
-	!--------!--------------------------------!
-	! ^7     ! ^xFFF      ! white             !
-	!--------!--------------------------------!
-	! ^8     ! ^xBBB      ! light grey        !
-	!--------!--------------------------------!
-	! ^9     ! ^x444      ! dark grey         !
-	!--------!--------------------------------!
+	!        !            !                        !
+	! code   ! rgb code   ! color                  !
+	!--------!-------------------------------------!
+	! ^0     ! ^x000      ! black                  !
+	!--------!-------------------------------------!
+	! ^1     ! ^xF00      ! red                    !
+	!--------!-------------------------------------!
+	! ^2     ! ^x0F0      ! green                  !
+	!--------!-------------------------------------!
+	! ^3     ! ^xFF0      ! yellow                 !
+	!--------!-------------------------------------!
+	! ^4     ! ^x00F      ! blue                   !
+	!--------!-------------------------------------!
+	! ^5     ! ^x0FF      ! cyan                   !
+	!--------!-------------------------------------!
+	! ^6     ! ^xF0F      ! magenta                !
+	!--------!-------------------------------------!
+	! ^7     ! ^xFFF      ! white                  !
+	!--------!-------------------------------------!
+	! ^8     !            ! half-transparent black !
+	!--------!-------------------------------------!
+	! ^9     ! ^x888      ! grey                   !
+	!--------!-------------------------------------!
+	!        ! ^x800      ! dark red               !
+	!--------!-------------------------------------!
+	!        ! ^x080      ! dark green             !
+	!--------!-------------------------------------!
+	!        ! ^x880      ! dark yellow            !
+	!--------!-------------------------------------!
+	!        ! ^x008      ! dark blue              !
+	!--------!-------------------------------------!
+	!        ! ^x088      ! dark cyan              !
+	!--------!-------------------------------------!
+	!        ! ^x808      ! dark magenta           !
+	!--------!-------------------------------------!
 
 ** How do I watch/record demos?
 Demos are recordings of matches that you have played. To automatically record a demo each time you play enable the option |Record demos while playing| in the |Multiplayer / Demos| menu. Or if you just want to record some matches open the console and type |rec <demos/name>| before playing. That is before starting a game or connecting to a server. The demo file will then be stored in |Nexuiz/data/demos/<name>.dem| (on Windows) or |~/.nexuiz/data/demos/<name>.dem| (on Linux, Mac).
