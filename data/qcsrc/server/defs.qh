@@ -190,6 +190,7 @@ void setanim(entity e, vector anim, float looping, float override, float restart
 .float pauseregen_finished;
 .float pauserothealth_finished;
 .float pauserotarmor_finished;
+.float pauserotfuel_finished;
 .string item_pickupsound;
 
 // definitions for weaponsystem
@@ -557,3 +558,5 @@ float servertime, serverprevtime, serverframetime;
 void Drag_MoveDrag(entity from, entity to);
 
 .entity soundentity;
+
+.float ammo_fuel;

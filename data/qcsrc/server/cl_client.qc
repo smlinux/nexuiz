@@ -1700,11 +1700,13 @@ float CalcRegen(float current, float stable, float regenfactor)
 
 void player_regen (void)
 {
-	float maxh, maxa, limith, limita, max_mod, regen_mod, rot_mod, limit_mod;
+	float maxh, maxa, maxf, limith, limita, limitf, max_mod, regen_mod, rot_mod, limit_mod;
 	maxh = cvar("g_balance_health_stable");
 	maxa = cvar("g_balance_armor_stable");
+	maxf = cvar("g_balance_fuel_stable");
 	limith = cvar("g_balance_health_limit");
 	limita = cvar("g_balance_armor_limit");
+	limitf = cvar("g_balance_fuel_limit");
 
 	if (g_minstagib || (g_lms && !cvar("g_lms_regenerate")))
 		return;
@@ -1739,8 +1741,10 @@ void player_regen (void)
 	}
 	maxh = maxh * max_mod;
 	//maxa = maxa * max_mod;
+	//maxf = maxf * max_mod;
 	limith = limith * limit_mod;
 	limita = limita * limit_mod;
+	//limitf = limitf * limit_mod;
 
 	if (self.armorvalue > maxa)
 	{
@@ -1774,11 +1778,32 @@ void player_regen (void)
 			self.health = min(maxh, self.health + regen_mod*cvar("g_balance_health_regenlinear") * frametime);
 		}
 	}
+	if (self.ammo_fuel > maxf)
+	{
+		if (time > self.pauserotfuel_finished)
+		{
+			self.ammo_fuel = max(maxf, self.ammo_fuel + (maxf - self.ammo_fuel) * rot_mod*cvar("g_balance_fuel_rot") * frametime);
+			self.ammo_fuel = max(maxf, self.ammo_fuel - rot_mod*cvar("g_balance_fuel_rotlinear") * frametime);
+		}
+	}
+	else if (self.ammo_fuel < maxf)
+	{
+		if(self.items & IT_FUEL_REGEN)
+		{
+			if (time > self.pauseregen_finished)
+			{
+				self.ammo_fuel = CalcRegen(self.ammo_fuel, maxf, regen_mod * cvar("g_balance_fuel_regen"));
+				self.ammo_fuel = min(maxf, self.ammo_fuel + regen_mod*cvar("g_balance_fuel_regenlinear") * frametime);
+			}
+		}
+	}
 
 	if (self.health > limith)
 		self.health = limith;
 	if (self.armorvalue > limita)
 		self.armorvalue = limita;
+	if (self.ammo_fuel > limitf)
+		self.ammo_fuel = limitf;
 
 	// if player rotted to death...  die!
 	if(self.health < 1)
@@ -1848,6 +1873,7 @@ void SpectateCopy(entity spectatee) {
 	self.ammo_shells = spectatee.ammo_shells;
 	self.ammo_nails = spectatee.ammo_nails;
 	self.ammo_rockets = spectatee.ammo_rockets;
+	self.ammo_fuel = spectatee.ammo_fuel;
 	self.effects = spectatee.effects & EFMASK_CHEAP; // eat performance
 	self.health = spectatee.health;
 	self.impulse = 0;
@@ -2337,7 +2363,11 @@ void PlayerPreThink (void)
 		GrapplingHookFrame();
 
 		if(frametime)
+		{
 			W_WeaponFrame();
+			if(self.items & IT_JETPACK)
+				self.items |= IT_FUEL;
+		}
 
 		player_regen();
 		if(frametime)

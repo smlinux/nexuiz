@@ -1722,12 +1722,52 @@ void Sbar_DrawPressedKeys(void)
 	drawpic(pos + ' 65   32   0', "gfx/keys/key_right.tga",    ' 32 32 0', '1 1 1', .5 * ((pressedkeys & KEY_RIGHT) + 1), DRAWFLAG_NORMAL);
 }
 
+float GetAmmoStat(float i)
+{
+	switch(i)
+	{
+		case 0: return STAT_SHELLS;
+		case 1: return STAT_NAILS;
+		case 2: return STAT_ROCKETS;
+		case 3: return STAT_CELLS;
+		case 4: return STAT_FUEL;
+		default: return -1;
+	}
+}
+
+float GetAmmoItemCode(float i)
+{
+	switch(i)
+	{
+		case 0: return IT_SHELLS;
+		case 1: return IT_NAILS;
+		case 2: return IT_ROCKETS;
+		case 3: return IT_CELLS;
+		case 4: return IT_FUEL;
+		default: return -1;
+	}
+}
+
+string GetAmmoPicture(float i)
+{
+	switch(i)
+	{
+		case 0: return "gfx/sb_shells";
+		case 1: return "gfx/sb_bullets";
+		case 2: return "gfx/sb_rockets";
+		case 3: return "gfx/sb_cells";
+		case 4: return "gfx/sb_fuel";
+		default: return "";
+	}
+}
+
 void Sbar_Draw (void)
 {
 	float i;
 	float x, fade;
 	float stat_items, stat_weapons;
 	vector o; o = '1 0 0' * vid_conwidth;
+	vector v;
 	string s;
 
 	sbar_fontsize = Sbar_GetFontsize("sbar_fontsize");
@@ -1967,43 +2007,17 @@ void Sbar_Draw (void)
 				}
 
 				// ammo
-				if (stat_items & IT_SHELLS)
-					x = getstati(STAT_SHELLS);
-				else if (stat_items & IT_NAILS)
-					x = getstati(STAT_NAILS);
-				else if (stat_items & IT_ROCKETS)
-					x = getstati(STAT_ROCKETS);
-				else if (stat_items & IT_CELLS)
-					x = getstati(STAT_CELLS);
-				else
-					x = 0;
-				if ((stat_items & IT_AMMO) || x != 0)
-				{
-					if (stat_items & IT_SHELLS)
-						drawpic(sbar + '296 0 0', "gfx/sb_shells", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
-					else if (stat_items & IT_NAILS)
-						drawpic(sbar + '296 0 0', "gfx/sb_bullets", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
-					else if (stat_items & IT_ROCKETS)
-						drawpic(sbar + '296 0 0', "gfx/sb_rocket", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
-					else if (stat_items & IT_CELLS)
-						drawpic(sbar + '296 0 0', "gfx/sb_cells", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
-					if(x > 10)
-						Sbar_DrawXNum('224 0 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
-					else
-						Sbar_DrawXNum('224 0 0', x, 3, 24, '0.7 0 0', 1, 0);
-				}
-
-				// jetpack cells
-				if(stat_items & IT_USING_JETPACK)
-				if not(stat_items & IT_CELLS)
-				{
-					x = getstati(STAT_CELLS);
-					drawpic(sbar + '296 -30 0', "gfx/sb_cells", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
-					if(x > 10)
-						Sbar_DrawXNum('224 -30 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
-					else
-						Sbar_DrawXNum('224 -30 0', x, 3, 24, '0.7 0 0', 1, 0);
-				}
+				for(i = 0, v = '0 0 0'; (x = GetAmmoStat(i)) >= 0; ++i)
+					if(stat_items & GetAmmoItemCode(i))
+					{
+						x = getstati(x);
+						drawpic(sbar + '296 0 0' + v, GetAmmoPicture(i), '24 24 0', '1 1 1', sbar_alpha_fg, 0);
+						if(x > 10)
+							Sbar_DrawXNum('224 0 0' + v, x, 3, 24, '0.6 0.7 0.8', 1, 0);
+						else
+							Sbar_DrawXNum('224 0 0' + v, x, 3, 24, '0.7 0 0', 1, 0);
+						v_y -= 30;
+					}
 
 				if (sbar_x + 320 + 160 <= vid_conwidth)
 					Sbar_MiniDeathmatchOverlay(sbar + '320 0 0');
@@ -2055,44 +2069,18 @@ void Sbar_Draw (void)
 				else
 					Sbar_DrawXNum('81 12 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
 
-				if (stat_items & IT_SHELLS)
-					x = getstati(STAT_SHELLS);
-				else if (stat_items & IT_NAILS)
-					x = getstati(STAT_NAILS);
-				else if (stat_items & IT_ROCKETS)
-					x = getstati(STAT_ROCKETS);
-				else if (stat_items & IT_CELLS)
-					x = getstati(STAT_CELLS);
-				else
-					x = 0;
-				if ((stat_items & IT_AMMO) || x != 0)
-				{
-					// (519-3*24) = 447
-					if (stat_items & IT_SHELLS)
-						drawpic(sbar + '519 0 0', "gfx/sb_shells", '0 0 0', '1 1 1', sbar_alpha_fg, 0);
-					else if (stat_items & IT_NAILS)
-						drawpic(sbar + '519 0 0', "gfx/sb_bullets", '0 0 0', '1 1 1', sbar_alpha_fg, 0);
-					else if (stat_items & IT_ROCKETS)
-						drawpic(sbar + '519 0 0', "gfx/sb_rocket", '0 0 0', '1 1 1', sbar_alpha_fg, 0);
-					else if (stat_items & IT_CELLS)
-						drawpic(sbar + '519 0 0', "gfx/sb_cells", '0 0 0', '1 1 1', sbar_alpha_fg, 0);
-					if(x > 10)
-						Sbar_DrawXNum('447 12 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
-					else
-						Sbar_DrawXNum('447 12 0', x, 3, 24, '0.7 0 0', 1, 0);
-				}
-
-				// jetpack cells
-				if(stat_items & IT_USING_JETPACK)
-				if not(stat_items & IT_CELLS)
-				{
-					x = getstati(STAT_CELLS);
-					drawpic(sbar + '519 -40 0', "gfx/sb_cells", '0 0 0', '1 1 1', sbar_alpha_fg, 0);
-					if(x > 10)
-						Sbar_DrawXNum('447 -28 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
-					else
-						Sbar_DrawXNum('447 -28 0', x, 3, 24, '0.7 0 0', 1, 0);
-				}
+				// ammo
+				for(i = 0, v = '0 0 0'; (x = GetAmmoStat(i)) >= 0; ++i)
+					if(stat_items & GetAmmoItemCode(i))
+					{
+						x = getstati(x);
+						drawpic(sbar + '519 0 0' + v, GetAmmoPicture(i), '24 24 0', '1 1 1', sbar_alpha_fg, 0);
+						if(x > 10)
+							Sbar_DrawXNum('447 12 0' + v, x, 3, 24, '0.6 0.7 0.8', 1, 0);
+						else
+							Sbar_DrawXNum('447 12 0' + v, x, 3, 24, '0.7 0 0', 1, 0);
+						v_y -= 40;
+					}
 
 				if (sb_lines > 24)
 					drawpic(sbar, "gfx/sbar_overlay", '0 0 0', '1 1 1', 1, DRAWFLAG_MODULATE);

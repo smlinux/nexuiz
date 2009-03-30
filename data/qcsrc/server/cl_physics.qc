@@ -638,7 +638,7 @@ void SV_PlayerPhysics()
 				self.velocity = self.velocity + wishdir * min(f, sv_accelerate*maxspd_mod * frametime * wishspeed);
 		}
 	}
-	else if (g_jetpack && self.BUTTON_HOOK && (!cvar("g_jetpack_ammo") || self.ammo_cells >= 0.01 || self.items & IT_UNLIMITED_WEAPON_AMMO))
+	else if ((self.items & IT_JETPACK) && self.BUTTON_HOOK && (!cvar("g_jetpack_fuel") || self.ammo_fuel >= 0.01 || self.items & IT_UNLIMITED_WEAPON_AMMO))
 	{
 		//makevectors(self.v_angle_y * '0 1 0');
 		makevectors(self.v_angle);
@@ -670,13 +670,8 @@ void SV_PlayerPhysics()
 		wishvel_z = (wishvel_z - sv_gravity) * fz + sv_gravity;
 		fvel = min(1, vlen(wishvel) / fvel);
 
-		if(cvar("g_jetpack_ammo") && !(self.items & IT_UNLIMITED_WEAPON_AMMO))
-		{
-			if(self.ammo_cells < 0.01)
-				f = 0;
-			else
-				f = min(1, self.ammo_cells / (cvar("g_jetpack_ammo") * frametime * fvel));
-		}
+		if(cvar("g_jetpack_fuel") && !(self.items & IT_UNLIMITED_WEAPON_AMMO))
+			f = min(1, self.ammo_fuel / (cvar("g_jetpack_fuel") * frametime * fvel));
 		else
 			f = 1;
 
@@ -684,15 +679,18 @@ void SV_PlayerPhysics()
 		{
 			self.velocity = self.velocity + wishvel * f * frametime;
 			if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
-				self.ammo_cells -= cvar("g_jetpack_ammo") * frametime * fvel * f;
+				self.ammo_fuel -= cvar("g_jetpack_fuel") * frametime * fvel * f;
 			self.flags &~= FL_ONGROUND;
 			self.items |= IT_USING_JETPACK;
+
+			// jetpack also inhibits health regeneration!
+			self.pauseregen_finished = max(self.pauseregen_finished, time + cvar("g_balance_pause_health_regen"));
 		}
 	}
 	else if (self.flags & FL_ONGROUND)
 	{
 		// we get here if we ran out of ammo
-		if(g_jetpack && self.BUTTON_HOOK && !(buttons_prev & 32))
+		if((self.items & IT_JETPACK) && self.BUTTON_HOOK && !(buttons_prev & 32))
 			sprint(self, "You don't have any fuel for the ^2Jetpack\n");
 
 		// walking
@@ -742,7 +740,7 @@ void SV_PlayerPhysics()
 	else
 	{
 		// we get here if we ran out of ammo
-		if(g_jetpack && self.BUTTON_HOOK && !(buttons_prev & 32))
+		if((self.items & IT_JETPACK) && self.BUTTON_HOOK && !(buttons_prev & 32))
 			sprint(self, "You don't have any fuel for the ^2Jetpack\n");
 
 		if(maxspd_mod < 1)

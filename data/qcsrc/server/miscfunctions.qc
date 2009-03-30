@@ -949,12 +949,9 @@ void readplayerstartcvars()
 
 	if(g_jetpack)
 	{
-		if(!start_ammo_cells)
-			start_ammo_cells = g_pickup_cells;
-		if(!warmup_start_ammo_cells)
-			warmup_start_ammo_cells = g_pickup_cells;
-
 		g_grappling_hook = 0; // these two can't coexist, as they use the same button
+		start_items |= IT_JETPACK;
+		start_items |= IT_FUEL_REGEN;
 	}
 
 	if(g_weapon_stay == 2)
