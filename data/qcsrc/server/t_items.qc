@@ -180,7 +180,7 @@ float Item_GiveTo(entity item, entity player)
 			}
 		}
 
-		if((it = (item.items - (item.items & player.items) & IT_PICKUPMASK)))
+		if((it = (item.items - (item.items & player.items)) & IT_PICKUPMASK))
 		{
 			pickedup = TRUE;
 			player.items |= it;

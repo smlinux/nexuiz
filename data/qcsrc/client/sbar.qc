@@ -1754,7 +1754,7 @@ string GetAmmoPicture(float i)
 	{
 		case 0: return "gfx/sb_shells";
 		case 1: return "gfx/sb_bullets";
-		case 2: return "gfx/sb_rockets";
+		case 2: return "gfx/sb_rocket";
 		case 3: return "gfx/sb_cells";
 		case 4: return "gfx/sb_fuel";
 		default: return "";
