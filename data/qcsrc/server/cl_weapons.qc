@@ -436,6 +436,7 @@ void Nixnex_GiveCurrentWeapon()
 				self.ammo_nails = cvar("g_pickup_nails_max");
 				self.ammo_rockets = cvar("g_pickup_rockets_max");
 				self.ammo_cells = cvar("g_pickup_cells_max");
+				self.ammo_fuel = cvar("g_pickup_fuel_max");
 			}
 			else
 			{
@@ -443,6 +444,7 @@ void Nixnex_GiveCurrentWeapon()
 				self.ammo_nails = cvar("g_balance_nixnex_ammo_nails");
 				self.ammo_rockets = cvar("g_balance_nixnex_ammo_rockets");
 				self.ammo_cells = cvar("g_balance_nixnex_ammo_cells");
+				self.ammo_fuel = cvar("g_balance_nixnex_ammo_fuel");
 			}
 			self.nixnex_nextincr = time + cvar("g_balance_nixnex_incrtime");
 			if(dt >= 1 && dt <= 5)
@@ -463,6 +465,7 @@ void Nixnex_GiveCurrentWeapon()
 			self.ammo_nails = self.ammo_nails + cvar("g_balance_nixnex_ammoincr_nails");
 			self.ammo_rockets = self.ammo_rockets + cvar("g_balance_nixnex_ammoincr_rockets");
 			self.ammo_cells = self.ammo_cells + cvar("g_balance_nixnex_ammoincr_cells");
+			self.ammo_fuel = self.ammo_fuel + cvar("g_balance_nixnex_ammoincr_fuel");
 			self.nixnex_nextincr = time + cvar("g_balance_nixnex_incrtime");
 		}
 

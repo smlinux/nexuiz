@@ -340,10 +340,12 @@ void ImpulseCommands (void)
 						self.ammo_nails = g_pickup_nails_max;
 						self.ammo_rockets = g_pickup_rockets_max;
 						self.ammo_cells = g_pickup_cells_max;
+						self.ammo_fuel = g_pickup_fuel_max;
 						self.health = g_pickup_healthsmall_max;
 						self.armorvalue = g_pickup_armorsmall_max;
 						self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
 						self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
+						self.pauserotfuel_finished = time + cvar("g_balance_pause_fuel_rot_spawn");
 						self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
 						// precache weapon models/sounds
 						wep = WEP_FIRST;
@@ -379,11 +381,13 @@ void ImpulseCommands (void)
 							self.ammo_nails = 999;
 							self.ammo_cells = 999;
 							self.ammo_shells = 999;
+							self.ammo_fuel = 999;
 							self.health = start_health;
 							self.armorvalue = start_armorvalue;
 							self.weapons |= weaponsInMap;
 							self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
 							self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
+							self.pauserotfuel_finished = time + cvar("g_balance_pause_fuel_rot_spawn");
 							self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
 						}
 						else if(self.deadflag != DEAD_NO)

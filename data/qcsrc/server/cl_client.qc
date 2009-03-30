@@ -746,6 +746,7 @@ void PutClientInServer (void)
 			self.ammo_nails = warmup_start_ammo_nails;
 			self.ammo_rockets = warmup_start_ammo_rockets;
 			self.ammo_cells = warmup_start_ammo_cells;
+			self.ammo_fuel = warmup_start_ammo_fuel;
 			self.health = warmup_start_health;
 			self.armorvalue = warmup_start_armorvalue;
 			self.weapons = warmup_start_weapons;
@@ -756,11 +757,11 @@ void PutClientInServer (void)
 			self.ammo_nails = start_ammo_nails;
 			self.ammo_rockets = start_ammo_rockets;
 			self.ammo_cells = start_ammo_cells;
+			self.ammo_fuel = start_ammo_fuel;
 			self.health = start_health;
 			self.armorvalue = start_armorvalue;
 			self.weapons = start_weapons;
 		}
-		self.ammo_fuel = start_fuel;
 		self.items = start_items;
 		self.switchweapon = w_getbestweapon(self);
 		self.cnt = self.switchweapon;
