@@ -2074,7 +2074,7 @@ void Sbar_Draw (void)
 					if(stat_items & GetAmmoItemCode(i))
 					{
 						x = getstati(x);
-						drawpic(sbar + '519 0 0' + v, GetAmmoPicture(i), '24 24 0', '1 1 1', sbar_alpha_fg, 0);
+						drawpic(sbar + '519 0 0' + v, GetAmmoPicture(i), '0 0 0', '1 1 1', sbar_alpha_fg, 0);
 						if(x > 10)
 							Sbar_DrawXNum('447 12 0' + v, x, 3, 24, '0.6 0.7 0.8', 1, 0);
 						else
