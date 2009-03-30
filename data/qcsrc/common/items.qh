@@ -27,8 +27,6 @@ float	IT_UNLIMITED_WEAPON_AMMO  = 1;
 // when this bit is set, using a weapon does not reduce ammo. Checkpoints can give this powerup.
 float	IT_UNLIMITED_SUPERWEAPONS = 2;
 // when this bit is set, using a superweapon does not throw it away. Checkpoints can give this powerup.
-float	IT_UNLIMITED_AMMO         = 3;
-// both of these combined
 float	IT_CTF_SHIELDED           = 4; // set for the flag shield
 // using jetpack
 float   IT_USING_JETPACK          = 8; // confirmation that button is pressed
@@ -40,7 +38,6 @@ float	IT_ROCKETS				= 1024;
 float	IT_CELLS				= 2048;
 float	IT_SUPERWEAPON			= 4096;
 float	IT_FUEL					= 128;
-float	IT_AMMO					= 8064;
 float	IT_STRENGTH				= 8192;
 float	IT_INVINCIBLE			= 16384;
 float	IT_HEALTH				= 32768;
@@ -60,6 +57,10 @@ float	IT_5HP					= 524288;
 float	IT_25HP					= 1048576;
 float	IT_ARMOR_SHARD			= 2097152;
 float	IT_ARMOR				= 4194304;
+
+float	IT_AMMO					= 8064; // IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS | IT_SUPERWEAPON | IT_FUEL;
+float	IT_PICKUPMASK           = 51; // IT_FUEL_REGEN | IT_JETPACK | IT_UNLIMITED_AMMO;
+float	IT_UNLIMITED_AMMO       = 3; // IT_UNLIMITED_SUPERWEAPONS | IT_UNLIMITED_WEAPON_AMMO;
 
 // variables:
 string weaponpriority_hudselector_0;
