@@ -702,6 +702,7 @@ float g_pickup_rockets_max;
 float g_pickup_cells;
 float g_pickup_cells_max;
 float g_pickup_fuel;
+float g_pickup_fuel_jetpack;
 float g_pickup_fuel_max;
 float g_pickup_armorsmall;
 float g_pickup_armorsmall_max;
@@ -1089,6 +1090,7 @@ void readlevelcvars(void)
 	g_pickup_cells                     = cvar("g_pickup_cells");
 	g_pickup_cells_max                 = cvar("g_pickup_cells_max");
 	g_pickup_fuel                     = cvar("g_pickup_fuel");
+	g_pickup_fuel_jetpack             = cvar("g_pickup_fuel_jetpack");
 	g_pickup_fuel_max                 = cvar("g_pickup_fuel_max");
 	g_pickup_armorsmall                = cvar("g_pickup_armorsmall");
 	g_pickup_armorsmall_max            = cvar("g_pickup_armorsmall_max");
