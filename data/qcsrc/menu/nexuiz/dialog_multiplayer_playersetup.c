@@ -53,31 +53,32 @@ void fillNexuizPlayerSettingsTab(entity me)
 	me.TR(me);
 	me.TR(me);
 	me.TR(me);
+	me.TR(me);
 		pms = makeNexuizPlayerModelSelector();
-		me.TDempty(me, 0.5);
+		me.TDempty(me, 0.6);
 		me.TD(me, 1, 0.3, e = makeNexuizButton("<<", '0 0 0'));
 			e.onClick = PlayerModelSelector_Prev_Click;
 			e.onClickEntity = pms;
-		me.TD(me, me.rows - me.currentRow - 1, 1.9, pms);
+		me.TD(me, me.rows - me.currentRow - 1, 1.8, pms);
 		me.TD(me, 1, 0.3, e = makeNexuizButton(">>", '0 0 0'));
 			e.onClick = PlayerModelSelector_Next_Click;
 			e.onClickEntity = pms;
-	me.gotoRC(me, 8, 0.1);
-		me.TD(me, 1, 0.6, e = makeNexuizTextLabel(1, "Skin colors"));
-	me.gotoRC(me, 9, 0.2); me.setFirstColumn(me, me.currentColumn);
+	me.gotoRC(me, 8, 0.0);
+		me.TD(me, 1, 0.4, e = makeNexuizTextLabel(1, "Model:"));
+	me.gotoRC(me, 9, 0.1); me.setFirstColumn(me, me.currentColumn);
 		n = 16 - !cvar("developer");
 		for(i = 0; i < n; ++i)
 		{
 			me.gotoRC(me, 8 + i * 0.75, 0.1);
 			me.TR(me);
-				me.TDNoMargin(me, 1, (2 / n) + 0.1, e = makeNexuizColorButton(1, 0, i), '1 0 0');
+				me.TDNoMargin(me, 1, (2 / n) + 0.05, e = makeNexuizColorButton(1, 0, i), '1 0 0');
 		}
-	me.gotoRC(me, 9, 0.45); me.setFirstColumn(me, me.currentColumn);
+	me.gotoRC(me, 9, 0.3); me.setFirstColumn(me, me.currentColumn);
 		for(i = 0; i < n; ++i)
 		{
 			me.gotoRC(me, 8 + i * 0.75, 0.4);
 			me.TR(me);
-				me.TDNoMargin(me, 1, (2 / n) + 0.1, e = makeNexuizColorButton(2, 1, i), '1 0 0');
+				me.TDNoMargin(me, 1, (2 / n) + 0.05, e = makeNexuizColorButton(2, 1, i), '1 0 0');
 		}
 
 	me.gotoRC(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
