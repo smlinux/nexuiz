@@ -770,6 +770,7 @@ void PutClientInServer (void)
 		self.spawnshieldtime = time + cvar("g_spawnshieldtime");
 		self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
 		self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
+		self.pauserotfuel_finished = time + cvar("g_balance_pause_fuel_rot_spawn");
 		self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
 		//extend the pause of rotting if client was reset at the beginning of the countdown
 		if(!cvar("sv_ready_restart_after_countdown") && time < game_starttime) { // TODO why is this cvar NOTted?
