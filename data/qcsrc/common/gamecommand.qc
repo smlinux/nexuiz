@@ -44,21 +44,6 @@ float rpn_popf() { return stof(rpn_pop()); }
 void rpn_pushf(float f) { return rpn_push(ftos(f)); }
 void rpn_setf(float f) { return rpn_set(ftos(f)); }
 
-string bruteforce_crc16(float crc, float len)
-{
-	string s;
-	float i, j;
-	for(j = 0; j < 262144; ++j)
-	{
-		s = "";
-		for(i = 0; i < len; ++i)
-			s = strcat(s, substring("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", floor(random() * 62), 1));
-		if(crc16(FALSE, s) == crc)
-			return s;
-	}
-	return "";
-}
-
 float GameCommand_Generic(string command)
 {
 	float argc;
@@ -375,9 +360,6 @@ float GameCommand_Generic(string command)
 					rpn_setf(ceil(random() * rpn_getf()) - 1);
 				} else if(rpncmd == "crc16") {
 					rpn_setf(crc16(FALSE, rpn_get()));
-				} else if(rpncmd == "brutus") {
-					f = rpn_popf();
-					rpn_set(bruteforce_crc16(rpn_getf(), f));
 				} else if(rpncmd == "dbpush") {
 					s = rpn_pop();
 					if(!rpn_error)
