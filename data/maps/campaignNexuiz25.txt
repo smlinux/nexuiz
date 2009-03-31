@@ -20,7 +20,7 @@
 "ctf","runningmanctf",3,5,100,,"CTF: Running Man","Now that you have played a simple CTF match, let's try one with team mates.\n\nDo not shoot your team mate, and let him protect you while you carry the flag back home."
 "ctf","bloodprisonctf",5,6,150,,"CTF: Blood Prison","Let's try the same with a total of 6 players."
 "ctf","accident",5,7,100,,"CTF: Accident","Enough of the CTF training arenas – you can now play on the real thing, namely, this industrial CTF level which you can find on many online servers too. Just remember that this map is called 'accident'."
-"lms","evilspace",3,7,15,"g_weaponarena laser","SPECIAL: [evilspace]","All you get is a Laser.\n\nWell, I think you know how to use it to push the bots off this map into the deadly void..."
+"lms","evilspace",3,7,9,"g_weaponarena laser","SPECIAL: [evilspace]","All you get is a Laser.\n\nWell, I think you know how to use it to push the bots off this map into the deadly void..."
 "dom","basement",1,5,70,,"DOM: Basement","Domination: take control points so they show the color of your team, and make the enemies not take yours. Points are awarded for holding a control point.\n\n70 points win."
 "dom","runningman",3,6,100,,"DOM: Running Man","This time it's a bigger map and you get a team mate to help you capture the control points.\n\n3 bots, and 100 points to win."
 "dom","slimepit",5,7,100,,"DOM: The Slime Pit","An old, rusty industrial arena on which you have to watch out for slime...\n\nNote: while trying to capture one control point after another, you should keep an eye on your already captured control points, and defend them from incoming enemies."
