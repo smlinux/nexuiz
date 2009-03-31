@@ -94,6 +94,10 @@ void CampaignPreInit()
 	cvar_set("bot_number", ftos(campaign_bots[0]));
 	MapInfo_SwitchGameType(MapInfo_Type_FromString(campaign_gametype[0]));
 
+	// copy sv_gravity cvar, as the engine needs it too (sorry, this will mess
+	// with the menu a little still...)
+	cvar_set_builtin("sv_gravity", cvar_string("sv_gravity"));
+
 	if(Campaign_Invalid())
 		return;
 
