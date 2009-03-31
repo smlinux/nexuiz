@@ -600,7 +600,7 @@ Use trigger_monoflop if you want the laser to turn off for a while, then turn ba
 When the laser's target has itself target set, its targets are triggered when someone enters or leaves the laser.
 */
 
-/*QUAKED misc_model (1 .5 .25) (-16 -16 -16) (16 16 16) - SOLID - EXTRUDE_NORMALS EXTRUDE_TERRAIN
+/*QUAKED misc_model (1 .5 .25) (-16 -16 -16) (16 16 16) - SOLID - EXTRUDE_NORMALS EXTRUDE_TERRAIN COLOR_TO_ALPHA
 Generic placeholder for inserting MD3 models in game. Requires compilation of map geometry to be added to level. If the map is compiled with Q3Map2, then ASE, 3DS, OBJ and other model formats are supported.
 -------- Q3MAP2 KEYS --------
 model: file name of model to include
@@ -618,6 +618,7 @@ _celshader: the cel shader for this
 SOLID: make the model solid
 EXTRUDE_NORMALS: for converting triangles to clip brushes, extrude along the model normals (by default, extrusion happens in a coordinate axis direction that is decided per triangle)
 EXTRUDE_TERRAIN: always extrude downwards (for terrain)
+COLOR_TO_ALPHA: use the color value as alpha (for terrain blending)
 */
 
 /*QUAKED misc_gamemodel (0 .5 .8) (-8 -8 -8) (8 8 8) ALIGN_ORIGIN ALIGN_BOTTOM
