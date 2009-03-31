@@ -1318,6 +1318,8 @@ void spawnfunc_item_fuel_regen(void)
 
 void spawnfunc_item_jetpack(void)
 {
+	if(g_grappling_hook)
+		return; // sorry, but these two can't coexist (same button)
 	if(!self.ammo_fuel)
 		self.ammo_fuel = g_pickup_fuel_jetpack;
 	StartItem ("models/items/g_jetpack.md3", "misc/itempickup.wav", g_pickup_respawntime_powerup, "Jet pack", IT_JETPACK, 0, FL_POWERUP, commodity_pickupevalfunc, BOT_PICKUP_RATING_LOW);
