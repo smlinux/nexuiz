@@ -1,4 +1,4 @@
-CHANGES since 2.4.2 to r5904:
+CHANGES since 2.4.2 to r6387:
 compat-q3a: switch crylink/hagar, as crylink is closer to BFG and hagar is closer to Plasmagun
 engine: add a half-baked "commandmode" (currently it has, like messagemode, no history, no line editing)
 engine: added blend and orientation commands for effectinfo.txt (overrides the defaults chosen by the particle type)
@@ -95,6 +95,7 @@ game: cvar sv_ready_restart_repeatable
 game: cvar sv_vote_stop, the amount of time till one can vote again after stopping ones own vote
 game: cvar teamplay_lockonrestart
 game: cvar timelimit_overtime, timelimit_overtimes, timelimit_suddendeath (timelimit_maxovertime removed)
+game: fix a server crash exploit
 game: fix flag falling through bunker
 game: fix q3skoredm1
 game: fix some memory leaks
@@ -113,6 +114,7 @@ game: improved bot ai: teamworking, items rating, weapon combos, swimming, basic
 game: improved weapon system, new weapons Port-O-Launch, MinstaNex, On-hand hook, TAG Seeker, HLAC, Camping Rifle; now up to 24 weapons supported
 game: IP ban syncing support (servers can share a ban list, can be used as a kind of global IP ban system)
 game: item respawn: 20s for 50health and 25armor
+game: jetpack (g_jetpack, or entities item_jetpack, item_fuel, item_fuel_regen)
 game: kick banned players also when they try to talk
 game: lemmings countdown ('kill' and switching teams is no longer instant)
 game: log can get :time: events
@@ -126,6 +128,7 @@ game: new music track by meoblast001 (TODO nexuiz-credits.txt)
 game: new particle effects
 game: new tokenizer fixing weirdly split kick reasons/vote commands
 game: new weapon and player sounds
+game: optimize bot waypoint loading
 game: performance improved (fteqcc -O3)
 game: race game type (see Docs/basics.html for more details)
 game: ready now toggles the ready state
@@ -170,15 +173,19 @@ mapping: entity trigger_hurt now can set a message2 as death message for push-ki
 mapping: entity trigger_items
 mapping: field nottargeted overrides targetname checks in e.g. func_door (so it can be used for misc_follow without needing an extra trigger)
 mapping: field team on items, and cnt as weight
+mapping: filtering by gametype: "gametypefilter" "+ctf,kh"
 mapping: LOD for misc_models and similar entities
 mapping: mapname.cfg is deprecated. Use clientsettemp_for_type and cdtrack in mapname.mapinfo
+mapping: randomizing origin, angle or angles fields: "originjitter", "anglejitter", "anglesjitter" fields
 mapping: target2, target3, target4 as extra target fields
+mapping: team field in trigger_teleport and trigger_push
 mapping: triggers now MUST be common/trigger; their exact shape now works (no longer their bbox)
 mapping: turrets
 mapping: zeroradiant support, bugfix patchset updated
 map: reslimed: less distracting fog
 map: some more TDM map settings
 map: starship and silvercity: no CTF
+media: new weapon system (see cl_weaponsystem.qc comment about model formats)
 menu: blueplastic skin
 menu: channel mixer
 menu: cvar list editor
