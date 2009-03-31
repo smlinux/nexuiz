@@ -373,7 +373,7 @@ void PrintWelcomeMessage(entity pl)
 	   && !self.BUTTON_INFO)
 		return;
 
-	if( !(timeoutStatus >= 1 || (time < game_starttime) ) ) { //really print the WelcomeMessage to the player every frame when timeout-seconds are shown or the game is restarted, to make sure that the shown number is accurate
+	if( !(timeoutStatus >= 1) ) { //really print the WelcomeMessage to the player every frame when timeout-seconds are shown or the game is restarted, to make sure that the shown number is accurate
 		if(self.welcomemessage_time > time) return;
 		self.welcomemessage_time = time + self.cvar_scr_centertime * 0.6;
 	}

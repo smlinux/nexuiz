@@ -1975,7 +1975,8 @@ void LeaveSpectatorMode()
 			PutClientInServer();
 			if(!(self.flags & FL_NOTARGET))
 				bprint ("^4", self.netname, "^4 is playing now\n");
-			centerprint(self,"");
+			if(!cvar("g_campaign"))
+				centerprint(self,""); // clear MOTD
 			return;
 		} else {
 			stuffcmd(self,"menu_showteamselect\n");
