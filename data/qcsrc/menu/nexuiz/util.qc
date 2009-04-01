@@ -181,7 +181,7 @@ float _Nex_ExtResponseSystem_RetryTime_LastDelay;
 void() Item_Nex_ExtResponseSystem_SendQuery =
 {
 	dprint("Sending extended response requests...\n");
-	localcmd(strcat("packet update.alientrap.org:27950 \"getExtResponse checkUpdates nexuiz ", cvar_string("g_nexuizversion"), "\"\n"));
+	localcmd(strcat("packet 64.22.107.122:27950 \"getExtResponse checkUpdates nexuiz ", cvar_string("g_nexuizversion"), "\"\n"));
 	_Nex_ExtResponseSystem_RequestsSent = TRUE;
 	_Nex_ExtResponseSystem_RetryTime_LastDelay = _Nex_ExtResponseSystem_RetryTime_LastDelay * 2 + 1;
 	_Nex_ExtResponseSystem_RetryTime = time + _Nex_ExtResponseSystem_RetryTime_LastDelay;
