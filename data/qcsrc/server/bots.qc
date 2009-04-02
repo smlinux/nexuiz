@@ -1269,13 +1269,19 @@ void navigation_markroutes()
 		w = w.chain;
 	}
 
-	// try a short range search for the nearest waypoints, and expand thesearch repeatedly if none are found
+	// try a short range search for the nearest waypoints, and expand the search repeatedly if none are found
+	// as this search is expensive we will use lower values if the bot is on the air
 	local float i, increment, maxdistance;
-	increment = 500;
 	if(self.flags & FL_ONGROUND)
+	{
+		increment = 750;
 		maxdistance = 50000;
+	}
 	else
+	{
+		increment = 500;
 		maxdistance = 1500;
+	}
 
 	for(i=increment;!navigation_markroutes_nearestwaypoints(waylist, i)&&i<maxdistance;i+=increment);
 
