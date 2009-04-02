@@ -242,7 +242,10 @@ entity WaypointSprite_Spawn(
 	wp.health = lifetime;
 	wp.exteriormodeltoclient = ref;
 	if(ref)
+	{
 		wp.view_ofs = ofs;
+		setorigin(wp, ref.origin + ofs);
+	}
 	else
 		setorigin(wp, ofs);
 	wp.enemy = showto;
