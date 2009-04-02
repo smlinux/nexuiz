@@ -112,7 +112,7 @@ void saveCvarsLaserWeaponArenaWeaponButton(entity me)
 	string suffix;
 
 	suffix = "";
-	if(me.cvarValue != "laser")
+	if(me.cvarValue != "laser" && me.cvarValue != "most")
 		if(cvar("menu_weaponarena_with_laser"))
 			suffix = " laser";
 	if(me.checked)
@@ -128,7 +128,7 @@ void saveCvarsLaserWeaponArenaLaserButton(entity me)
 	// run the old function
 	me.saveCvars_weaponarena(me);
 
-	me.disabled = ((cvar_string("g_weaponarena") == "0") || (cvar_string("g_weaponarena") == "laser"));
+	me.disabled = ((cvar_string("g_weaponarena") == "0") || (cvar_string("g_weaponarena") == "laser") || (cvar_string("g_weaponarena") == "most"));
 
 	if not(me.disabled)
 	{
@@ -145,7 +145,7 @@ void saveCvarsLaserWeaponArenaLaserButton(entity me)
 
 void preDrawLaserWeaponArenaLaserButton(entity me)
 {
-	me.disabled = ((cvar_string("g_weaponarena") == "0") || (cvar_string("g_weaponarena") == "laser"));
+	me.disabled = ((cvar_string("g_weaponarena") == "0") || (cvar_string("g_weaponarena") == "laser") || (cvar_string("g_weaponarena") == "most"));
 	// run the old function
 	me.draw_weaponarena(me);
 }
