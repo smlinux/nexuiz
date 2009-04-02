@@ -649,12 +649,60 @@ void SV_PlayerPhysics()
 		wishvel = normalize(wishvel) * min(vlen(wishvel) / maxairspd, 1);
 		// add the unused velocity as up component
 		wishvel_z = 0;
-		wishvel_z = sqrt(max(0, 1 - wishvel * wishvel));
+
+		// if(self.BUTTON_JUMP)
+			wishvel_z = sqrt(max(0, 1 - wishvel * wishvel));
+
 		// it is now normalized, so...
-		wishvel_x *= cvar("g_jetpack_acceleration_side");
-		wishvel_y *= cvar("g_jetpack_acceleration_side");
-		wishvel_z *= cvar("g_jetpack_acceleration_up");
-		wishvel_z += cvar("g_jetpack_antigravity") * sv_gravity;
+		float a_side, a_up, a_add, a_diff;
+		a_side = cvar("g_jetpack_acceleration_side");
+		a_up = cvar("g_jetpack_acceleration_up");
+		a_add = cvar("g_jetpack_antigravity") * sv_gravity;
+
+		wishvel_x *= a_side;
+		wishvel_y *= a_side;
+		wishvel_z *= a_up;
+		wishvel_z += a_add;
+
+		float best;
+		best = 0;
+		//////////////////////////////////////////////////////////////////////////////////////
+		// finding the maximum over all vectors of above form
+		// with wishvel having an absolute value of 1
+		//////////////////////////////////////////////////////////////////////////////////////
+		// we're finding the maximum over
+		//   f(a_side, a_up, a_add, z) := a_side * (1 - z^2) + (a_add + a_up * z)^2;
+		// for z in the range from -1 to 1
+		//////////////////////////////////////////////////////////////////////////////////////
+		// maximum is EITHER attained at the single extreme point:
+		a_diff = a_side * a_side - a_up * a_up;
+		if(a_diff != 0)
+		{
+			f = a_add * a_up / a_diff; // this is the zero of diff(f(a_side, a_up, a_add, z), z)
+			if(f > -1 && f < 1) // can it be attained?
+			{
+				best = (a_diff + a_add * a_add) * (a_diff + a_up * a_up) / a_diff;
+				//print("middle\n");
+			}
+		}
+		// OR attained at z = 1:
+		f = (a_up + a_add) * (a_up + a_add);
+		if(f > best)
+		{
+			best = f;
+			//print("top\n");
+		}
+		// OR attained at z = -1:
+		f = (a_up - a_add) * (a_up - a_add);
+		if(f > best)
+		{
+			best = f;
+			//print("bottom\n");
+		}
+		best = sqrt(best);
+		//////////////////////////////////////////////////////////////////////////////////////
+
+		//print("best possible acceleration: ", ftos(best), "\n");
 
 		float fxy, fz;
 		fxy = bound(0, 1 - (self.velocity * normalize(wishvel_x * '1 0 0' + wishvel_y * '0 1 0')) / cvar("g_jetpack_maxspeed_side"), 1);
@@ -668,12 +716,14 @@ void SV_PlayerPhysics()
 		wishvel_x *= fxy;
 		wishvel_y *= fxy;
 		wishvel_z = (wishvel_z - sv_gravity) * fz + sv_gravity;
-		fvel = min(1, vlen(wishvel) / fvel);
 
+		fvel = min(1, vlen(wishvel) / best);
 		if(cvar("g_jetpack_fuel") && !(self.items & IT_UNLIMITED_WEAPON_AMMO))
 			f = min(1, self.ammo_fuel / (cvar("g_jetpack_fuel") * frametime * fvel));
 		else
 			f = 1;
+
+		//print("this acceleration: ", ftos(vlen(wishvel) * f), "\n");
 
 		if (f > 0 && wishvel != '0 0 0')
 		{
