@@ -656,12 +656,27 @@ void havocbot_chooseenemy()
 float(entity e) w_getbestweapon;
 void havocbot_chooseweapon()
 {
+	local float i;
+
 	// TODO: clean this up by moving it to weapon code
 	if(self.enemy.classname!="player")
 	{
-	//	self.switchweapon = w_getbestweapon(self);
+		// If there aren't enemies at sight use the laser (like most players)
 		if(client_hasweapon(self, WEP_LASER, TRUE, FALSE))
+		{
 			self.switchweapon = WEP_LASER;
+			return;
+		}
+
+		// Otherwise get the first available weapon
+		for(i=WEP_LASER + 1; i < WEP_COUNT ; ++i)
+		{
+			if(client_hasweapon(self, i, TRUE, FALSE))
+			{
+				self.switchweapon = i;
+				return;
+			}
+		}
 		return;
 	}
 
@@ -698,7 +713,7 @@ void havocbot_chooseweapon()
 	combo_time = time + ct + (ct * ((-0.3*skill)+3));
 
 	// Custom weapon list based on distance to the enemy
-	local float i; i = 0;
+	i = 0;
 	if(bot_custom_weapon){
 
 		// Choose weapons for far distance
