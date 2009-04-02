@@ -142,9 +142,12 @@ void havocbot_bunnyhop(vector dir)
 {
 	local float bunnyhopdistance;
 	local vector deviation;
+	local float maxspeed;
 
 	if(self.goalcurrent.classname == "player")
 		return;
+
+	maxspeed = cvar("sv_maxspeed");
 
 	if(self.aistatus & AI_STATUS_DANGER_AHEAD)
 	{
@@ -168,9 +171,9 @@ void havocbot_bunnyhop(vector dir)
 	bunnyhopdistance = vlen(self.origin - self.goalcurrent.origin);
 
 	// Run only to visible goals
-	traceline(self.origin + self.view_ofs , self.goalcurrent.origin, TRUE, world);
 	if(self.flags & FL_ONGROUND)
-	if(trace_fraction == 1)
+	if(self.speed==maxspeed)
+	if(checkpvs(self.origin + self.view_ofs, self.goalcurrent))
 	{
 			self.bot_lastseengoal = self.goalcurrent;
 
@@ -200,17 +203,16 @@ void havocbot_bunnyhop(vector dir)
 					if(fabs(self.goalcurrent.origin_z - self.origin_z) < self.maxs_z - self.mins_z)
 					if(self.goalstack01!=world)
 					{
-						deviation = self.goalstack01.origin - (self.origin + self.view_ofs);
-						deviation = vectoangles(deviation) - self.v_angle;
+						deviation = vectoangles(self.goalstack01.origin - self.origin) - vectoangles(self.goalcurrent.origin - self.origin);
 						while (deviation_y < -180) deviation_y = deviation_y + 360;
 						while (deviation_y > 180) deviation_y = deviation_y - 360;
 
-						if(fabs(deviation_y) < 15)
+						if(fabs(deviation_y) < 20)
 						if(bunnyhopdistance < vlen(self.origin - self.goalstack01.origin))
 						if(fabs(self.goalstack01.origin_z - self.goalcurrent.origin_z) < self.maxs_z - self.mins_z)
 						{
-							traceline(self.origin + self.view_ofs , self.goalstack01.origin, TRUE, world);
-							if(trace_fraction==1)
+							if(vlen(self.goalcurrent.origin - self.goalstack01.origin) > cvar("bot_ai_bunnyhop_startdistance"))
+							if(checkpvs(self.origin + self.view_ofs, self.goalstack01))
 							{
 								checkdistance = FALSE;
 							}
@@ -243,24 +245,19 @@ void havocbot_bunnyhop(vector dir)
 	// Release jump button
 	if(self.flags & FL_ONGROUND == 0)
 	{
-		if(self.velocity_z < 0)
+		if(self.velocity_z < 0 || vlen(self.velocity)<maxspeed)
 			self.BUTTON_JUMP = FALSE;
 
 		// Strafe
-		local float maxspeed;
-		maxspeed = cvar("sv_maxspeed");
-
 		if(self.aistatus & AI_STATUS_RUNNING)
 		if(vlen(self.velocity)>maxspeed)
 		{
-			deviation = vectoangles(dir) - self.v_angle;
+			deviation = vectoangles(dir) - vectoangles(self.velocity);
 			while (deviation_y < -180) deviation_y = deviation_y + 360;
 			while (deviation_y > 180) deviation_y = deviation_y - 360;
 
-			if ( deviation_y > 2 )
-				self.movement_y = maxspeed;
-			if ( deviation_y < -2 )
-				self.movement_y = maxspeed * -1;
+			if(fabs(deviation_y)>5)
+				self.movement_x = 0;
 		}
 	}
 };
