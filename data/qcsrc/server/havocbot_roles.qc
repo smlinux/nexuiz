@@ -257,8 +257,11 @@ void havocbot_goalrating_enemyplayers(float ratingscale, vector org, float sradi
 	local float t, noteam, distance;
 	noteam = ((self.team == 0) || !teams_matter); // fteqcc sucks
 
+	if (cvar("bot_nofire"))
+		return;
+
 	// don't chase players if we're under water
-	if(self.waterlevel>1)
+	if(self.waterlevel>WATERLEVEL_WETFEET)
 		return;
 
 	FOR_EACH_PLAYER(head)
