@@ -274,6 +274,7 @@ void havocbot_bunnyhop(vector dir)
 //.float bot_dodgevector_jumpbutton;
 .float ladder_time;
 .entity ladder_entity;
+.float rocketjumptime;
 void havocbot_movetogoal()
 {
 	local vector destorg;
@@ -403,18 +404,28 @@ void havocbot_movetogoal()
 			if(self.velocity_z < 0)
 			if(client_hasweapon(self, WEP_ROCKET_LAUNCHER, TRUE, FALSE))
 			{
+				self.movement_x = maxspeed;
+
+				if(self.rocketjumptime)
+				{
+					if(time > self.rocketjumptime)
+					{
+						self.BUTTON_ATCK2 = TRUE;
+						self.rocketjumptime = 0;
+					}
+					return;
+				}
+
 				self.switchweapon = WEP_ROCKET_LAUNCHER;
 				self.v_angle_x = 90;
-				self.movement_x = maxspeed;
 				self.BUTTON_ATCK = TRUE;
-				self.BUTTON_ATCK2 = TRUE;
+				self.rocketjumptime = time + cvar("g_balance_rocketlauncher_detonatedelay");
 				return;
 			}
 		}
 		else
 		{
 			// If there is no goal try to move forward
-			if(self.velocity_z<0)
 			if(self.goalcurrent==world)
 				self.movement_x = maxspeed;
 		}
