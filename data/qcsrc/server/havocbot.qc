@@ -356,6 +356,7 @@ void havocbot_movetogoal()
 	}
 
 	// If there is a trigger_hurt right below try to use the jetpack or make a rocketjump
+	if(skill>6)
 	if not(self.flags & FL_ONGROUND)
 	{
 		tracebox(self.origin, self.mins, self.maxs, self.origin + '0 0 -65536', MOVE_NOMONSTERS, self);
@@ -374,17 +375,48 @@ void havocbot_movetogoal()
 			}
 			else
 				self.BUTTON_HOOK = TRUE;
+
+			// If there is no goal try to move forward
+			if(self.goalcurrent==world)
+			{
+				local float speed = fabs(self.velocity_x) + fabs(self.velocity_y);
+
+				if(speed > (maxspeed / 1.5) && speed > (maxspeed / 4))
+				{
+					self.movement_x = 0;
+				}
+				else
+				{
+					makevectors(self.v_angle_y * '0 1 0');
+					tracebox(self.origin, self.mins, self.maxs, self.origin + (v_forward * maxspeed * 3), MOVE_NOMONSTERS, self);
+
+					if(trace_fraction==1)
+					{
+						if(speed < (maxspeed / 2))
+							self.movement_x = maxspeed;
+					}
+				}
+			}
 		}
 		else if(self.health>cvar("g_balance_rocketlauncher_damage")*0.5)
 		{
-			if(self.velocity_z < -maxspeed)
+			if(self.velocity_z < 0)
 			if(client_hasweapon(self, WEP_ROCKET_LAUNCHER, TRUE, FALSE))
 			{
 				self.switchweapon = WEP_ROCKET_LAUNCHER;
 				self.v_angle_x = 90;
+				self.movement_x = maxspeed;
 				self.BUTTON_ATCK = TRUE;
 				self.BUTTON_ATCK2 = TRUE;
+				return;
 			}
+		}
+		else
+		{
+			// If there is no goal try to move forward
+			if(self.velocity_z<0)
+			if(self.goalcurrent==world)
+				self.movement_x = maxspeed;
 		}
 	}
 
