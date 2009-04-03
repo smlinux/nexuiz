@@ -256,8 +256,14 @@ void havocbot_bunnyhop(vector dir)
 			while (deviation_y < -180) deviation_y = deviation_y + 360;
 			while (deviation_y > 180) deviation_y = deviation_y - 360;
 
-			if(fabs(deviation_y)>5)
+			if(fabs(deviation_y)>10)
 				self.movement_x = 0;
+
+			if(deviation_y>10)
+				self.movement_y = maxspeed * -1;
+			else if(deviation_y<10)
+				self.movement_y = maxspeed;
+
 		}
 	}
 };
