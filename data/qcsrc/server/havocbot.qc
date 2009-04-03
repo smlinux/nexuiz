@@ -355,6 +355,39 @@ void havocbot_movetogoal()
 		}
 	}
 
+	// If there is a trigger_hurt right below try to use the jetpack or make a rocketjump
+	if not(self.flags & FL_ONGROUND)
+	{
+		tracebox(self.origin, self.mins, self.maxs, self.origin + '0 0 -65536', MOVE_NOMONSTERS, self);
+
+		if(tracebox_hits_trigger_hurt(self.origin, self.mins, self.maxs, trace_endpos ))
+		if(self.items & IT_JETPACK)
+		{
+			tracebox(self.origin, self.mins, self.maxs, self.origin + '0 0 65536', MOVE_NOMONSTERS, self);
+
+			if(tracebox_hits_trigger_hurt(self.origin, self.mins, self.maxs, trace_endpos + '0 0 1' ))
+			{
+				if(self.velocity_z<0)
+				{
+					self.BUTTON_HOOK = TRUE;
+				}
+			}
+			else
+				self.BUTTON_HOOK = TRUE;
+		}
+		else if(self.health>cvar("g_balance_rocketlauncher_damage")*0.5)
+		{
+			if(self.velocity_z < -maxspeed)
+			if(client_hasweapon(self, WEP_ROCKET_LAUNCHER, TRUE, FALSE))
+			{
+				self.switchweapon = WEP_ROCKET_LAUNCHER;
+				self.v_angle_x = 90;
+				self.BUTTON_ATCK = TRUE;
+				self.BUTTON_ATCK2 = TRUE;
+			}
+		}
+	}
+
 	// If we are under water with no goals, swim up
 	if(self.waterlevel)
 	if(self.goalcurrent==world)
