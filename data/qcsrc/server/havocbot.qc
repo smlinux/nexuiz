@@ -380,7 +380,8 @@ void havocbot_movetogoal()
 			// If there is no goal try to move forward
 			if(self.goalcurrent==world)
 			{
-				local float xyspeed = fabs(self.velocity_x) + fabs(self.velocity_y);
+				local vector xyvelocity = self.velocity; xyvelocity_z = 0;
+				local float xyspeed = vlen(xyvelocity);
 
 				if(xyspeed > (maxspeed / 1.5) && xyspeed > (maxspeed / 4))
 				{
