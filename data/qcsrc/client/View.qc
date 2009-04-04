@@ -429,7 +429,7 @@ void CSQC_UpdateView(float w, float h)
 		CSQC_common_hud();
 
 	// crosshair goes VERY LAST
-	if(!scoreboard_active && !ons_showmap) {
+	if(!scoreboard_active && !ons_showmap && !camera_active) {
 		string wcross_style;
 		wcross_style = cvar_string("crosshair");
 
