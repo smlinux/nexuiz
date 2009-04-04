@@ -1150,6 +1150,14 @@ void target_item_change(float binary, .float field, float(float a, float b) func
 void target_items_use (void)
 {
 	float h0, a0;
+
+	if(activator.classname == "droppedweapon")
+	{
+		EXACTTRIGGER_TOUCH;
+		remove(activator);
+		return;
+	}
+
 	if(activator.classname != "player")
 		return;
 	if(activator.deadflag != DEAD_NO)
