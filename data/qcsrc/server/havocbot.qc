@@ -744,14 +744,8 @@ void havocbot_chooseweapon()
 	// TODO: clean this up by moving it to weapon code
 	if(self.enemy.classname!="player")
 	{
-		// If there aren't enemies at sight use the laser (like most players)
-		if(client_hasweapon(self, WEP_LASER, TRUE, FALSE))
-		{
-			self.switchweapon = WEP_LASER;
-			return;
-		}
-
-		// Otherwise get the first available weapon
+		// If no weapon was chosen get the first available weapon
+		if(self.weapon==0)
 		for(i=WEP_LASER + 1; i < WEP_COUNT ; ++i)
 		{
 			if(client_hasweapon(self, i, TRUE, FALSE))
