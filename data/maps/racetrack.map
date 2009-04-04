@@ -99,7 +99,7 @@
 // entity 3
 {
 "classname" "trigger_hurt"
-"message" "fall of the track"
+"message" "fell off the track"
 "spawnflags" "4"
 // brush 0
 {
