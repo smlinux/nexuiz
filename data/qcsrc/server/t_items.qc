@@ -1095,12 +1095,12 @@ float target_item_func_and(float a, float b)
 
 float target_item_func_itembitset(float a, float b)
 {
-	return (a - (a & (IT_UNLIMITED_WEAPON_AMMO | IT_STRENGTH | IT_INVINCIBLE))) | b;
+	return (a - (a & (IT_PICKUPMASK | IT_STRENGTH | IT_INVINCIBLE))) | b;
 }
 
 float target_item_func_itemand(float a, float b)
 {
-	return (a - (a & (IT_UNLIMITED_WEAPON_AMMO | IT_STRENGTH | IT_INVINCIBLE))) | (a & b);
+	return (a - (a & (IT_PICKUPMASK | IT_STRENGTH | IT_INVINCIBLE))) | (a & b);
 }
 
 float target_item_func_or(float a, float b)

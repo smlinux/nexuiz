@@ -59,7 +59,7 @@ float	IT_ARMOR_SHARD			= 2097152;
 float	IT_ARMOR				= 4194304;
 
 float	IT_AMMO					= 8064; // IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS | IT_SUPERWEAPON | IT_FUEL;
-float	IT_PICKUPMASK           = 51; // IT_FUEL_REGEN | IT_JETPACK | IT_UNLIMITED_AMMO;
+float	IT_PICKUPMASK           = 51; // IT_FUEL_REGEN | IT_JETPACK | IT_UNLIMITED_AMMO; // strength and invincible are handled separately
 float	IT_UNLIMITED_AMMO       = 3; // IT_UNLIMITED_SUPERWEAPONS | IT_UNLIMITED_WEAPON_AMMO;
 
 // variables:
