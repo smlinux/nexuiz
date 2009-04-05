@@ -270,7 +270,7 @@ void preMenuDraw()
 {
 	vector fs, sz, line, mid;
 
-	if(!cvar("menu_updatecheck"))
+	if(cvar("menu_updatecheck"))
 	{
 		Item_Nex_ExtResponseSystem_CheckForResponse();
 		if(!_Nex_ExtResponseSystem_VersionHandled)
