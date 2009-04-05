@@ -155,6 +155,8 @@ void havocbot_bunnyhop(vector dir)
 	{
 		self.aistatus &~= AI_STATUS_RUNNING;
 		self.BUTTON_JUMP = FALSE;
+		self.bot_canruntogoal = 0;
+		self.bot_timelastseengoal = 0;
 		return;
 	}
 
@@ -544,7 +546,8 @@ void havocbot_movetogoal()
 
 			// avoiding dangers and obstacles
 			local vector dst_ahead, dst_down;
-			dst_ahead = self.origin + self.view_ofs + (self.velocity * 0.32);
+			makevectors(self.v_angle_y * '0 1 0');
+			dst_ahead = self.origin + self.view_ofs + (self.velocity * 0.4) + (v_forward * 32 * 2);
 			dst_down = dst_ahead + '0 0 -1500';
 
 			// Look ahead
@@ -584,8 +587,8 @@ void havocbot_movetogoal()
 			{
 				// Look downwards
 				traceline(dst_ahead , dst_down, TRUE, world);
-				//	te_lightning2(world, self.origin, dst_ahead);	// Draw "ahead" look
-				//	te_lightning2(world, dst_ahead, dst_down);		// Draw "downwards" look
+			//	te_lightning2(world, self.origin, dst_ahead);	// Draw "ahead" look
+			//	te_lightning2(world, dst_ahead, dst_down);		// Draw "downwards" look
 				if(trace_endpos_z < self.origin_z + self.mins_z)
 				{
 					s = pointcontents(trace_endpos + '0 0 1');
