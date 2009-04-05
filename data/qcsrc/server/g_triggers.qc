@@ -597,6 +597,11 @@ float pointparticles_SendEntity(entity to, float fl)
 		WriteCoord(MSG_ENTITY, self.count);
 		WriteByte(MSG_ENTITY, self.glow_color);
 		WriteString(MSG_ENTITY, self.noise);
+		if(self.noise != "")
+		{
+			WriteByte(MSG_ENTITY, floor(self.atten * 64));
+			WriteByte(MSG_ENTITY, floor(self.volume * 255));
+		}
 	}
 	return 1;
 }
@@ -631,6 +636,13 @@ void spawnfunc_func_pointparticles()
 		setmodel(self, self.model);
 	if(self.noise != "")
 		precache_sound (self.noise);
+
+	if(!self.atten)
+		self.atten = ATTN_NORM;
+	else if(self.atten < 0)
+		self.atten = 0;
+	if(!self.volume)
+		self.volume = 1;
 
 	if(!self.modelindex)
 	{

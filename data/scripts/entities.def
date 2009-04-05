@@ -1144,6 +1144,8 @@ count: particle count multiplier (per spawned particle)
 movedir: when set, trace direction (particles will then be emitted from the surface the trace hits); the length of the vector is used as strength of taking the normal of the trace into account
 glow_color: particle palette color
 noise: sound to play when the particle is emitted
+atten: distance attenuation of the sound (a value from 0.1 to 3.9), default is 0.5; set to -1 for no attenuation (global sound)
+volume: volume of the sound
 targetname: name to target this (then its state is toggled)
 -------- SPAWNFLAGS --------
 START_ON: when targeted, the particle emitter will start switched on

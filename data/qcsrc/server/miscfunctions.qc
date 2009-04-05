@@ -1175,7 +1175,7 @@ void soundtoat(float dest, entity e, vector o, float chan, string samp, float vo
 	WriteByte(dest, SVC_SOUND);
 	WriteByte(dest, sflags);
 	if(sflags & SND_VOLUME)
-		WriteByte(dest, vol * 255);
+		WriteByte(dest, vol);
 	if(sflags & SND_ATTENUATION)
 		WriteByte(dest, atten);
 	if(sflags & SND_LARGEENTITY)

@@ -45,6 +45,8 @@ float PointInBrush(entity brush, vector point)
 .float glow_color; // palette color
 .float impulse; // density
 .string noise; // sound
+.float atten;
+.float volume;
 .float absolute;
 .vector movedir; // trace direction
 
@@ -79,7 +81,7 @@ void Draw_PointParticles()
 			if(self.noise != "")
 			{
 				self.origin = p;
-				sound(self, CHAN_AUTO, self.noise, 1, ATTN_NORM);
+				sound(self, CHAN_AUTO, self.noise, VOL_BASE * self.volume, self.atten);
 			}
 		}
 		else if(self.absolute)
@@ -143,6 +145,11 @@ void Ent_PointParticles()
 		if(self.noise)
 			strunzone(self.noise);
 		self.noise = strzone(ReadString());
+		if(self.noise != "")
+		{
+			self.atten = ReadByte() / 64.0;
+			self.volume = ReadByte() / 255.0;
+		}
 	}
 
 	if(f & 2)
