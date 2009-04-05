@@ -189,14 +189,14 @@ void Arena_Warmup()
 	if(time < warmup && self.spawned)
 	{
 		if(champion)
-			msg = strcat(msg, "The Champion is ", champion.netname, "^7");
+			msg = strcat(msg, "The Champion is ", champion.netname, "^7\n");
 
 		if(f)
-			msg = strcat(msg, "Round will start in ", ftos(f));
+			msg = strcat(msg, "Round will start in ", ftos(f),"\n");
 		else
 		{
 			if(self.spawned)
-				msg = strcat(msg, "^1Fight!");
+				msg = strcat(msg, "^1Fight!\n");
 		}
 
 		centerprint(self, msg);
