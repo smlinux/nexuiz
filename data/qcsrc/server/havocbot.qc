@@ -3,6 +3,8 @@ void() havocbot_chooserole;
 .float havocbot_keyboardskill;
 .float facingwalltime, ignoregoaltime;
 .entity ignoregoal;
+.float lastfiredweapon;
+.float lastcombotime;
 
 #ifdef DEBUG_BOT_GOALSTACK
 void debuggoalstack();
@@ -757,6 +759,16 @@ void havocbot_chooseweapon()
 		return;
 	}
 
+	// Do not change weapon during the next second after a combo
+	i = time - self.lastcombotime;
+	if(i < 1)
+		return;
+
+	// Workaround for rifle reloading (..)
+	if(self.weapon == WEP_CAMPINGRIFLE)
+	if(i < cvar("g_balance_campingrifle_reloadtime") + 1)
+		return;
+
 	local float w, s;
 	local float rocket  ; rocket   =-1000;
 	local float nex     ; nex      =-1000;
@@ -777,10 +789,8 @@ void havocbot_chooseweapon()
 	local float spreadpenalty=10;
 	local float distancefromfloor;
 
-	local float af, ct, combo_time;
-
-	traceline(self.enemy.origin,self.enemy.origin-'0 0 1000',TRUE,world);
-	distancefromfloor = self.enemy.origin_z - trace_endpos_z;
+	// Should it do a weapon combo?
+	local float af, ct, combo_time, combo;
 
 	af = ATTACK_FINISHED(self);
 	ct = cvar("bot_ai_weapon_combo_threshold");
@@ -789,8 +799,17 @@ void havocbot_chooseweapon()
 	// Ideally this 4 should be calculated as longest_weapon_refire / bot_ai_weapon_combo_threshold
 	combo_time = time + ct + (ct * ((-0.3*skill)+3));
 
+	combo = FALSE;
+
+	if(cvar("bot_ai_weapon_combo"))
+	if(self.weapon == self.lastfiredweapon)
+	if(af > combo_time)
+	{
+		combo = TRUE;
+		self.lastcombotime = time;
+	}
+
 	// Custom weapon list based on distance to the enemy
-	i = 0;
 	if(bot_custom_weapon){
 
 		// Choose weapons for far distance
@@ -798,12 +817,9 @@ void havocbot_chooseweapon()
 			for(i=0; i < WEP_COUNT && bot_weapons_far[i] != -1 ; ++i){
 				w = bot_weapons_far[i];
 				if ( client_hasweapon(self, w, TRUE, FALSE) ){
-					if ( self.weapon == w){
-						if( cvar("bot_ai_weapon_combo") && af > combo_time)
-							continue;
-					} else {
-						self.switchweapon = w;
-					}
+					if ( self.weapon == w && combo)
+						continue;
+					self.switchweapon = w;
 					return;
 				}
 			}
@@ -811,30 +827,24 @@ void havocbot_chooseweapon()
 
 		// Choose weapons for mid distance
 		if ( distance > bot_distance_close ) {
-			for(i= 0; i < WEP_COUNT && bot_weapons_mid[i] != -1 ; ++i){
+			for(i=0; i < WEP_COUNT && bot_weapons_mid[i] != -1 ; ++i){
 				w = bot_weapons_mid[i];
 				if ( client_hasweapon(self, w, TRUE, FALSE) ){
-					if ( self.weapon == w){
-						if( cvar("bot_ai_weapon_combo") && af > combo_time)
-							continue;
-					} else {
-						self.switchweapon = w;
-					}
+					if ( self.weapon == w && combo)
+						continue;
+					self.switchweapon = w;
 					return;
 				}
 			}
 		}
 
 		// Choose weapons for close distance
-		for(i= 0; i < WEP_COUNT && bot_weapons_close[i] != -1 ; ++i){
+		for(i=0; i < WEP_COUNT && bot_weapons_close[i] != -1 ; ++i){
 			w = bot_weapons_close[i];
 			if ( client_hasweapon(self, w, TRUE, FALSE) ){
-				if ( self.weapon == w){
-					if( cvar("bot_ai_weapon_combo") && af > combo_time)
-						continue;
-				} else {
-					self.switchweapon = w;
-				}
+				if ( self.weapon == w && combo)
+					continue;
+				self.switchweapon = w;
 				return;
 			}
 		}
@@ -847,6 +857,10 @@ void havocbot_chooseweapon()
 	//	*(Spread change of hit) // if it applies
 	//	*(Penality for target beeing in air)
 	// %weaponaddpoint
+
+	traceline(self.enemy.origin,self.enemy.origin-'0 0 1000',TRUE,world);
+	distancefromfloor = self.enemy.origin_z - trace_endpos_z;
+
 	if (client_hasweapon(self, WEP_MINSTANEX, TRUE, FALSE))
 		minstanex = (1000/cvar("g_balance_minstanex_refire")*1.0)
 			* (0.5);
@@ -1051,6 +1065,11 @@ void havocbot_ai()
 		{
 			self.BUTTON_ATCK = FALSE;
 			self.BUTTON_ATCK2 = FALSE;
+		}
+		else
+		{
+			if(self.BUTTON_ATCK||self.BUTTON_ATCK2)
+				self.lastfiredweapon = self.weapon;
 		}
 	}
 	else if (self.goalcurrent)
