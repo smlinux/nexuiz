@@ -437,6 +437,8 @@ float lag_additem(float t, float f1, float f2, entity e1, vector v1, vector v2, 
 .float wpisbox;
 .float wpflags;
 .vector wpnearestpoint;
+.float waypoint_id;
+float waypoint_counter;
 
 // stack of current goals (the last one of which may be an item or other
 // desirable object, the rest are typically waypoints to reach it)
@@ -761,6 +763,7 @@ entity waypoint_spawn(vector m1, vector m2, float f)
 		}
 	}
 
+	w.waypoint_id = waypoint_counter; ++waypoint_counter;
 	waypoint_clearlinks(w);
 	//waypoint_schedulerelink(w);
 	return w;
@@ -813,6 +816,7 @@ void waypoint_remove(entity e)
 	waypoint_schedulerelink(e.wp31);
 	// and now remove the spawnfunc_waypoint
 	remove(e);
+	--waypoint_counter;
 };
 
 // empties the map of waypoints
@@ -842,8 +846,210 @@ void waypoint_schedulerelinkall()
 	}
 };
 
+// Load waypoint links from file
+float botframe_cachedwaypointlinks;
+float waypoint_load_links()
+{
+	local string filename, s;
+	local float file, tokens, cost, id_from, id_to, c;
+	local entity wp_from, wp_to;
+	filename = strcat("maps/", mapname);
+	filename = strcat(filename, ".waypoints.cache");
+	file = fopen(filename, FILE_READ);
+
+	if (file < 0)
+	{
+		dprint("waypoint links load from ");
+		dprint(filename);
+		dprint(" failed\n");
+		return FALSE;
+	}
+
+	while (1)
+	{
+		s = fgets(file);
+		if (!s)
+			break;
+
+		tokens = tokenizebyseparator(s, " ");
+
+		if (tokens!=3)
+		{
+			// bad file format
+			fclose(file);
+			return FALSE;
+		}
+
+		id_from = stof(argv(0));
+		id_to	= stof(argv(1));
+		cost	= stof(argv(2));
+
+		// Search "from" waypoint
+		if(wp_from.waypoint_id!=id_from)
+		{
+			wp_from = findchain(classname, "waypoint");
+			while(wp_from)
+			{
+				if(wp_from.waypoint_id==id_from)
+					break;
+				wp_from = wp_from.chain;
+			}
+
+			if(wp_from.waypoint_id!=id_from)
+			{
+				// can't find that waypoint
+				fclose(file);
+				return FALSE;
+			}
+		}
+
+		// Search "to" waypoint
+		wp_to = findchain(classname, "waypoint");
+		while(wp_to)
+		{
+			if(wp_to.waypoint_id==id_to)
+				break;
+			wp_to = wp_to.chain;
+		}
+
+		if(wp_to.waypoint_id!=id_to)
+		{
+			// can't find that waypoint
+			fclose(file);
+			return FALSE;
+		}
+
+		++c;
+		//	for i in $(seq -w 0 31); do echo "if(wp_from.wp${i}==world){wp_from.wp${i}=wp_to;wp_from.wp${i}mincost=cost;continue;}"; done;
+		if(wp_from.wp00==world){wp_from.wp00=wp_to;wp_from.wp00mincost=cost;continue;}
+		if(wp_from.wp01==world){wp_from.wp01=wp_to;wp_from.wp01mincost=cost;continue;}
+		if(wp_from.wp02==world){wp_from.wp02=wp_to;wp_from.wp02mincost=cost;continue;}
+		if(wp_from.wp03==world){wp_from.wp03=wp_to;wp_from.wp03mincost=cost;continue;}
+		if(wp_from.wp04==world){wp_from.wp04=wp_to;wp_from.wp04mincost=cost;continue;}
+		if(wp_from.wp05==world){wp_from.wp05=wp_to;wp_from.wp05mincost=cost;continue;}
+		if(wp_from.wp06==world){wp_from.wp06=wp_to;wp_from.wp06mincost=cost;continue;}
+		if(wp_from.wp07==world){wp_from.wp07=wp_to;wp_from.wp07mincost=cost;continue;}
+		if(wp_from.wp08==world){wp_from.wp08=wp_to;wp_from.wp08mincost=cost;continue;}
+		if(wp_from.wp09==world){wp_from.wp09=wp_to;wp_from.wp09mincost=cost;continue;}
+		if(wp_from.wp10==world){wp_from.wp10=wp_to;wp_from.wp10mincost=cost;continue;}
+		if(wp_from.wp11==world){wp_from.wp11=wp_to;wp_from.wp11mincost=cost;continue;}
+		if(wp_from.wp12==world){wp_from.wp12=wp_to;wp_from.wp12mincost=cost;continue;}
+		if(wp_from.wp13==world){wp_from.wp13=wp_to;wp_from.wp13mincost=cost;continue;}
+		if(wp_from.wp14==world){wp_from.wp14=wp_to;wp_from.wp14mincost=cost;continue;}
+		if(wp_from.wp15==world){wp_from.wp15=wp_to;wp_from.wp15mincost=cost;continue;}
+		if(wp_from.wp16==world){wp_from.wp16=wp_to;wp_from.wp16mincost=cost;continue;}
+		if(wp_from.wp17==world){wp_from.wp17=wp_to;wp_from.wp17mincost=cost;continue;}
+		if(wp_from.wp18==world){wp_from.wp18=wp_to;wp_from.wp18mincost=cost;continue;}
+		if(wp_from.wp19==world){wp_from.wp19=wp_to;wp_from.wp19mincost=cost;continue;}
+		if(wp_from.wp20==world){wp_from.wp20=wp_to;wp_from.wp20mincost=cost;continue;}
+		if(wp_from.wp21==world){wp_from.wp21=wp_to;wp_from.wp21mincost=cost;continue;}
+		if(wp_from.wp22==world){wp_from.wp22=wp_to;wp_from.wp22mincost=cost;continue;}
+		if(wp_from.wp23==world){wp_from.wp23=wp_to;wp_from.wp23mincost=cost;continue;}
+		if(wp_from.wp24==world){wp_from.wp24=wp_to;wp_from.wp24mincost=cost;continue;}
+		if(wp_from.wp25==world){wp_from.wp25=wp_to;wp_from.wp25mincost=cost;continue;}
+		if(wp_from.wp26==world){wp_from.wp26=wp_to;wp_from.wp26mincost=cost;continue;}
+		if(wp_from.wp27==world){wp_from.wp27=wp_to;wp_from.wp27mincost=cost;continue;}
+		if(wp_from.wp28==world){wp_from.wp28=wp_to;wp_from.wp28mincost=cost;continue;}
+		if(wp_from.wp29==world){wp_from.wp29=wp_to;wp_from.wp29mincost=cost;continue;}
+		if(wp_from.wp30==world){wp_from.wp30=wp_to;wp_from.wp30mincost=cost;continue;}
+		if(wp_from.wp31==world){wp_from.wp31=wp_to;wp_from.wp31mincost=cost;continue;}
+	}
+
+	fclose(file);
+
+	dprint("loaded ");
+	dprint(ftos(c));
+	dprint(" waypoint links from maps/");
+	dprint(mapname);
+	dprint(".waypoints.cache\n");
+
+	botframe_cachedwaypointlinks = TRUE;
+	return TRUE;
+};
+
+
+// Save all waypoint links to a file
+void waypoint_save_links()
+{
+	local string filename, s;
+	local float file, c, i, cost;
+	local entity w, link;
+	filename = strcat("maps/", mapname);
+	filename = strcat(filename, ".waypoints.cache");
+	file = fopen(filename, FILE_WRITE);
+	if (file < 0)
+	{
+		bprint("waypoint links save to ");
+		bprint(filename);
+		bprint(" failed\n");
+	}
+	c = 0;
+	w = findchain(classname, "waypoint");
+	while (w)
+	{
+		if (!(w.wpflags & WAYPOINTFLAG_GENERATED))
+		{
+			for(i=0;i<32;++i)
+			{
+				// :S
+				switch(i)
+				{
+					//	for i in $(seq -w 0 31); do echo "case $i:link = w.wp$i; cost = w.wp${i}mincost; break;"; done;
+					case 00:link = w.wp00; cost = w.wp00mincost; break;
+					case 01:link = w.wp01; cost = w.wp01mincost; break;
+					case 02:link = w.wp02; cost = w.wp02mincost; break;
+					case 03:link = w.wp03; cost = w.wp03mincost; break;
+					case 04:link = w.wp04; cost = w.wp04mincost; break;
+					case 05:link = w.wp05; cost = w.wp05mincost; break;
+					case 06:link = w.wp06; cost = w.wp06mincost; break;
+					case 07:link = w.wp07; cost = w.wp07mincost; break;
+					case 08:link = w.wp08; cost = w.wp08mincost; break;
+					case 09:link = w.wp09; cost = w.wp09mincost; break;
+					case 10:link = w.wp10; cost = w.wp10mincost; break;
+					case 11:link = w.wp11; cost = w.wp11mincost; break;
+					case 12:link = w.wp12; cost = w.wp12mincost; break;
+					case 13:link = w.wp13; cost = w.wp13mincost; break;
+					case 14:link = w.wp14; cost = w.wp14mincost; break;
+					case 15:link = w.wp15; cost = w.wp15mincost; break;
+					case 16:link = w.wp16; cost = w.wp16mincost; break;
+					case 17:link = w.wp17; cost = w.wp17mincost; break;
+					case 18:link = w.wp18; cost = w.wp18mincost; break;
+					case 19:link = w.wp19; cost = w.wp19mincost; break;
+					case 20:link = w.wp20; cost = w.wp20mincost; break;
+					case 21:link = w.wp21; cost = w.wp21mincost; break;
+					case 22:link = w.wp22; cost = w.wp22mincost; break;
+					case 23:link = w.wp23; cost = w.wp23mincost; break;
+					case 24:link = w.wp24; cost = w.wp24mincost; break;
+					case 25:link = w.wp25; cost = w.wp25mincost; break;
+					case 26:link = w.wp26; cost = w.wp26mincost; break;
+					case 27:link = w.wp27; cost = w.wp27mincost; break;
+					case 28:link = w.wp28; cost = w.wp28mincost; break;
+					case 29:link = w.wp29; cost = w.wp29mincost; break;
+					case 30:link = w.wp30; cost = w.wp30mincost; break;
+					case 31:link = w.wp31; cost = w.wp31mincost; break;
+				}
+
+				if(link==world)
+					continue;
+
+				s = strcat(ftos(w.waypoint_id), " ", ftos(link.waypoint_id), " ", ftos(cost), "\n");
+				fputs(file, s);
+				++c;
+			}
+		}
+		w = w.chain;
+	}
+	fclose(file);
+	botframe_cachedwaypointlinks = TRUE;
+
+	bprint("saved ");
+	bprint(ftos(c));
+	bprint(" waypoints links to maps/");
+	bprint(mapname);
+	bprint(".waypoints.cache\n");
+};
+
 // save waypoints to gamedir/data/maps/mapname.waypoints
-// TODO: support saving wayboxes
 void waypoint_saveall()
 {
 	local string filename, s;
@@ -883,6 +1089,7 @@ void waypoint_saveall()
 		bprint(filename);
 		bprint(" failed\n");
 	}
+	waypoint_save_links();
 };
 
 // load waypoints from file
@@ -2452,11 +2659,22 @@ void bot_serverframe()
 	}
 
 	if (currentbots > 0 || cvar("g_waypointeditor"))
-	if (!botframe_spawnedwaypoints)
+	if (botframe_spawnedwaypoints)
+	{
+		if(!botframe_cachedwaypointlinks)
+		{
+			// TODO: Make this check cleaner
+			local entity wp = findchain(classname, "waypoint");
+			if(time - wp.nextthink > 10)
+				waypoint_save_links();
+		}
+	}
+	else
 	{
 		botframe_spawnedwaypoints = TRUE;
 		waypoint_loadall();
-		waypoint_schedulerelinkall();
+		if(!waypoint_load_links())
+			waypoint_schedulerelinkall();
 	}
 
 	if (bot_list)
