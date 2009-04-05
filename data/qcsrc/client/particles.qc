@@ -101,13 +101,11 @@ void Ent_PointParticles_Remove()
 void Ent_PointParticles()
 {
 	float f;
+	vector v;
 	f = ReadByte();
 	if(f & 2)
 	{
 		self.impulse = ReadCoord(); // density (<0: point, >0: volume)
-		self.absolute = (self.impulse >= 0);
-		if(!self.absolute)
-			self.impulse *= -self.maxs_x * self.maxs_y * self.maxs_z / 262144; // relative: particles per 64^3 cube
 	}
 	if(f & 4)
 	{
@@ -145,6 +143,16 @@ void Ent_PointParticles()
 		if(self.noise)
 			strunzone(self.noise);
 		self.noise = strzone(ReadString());
+	}
+
+	if(f & 2)
+	{
+		self.absolute = (self.impulse >= 0);
+		if(!self.absolute)
+		{
+			v = self.maxs - self.mins;
+			self.impulse *= -v_x * v_y * v_z / 262144; // relative: particles per 64^3 cube
+		}
 	}
 
 	setorigin(self, self.origin);
