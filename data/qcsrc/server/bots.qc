@@ -953,9 +953,9 @@ void waypoint_save_links()
 	file = fopen(filename, FILE_WRITE);
 	if (file < 0)
 	{
-		bprint("waypoint links save to ");
-		bprint(filename);
-		bprint(" failed\n");
+		print("waypoint links save to ");
+		print(filename);
+		print(" failed\n");
 	}
 	c = 0;
 	w = findchain(classname, "waypoint");
@@ -1013,11 +1013,11 @@ void waypoint_save_links()
 	fclose(file);
 	botframe_cachedwaypointlinks = TRUE;
 
-	bprint("saved ");
-	bprint(ftos(c));
-	bprint(" waypoints links to maps/");
-	bprint(mapname);
-	bprint(".waypoints.cache\n");
+	print("saved ");
+	print(ftos(c));
+	print(" waypoints links to maps/");
+	print(mapname);
+	print(".waypoints.cache\n");
 };
 
 // save waypoints to gamedir/data/maps/mapname.waypoints
