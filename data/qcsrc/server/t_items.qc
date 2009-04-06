@@ -233,7 +233,8 @@ float Item_GiveTo(entity item, entity player)
 
 	sound (player, CHAN_AUTO, item.item_pickupsound, VOL_BASE, ATTN_NORM);
 	if (_switchweapon)
-		W_SwitchWeapon_Force(player, w_getbestweapon(player));
+		if (player.switchweapon != w_getbestweapon(player))
+			W_SwitchWeapon_Force(player, w_getbestweapon(player));
 
 	return 1;
 }
