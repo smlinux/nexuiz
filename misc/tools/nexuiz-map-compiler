@@ -114,7 +114,7 @@ while(@ARGV)
 	}
 }
 
-my $linkdir = File::Temp::tempdir("nexuiz-map-compiler", TMPDIR => 1, CLEANUP => 1);
+my $linkdir = File::Temp::tempdir("nexuiz-map-compiler.XXXXXX", TMPDIR => 1, CLEANUP => 1);
 
 sub q3map2(@)
 {
@@ -149,26 +149,60 @@ for my $m(@{$options->{maps}})
 	}
 
 	my %shaders = map { m!/([^/.]*)\.shader(?:$)! ? ($1 => 1) : () } glob "../scripts/*.shader";
-	if(!-f "$NEXUIZDIR/data/scripts/shaderlist.txt")
+
+	my $previous_shaderlist = undef;
+	my $shaderlist = "";
+	if(open my $fh, "<", "$NEXUIZDIR/scripts/shaderlist.txt")
+	{
+		while(<$fh>)
+		{
+			$shaderlist .= $_;
+		}
+
+		# we may have to restore the file on exit
+		$previous_shaderlist = $shaderlist
+			if "$NEXUIZDIR/data" eq $mapdir;
+	}
+	else
 	{
 		# possibly extract the shader list from a pk3?
-		local $ENV{D} = $NEXUIZDIR;
-		system q{cd "$D" && for X in data/data*.pk3; do unzip -o "$X" scripts/shaderlist.txt; done};
+		local $ENV{N} = $NEXUIZDIR;
+		$shaderlist = `cd "\$N" && for X in "\$N"/data/data*.pk3; do Y=\$X; done; unzip -p "\$Y" scripts/shaderlist.txt`;
 	}
-	open my $shaderlist, "+<", "$NEXUIZDIR/data/scripts/shaderlist.txt"
-		or die "open $NEXUIZDIR/data/scripts/shaderlist.txt: $!";
-	my $previous_shaderlist = "";
-	while(<$shaderlist>)
+
+	my $shaderlist_new = "";
+	for(split /\r?\n|\r/, $shaderlist)
 	{
-		$previous_shaderlist .= $_;
-		y/\r\n//d;
 		delete $shaders{$_};
+		$shaderlist_new .= "$_\n";
 	}
+	if(%shaders)
+	{
+		for(sort keys %shaders)
+		{
+			$shaderlist_new .= "$_\n";
+		}
+	}
+	else
+	{
+		$shaderlist_new = undef;
+	}
+
 	my $restore_shaderlist = sub
 	{
-		open $shaderlist, ">", "$NEXUIZDIR/data/scripts/shaderlist.txt";
-		print $shaderlist $previous_shaderlist;
-		close $shaderlist;
+		if(defined $shaderlist_new)
+		{
+			if(defined $previous_shaderlist)
+			{
+				open my $fh, ">", "$mapdir/scripts/shaderlist.txt";
+				print $fh $previous_shaderlist;
+				close $fh;
+			}
+			else
+			{
+				unlink "$mapdir/scripts/shaderlist.txt";
+			}
+		}
 	};
 	local $SIG{INT} = sub
 	{
@@ -176,13 +210,16 @@ for my $m(@{$options->{maps}})
 		$restore_shaderlist->();
 		exit 0;
 	};
+
 	eval
 	{
-		for(keys %shaders)
+		if(defined $shaderlist_new)
 		{
-			print $shaderlist "$_\n";
+			mkdir "$mapdir/scripts";
+			open my $fh, ">", "$mapdir/scripts/shaderlist.txt";
+			print $fh $shaderlist_new;
+			close $fh;
 		}
-		close $shaderlist;
 
 		unlink <$m/lm_*>; # delete old external lightmaps
 		q3map2 '-bsp', '-meta', @{$options->{bsp}},   "$m.map"
