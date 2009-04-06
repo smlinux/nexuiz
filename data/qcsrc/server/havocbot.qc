@@ -5,6 +5,7 @@ void() havocbot_chooserole;
 .entity ignoregoal;
 .float lastfiredweapon;
 .float lastcombotime;
+.float havocbot_blockhead;
 
 #ifdef DEBUG_BOT_GOALSTACK
 void debuggoalstack();
@@ -365,12 +366,10 @@ void havocbot_movetogoal()
 	if not(self.flags & FL_ONGROUND)
 	{
 		tracebox(self.origin, self.mins, self.maxs, self.origin + '0 0 -65536', MOVE_NOMONSTERS, self);
-
 		if(tracebox_hits_trigger_hurt(self.origin, self.mins, self.maxs, trace_endpos ))
 		if(self.items & IT_JETPACK)
 		{
 			tracebox(self.origin, self.mins, self.maxs, self.origin + '0 0 65536', MOVE_NOMONSTERS, self);
-
 			if(tracebox_hits_trigger_hurt(self.origin, self.mins, self.maxs, trace_endpos + '0 0 1' ))
 			{
 				if(self.velocity_z<0)
@@ -382,27 +381,31 @@ void havocbot_movetogoal()
 				self.BUTTON_HOOK = TRUE;
 
 			// If there is no goal try to move forward
+			
 			if(self.goalcurrent==world)
+				dir = v_forward;
+			else
+				dir = normalize(self.goalcurrent.origin - self.origin);
+
+			local vector xyvelocity = self.velocity; xyvelocity_z = 0;
+			local float xyspeed = xyvelocity * dir;
+
+			if(xyspeed < (maxspeed / 2))
 			{
-				local vector xyvelocity = self.velocity; xyvelocity_z = 0;
-				local float xyspeed = vlen(xyvelocity);
-
-				if(xyspeed > (maxspeed / 1.5) && xyspeed > (maxspeed / 4))
+				makevectors(self.v_angle_y * '0 1 0');
+				tracebox(self.origin, self.mins, self.maxs, self.origin + (dir * maxspeed * 3), MOVE_NOMONSTERS, self);
+				if(trace_fraction==1)
 				{
-					self.movement_x = 0;
-				}
-				else
-				{
-					makevectors(self.v_angle_y * '0 1 0');
-					tracebox(self.origin, self.mins, self.maxs, self.origin + (v_forward * maxspeed * 3), MOVE_NOMONSTERS, self);
-
-					if(trace_fraction==1)
-					{
-						if(xyspeed < (maxspeed / 2))
-							self.movement_x = maxspeed;
-					}
+					self.movement_x = dir * v_forward * maxspeed;
+					self.movement_y = dir * v_right * maxspeed;
+					if (skill < 10)
+						havocbot_keyboard_movement(self.origin + dir * 100);
 				}
 			}
+
+			self.havocbot_blockhead = TRUE;
+
+			return;
 		}
 		else if(self.health>cvar("g_balance_rocketlauncher_damage")*0.5)
 		{
@@ -1000,7 +1003,14 @@ void havocbot_ai()
 	if (bot_strategytoken == self)
 	if (!bot_strategytoken_taken)
 	{
-		self.havocbot_role();
+		if(self.havocbot_blockhead)
+		{
+			self.havocbot_blockhead = FALSE;
+		}
+		else
+		{
+			self.havocbot_role();
+		}
 
 		// TODO: tracewalk() should take care of this job (better path finding under water)
 		// if we don't have a goal and we're under water look for a waypoint near the "shore" and push it
