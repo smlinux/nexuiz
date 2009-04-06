@@ -883,11 +883,12 @@ float waypoint_load_links()
 		// Search "from" waypoint
 		if(wp_from.origin!=wp_from_pos)
 		{
-			wp_from = findchain(classname, "waypoint");
+			wp_from = findradius(wp_from_pos, 1);
 			found = FALSE;
 			while(wp_from)
 			{
 				if(vlen(wp_from.origin-wp_from_pos)<1)
+				if(wp_from.classname == "waypoint")
 				{
 					found = TRUE;
 					break;
@@ -904,11 +905,12 @@ float waypoint_load_links()
 		}
 
 		// Search "to" waypoint
-		wp_to = findchain(classname, "waypoint");
+		wp_to = findradius(wp_to_pos, 1);
 		found = FALSE;
 		while(wp_to)
 		{
 			if(vlen(wp_to.origin-wp_to_pos)<1)
+			if(wp_to.classname == "waypoint")
 			{
 				found = TRUE;
 				break;
