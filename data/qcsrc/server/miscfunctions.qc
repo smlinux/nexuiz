@@ -1397,6 +1397,7 @@ void precache()
 	precache_sound ("misc/spawn.wav");
 	precache_sound ("misc/talk.wav");
 	precache_sound ("misc/teleport.wav");
+	precache_sound ("misc/poweroff.wav");
 	precache_sound ("player/lava.wav");
 	precache_sound ("player/slime.wav");
 	

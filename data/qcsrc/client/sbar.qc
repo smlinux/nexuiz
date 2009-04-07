@@ -1436,9 +1436,11 @@ float Sbar_WouldDrawScoreboard ()
 void CSQC_Strength_Timer() {
 	float stat_items, dt;
 	stat_items = getstati(STAT_ITEMS);
+	/*
 	if not(stat_items & IT_STRENGTH)
 		if not(stat_items & IT_INVINCIBLE)
 			return;
+	*/
 	
 	if (getstati(STAT_HEALTH) <= 0)
 		return;
@@ -1482,6 +1484,11 @@ void CSQC_Strength_Timer() {
 			}
 			Sbar_DrawXNum(number_position, ceil(dt), 2, countdown_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
 		}
+		else if(dt > -1)
+		{
+			drawpic_expanding(pos, "gfx/sb_str", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE,
+				bound(0, -dt / 0.5, 1));
+		}
 	}
 	
 	//add some margin to the invincibility icon
@@ -1503,6 +1510,11 @@ void CSQC_Strength_Timer() {
 				drawpic(pos, "gfx/sb_invinc", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE);
 			}
 			Sbar_DrawXNum(number_position, ceil(dt), 2, countdown_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
+		}
+		else if(dt > -1)
+		{
+			drawpic_expanding(pos, "gfx/sb_invinc", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE,
+				bound(0, -dt / 0.5, 1));
 		}
 	}
 }

@@ -1538,6 +1538,14 @@ void respawn(void)
 	PutClientInServer();
 }
 
+void play_countdown(float finished, string samp)
+{
+	if(clienttype(self) == CLIENTTYPE_REAL)
+		if(floor(finished - time - frametime) != floor(finished - time))
+			if(self.strength_finished - time < 6)
+				sound (self, CHAN_AUTO, samp, VOL_BASE, ATTN_NORM);
+}
+
 /**
  * When sv_timeout is used this function returs strings like
  * "Timeout begins in 2 seconds!\n" or "Timeout ends in 23 seconds!\n".
@@ -1601,6 +1609,7 @@ void player_powerups (void)
 	{
 		if (self.items & IT_STRENGTH)
 		{
+			play_countdown(self.strength_finished, "misc/poweroff.wav");
 			if (time > self.strength_finished)
 			{
 				self.alpha = default_player_alpha;
@@ -1622,6 +1631,7 @@ void player_powerups (void)
 
 		if (self.items & IT_INVINCIBLE)
 		{
+			play_countdown(self.invincible_finished, "misc/poweroff.wav");
 			if (time > self.invincible_finished)
 			{
 				self.items = self.items - (self.items & IT_INVINCIBLE);
@@ -1641,6 +1651,7 @@ void player_powerups (void)
 
 	if (self.items & IT_STRENGTH)
 	{
+		play_countdown(self.strength_finished, "misc/poweroff.wav");
 		self.effects = self.effects | (EF_BLUE | EF_ADDITIVE | EF_FULLBRIGHT);
 		if (time > self.strength_finished)
 		{
@@ -1658,6 +1669,7 @@ void player_powerups (void)
 	}
 	if (self.items & IT_INVINCIBLE)
 	{
+		play_countdown(self.invincible_finished, "misc/poweroff.wav");
 		self.effects = self.effects | (EF_RED | EF_ADDITIVE | EF_FULLBRIGHT);
 		if (time > self.invincible_finished)
 		{
@@ -2241,7 +2253,8 @@ void PlayerPreThink (void)
 			self.fixangle = TRUE;
 		}
 
-		player_powerups();
+		if(frametime)
+			player_powerups();
 
 		if (self.deadflag != DEAD_NO)
 		{
