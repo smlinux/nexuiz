@@ -147,6 +147,9 @@ void havocbot_bunnyhop(vector dir)
 	local vector deviation;
 	local float maxspeed;
 
+	if(cvar("g_midair"))
+		return;
+
 	if(self.goalcurrent.classname == "player")
 		return;
 
@@ -381,7 +384,7 @@ void havocbot_movetogoal()
 				self.BUTTON_HOOK = TRUE;
 
 			// If there is no goal try to move forward
-			
+
 			if(self.goalcurrent==world)
 				dir = v_forward;
 			else
