@@ -565,6 +565,8 @@ void PutObserverInServer (void)
 	self.oldvelocity = self.velocity;
 	self.customizeentityforclient = Client_customizeentityforclient;
 
+	self.team = -1;
+
 	if(g_arena)
 	{
 		if(self.version_mismatch)
@@ -709,6 +711,9 @@ void PutClientInServer (void)
 
 	if(self.classname == "player") {
 		entity spot, oldself;
+
+		if(self.team < 0)
+			JoinBestTeam(self, FALSE, TRUE);
 
 		race_PreSpawn();
 
@@ -978,9 +983,7 @@ void ClientKill_Now_TeamChange()
 		JoinBestTeam( self, FALSE, FALSE );
 	}
 	else
-	{
 		SV_ChangeTeam(self.killindicator_teamchange - 1);
-	}
 }
 
 void ClientKill_Now()
@@ -1137,7 +1140,7 @@ void DoTeamChange(float destteam)
 		if(destteam == -1)
 			return;
 	}
-	if(destteam == self.team && !self.killindicator)
+	if(destteam == self.team && destteam >= 0 && !self.killindicator)
 		return;
 	ClientKill_TeamChange(destteam);
 }
