@@ -273,7 +273,7 @@ void MapList_LoadMap(entity btn, entity me)
 	}
 	if(MapInfo_CheckMap(m))
 	{
-		localcmd("\ndisconnect\nwait\nmaxplayers $menu_maxplayers\ng_maplist_shufflenow\n");
+		localcmd("\ndisconnect\nwait\ng_campaign 0\nmaxplayers $menu_maxplayers\ng_maplist_shufflenow\n");
 		if(cvar("menu_use_default_hostname"))
 			localcmd("hostname \"", strdecolorize(cvar_string("_cl_name")), "'s Nexuiz server\"\n");
 		MapInfo_LoadMap(m);
