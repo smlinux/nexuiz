@@ -542,7 +542,7 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 	string fn;
 	string s, t;
 	float fh, fh2;
-	float r, f;
+	float r, f, n, i;
 
 	if(strstrofs(pFilename, "/", 0) >= 0)
 	{
@@ -585,7 +585,17 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 				fputs(fh, strcat("cdtrack ", _MapInfo_Map_worldspawn_music, "\n"));
 		}
 		else
-			fputs(fh, strcat("cdtrack ", ftos(floor(random() * 9 + 2)), "\n")); // track from 2 to 10
+		{
+			n = tokenize_sane(cvar_string("g_cdtracks_remaplist"));
+			s = strcat(" ", cvar_string("g_cdtracks_dontusebydefault"), " ");
+			for(;;)
+			{
+				i = floor(random() * n);
+				if(strstrofs(s, strcat(" ", argv(i), " "), 0) < 0)
+					break;
+			}
+			fputs(fh, strcat("cdtrack ", ftos(i + 1), "\n"));
+		}
 		if(MapInfo_Map_supportedFeatures & MAPINFO_FEATURE_WEAPONS)    
 			fputs(fh, "has weapons\n");
 		else

@@ -9,6 +9,6 @@ type dom 200 20
 type rune 200 20
 type lms 9 20
 type arena 10 20
-cdtrack thunder
+cdtrack 11
 clientsettemp_for_type all r_shadow_glossexponent 96
 clientsettemp_for_type all r_shadow_glossintensity 2
