@@ -379,16 +379,19 @@ sub fds($)
 package Channel::QW;
 use strict;
 use warnings;
+use Digest::HMAC;
+use Digest::MD4;
 
 # Constructor:
 #   my $chan = new Channel::QW($connection, "password");
-sub new($$)
+sub new($$$)
 {
-	my ($class, $conn, $password) = @_;
+	my ($class, $conn, $password, $secure) = @_;
 	my $you = {
 		connector => $conn,
 		password => $password,
 		recvbuf => "",
+		secure => $secure,
 	};
 	return
 		bless $you, 'Channel::QW';
@@ -404,7 +407,16 @@ sub join_commands($@)
 sub send($$$)
 {
 	my ($self, $line, $nothrottle) = @_;
-	return $self->{connector}->send("\377\377\377\377rcon $self->{password} $line");
+	if($self->{secure})
+	{
+		my $t = sprintf "%ld", time();
+		my $key = Digest::HMAC::hmac("$t $line", $self->{password}, \&Digest::MD4::md4);
+		return $self->{connector}->send("\377\377\377\377srcon HMAC-MD4 TIME $key $t $line");
+	}
+	else
+	{
+		return $self->{connector}->send("\377\377\377\377rcon $self->{password} $line");
+	}
 }
 
 # Note: backslash and quotation mark escaping is a DarkPlaces extension.
@@ -466,6 +478,7 @@ sub default($$)
 
 my $server   = default '',    $ENV{rcon_address};
 my $password = default '',    $ENV{rcon_password};
+my $secure   = default '1',   $ENV{rcon_secure};
 my $timeout  = default '5',   $ENV{rcon_timeout};
 my $timeouti = default '0.2', $ENV{rcon_timeout_inter};
 my $colors   = default '0',   $ENV{rcon_colorcodes_raw};
@@ -476,11 +489,12 @@ if(!length $server)
 	print STDERR "Optional: rcon_timeout=... (default: 5)\n";
 	print STDERR "          rcon_timeout_inter=... (default: 0.2)\n";
 	print STDERR "          rcon_colorcodes_raw=1 (to disable color codes translation)\n";
+	print STDERR "          rcon_secure=0 (to allow connecting to older servers not supporting secure rcon)\n";
 	exit 0;
 }
 
 my $connection = Connection::Socket->new("udp", "", $server, 26000);
-my $rcon = Channel::QW->new($connection, $password);
+my $rcon = Channel::QW->new($connection, $password, $secure);
 
 if(!$rcon->send($rcon->join_commands(@ARGV)))
 {
