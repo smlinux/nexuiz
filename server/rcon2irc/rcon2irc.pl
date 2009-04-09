@@ -436,16 +436,19 @@ sub fds($)
 package Channel::QW;
 use strict;
 use warnings;
+use Digest::HMAC;
+use Digest::MD4;
 
 # Constructor:
 #   my $chan = new Channel::QW($connection, "password");
-sub new($$)
+sub new($$$)
 {
-	my ($class, $conn, $password) = @_;
+	my ($class, $conn, $password, $secure) = @_;
 	my $you = {
 		connector => $conn,
 		password => $password,
 		recvbuf => "",
+		secure => $secure,
 	};
 	return
 		bless $you, 'Channel::QW';
@@ -461,7 +464,16 @@ sub join_commands($@)
 sub send($$$)
 {
 	my ($self, $line, $nothrottle) = @_;
-	return $self->{connector}->send("\377\377\377\377rcon $self->{password} $line");
+	if($self->{secure})
+	{
+		my $t = sprintf "%ld", time();
+		my $key = Digest::HMAC::hmac("$t $line", $self->{password}, \&Digest::MD4::md4);
+		return $self->{connector}->send("\377\377\377\377srcon HMAC-MD4 TIME $key $t $line");
+	}
+	else
+	{
+		return $self->{connector}->send("\377\377\377\377rcon $self->{password} $line");
+	}
 }
 
 # Note: backslash and quotation mark escaping is a DarkPlaces extension.
@@ -653,6 +665,7 @@ our %config = (
 	irc_quakenet_challengeprefix => ':Q!TheQBot@CServe.quakenet.org NOTICE [^:]+ :CHALLENGE',
 
 	dp_server => undef,
+	dp_secure => 1,
 	dp_listen => "", 
 	dp_password => undef,
 	dp_status_delay => 30,
@@ -740,7 +753,7 @@ $SIG{TERM} = sub {
 # Create the two channels to gateway between...
 
 $channels{irc} = new Channel::Line(new Connection::Socket(tcp => $config{irc_local} => $config{irc_server} => 6667));
-$channels{dp} = new Channel::QW(my $dpsock = new Connection::Socket(udp => $config{dp_listen} => $config{dp_server} => 26000), $config{dp_password});
+$channels{dp} = new Channel::QW(my $dpsock = new Connection::Socket(udp => $config{dp_listen} => $config{dp_server} => 26000), $config{dp_password}, $config{dp_secure});
 $config{dp_listen} = $dpsock->sockname();
 print "Listening on $config{dp_listen}\n";
 
