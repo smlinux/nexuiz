@@ -214,6 +214,7 @@ void cvar_changes_init()
 		// private
 		BADPREFIX("g_ban_");
 		BADPREFIX("g_chat_flood_");
+		BADPREFIX("g_voice_flood_");
 		BADPREFIX("rcon_");
 		BADPREFIX("settemp_");
 		BADPREFIX("sv_allowdownloads_");
