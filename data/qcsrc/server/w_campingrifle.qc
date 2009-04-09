@@ -51,7 +51,11 @@ void W_CampingRifle_FireBullet(float pSpread, float pDamage, float pHeadshotAdde
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_nails -= pAmmo;
 
-	W_SetupShot (self, FALSE, 2, "weapons/campingrifle_fire.wav");
+	if(deathtype & HITTYPE_SECONDARY)
+		W_SetupShot (self, FALSE, 2, "weapons/campingrifle_fire2.wav");
+	else
+		W_SetupShot (self, FALSE, 2, "weapons/campingrifle_fire.wav");
+
 	pointparticles(particleeffectnum("shotgun_muzzleflash"), w_shotorg, w_shotdir * 2000, 1);
 
 	if(self.BUTTON_ZOOM) // if zoomed, shoot from the eye
@@ -140,6 +144,7 @@ float w_campingrifle(float req)
 		precache_model ("models/weapons/h_campingrifle.dpm");
 		precache_sound ("weapons/campingrifle_reload.wav");
 		precache_sound ("weapons/campingrifle_fire.wav");
+		precache_sound ("weapons/campingrifle_fire2.wav");
 	}
 	else if (req == WR_SETUP)
 	{
