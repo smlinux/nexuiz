@@ -389,23 +389,33 @@ float nixnex_nextweapon;
 .float nixnex_lastinfotime;
 .float nixnex_nextincr;
 
+float NixNex_CanChooseWeapon(float wpn)
+{
+	entity e;
+	e = get_weaponinfo(wpn);
+	if(!e.weapons) // skip dummies
+		return FALSE;
+	if(g_weaponarena)
+	{
+		if not(g_weaponarena & e.weapons)
+			return FALSE;
+	}
+	else
+	{
+		if(wpn == WEP_LASER && g_nixnex_with_laser)
+			return FALSE;
+		if not(e.spawnflags & WEPSPAWNFLAG_NORMAL)
+			return FALSE;
+	}
+	return TRUE;
+}
 void Nixnex_ChooseNextWeapon()
 {
 	float j;
-	entity e;
-
 	RandomSelection_Init();
 	for(j = WEP_FIRST; j <= WEP_LAST; ++j)
-	{
-		if(j == WEP_LASER && g_nixnex_with_laser)
-			continue;
-		e = get_weaponinfo(j);
-		if(!e.weapons) // skip dummies
-			continue;
-		if not(e.spawnflags & WEPSPAWNFLAG_NORMAL)
-			continue;
-		RandomSelection_Add(world, j, 1, 0);
-	}
+		if(NixNex_CanChooseWeapon(j))
+			RandomSelection_Add(world, j, 1, (j != nixnex_weapon));
 	nixnex_nextweapon = RandomSelection_chosen_float;
 }
 

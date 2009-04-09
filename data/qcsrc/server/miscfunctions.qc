@@ -744,6 +744,7 @@ float g_weapon_stay;
 
 entity get_weaponinfo(float w);
 
+float NixNex_CanChooseWeapon(float wpn);
 void readplayerstartcvars()
 {
 	entity e;
@@ -814,7 +815,15 @@ void readplayerstartcvars()
 		g_weaponarena_list = strzone(substring(g_weaponarena_list, 0, strlen(g_weaponarena_list) - 3));
 	}
 
-	if(g_weaponarena)
+	if(g_nixnex)
+	{
+		start_weapons = 0;
+		// will be done later
+		for(i = WEP_FIRST; i <= WEP_LAST; ++i)
+			if(NixNex_CanChooseWeapon(i))
+				weapon_action(i, WR_PRECACHE);
+	}
+	else if(g_weaponarena)
 	{
 		start_weapons = g_weaponarena;
 		start_ammo_rockets = 999;
@@ -823,18 +832,6 @@ void readplayerstartcvars()
 		start_ammo_nails = 999;
 		start_ammo_fuel = 999;
 		start_items |= IT_UNLIMITED_AMMO;
-	}
-	else if(g_nixnex)
-	{
-		start_weapons = 0;
-		// will be done later
-		for(i = WEP_FIRST; i <= WEP_LAST; ++i)
-		{
-			e = get_weaponinfo(i);
-			if(!(e.weapon))
-				continue;
-			weapon_action(e.weapon, WR_PRECACHE);
-		}
 	}
 	else if(g_minstagib)
 	{
