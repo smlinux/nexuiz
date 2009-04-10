@@ -598,9 +598,14 @@ void race_ClearRecords()
 
 void race_ReadyRestart()
 {
-	race_ClearRecords();
+	Score_NicePrint(world);
 
+	race_ClearRecords();
 	PlayerScore_Sort(race_place);
+
+	entity e;
+	FOR_EACH_CLIENT(e)
+		print(e.netname, " = ", ftos(e.race_place), "\n");
 
 	if(g_race_qualifying == 2)
 	{
