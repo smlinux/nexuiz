@@ -622,7 +622,7 @@ void VoteCount() {
 					result = "no";
 				else
 					result = "timeout";
-				VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, floor((yescount + nocount) * votefactor) + 1, result);
+				VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, floor(min((playercount - abstaincount) * votefactor, (yescount + nocount) * simplevotefactor)) + 1, result);
 				if(result == "yes")
 					VoteAccept();
 				else if(result == "no")
