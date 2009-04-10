@@ -14871,27 +14871,27 @@ evil8_floor/e8cretefloor01c
 // entity 508
 {
 "classname" "item_armor_small"
-"origin" "1760 304 -16"
+"origin" "1752.000000 304.000000 -16.000000"
 }
 // entity 509
 {
 "classname" "item_armor_small"
-"origin" "1752 360 -16"
+"origin" "1744.000000 360.000000 -16.000000"
 }
 // entity 510
 {
 "classname" "item_armor_small"
-"origin" "1735 416 -16"
+"origin" "1727.000000 416.000000 -16.000000"
 }
 // entity 511
 {
 "classname" "item_armor_small"
-"origin" "1704 472 -16"
+"origin" "1696.000000 472.000000 -16.000000"
 }
 // entity 512
 {
 "classname" "item_armor_small"
-"origin" "1652.000000 516.000000 -16.000000"
+"origin" "1644.000000 516.000000 -16.000000"
 }
 // entity 513
 {
