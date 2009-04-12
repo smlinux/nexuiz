@@ -871,6 +871,46 @@ void GameCommand(string command)
 		return;
 	}
 
+	if(argv(0) == "tracebug")
+	{
+		print("TEST CASE. If this returns the runaway loop counter error, possibly everything is oaky.\n");
+		for(;;)
+		{
+			vector org, delta, start, end, p;
+
+			org = world.mins;
+			delta = world.maxs - world.mins;
+
+			start_x = org_x + random() * delta_x;
+			start_y = org_y + random() * delta_y;
+			start_z = org_z + random() * delta_z;
+
+			end_x = org_x + random() * delta_x;
+			end_y = org_y + random() * delta_y;
+			end_z = org_z + random() * delta_z;
+
+			start = stov(vtos(start));
+			end = stov(vtos(end));
+
+			tracebox(start, PL_MIN, PL_MAX, end, MOVE_NOMONSTERS, world);
+			if(!trace_startsolid)
+			{
+				p = trace_endpos;
+				tracebox(p, PL_MIN, PL_MAX, p, MOVE_NOMONSTERS, world);
+				if(trace_startsolid)
+				{
+					rint(42); // do an engine breakpoint on VM_rint so you can get the trace that errnoeously returns startsolid
+					tracebox(p, PL_MIN, PL_MAX, p, MOVE_NOMONSTERS, world);
+					tracebox(p, PL_MIN + '0.1 0.1 0.1', PL_MAX - '0.1 0.1 0.1', p, MOVE_NOMONSTERS, world);
+					if(trace_startsolid)
+						error(strcat("trace_endpos much in solid when tracing from ", vtos(start), " to ", vtos(end), " endpos ", vtos(trace_endpos), "\n"));
+					else
+						error(strcat("trace_endpos just in solid when tracing from ", vtos(start), " to ", vtos(end), " endpos ", vtos(trace_endpos), "\n"));
+				}
+			}
+		}
+	}
+
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");
 }
 
