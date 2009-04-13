@@ -132,8 +132,8 @@ void turret_mlrs_dinit()
 void spawnfunc_turret_mlrs()
 {
     //precache_model ( "models/turrets/rocket.md3");
-    //precache_model ("models/turrets/mlrs.md3");
-    //precache_model ("models/turrets/base.md3");
+    precache_model ("models/turrets/mlrs.md3");
+    precache_model ("models/turrets/base.md3");
 
     self.think = turret_mlrs_dinit;
     self.nextthink = time + 0.5;

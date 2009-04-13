@@ -367,10 +367,6 @@ void FireImoBeam (vector start,vector end,vector smin,vector smax,
 
 void turrets_precash()
 {
-    precache_model ("models/turrets/c512.md3");
-
-    precache_sound ("turrets/phaser.ogg");
-
     precache_model ("models/turrets/base-gib1.md3");
     precache_model ("models/turrets/base-gib2.md3");
     precache_model ("models/turrets/base-gib3.md3");
@@ -380,22 +376,31 @@ void turrets_precash()
     precache_model ("models/turrets/head-gib2.md3");
     precache_model ("models/turrets/head-gib3.md3");
     precache_model ("models/turrets/head-gib4.md3");
+    precache_model ("models/turrets/terrainbase.md3");
 
-    precache_model ("models/turrets/base.md3");
-    precache_model ("models/turrets/flac.md3");
-    precache_model ("models/turrets/pd_proj.md3");
-    precache_model ("models/turrets/reactor.md3");
-    precache_model ("models/turrets/mlrs_rocket.md3");
-    precache_model ("models/turrets/hellion.md3");
-    precache_model ("models/turrets/hunter2.md3");
-    precache_model ("models/turrets/hk.md3");
-    precache_model ("models/turrets/machinegun.md3");
-    precache_model ("models/turrets/rocket.md3");
-    precache_model ("models/turrets/mlrs.md3");
-    precache_model ("models/turrets/phaser.md3");
-    precache_model ("models/turrets/phaser_beam.md3");
-    precache_model ("models/turrets/plasmad.md3");
-    precache_model ("models/turrets/plasma.md3");
-    precache_model ("models/turrets/tesla_head.md3");
-    precache_model ("models/turrets/tesla_base.md3");
+    //precache_model ("models/turrets/base.md3");
+    //precache_model ("models/turrets/flac.md3");
+    //precache_model ("models/turrets/pd_proj.md3");
+    //precache_model ("models/turrets/reactor.md3");
+    //precache_model ("models/turrets/mlrs_rocket.md3");
+    //precache_model ("models/turrets/hellion.md3");
+    //precache_model ("models/turrets/hunter2.md3");
+    //precache_model ("models/turrets/hk.md3");
+    //precache_model ("models/turrets/machinegun.md3");
+    //precache_model ("models/turrets/rocket.md3");
+    //precache_model ("models/turrets/mlrs.md3");
+    //precache_model ("models/turrets/phaser.md3");
+    //precache_model ("models/turrets/phaser_beam.md3");
+    //precache_model ("models/turrets/plasmad.md3");
+    //precache_model ("models/turrets/plasma.md3");
+    //precache_model ("models/turrets/tesla_head.md3");
+    //precache_model ("models/turrets/tesla_base.md3");
+
+#if 0
+    precache_model ("models/turrets/c512.md3");
+    precache_model ("models/pathlib/goodsquare.md3");
+    precache_model ("models/pathlib/badsquare.md3");
+    precache_model ("models/pathlib/square.md3");
+    precache_model ("models/pathlib/edge.md3");
+#endif
 }

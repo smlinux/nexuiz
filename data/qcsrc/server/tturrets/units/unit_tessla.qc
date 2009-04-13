@@ -168,8 +168,8 @@ void turret_tesla_dinit()
 */
 void spawnfunc_turret_tesla()
 {
-    //precache_model ("models/turrets/tesla_head.md3");
-    //precache_model ("models/turrets/tesla_base.md3");
+    precache_model ("models/turrets/tesla_head.md3");
+    precache_model ("models/turrets/tesla_base.md3");
 
 
     self.think = turret_tesla_dinit;

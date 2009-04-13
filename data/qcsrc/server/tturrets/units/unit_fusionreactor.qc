@@ -75,8 +75,8 @@ void turret_fusionreactor_dinit()
 */
 void spawnfunc_turret_fusionreactor()
 {
-    //precache_model ("models/turrets/reactor.md3");
-    //precache_model ("models/turrets/base.md3");
+    precache_model ("models/turrets/reactor.md3");
+    precache_model ("models/turrets/base.md3");
 
     self.think = turret_fusionreactor_dinit;
     self.nextthink = time + 0.5;

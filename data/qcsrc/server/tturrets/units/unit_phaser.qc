@@ -138,10 +138,10 @@ void turret_phaser_dinit()
 */
 void spawnfunc_turret_phaser()
 {
-    //precache_sound ("turrets/phaser.ogg");
-    //precache_model ("models/turrets/phaser.md3");
-    //precache_model ("models/turrets/phaser_beam.md3");
-    //precache_model ("models/turrets/base.md3");
+    precache_sound ("turrets/phaser.ogg");
+    precache_model ("models/turrets/phaser.md3");
+    precache_model ("models/turrets/phaser_beam.md3");
+    precache_model ("models/turrets/base.md3");
 
     self.think = turret_phaser_dinit;
     self.nextthink = time + 0.5;

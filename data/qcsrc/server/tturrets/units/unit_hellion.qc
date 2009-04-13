@@ -212,8 +212,8 @@ void turret_hellion_dinit()
 void spawnfunc_turret_hellion()
 {
     //precache_model ( "models/turrets/mlrs_rocket.md3");
-    //precache_model ("models/turrets/hellion.md3");
-    //precache_model ("models/turrets/base.md3");
+    precache_model ("models/turrets/hellion.md3");
+    precache_model ("models/turrets/base.md3");
 
     self.think = turret_hellion_dinit;
     self.nextthink = time + 0.5;

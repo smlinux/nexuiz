@@ -470,8 +470,8 @@ hunter-killer missiles.
 void spawnfunc_turret_hk()
 {
     //precache_model ( "models/turrets/hunter2.md3");
-    //precache_model ("models/turrets/base.md3");
-    //precache_model ("models/turrets/hk.md3");
+    precache_model ("models/turrets/base.md3");
+    precache_model ("models/turrets/hk.md3");
 
     self.think = turret_hk_dinit;
     self.nextthink = time + 0.5;
