@@ -312,6 +312,10 @@ void _Movetype_Physics_Toss(float dt) // SV_Physics_Toss
 		// DP revision 8905 (just, WHY...)
 		if(self.move_movetype == MOVETYPE_BOUNCEMISSILE)
 			break;
+
+		// DP revision 8918 (WHY...)
+		if(self.move_flags & FL_ONGROUND)
+			break;
 	}
 
 	_Movetype_CheckWaterTransition();
