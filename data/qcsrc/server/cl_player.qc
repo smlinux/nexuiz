@@ -60,7 +60,7 @@ void CopyBody(float keepvelocity)
 	//self.weapon = oldself.weapon;
 	setorigin(self, oldself.origin);
 	setsize(self, oldself.mins, oldself.maxs);
-	self.oldorigin = oldself.origin;
+	self.prevorigin = oldself.origin;
 	self.reset = SUB_Remove;
 
 	Drag_MoveDrag(oldself, self);

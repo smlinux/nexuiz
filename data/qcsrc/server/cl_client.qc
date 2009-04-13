@@ -548,7 +548,7 @@ void PutObserverInServer (void)
 	self.view_ofs = PL_VIEW_OFS;
 	setorigin (self, spot.origin);
 	setsize (self, '0 0 0', '0 0 0');
-	self.oldorigin = self.origin;
+	self.prevorigin = self.origin;
 	self.items = 0;
 	self.weapons = 0;
 	self.model = "";
@@ -836,6 +836,7 @@ void PutClientInServer (void)
 		setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 24));
 		// don't reset back to last position, even if new position is stuck in solid
 		self.oldorigin = self.origin;
+		self.prevorigin = self.origin;
 
 		if(g_arena)
 		{
@@ -2318,7 +2319,7 @@ void PlayerPreThink (void)
 			vector dist;
 
 			// calculate player movement (in 2 dimensions only, so jumping on one spot doesn't count as movement)
-			dist = self.oldorigin - self.origin;
+			dist = self.prevorigin - self.origin;
 			dist_z = 0;
 			self.lms_traveled_distance += fabs(vlen(dist));
 
@@ -2343,7 +2344,7 @@ void PlayerPreThink (void)
 			}
 		}
 
-		self.oldorigin = self.origin;
+		self.prevorigin = self.origin;
 
 		if ((self.BUTTON_CROUCH && !self.hook.state) || self.health <= g_bloodloss)
 		{
