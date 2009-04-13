@@ -32,7 +32,8 @@ vector real_origin(entity ent);
 #define TSF_NO_AMMO_REGEN 4
 /// Dont break path to chase enemys. will still fire at them if possible.
 #define TSF_NO_PATHBREAK  8
-
+/// Dont respawn
+#define TSL_NO_RESPAWN    16
 
 /// target selection flags
 .float target_select_flags;

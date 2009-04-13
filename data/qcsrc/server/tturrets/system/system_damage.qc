@@ -35,7 +35,7 @@ void turret_trowgib(
     if (b_burn)
     {
         burn = spawn();
-        burn.effects        = EF_LOWPRECISION|EF_FLAME;
+        burn.effects        = EF_LOWPRECISION;//|EF_FLAME;
         setattachment(burn,gib,"");
         setorigin(burn,(gib.mins + gib.maxs) * 0.5);
         SUB_SetFade(burn,time + (f_lifetime * 0.5) ,2);
@@ -112,7 +112,7 @@ void turret_trowgib2(
     gib.avelocity          = randomvec() * 32;
     gib.think              = turret_gib_boom;
     gib.nextthink          = boomtime;
-    gib.effects            = EF_FLAME;
+    //gib.effects            = EF_FLAME;
 
 
 }
@@ -180,7 +180,7 @@ void turret_stdproc_die()
     }
 
 // Go boom
-    RadiusDamage (self,self, min(self.ammo,50),min(self.ammo,50) * 0.25,250,world,min(self.ammo,50)*5,DEATH_TURRET,world);
+    //RadiusDamage (self,self, min(self.ammo,50),min(self.ammo,50) * 0.25,250,world,min(self.ammo,50)*5,DEATH_TURRET,world);
 
     if(self.damage_flags & TFL_DMG_DEATH_NORESPAWN)
     {

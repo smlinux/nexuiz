@@ -863,12 +863,12 @@ float turret_stdproc_init (string cvar_base_name)
     if (self.spawnflags & TSF_TERRAINBASE)
     {
         entity tb;
-        precache_model("models/turrets/terrainbase.md3");
+        //precache_model("models/turrets/terrainbase.md3");
         tb = spawn();
         setmodel(tb,"models/turrets/terrainbase.md3");
         setorigin(tb,self.origin);
         tb.solid = SOLID_BBOX;
-        makestatic(tb);
+        //makestatic(tb);
     }
 
     self.cvar_basename = cvar_base_name;
@@ -1089,6 +1089,11 @@ float turret_stdproc_init (string cvar_base_name)
 
     if (!self.ammo_flags)
         self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE;
+
+// Damage stuff
+    if(self.spawnflags & TSL_NO_RESPAWN)
+        if not (self.damage_flags & TFL_DMG_DEATH_NORESPAWN)
+            self.damage_flags |= TFL_DMG_DEATH_NORESPAWN;
 
 // Offsets & origins
     if (!self.tur_shotorg)   self.tur_shotorg = '50 0 50';
