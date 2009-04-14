@@ -192,8 +192,6 @@ void drawNexuizPlayerModelSelector(entity me)
 void resizeNotifyNexuizPlayerModelSelector(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
 	resizeNotifyImage(me, relOrigin, relSize, absOrigin, absSize);
-	me.origin = absOrigin;
-	me.size = absSize;
 	me.realFontSize_y = me.fontSize / absSize_y;
 	me.realFontSize_x = me.fontSize / absSize_x;
 }

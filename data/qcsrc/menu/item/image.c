@@ -27,6 +27,7 @@ void drawImage(entity me)
 }
 void resizeNotifyImage(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
+	resizeNotifyItem(me, relOrigin, relSize, absOrigin, absSize);
 	if(me.forcedAspect == 0)
 	{
 		me.imgOrigin = '0 0 0';

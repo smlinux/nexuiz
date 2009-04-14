@@ -19,6 +19,7 @@ CLASS(Container) EXTENDS(Item)
 	METHOD(Container, itemFromPoint, entity(entity, vector))
 	METHOD(Container, showNotify, void(entity))
 	METHOD(Container, hideNotify, void(entity))
+	METHOD(Container, preferredFocusedGrandChild, entity(entity))
 	ATTRIB(Container, focusable, float, 0)
 	ATTRIB(Container, firstChild, entity, NULL)
 	ATTRIB(Container, lastChild, entity, NULL)
@@ -338,5 +339,29 @@ void moveItemAfterContainer(entity me, entity other, entity dest)
 		other.nextSibling.prevSibling = other;
 	else
 		me.lastChild = other;
+}
+
+entity preferredFocusedGrandChildContainer(entity me)
+{
+	entity e, e2;
+	entity best;
+
+	best = NULL;
+
+	for(e = me.firstChild; e; e = e.nextSibling)
+	{
+		if(e.instanceOfContainer)
+		{
+			e2 = e.preferredFocusedGrandChild(e);
+			if(e2)
+				if(!best || best.preferredFocusPriority < e2.preferredFocusPriority)
+					best = e2;
+		}
+		if(e)
+			if(!best || best.preferredFocusPriority < e.preferredFocusPriority)
+				best = e;
+	}
+
+	return best;
 }
 #endif

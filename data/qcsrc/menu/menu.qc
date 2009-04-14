@@ -415,6 +415,13 @@ void() m_shutdown =
 	}
 };
 
+void m_focus_item_chain(entity outermost, entity innermost)
+{
+	if(innermost.parent != outermost)
+		m_focus_item_chain(outermost, innermost.parent);
+	innermost.parent.setFocus(innermost.parent, innermost);
+}
+
 void m_activate_window(entity wnd)
 {
 	entity par;
@@ -443,6 +450,19 @@ void m_activate_window(entity wnd)
 		// other containers
 		if(par.focused)
 			par.setFocus(par, wnd);
+	}
+
+	if(wnd.instanceOfContainer)
+	{
+		entity focus = wnd.preferredFocusedGrandChild(wnd);
+		if(focus)
+		{
+			menuMousePos = focus.origin + 0.5 * focus.size;
+			menuMousePos_x *= 1 / conwidth;
+			menuMousePos_y *= 1 / conheight;
+			if(wnd.focused) // why does this never happen?
+				m_focus_item_chain(wnd, focus);
+		}
 	}
 }
 

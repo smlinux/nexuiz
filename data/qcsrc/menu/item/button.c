@@ -42,8 +42,6 @@ void resizeNotifyButton(entity me, vector relOrigin, vector relSize, vector absO
 	else
 		me.keepspaceLeft = min(0.8, absSize_y / absSize_x);
 	resizeNotifyLabel(me, relOrigin, relSize, absOrigin, absSize);
-	me.origin = absOrigin;
-	me.size = absSize;
 }
 void configureButtonButton(entity me, string txt, float sz, string gfx)
 {

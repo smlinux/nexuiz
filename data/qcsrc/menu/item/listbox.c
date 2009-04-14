@@ -45,8 +45,7 @@ void setSelectedListBox(entity me, float i)
 }
 void resizeNotifyListBox(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
-	me.size = absSize;
-	me.origin = absOrigin;
+	resizeNotifyItem(me, relOrigin, relSize, absOrigin, absSize);
 	me.controlWidth = me.scrollbarWidth / absSize_x;
 }
 void configureListBoxListBox(entity me, float theScrollbarWidth, float theItemHeight)

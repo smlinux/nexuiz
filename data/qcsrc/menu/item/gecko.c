@@ -83,8 +83,7 @@ float mouseDragGecko(entity me, vector pos)
 
 void resizeNotifyGecko(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
-	me.origin = absOrigin;
-	me.size = absSize;
+	resizeNotifyItem(me, relOrigin, relSize, absOrigin, absSize);
 	gecko_resize( me.texturePath, absSize_x, absSize_y );
 	me.textureExtent = gecko_get_texture_extent( me.texturePath );
 }

@@ -81,7 +81,6 @@ void destroyNexuizDemoList(entity me)
 
 void resizeNotifyNexuizDemoList(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
-    me.origin = absOrigin;
     me.itemAbsSize = '0 0 0';
     resizeNotifyNexuizListBox(me, relOrigin, relSize, absOrigin, absSize);
 

@@ -97,8 +97,6 @@ void DialogCloseButton_Click(entity button, entity tab)
 
 void resizeNotifyModalController(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
-	me.origin = absOrigin;
-	me.size = absSize;
 	me.resizeNotifyLie(me, relOrigin, relSize, absOrigin, absSize, ModalController_initialOrigin, ModalController_initialSize);
 }
 

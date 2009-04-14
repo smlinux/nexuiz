@@ -18,6 +18,9 @@ CLASS(Item) EXTENDS(Object)
 	ATTRIB(Item, focused, float, 0)
 	ATTRIB(Item, focusable, float, 0)
 	ATTRIB(Item, parent, entity, NULL)
+	ATTRIB(Item, preferredFocusPriority, float, 0)
+	ATTRIB(Item, origin, vector, '0 0 0')
+	ATTRIB(Item, size, vector, '0 0 0')
 ENDCLASS(Item)
 #endif
 
@@ -36,6 +39,8 @@ void relinquishFocusItem(entity me)
 
 void resizeNotifyItem(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
+	me.origin = absOrigin;
+	me.size = absSize;
 }
 
 void drawItem(entity me)

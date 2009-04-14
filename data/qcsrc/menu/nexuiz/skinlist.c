@@ -134,7 +134,6 @@ void destroyNexuizSkinList(entity me)
 
 void resizeNotifyNexuizSkinList(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
-	me.origin = absOrigin;
 	me.itemAbsSize = '0 0 0';
 	resizeNotifyNexuizListBox(me, relOrigin, relSize, absOrigin, absSize);
 

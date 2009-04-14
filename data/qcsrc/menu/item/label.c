@@ -37,6 +37,7 @@ void setTextLabel(entity me, string txt)
 }
 void resizeNotifyLabel(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
+	resizeNotifyItem(me, relOrigin, relSize, absOrigin, absSize);
 	// absSize_y is height of label
 	me.realFontSize_y = me.fontSize / absSize_y;
 	me.realFontSize_x = me.fontSize / absSize_x;
