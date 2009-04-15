@@ -2,7 +2,7 @@
 // entity 0
 {
 "classname" "worldspawn"
-"meesage" "Basement by Zombie"
+"message" "Basement by Zombie"
 // brush 0
 {
 ( -128 192 8 ) ( -128 136 8 ) ( -128 136 0 ) evil2_basefloor/flr_tmtl_drk 0 16 0 0.5 0.5 0 0 0
