@@ -554,6 +554,8 @@ void spawnfunc_func_stardust() {
 	self.effects = EF_STARDUST;
 }
 
+.string bgmscript;
+.float bgmscriptdecay;
 float pointparticles_SendEntity(entity to, float fl)
 {
 	WriteByte(MSG_ENTITY, ENT_CLIENT_POINTPARTICLES);
@@ -602,7 +604,9 @@ float pointparticles_SendEntity(entity to, float fl)
 			WriteByte(MSG_ENTITY, floor(self.atten * 64));
 			WriteByte(MSG_ENTITY, floor(self.volume * 255));
 		}
-		WriteString(MSG_ENTITY, self.message);
+		WriteString(MSG_ENTITY, self.bgmscript);
+		if(self.bgmscript != "")
+			WriteByte(MSG_ENTITY, floor(self.bgmscriptdecay * 255));
 	}
 	return 1;
 }

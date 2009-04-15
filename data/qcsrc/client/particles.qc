@@ -49,7 +49,8 @@ float PointInBrush(entity brush, vector point)
 .float volume;
 .float absolute;
 .vector movedir; // trace direction
-.string message; // script stuff
+.string bgmscript;
+.float bgmscriptdecay;
 
 float pointparticles_scriptbuf;
 float pointparticles_scriptbufsize;
@@ -57,7 +58,7 @@ float pointparticles_scriptbufloaded;
 void PointparticlesScript_Init()
 {
 	string s;
-	float fh, i;
+	float fh;
 	pointparticles_scriptbuf = pointparticles_scriptbufsize = 0;
 	pointparticles_scriptbufloaded = 1;
 	s = strcat("maps/", mi_shortname, ".pp");
@@ -79,7 +80,7 @@ void PointparticlesScript_Init()
 .float scripttime;
 void PointparticlesScript_InitEntity(entity e)
 {
-	if(e.message != "")
+	if(e.bgmscript != "")
 	{
 		if(!pointparticles_scriptbufloaded)
 			PointparticlesScript_Init();
@@ -88,36 +89,33 @@ void PointparticlesScript_InitEntity(entity e)
 		float i;
 
 		e.scriptline0 = -1;
-		mychar = substring(e.message, 0, 1);
 		for(i = 0; i < pointparticles_scriptbufsize; ++i)
 		{
 			tokenize_sane(bufstr_get(pointparticles_scriptbuf, i));
-			if(argv(0) == mychar)
+			if(argv(0) == e.bgmscript)
 				break;
 		}
 		e.scriptline = e.scriptline0 = i;
 		if(i >= pointparticles_scriptbufsize)
 		{
 			print("func_pointparticles: script does not define ", mychar, "\n");
-			e.message = "";
+			e.bgmscript = "";
 		}
 	}
 }
 
 float PointparticlesScript(entity e)
 {
-	string l;
-	string mychar;
-	float mymult;
 	float t;
 
-	if(e.message == "")
+	if(e.bgmscript == "")
 		return 1;
+	
+	if(cvar("bgmvolume") <= 0)
+		return 0.5;
 
 	e.scriptstate = !!e.scriptstate; // turns 0 to 0 and 2 to 1
 
-	mychar = substring(e.message, 0, 1);
-	mymult = stof(substring(e.message, 1, -1));
 	t = gettime(GETTIME_CDTRACK);
 
 	tokenize_sane(bufstr_get(pointparticles_scriptbuf, e.scriptline));
@@ -128,7 +126,7 @@ float PointparticlesScript(entity e)
 		tokenize_sane(bufstr_get(pointparticles_scriptbuf, e.scriptline));
 	}
 
-	if(argv(0) != mychar)
+	if(argv(0) != e.bgmscript)
 	{
 		e.scriptstate = 0; // end of script, will revert to beginning later
 	}
@@ -142,10 +140,10 @@ float PointparticlesScript(entity e)
 
 	if(e.scriptstate)
 	{
-		if(mymult >= 1)
+		if(e.bgmscriptdecay >= 1)
 			return (e.scriptstate == 2);
 		else
-			return pow(0.5, (t - e.scripttime) * (mymult / (1 - mymult)));
+			return pow(0.5, (t - e.scripttime) * (e.bgmscriptdecay / (1 - e.bgmscriptdecay)));
 	}
 	else
 		return 0;
@@ -202,9 +200,9 @@ void Ent_PointParticles_Remove()
 	if(self.noise)
 		strunzone(self.noise);
 	self.noise = string_null;
-	if(self.message)
-		strunzone(self.message);
-	self.message = string_null;
+	if(self.bgmscript)
+		strunzone(self.bgmscript);
+	self.bgmscript = string_null;
 }
 
 void Ent_PointParticles()
@@ -257,9 +255,11 @@ void Ent_PointParticles()
 			self.atten = ReadByte() / 64.0;
 			self.volume = ReadByte() / 255.0;
 		}
-		if(self.message)
-			strunzone(self.message);
-		self.message = strzone(ReadString());
+		if(self.bgmscript)
+			strunzone(self.bgmscript);
+		self.bgmscript = strzone(ReadString());
+		if(self.bgmscript != "")
+			self.bgmscriptdecay = ReadByte() / 255.0;
 		PointparticlesScript_InitEntity(self);
 	}
 
