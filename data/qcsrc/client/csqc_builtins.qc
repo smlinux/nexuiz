@@ -279,3 +279,5 @@ float(entity ent) wasfreed = #353;
 entity(vector org, float rad) findradius = #22;
 
 string(float uselocaltime, string format, ...) strftime = #478;
+float(float timer) gettime = #519;
+#define GETTIME_CDTRACK 4

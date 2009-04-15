@@ -145,14 +145,14 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "reportcvar") { // old system
 		if(substring(argv(2), 0, 1) == "$") // undefined cvar: use the default value on the server then
 		{
-			s = strcat(substring(s, argv_start_index(0), argv_end_index(1)), " \"", cvar_defstring(argv(1)), "\"");
+			s = strcat(substring(s, argv_start_index(0), argv_end_index(1) - argv_start_index(0)), " \"", cvar_defstring(argv(1)), "\"");
 			tokens = tokenize_sane(s);
 		}
 		GetCvars(1);
 	} else if(argv(0) == "sentcvar") { // new system
 		if(tokens == 2) // undefined cvar: use the default value on the server then
 		{
-			s = strcat(substring(s, argv_start_index(0), argv_end_index(1)), " \"", cvar_defstring(argv(1)), "\"");
+			s = strcat(substring(s, argv_start_index(0), argv_end_index(1) - argv_start_index(0)), " \"", cvar_defstring(argv(1)), "\"");
 			tokens = tokenize_sane(s);
 		}
 		GetCvars(1);

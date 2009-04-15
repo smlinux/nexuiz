@@ -602,6 +602,7 @@ float pointparticles_SendEntity(entity to, float fl)
 			WriteByte(MSG_ENTITY, floor(self.atten * 64));
 			WriteByte(MSG_ENTITY, floor(self.volume * 255));
 		}
+		WriteString(MSG_ENTITY, self.message);
 	}
 	return 1;
 }

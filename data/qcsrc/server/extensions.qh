@@ -776,6 +776,14 @@ float(float tmr) gettime = #519;
 //description:
 //some timers to query...
 
+//DP_QC_GETTIME_CDTRACK
+//idea: div0
+//darkplaces implementation: div0
+//constant definitions:
+float GETTIME_CDTRACK = 4;
+//description:
+//returns the playing time of the current cdtrack when passed to gettime()
+
 //DP_QC_MINMAXBOUND
 //idea: LordHavoc
 //darkplaces implementation: LordHavoc
