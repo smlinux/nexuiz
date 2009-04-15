@@ -61,7 +61,7 @@ void PointparticlesScript_Init()
 	float fh;
 	pointparticles_scriptbuf = pointparticles_scriptbufsize = 0;
 	pointparticles_scriptbufloaded = 1;
-	s = strcat("maps/", mi_shortname, ".pp");
+	s = strcat("maps/", mi_shortname, ".bgs");
 	fh = fopen(s, FILE_READ);
 	if(fh < 0)
 		return;
