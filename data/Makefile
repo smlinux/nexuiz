@@ -3,6 +3,7 @@ PERL ?= perl
 PK3NAME ?= `date +../data%Y%m%d.pk3`
 ZIP ?= 7za a -tzip -mx=9
 ZIPEXCLUDE ?= -x\!*.pk3 -xr\!\.svn -x\!qcsrc
+DIFF ?= diff
 
 FTEQCCFLAGS ?= -Wall -Wno-mundane -O3 -Ono-c -Ono-cs -flo
 FTEQCCFLAGS_PROGS ?= 
@@ -20,7 +21,7 @@ all: qc
 .PHONY: update-cvarcount
 update-cvarcount:
 	[ "$(NEX_BUILDSYSTEM)" = "" ] || [ "$(NEX_BUILDSYSTEM)" = "1" ]
-	[ "$(NEX_BUILDSYSTEM)" != "" ] || { ! [ -f ../misc/netradiant-NexuizPack/nexuiz.game/data/entities.def ] || diff ../misc/netradiant-NexuizPack/nexuiz.game/data/entities.def scripts/entities.def || { echo entities.def mismatch, please merge ../misc/netradiant-NexuizPack/nexuiz.game/data/entities.def and scripts/entities.def; exit 1; }; }
+	[ "$(NEX_BUILDSYSTEM)" != "" ] || { ! [ -f ../misc/netradiant-NexuizPack/nexuiz.game/data/entities.def ] || $(DIFF) ../misc/netradiant-NexuizPack/nexuiz.game/data/entities.def scripts/entities.def || { echo entities.def mismatch, please merge ../misc/netradiant-NexuizPack/nexuiz.game/data/entities.def and scripts/entities.def; exit 1; }; }
 	[ "$(NEX_BUILDSYSTEM)" != "" ] || { DO_NOT_RUN_MAKE=1 sh update-cvarcount.sh; }
 
 .PHONY: qc

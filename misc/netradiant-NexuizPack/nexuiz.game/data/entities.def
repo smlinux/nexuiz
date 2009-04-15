@@ -73,7 +73,7 @@ health: (default 0) if set to any non-zero value, the button must take damage (a
 
 /*QUAKED func_door (0 .5 .8) ? START_OPEN - DOOR_DONT_LINK - - TOGGLE
 Normal sliding door entity. By default, the door will activate when player walks close to it or when damage is inflicted to it.
-If DOOR_DONT_LINK is not set, the door will be linked with all doors it touches.
+If DOOR_DONT_LINK is not set, the door will be linked with all doors it touches. Note however that for linked doors to work properly, it is necessary that ALL linked doors have SOME volume of common area (that is, there must be a point that is part of ALL doors).
 -------- KEYS --------
 message: is printed when the door is touched if it is a trigger door and it hasn't been fired yet, or death message if dmg is set
 message2: death message when someone gets pushed into this (default: "was thrown into a world of hurt by"). The # character is replaced by the attacker name if present (and it instead does not get appended to the end)
@@ -582,7 +582,7 @@ NOANGLE: Ignore angle attenuation.
 */
 
 /*QUAKED misc_laser (.5 .5 .5) (-8 -8 -8) (8 8 8) START_ON FINITE
-Laser beam emitter
+Laser beam emitter. Note that for the laser to be deadly, it has to start OUTSIDE the player's collision box. To ensure this, you may want to put this entity inside the walls (or directly on their surface), or cover it with a playerclip brush.
 -------- KEYS --------
 target: target_position the laser targets (may be another entity, preferably target_position, possibly controlled by misc_follow)
 mdl: name of particle effect for the beam end point (see effectinfo.txt; default is laser_deadly if dmg is set, and none if not)
