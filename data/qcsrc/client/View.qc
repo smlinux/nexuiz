@@ -199,6 +199,7 @@ float Sbar_WouldDrawScoreboard ();
 float zoomscript_caught;
 float view_set;
 float camera_mode;
+string NextFrameCommand;
 void CSQC_UpdateView(float w, float h)
 {
 	entity e;
@@ -472,6 +473,12 @@ void CSQC_UpdateView(float w, float h)
 
 			drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x) + '0 0.5 0' * (vid_conheight - wcross_size_y), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
 		}
+	}
+
+	if(NextFrameCommand)
+	{
+		localcmd("\n", NextFrameCommand, "\n");
+		NextFrameCommand = string_null;
 	}
 }
 
