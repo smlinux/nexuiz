@@ -1133,7 +1133,7 @@ cnt: weight of spawn point for random selection. Set to a lower value if you hav
 race_place: if target points to the trigger_race_checkpoint with cnt 0 (finish line), this sets which place the spawn corresponds to; the special value 0 stands for spawns for players who come in later (have to be behind the ones with race_place set to an actual place), and -1 marks the spawnpoint for qualifying mode only
 */
 
-/*QUAKED func_pointparticles (.5 .5 .5) ? START_ON
+/*QUAKED func_pointparticles (.5 .5 .5) ? START_ON IMPULSE
 A brush that emits particles.
 -------- KEYS --------
 mdl: particle effect name from effectinfo.txt
@@ -1142,15 +1142,15 @@ velocity: particle direction and speed
 waterlevel: extra velocity jitter amount
 count: particle count multiplier (per spawned particle)
 movedir: when set, trace direction (particles will then be emitted from the surface the trace hits); the length of the vector is used as strength of taking the normal of the trace into account
-glow_color: particle palette color
 noise: sound to play when the particle is emitted
 atten: distance attenuation of the sound (a value from 0.1 to 3.9), default is 0.5; set to -1 for no attenuation (global sound)
 volume: volume of the sound
 targetname: name to target this (then its state is toggled)
 bgmscript: emitter class from the BGM script
-bgmscriptdecay: how fast the effect strength decays while it is active (0 = not at all, 1 = immediately, values in between are supported)
+bgmscriptdecay: half-life of the effect strength
 -------- SPAWNFLAGS --------
 START_ON: when targeted, the particle emitter will start switched on
+IMPULSE: only send the full amount of impulse particles when the entity is triggered
 -------- NOTES --------
 Use trigger_monoflop if you want the particles to turn off for a while, then turn back on.
 A BGM script is a .bgs file named like the map, in the maps directory. Its format is lines of the form

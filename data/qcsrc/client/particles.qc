@@ -144,12 +144,7 @@ float PointparticlesScript(entity e)
 	}
 
 	if(e.scriptstate)
-	{
-		if(e.bgmscriptdecay >= 1)
-			return e.just_toggled;
-		else
-			return pow(0.5, (t - e.scripttime) * (e.bgmscriptdecay / (1 - e.bgmscriptdecay))) * e.scriptvelocity;
-	}
+		return pow(0.5, (t - e.scripttime) * e.bgmscriptdecay) * e.scriptvelocity;
 	else
 		return 0;
 }
