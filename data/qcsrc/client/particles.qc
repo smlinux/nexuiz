@@ -229,7 +229,7 @@ void Ent_PointParticles()
 	if(f & 2)
 	{
 		i = ReadCoord(); // density (<0: point, >0: volume)
-		if(i && !self.impulse)
+		if(i && !self.impulse && self.cnt) // self.cnt check is so it only happens if the ent already existed
 			self.just_toggled = 1;
 		self.impulse = i;
 	}

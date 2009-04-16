@@ -562,7 +562,7 @@ float pointparticles_SendEntity(entity to, float fl)
 
 	// optional features to save space
 	fl = fl & 0x0F;
-	if(self.spawnflags & 1)
+	if(self.spawnflags & 2)
 		fl |= 0x10; // absolute count on toggle-on
 	if(self.movedir != '0 0 0' || self.velocity != '0 0 0')
 		fl |= 0x20; // 4 bytes - saves CPU
