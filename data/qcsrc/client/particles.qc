@@ -76,7 +76,6 @@ void PointparticlesScript_Init()
 
 .float scriptline;
 .float scriptline0;
-.float scriptstate;
 .float scriptvelocity;
 .float scripttime;
 .float switchedon;
@@ -124,30 +123,38 @@ float PointparticlesScript(entity e)
 	if(t < e.scripttime)
 	{
 		e.scriptline = e.scriptline0;
-		e.scriptstate = 0;
+		e.scripttime = 0;
 		tokenize_sane(bufstr_get(pointparticles_scriptbuf, e.scriptline));
 	}
 
 	if(argv(0) != e.bgmscript)
 	{
-		e.scriptstate = 0; // end of script, will revert to beginning later
+		// end of script, will revert to beginning later
 	}
 	else if(t >= stof(argv(1)))
 	{
 		// time code reached!
 		e.scriptvelocity = stof(argv(2));
 		if(e.scriptvelocity > 0)
+		{
 			e.switchedon = TRUE;
-		e.scripttime = stof(argv(1));
+			e.scripttime = stof(argv(1));
+		}
+		else
+			e.scripttime = 0;
 		e.scriptline += 1;
 	}
 
-	if(e.scriptstate)
+	if(e.scripttime)
 	{
 		if(e.bgmscriptdecay >= 1)
-			return (e.scriptstate == 2);
+		{
+			return e.switchedon;
+		}
 		else
+		{
 			return pow(0.5, (t - e.scripttime) * (e.bgmscriptdecay / (1 - e.bgmscriptdecay))) * e.scriptvelocity;
+		}
 	}
 	else
 		return 0;
@@ -272,7 +279,8 @@ void Ent_PointParticles()
 		}
 		else
 		{
-			self.waterlevel = self.count = self.glow_color = 0;
+			self.waterlevel = self.glow_color = 0;
+			self.count = 1;
 		}
 		if(self.noise)
 			strunzone(self.noise);

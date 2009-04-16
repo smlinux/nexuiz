@@ -566,7 +566,7 @@ float pointparticles_SendEntity(entity to, float fl)
 		fl |= 0x10; // 2 bytes
 	if(self.movedir != '0 0 0' || self.velocity != '0 0 0')
 		fl |= 0x20; // 4 bytes - saves CPU
-	if(self.glow_color || self.waterlevel || self.glow_color)
+	if(self.glow_color || self.waterlevel || self.count != 1)
 		fl |= 0x40; // 4 bytes - obscure features almost never used
 	if(self.mins != '0 0 0' || self.maxs != '0 0 0')
 		fl |= 0x80; // 14 bytes - saves lots of space
@@ -675,6 +675,8 @@ void spawnfunc_func_pointparticles()
 		self.atten = 0;
 	if(!self.volume)
 		self.volume = 1;
+	if(!self.count)
+		self.count = 1;
 
 	if(!self.modelindex)
 	{
