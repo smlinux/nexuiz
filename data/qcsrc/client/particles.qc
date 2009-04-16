@@ -77,6 +77,7 @@ void PointparticlesScript_Init()
 .float scriptline;
 .float scriptline0;
 .float scriptstate;
+.float scriptvelocity;
 .float scripttime;
 void PointparticlesScript_InitEntity(entity e)
 {
@@ -133,7 +134,8 @@ float PointparticlesScript(entity e)
 	else if(t >= stof(argv(1)))
 	{
 		// time code reached!
-		e.scriptstate = stof(argv(2)) * 2; // 0 = off, 2 = on
+		e.scriptvelocity = stof(argv(2));
+		e.scriptstate = (e.scriptvelocity > 0) ? 2 : 0;
 		e.scripttime = stof(argv(1));
 		e.scriptline += 1;
 	}
@@ -143,7 +145,7 @@ float PointparticlesScript(entity e)
 		if(e.bgmscriptdecay >= 1)
 			return (e.scriptstate == 2);
 		else
-			return pow(0.5, (t - e.scripttime) * (e.bgmscriptdecay / (1 - e.bgmscriptdecay)));
+			return pow(0.5, (t - e.scripttime) * (e.bgmscriptdecay / (1 - e.bgmscriptdecay))) * e.scriptvelocity;
 	}
 	else
 		return 0;

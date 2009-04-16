@@ -1154,7 +1154,7 @@ START_ON: when targeted, the particle emitter will start switched on
 -------- NOTES --------
 Use trigger_monoflop if you want the particles to turn off for a while, then turn back on.
 A BGM script is a .bgs file named like the map, in the maps directory. Its format is lines of the form
-  <emitter class> <time since start of background music> <0 if the emitters are to be switched off, 1 if they are to be switched on>
+  <emitter class> <time since start of background music> <0 if the emitters are to be switched off, >0 and <=1 if they are to be switched on>
 e.g.
   smokers 4.7 1
   smokers 4.9 0

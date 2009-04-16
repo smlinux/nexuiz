@@ -1147,10 +1147,18 @@ noise: sound to play when the particle is emitted
 atten: distance attenuation of the sound (a value from 0.1 to 3.9), default is 0.5; set to -1 for no attenuation (global sound)
 volume: volume of the sound
 targetname: name to target this (then its state is toggled)
+bgmscript: emitter class from the BGM script
+bgmscriptdecay: how fast the effect strength decays while it is active (0 = not at all, 1 = immediately, values in between are supported)
 -------- SPAWNFLAGS --------
 START_ON: when targeted, the particle emitter will start switched on
 -------- NOTES --------
-Use trigger_monoflop if you want the particles to turn off for a while, then turn back on
+Use trigger_monoflop if you want the particles to turn off for a while, then turn back on.
+A BGM script is a .bgs file named like the map, in the maps directory. Its format is lines of the form
+  <emitter class> <time since start of background music> <0 if the emitters are to be switched off, >0 and <=1 if they are to be switched on>
+e.g.
+  smokers 4.7 1
+  smokers 4.9 0
+The lines MUST be sorted by emitter class as primary key, and by the time since start of the BGM as secondary key.
 */
 
 /*QUAKED trigger_flipflop (.5 .5 .5) (-8 -8 -8) (8 8 8) START_ON
