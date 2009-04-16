@@ -45,7 +45,7 @@ for(sort { $a->[0] cmp $b->[0] or $a->[1] <=> $b->[1] } @script)
 }
 
 __DATA__
-time           1.957
+time           0.200
 bpm            254
 pattern        aaa_____aaa_____
 range          0 32
