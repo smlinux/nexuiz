@@ -79,6 +79,7 @@ void PointparticlesScript_Init()
 .float scriptstate;
 .float scriptvelocity;
 .float scripttime;
+.float switchedon;
 void PointparticlesScript_InitEntity(entity e)
 {
 	if(e.bgmscript != "")
@@ -115,7 +116,7 @@ float PointparticlesScript(entity e)
 	if(cvar("bgmvolume") <= 0)
 		return 0.5;
 
-	e.scriptstate = !!e.scriptstate; // turns 0 to 0 and 2 to 1
+	e.switchedon = FALSE;
 
 	t = gettime(GETTIME_CDTRACK);
 
@@ -135,7 +136,8 @@ float PointparticlesScript(entity e)
 	{
 		// time code reached!
 		e.scriptvelocity = stof(argv(2));
-		e.scriptstate = (e.scriptvelocity > 0) ? 2 : 0;
+		if(e.scriptvelocity > 0)
+			e.switchedon = TRUE;
 		e.scripttime = stof(argv(1));
 		e.scriptline += 1;
 	}
@@ -153,7 +155,7 @@ float PointparticlesScript(entity e)
 
 void Draw_PointParticles()
 {
-	float n, i, fail, force;
+	float n, i, fail;
 	vector p;
 	vector sz;
 	vector o;
@@ -164,8 +166,7 @@ void Draw_PointParticles()
 	if(n == 0)
 		return;
 	fail = 0;
-	force = (self.scriptstate == 2);
-	for(i = random(); (force || i <= n) && fail <= 64*n; ++i)
+	for(i = random(); (self.switchedon || i <= n) && fail <= 64*n; ++i)
 	{
 		p = o + self.mins;
 		p_x += random() * sz_x;
@@ -186,7 +187,7 @@ void Draw_PointParticles()
 				self.origin = p;
 				sound(self, CHAN_AUTO, self.noise, VOL_BASE * self.volume, self.atten);
 			}
-			force = 0;
+			self.switchedon = 0;
 		}
 		else if(self.absolute)
 		{
@@ -209,12 +210,15 @@ void Ent_PointParticles_Remove()
 
 void Ent_PointParticles()
 {
-	float f;
+	float f, i;
 	vector v;
 	f = ReadByte();
 	if(f & 2)
 	{
-		self.impulse = ReadCoord(); // density (<0: point, >0: volume)
+		i = ReadCoord(); // density (<0: point, >0: volume)
+		if(i && !self.impulse)
+			self.switchedon = 1;
+		self.impulse = i;
 	}
 	if(f & 4)
 	{
@@ -225,44 +229,72 @@ void Ent_PointParticles()
 	if(f & 1)
 	{
 		self.modelindex = ReadShort();
-		if(self.modelindex)
+		if(f & 0x80)
 		{
-			self.mins_x = ReadCoord();
-			self.mins_y = ReadCoord();
-			self.mins_z = ReadCoord();
-			self.maxs_x = ReadCoord();
-			self.maxs_y = ReadCoord();
-			self.maxs_z = ReadCoord();
+			if(self.modelindex)
+			{
+				self.mins_x = ReadCoord();
+				self.mins_y = ReadCoord();
+				self.mins_z = ReadCoord();
+				self.maxs_x = ReadCoord();
+				self.maxs_y = ReadCoord();
+				self.maxs_z = ReadCoord();
+			}
+			else
+			{
+				self.mins    = '0 0 0';
+				self.maxs_x = ReadCoord();
+				self.maxs_y = ReadCoord();
+				self.maxs_z = ReadCoord();
+			}
 		}
 		else
 		{
-			self.mins    = '0 0 0';
-			self.maxs_x = ReadCoord();
-			self.maxs_y = ReadCoord();
-			self.maxs_z = ReadCoord();
+			self.mins = self.maxs = '0 0 0';
 		}
 
 		self.cnt = ReadShort(); // effect number
 
-		self.velocity = decompressShortVector(ReadShort());
-		self.movedir = decompressShortVector(ReadShort());
-		self.waterlevel = ReadCoord();
-		self.count = ReadCoord();
-		self.glow_color = ReadByte();
+		if(f & 0x20)
+		{
+			self.velocity = decompressShortVector(ReadShort());
+			self.movedir = decompressShortVector(ReadShort());
+		}
+		else
+		{
+			self.velocity = self.movedir = '0 0 0';
+		}
+		if(f & 0x40)
+		{
+			self.waterlevel = ReadShort() / 16.0;
+			self.count = ReadByte() / 16.0;
+			self.glow_color = ReadByte();
+		}
+		else
+		{
+			self.waterlevel = self.count = self.glow_color = 0;
+		}
 		if(self.noise)
 			strunzone(self.noise);
-		self.noise = strzone(ReadString());
-		if(self.noise != "")
-		{
-			self.atten = ReadByte() / 64.0;
-			self.volume = ReadByte() / 255.0;
-		}
 		if(self.bgmscript)
 			strunzone(self.bgmscript);
-		self.bgmscript = strzone(ReadString());
-		if(self.bgmscript != "")
-			self.bgmscriptdecay = ReadByte() / 255.0;
-		PointparticlesScript_InitEntity(self);
+		if(f & 0x10)
+		{
+			self.noise = strzone(ReadString());
+			if(self.noise != "")
+			{
+				self.atten = ReadByte() / 64.0;
+				self.volume = ReadByte() / 255.0;
+			}
+			self.bgmscript = strzone(ReadString());
+			if(self.bgmscript != "")
+				self.bgmscriptdecay = ReadByte() / 255.0;
+			PointparticlesScript_InitEntity(self);
+		}
+		else
+		{
+			self.noise = self.bgmscript = string_null;
+		}
 	}
 
 	if(f & 2)

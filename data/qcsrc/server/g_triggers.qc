@@ -559,6 +559,18 @@ void spawnfunc_func_stardust() {
 float pointparticles_SendEntity(entity to, float fl)
 {
 	WriteByte(MSG_ENTITY, ENT_CLIENT_POINTPARTICLES);
+
+	// optional features to save space
+	fl = fl & 0x0F;
+	if(self.noise || self.bgmscript)
+		fl |= 0x10; // 2 bytes
+	if(self.movedir != '0 0 0' || self.velocity != '0 0 0')
+		fl |= 0x20; // 4 bytes - saves CPU
+	if(self.glow_color || self.waterlevel || self.glow_color)
+		fl |= 0x40; // 4 bytes - obscure features almost never used
+	if(self.mins != '0 0 0' || self.maxs != '0 0 0')
+		fl |= 0x80; // 14 bytes - saves lots of space
+
 	WriteByte(MSG_ENTITY, fl);
 	if(fl & 2)
 	{
@@ -578,35 +590,50 @@ float pointparticles_SendEntity(entity to, float fl)
 		if(self.model != "null")
 		{
 			WriteShort(MSG_ENTITY, self.modelindex);
-			WriteCoord(MSG_ENTITY, self.mins_x);
-			WriteCoord(MSG_ENTITY, self.mins_y);
-			WriteCoord(MSG_ENTITY, self.mins_z);
-			WriteCoord(MSG_ENTITY, self.maxs_x);
-			WriteCoord(MSG_ENTITY, self.maxs_y);
-			WriteCoord(MSG_ENTITY, self.maxs_z);
+			if(fl & 0x80)
+			{
+				WriteCoord(MSG_ENTITY, self.mins_x);
+				WriteCoord(MSG_ENTITY, self.mins_y);
+				WriteCoord(MSG_ENTITY, self.mins_z);
+				WriteCoord(MSG_ENTITY, self.maxs_x);
+				WriteCoord(MSG_ENTITY, self.maxs_y);
+				WriteCoord(MSG_ENTITY, self.maxs_z);
+			}
 		}
 		else
 		{
 			WriteShort(MSG_ENTITY, 0);
-			WriteCoord(MSG_ENTITY, self.maxs_x);
-			WriteCoord(MSG_ENTITY, self.maxs_y);
-			WriteCoord(MSG_ENTITY, self.maxs_z);
+			if(fl & 0x80)
+			{
+				WriteCoord(MSG_ENTITY, self.maxs_x);
+				WriteCoord(MSG_ENTITY, self.maxs_y);
+				WriteCoord(MSG_ENTITY, self.maxs_z);
+			}
 		}
 		WriteShort(MSG_ENTITY, self.cnt);
-		WriteShort(MSG_ENTITY, compressShortVector(self.velocity));
-		WriteShort(MSG_ENTITY, compressShortVector(self.movedir));
-		WriteCoord(MSG_ENTITY, self.waterlevel);
-		WriteCoord(MSG_ENTITY, self.count);
-		WriteByte(MSG_ENTITY, self.glow_color);
-		WriteString(MSG_ENTITY, self.noise);
-		if(self.noise != "")
+		if(fl & 0x20)
 		{
-			WriteByte(MSG_ENTITY, floor(self.atten * 64));
-			WriteByte(MSG_ENTITY, floor(self.volume * 255));
+			WriteShort(MSG_ENTITY, compressShortVector(self.velocity));
+			WriteShort(MSG_ENTITY, compressShortVector(self.movedir));
 		}
-		WriteString(MSG_ENTITY, self.bgmscript);
-		if(self.bgmscript != "")
-			WriteByte(MSG_ENTITY, floor(self.bgmscriptdecay * 255));
+		if(fl & 0x40)
+		{
+			WriteShort(MSG_ENTITY, self.waterlevel * 16.0);
+			WriteByte(MSG_ENTITY, self.count * 16.0);
+			WriteByte(MSG_ENTITY, self.glow_color);
+		}
+		if(fl & 0x10)
+		{
+			WriteString(MSG_ENTITY, self.noise);
+			if(self.noise != "")
+			{
+				WriteByte(MSG_ENTITY, floor(self.atten * 64));
+				WriteByte(MSG_ENTITY, floor(self.volume * 255));
+			}
+			WriteString(MSG_ENTITY, self.bgmscript);
+			if(self.bgmscript != "")
+				WriteByte(MSG_ENTITY, floor(self.bgmscriptdecay * 255));
+		}
 	}
 	return 1;
 }
