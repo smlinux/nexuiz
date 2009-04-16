@@ -78,7 +78,8 @@ void PointparticlesScript_Init()
 .float scriptline0;
 .float scriptvelocity;
 .float scripttime;
-.float switchedon;
+.float scriptstate;
+.float just_toggled;
 void PointparticlesScript_InitEntity(entity e)
 {
 	if(e.bgmscript != "")
@@ -115,7 +116,7 @@ float PointparticlesScript(entity e)
 	if(cvar("bgmvolume") <= 0)
 		return 0.5;
 
-	e.switchedon = FALSE;
+	e.just_toggled = FALSE;
 
 	t = gettime(GETTIME_CDTRACK);
 
@@ -136,25 +137,19 @@ float PointparticlesScript(entity e)
 		// time code reached!
 		e.scriptvelocity = stof(argv(2));
 		if(e.scriptvelocity > 0)
-		{
-			e.switchedon = TRUE;
-			e.scripttime = stof(argv(1));
-		}
+			e.just_toggled = e.scriptstate = TRUE;
 		else
-			e.scripttime = 0;
+			e.just_toggled = e.scriptstate = FALSE;
 		e.scriptline += 1;
+		e.scripttime = stof(argv(1));
 	}
 
-	if(e.scripttime)
+	if(e.scriptstate)
 	{
 		if(e.bgmscriptdecay >= 1)
-		{
-			return e.switchedon;
-		}
+			return e.just_toggled;
 		else
-		{
 			return pow(0.5, (t - e.scripttime) * (e.bgmscriptdecay / (1 - e.bgmscriptdecay))) * e.scriptvelocity;
-		}
 	}
 	else
 		return 0;
@@ -173,7 +168,7 @@ void Draw_PointParticles()
 	if(n == 0)
 		return;
 	fail = 0;
-	for(i = random(); (self.switchedon || i <= n) && fail <= 64*n; ++i)
+	for(i = random(); (self.just_toggled || i <= n) && fail <= 64*n; ++i)
 	{
 		p = o + self.mins;
 		p_x += random() * sz_x;
@@ -194,7 +189,7 @@ void Draw_PointParticles()
 				self.origin = p;
 				sound(self, CHAN_AUTO, self.noise, VOL_BASE * self.volume, self.atten);
 			}
-			self.switchedon = 0;
+			self.just_toggled = 0;
 		}
 		else if(self.absolute)
 		{
@@ -224,7 +219,7 @@ void Ent_PointParticles()
 	{
 		i = ReadCoord(); // density (<0: point, >0: volume)
 		if(i && !self.impulse)
-			self.switchedon = 1;
+			self.just_toggled = 1;
 		self.impulse = i;
 	}
 	if(f & 4)
