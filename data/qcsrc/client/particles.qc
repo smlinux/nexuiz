@@ -113,7 +113,7 @@ float PointparticlesScript(entity e)
 		return 1;
 	
 	if(cvar("bgmvolume") <= 0)
-		return 0.5;
+		return -1;
 
 	e.just_toggled = FALSE;
 
@@ -160,7 +160,10 @@ void Draw_PointParticles()
 	n = PointparticlesScript(self);
 	if(self.absolute == 2)
 	{
-		n = self.just_toggled ? self.impulse : 0;
+		if(n >= 0)
+			n = self.just_toggled ? self.impulse : 0;
+		else
+			n = self.impulse * drawframetime;
 	}
 	else
 	{

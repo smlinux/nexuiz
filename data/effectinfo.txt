@@ -2748,7 +2748,6 @@ airfriction 3
 //steam, it needs direction
 // used nowhere in code
 effect steam
-effect steam
 type smoke
 count 2
 tex 0 8
@@ -3192,3 +3191,20 @@ alpha 256 256 2560
 size 3 3
 stretchfactor 0.6
 velocitymultiplier 0.7
+
+// smoke emitter for small pipes
+// used nowhere in code
+effect smoking_smallemitter
+count 20
+type alphastatic
+tex 0 8
+color 0x292929 0x000000
+size 6 15
+sizeincrease 20
+alpha 200 256 100
+gravity -0.1
+bounce 0
+originjitter 10 10 10
+velocityjitter 5 5 20
+//velocitymultiplier -20
+airfriction -1
