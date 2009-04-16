@@ -42,12 +42,11 @@ float PointInBrush(entity brush, vector point)
 .vector velocity; // particle velocity
 .float waterlevel; // direction jitter
 .float count; // count multiplier
-.float glow_color; // palette color
 .float impulse; // density
 .string noise; // sound
 .float atten;
 .float volume;
-.float absolute;
+.float absolute; // 1 = count per second is absolute, 2 = only spawn at toggle
 .vector movedir; // trace direction
 .string bgmscript;
 .float bgmscriptdecay;
@@ -163,12 +162,22 @@ void Draw_PointParticles()
 	vector o;
 	o = self.origin;
 	sz = self.maxs - self.mins;
-	n = self.impulse * drawframetime;
-	n *= PointparticlesScript(self);
+	n = PointparticlesScript(self);
+	if(self.absolute == 2)
+	{
+		n = self.just_toggled ? self.impulse : 0;
+	}
+	else
+	{
+		n *= self.impulse * drawframetime;
+		if(self.just_toggled)
+			if(n < 1)
+				n = 1;
+	}
 	if(n == 0)
 		return;
 	fail = 0;
-	for(i = random(); (self.just_toggled || i <= n) && fail <= 64*n; ++i)
+	for(i = random(); i <= n && fail <= 64*n; ++i)
 	{
 		p = o + self.mins;
 		p_x += random() * sz_x;
@@ -180,10 +189,12 @@ void Draw_PointParticles()
 			{
 				traceline(p, p + normalize(self.movedir) * 4096, 0, world);
 				p = trace_endpos;
-				pointparticles(self.cnt, p, trace_plane_normal * vlen(self.movedir) + self.velocity + randomvec() * self.waterlevel, self.count, self.glow_color);
+				pointparticles(self.cnt, p, trace_plane_normal * vlen(self.movedir) + self.velocity + randomvec() * self.waterlevel, self.count);
 			}
 			else
-				pointparticles(self.cnt, p, self.velocity + randomvec() * self.waterlevel, self.count, self.glow_color);
+			{
+				pointparticles(self.cnt, p, self.velocity + randomvec() * self.waterlevel, self.count);
+			}
 			if(self.noise != "")
 			{
 				self.origin = p;
@@ -270,34 +281,26 @@ void Ent_PointParticles()
 		{
 			self.waterlevel = ReadShort() / 16.0;
 			self.count = ReadByte() / 16.0;
-			self.glow_color = ReadByte();
 		}
 		else
 		{
-			self.waterlevel = self.glow_color = 0;
+			self.waterlevel = 0;
 			self.count = 1;
 		}
 		if(self.noise)
 			strunzone(self.noise);
 		if(self.bgmscript)
 			strunzone(self.bgmscript);
-		if(f & 0x10)
+		self.noise = strzone(ReadString());
+		if(self.noise != "")
 		{
-			self.noise = strzone(ReadString());
-			if(self.noise != "")
-			{
-				self.atten = ReadByte() / 64.0;
-				self.volume = ReadByte() / 255.0;
-			}
-			self.bgmscript = strzone(ReadString());
-			if(self.bgmscript != "")
-				self.bgmscriptdecay = ReadByte() / 255.0;
-			PointparticlesScript_InitEntity(self);
+			self.atten = ReadByte() / 64.0;
+			self.volume = ReadByte() / 255.0;
 		}
-		else
-		{
-			self.noise = self.bgmscript = string_null;
-		}
+		self.bgmscript = strzone(ReadString());
+		if(self.bgmscript != "")
+			self.bgmscriptdecay = ReadByte() / 255.0;
+		PointparticlesScript_InitEntity(self);
 	}
 
 	if(f & 2)
@@ -310,6 +313,9 @@ void Ent_PointParticles()
 		}
 	}
 
+	if(f & 0x10)
+		self.absolute = 2;
+
 	setorigin(self, self.origin);
 	setsize(self, self.mins, self.maxs);
 	self.solid = SOLID_NOT;
@@ -317,6 +323,7 @@ void Ent_PointParticles()
 	self.entremove = Ent_PointParticles_Remove;
 }
 
+.float glow_color; // palette index
 void Draw_Rain()
 {
     te_particlerain(self.origin + self.mins, self.origin + self.maxs, self.velocity, self.count * drawframetime, self.glow_color);

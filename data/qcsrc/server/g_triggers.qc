@@ -562,11 +562,11 @@ float pointparticles_SendEntity(entity to, float fl)
 
 	// optional features to save space
 	fl = fl & 0x0F;
-	if(self.noise || self.bgmscript)
-		fl |= 0x10; // 2 bytes
+	if(self.spawnflags & 1)
+		fl |= 0x10; // absolute count on toggle-on
 	if(self.movedir != '0 0 0' || self.velocity != '0 0 0')
 		fl |= 0x20; // 4 bytes - saves CPU
-	if(self.glow_color || self.waterlevel || self.count != 1)
+	if(self.waterlevel || self.count != 1)
 		fl |= 0x40; // 4 bytes - obscure features almost never used
 	if(self.mins != '0 0 0' || self.maxs != '0 0 0')
 		fl |= 0x80; // 14 bytes - saves lots of space
@@ -620,20 +620,16 @@ float pointparticles_SendEntity(entity to, float fl)
 		{
 			WriteShort(MSG_ENTITY, self.waterlevel * 16.0);
 			WriteByte(MSG_ENTITY, self.count * 16.0);
-			WriteByte(MSG_ENTITY, self.glow_color);
 		}
-		if(fl & 0x10)
+		WriteString(MSG_ENTITY, self.noise);
+		if(self.noise != "")
 		{
-			WriteString(MSG_ENTITY, self.noise);
-			if(self.noise != "")
-			{
-				WriteByte(MSG_ENTITY, floor(self.atten * 64));
-				WriteByte(MSG_ENTITY, floor(self.volume * 255));
-			}
-			WriteString(MSG_ENTITY, self.bgmscript);
-			if(self.bgmscript != "")
-				WriteByte(MSG_ENTITY, floor(self.bgmscriptdecay * 255));
+			WriteByte(MSG_ENTITY, floor(self.atten * 64));
+			WriteByte(MSG_ENTITY, floor(self.volume * 255));
 		}
+		WriteString(MSG_ENTITY, self.bgmscript);
+		if(self.bgmscript != "")
+			WriteByte(MSG_ENTITY, floor(self.bgmscriptdecay * 255));
 	}
 	return 1;
 }
@@ -677,6 +673,8 @@ void spawnfunc_func_pointparticles()
 		self.volume = 1;
 	if(!self.count)
 		self.count = 1;
+	if(!self.impulse)
+		self.impulse = 1;
 
 	if(!self.modelindex)
 	{
