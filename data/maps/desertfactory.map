@@ -11477,9 +11477,11 @@
 // entity 456
 {
 "classname" "func_pointparticles"
-"impulse" "4"
-"count" "1"
-"mdl" "smoking"
+"impulse" "1"
+"count" "5"
+"mdl" "smoking_smallemitter"
+"bgmscript" "c"
+"spawnflags" "2"
 // brush 0
 {
 ( 249 820 360 ) ( 249 788 360 ) ( 217 820 360 ) common/trigger 0 0 0 0.25 0.25 134217728 0 0
@@ -11493,9 +11495,11 @@
 // entity 457
 {
 "classname" "func_pointparticles"
-"impulse" "4"
-"count" "1"
+"impulse" "1"
+"count" "3"
 "mdl" "smoke_ring"
+"bgmscript" "a"
+"spawnflags" "2"
 // brush 0
 {
 ( 1668 1040 304 ) ( 1668 1008 304 ) ( 1636 1040 304 ) common/trigger 0 0 0 0.25 0.25 134217728 0 0
@@ -11512,8 +11516,10 @@
 "impulse" "1"
 "count" "1"
 "mdl" "TE_EXPLOSION"
-"targetname" "steamburst01"
+"targetname" "steam02_secret"
 "noise" "sound/desertfactory/steam_burst.wav"
+"bgmscript" "b"
+"spawnflags" "3"
 // brush 0
 {
 ( 1668 1040 300 ) ( 1668 1008 300 ) ( 1636 1040 300 ) common/trigger 0 0 0 0.25 0.25 134217728 0 0
@@ -11523,14 +11529,6 @@
 ( 1639 1022 296 ) ( 1639 1022 328 ) ( 1671 1022 296 ) common/trigger 0 0 0 0.25 0.25 134217728 0 0
 ( 1652 1007 312 ) ( 1652 1039 312 ) ( 1652 1007 344 ) common/trigger 0 0 0 0.25 0.25 134217728 0 0
 }
-}
-// entity 459
-{
-"classname" "trigger_multivibrator"
-"origin" "1654 1024 512"
-"wait" "2"
-"respawntime" "20"
-"target" "steamburst01"
 }
 // entity 460
 {
@@ -11620,11 +11618,12 @@
 // entity 472
 {
 "classname" "func_pointparticles"
-"impulse" "4"
-"count" "1"
+"impulse" "1"
+"count" "3"
 "mdl" "smoke_ring"
-"spawnflags" "1"
+"spawnflags" "3"
 "targetname" "steam02_secret"
+"bgmscript" "a"
 // brush 0
 {
 ( 854 402 304 ) ( 854 370 304 ) ( 822 402 304 ) common/trigger 0 0 0 0.25 0.25 134217728 0 0
@@ -11641,8 +11640,10 @@
 "impulse" "1"
 "count" "1"
 "mdl" "TE_EXPLOSION"
-"targetname" "steamburst02"
+"targetname" "steam02_secret"
 "noise" "sound/desertfactory/steam_burst.wav"
+"bgmscript" "b"
+"spawnflags" "3"
 // brush 0
 {
 ( 856 400 300 ) ( 856 368 300 ) ( 824 400 300 ) common/trigger 0 0 0 0.25 0.25 134217728 0 0
@@ -11652,16 +11653,6 @@
 ( 827 382 296 ) ( 827 382 328 ) ( 859 382 296 ) common/trigger 0 0 0 0.25 0.25 134217728 0 0
 ( 840 367 312 ) ( 840 399 312 ) ( 840 367 344 ) common/trigger 0 0 0 0.25 0.25 134217728 0 0
 }
-}
-// entity 474
-{
-"classname" "trigger_multivibrator"
-"origin" "842 384 512"
-"target" "steamburst02"
-"wait" "2"
-"respawntime" "8"
-"targetname" "steam02_secret"
-"spawnflags" "1"
 }
 // entity 475
 {
