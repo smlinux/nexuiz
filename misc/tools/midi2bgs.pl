@@ -2,17 +2,23 @@
 
 # converter from Type 1 MIDI files to BGS files that control particle effects on maps
 # usage:
-#   perl midi2bgs.pl filename.mid tracknumber channelnumber offset prefix > filename.bgs
+#   perl midi2bgs.pl filename.mid tracknumber channelnumber offset notepattern > filename.bgs
 # track and channel numbers -1 include all events
+# in patterns, %1$s inserts the note name, %2$d inserts the track number, and %3$d inserts the channel number
 # example:
-#   perl midi2bgs.pl filename.mid -1 10 0.3 note_ > filename.bgs
+#   perl midi2bgs.pl filename.mid -1 10 0.3 'note_%1$s_%3$d_%2$d' > filename.bgs
 
 use strict;
 use warnings;
 use MIDI;
 use MIDI::Opus;
 
-my ($filename, $trackno, $channelno, $offset, $noteprefix) = @ARGV;
+my ($filename, $trackno, $channelno, $offset, $notepattern) = @ARGV;
+$notepattern = '%1$s'
+	unless defined $notepattern;
+defined $offset
+	or die "usage: $0 filename.mid {trackno|-1} {channelno|-1} offset [notepattern]\n";
+
 my $opus = MIDI::Opus->new({from_file => $filename});
 my $ticksperquarter = $opus->ticks();
 my $tracks = $opus->tracks_r();
@@ -69,33 +75,59 @@ for my $octave (0..11)
 	}
 }
 
+# merge all to a single track
+my @allmidievents = ();
+my $sequence = 0;
+for my $track(0..@$tracks-1)
+{
+	$tick = 0;
+	for($tracks->[$track]->events())
+	{
+		my ($command, $delta, @data) = @$_;
+		$tick += $delta;
+		push @allmidievents, [$command, $tick, $sequence++, $track, @data];
+	}
+}
+@allmidievents = sort { $a->[1] <=> $b->[1] or $a->[2] <=> $b->[2] } @allmidievents;
+
 my @outevents = (); # format: name, time in seconds, velocity
 $tick = 0;
-for my $thistrackno($trackno >= 0 ? $trackno : (0..@$tracks - 1))
+
+my %notecounters;
+my %notecounters_converted;
+for(@allmidievents)
 {
-	for($tracks->[$thistrackno]->events())
+	my $t = tick2sec $_->[1];
+	my $track = $_->[3];
+	next
+		unless $trackno < 0 || $trackno == $track;
+	if($_->[0] eq 'note_on')
 	{
-		$tick += $_->[1];
-		my $t = tick2sec $tick;
-		if($_->[0] eq 'note_on')
+		my $chan = $_->[4];
+		my $note = sprintf $notepattern, $notenames[$_->[5]], $trackno, $channelno;
+		my $velocity = $_->[6] / 127.0;
+		push @outevents, [$note, $t, $velocity]
+			if($channelno < 0 || $channelno == $chan);
+		++$notecounters_converted{$note}
+			unless $notecounters{$chan}{$_->[5]};
+		$notecounters{$chan}{$_->[5]} = 1;
+	}
+	elsif($_->[0] eq 'note_off')
+	{
+		my $chan = $_->[4];
+		my $note = sprintf $notepattern, $notenames[$_->[5]], $trackno, $channelno;
+		my $velocity = $_->[6] / 127.0;
+		--$notecounters_converted{$note}
+			if $notecounters{$chan}{$_->[5]};
+		$notecounters{$chan}{$_->[5]} = 0;
+		if($notecounters_converted{$note} == 0)
 		{
-			my $chan = $_->[2];
-			my $note = $notenames[$_->[3]];
-			my $velocity = $_->[4] / 127.0;
-			push @outevents, [$note, $t, $velocity]
-				if($channelno < 0 || $channelno == $chan);
-		}
-		elsif($_->[0] eq 'note_off')
-		{
-			my $chan = $_->[2];
-			my $note = $notenames[$_->[3]];
-			my $velocity = $_->[4] / 127.0;
 			push @outevents, [$note, $t, 0]
 				if($channelno < 0 || $channelno == $chan);
 		}
-	}   
+	}
 }
 for(sort { $a->[0] cmp $b->[0] or $a->[1] <=> $b->[1] } @outevents)
 {
-    printf "%s%s %f %f\n", $noteprefix, @$_;
+    printf "%s %13.6f %13.6f\n", @$_;
 }
