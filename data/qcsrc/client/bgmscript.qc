@@ -77,7 +77,6 @@ void BGMScript_InitEntity(entity e)
 		if(!bgmscriptbufloaded)
 			BGMScript_Init();
 
-		string mychar;
 		float i;
 
 		m = strcat(e.bgmscript, " ");
@@ -92,7 +91,7 @@ void BGMScript_InitEntity(entity e)
 		e.bgmscriptline = e.bgmscriptline0 = i;
 		if(i >= bgmscriptbufsize)
 		{
-			print("func_pointparticles: bgmscript does not define ", mychar, "\n");
+			print("func_pointparticles: bgmscript does not define ", e.bgmscript, "\n");
 			e.bgmscript = "";
 		}
 	}
