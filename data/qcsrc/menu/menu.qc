@@ -451,7 +451,10 @@ void m_activate_window(entity wnd)
 		if(par.focused)
 			par.setFocus(par, wnd);
 	}
+}
 
+void m_setpointerfocus(entity wnd)
+{
 	if(wnd.instanceOfContainer)
 	{
 		entity focus = wnd.preferredFocusedGrandChild(wnd);
@@ -488,6 +491,7 @@ void(string itemname) m_goto =
 		{
 			m_hide();
 			m_activate_window(e);
+			m_setpointerfocus(e);
 			m_display();
 		}
 	}
