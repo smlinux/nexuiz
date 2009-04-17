@@ -70,6 +70,8 @@ void BGMScript_Init()
 
 void BGMScript_InitEntity(entity e)
 {
+	float l;
+	string m;
 	if(e.bgmscript != "")
 	{
 		if(!bgmscriptbufloaded)
@@ -78,11 +80,13 @@ void BGMScript_InitEntity(entity e)
 		string mychar;
 		float i;
 
+		m = strcat(e.bgmscript, " ");
+		l = strlen(m);
+
 		e.bgmscriptline0 = -1;
 		for(i = 0; i < bgmscriptbufsize; ++i)
 		{
-			tokenize_sane(bufstr_get(bgmscriptbuf, i));
-			if(argv(0) == e.bgmscript)
+			if(substring(bufstr_get(bgmscriptbuf, i), 0, l) == m)
 				break;
 		}
 		e.bgmscriptline = e.bgmscriptline0 = i;
