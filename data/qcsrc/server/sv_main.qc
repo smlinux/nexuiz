@@ -214,6 +214,12 @@ void SV_OnEntityPreSpawnFunction()
 		return;
 	}
 
+	// support special -1 and -2 angle from radiant
+	if (self.angles == '0 -1 0')
+		self.angles = '-90 0 0';
+	else if (self.angles == '0 -2 0')
+		self.angles = '+90 0 0';
+
 	if(self.originjitter_x != 0)
 		self.origin_x = self.origin_x + (random() * 2 - 1) * self.originjitter_x;
 	if(self.originjitter_y != 0)
