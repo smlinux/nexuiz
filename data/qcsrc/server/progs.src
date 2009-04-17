@@ -83,6 +83,7 @@ sv_main.qc
 sv_stats.qc
 
 g_triggers.qc
+g_models.qc
 
 cl_weaponsystem.qc
 w_common.qc
