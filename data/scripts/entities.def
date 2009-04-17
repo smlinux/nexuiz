@@ -733,6 +733,8 @@ bgmscriptattack: attack time of the effect strength (0 to 3.9)
 bgmscriptdecay: decay time of the effect strength (0 to 3.9)
 bgmscriptsustain: sustain level of the effect strength (0.1 to 1, set to -1 to disable sustain)
 bgmscriptrelease: release time of the effect strength (0 to 3.9)
+movedir: vector by which the entity moves when "pressed" by the bgmscript
+lip: alpha change when "pressed" by the bgmscript (if > 0, it fades in when pressed, if < 0, it fades out when pressed)
 originjitter: a vector describing a random offset this entity will be moved on initial spawn. This corresponds to the "origin" field. Works on any non-q3map2-only entity.
 anglesjitter: a vector in the order "pitch yaw roll" describing a random angles change on this entity on initial spawn. The value 180 180 180 makes the angles entirely random and uniformly distributed (among euler angles). This corresponds to the "angles" field. Works on any non-q3map2-only entity.
 anglejitter: a float describing a random yaw angle change on this entity on initial spawn. The value 180 makes the yaw angle entirely random (maybe good for items). This corresponds to the "angle" field. Works on any non-q3map2-only entity.
@@ -762,6 +764,8 @@ bgmscriptattack: attack time of the effect strength (0 to 3.9)
 bgmscriptdecay: decay time of the effect strength (0 to 3.9)
 bgmscriptsustain: sustain level of the effect strength (0.1 to 1, set to -1 to disable sustain)
 bgmscriptrelease: release time of the effect strength (0 to 3.9)
+movedir: vector by which the entity moves when "pressed" by the bgmscript
+lip: alpha change when "pressed" by the bgmscript (if > 0, it fades in when pressed, if < 0, it fades out when pressed)
 originjitter: a vector describing a random offset this entity will be moved on initial spawn. This corresponds to the "origin" field. Works on any non-q3map2-only entity.
 anglesjitter: a vector in the order "pitch yaw roll" describing a random angles change on this entity on initial spawn. The value 180 180 180 makes the angles entirely random and uniformly distributed (among euler angles). This corresponds to the "angles" field. Works on any non-q3map2-only entity.
 anglejitter: a float describing a random yaw angle change on this entity on initial spawn. The value 180 makes the yaw angle entirely random (maybe good for items). This corresponds to the "angle" field. Works on any non-q3map2-only entity.
