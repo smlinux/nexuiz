@@ -1,14 +1,15 @@
+#define CONSTANT_SPEED_DECAY
+
 float bgmscriptbuf;
 float bgmscriptbufsize;
 float bgmscriptbufloaded;
 
 .float bgmscriptline;
 .float bgmscriptline0;
-.float bgmscriptvelocity;
+.float bgmscriptvolume;
 .float bgmscripttime;
 .float bgmscriptstate;
 .float bgmscriptstatetime;
-.float bgmscriptdelta;
 
 float GetAttackDecaySustainAmplitude(float a, float d, float s, float t)
 {
@@ -130,16 +131,44 @@ void BGMScript_InitEntity(entity e)
 		e.bgmscriptline = e.bgmscriptline0 = i;
 		if(i >= bgmscriptbufsize)
 		{
-			print("func_pointparticles: bgmscript does not define ", e.bgmscript, "\n");
+			print("ERROR: bgmscript does not define ", e.bgmscript, "\n");
 			e.bgmscript = "";
 		}
+	}
+}
+
+float GetCurrentAmplitude(entity e, float trel)
+{
+	if(e.bgmscriptstate)
+		return GetAttackDecaySustainAmplitude(e.bgmscriptattack, e.bgmscriptdecay, e.bgmscriptsustain, trel) * e.bgmscriptvolume;
+	else
+	{
+#ifdef CONSTANT_SPEED_DECAY
+		return GetReleaseAmplitude(e.bgmscriptdecay, e.bgmscriptsustain * e.bgmscriptvolume, e.bgmscriptrelease, trel);
+#else
+		return GetReleaseAmplitude(e.bgmscriptdecay, e.bgmscriptsustain, e.bgmscriptrelease, trel) * e.bgmscriptvolume;
+#endif
+	}
+}
+
+float GetTimeForAmplitude(entity e, float amp)
+{
+	if(e.bgmscriptstate)
+		return GetAttackTime(e.bgmscriptattack, amp / e.bgmscriptvolume);
+	else
+	{
+#ifdef CONSTANT_SPEED_DECAY
+		return GetReleaseTime(e.bgmscriptdecay, e.bgmscriptsustain * e.bgmscriptvolume, e.bgmscriptrelease, amp);
+#else
+		return GetReleaseTime(e.bgmscriptdecay, e.bgmscriptsustain, e.bgmscriptrelease, amp / e.bgmscriptvolume);
+#endif
 	}
 }
 
 float BGMScript(entity e)
 {
 	float t;
-	float amp;
+	float amp, vel;
 
 	if(e.bgmscript == "")
 		return 1;
@@ -150,11 +179,21 @@ float BGMScript(entity e)
 	e.just_toggled = FALSE;
 
 	t = gettime(GETTIME_CDTRACK);
+	if(t < 0)
+		return -1;
+
 	if(t < e.bgmscripttime)
 	{
+		//print("reset ", e.bgmscript, "\n");
+		amp = GetCurrentAmplitude(e, e.bgmscripttime - e.bgmscriptstatetime + drawframetime);
+
 		e.bgmscriptline = e.bgmscriptline0;
-		e.bgmscripttime = 0;
-		e.bgmscriptstatetime = t - drawframetime - e.bgmscriptdelta; // FIXME this causes a tiny hitch
+		e.bgmscripttime = t;
+
+		// treat this as a stop event for all notes, to prevent sticking keys
+		e.bgmscriptstate = FALSE;
+		e.bgmscriptvolume = 1;
+		e.bgmscriptstatetime = t - GetTimeForAmplitude(e, amp);
 	}
 
 	// find the CURRENT line
@@ -173,36 +212,23 @@ float BGMScript(entity e)
 			e.bgmscriptline += 1;
 			e.bgmscripttime = stof(argv(1));
 
-			if(e.bgmscriptstate)
-				amp = GetAttackDecaySustainAmplitude(e.bgmscriptattack, e.bgmscriptdecay, e.bgmscriptsustain, e.bgmscripttime - e.bgmscriptstatetime) * e.bgmscriptvelocity;
-			else
-				amp = GetReleaseAmplitude(e.bgmscriptdecay, e.bgmscriptsustain, e.bgmscriptrelease, e.bgmscripttime - e.bgmscriptstatetime);
+			amp = GetCurrentAmplitude(e, e.bgmscripttime - e.bgmscriptstatetime);
 
 			// time code reached!
-			e.bgmscriptvelocity = stof(argv(2));
-			if(e.bgmscriptvelocity > 0)
+			vel = stof(argv(2));
+			if(vel > 0)
+			{
 				e.just_toggled = e.bgmscriptstate = TRUE;
+				e.bgmscriptvolume = vel;
+			}
 			else
 				e.just_toggled = e.bgmscriptstate = FALSE;
 
-			if(e.bgmscriptstate)
-				e.bgmscriptstatetime = e.bgmscripttime - GetAttackTime(e.bgmscriptattack, amp / e.bgmscriptvelocity);
-			else
-				e.bgmscriptstatetime = e.bgmscripttime - GetReleaseTime(e.bgmscriptdecay, e.bgmscriptsustain, e.bgmscriptrelease, amp);
+			e.bgmscriptstatetime = e.bgmscripttime - GetTimeForAmplitude(e, amp);
 		}
 	}
 
-	if(e.bgmscriptstate)
-	{
-		// attack, decay or sustain
-		e.bgmscriptdelta = t - e.bgmscriptstatetime;
-		return GetAttackDecaySustainAmplitude(e.bgmscriptattack, e.bgmscriptdecay, e.bgmscriptsustain, e.bgmscriptdelta) * e.bgmscriptvelocity;
-	}
-	else
-	{
-		// release
-		e.bgmscriptdelta = t - e.bgmscriptstatetime;
-		return GetReleaseAmplitude(e.bgmscriptdecay, e.bgmscriptsustain, e.bgmscriptrelease, self.bgmscriptdelta);
-	}
+	e.bgmscripttime = t;
+	return GetCurrentAmplitude(e, t - e.bgmscriptstatetime);
 }
 
