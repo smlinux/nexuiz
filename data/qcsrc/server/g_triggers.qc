@@ -793,6 +793,31 @@ void func_clientwall_use (void)
 	self.SendFlags |= 1;
 }
 
+void gamemodel_drop();
+void clientmodel_drop()
+{
+	vector o0;
+	o0 = self.origin;
+	gamemodel_drop();
+	if(self.origin != o0)
+		self.SendFlags |= 2;
+}
+
+void spawnfunc_misc_clientmodel()
+{
+	SetBrushEntityModelNoLOD(); // LOD can't be done the CEFC way
+	self.use = func_clientwall_use;
+
+	if(!self.bgmscriptsustain)
+		self.bgmscriptsustain = 1;
+	else if(self.bgmscriptsustain < 0)
+		self.bgmscriptsustain = 0;
+
+	InitializeEntity(self, clientmodel_drop, INITPRIO_DROPTOFLOOR);
+
+	Net_LinkEntity(self, TRUE, 0, func_clientwall_send);
+}
+
 void spawnfunc_func_clientillusionary()
 {
 	SetBrushEntityModelNoLOD(); // LOD can't be done the CEFC way
