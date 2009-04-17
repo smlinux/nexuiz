@@ -200,12 +200,10 @@ float BGMScript(entity e)
 	for(;;)
 	{
 		tokenize_sane(bufstr_get(bgmscriptbuf, e.bgmscriptline));
-		if(stof(argv(1)) >= t)
-			break;
-		if(argv(0) != e.bgmscript)
+		if(stof(argv(1)) >= t || argv(0) != e.bgmscript)
 		{
-			// end of bgmscript, will revert to beginning later
-			break;
+			e.bgmscripttime = t;
+			return GetCurrentAmplitude(e, t - e.bgmscriptstatetime);
 		}
 		else if(t >= stof(argv(1)))
 		{
@@ -227,8 +225,5 @@ float BGMScript(entity e)
 			e.bgmscriptstatetime = e.bgmscripttime - GetTimeForAmplitude(e, amp);
 		}
 	}
-
-	e.bgmscripttime = t;
-	return GetCurrentAmplitude(e, t - e.bgmscriptstatetime);
 }
 
