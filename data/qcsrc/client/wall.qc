@@ -18,11 +18,10 @@ void Ent_Wall_Draw()
 		self.origin = self.origin + self.movedir * f;
 	}
 	else
-	{
 		self.alpha = 1;
-	}
 
-	R_AddEntity(self);
+	if(self.alpha >= ALPHA_MIN_VISIBLE)
+		R_AddEntity(self);
 
 	self.origin = save;
 }

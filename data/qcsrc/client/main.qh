@@ -151,3 +151,5 @@ float camera_roll;
 vector camera_direction;
 
 void centerprint(string strMessage);
+
+#define ALPHA_MIN_VISIBLE 0.003

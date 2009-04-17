@@ -37,7 +37,7 @@ void Gib_Draw()
 	self.renderflags = 0;
 	self.alpha = bound(0, self.nextthink - time, 1);
 
-	if(self.alpha == 0)
+	if(self.alpha < ALPHA_MIN_VISIBLE)
 		remove(self);
 	else
 		R_AddEntity(self);
