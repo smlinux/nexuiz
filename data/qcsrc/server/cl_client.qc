@@ -1313,7 +1313,7 @@ void ClientConnect (void)
 		ctf_clientconnect();
 	}*/
 
-	if(teams_matter)
+	if(teams_matter || sv_cheats)
 		attach_entcs();
 
 	bot_relinkplayerlist();
@@ -1370,7 +1370,7 @@ void ClientDisconnect (void)
 
 	bot_clientdisconnect();
 
-	if(teams_matter)
+	if(self.entcs)
 		detach_entcs();
 	
 	if(cvar("sv_eventlog"))

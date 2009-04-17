@@ -32,7 +32,8 @@ float entcs_customize()
 		return FALSE;
 	if(other.classname == "player")
 		if(o.team != other.team)
-			return FALSE;
+			if(!sv_cheats)
+				return FALSE;
 	return TRUE;
 }
 
