@@ -15,6 +15,7 @@ teamradar.qh
 waypointsprites.qh
 movetypes.qh
 prandom.qh
+bgmscript.qh
 
 main.qh
 
@@ -35,6 +36,7 @@ gibs.qc
 damage.qc
 casings.qc
 effects.qc
+wall.qc
 
 Main.qc
 View.qc
@@ -43,6 +45,7 @@ teamradar.qc
 waypointsprites.qc
 movetypes.qc
 prandom.qc
+bgmscript.qc
 
 ../common/util.qc
 ../common/gamecommand.qc

@@ -48,106 +48,6 @@ float PointInBrush(entity brush, vector point)
 .float volume;
 .float absolute; // 1 = count per second is absolute, 2 = only spawn at toggle
 .vector movedir; // trace direction
-.string bgmscript;
-.float bgmscriptdecay;
-
-float pointparticles_scriptbuf;
-float pointparticles_scriptbufsize;
-float pointparticles_scriptbufloaded;
-void PointparticlesScript_Init()
-{
-	string s;
-	float fh;
-	pointparticles_scriptbuf = pointparticles_scriptbufsize = 0;
-	pointparticles_scriptbufloaded = 1;
-	s = strcat("maps/", mi_shortname, ".bgs");
-	fh = fopen(s, FILE_READ);
-	if(fh < 0)
-		return;
-	pointparticles_scriptbuf = buf_create();
-	while((s = fgets(fh)))
-	{
-		bufstr_set(pointparticles_scriptbuf, pointparticles_scriptbufsize, s);
-		++pointparticles_scriptbufsize;
-	}
-	fclose(fh);
-}
-
-.float scriptline;
-.float scriptline0;
-.float scriptvelocity;
-.float scripttime;
-.float scriptstate;
-.float just_toggled;
-void PointparticlesScript_InitEntity(entity e)
-{
-	if(e.bgmscript != "")
-	{
-		if(!pointparticles_scriptbufloaded)
-			PointparticlesScript_Init();
-
-		string mychar;
-		float i;
-
-		e.scriptline0 = -1;
-		for(i = 0; i < pointparticles_scriptbufsize; ++i)
-		{
-			tokenize_sane(bufstr_get(pointparticles_scriptbuf, i));
-			if(argv(0) == e.bgmscript)
-				break;
-		}
-		e.scriptline = e.scriptline0 = i;
-		if(i >= pointparticles_scriptbufsize)
-		{
-			print("func_pointparticles: script does not define ", mychar, "\n");
-			e.bgmscript = "";
-		}
-	}
-}
-
-float PointparticlesScript(entity e)
-{
-	float t;
-
-	if(e.bgmscript == "")
-		return 1;
-	
-	if(cvar("bgmvolume") <= 0)
-		return -1;
-
-	e.just_toggled = FALSE;
-
-	t = gettime(GETTIME_CDTRACK);
-
-	tokenize_sane(bufstr_get(pointparticles_scriptbuf, e.scriptline));
-	if(t < e.scripttime)
-	{
-		e.scriptline = e.scriptline0;
-		e.scripttime = 0;
-		tokenize_sane(bufstr_get(pointparticles_scriptbuf, e.scriptline));
-	}
-
-	if(argv(0) != e.bgmscript)
-	{
-		// end of script, will revert to beginning later
-	}
-	else if(t >= stof(argv(1)))
-	{
-		// time code reached!
-		e.scriptvelocity = stof(argv(2));
-		if(e.scriptvelocity > 0)
-			e.just_toggled = e.scriptstate = TRUE;
-		else
-			e.just_toggled = e.scriptstate = FALSE;
-		e.scriptline += 1;
-		e.scripttime = stof(argv(1));
-	}
-
-	if(e.scriptstate)
-		return pow(0.5, (t - e.scripttime) * e.bgmscriptdecay) * e.scriptvelocity;
-	else
-		return 0;
-}
 
 void Draw_PointParticles()
 {
@@ -157,7 +57,7 @@ void Draw_PointParticles()
 	vector o;
 	o = self.origin;
 	sz = self.maxs - self.mins;
-	n = PointparticlesScript(self);
+	n = BGMScript(self);
 	if(self.absolute == 2)
 	{
 		if(n >= 0)
@@ -297,8 +197,13 @@ void Ent_PointParticles()
 		}
 		self.bgmscript = strzone(ReadString());
 		if(self.bgmscript != "")
-			self.bgmscriptdecay = ReadByte() / 255.0;
-		PointparticlesScript_InitEntity(self);
+		{
+			self.bgmscriptattack = ReadByte() / 64.0;
+			self.bgmscriptdecay = ReadByte() / 64.0;
+			self.bgmscriptsustain = ReadByte() / 255.0;
+			self.bgmscriptrelease = ReadByte() / 64.0;
+		}
+		BGMScript_InitEntity(self);
 	}
 
 	if(f & 2)

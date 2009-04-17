@@ -669,6 +669,20 @@ void SetBrushEntityModel()
 		setsize(self, self.mins, self.maxs);
 }
 
+void SetBrushEntityModelNoLOD()
+{
+ 	if(self.model != "")
+ 	{
+ 		precache_model(self.model);
+ 		setmodel(self, self.model); // no precision needed
+ 	}
+	setorigin(self, self.origin);
+	if(self.scale)
+		setsize(self, self.mins * self.scale, self.maxs * self.scale);
+	else
+		setsize(self, self.mins, self.maxs);
+}
+
 /*
 ================
 InitTrigger

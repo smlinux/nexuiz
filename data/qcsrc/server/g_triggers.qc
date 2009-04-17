@@ -555,7 +555,10 @@ void spawnfunc_func_stardust() {
 }
 
 .string bgmscript;
+.float bgmscriptattack;
 .float bgmscriptdecay;
+.float bgmscriptsustain;
+.float bgmscriptrelease;
 float pointparticles_SendEntity(entity to, float fl)
 {
 	WriteByte(MSG_ENTITY, ENT_CLIENT_POINTPARTICLES);
@@ -629,7 +632,12 @@ float pointparticles_SendEntity(entity to, float fl)
 		}
 		WriteString(MSG_ENTITY, self.bgmscript);
 		if(self.bgmscript != "")
-			WriteByte(MSG_ENTITY, floor(self.bgmscriptdecay * 255));
+		{
+			WriteByte(MSG_ENTITY, floor(self.bgmscriptattack * 64));
+			WriteByte(MSG_ENTITY, floor(self.bgmscriptdecay * 64));
+			WriteByte(MSG_ENTITY, floor(self.bgmscriptsustain * 255));
+			WriteByte(MSG_ENTITY, floor(self.bgmscriptrelease * 64));
+		}
 	}
 	return 1;
 }
@@ -664,6 +672,11 @@ void spawnfunc_func_pointparticles()
 		setmodel(self, self.model);
 	if(self.noise != "")
 		precache_sound (self.noise);
+	
+	if(!self.bgmscriptsustain)
+		self.bgmscriptsustain = 1;
+	else if(self.bgmscriptsustain < 0)
+		self.bgmscriptsustain = 0;
 
 	if(!self.atten)
 		self.atten = ATTN_NORM;
@@ -696,6 +709,116 @@ void spawnfunc_func_pointparticles()
 		self.state = 1;
 	self.think = pointparticles_think;
 	self.nextthink = time;
+}
+
+float func_clientwall_send (entity to, float sf)
+{
+	sf = sf & 0x0F;
+	if(self.angles != '0 0 0')
+		sf |= 0x10;
+	if(self.solid && (self.mins != '0 0 0' || self.maxs != '0 0 0'))
+		sf |= 0x20;
+	if(self.colormap != 0)
+		sf |= 0x40;
+	
+	WriteByte(MSG_ENTITY, ENT_CLIENT_WALL);
+	WriteByte(MSG_ENTITY, sf);
+
+	if(sf & 1)
+	{
+		if(sf & 0x40)
+			WriteShort(MSG_ENTITY, self.colormap);
+	}
+
+	if(sf & 2)
+	{
+		WriteCoord(MSG_ENTITY, self.origin_x);
+		WriteCoord(MSG_ENTITY, self.origin_y);
+		WriteCoord(MSG_ENTITY, self.origin_z);
+	}
+
+	if(sf & 4)
+	{
+		if(sf & 0x10)
+		{
+			WriteAngle(MSG_ENTITY, self.angles_x);
+			WriteAngle(MSG_ENTITY, self.angles_y);
+			WriteAngle(MSG_ENTITY, self.angles_z);
+		}
+	}
+
+	if(sf & 8)
+	{
+		WriteShort(MSG_ENTITY, self.modelindex);
+		WriteByte(MSG_ENTITY, self.solid);
+		WriteByte(MSG_ENTITY, floor(self.scale * 16));
+		if(sf & 0x20)
+		{
+			WriteCoord(MSG_ENTITY, self.mins_x);
+			WriteCoord(MSG_ENTITY, self.mins_y);
+			WriteCoord(MSG_ENTITY, self.mins_z);
+			WriteCoord(MSG_ENTITY, self.maxs_x);
+			WriteCoord(MSG_ENTITY, self.maxs_y);
+			WriteCoord(MSG_ENTITY, self.maxs_z);
+		}
+		WriteString(MSG_ENTITY, self.bgmscript);
+		if(self.bgmscript != "")
+		{
+			WriteByte(MSG_ENTITY, floor(self.bgmscriptattack * 64));
+			WriteByte(MSG_ENTITY, floor(self.bgmscriptdecay * 64));
+			WriteByte(MSG_ENTITY, floor(self.bgmscriptsustain * 255));
+			WriteByte(MSG_ENTITY, floor(self.bgmscriptrelease * 64));
+			WriteCoord(MSG_ENTITY, self.movedir_x);
+			WriteCoord(MSG_ENTITY, self.movedir_y);
+			WriteCoord(MSG_ENTITY, self.movedir_z);
+			WriteByte(MSG_ENTITY, floor(self.lip * 255));
+		}
+	}
+
+	return TRUE;
+}
+
+void func_clientwall_use (void)
+{
+	if(teams_matter)
+	{
+		if(activator.team)
+			self.colormap = (activator.team - 1) * 0x11;
+		else
+			self.colormap = 0x00;
+	}
+	else
+		self.colormap = floor(random() * 256);
+	self.colormap |= 1024; // RENDER_COLORMAPPED
+	self.SendFlags |= 1;
+}
+
+void spawnfunc_func_clientillusionary()
+{
+	SetBrushEntityModelNoLOD(); // LOD can't be done the CEFC way
+	self.use = func_clientwall_use;
+
+	if(!self.bgmscriptsustain)
+		self.bgmscriptsustain = 1;
+	else if(self.bgmscriptsustain < 0)
+		self.bgmscriptsustain = 0;
+
+	Net_LinkEntity(self, TRUE, 0, func_clientwall_send);
+}
+
+void spawnfunc_func_clientwall()
+{
+	SetBrushEntityModelNoLOD(); // LOD can't be done the CEFC way
+	if(!self.solid)
+		self.solid = SOLID_BSP;
+	self.use = func_clientwall_use;
+
+	if(!self.bgmscriptsustain)
+		self.bgmscriptsustain = 1;
+	else if(self.bgmscriptsustain < 0)
+		self.bgmscriptsustain = 0;
+
+	Net_LinkEntity(self, TRUE, 0, func_clientwall_send);
 }
 
 void spawnfunc_func_sparks()

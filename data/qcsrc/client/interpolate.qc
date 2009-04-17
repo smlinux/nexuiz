@@ -2,7 +2,7 @@
 .vector iorigin1, iorigin2;
 .vector ivelocity1, ivelocity2;
 .vector iforward1, iforward2;
-.vector iright1, iright2;
+.vector iup1, iup2;
 .float itime1, itime2;
 void InterpolateOrigin_Note()
 {
@@ -25,9 +25,9 @@ void InterpolateOrigin_Note()
 	{
 		fixedmakevectors(self.angles);
 		self.iforward1 = self.iforward2;
-		self.iright1 = self.iright2;
+		self.iup1 = self.iup2;
 		self.iforward2 = v_forward;
-		self.iright2 = v_right;
+		self.iup2 = v_up;
 	}
 
 	if(self.iflags & IFLAG_VELOCITY)
@@ -59,7 +59,7 @@ void InterpolateOrigin_Note()
 }
 void InterpolateOrigin_Do()
 {
-	vector forward, right;
+	vector forward, up;
 	if(self.itime1 && self.itime2 && self.itime1 != self.itime2)
 	{
 		float f;
@@ -68,8 +68,8 @@ void InterpolateOrigin_Do()
 		if(self.iflags & IFLAG_ANGLES)
 		{
 			forward = (1 - f) * self.iforward1 + f * self.iforward2;
-			right = (1 - f) * self.iright1 + f * self.iright2;
-			self.angles = fixedvectoangles2(forward, right);
+			up = (1 - f) * self.iup1 + f * self.iup2;
+			self.angles = fixedvectoangles2(forward, up);
 		}
 		if(self.iflags & IFLAG_VELOCITY)
 			self.velocity = (1 - f) * self.ivelocity1 + f * self.ivelocity2;
@@ -79,7 +79,7 @@ void InterpolateOrigin_Undo()
 {
 	self.origin = self.iorigin2;
 	if(self.iflags & IFLAG_ANGLES)
-		self.angles = fixedvectoangles2(self.iforward2, self.iright2);
+		self.angles = fixedvectoangles2(self.iforward2, self.iup2);
 	if(self.iflags & IFLAG_VELOCITY)
 		self.velocity = self.ivelocity2;
 }

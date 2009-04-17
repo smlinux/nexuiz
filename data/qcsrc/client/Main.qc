@@ -775,6 +775,7 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		case ENT_CLIENT_MAPVOTE: Ent_MapVote(); break;
 		case ENT_CLIENT_CLIENTDATA: Ent_ClientData(); break;
 		case ENT_CLIENT_RANDOMSEED: Ent_RandomSeed(); break;
+		case ENT_CLIENT_WALL: Ent_Wall(); break;
 		default:
 			error(strcat("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n"));
 			break;
