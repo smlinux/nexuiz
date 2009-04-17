@@ -17,23 +17,45 @@ float GetAttackDecaySustainAmplitude(float a, float d, float s, float t)
 	//   decay: from 1 to s, in time d
 	//   sustain: s
 	
+	if(t < 0)
+		return 0;
+	
 	if(a)
 		if(t <= a)
-			return max(0, t / a);
+			return t / a;
 
 	if(d)
 		if(t <= a + d)
-			return max(0, ((t - a) / d)) * (s - 1) + 1;
+			return ((t - a) / d) * (s - 1) + 1;
 
 	return s;
 }
 
-float GetReleaseAmplitude(float s, float r, float t)
+float GetReleaseAmplitude(float d, float s, float r, float t)
 {
-	if(r)
-		return s * (1 - min(1, t / r));
+	float decayval, releaseval;
+
+	if(!r)
+		return 0;
 	
-	return 0;
+	if(t > r)
+		return 0;
+	
+	releaseval = s * (1 - t / r);
+
+	if(t < -d)
+		return 1;
+
+	if(t < 0 && t >= -d)
+	{
+		// pre-time decay
+		// value is s at time  0
+		//          1 at time -d
+		decayval = ((t + d) / d) * (s - 1) + 1;
+		return max(decayval, releaseval);
+	}
+
+	return releaseval;
 }
 
 float GetAttackTime(float a, float amp)
@@ -41,12 +63,29 @@ float GetAttackTime(float a, float amp)
 	return amp * a;
 }
 
-float GetReleaseTime(float s, float r, float amp)
+float GetReleaseTime(float d, float s, float r, float amp)
 {
-	if(s)
-		return (1 - amp / s) * r;
+	float decaytime, releasetime;
 
-	return 0;
+	if(!s)
+		return 0;
+	
+	// if amp > s, we may be in the attack or in the prolonged decay curve
+	releasetime = (1 - amp / s) * r;
+
+	if(amp > s)
+	{
+		if(s == 1) // gracefully handle division by zero here
+			return 0;
+
+		// pre-time decay
+		// value is s at time  0
+		//          1 at time -d
+		decaytime = (amp - 1) / (s - 1) * d - d;
+		return max(decaytime, releasetime);
+	}
+
+	return releasetime;
 }
 
 void BGMScript_Init()
@@ -137,7 +176,7 @@ float BGMScript(entity e)
 			if(e.bgmscriptstate)
 				amp = GetAttackDecaySustainAmplitude(e.bgmscriptattack, e.bgmscriptdecay, e.bgmscriptsustain, e.bgmscripttime - e.bgmscriptstatetime) * e.bgmscriptvelocity;
 			else
-				amp = GetReleaseAmplitude(e.bgmscriptsustain, e.bgmscriptrelease, e.bgmscripttime - e.bgmscriptstatetime);
+				amp = GetReleaseAmplitude(e.bgmscriptdecay, e.bgmscriptsustain, e.bgmscriptrelease, e.bgmscripttime - e.bgmscriptstatetime);
 
 			// time code reached!
 			e.bgmscriptvelocity = stof(argv(2));
@@ -149,10 +188,7 @@ float BGMScript(entity e)
 			if(e.bgmscriptstate)
 				e.bgmscriptstatetime = e.bgmscripttime - GetAttackTime(e.bgmscriptattack, amp / e.bgmscriptvelocity);
 			else
-			{
-				e.bgmscriptstatetime = e.bgmscripttime - GetReleaseTime(e.bgmscriptsustain, e.bgmscriptrelease, amp);
-				amp = GetReleaseAmplitude(e.bgmscriptsustain, e.bgmscriptrelease, e.bgmscripttime - e.bgmscriptstatetime);
-			}
+				e.bgmscriptstatetime = e.bgmscripttime - GetReleaseTime(e.bgmscriptdecay, e.bgmscriptsustain, e.bgmscriptrelease, amp);
 		}
 	}
 
@@ -166,7 +202,7 @@ float BGMScript(entity e)
 	{
 		// release
 		e.bgmscriptdelta = t - e.bgmscriptstatetime;
-		return GetReleaseAmplitude(e.bgmscriptsustain, e.bgmscriptrelease, self.bgmscriptdelta);
+		return GetReleaseAmplitude(e.bgmscriptdecay, e.bgmscriptsustain, e.bgmscriptrelease, self.bgmscriptdelta);
 	}
 }
 
