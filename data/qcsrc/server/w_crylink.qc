@@ -2,6 +2,7 @@
 
 .entity realowner;
 
+// NO bounce protection, as bounces are limited!
 void W_Crylink_Touch (void)
 {
 	float finalhit;

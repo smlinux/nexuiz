@@ -1,3 +1,4 @@
+// NO bounce protection, as bounces are limited!
 void W_Hagar_Explode (void)
 {
 	self.event_damage = SUB_Null;

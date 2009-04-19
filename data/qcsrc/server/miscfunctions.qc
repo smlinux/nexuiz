@@ -1258,6 +1258,15 @@ float announce(entity player, string msg)
 	}
 	return FALSE;
 }
+// use this one if you might be causing spam (e.g. from touch functions that might get called more than once per frame)
+float spamsound(entity e, float chan, string samp, float vol, float atten)
+{
+	if(time > e.announcetime)
+	{
+		e.announcetime = time;
+		sound(e, chan, samp, vol, atten);
+	}
+}
 
 void play2team(float t, string filename)
 {

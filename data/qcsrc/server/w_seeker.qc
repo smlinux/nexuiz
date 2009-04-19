@@ -335,7 +335,7 @@ void Seeker_Fire_Tag()
 	missile.flags       = FL_PROJECTILE;
 
 	missile.velocity    = w_shotdir  * cvar("g_balance_seeker_tag_speed");
-	missile.movetype    = MOVETYPE_BOUNCEMISSILE;
+	missile.movetype    = MOVETYPE_FLY;
 	W_SetupProjectileVelocity(missile);
 	missile.angles = vectoangles (missile.velocity);
 
