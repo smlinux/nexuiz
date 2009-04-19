@@ -304,7 +304,7 @@ for(@ARGV)
 		for(@entitylines)
 		{
 			last if $_ eq '}';
-			/^\s*"gridsize"\s+"(.*)"$/
+			/^\s*"_?gridsize"\s+"(.*)"$/
 				and $gridsize = $1;
 		}
 		my @scale = map { 1 / $_ } split / /, $gridsize;
@@ -364,7 +364,7 @@ for(@ARGV)
 		{
 			my $l = $entitylines[$_];
 			last if $l eq '}';
-			if($l =~ /^\s*"gridsize"\s+"(.*)"$/)
+			if($l =~ /^\s*"_?gridsize"\s+"(.*)"$/)
 			{
 				$gridsize = $1;
 				$gridsizeindex = $_;
