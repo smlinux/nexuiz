@@ -3208,3 +3208,31 @@ originjitter 10 10 10
 velocityjitter 5 5 20
 //velocitymultiplier -20
 airfriction -1
+
+// crylink trail
+// plasma smoke
+// used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("TR_NEXUIZPLASMA"), from, to)
+effect TR_CRYLINKPLASMA
+trailspacing 64
+type static
+color 0x5522aa 0x6622ff
+size 2 2
+sizeincrease 8
+tex 32 32
+alpha 256 256 1024
+velocityjitter 8 8 8
+//lightradius 90
+//lighttime 0
+//lightcolor 1 0 1
+velocitymultiplier -0.01
+// crylink main trail
+effect TR_CRYLINKPLASMA
+trailspacing 8
+type static
+color 0x5522aa 0x6622ff
+size 3 3
+sizeincrease 15
+tex 3 3
+alpha 256 256 2600
+velocityjitter 2 2 2
+velocitymultiplier 0.01
