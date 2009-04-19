@@ -71,7 +71,7 @@ float RadarMapAtPoint_Block(float x, float y, float w, float h, float zmin, floa
 		return 0;
 	if(y > world.absmax_y)
 		return 0;
-	
+
 	r = 0;
 	for(i = 0; i < q; ++i)
 	{
@@ -94,7 +94,7 @@ float RadarMapAtPoint_Sample(float x, float y, float w, float h, float zmin, flo
 	ma = '1 0 0' * w + '0 1 0' * h;
 	a = '1 0 0' * x + '0 1 0' * y + '0 0 1' * zmin;
 	b = '1 0 0' * w + '0 1 0' * h + '0 0 1' * zsize;
-	
+
 	float c, i;
 	c = 0;
 
@@ -911,6 +911,47 @@ void GameCommand(string command)
 				}
 			}
 		}
+	}
+
+	if(argv(0) == "bot_cmd")
+	{
+		if(argv(1) == "help")
+		{
+			if(argc==2)
+			{
+				bot_list_commands();
+				print("\nUse sv_cmd bot_cmd help <command> for more\n");
+				return;
+			}
+
+			bot_cmdhelp(argv(2));
+			return;
+		}
+
+		if(argc < 3)
+		{
+			print("Usage: sv_cmd bot_cmd <bot name or number> <command> [argument]\n");
+			print("Examples: bot_cmd <id> cc \"say something\"\n");
+			print("          bot_cmd <id> presskey jump\n");
+			print("          .. or sv_cmd bot_cmd help <command> for more\n");
+			return;
+		}
+
+		local entity bot;
+		bot = find_bot_by_name(argv(1));
+		if(bot==world)
+			bot = find_bot_by_number(stof(argv(1)));
+
+		if(bot)
+		{
+			if(argc==4)
+				bot_queuecommand(bot,argv(2),argv(3));
+			else
+				bot_queuecommand(bot,argv(2),"");
+		}
+		else
+			print(strcat("Error: Unable to find a bot with the name or number '",argv(1),"'\n"));
+        	return;
 	}
 
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");

@@ -1003,6 +1003,9 @@ void havocbot_aim()
 
 void havocbot_ai()
 {
+    if(bot_execute_commands())
+        return;
+
 	if (bot_strategytoken == self)
 	if (!bot_strategytoken_taken)
 	{

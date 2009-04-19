@@ -49,6 +49,7 @@ waypointsprites.qc
 
 // general bot utility functions and management
 bots.qc
+bots_scripting.qc
 
 // LordHavoc's bots
 havocbot.qc
