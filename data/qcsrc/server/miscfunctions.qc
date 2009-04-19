@@ -1265,7 +1265,9 @@ float spamsound(entity e, float chan, string samp, float vol, float atten)
 	{
 		e.announcetime = time;
 		sound(e, chan, samp, vol, atten);
+		return TRUE;
 	}
+	return FALSE;
 }
 
 void play2team(float t, string filename)
