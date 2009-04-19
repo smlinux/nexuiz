@@ -34,7 +34,7 @@ string bot_cmd_string[BOT_CMD_COUNTER];
 
 // Bots command queue
 
-#define BOT_CMD_QUEUE_SIZE 150
+#define BOT_CMD_QUEUE_SIZE 80
 
 .float bot_cmd[BOT_CMD_QUEUE_SIZE];
 .float bot_cmd_parm_float[BOT_CMD_QUEUE_SIZE];
