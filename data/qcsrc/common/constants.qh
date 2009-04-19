@@ -375,6 +375,7 @@ float PROJECTILE_HOOKBOMB = 15;
 float PROJECTILE_HAGAR = 16;
 float PROJECTILE_HAGAR_BOUNCING = 17;
 float PROJECTILE_BULLET_GLOWING = 18;
+float PROJECTILE_CRYLINK_BOUNCING = 19;
 
 // Deathtypes (weapon deathtypes are the IT_* constants below)
 // NOTE: when adding death types, please add an explanation to Docs/spamlog.txt too.

@@ -256,6 +256,7 @@ void Ent_Projectile()
 			case PROJECTILE_BULLET: setmodel(self, "models/tracer.mdl"); break;
 			case PROJECTILE_BULLET_GLOWING: setmodel(self, "models/tracer.mdl"); break;
 			case PROJECTILE_CRYLINK: setmodel(self, "models/plasmatrail.mdl"); break;
+			case PROJECTILE_CRYLINK_BOUNCING: setmodel(self, "models/plasmatrail.mdl"); break;
 			case PROJECTILE_ELECTRO_BEAM: setmodel(self, "models/elaser.mdl"); break;
 			case PROJECTILE_GRENADE: setmodel(self, "models/grenademodel.md3"); break;
 			case PROJECTILE_GRENADE_BOUNCING: setmodel(self, "models/grenademodel.md3"); break;
@@ -322,6 +323,10 @@ void Ent_Projectile()
 				self.move_touch = SUB_Null;
 				break;
 			case PROJECTILE_HAGAR_BOUNCING:
+				self.move_movetype = MOVETYPE_BOUNCE;
+				self.move_touch = SUB_Null;
+				break;
+			case PROJECTILE_CRYLINK_BOUNCING:
 				self.move_movetype = MOVETYPE_BOUNCE;
 				self.move_touch = SUB_Null;
 				break;
