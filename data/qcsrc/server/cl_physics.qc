@@ -349,6 +349,7 @@ void RaceCarPhysics()
 .vector movement_old;
 .float buttons_old;
 .vector v_angle_old;
+.string lastclassname;
 
 void Nixnex_GiveCurrentWeapon();
 void SV_PlayerPhysics()
@@ -447,7 +448,7 @@ void SV_PlayerPhysics()
 			self.spectatorspeed = maxspd_mod;
 		if(self.impulse && self.impulse <= 19)
 		{
-			// if(self.lastflags & FL_NOTARGET)
+			if(self.lastclassname != "player")
 			{
 				if(self.impulse == 10 || self.impulse == 15 || self.impulse == 18)
 					self.spectatorspeed = bound(1, self.spectatorspeed + 0.5, 5);
@@ -850,4 +851,5 @@ void SV_PlayerPhysics()
 		self.lastground = time;
 
 	self.lastflags = self.flags;
+	self.lastclassname = self.classname;
 };

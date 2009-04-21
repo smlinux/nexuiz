@@ -1931,7 +1931,7 @@ float bot_shouldattack(entity e)
 	if(e.items & IT_STRENGTH)
 		return FALSE;
 	if(e.flags & FL_NOTARGET)
-		return false;
+		return FALSE;
 	return TRUE;
 };
 
