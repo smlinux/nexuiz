@@ -1930,6 +1930,8 @@ float bot_shouldattack(entity e)
 	if(g_minstagib)
 	if(e.items & IT_STRENGTH)
 		return FALSE;
+	if(e.flags & FL_NOTARGET)
+		return false;
 	return TRUE;
 };
 
