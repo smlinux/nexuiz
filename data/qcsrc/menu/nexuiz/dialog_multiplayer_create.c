@@ -31,40 +31,36 @@ void fillNexuizServerCreateTab(entity me)
 	float n;
 
 	me.TR(me);
-		n = 10 + 1 * !!cvar("developer");
-		// NOTE: not using ?: due to fteqcc bug
-		// this actually means: cvar("developer") ? 10 : 9
-		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_dm", "DM"));
+		n = 5;
+		me.TD(me, 1, me.columns / n, e = makeNexuizGametypeButton(1, "g_dm", "DM"));
 			e0 = e;
-		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_tdm", "TDM"));
+		me.TD(me, 1, me.columns / n, e = makeNexuizGametypeButton(1, "g_lms", "LMS"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_lms", "LMS"));
+		me.TD(me, 1, me.columns / n, e = makeNexuizGametypeButton(1, "g_arena", "Arena"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_arena", "Arena"));
+		me.TD(me, 1, me.columns / n, e = makeNexuizGametypeButton(1, "g_runematch", "Runematch"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_runematch", "Rune"));
+		me.TD(me, 1, me.columns / n, e = makeNexuizGametypeButton(1, "g_race", "Race"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_domination", "Dom"));
+	me.TR(me);
+		n = 6;
+		me.TD(me, 1, me.columns / n, e = makeNexuizGametypeButton(1, "g_tdm", "TDM"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_keyhunt", "Key Hunt"));
+		me.TD(me, 1, me.columns / n, e = makeNexuizGametypeButton(1, "g_ctf", "CTF"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_ctf", "CTF"));
+		me.TD(me, 1, me.columns / n, e = makeNexuizGametypeButton(1, "g_domination", "Domination"));
 			if(e.checked) e0 = NULL;
-		if(cvar("developer"))
-		{
-			me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_assault", "Assault"));
-				if(e.checked) e0 = NULL;
-		}
-		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_onslaught", "Onslaught"));
+		me.TD(me, 1, me.columns / n, e = makeNexuizGametypeButton(1, "g_keyhunt", "Key Hunt"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_race", "Race"));
+		me.TD(me, 1, me.columns / n, e = makeNexuizGametypeButton(1, "g_assault", "Assault"));
+			if(e.checked) e0 = NULL;
+		me.TD(me, 1, me.columns / n, e = makeNexuizGametypeButton(1, "g_onslaught", "Onslaught"));
 			if(e.checked) e0 = NULL;
 		if(e0)
 		{
 			//print("NO CHECK\n");
 			e0.setChecked(e0, 1);
 		}
-	me.TR(me);
 	me.TR(me);
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizTextLabel(0, "Map list:"));
