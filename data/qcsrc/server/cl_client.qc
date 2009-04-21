@@ -385,7 +385,7 @@ float Client_customizeentityforclient()
 	float distance;
 	float f;
 
-	if(self.flags & FL_NOTARGET) // we don't need LOD for spectators
+	if(self.classname != "player")
 		return TRUE;
 
 	if(other.cvar_cl_playerdetailreduction <= 0)
@@ -1922,7 +1922,7 @@ float SpectateUpdate() {
 	if (self == self.enemy)
 		return 0;
 	
-	if(self.enemy.flags & FL_NOTARGET)
+	if(self.enemy.classname != "player")
 		return 0;
 
 	SpectateCopy(self.enemy);
@@ -1987,7 +1987,7 @@ void LeaveSpectatorMode()
 			if(cvar("g_campaign"))
 				campaign_bots_may_start = 1;
 			PutClientInServer();
-			if(!(self.flags & FL_NOTARGET))
+			if(self.classname == "player")
 				bprint ("^4", self.netname, "^4 is playing now\n");
 			if(!cvar("g_campaign"))
 				centerprint(self,""); // clear MOTD

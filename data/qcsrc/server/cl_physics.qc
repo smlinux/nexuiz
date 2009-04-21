@@ -440,14 +440,14 @@ void SV_PlayerPhysics()
 		swampspd_mod = self.swamp_slowdown; //cvar("g_balance_swamp_moverate");
 	}
 
-	if(self.flags & FL_NOTARGET)
+	if(self.classname != "player")
 	{
 		maxspd_mod = cvar("sv_spectator_speed_multiplier");
 		if(!self.spectatorspeed)
 			self.spectatorspeed = maxspd_mod;
 		if(self.impulse && self.impulse <= 19)
 		{
-			if(self.lastflags & FL_NOTARGET)
+			// if(self.lastflags & FL_NOTARGET)
 			{
 				if(self.impulse == 10 || self.impulse == 15 || self.impulse == 18)
 					self.spectatorspeed = bound(1, self.spectatorspeed + 0.5, 5);
