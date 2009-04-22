@@ -309,14 +309,30 @@ void Ban_View()
 
 float Ban_GetClientIP(entity client)
 {
-	float n;
-	n = tokenizebyseparator(client.netaddress, ".");
-	if(n != 4)
+	// we can't use tokenizing here, as this is called during ban list parsing
+	float i1, i2, i3, i4;
+	string s;
+
+	s = client.netaddress;
+	
+	i1 = strstrofs(s, ".", 0);
+	if(i1 < 0)
 		return FALSE;
-	ban_ip1 = strcat1(argv(0));
-	ban_ip2 = strcat(ban_ip1, ".", argv(1));
-	ban_ip3 = strcat(ban_ip2, ".", argv(2));
-	ban_ip4 = strcat(ban_ip3, ".", argv(3));
+	i2 = strstrofs(s, ".", i1 + 1);
+	if(i2 < 0)
+		return FALSE;
+	i3 = strstrofs(s, ".", i2 + 1);
+	if(i3 < 0)
+		return FALSE;
+	i4 = strstrofs(s, ".", i3 + 1);
+	if(i4 >= 0)
+		return FALSE;
+	
+	ban_ip1 = substring(s, 0, i1);
+	ban_ip2 = substring(s, 0, i2);
+	ban_ip3 = substring(s, 0, i3);
+	ban_ip4 = strcat1(s);
+
 	return TRUE;
 }
 
