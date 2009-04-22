@@ -99,9 +99,7 @@ float RemapVote(string vote, string cmd, entity e)
 	vote_argc = tokenize_sane(vote);
 
 	if(!VoteAllowed(argv(0), cmd))
-	{
 		return FALSE;
-	}
 
 	// VoteAllowed tokenizes!
 	vote_argc = tokenize_sane(vote);
@@ -415,28 +413,38 @@ string VoteParse(string all, float argc) {
 	return substring(all, argv_start_index(2), argv_end_index(-1) - argv_start_index(2));
 }
 
+float VoteCommandInList(string votecommand, string list)
+{
+	string l;
+	l = strcat(" ", list, " ");
+	
+	if(strstrofs(l, strcat(" ", votecommand, " ")) >= 0)
+		return TRUE;
+	
+	// if gotomap is allowed, chmap is too, and vice versa
+	if(votecommand == "gotomap")
+		if(strstrofs(l, " chmap ") >= 0)
+			return TRUE;
+	if(votecommand == "chmap")
+		if(strstrofs(l, " gotomap ") >= 0)
+			return TRUE;
+}
+
 float VoteAllowed(string votecommand, string cmd) {
 	local float index;
 
-	tokenize_sane(cvar_string("sv_vote_commands"));
-	index = 0;
-	while(argv(index) != "") {
-		if(votecommand == argv(index)) {
-			return TRUE;
-		}
-		++index;
-	}
+	if(VoteCommandInList(votecommand, cvar_string("sv_vote_commands")))
+		return TRUE;
 
 	if(cmd == "vdo")
-		tokenize_sane(cvar_string("sv_vote_master_commands"));
-	else
-		tokenize_sane(cvar_string("sv_vote_only_commands"));
-	index = 0;
-	while(argv(index) != "") {
-		if(votecommand == argv(index)) {
+	{
+		if(VoteCommandInList(votecommand, cvar_string("sv_vote_master_commands")))
 			return TRUE;
-		}
-		++index;
+	}
+	else
+	{
+		if(VoteCommandInList(votecommand, cvar_string("sv_vote_only_commands")))
+			return TRUE;
 	}
 
 	return FALSE;
