@@ -418,21 +418,19 @@ float VoteCommandInList(string votecommand, string list)
 	string l;
 	l = strcat(" ", list, " ");
 	
-	if(strstrofs(l, strcat(" ", votecommand, " ")) >= 0)
+	if(strstrofs(l, strcat(" ", votecommand, " "), 0) >= 0)
 		return TRUE;
 	
 	// if gotomap is allowed, chmap is too, and vice versa
 	if(votecommand == "gotomap")
-		if(strstrofs(l, " chmap ") >= 0)
+		if(strstrofs(l, " chmap ", 0) >= 0)
 			return TRUE;
 	if(votecommand == "chmap")
-		if(strstrofs(l, " gotomap ") >= 0)
+		if(strstrofs(l, " gotomap ", 0) >= 0)
 			return TRUE;
 }
 
 float VoteAllowed(string votecommand, string cmd) {
-	local float index;
-
 	if(VoteCommandInList(votecommand, cvar_string("sv_vote_commands")))
 		return TRUE;
 
