@@ -428,6 +428,8 @@ float VoteCommandInList(string votecommand, string list)
 	if(votecommand == "chmap")
 		if(strstrofs(l, " gotomap ", 0) >= 0)
 			return TRUE;
+	
+	return FALSE;
 }
 
 float VoteAllowed(string votecommand, string cmd) {
