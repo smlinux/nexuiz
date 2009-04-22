@@ -141,7 +141,7 @@ void OnlineBanList_URI_Get_Callback(float id, float status, string data)
 		reason = argv(i + 2);
 		serverip = argv(i + 3);
 
-		dprint("received ban list item ", ftos(i / n), ": ip=", ip);
+		dprint("received ban list item ", ftos(i / 4), ": ip=", ip);
 		dprint(" timeleft=", ftos(timeleft), " reason=", reason);
 		dprint(" serverip=", serverip, "\n");
 
