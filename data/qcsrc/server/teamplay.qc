@@ -97,6 +97,7 @@ void WriteGameCvars()
 	cvar_set("g_assault", ftos(g_assault));
 	cvar_set("g_onslaught", ftos(g_onslaught));
 	cvar_set("g_race", ftos(g_race));
+	cvar_set("g_nexball", ftos(g_nexball));
 }
 
 void ReadGameCvars()
