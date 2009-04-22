@@ -56,6 +56,8 @@ void CSQC_Init(void)
 	}
 #pragma target FTE
 #endif
+	
+	check_unacceptable_compiler_bugs();
 
 	float i;
 	CSQC_CheckEngine();

@@ -1614,3 +1614,18 @@ vector solve_quadratic(float a, float b, float c) // ax^2 + bx + c = 0
 	}
 	return v;
 }
+
+
+float _unacceptable_compiler_bug_1_a(float b, float c) { return b == c; }
+float _unacceptable_compiler_bug_1_b() { return 1; }
+float _unacceptable_compiler_bug_1_c(float d) { return 2 * d; }
+float _unacceptable_compiler_bug_1_d() { return 1; }
+
+void check_unacceptable_compiler_bugs()
+{
+	if(cvar("_allow_unacceptable_compiler_bugs"))
+		return;
+	tokenize_sane("foo bar");
+	if(strcat(argv(0), substring("foo bar", 4, 7 - argv_start_index(1))) == "barbar")
+		error("fteqcc bug introduced with revision 3178 detected. Please upgrade fteqcc to a later revision, downgrade fteqcc to revision 3177, or pester Spike until he fixes it. You can set _allow_unacceptable_compiler_bugs 1 to skip this check, but expect stuff to be horribly broken then.");
+}

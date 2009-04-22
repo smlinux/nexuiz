@@ -21,6 +21,7 @@ void SUB_Null() { };
 void() m_init =
 {
 	dprint_load();
+	check_unacceptable_compiler_bugs();
 }
 
 void UpdateConWidthHeight()

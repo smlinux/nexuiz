@@ -386,6 +386,8 @@ void spawnfunc_worldspawn (void)
 
 	remove = remove_safely; // during spawning, watch what you remove!
 
+	check_unacceptable_compiler_bugs();
+
 	if(cvar_string("cvar_check_default") != "bypass")
 	{
 		if(cvar_string("cvar_check_default") != CVAR_CHECK_DEFAULT)
