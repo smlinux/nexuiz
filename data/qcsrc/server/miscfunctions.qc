@@ -1845,7 +1845,7 @@ float URI_GET_IPBAN_END = 16;
 
 void URI_Get_Callback(float id, float status, string data)
 {
-	dprint("Received HTTP request data for id ", ftos(id), "; status is ", ftos(status), "\nData is\n:");
+	dprint("Received HTTP request data for id ", ftos(id), "; status is ", ftos(status), "\nData is:\n");
 	dprint(data);
 	dprint("\nEnd of data.\n");
 
