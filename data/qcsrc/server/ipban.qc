@@ -132,7 +132,7 @@ void OnlineBanList_URI_Get_Callback(float id, float status, string data)
 		return;
 	}
 
-	print("OK, ", ftos(n), " items\n");
+	print("OK, ", ftos(n / 4), " items\n");
 
 	for(i = 0; i < n; i += 4)
 	{
@@ -141,7 +141,7 @@ void OnlineBanList_URI_Get_Callback(float id, float status, string data)
 		reason = argv(i + 2);
 		serverip = argv(i + 3);
 
-		dprint("received ban list item ", ftos(i), ": ip=", ip);
+		dprint("received ban list item ", ftos(i / n), ": ip=", ip);
 		dprint(" timeleft=", ftos(timeleft), " reason=", reason);
 		dprint(" serverip=", serverip, "\n");
 
@@ -404,8 +404,10 @@ float Ban_Insert(string ip, float bantime, string reason, float dosync)
 			if(time + bantime > ban_expire[i])
 			{
 				ban_expire[i] = time + bantime;
-				print(ip, "'s ban has been prolonged to ", ftos(bantime), " seconds from now\n");
+				dprint(ip, "'s ban has been prolonged to ", ftos(bantime), " seconds from now\n");
 			}
+			else
+				dprint(ip, "'s ban is still active until ", ftos(ban_expire[i] - time), " seconds from now\n");
 
 			// and enforce
 			reason = Ban_Enforce(i, reason);
@@ -447,7 +449,7 @@ float Ban_Insert(string ip, float bantime, string reason, float dosync)
 	}
 	// okay, insert our new victim as i
 	Ban_Delete(i);
-	print(ip, " has been banned for ", ftos(bantime), " seconds\n");
+	dprint(ip, " has been banned for ", ftos(bantime), " seconds\n");
 	ban_expire[i] = time + bantime;
 	ban_ip[i] = strzone(ip);
 	ban_count = max(ban_count, i + 1);
