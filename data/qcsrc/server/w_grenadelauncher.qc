@@ -146,8 +146,10 @@ void spawnfunc_weapon_grenadelauncher (void)
 }
 
 .float bot_secondary_grenademooth;
+float w_nexball_weapon(float req);
 float w_glauncher(float req)
 {
+	if (g_nexball) { return w_nexball_weapon(req); }
 	if (req == WR_AIM)
 	{
 		self.BUTTON_ATCK = FALSE;

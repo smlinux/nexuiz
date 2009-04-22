@@ -21,9 +21,9 @@ IV       CTF
 
 V        Rune Match
 
-VI       Assault
+VI       Race
 
-VII      Onslaught
+VII      Nexball
 
 Appendix A - Advanced mapinfo
 
@@ -361,6 +361,23 @@ If your map contains the required entities for Race, the menu will automatically
 detect it for supporting Race. To force the map to get re-detected after you add
 such entities, delete the data/data/mapname.mapinfo file - or simply edit it to
 add the "type race" line.
+
+=============
+=VI. Nexball=
+=============
+
+There are three required entities: ball_redgoal, ball_bluegoal, and one of ball_basketball
+or ball_football. Pay extra attention to the goals, as their names can be somewhat counter-
+intuitive: ball_redgoal will give a point to the red team when scored in, NOT to the blue team!
+
+There are also two other goal-like triggers, ball_fault and ball_bound, the first giving a point to
+the opposing team when the ball hits it, the second simply returning it. You can spawn the ball inside
+a goal-like trigger, this can be useful for basketball maps with separate teams and a common ball spawn.
+The different keys for the entities are documented in entities.def.
+
+The ball is affected by trigger_impulse, but not by trigger_push or teleporters.
+
+You should better avoid patches on the field, as collisions can sometimes get buggy on these.
 
 
 ===============================

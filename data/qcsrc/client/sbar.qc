@@ -13,6 +13,7 @@ float ts_primary, ts_secondary;
 
 void CSQC_kh_hud();
 void CSQC_ctf_hud();
+void CSQC_nb_hud();
 void MapVote_Draw();
 void Sbar_FinaleOverlay()
 {
@@ -2123,6 +2124,9 @@ void Sbar_Draw (void)
 			} else if(gametype == GAME_CTF)
 			{
 				CSQC_ctf_hud();
+			} else if(gametype == GAME_NEXBALL)
+			{
+				CSQC_nb_hud();
 			}
 		}
 		Sbar_DrawCenterPrint();
@@ -2189,4 +2193,65 @@ void CSQC_ctf_hud(void)
 			if(myteam == COLOR_TEAM1)
 				drawpic(pos, "gfx/sb_flag_blue_shielded", '128 64 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
 	}
+}
+
+//box style
+#define NBPB_SIZE '128 66 0'
+#define NBPB_BT 2                   //thickness
+#define NBPB_BRGB '1 1 1'
+#define NBPB_BALPH 1                //alpha
+#define NBPB_BFLAG DRAWFLAG_NORMAL
+#define NBPB_IALPH 0.4
+#define NBPB_IFLAG DRAWFLAG_ADDITIVE
+#define NBPB_IRGB '0.7 0.1 0'
+
+void CSQC_nb_hud(void)
+{
+	float stat_items, nb_pb_starttime, dt, p;
+	vector pos;
+	
+	stat_items = getstati(STAT_ITEMS);
+	nb_pb_starttime = getstatf(STAT_NB_METERSTART);
+	
+	if(cvar("sbar_flagstatus_right"))
+		pos_x = vid_conwidth - 10 - sbar_x - 64;
+	else
+		pos_x = 10 - sbar_x;
+	
+	pos_z = 0;
+
+	if(sbar_hudselector == 1)
+		pos_y = (vid_conheight - sbar_y) - cvar("sbar_flagstatus_pos") - 64;
+	else
+		pos_y = -117;
+
+	pos += sbar;
+	pos_y -= 1; //vertical margin to the picture
+
+	//Manage the progress bar if any
+	if (nb_pb_starttime > 0)
+	{
+		vector s;
+		dt = mod(time - nb_pb_starttime, nb_pb_period);
+		// one period of positive triangle
+		p = 2 * dt / nb_pb_period;
+		if (p > 1)
+			p = 2 - p;
+
+		s = NBPB_SIZE;
+		//Draw the filling
+		drawfill(pos, p * s_x * '1 0 0' + s_y * '0 1 0', NBPB_IRGB, NBPB_IALPH, NBPB_IFLAG);
+
+		//Draw the box
+		s = NBPB_SIZE;
+		drawline(NBPB_BT, pos    , pos + '1 0 0' * s_x, NBPB_BRGB, NBPB_BALPH, NBPB_BFLAG);
+		drawline(NBPB_BT, pos    , pos + '0 1 0' * s_y, NBPB_BRGB, NBPB_BALPH, NBPB_BFLAG);
+		drawline(NBPB_BT, pos + s, pos + '1 0 0' * s_x, NBPB_BRGB, NBPB_BALPH, NBPB_BFLAG);
+		drawline(NBPB_BT, pos + s, pos + '0 1 0' * s_y, NBPB_BRGB, NBPB_BALPH, NBPB_BFLAG);
+	}
+
+	pos_y += 1; //vertical margin to the picture
+	
+	if (stat_items & IT_KEY1)
+		drawpic(pos, "gfx/sb_nexball_carrying", '128 64 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 }

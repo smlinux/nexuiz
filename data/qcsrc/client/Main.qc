@@ -836,8 +836,6 @@ void CSQC_Parse_CenterPrint(string strMessage)
 	centerprint(strMessage);
 }
 
-void CSQC_CheckRevision();
-
 void Fog_Force()
 {
 	// TODO somehow thwart prvm_globalset client ...
@@ -871,7 +869,7 @@ void Ent_Init()
 	float i;
 	self.classname = "ent_client_init";
 
-	csqc_revision = ReadShort();
+	nb_pb_period = ReadByte() / 32; //Accuracy of 1/32th
 
 	for(i = 0; i < 24; ++i)
 		weaponimpulse[i] = ReadByte() - 1;
@@ -883,7 +881,6 @@ void Ent_Init()
 		strunzone(forcefog);
 	forcefog = strzone(ReadString());
 
-	CSQC_CheckRevision();
 	if(!postinit)
 		PostInit();
 }
@@ -1031,20 +1028,6 @@ float CSQC_Parse_TempEntity()
 	}
 
 	return bHandled;
-}
-
-// COMMIT-TODO: Update if necessare, before committing
-void CSQC_CheckRevision()
-{
-	if(csqc_revision == CSQC_REVISION)
-	{
-		print("^2SVQC and CSQC revisions are compatible.\n");
-	} else if(csqc_revision < CSQC_REVISION) {
-		print("^1Your csprogs.dat (CSQC) version is newer than the one on the server.\n");
-	} else if(csqc_revision > CSQC_REVISION) {
-		print("^1Your csprogs.dat (CSQC) is too old for this server.\n");
-		print("^1Please update to a newer version.\n");
-	}
 }
 
 string getcommandkey(string text, string command)

@@ -120,6 +120,7 @@ antilag.qc
 ctf.qc
 domination.qc
 mode_onslaught.qc
+nexball.qc
 g_hook.qc
 
 t_swamp.qc

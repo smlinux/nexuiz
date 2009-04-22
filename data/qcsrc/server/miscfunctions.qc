@@ -238,7 +238,7 @@ void relocate_spawnpoint()
 	if(!self.cnt)
 		self.cnt = 1;
 
-	if(g_ctf || g_assault || g_onslaught || g_domination)
+	if(g_ctf || g_assault || g_onslaught || g_domination || g_nexball)
 	if(self.team)
 		have_team_spawns = 1;
 
@@ -891,6 +891,9 @@ void readplayerstartcvars()
 				if(g_grappling_hook) // if possible, redirect off-hand hook to on-hand hook
 					t += (i == WEP_HOOK);
 			}
+
+			if(g_nexball && i == WEP_GRENADE_LAUNCHER)
+					t=1;
 
 			if(t)
 			{

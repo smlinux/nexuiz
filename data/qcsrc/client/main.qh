@@ -36,8 +36,6 @@ float ons_showmap;
 // --------------------------------------------------------------------------
 // General stuff
 
-float csqc_revision;
-
 float drawfont;
 float postinit;
 float gametype;

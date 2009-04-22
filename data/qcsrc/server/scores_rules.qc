@@ -172,3 +172,16 @@ void ScoreRules_assault()
 	ScoreInfo_SetLabel_PlayerScore(SP_ASSAULT_OBJECTIVES,    "objectives",      SFL_SORT_PRIO_PRIMARY);
 	ScoreRules_basics_end();
 }
+
+// Nexball stuff
+#define ST_NEXBALL_GOALS 1
+#define SP_NEXBALL_GOALS 4
+#define SP_NEXBALL_OWNGOALS 5
+void ScoreRules_nexball()
+{
+	ScoreRules_basics(2, 0, 0, TRUE);
+	ScoreInfo_SetLabel_TeamScore  (   ST_NEXBALL_GOALS,    "goals", SFL_SORT_PRIO_PRIMARY);
+	ScoreInfo_SetLabel_PlayerScore(   SP_NEXBALL_GOALS,    "goals", SFL_SORT_PRIO_PRIMARY);
+	ScoreInfo_SetLabel_PlayerScore(SP_NEXBALL_OWNGOALS, "owngoals", SFL_SORT_PRIO_SECONDARY | SFL_LOWER_IS_BETTER);
+	ScoreRules_basics_end();
+}

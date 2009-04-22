@@ -489,6 +489,8 @@ void PutObserverInServer (void)
 
 	if(self.flagcarried)
 		DropFlag(self.flagcarried, world, world);
+	if(self.ballcarried)
+		DropBall(self.ballcarried, self.origin + self.ballcarried.origin, self.velocity);
 
 	WaypointSprite_PlayerDead();
 	
@@ -802,6 +804,8 @@ void PutClientInServer (void)
 		self.hook_time = 0;
 		self.dmg_team = 0;
 
+		self.metertime = 0;
+
 		self.runes = 0;
 
 		self.deadflag = DEAD_NO;
@@ -908,7 +912,7 @@ float ClientInit_SendEntity(entity to, float sf)
 {
 	float i;
 	WriteByte(MSG_ENTITY, ENT_CLIENT_INIT);
-	WriteShort(MSG_ENTITY, CSQC_REVISION);
+	WriteByte(MSG_ENTITY, g_nexball_meter_period * 32);
 	for(i = 1; i <= 24; ++i)
 		WriteByte(MSG_ENTITY, (get_weaponinfo(i)).impulse + 1);
 	WriteCoord(MSG_ENTITY, hook_shotorigin_x);
@@ -1329,8 +1333,6 @@ void ClientConnect (void)
 
 	if(clienttype(self) == CLIENTTYPE_REAL)
 	{
-		sprint(self, strcat("nexuiz-csqc protocol ", ftos(CSQC_REVISION), "\n"));
-
 		if(cvar("g_bugrigs"))
 			stuffcmd(self, "cl_cmd settemp chase_active 1\n");
 	}
@@ -1387,6 +1389,8 @@ void ClientDisconnect (void)
 
 	if(self.flagcarried)
 		DropFlag(self.flagcarried, world, world);
+	if(self.ballcarried)
+		DropBall(self.ballcarried, self.origin + self.ballcarried.origin, self.velocity);
 
 	// Here, everything has been done that requires this player to be a client.
 
@@ -1895,6 +1899,7 @@ void SpectateCopy(entity spectatee) {
 	self.health = spectatee.health;
 	self.impulse = 0;
 	self.items = spectatee.items;
+	self.metertime = spectatee.metertime;
 	self.strength_finished = spectatee.strength_finished;
 	self.invincible_finished = spectatee.invincible_finished;
 	self.pressedkeys = spectatee.pressedkeys;
@@ -2160,6 +2165,7 @@ Called every frame for each client before the physics are run
 =============
 */
 void() ctf_setstatus;
+void() nexball_setstatus;
 void PlayerPreThink (void)
 {
 	self.stat_sys_ticrate = cvar("sys_ticrate");
@@ -2400,6 +2406,7 @@ void PlayerPreThink (void)
 
 		ctf_setstatus();
 		kh_setstatus();
+		nexball_setstatus();
 
 		self.dmg_team = max(0, self.dmg_team - cvar("g_teamdamage_resetspeed") * frametime);
 

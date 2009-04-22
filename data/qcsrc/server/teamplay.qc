@@ -69,6 +69,7 @@ void dom_init();
 void ctf_init();
 void runematch_init();
 void tdm_init();
+void nb_init();
 void entcs_init();
 
 void LogTeamchange(entity pl)
@@ -119,6 +120,7 @@ void ReadGameCvars()
 		found += (g_assault = (!found && (prev != GAME_ASSAULT) && cvar("g_assault")));
 		found += (g_onslaught = (!found && (prev != GAME_ONSLAUGHT) && cvar("g_onslaught")));
 		found += (g_race = (!found && (prev != GAME_RACE) && cvar("g_race")));
+		found += (g_nexball = (!found && (prev != GAME_NEXBALL) && cvar("g_nexball")));
 
 		if(found)
 			break;
@@ -320,6 +322,16 @@ void InitGameplayMode()
 			independent_players = 1;
 
 		ScoreRules_race();
+	}
+
+	if(g_nexball)
+	{
+		game = GAME_NEXBALL;
+		gamemode_name = "Nexball";
+		fraglimit_override = cvar("g_nexball_goallimit");
+		nb_init();
+		ActivateTeamplay();
+		ScoreRules_nexball();
 	}
 
 	if(teams_matter)
@@ -560,9 +572,9 @@ void CheckAllowedTeams (entity for_whom)
 		teament_name = "ctf_team";
 	else if(g_tdm)
 		teament_name = "tdm_team";
-	else if(g_assault)
+	else if(g_assault || g_nexball)
 	{
-		c1 = c2 = 0; // Assault always has 2 teams
+		c1 = c2 = 0; // Assault and nexball always have 2 teams
 		return;
 	}
 	else

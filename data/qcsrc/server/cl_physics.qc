@@ -436,6 +436,11 @@ void SV_PlayerPhysics()
 		maxspd_mod = cvar("g_minstagib_speed_moverate");
 	}
 
+	if(g_nexball && self.ballcarried)
+	{
+		maxspd_mod = cvar("g_nexball_basketball_carrier_speed");
+	}
+
 	swampspd_mod = 1;
 	if(self.in_swamp) {
 		swampspd_mod = self.swamp_slowdown; //cvar("g_balance_swamp_moverate");

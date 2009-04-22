@@ -1550,6 +1550,57 @@ target: disable/enable all relays with this targetname when triggered
 targetname: name that identifies this entity so it can be triggered
 */
 
+/*QUAKED ball_redgoal (1 0 0) ?
+"Red" goal. Defended by blue team, the red team tries to put the ball in there.
+-------- KEYS --------
+noise: sound played when a point is scored
+-------- SPAWNFLAGS --------
+GOAL_TOUCHPLAYER: The trigger also affects ball-carrying players (the ball is then auto-dropped)
+*/
+
+/*QUAKED ball_bluegoal (0 0 1) ?
+"Blue" goal. Defended by red team, the blue team tries to put the ball in there.
+-------- KEYS --------
+noise: sound played when a point is scored
+-------- SPAWNFLAGS --------
+GOAL_TOUCHPLAYER: The trigger also affects ball-carrying players (the ball is then auto-dropped)
+*/
+
+/*QUAKED ball_fault (0.6 0.1 0) ?
+This acts as a goal that always gives points to the opposing team.
+-------- KEYS --------
+noise: sound played when a point is scored
+-------- SPAWNFLAGS --------
+GOAL_TOUCHPLAYER: The trigger also affects ball-carrying players (the ball is then auto-dropped)
+*/
+
+/*QUAKED ball_bound (0.1 0.6 0) ?
+When the ball touches this, it is returned.
+-------- KEYS --------
+noise: sound played when a point is scored
+-------- SPAWNFLAGS --------
+GOAL_TOUCHPLAYER: The trigger also affects ball-carrying players (the ball is then auto-dropped)
+*/
+
+/*QUAKED ball_football (.9 .9 .9) (-16 -16 -16) (16 16 16)
+The soccer type Nexball.
+-------- KEYS --------
+model: set this if you want to use your own model
+scale: if you're using your own model, change this to scale it to 32*32*32
+noise: played when the ball bounces
+noise1: played when the ball is dropped on the map
+*/
+
+/*QUAKED ball_basketball (.5 .2 0) (-16 -16 -16) (16 16 16)
+The basket ball type Nexball.
+-------- KEYS --------
+model: set this if you want to use your own model
+scale: if you're using your own model, change this to scale it to 32*32*32
+noise: played when the ball bounces
+noise1: played when the ball is dropped on the map
+noise2: played when the ball is stolen from the enemy
+*/
+
 /*QUAKED item_fuel (.3 .3 1) (-30 -30 0) (30 30 32) FLOATING
 Jetpack fuel
 -------- KEYS --------

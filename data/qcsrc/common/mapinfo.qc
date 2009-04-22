@@ -399,6 +399,8 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 					MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_ASSAULT;
 				else if(v == "onslaught_generator")
 					MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_ONSLAUGHT;
+				else if(v == "ball_bluegoal")
+					MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_NEXBALL;
 				else if(v == "info_player_team1")
 					++spawnpoints;
 				else if(v == "info_player_team2")
@@ -521,19 +523,20 @@ void _MapInfo_Map_ApplyGametype(string s, float pWantedType, float pThisType)
 
 float MapInfo_Type_FromString(string t)
 {
-	if     (t == "dm")    return MAPINFO_TYPE_DEATHMATCH;
-	else if(t == "tdm")   return MAPINFO_TYPE_TEAM_DEATHMATCH;
-	else if(t == "dom")   return MAPINFO_TYPE_DOMINATION;
-	else if(t == "ctf")   return MAPINFO_TYPE_CTF;
-	else if(t == "rune")  return MAPINFO_TYPE_RUNEMATCH;
-	else if(t == "lms")   return MAPINFO_TYPE_LMS;
-	else if(t == "arena") return MAPINFO_TYPE_ARENA;
-	else if(t == "kh")    return MAPINFO_TYPE_KEYHUNT;
-	else if(t == "as")    return MAPINFO_TYPE_ASSAULT;
-	else if(t == "ons")   return MAPINFO_TYPE_ONSLAUGHT;
-	else if(t == "race")  return MAPINFO_TYPE_RACE;
-	else if(t == "all")   return MAPINFO_TYPE_ALL;
-	else                  return 0;
+	if     (t == "dm")      return MAPINFO_TYPE_DEATHMATCH;
+	else if(t == "tdm")     return MAPINFO_TYPE_TEAM_DEATHMATCH;
+	else if(t == "dom")     return MAPINFO_TYPE_DOMINATION;
+	else if(t == "ctf")     return MAPINFO_TYPE_CTF;
+	else if(t == "rune")    return MAPINFO_TYPE_RUNEMATCH;
+	else if(t == "lms")     return MAPINFO_TYPE_LMS;
+	else if(t == "arena")   return MAPINFO_TYPE_ARENA;
+	else if(t == "kh")      return MAPINFO_TYPE_KEYHUNT;
+	else if(t == "as")      return MAPINFO_TYPE_ASSAULT;
+	else if(t == "ons")     return MAPINFO_TYPE_ONSLAUGHT;
+	else if(t == "race")    return MAPINFO_TYPE_RACE;
+	else if(t == "nexball") return MAPINFO_TYPE_NEXBALL;
+	else if(t == "all")     return MAPINFO_TYPE_ALL;
+	else                    return 0;
 }
 
 // load info about a map by name into the MapInfo_Map_* globals
@@ -611,6 +614,7 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ASSAULT)         fputs(fh, "type as 20\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_RACE)            fputs(fh, "type race 5 20 15\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ONSLAUGHT)       fputs(fh, "type ons 20\n");
+		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_NEXBALL)         fputs(fh, "type nexball 5 20\n");
 
 		fh2 = fopen(strcat("scripts/", pFilename, ".arena"), FILE_READ);
 		if(fh2 >= 0)
@@ -856,7 +860,7 @@ float MapInfo_CurrentFeatures()
 {
 	float req;
 	req = 0;
-	if(!(cvar("g_lms") || cvar("g_instagib") || cvar("g_minstagib") || cvar("g_nixnex") || cvar("g_rocketarena") || !cvar("g_pickup_items") || cvar("g_race")))
+	if(!(cvar("g_lms") || cvar("g_instagib") || cvar("g_minstagib") || cvar("g_nixnex") || cvar("g_rocketarena") || !cvar("g_pickup_items") || cvar("g_race") || cvar("g_nexball")))
 		req |= MAPINFO_FEATURE_WEAPONS;
 	return req;
 }
@@ -883,6 +887,8 @@ float MapInfo_CurrentGametype()
 		return MAPINFO_TYPE_ONSLAUGHT;
 	else if(cvar("g_race"))
 		return MAPINFO_TYPE_RACE;
+	else if(cvar("g_nexball"))
+		return MAPINFO_TYPE_NEXBALL;
 	else
 		return MAPINFO_TYPE_DEATHMATCH;
 }
@@ -939,6 +945,7 @@ void MapInfo_SwitchGameType(float t)
 	cvar_set("g_assault",    (t == MAPINFO_TYPE_ASSAULT)         ? "1" : "0");
 	cvar_set("g_onslaught",  (t == MAPINFO_TYPE_ONSLAUGHT)       ? "1" : "0");
 	cvar_set("g_race",       (t == MAPINFO_TYPE_RACE)            ? "1" : "0");
+	cvar_set("g_nexball",    (t == MAPINFO_TYPE_NEXBALL)         ? "1" : "0");
 }
 
 void MapInfo_LoadMap(string s)

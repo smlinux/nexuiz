@@ -36,6 +36,7 @@ const float GAME_KEYHUNT		= 8;
 const float GAME_ASSAULT		= 9;
 const float GAME_ONSLAUGHT	= 10;
 const float GAME_RACE	= 11;
+const float GAME_NEXBALL = 12;
 
 const float AS_STRING		= 1;
 const float AS_INT		= 2;
@@ -248,6 +249,7 @@ const float STAT_INVINCIBLE_FINISHED = 39;
 const float STAT_PRESSED_KEYS = 42;
 const float STAT_ALLOW_OLDNEXBEAM = 43; // this stat could later contain some other bits of info, like, more server-side particle config
 const float STAT_FUEL = 44;
+const float STAT_NB_METERSTART = 45;
 const float CTF_STATE_ATTACK = 1;
 const float CTF_STATE_DEFEND = 2;
 const float CTF_STATE_COMMANDER = 3;

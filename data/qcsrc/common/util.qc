@@ -426,6 +426,7 @@ string GametypeNameFromType(float g)
 	else if (g == GAME_ONSLAUGHT) return "ons";
 	else if (g == GAME_ASSAULT) return "as";
 	else if (g == GAME_RACE) return "race";
+	else if (g == GAME_NEXBALL) return "nexball";
 	return "dm";
 }
 
