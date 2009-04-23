@@ -132,6 +132,7 @@ $postscale = 1 if not defined $postscale;
 
 for my $m(@{$options->{maps}})
 {
+	$m =~ s/\.(?:map|bsp)$//;
 	if($prescale != 1 or $postscale != 1)
 	{
 		open my $checkfh, "<", "$m.map"
