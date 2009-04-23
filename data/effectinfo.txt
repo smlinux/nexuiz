@@ -1,7 +1,5 @@
 // item respawn effect
 // flare particle and light
-// used in qcsrc/server/bots.qc:		//te_wizspike(start)
-// used in qcsrc/server/bots.qc:				te_wizspike(org)
 // used in qcsrc/server/bots.qc:	//te_wizspike(e.origin)
 // used in qcsrc/server/bots.qc:		//te_wizspike(e.nearestwaypoint.wpnearestpoint)
 // used in qcsrc/server/havocbot.qc:			//	te_wizspike(newgoal.origin)
@@ -28,10 +26,6 @@ velocityjitter 32 32 32
 
 // laser impact
 // decal
-// used in qcsrc/server/bots.qc:		//te_knightspike(end)
-// used in qcsrc/server/bots.qc:			te_knightspike(start)
-// used in qcsrc/server/bots.qc:						te_knightspike(org)
-// used in qcsrc/server/bots.qc:		te_knightspike(org)
 // used in qcsrc/server/w_seeker.qc:	te_knightspike(org2)
 effect TE_KNIGHTSPIKE
 countabsolute 1
@@ -236,11 +230,7 @@ velocityjitter 64 64 64
 
 // shotgun pellet impact
 // decal
-// used in qcsrc/server/bots.qc:			//te_gunshot(org)
-// used in qcsrc/server/bots.qc:					te_gunshot(org)
-// used in qcsrc/server/bots.qc:					te_gunshot(org)
-// used in qcsrc/server/bots.qc:					//	te_gunshot(org)
-// used in qcsrc/server/bots.qc:		//te_gunshot(end)
+// used nowhere in code
 effect TE_GUNSHOT
 countabsolute 1
 type decal
@@ -788,7 +778,7 @@ stretchfactor 0.6
 
 
 // normal super gory blood trail (used by gibs)
-// used nowhere in code
+// used in qcsrc/client/gibs.qc:		trailparticles(self, particleeffectnum("TR_BLOOD"), oldorg, self.origin)
 effect TR_BLOOD
 trailspacing 16
 type blood
@@ -805,7 +795,7 @@ velocitymultiplier 0.5
 
 
 // thinner blood trail (used by quake zombies)
-// used nowhere in code
+// used in qcsrc/client/gibs.qc:		trailparticles(self, particleeffectnum("TR_SLIGHTBLOOD"), oldorg, self.origin)
 effect TR_SLIGHTBLOOD
 trailspacing 32
 type blood
@@ -1107,6 +1097,7 @@ velocitymultiplier 0.1
 
 
 
+// used in qcsrc/server/nexball.qc:	pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1)
 // used in qcsrc/server/w_grenadelauncher.qc:	pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1)
 // used in qcsrc/server/w_grenadelauncher.qc:	pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1)
 // used in qcsrc/server/w_porto.qc:	//pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1)
@@ -1140,7 +1131,8 @@ airfriction 12
 
 // hagar trail
 // smoke
-// used nowhere in code
+// used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("TR_GRENADE"), from, to)
+// used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("TR_GRENADE"), from, to)
 effect TR_GRENADE
 trailspacing 6
 type alphastatic
@@ -1185,7 +1177,9 @@ velocityjitter 16 16 16
 
 // mortar trail
 // smoke
-// used nowhere in code
+// used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("TR_KNIGHTSPIKE"), from, to)
+// used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("TR_KNIGHTSPIKE"), from, to)
+// used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("TR_KNIGHTSPIKE"), from, to)
 effect TR_KNIGHTSPIKE // used for MF_TRACER2
 notunderwater
 trailspacing 5
@@ -1920,7 +1914,10 @@ airfriction 12
 
 // rocket trail
 // smoke
-// used nowhere in code
+// used in qcsrc/server/cl_client.qc:		self.modelflags |= MF_ROCKET
+// used in qcsrc/server/cl_client.qc:		self.modelflags &~= MF_ROCKET
+// used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("TR_ROCKET"), from, to)
+// used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("TR_ROCKET"), from, to)
 effect TR_ROCKET
 trailspacing 5
 type alphastatic
@@ -3033,7 +3030,8 @@ airfriction 1
 
 // port-o-launch trail
 // glowing vapor trail
-// used nowhere in code
+// used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("TR_WIZSPIKE"), from, to)
+// used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("TR_WIZSPIKE"), from, to)
 effect TR_WIZSPIKE
 trailspacing 2
 type static
@@ -3064,7 +3062,8 @@ velocityjitter 50 50 50
 
 // TAG trail
 // glowing vapor trail
-// used nowhere in code
+// used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("TR_VORESPIKE"), from, to)
+// used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("TR_VORESPIKE"), from, to)
 effect TR_VORESPIKE
 trailspacing 2
 type static
@@ -3211,7 +3210,8 @@ airfriction -1
 
 // crylink trail
 // plasma smoke
-// used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("TR_NEXUIZPLASMA"), from, to)
+// used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("TR_CRYLINKPLASMA"), from, to)
+// used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("TR_CRYLINKPLASMA"), from, to)
 effect TR_CRYLINKPLASMA
 trailspacing 64
 type static
