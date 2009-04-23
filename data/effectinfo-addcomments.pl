@@ -20,7 +20,8 @@ while(<$fh>)
 		{
 			print STDERR "Handling $1...\n";
 			$found{$1} = 1;
-			my $search =
+			my $search = $1;
+			my $search2 =
 				$1 eq 'TR_BLOOD' ? 'MF_GIB' :
 				$1 eq 'TR_SLIGHTBLOOD' ? 'MF_ZOMGIB' :
 				$1 eq 'TR_WIZSPIKE' ? 'MF_TRACER' :
@@ -31,8 +32,9 @@ while(<$fh>)
 				$1;
 			local $ENV{effectre} =
 				$search eq lc $search
-					? "\"$search\""
-					: "\"$search\"|\\<" . lc($search) . "\\>|\\<" . $search . "\\>";
+					? "\"$search\"|\"$search2\""
+					: "\"$search\"|\\<" . lc($search) . "\\>|\\<" . $search . "\\>|"
+					. "\"$search2\"|\\<" . lc($search2) . "\\>|\\<" . $search2 . "\\>";
 			print "$ENV{effectre}\n";
 			my $occurrences = `grep -E "\$effectre" qcsrc/server/*.qc qcsrc/client/*.qc`;
 			$occurrences =~ s/\r/\n/g;
