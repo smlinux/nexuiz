@@ -298,10 +298,145 @@ vector steerlib_traceavoid_flat(float pitch, float length, vector vofs)
     frontwish = v_forward * f_front;
 
     return normalize(leftwish + rightwish + frontwish);
-
 }
 
+float beamsweep_badpoint(vector point,float waterok)
+{
+    float pc,pc2;
 
+    if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SKY)
+        return 1;
+
+    pc  = pointcontents(point);
+    pc2 = pointcontents(point - '0 0 1');
+
+    switch(pc)
+    {
+        case CONTENT_SOLID: break;
+        case CONTENT_SLIME: break;
+        case CONTENT_LAVA:  break;
+
+        case CONTENT_SKY:
+            return 1;
+
+        case CONTENT_EMPTY:
+            if (pc2 == CONTENT_SOLID)
+                return 0;
+
+            if (pc2 == CONTENT_WATER)
+                if(waterok)
+                    return 0;
+
+            break;
+
+        case CONTENT_WATER:
+            if(waterok)
+                return 0;
+
+            break;
+    }
+
+    return 1;
+}
+
+float beamsweep(vector from, vector dir,float length, float step,float step_up, float step_down)
+{
+    float i;
+    vector a,b,u,d;
+
+    u = '0 0 1' * step_up;
+    d = '0 0 1' * step_down;
+
+    traceline(from + u, from - d,MOVE_NORMAL,self);
+    if(trace_fraction == 1.0)
+        return 0;
+
+    if(beamsweep_badpoint(trace_endpos,0))
+        return 0;
+
+    a = trace_endpos;
+    for(i = 0; i < length; i += step)
+    {
+
+        b = a + dir * step;
+        tracebox(a + u,'-4 -4 -4','4 4 4', b + u,MOVE_NORMAL,self);
+        if(trace_fraction != 1.0)
+            return i / length;
+
+        traceline(b + u, b - d,MOVE_NORMAL,self);
+        if(trace_fraction == 1.0)
+            return i / length;
+
+        if(beamsweep_badpoint(trace_endpos,0))
+            return i / length;
+
+        //te_lightning1(world,a+u,b+u);
+        //te_lightning1(world,b+u,b-d);
+
+        a = trace_endpos;
+    }
+
+    return 1;
+}
+
+vector steerlib_beamsteer(vector dir, float length, float step, float step_up, float step_down)
+{
+    float bm_forward, bm_right, bm_left,p;
+    vector vr,vl;
+
+    dir_z *= 0.15;
+    vr = vectoangles(dir);
+    vr_x *= -1;
+
+    makevectors(vr);
+    bm_forward = beamsweep(self.origin, v_forward, length, step, step_up, step_down);
+
+    vr = normalize(v_forward + v_right * 0.125);
+    vl = normalize(v_forward - v_right * 0.125);
+
+    bm_right = beamsweep(self.origin, vr, length, step, step_up, step_down);
+    bm_left  = beamsweep(self.origin, vl, length, step, step_up, step_down);
+
+
+    p = bm_left + bm_right;
+    if(p == 2)
+    {
+        //te_lightning1(self,self.origin + '0 0 32',self.origin + '0 0 32' + vr * length);
+        //te_lightning1(self.tur_head,self.origin + '0 0 32',self.origin + '0 0 32' + vl * length);
+
+        return v_forward;
+    }
+
+    p = 2 - p;
+
+    vr = normalize(v_forward + v_right * p);
+    vl = normalize(v_forward - v_right * p);
+    bm_right = beamsweep(self.origin, vr, length, step, step_up, step_down);
+    bm_left  = beamsweep(self.origin, vl, length, step, step_up, step_down);
+
+
+    if(bm_left + bm_right < 0.15)
+    {
+        vr = normalize((v_forward*-1) + v_right * 0.75);
+        vl = normalize((v_forward*-1) - v_right * 0.75);
+
+        bm_right = beamsweep(self.origin, vr, length, step, step_up, step_down);
+        bm_left  = beamsweep(self.origin, vl, length, step, step_up, step_down);
+    }
+
+    //te_lightning1(self,self.origin + '0 0 32',self.origin + '0 0 32' + vr * length);
+    //te_lightning1(self.tur_head,self.origin + '0 0 32',self.origin + '0 0 32' + vl * length);
+
+    bm_forward *= bm_forward;
+    bm_right   *= bm_right;
+    bm_left    *= bm_left;
+
+    vr = vr * bm_right;
+    vl = vl * bm_left;
+
+    return normalize(vr + vl);
+
+}
 
 
 //////////////////////////////////////////////
@@ -484,5 +619,6 @@ void spawnfunc_flockerspawn()
     self.enemy.owner     = self;
 }
 #endif
+
 
 
