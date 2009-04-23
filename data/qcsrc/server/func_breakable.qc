@@ -135,7 +135,7 @@ void func_breakable_destroy() {
 		RadiusDamage(self, activator, self.dmg, self.dmg_edge, self.dmg_radius, self, self.dmg_force, DEATH_HURTTRIGGER, world);
 
 	// now throw around the debris
-	n = tokenize_sane(self.debris);
+	n = tokenize_console(self.debris);
 	for(i = 0; i < n; ++i)
 		LaunchDebris(argv(i));
 
@@ -202,7 +202,7 @@ void spawnfunc_func_breakable() {
 	// precache all the models
 	if (self.mdl_dead)
 		precache_model(self.mdl_dead);
-	n = tokenize_sane(self.debris);
+	n = tokenize_console(self.debris);
 	for(i = 0; i < n; ++i)
 		precache_model(argv(i));
 	if(self.noise)

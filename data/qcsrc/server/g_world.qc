@@ -553,7 +553,7 @@ void spawnfunc_worldspawn (void)
 		{
 			while((s = fgets(fd)))
 			{
-				l = tokenize_sane(s);
+				l = tokenize_console(s);
 				if(l < 2)
 					continue;
 				if(argv(0) == "cd")
@@ -615,7 +615,7 @@ void spawnfunc_worldspawn (void)
 	lsmaps_reply = strzone(strcat(lsmaps_reply, "\n"));
 
 	maplist_reply = "^7Maps in list: ";
-	n = tokenize_sane(cvar_string("g_maplist"));
+	n = tokenize_console(cvar_string("g_maplist"));
 	for(i = 0, j = 0; i < n; ++i)
 	{
 		if(MapInfo_CheckMap(argv(i)))

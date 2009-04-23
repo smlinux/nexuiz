@@ -337,3 +337,7 @@ float 	fopen( string filename, float mode ) =
 	return handle;
 };
 #endif
+
+float(string s) tokenize_console = #514;
+float(float i) argv_start_index = #515;
+float(float i) argv_end_index = #516;

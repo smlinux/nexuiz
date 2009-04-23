@@ -71,10 +71,7 @@ void Draw_GrapplingHook()
 		tex = "particles/hook_green";
 		rgb = '.3 1 .3';
 	}
-	if(csqc_flags & CSQC_FLAG_READPICTURE)
-		Draw_CylindricLine(b, a, 8, tex, 0.25, random(), '1 1 1', 1, DRAWFLAG_NORMAL);
-	else
-		Draw_CylindricLine(b, a, 1, "", 0.25, 0, rgb, 1, DRAWFLAG_NORMAL);
+	Draw_CylindricLine(b, a, 8, tex, 0.25, random(), '1 1 1', 1, DRAWFLAG_NORMAL);
 }
 
 void Net_GrapplingHook()

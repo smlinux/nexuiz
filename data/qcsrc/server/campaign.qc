@@ -136,7 +136,7 @@ void CampaignSaveCvar(string cvarname, float value)
 	{
 		while((l = fgets(fh)))
 		{
-			len = tokenize_sane(l);
+			len = tokenize_console(l);
 			if(len != 3)
 				continue;
 			if(argv(0) != "set")

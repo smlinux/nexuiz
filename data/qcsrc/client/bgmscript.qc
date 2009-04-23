@@ -199,7 +199,7 @@ float BGMScript(entity e)
 	// find the CURRENT line
 	for(;;)
 	{
-		tokenize_sane(bufstr_get(bgmscriptbuf, e.bgmscriptline));
+		tokenize_console(bufstr_get(bgmscriptbuf, e.bgmscriptline));
 		if(stof(argv(1)) >= t || argv(0) != e.bgmscript)
 		{
 			e.bgmscripttime = t;

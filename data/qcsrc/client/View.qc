@@ -223,18 +223,8 @@ void CSQC_UpdateView(float w, float h)
 		view_set = 1;
 	}
 
-	if(csqc_flags & CSQC_FLAG_COLORCODES)
-	{
-		// supporting engine
-		vid_width = w;
-		vid_height = h;
-	}
-	else
-	{
-		// non-supporting engine
-		vid_width = cvar("vid_width");
-		vid_height = cvar("vid_height");
-	}
+	vid_width = w;
+	vid_height = h;
 
 #ifdef BLURTEST
 	if(time > blurtest_time0 && time < blurtest_time1)

@@ -67,18 +67,9 @@ void draw_teamradar_background(float bg, float fg)
 
 	if(fg > 0 && minimapname != "")
 	{
-		if(csqc_flags & CSQC_FLAG_READPICTURE) // not 2.4.2
-		{
-			fga = 1;
-			fgc = '1 1 1' * fg;
-			R_BeginPolygon(minimapname, DRAWFLAG_SCREEN | DRAWFLAG_MIPMAP);
-		}
-		else
-		{
-			fga = fg;
-			fgc = '1 1 1';
-			R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE);
-		}
+		fga = 1;
+		fgc = '1 1 1' * fg;
+		R_BeginPolygon(minimapname, DRAWFLAG_SCREEN | DRAWFLAG_MIPMAP);
 		if(v_flipped)
 		{
 			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord3), yinvert(mi_pictexcoord3), fgc, fga);

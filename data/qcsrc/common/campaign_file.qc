@@ -36,7 +36,7 @@ float CampaignFile_Load(float offset, float n)
 				continue; // comment
 			if(lineno >= offset)
 			{
-				entlen = tokenize_insane(l); // using insane tokenizer for CSV
+				entlen = tokenize(l); // using insane tokenizer for CSV
 
 #define CAMPAIGN_GETARG0                  if(i >= entlen)
 #define CAMPAIGN_GETARG1 CAMPAIGN_GETARG0     error("syntax error in campaign file: line has not enough fields");

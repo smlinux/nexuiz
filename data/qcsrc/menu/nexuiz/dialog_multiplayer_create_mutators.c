@@ -42,7 +42,7 @@ string WeaponArenaString()
 
 	weaponarenastring_cvar = strzone(s);
 
-	n = tokenize_sane(s);
+	n = tokenize_console(s);
 	s = "";
 	for(i = 0; i < n; ++i)
 	{
@@ -103,7 +103,7 @@ string toStringNexuizMutatorsDialog(entity me)
 // WARNING: dirty hack. TODO clean this up by putting this behaviour in extra classes.
 void loadCvarsLaserWeaponArenaWeaponButton(entity me)
 {
-	tokenize_sane(cvar_string("g_weaponarena"));
+	tokenize_console(cvar_string("g_weaponarena"));
 	me.checked = (argv(0) == me.cvarValue);
 }
 

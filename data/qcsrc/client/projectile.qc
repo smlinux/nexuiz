@@ -166,11 +166,8 @@ void Projectile_Draw()
 
 void loopsound(entity e, float ch, string samp, float vol, float attn)
 {
-	if(csqc_flags & CSQC_FLAG_COLORCODES)
-	{
-		sound(e, ch, samp, vol, attn);
-		e.snd_looping = 1;
-	}
+	sound(e, ch, samp, vol, attn);
+	e.snd_looping = 1;
 }
 
 void Ent_RemoveProjectile()

@@ -23,7 +23,7 @@ void W_SwitchWeapon(float imp)
 float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float imp, float complain)
 {
 	float n, i, weaponwant, first_valid, prev_valid, switchtonext, switchtolast, c;
-	n = tokenize_sane(weaponorder);
+	n = tokenize_console(weaponorder);
 	switchtonext = switchtolast = 0;
 	first_valid = prev_valid = 0;
 

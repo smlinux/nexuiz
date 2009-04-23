@@ -47,7 +47,7 @@ void saveCvarsNexuizResolutionSlider(entity me)
 {
 	if(me.value >= 0 || me.value < me.nValues)
 	{
-		tokenize_sane(me.getIdentifier(me));
+		tokenize_console(me.getIdentifier(me));
 		cvar_set("vid_width", argv(0));
 		cvar_set("vid_height", argv(1));
 		cvar_set("vid_conwidth", argv(2));

@@ -1628,7 +1628,7 @@ void func_fourier_controller_think()
 
 	self.nextthink = time + 0.1;
 
-	n = floor((tokenize_sane(self.owner.netname)) / 5);
+	n = floor((tokenize_console(self.owner.netname)) / 5);
 	t = self.nextthink * self.owner.cnt + self.owner.phase * 360;
 
 	v = self.owner.destvec;

@@ -97,9 +97,7 @@ float teamscores_flags[MAX_SCORE];
 
 vector sbar_fontsize;
 
-float csqc_flags;
-#define CSQC_FLAG_READPICTURE 1
-#define CSQC_FLAG_COLORCODES 2
+//float csqc_flags;
 
 entity playerslots[255]; // 255 is engine limit on maxclients
 entity teamslots[17];    // 17 teams (including "spectator team")

@@ -1510,7 +1510,7 @@ void target_voicescript_next(entity pl)
 		if(time >= pl.voicescript_nextthink)
 		{
 			// get the next voice...
-			n = tokenize_sane(vs.message);
+			n = tokenize_console(vs.message);
 
 			if(pl.voicescript_index < vs.cnt)
 				i = pl.voicescript_index * 2;
@@ -1544,7 +1544,7 @@ void spawnfunc_target_voicescript()
 	float i, n;
 	self.use = target_voicescript_use;
 
-	n = tokenize_sane(self.message);
+	n = tokenize_console(self.message);
 	self.cnt = n / 2;
 	for(i = 0; i+1 < n; i += 2)
 	{

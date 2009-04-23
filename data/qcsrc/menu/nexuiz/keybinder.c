@@ -50,7 +50,7 @@ void Nexuiz_KeyBinds_Read()
 		return;
 	while((s = fgets(fh)))
 	{
-		if(tokenize_sane(s) != 2)
+		if(tokenize_console(s) != 2)
 			continue;
 		Nexuiz_KeyBinds_Functions[Nexuiz_KeyBinds_Count] = strzone(argv(0));
 		Nexuiz_KeyBinds_Descriptions[Nexuiz_KeyBinds_Count] = strzone(argv(1));
@@ -116,7 +116,7 @@ void keyGrabbedNexuizKeyBinder(entity me, float key, float ascii)
 	if(func == "")
 		return;
 
-	n = tokenize_insane(findkeysforcommand(func)); // uses '...' strings
+	n = tokenize(findkeysforcommand(func)); // uses '...' strings
 	nvalid = 0;
 	for(j = 0; j < n; ++j)
 	{
@@ -186,7 +186,7 @@ void KeyBinder_Bind_Clear(entity btn, entity me)
 	if(func == "")
 		return;
 
-	n = tokenize_insane(findkeysforcommand(func)); // uses '...' strings
+	n = tokenize(findkeysforcommand(func)); // uses '...' strings
 	for(j = 0; j < n; ++j)
 	{
 		k = stof(argv(j));
@@ -300,7 +300,7 @@ void drawListBoxItemNexuizKeyBinder(entity me, float i, vector absSize, float is
 	draw_Text(me.realUpperMargin * eY + extraMargin * eX, descr, me.realFontSize, theColor, theAlpha, 0);
 	if(func != "")
 	{
-		n = tokenize_insane(findkeysforcommand(func)); // uses '...' strings
+		n = tokenize(findkeysforcommand(func)); // uses '...' strings
 		s = "";
 		for(j = 0; j < n; ++j)
 		{

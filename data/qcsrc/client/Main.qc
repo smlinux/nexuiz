@@ -293,7 +293,7 @@ float CSQC_ConsoleCommand(string strMessage)
 	float argc;
 	// Tokenize String
 	//argc = tokenize(strMessage);
-	argc = tokenize_sane(strMessage);
+	argc = tokenize_console(strMessage);
 
 	// Acquire Command
 	local string strCmd;
@@ -378,7 +378,7 @@ void ShotOrg_Draw2D()
 
 	s = vtos(self.view_ofs);
 	s = substring(s, 1, strlen(s) - 2);
-	if(tokenize_sane(s) == 3)
+	if(tokenize_console(s) == 3)
 		s = strcat(argv(0), " ", argv(1), " ", argv(2));
 
 	coord2d_topleft = project_3d_to_2d(self.origin + view_up * 4 - view_right * 4);
@@ -413,7 +413,7 @@ void ShotOrg_Spawn()
 void GameCommand(string msg)
 {
 	float argc;
-	argc = tokenize_sane(msg);
+	argc = tokenize_console(msg);
 
 	if(argv(0) == "help" || argc == 0)
 	{
@@ -887,27 +887,6 @@ void Ent_Init()
 		PostInit();
 }
 
-string Net_ReadPicture()
-{
-	string img;
-	if(csqc_flags & CSQC_FLAG_READPICTURE)
-	{
-		img = ReadPicture();
-		print(strcat("Got Picture: ", img, "\n"));
-	} else {
-		img = ReadString();
-		print(strcat("^3Warning: ^7Couldn't download ", img, ". This is probably because your engine build is outdated.\n"));
-		float psize, i;
-		psize = ReadShort();
-		// Can I be sure that ReadShort is 2 bytes and ReadLong is 4 bytes?
-		// Because then this could be optimized to first get all 4-byte-groups,
-		// then the remaining 2, then the remaining 1
-		for(i = 0; i < psize; ++i)
-			ReadByte();
-	}
-	return img;
-}
-
 void Net_ReadRace()
 {
 	float b;
@@ -1041,28 +1020,25 @@ string getcommandkey(string text, string command)
 		return text;
 
 	keys = db_get(binddb, command);
-	if(csqc_flags & CSQC_FLAG_READPICTURE)
+	if (!keys)
 	{
-		if (!keys)
+		n = tokenize(findkeysforcommand(command)); // uses '...' strings
+		for(j = 0; j < n; ++j)
 		{
-			n = tokenize_insane(findkeysforcommand(command)); // uses '...' strings
-			for(j = 0; j < n; ++j)
+			k = stof(argv(j));
+			if(k != -1)
 			{
-				k = stof(argv(j));
-				if(k != -1)
-				{
-					if ("" == keys)
-						keys = keynumtostring(k);
-					else
-						keys = strcat(keys, ", ", keynumtostring(k));
+				if ("" == keys)
+					keys = keynumtostring(k);
+				else
+					keys = strcat(keys, ", ", keynumtostring(k));
 
-					++l;
-					if (sbar_showbinds_limit > 0 && sbar_showbinds_limit >= l) break;
-				}
-
+				++l;
+				if (sbar_showbinds_limit > 0 && sbar_showbinds_limit >= l) break;
 			}
-			db_put(binddb, command, keys);
+
 		}
+		db_put(binddb, command, keys);
 	}
 
 	if ("" == keys) {

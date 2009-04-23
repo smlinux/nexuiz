@@ -105,7 +105,7 @@ void SV_ParseClientCommand(string s) {
 	local float tokens, f, effectnum;
 	local vector start, end;
 
-	tokens = tokenize_sane(s);
+	tokens = tokenize_console(s);
 
 	if(GameCommand_Vote(s, self)) {
 		return;
@@ -146,14 +146,14 @@ void SV_ParseClientCommand(string s) {
 		if(substring(argv(2), 0, 1) == "$") // undefined cvar: use the default value on the server then
 		{
 			s = strcat(substring(s, argv_start_index(0), argv_end_index(1) - argv_start_index(0)), " \"", cvar_defstring(argv(1)), "\"");
-			tokens = tokenize_sane(s);
+			tokens = tokenize_console(s);
 		}
 		GetCvars(1);
 	} else if(argv(0) == "sentcvar") { // new system
 		if(tokens == 2) // undefined cvar: use the default value on the server then
 		{
 			s = strcat(substring(s, argv_start_index(0), argv_end_index(1) - argv_start_index(0)), " \"", cvar_defstring(argv(1)), "\"");
-			tokens = tokenize_sane(s);
+			tokens = tokenize_console(s);
 		}
 		GetCvars(1);
 	} else if(argv(0) == "spectate") {

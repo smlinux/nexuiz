@@ -675,7 +675,7 @@ void weapon_defaultspawnfunc(float wpn)
 			startitem_failed = TRUE;
 			return;
 		}
-		t = tokenize_sane(s);
+		t = tokenize_console(s);
 		if(t >= 2)
 		{
 			self.team = --internalteam;
@@ -1221,7 +1221,7 @@ void spawnfunc_target_items (void)
 	precache_sound("misc/poweroff.wav");
 	precache_sound("weapons/weaponpickup.wav");
 
-	n = tokenize_sane(self.netname);
+	n = tokenize_console(self.netname);
 	for(i = 0; i < n; ++i)
 	{
 		if(argv(i) == "unlimited_ammo")         self.items |= IT_UNLIMITED_AMMO;

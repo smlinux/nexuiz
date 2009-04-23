@@ -227,11 +227,9 @@ void Cmd_MapVote_MapDownload(float argc)
 		mv_preview[id] = true;
 		//print("^2Found...\n");
 		return;
-	} else if(csqc_flags & CSQC_FLAG_READPICTURE) {
+	} else {
 		print("Requesting preview...\n");
 		localcmd(strcat("\ncmd mv_getpic ", ftos(id), "\n"));
-	} else {
-		print("^3Missing map preview - Update to a newer build to be able to see them.\n");
 	}
 }
 
@@ -252,7 +250,7 @@ void MapVote_CheckPK3(string pic, string pk3, float id)
 	}
 	else
 	{
-		Cmd_MapVote_MapDownload(tokenize_sane(strcat("mv_download ", ftos(id))));
+		Cmd_MapVote_MapDownload(tokenize_console(strcat("mv_download ", ftos(id))));
 	}
 }
 
@@ -388,11 +386,10 @@ void Ent_MapVote()
 		MapVote_UpdateVotes();
 }
 
-string Net_ReadPicture();
 void Net_MapVote_Picture()
 {
 	float type;
 	type = ReadByte();
 	mv_preview[type] = true;
-	mv_pics[type] = strzone(Net_ReadPicture());
+	mv_pics[type] = strzone(ReadPicture());
 }

@@ -1,5 +1,0 @@
-#define tokenize DO_NOT_DEFINE_THIS_MONSTER_tokenize
-#define tokenizebyseparator DO_NOT_DEFINE_THIS_MONSTER_tokenizebyseparator
-#define argv DO_NOT_DEFINE_THIS_MONSTER_argv
-#define argv_start_index DO_NOT_DEFINE_THIS_MONSTER_argv_start_index
-#define argv_end_index DO_NOT_DEFINE_THIS_MONSTER_argv_end_index

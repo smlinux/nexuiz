@@ -102,7 +102,7 @@ void g_maplistCacheToggleNexuizMapList(entity me, float i)
 	else
 	{
 		s = "";
-		n = tokenize_sane(cvar_string("g_maplist"));
+		n = tokenize_console(cvar_string("g_maplist"));
 		for(i = 0; i < n; ++i)
 			if(argv(i) != bspname)
 				s = strcat(s, " ", argv(i));
@@ -210,7 +210,7 @@ void refilterNexuizMapList(entity me)
 	s = "0";
 	for(i = 1; i < MapInfo_count; i *= 2)
 		s = strcat(s, s);
-	n = tokenize_sane(cvar_string("g_maplist"));
+	n = tokenize_console(cvar_string("g_maplist"));
 	for(i = 0; i < n; ++i)
 	{
 		j = MapInfo_FindName(argv(i));

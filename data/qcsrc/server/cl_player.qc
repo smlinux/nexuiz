@@ -881,7 +881,7 @@ float GetPlayerSoundSampleField_fixed;
 void PrecacheGlobalSound(string samplestring)
 {
 	float n, i;
-	tokenize_sane(samplestring);
+	tokenize_console(samplestring);
 	n = stof(argv(1));
 	if(n > 0)
 	{
@@ -903,7 +903,7 @@ void PrecachePlayerSounds(string f)
 		return;
 	while((s = fgets(fh)))
 	{
-		if(tokenize_sane(s) != 3)
+		if(tokenize_console(s) != 3)
 		{
 			dprint("Invalid sound info line: ", s, "\n");
 			continue;
@@ -939,7 +939,7 @@ void LoadPlayerSounds(string f, float first)
 		return;
 	while((s = fgets(fh)))
 	{
-		if(tokenize_sane(s) != 3)
+		if(tokenize_console(s) != 3)
 			continue;
 		field = GetPlayerSoundSampleField(argv(0));
 		if(GetPlayerSoundSampleField_notFound)
@@ -975,7 +975,7 @@ void GlobalSound(string sample, float chan, float voicetype)
 	if(sample == "")
 		return;
 
-	tokenize_sane(sample);
+	tokenize_console(sample);
 	n = stof(argv(1));
 	if(n > 0)
 		sample = strcat(argv(0), ftos(floor(random() * n + 1)), ".wav"); // randomization

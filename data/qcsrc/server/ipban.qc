@@ -31,7 +31,7 @@ void OnlineBanList_SendBan(string ip, float bantime, string reason)
 	uri = strcat(uri, "&duration=", ftos(bantime));
 	uri = strcat(uri, "&reason=", uri_escape(reason));
 
-	n = tokenize_sane(cvar_string("g_ban_sync_uri"));
+	n = tokenize_console(cvar_string("g_ban_sync_uri"));
 	if(n >= MAX_IPBAN_URIS)
 		n = MAX_IPBAN_URIS;
 	for(i = 0; i < n; ++i)
@@ -46,7 +46,7 @@ void OnlineBanList_SendUnban(string ip)
 	uri = strcat(     "?action=unban&hostname=", uri_escape(cvar_string("hostname")));
 	uri = strcat(uri, "&ip=", uri_escape(ip));
 
-	n = tokenize_sane(cvar_string("g_ban_sync_uri"));
+	n = tokenize_console(cvar_string("g_ban_sync_uri"));
 	if(n >= MAX_IPBAN_URIS)
 		n = MAX_IPBAN_URIS;
 	for(i = 0; i < n; ++i)
@@ -75,7 +75,7 @@ void OnlineBanList_URI_Get_Callback(float id, float status, string data)
 		return;
 	}
 
-	tokenize_sane(cvar_string("g_ban_sync_uri"));
+	tokenize_console(cvar_string("g_ban_sync_uri"));
 	uri = argv(id);
 
 	print("Received ban list from ", uri, ": ");
@@ -183,7 +183,7 @@ void OnlineBanList_Think()
 		return;
 	if(cvar("g_ban_sync_interval") == 0) // < 0 is okay, it means "sync on level start only"
 		return;
-	argc = tokenize_sane(cvar_string("g_ban_sync_trusted_servers"));
+	argc = tokenize_console(cvar_string("g_ban_sync_trusted_servers"));
 	if(argc == 0)
 		return;
 
@@ -199,7 +199,7 @@ void OnlineBanList_Think()
 
 	OnlineBanList_Timeout = time + cvar("g_ban_sync_timeout");
 
-	n = tokenize_sane(cvar_string("g_ban_sync_uri"));
+	n = tokenize_console(cvar_string("g_ban_sync_uri"));
 	if(n >= MAX_IPBAN_URIS)
 		n = MAX_IPBAN_URIS;
 	for(i = 0; i < n; ++i)
@@ -274,7 +274,7 @@ void Ban_LoadBans()
 		Ban_Delete(i);
 	ban_count = 0;
 	ban_loaded = TRUE;
-	n = tokenize_sane(cvar_string("g_banned_list"));
+	n = tokenize_console(cvar_string("g_banned_list"));
 	if(stof(argv(0)) == 1)
 	{
 		ban_count = (n - 1) / 2;
@@ -525,7 +525,7 @@ float GameCommand_Ban(string command)
 	string reason;
 	float reasonarg;
 
-	argc = tokenize_sane(command);
+	argc = tokenize_console(command);
 	if(argv(0) == "help")
 	{
 		print("  kickban # n m p reason - kickban player n for m seconds, using mask size p (1 to 4)\n");

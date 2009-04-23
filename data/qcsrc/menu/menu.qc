@@ -91,7 +91,7 @@ void() m_init_delayed =
 			continue;
 		if(substring(s, 0, 7) == "author ")
 			continue;
-		n = tokenize_sane(s);
+		n = tokenize_console(s);
 		if(n >= 2)
 			Skin_ApplySetting(argv(0), substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));
 	}

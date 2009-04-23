@@ -98,7 +98,7 @@ float	drawfill(vector position, vector size, vector rgb, float alpha, float flag
 void	drawsetcliparea(float x, float y, float width, float height) = #324;
 void	drawresetcliparea(void) = #325;
 float	drawcolorcodedstring(vector position, string text, vector scale, float alpha, float flag) = #326;
-float	stringwidth_engine(string text, float handleColors) = #327;
+float	stringwidth(string text, float handleColors) = #327;
 float	drawsubpic(vector position, vector size, string pic, vector srcPosition, vector srcSize, vector rgb, float alpha, float flag) = #328;
 
 
@@ -281,3 +281,7 @@ entity(vector org, float rad) findradius = #22;
 string(float uselocaltime, string format, ...) strftime = #478;
 float(float timer) gettime = #519;
 #define GETTIME_CDTRACK 4
+
+float(string s) tokenize_console = #514;
+float(float i) argv_start_index = #515;
+float(float i) argv_end_index = #516;

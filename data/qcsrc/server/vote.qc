@@ -22,7 +22,7 @@ entity GetKickVoteVictim(string vote, string cmd, entity caller)
 	entity e;
 	string reason;
 
-	tokens = tokenize_sane(vote);
+	tokens = tokenize_console(vote);
 	ns = "";
 
 	if(tokens >= 2)
@@ -96,13 +96,13 @@ float RemapVote(string vote, string cmd, entity e)
 {
 	float vote_argc;
 	entity victim;
-	vote_argc = tokenize_sane(vote);
+	vote_argc = tokenize_console(vote);
 
 	if(!VoteAllowed(argv(0), cmd))
 		return FALSE;
 
 	// VoteAllowed tokenizes!
-	vote_argc = tokenize_sane(vote);
+	vote_argc = tokenize_console(vote);
 
 	// remap chmap to gotomap (forces intermission)
 	if(vote_argc < 2)
@@ -111,14 +111,14 @@ float RemapVote(string vote, string cmd, entity e)
 	if(argv(0) == "chmap")
 	{
 		vote = strcat("gotomap ", substring(vote, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));
-		vote_argc = tokenize_sane(vote);
+		vote_argc = tokenize_console(vote);
 	}
 	if(argv(0) == "gotomap")
 	{
 		if(!(vote = ValidateMap(substring(vote, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)), e)))
 			return FALSE;
 		vote = strcat("gotomap ", vote);
-		vote_argc = tokenize_sane(vote); // ValidateMap may have done some stuff to it
+		vote_argc = tokenize_console(vote); // ValidateMap may have done some stuff to it
 	}
 
 	// make kick and kickban votes a bit nicer (and reject them if formatted badly)
@@ -140,7 +140,7 @@ float RemapVote(string vote, string cmd, entity e)
 
 float GameCommand_Vote(string s, entity e) {
 	float argc;
-	argc = tokenize_sane(s);
+	argc = tokenize_console(s);
 	if(argv(0) == "help") {
 		print_to(e, "  vote COMMANDS ARGUMENTS. See 'vhelp' for more info.");
 		return TRUE;

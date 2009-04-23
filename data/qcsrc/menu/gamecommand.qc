@@ -34,7 +34,7 @@ void _dumptree_close(entity pass, entity me)
 void GameCommand(string theCommand)
 {
 	float argc;
-	argc = tokenize_sane(theCommand);
+	argc = tokenize_console(theCommand);
 
 	if(argv(0) == "help" || argc == 0)
 	{
@@ -82,7 +82,7 @@ void GameCommand(string theCommand)
 
 		print("SANE tokenizer:\n");
 		s = cvar_string("tokentest");
-		n = tokenize_sane_force_builtin(s);
+		n = tokenize_console_force_builtin(s);
 		for(i = -n; i < n; ++i)
 		{
 			print("token ", ftos(i), ": '", argv(i), "' = ");
@@ -92,7 +92,7 @@ void GameCommand(string theCommand)
 
 		print("INSANE tokenizer:\n");
 		s = cvar_string("tokentest");
-		n = tokenize_insane(s);
+		n = tokenize(s);
 		for(i = -n; i < n; ++i)
 		{
 			print("token ", ftos(i), ": '", argv(i), "' = ");
@@ -102,7 +102,7 @@ void GameCommand(string theCommand)
 
 		print("EMULATED tokenizer:\n");
 		s = cvar_string("tokentest");
-		n = tokenize_sane_force_emulation(s);
+		n = tokenize_console_force_emulation(s);
 		for(i = -n; i < n; ++i)
 		{
 			print("token ", ftos(i), ": '", argv(i), "' = ");

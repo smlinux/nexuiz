@@ -32,7 +32,7 @@ void target_spawn_useon(entity e)
 	entity oldactivator;
 	entity kt, t2, t3, t4;
 
-	n = tokenize_sane(self.message);
+	n = tokenize_console(self.message);
 	self.target_spawn_activator = activator;
 
 	kt = find(world, targetname, self.killtarget);

@@ -40,7 +40,7 @@ void drawNexuizWeaponsList(entity me)
 		print("AUTOFIXED\n");
 		cvar_set("cl_weaponpriority", t);
 	}
-	me.nItems = tokenize_sane(t);
+	me.nItems = tokenize_console(t);
 	drawListBox(me);
 }
 void WeaponsList_MoveUp_Click(entity box, entity me)
@@ -81,7 +81,7 @@ string toStringNexuizWeaponsList(entity me)
 	float n, i;
 	string s;
 	entity e;
-	n = tokenize_sane(cvar_string("cl_weaponpriority"));
+	n = tokenize_console(cvar_string("cl_weaponpriority"));
 	s = "";
 	for(i = 0; i < n; ++i)
 	{

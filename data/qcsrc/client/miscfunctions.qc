@@ -146,96 +146,35 @@ entity GetTeam(float Team, float add)
 	return tm;
 }
 
-float stringwidth_oldfont(string text, float handleColors)
-{
-	float i, len, ch, width;
-	len = strlen(text);
-	if(!handleColors)
-		return len;
-	width = 0;
-	for(i = 0; i < len; ++i)
-	{
-		if(substring(text, i, 1) == "^")
-		{
-			ch = str2chr(text, i+1);
-			if(ch >= '0' && ch <= '9')
-				++i;
-			else if(i+4 < len && ch == 'x')
-			{
-				ch = str2chr(text, i+2);
-				if ( (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F') )
-				{
-					ch = str2chr(text, i+3);
-					if ( (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F') )
-					{
-						ch = str2chr(text, i+4);
-						if ( (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F') )
-							i+=4;
-						else ++width;
-					} else ++width;
-				} else ++width;
-			} else ++width;
-		} else ++width;
-	}
-	return width;
-}
-
 void CSQC_CheckEngine()
 {
-	/*
-	registercvar("csqc_flags", "0");
-	csqc_flags = cvar("csqc_flags");
-	*/
-
-	csqc_flags = 0;
-	
-	if(checkextension("DP_SV_WRITEPICTURE"))
-	{
-		stringwidth = stringwidth_engine;
-		sbar_font = FONT_USER+1;
-		sbar_bigfont = FONT_USER+2;
-		csqc_flags |= CSQC_FLAG_READPICTURE;
-	} else {
-		stringwidth = stringwidth_oldfont;
-		sbar_font = FONT_DEFAULT;
-		sbar_bigfont = FONT_DEFAULT;
-	}
-
-	if(strlennocol("^xFFF") == 0)
-		csqc_flags |= CSQC_FLAG_COLORCODES;
+	sbar_font = FONT_USER+1;
+	sbar_bigfont = FONT_USER+2;
 }
 
 vector Sbar_GetFontsize(string cvarname)
 {
-	if(csqc_flags & CSQC_FLAG_READPICTURE)
-	{
-		vector v;
-		v = stov(cvar_string(cvarname));
-		if(v_x == 0)
-			v = '8 8 0';
-		if(v_y == 0)
-			v_y = v_x;
-		v_z = 0;
-		return v;
-	}
-	return '8 8 0' ;
+	vector v;
+	v = stov(cvar_string(cvarname));
+	if(v_x == 0)
+		v = '8 8 0';
+	if(v_y == 0)
+		v_y = v_x;
+	v_z = 0;
+	return v;
 }
 
 float Sbar_GetWidth(float teamcolumnwidth)
 {
-	if(csqc_flags & CSQC_FLAG_READPICTURE)
-	{
-		float f;
-		f = stof(cvar_string("sbar_width"));
-		if(f == 0)
-			f = 640;
-		if(f < 320)
-			f = 320;
-		if(f > vid_conwidth - 2 * teamcolumnwidth)
-			f = vid_conwidth - 2 * teamcolumnwidth;
-		return f;
-	}
-	return 640;
+	float f;
+	f = stof(cvar_string("sbar_width"));
+	if(f == 0)
+		f = 640;
+	if(f < 320)
+		f = 320;
+	if(f > vid_conwidth - 2 * teamcolumnwidth)
+		f = vid_conwidth - 2 * teamcolumnwidth;
+	return f;
 }
 
 float PreviewExists(string name)
@@ -292,122 +231,10 @@ float ColorTranslateMode;
 
 string ColorTranslateRGB(string s)
 {
-	if not(ColorTranslateMode & 2)
-	if(csqc_flags & CSQC_FLAG_COLORCODES)
-	{
-		if(ColorTranslateMode & 1)
-			return strdecolorize(s);
-		else
-			return s;
-	}
-	
-	// running on an OLD engine!
-	// must translate ^xRGB codes to regular color codes
-	float i, n;
-	string s2, ch, ch2;
-	vector theTempColor, hsv;
-	float component;
-
-	s2 = "";
-
-	n = strlen(s);
-	for(i = 0; i < n; ++i)
-	{
-		ch = substring(s, i, 1);
-		if(ch == "^")
-		{
-			ch2 = substring(s, i+1, 1);
-			if(ch2 == "^")
-			{
-				s2 = strcat(s2, ch, ch2);
-			}
-			else if(ch2 == "0" || stof(ch2)) // digit?
-			{
-				if not(ColorTranslateMode & 1)
-					s2 = strcat(s2, ch, ch2);
-			}
-			else if(ch2 == "x") // ^x found
-			{
-				theTempColor = '0 0 0';
-				
-				component = HEXDIGIT_TO_DEC(substring(s, i+2, 1));
-				if (component >= 0) // ^xr found
-				{
-					theTempColor_x = component/15;
-					
-					component = HEXDIGIT_TO_DEC(substring(s, i+3, 1));
-					if (component >= 0) // ^xrg found
-					{
-						theTempColor_y = component/15;
-						
-						component = HEXDIGIT_TO_DEC(substring(s, i+4, 1));
-						if (component >= 0) // ^xrgb found
-						{
-							theTempColor_z = component/15;
-
-							if not(ColorTranslateMode & 1)
-							{
-								hsv = rgb_to_hsv(theTempColor);
-
-								if(hsv_y < 0.2)
-								{
-									if(hsv_z < 0.5)
-										s2 = strcat(s2, "^0");
-									else
-										s2 = strcat(s2, "^7");
-								}
-								else
-								{
-									if(hsv_x < 0.6)
-										s2 = strcat(s2, "^1");
-									else if(hsv_x < 1.33333333333333333333)
-										s2 = strcat(s2, "^3");
-									else if(hsv_x < 2.5)
-										s2 = strcat(s2, "^2");
-									else if(hsv_x < 3.33333333333333333333)
-										s2 = strcat(s2, "^5");
-									else if(hsv_x < 4.5)
-										s2 = strcat(s2, "^4");
-									else if(hsv_x < 5.5)
-										s2 = strcat(s2, "^6");
-									else
-										s2 = strcat(s2, "^1");
-								}
-							}
-
-							i += 3;
-						}
-						else
-						{
-							// blue missing
-							s2 = strcat(s2, substring(s, i, 4));
-							i += 2;
-						}
-					}
-					else
-					{
-						// green missing
-						s2 = strcat(s, substring(s2, i, 3));
-						i += 1;
-					}
-				}
-				else
-				{
-					// red missing
-					s2 = strcat(s, substring(s2, i, 2));
-				}
-			}
-			else
-			{
-				s2 = strcat(s2, ch, ch2);
-			}
-			++i;
-			continue;
-		}
-		s2 = strcat(s2, ch);
-	}
-
-	return s2;
+	if(ColorTranslateMode & 1)
+		return strdecolorize(s);
+	else
+		return s;
 }
 
 float cvar_or(string cv, float v)

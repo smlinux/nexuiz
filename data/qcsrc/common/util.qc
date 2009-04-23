@@ -647,7 +647,7 @@ string fixPriorityList(string order, float from, float to, float subtract, float
 	string neworder;
 	float i, n, w;
 
-	n = tokenize_sane(order);
+	n = tokenize_console(order);
 	for(i = 0; i < n; ++i)
 	{
 		w = stof(argv(i));
@@ -666,7 +666,7 @@ string fixPriorityList(string order, float from, float to, float subtract, float
 
 	if(complete)
 	{
-		n = tokenize_sane(neworder);
+		n = tokenize_console(neworder);
 		for(w = to; w >= from; --w)
 		{
 			for(i = 0; i < n; ++i)
@@ -685,7 +685,7 @@ string swapInPriorityList(string order, float i, float j)
 	string s;
 	float w, n;
 
-	n = tokenize_sane(order);
+	n = tokenize_console(order);
 
 	if(i >= 0 && i < n && j >= 0 && j < n && i != j)
 	{
@@ -885,7 +885,7 @@ void cvar_settemp_restore()
 {
 	// undo what cvar_settemp did
 	float n, i;
-	n = tokenize_sane(cvar_string("settemp_list"));
+	n = tokenize_console(cvar_string("settemp_list"));
 	for(i = 0; i < n - 3; i += 3)
 		cvar_set(argv(i + 1), cvar_string(argv(i + 2)));
 	cvar_set("settemp_list", "0");
@@ -906,178 +906,6 @@ float almost_in_bounds(float a, float b, float c)
 	float eps;
 	eps = (max(a, -a) + max(c, -c)) * 0.001;
 	return b == median(a - eps, b, c + eps);
-}
-
-
-
-#ifdef MENUQC
-float (string s) _tokenize_builtin = #58;
-string (float argnum) _argv_builtin = #59;
-float (string s, string sep) _tokenizebyseparator_builtin = #479;
-#else
-float (string s) _tokenize_builtin = #441;
-string (float argnum) _argv_builtin = #442;
-float (string s, string sep) _tokenizebyseparator_builtin = #479;
-#endif
-float(string s) _tokenize_console = #514;
-float(float i) _argv_start_index_builtin = #515;
-float(float i) _argv_end_index_builtin = #516;
-
-float MAX_TOKENS = 256;
-string _argv_sane_buffer[MAX_TOKENS];
-float _argv_sane_startpos[MAX_TOKENS];
-float _argv_sane_endpos[MAX_TOKENS];
-float _argc_sane;
-
-string _argv_sane(float i)
-{
-	// Perl-ish -1 for the last argument
-	if(i < 0)
-		i = _argc_sane + i;
-	return strcat("", _argv_sane_buffer[i]); // force tempstring
-}
-
-float _argv_start_index_sane(float i)
-{
-	// Perl-ish -1 for the last argument
-	if(i < 0)
-		i = _argc_sane + i;
-	return _argv_sane_startpos[i];
-}
-
-float _argv_end_index_sane(float i)
-{
-	// Perl-ish -1 for the last argument
-	if(i < 0)
-		i = _argc_sane + i;
-	return _argv_sane_endpos[i];
-}
-
-//string TOKENIZE_SANE_WHITESPACE_CHARS = "\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f\xa0\xa1\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xab\xac\xad\xae\xaf\xb0\xb1\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xbb\xbc\xbd\xbe\xbf\xc0\xc1\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd0\xd1\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xdb\xdc\xdd\xde\xdf\xe0\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff";
-string TOKENIZE_SANE_WHITESPACE_CHARS = "\x20\x0d\x0a\x09";
-string TOKENIZE_SANE_COMMENT_BREAKERS = "\x0d\x0a";
-// change this if DP changes its type to "char"!
-
-float _tokenize_sane(string s)
-{
-	// This MUST match COM_ParseToken_Console!
-	string com_token, tmp;
-	float data;
-	float end;
-	float i;
-
-	for(i = 0; i < _argc_sane; ++i)
-	{
-		if(_argv_sane_buffer[i])
-			strunzone(_argv_sane_buffer[i]);
-		_argv_sane_buffer[i] = string_null;
-		_argv_sane_startpos[i] = 0;
-	}
-
-	_argc_sane = 0;
-	data = 0;
-	end = strlen(s);
-
-	for(;;)
-	{
-		// skip whitespace
-		for(; data < end && strstrofs(TOKENIZE_SANE_WHITESPACE_CHARS, substring(s, data, 1), 0) >= 0; ++data)
-			;
-		if(data == end)
-			break;
-
-		if(substring(s, data, 2) == "//")
-		{
-			// comment
-
-			// Any call to the tokenizer ALREADY assumes it's a single line, so we can safely abort if we see a comment.
-			/*
-			data += 2;
-			while(data < end && strstrofs(TOKENIZE_SANE_COMMENT_BREAKERS, substring(s, data, 1), 0) >= 0)
-				++data;
-			continue; // go to skipwhite again
-			*/
-
-			// I'd like to simply put a "break" here, but then fteqcc says this function has unreachable code
-			return _argc_sane;
-		}
-		else if(substring(s, data, 1) == "\"")
-		{
-			// quoted string
-			com_token = "";
-			_argv_sane_startpos[_argc_sane] = data;
-			for(++data; data < end && substring(s, data, 1) != "\""; ++data)
-			{
-				// allow escaped " and \ case
-				tmp = substring(s, data, 2);
-				if(tmp == "\\\"" || tmp == "\\\\")
-					++data;
-				com_token = strcat(com_token, substring(s, data, 1));
-			}
-			if(substring(s, data, 1) == "\"")
-				++data;
-			_argv_sane_endpos[_argc_sane] = data;
-			_argv_sane_buffer[_argc_sane] = strzone(com_token);
-			++_argc_sane;
-		}
-		else
-		{
-			// regular word
-			com_token = "";
-			_argv_sane_startpos[_argc_sane] = data;
-			for(; data < end && strstrofs(TOKENIZE_SANE_WHITESPACE_CHARS, substring(s, data, 1), 0) < 0; ++data)
-				com_token = strcat(com_token, substring(s, data, 1));
-			_argv_sane_endpos[_argc_sane] = data;
-			_argv_sane_buffer[_argc_sane] = strzone(com_token);
-			++_argc_sane;
-		}
-	}
-
-	return _argc_sane;
-}
-
-
-
-// "sane" tokenizer
-// matching the console 1:1
-
-float tokenize_sane_force_native(string s)
-{
-	argv = _argv_builtin;
-	argv_start_index = _argv_start_index_builtin;
-	argv_end_index = _argv_end_index_builtin;
-	return _tokenize_console(s);
-}
-
-float tokenize_sane_force_emulation(string s)
-{
-	argv = _argv_sane;
-	argv_start_index = _argv_start_index_sane;
-	argv_end_index = _argv_end_index_sane;
-	return _tokenize_sane(s);
-}
-
-float tokenize_sane(string s)
-{
-	if(checkextension("DP_QC_TOKENIZE_CONSOLE"))
-		return tokenize_sane_force_native(s);
-	return tokenize_sane_force_emulation(s);
-}
-
-float tokenize_insane(string s)
-{
-	argv = _argv_builtin;
-	argv_start_index = _argv_start_index_builtin;
-	argv_end_index = _argv_end_index_builtin;
-	return _tokenize_builtin(s);
-}
-
-float tokenizebyseparator(string s, string sep)
-{
-	argv = _argv_builtin;
-	argv_start_index = _argv_start_index_builtin;
-	argv_end_index = _argv_end_index_builtin;
-	return _tokenizebyseparator_builtin(s, sep);
 }
 
 float power2of(float e)
@@ -1625,7 +1453,7 @@ void check_unacceptable_compiler_bugs()
 {
 	if(cvar("_allow_unacceptable_compiler_bugs"))
 		return;
-	tokenize_sane("foo bar");
+	tokenize_console("foo bar");
 	if(strcat(argv(0), substring("foo bar", 4, 7 - argv_start_index(1))) == "barbar")
 		error("fteqcc bug introduced with revision 3178 detected. Please upgrade fteqcc to a later revision, downgrade fteqcc to revision 3177, or pester Spike until he fixes it. You can set _allow_unacceptable_compiler_bugs 1 to skip this check, but expect stuff to be horribly broken then.");
 }

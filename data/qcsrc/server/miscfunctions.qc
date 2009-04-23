@@ -791,7 +791,7 @@ void readplayerstartcvars()
 	}
 	else
 	{
-		t = tokenize_sane(s);
+		t = tokenize_console(s);
 		g_weaponarena_list = "";
 		for(i = 0; i < t; ++i)
 		{

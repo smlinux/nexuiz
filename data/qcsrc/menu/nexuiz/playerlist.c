@@ -51,7 +51,7 @@ void setPlayerListNexuizPlayerList(entity me, string plist)
 	for(i = 0; i < me.nItems; ++i)
 	{
 		s = bufstr_get(buf, i * PLAYERPARM_COUNT + PLAYERPARM_NAME);
-		n = tokenize_sane(s);
+		n = tokenize_console(s);
 
 		if(n == 4)
 		{

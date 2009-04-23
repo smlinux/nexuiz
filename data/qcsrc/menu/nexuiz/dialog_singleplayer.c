@@ -28,7 +28,7 @@ void InstantAction_LoadMap(entity btn, entity dummy)
 	{
 		if(substring(s, 0, 4) == "set ")
 			s = substring(s, 4, strlen(s) - 4);
-		n = tokenize_sane(s);
+		n = tokenize_console(s);
 		if(argv(0) == "bot_number")
 			cvar_set("bot_number", argv(1));
 		else if(argv(0) == "skill")

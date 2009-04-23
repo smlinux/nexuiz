@@ -172,7 +172,7 @@ float GameCommand_Generic(string command)
 	float i, j, f, n;
 	vector rgb;
 	string s, s2, c;
-	argc = tokenize_sane(command);
+	argc = tokenize_console(command);
 	if(argv(0) == "help")
 	{
 		print("  rpn EXPRESSION... - a RPN calculator.\n");
@@ -646,8 +646,8 @@ float GameCommand_Generic(string command)
 					// s s2 union
 					s2 = rpn_pop();
 					s = rpn_get();
-					f = tokenize_sane(s);
-					f2 = tokenize_sane(strcat(s, " ", s2));
+					f = tokenize_console(s);
+					f2 = tokenize_console(strcat(s, " ", s2));
 					// tokens 0..(f-1) represent s
 					// tokens f..f2 represent s2
 					// UNION: add all tokens to s that are in s2 but not in s
@@ -664,13 +664,13 @@ float GameCommand_Generic(string command)
 					if(substring(s, 0, 1) == " ")
 						s = substring(s, 1, 99999);
 					rpn_set(s);
-					tokenize_sane(command);
+					tokenize_console(command);
 				} else if(rpncmd == "intersection") {
 					// s s2 intersection
 					s2 = rpn_pop();
 					s = rpn_get();
-					f = tokenize_sane(s);
-					f2 = tokenize_sane(strcat(s, " ", s2));
+					f = tokenize_console(s);
+					f2 = tokenize_console(strcat(s, " ", s2));
 					// tokens 0..(f-1) represent s
 					// tokens f..f2 represent s2
 					// INTERSECTION: keep only the tokens from s that are also in s2
@@ -686,13 +686,13 @@ float GameCommand_Generic(string command)
 					if(substring(s, 0, 1) == " ")
 						s = substring(s, 1, 99999);
 					rpn_set(s);
-					tokenize_sane(command);
+					tokenize_console(command);
 				} else if(rpncmd == "difference") {
 					// s s2 difference
 					s2 = rpn_pop();
 					s = rpn_get();
-					f = tokenize_sane(s);
-					f2 = tokenize_sane(strcat(s, " ", s2));
+					f = tokenize_console(s);
+					f2 = tokenize_console(strcat(s, " ", s2));
 					// tokens 0..(f-1) represent s
 					// tokens f..f2 represent s2
 					// DIFFERENCE: keep only the tokens from s that are not in s2
@@ -707,11 +707,11 @@ float GameCommand_Generic(string command)
 					if(substring(s, 0, 1) == " ")
 						s = substring(s, 1, 99999);
 					rpn_set(s);
-					tokenize_sane(command);
+					tokenize_console(command);
 				} else if(rpncmd == "shuffle") {
 					// s shuffle
 					s = rpn_get();
-					f = tokenize_sane(s);
+					f = tokenize_console(s);
 
 					for(i = 0; i < f - 1; ++i) {
 						// move a random item from i..f-1 to position i
@@ -723,13 +723,13 @@ float GameCommand_Generic(string command)
 						for(j = i; j < f; ++j)
 							if(j != f2)
 								s = strcat(s, " ", argv(j));
-						f = tokenize_sane(s);
+						f = tokenize_console(s);
 					}
 
 					if(substring(s, 0, 1) == " ")
 						s = substring(s, 1, 99999);
 					rpn_set(s);
-					tokenize_sane(command);
+					tokenize_console(command);
 				} else if(rpncmd == "fexists_assert") {
 					s = rpn_pop();
 					if(!rpn_error)
