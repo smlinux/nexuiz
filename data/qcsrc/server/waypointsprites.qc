@@ -163,7 +163,13 @@ float WaypointSprite_Customize()
 {
 	// this is not in SendEntity because it shall run every frame, not just every update
 
-	return self.waypointsprite_visible_for_player(other);
+	// make spectators see what the player would see
+	entity e;
+	e = other;
+	if(e.classname == "spectator")
+		e = e.enemy;
+
+	return self.waypointsprite_visible_for_player(e);
 }
 
 float WaypointSprite_SendEntity(entity to, float sendflags)
