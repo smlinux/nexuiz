@@ -34,7 +34,7 @@ entity verb;
 /**
     Push a new verb onto the specified stack. Set vrb_life to make it time-limited.
 **/
-entity verbstack_push(entity stack, float(float eval) vrb_call, float val_static, float vrb_life)
+entity verbstack_push(entity stack, float(float eval) vrb_call, float val_static, float vrb_life,entity verb_owner)
 {
     entity vrb;
 
@@ -45,7 +45,7 @@ entity verbstack_push(entity stack, float(float eval) vrb_call, float val_static
         return world;
 
     vrb                   = spawn();
-    vrb.owner             = self;
+    vrb.owner             = verb_owner;
     vrb.verbstack         = stack;
     vrb.verb_call         = vrb_call;
     vrb.verb_static_value = val_static;

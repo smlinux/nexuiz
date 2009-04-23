@@ -598,8 +598,8 @@ float walker_moveverb_enemy(float eval)
         if (self.enemy == world)
             return VS_CALL_NO;
 
-        if (tracewalk(self.enemy, self.origin, self.mins, self.maxs, self.enemy.origin, MOVE_NORMAL))
-            return verb.verb_static_value;
+        //if (tracewalk(self.enemy, self.origin, self.mins, self.maxs, self.enemy.origin, MOVE_NORMAL))
+        return verb.verb_static_value;
 
         return VS_CALL_NO;
 
@@ -684,7 +684,7 @@ float walker_moveverb_idle_roam(float eval)
             if(verb.wait - time < 9)
                 if(vlen(self.moveto - self.origin) < 32)
                 {
-                    verbstack_push(self.walker_verbs_move, walker_moveverb_idle_pause,   WVM_IDLE + WVM_IDLE_UP, random() * (verb.wait - time));
+                    verbstack_push(self.walker_verbs_move, walker_moveverb_idle_pause,   WVM_IDLE + WVM_IDLE_UP, random() * (verb.wait - time), self);
                     self.animflag = ANIM_NO;
                     return VS_CALL_REMOVE;
                 }
@@ -729,7 +729,7 @@ float walker_moveverb_idle(float eval)
     case VCM_DO:
 
         //if (random() < 0.5)
-            verbstack_push(self.walker_verbs_move, walker_moveverb_idle_pause,   WVM_IDLE + WVM_IDLE_UP, random() * 5);
+            verbstack_push(self.walker_verbs_move, walker_moveverb_idle_pause,   WVM_IDLE + WVM_IDLE_UP, random() * 5, self);
         //else
         //    verbstack_push(self.walker_verbs_move, walker_moveverb_idle_roam,   WVM_IDLE + WVM_IDLE_UP,  random() * 15);
 
@@ -949,12 +949,12 @@ void turret_walker_dinit()
     self.walker_verbs_attack = spawn();
     self.walker_verbs_idle   = spawn();
 
-    verbstack_push(self.walker_verbs_move, walker_moveverb_idle,   WVM_IDLE,  0);
-    verbstack_push(self.walker_verbs_move, walker_moveverb_enemy,  WVM_ENEMY, 0);
-    verbstack_push(self.walker_verbs_move, walker_moveverb_path,   WVM_PATH,  0);
+    verbstack_push(self.walker_verbs_move, walker_moveverb_idle,   WVM_IDLE,  0, self);
+    verbstack_push(self.walker_verbs_move, walker_moveverb_enemy,  WVM_ENEMY, 0, self);
+    verbstack_push(self.walker_verbs_move, walker_moveverb_path,   WVM_PATH,  0, self);
 
-    verbstack_push(self.walker_verbs_attack, walker_attackverb_meele,   WVA_MEELE,  0);
-    verbstack_push(self.walker_verbs_attack, walker_attackverb_rockets, WVA_ROCKET, 0);
+    verbstack_push(self.walker_verbs_attack, walker_attackverb_meele,   WVA_MEELE,  0, self);
+    verbstack_push(self.walker_verbs_attack, walker_attackverb_rockets, WVA_ROCKET, 0, self);
 
     self.damage_flags |= TFL_DMG_DEATH_NOGIBS;
 

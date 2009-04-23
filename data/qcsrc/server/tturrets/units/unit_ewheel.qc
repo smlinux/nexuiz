@@ -61,6 +61,34 @@ void ewheel_attack()
 
 }
 
+float ewheel_moveverb_roam(float eval)
+{
+    switch (eval)
+    {
+    case VCM_EVAL:
+
+        if (!self.enemy)
+            return verb.verb_static_value;
+
+        return VS_CALL_NO;
+
+    case VCM_DO:
+        self.angles_z = 0;
+        makevectors(self.angles);
+        self.moveto = v_forward * 128;
+        self.steerto = steerlib_beamsteer(v_forward,1024,32,36,128);
+        self.frame += 1;
+        movelib_move_simple(v_forward,cvar("g_turrets_unit_ewheel_speed_fast"),0.4);
+
+        return VS_CALL_YES_DOING;
+
+    case VCM_REMOVE:
+
+    }
+
+    return VS_CALL_YES_DONE;
+}
+
 float ewheel_moveverb_path(float eval)
 {
     switch (eval)
@@ -79,7 +107,7 @@ float ewheel_moveverb_path(float eval)
         else
         {
             // Are we close enougth to a path node to switch to the next?
-            if (vlen(self.origin  - self.pathcurrent.origin) < 32)
+            if (vlen(self.origin  - self.pathcurrent.origin) < 64)
                 if (self.pathcurrent.path_next == world)
                 {
                     // Path endpoint reached
@@ -119,7 +147,7 @@ float ewheel_moveverb_path(float eval)
             self.steerto = steerlib_attract2(self.moveto,0.5,500,0.95);
 
             self.frame += 1;
-            movelib_move_simple(v_forward,cvar("g_turrets_unit_ewheel_speed_slow"),0.4);
+            movelib_move_simple(v_forward,cvar("g_turrets_unit_ewheel_speed_fast"),0.4);
 
             return VS_CALL_YES_DOING;
         }
@@ -157,8 +185,11 @@ float ewheel_moveverb_enemy(float eval)
 
     case VCM_DO:
 
-        self.moveto  = self.enemy.origin;
         self.steerto = steerlib_arrive(self.enemy.origin,self.target_range_optimal);
+        self.steerto = steerlib_beamsteer(self.steerto,1024,64,68,256);
+        self.moveto  = self.origin + self.steerto * 128;
+
+        makevectors(self.angles);
 
         if (self.tur_dist_enemy > self.target_range_optimal)
         {
@@ -169,9 +200,10 @@ float ewheel_moveverb_enemy(float eval)
             }
             else if (self.tur_head.spawnshieldtime < 2)
             {
+
                 self.frame += 1;
                 movelib_move_simple(v_forward,cvar("g_turrets_unit_ewheel_speed_slow"),0.4);
-            }
+           }
             else
             {
                 self.frame += 1;
@@ -266,7 +298,7 @@ void ewheel_postthink()
     real_angle = shortangle_vxy(real_angle,self.tur_head.angles);
 
     self.tur_head.spawnshieldtime = fabs(real_angle_y);
-    real_angle_y  = bound(self.tur_head.aim_speed * -1,real_angle_y,self.tur_head.aim_speed);
+    real_angle_y  = bound(-self.tur_head.aim_speed,real_angle_y,self.tur_head.aim_speed);
     self.angles_y = (self.angles_y + real_angle_y);
 
     // Simulate banking
@@ -326,6 +358,59 @@ void ewheel_diehook()
 
 }
 
+/*
+float test_stack_1(float eval)
+{
+    switch (eval)
+    {
+    case VCM_EVAL:
+        return verb.verb_static_value;
+
+    case VCM_DO:
+        dprint("test_stack_1\n");
+        return VS_CALL_REMOVE;
+    }
+
+    return VS_CALL_REMOVE;
+}
+
+float test_stack_2(float eval)
+{
+    switch (eval)
+    {
+    case VCM_EVAL:
+        return verb.verb_static_value;
+
+    case VCM_DO:
+        dprint("test_stack_2\n");
+        return VS_CALL_REMOVE;
+    }
+
+    return VS_CALL_REMOVE;
+}
+
+float ccnntt;
+float test_stack_3(float eval)
+{
+    switch (eval)
+    {
+    case VCM_EVAL:
+        return verb.verb_static_value;
+
+    case VCM_DO:
+        dprint("test_stack_3\n");
+        ++ccnntt;
+        if(ccnntt > 3)
+            return VS_CALL_REMOVE;
+        else
+            return VS_CALL_YES_DONE;
+    }
+
+    return VS_CALL_YES_DONE;
+}
+
+.entity test_stack;
+*/
 void turret_ewheel_dinit()
 {
     entity e;
@@ -361,7 +446,7 @@ void turret_ewheel_dinit()
     }
 
     self.target_select_flags   = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK | TFL_TARGETSELECT_LOS;
-    self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK | TFL_TARGETSELECT_LOS;
+    self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK;// | TFL_TARGETSELECT_LOS;
     self.damage_flags          |= TFL_DMG_DEATH_NOGIBS;
 
     self.iscreature = TRUE;
@@ -383,10 +468,22 @@ void turret_ewheel_dinit()
     self.tur_head.frame = 1;
 
     self.verbs_move = spawn();
-    verbstack_push(self.verbs_move, ewheel_moveverb_idle,   WVM_IDLE,  0);
-    verbstack_push(self.verbs_move, ewheel_moveverb_enemy,  WVM_ENEMY, 0);
-    verbstack_push(self.verbs_move, ewheel_moveverb_path,   WVM_PATH,  0);
-    verbstack_push(self.verbs_move, ewheel_moveverb_runaway,WVM_PANIC,  0);
+
+    //verbstack_push(self.verbs_move, ewheel_moveverb_roam,   WVM_IDLE,  0, self);
+    verbstack_push(self.verbs_move, ewheel_moveverb_idle,   WVM_IDLE,  0, self);
+    verbstack_push(self.verbs_move, ewheel_moveverb_enemy,  WVM_ENEMY, 0, self);
+    verbstack_push(self.verbs_move, ewheel_moveverb_path,   WVM_PATH,  0, self);
+    //verbstack_push(self.verbs_move, ewheel_moveverb_runaway,WVM_PANIC,  0, self);
+
+    /*
+    self.test_stack = spawn();
+    verbstack_push(self.test_stack, test_stack_1,1,  0, self);
+    verbstack_push(self.test_stack, test_stack_2,2,  0, self);
+    verbstack_push(self.test_stack, test_stack_3,100,0, self);
+    while(verbstack_popfifo(self.test_stack) != 0)
+    */
+
+
 
     // Convert from dgr / sec to dgr / tic
     self.tur_head.aim_speed = cvar("g_turrets_unit_ewheel_turnrate");
@@ -413,6 +510,8 @@ void turret_ewheel_dinit()
 
 void spawnfunc_turret_ewheel()
 {
+    g_turrets_common_precash();
+
     precache_model ("models/turrets/ewheel-base.md3");
     precache_model ("models/turrets/ewheel-gun1.md3");
 
