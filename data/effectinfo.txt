@@ -3236,3 +3236,19 @@ tex 3 3
 alpha 256 256 2600
 velocityjitter 2 2 2
 velocitymultiplier 0.01
+
+effect cherryblossom
+count 3
+type static
+color 0xb123ff 0xb183ff
+size 1.5 2
+alpha 128 256 32
+gravity 0.05
+bounce 1.5
+airfriction 1
+liquidfriction 1
+originjitter 16 16 16
+velocityjitter 32 32 0
+tex 40 40
+//lightradius 200
+//lighttime 0
