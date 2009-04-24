@@ -104,6 +104,11 @@ void target_spawn_useon(entity e)
 					valueent = activator;
 					value = "";
 				}
+				else if(value == "other")
+				{
+					valueent = other;
+					value = "";
+				}
 				else if(value == "pusher")
 				{
 					if(time < activator.pushltime)
