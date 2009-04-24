@@ -157,7 +157,7 @@ void multi_trigger()
 	self.takedamage = DAMAGE_NO;
 
 	activator = self.enemy;
-
+	other = self.goalentity;
 	SUB_UseTargets();
 
 	if (self.wait > 0)
@@ -174,6 +174,7 @@ void multi_trigger()
 
 void multi_use()
 {
+	self.goalentity = other;
 	self.enemy = activator;
 	multi_trigger();
 };
@@ -201,10 +202,11 @@ void multi_touch()
 	EXACTTRIGGER_TOUCH;
 
 	self.enemy = other;
+	self.goalentity = other;
 	multi_trigger ();
 };
 
-void multi_eventdamage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
+void multi_eventdamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	if (!self.takedamage)
 		return;
@@ -212,6 +214,7 @@ void multi_eventdamage (vector hitloc, float damage, entity inflictor, entity at
 	if (self.health <= 0)
 	{
 		self.enemy = attacker;
+		self.goalentity = inflictor;
 		multi_trigger();
 	}
 }
