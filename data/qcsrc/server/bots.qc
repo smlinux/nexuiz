@@ -1604,38 +1604,37 @@ void navigation_routerating(entity e, float f, float rangebias)
 };
 
 // adds an item to the the goal stack with the path to a given item
-vector navigation_routetogoal(entity e, vector startposition)
+float navigation_routetogoal(entity e, vector startposition)
 {
-	local vector endposition;
-
 	self.goalentity = e;
 
 	// if there is no goal, just exit
 	if (!e)
-		return '0 0 0';
+		return FALSE;
 
 	// put the entity on the goal stack
 	navigation_pushroute(e);
 
-	endposition = e.origin;
-
-
 	// if it can reach the goal there is nothing more to do
 	if (tracewalk(self, startposition, PL_MIN, PL_MAX, e.origin, MOVE_NORMAL))
-		return endposition;
+		return TRUE;
 
 	// see if there are waypoints describing a path to the item
-
 	e = e.nearestwaypoint;
-	while (e != world)
+	if(e == world)
+		return FALSE;
+
+	for (;;)
 	{
 		// add the spawnfunc_waypoint to the path
 		navigation_pushroute(e);
 		e = e.enemy;
+
+		if(e==world)
+			break;
 	}
 
-	// we assume the destination will be reached
-	return endposition;
+	return TRUE;
 };
 
 void navigation_routetogoals()
@@ -1653,8 +1652,7 @@ void navigation_routetogoals()
 		if(e==world)
 			return;
 
-		v = navigation_routetogoal(e, position);
-		if not(v=='0 0 0')
+		if(navigation_routetogoal(e, position))
 		{
 			position = v;
 			self.navigation_hasgoals = TRUE;
