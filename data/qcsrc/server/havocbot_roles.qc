@@ -434,7 +434,7 @@ void havocbot_role_ctf_carrier()
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
 		navigation_goalrating_start();
 		havocbot_goalrating_ctf_ourflag(50000);
-		if (navigation_bestgoal)
+		if (self.navigation_hasgoals)
 			self.bot_cantfindflag = time + 10;
 		else if (time > self.bot_cantfindflag)
 		{
@@ -1000,9 +1000,9 @@ void havocbot_chooserole_kh()
 
 void havocbot_chooserole()
 {
-	dprint("choose a role...\n");
-	navigation_routetogoal(world);
-	self.bot_strategytime = -1;
+	dprint("choosing a role...\n");
+	navigation_clearroute();
+	self.bot_strategytime = 0;
 	if (g_ctf)
 		havocbot_chooserole_ctf();
 	else if (g_domination)

@@ -453,13 +453,12 @@ float lag_additem(float t, float f1, float f2, entity e1, vector v1, vector v2, 
 .float nearestwaypointtimeout;
 
 // used during navigation_goalrating_begin/end sessions
+#define MAX_BESTGOALS 3
+float bestgoalswindex;
+float bestgoalsrindex;
 float navigation_bestrating;
-entity navigation_bestgoal;
-entity navigation_alternativegoal;
-.entity alternativegoal;
-
-
-
+entity navigation_bestgoals[MAX_BESTGOALS];
+.float navigation_hasgoals;
 
 /////////////////////////////////////////////////////////////////////////////
 // spawnfunc_waypoint management
@@ -1515,6 +1514,59 @@ void navigation_markroutes()
 	}
 };
 
+void navigation_bestgoals_reset()
+{
+	local float i;
+
+	bestgoalswindex = 0;
+	bestgoalsrindex = 0;
+
+	for(i=0;i>MAX_BESTGOALS-1;++i)
+	{
+		navigation_bestgoals[i] = world;
+	}
+}
+
+void navigation_add_bestgoal(entity goal)
+{
+	local float i;
+
+	if(bestgoalsrindex>0)
+	{
+		++bestgoalsrindex;
+
+		if(bestgoalsrindex==MAX_BESTGOALS)
+			bestgoalsrindex = 0;
+	}
+
+	if(bestgoalswindex==MAX_BESTGOALS)
+	{
+		bestgoalswindex=0;
+		bestgoalsrindex=1;
+	}
+
+	navigation_bestgoals[bestgoalswindex] = goal;
+
+	++bestgoalswindex;
+
+}
+
+entity navigation_get_bestgoal()
+{
+	local float i;
+	local entity ent;
+
+	ent = navigation_bestgoals[bestgoalsrindex];
+	navigation_bestgoals[bestgoalsrindex] = world;
+
+	++bestgoalsrindex;
+
+	if(bestgoalsrindex==MAX_BESTGOALS)
+		bestgoalsrindex = 0;
+
+	return ent;
+}
+
 // updates the best goal according to a weighted calculation of travel cost and item value of a new proposed item
 .void() havocbot_role;
 void() havocbot_role_ctf_offense;
@@ -1544,54 +1596,71 @@ void navigation_routerating(entity e, float f, float rangebias)
 		//dprint(ftos(f));
 		if (navigation_bestrating < f)
 		{
-			navigation_alternativegoal = navigation_bestgoal;
 			navigation_bestrating = f;
-			navigation_bestgoal = e;
+			navigation_add_bestgoal(e);
 		}
 	}
 	//dprint("\n");
 };
 
-// replaces the goal stack with the path to a given item
-void navigation_routetogoal(entity e)
+// adds an item to the the goal stack with the path to a given item
+vector navigation_routetogoal(entity e, vector startposition)
 {
-	// if already going to this goal, don't stop
-	//if (self.goalentity == e)
-	//	return;
-	// clear the route and add the new one
-	navigation_clearroute();
+	local vector endposition;
+
 	self.goalentity = e;
+
 	// if there is no goal, just exit
 	if (!e)
-		return;
-	// put the entity on the goal stack as the only item
+		return '0 0 0';
+
+	// put the entity on the goal stack
 	navigation_pushroute(e);
-	//te_smallflash((e.absmin + e.absmax) * 0.5);
-	//bprint("navigation_routetogoal(");
-	//bprint(etos(e));
-	//bprint(") : ");
-	//bprint(etos(e));
-	//tracebox(self.origin, '-16 -16 0', '16 16 0', e.origin, TRUE, self);
-	//if (trace_fraction == 1)
-	if (tracewalk(self, self.origin, PL_MIN, PL_MAX, e.origin, MOVE_NORMAL))
-		return;
+
+	endposition = e.origin;
+
+
+	// if it can reach the goal there is nothing more to do
+	if (tracewalk(self, startposition, PL_MIN, PL_MAX, e.origin, MOVE_NORMAL))
+		return endposition;
+
 	// see if there are waypoints describing a path to the item
+
 	e = e.nearestwaypoint;
 	while (e != world)
 	{
-		//bprint(" ");
-		//bprint(etos(e));
-		//te_smallflash((e.absmin + e.absmax) * 0.5);
-		//tracebox(self.origin, '-16 -16 0', '16 16 0', e.origin, TRUE, self);
-		//if (trace_fraction == 1)
-		//if (tracewalk(self, self.origin, PL_MIN, PL_MAX, e.origin, MOVE_NORMAL))
-		//	break;
 		// add the spawnfunc_waypoint to the path
 		navigation_pushroute(e);
 		e = e.enemy;
 	}
-	//bprint("\n");
+
+	// we assume the destination will be reached
+	return endposition;
 };
+
+void navigation_routetogoals()
+{
+	entity e;
+	vector position, v;
+
+	navigation_clearroute();
+
+	position = self.origin;
+	for(;;)
+	{
+		e = navigation_get_bestgoal();
+
+		if(e==world)
+			return;
+
+		v = navigation_routetogoal(e, position);
+		if not(v=='0 0 0')
+		{
+			position = v;
+			self.navigation_hasgoals = TRUE;
+		}
+	}
+}
 
 // removes any currently touching waypoints from the goal stack
 // (this is how bots detect if they have reached a goal)
@@ -1624,17 +1693,15 @@ void navigation_poptouchedgoals()
 void navigation_goalrating_start()
 {
 	navigation_bestrating = -1;
-	navigation_bestgoal = world;
+	self.navigation_hasgoals = TRUE;
+	navigation_bestgoals_reset();
 	navigation_markroutes();
 };
 
 // ends a goal selection session (updates goal stack to the best goal)
 void navigation_goalrating_end()
 {
-	if (self.havocbot_role == havocbot_role_ctf_offense)
-		dprint(navigation_bestgoal.classname, " (with rating ", ftos(navigation_bestrating), ")\n");
-	self.alternativegoal = navigation_alternativegoal;
-	navigation_routetogoal(navigation_bestgoal);
+	navigation_routetogoals();
 };
 
 

@@ -344,7 +344,8 @@ void havocbot_movetogoal()
 				{
 					self.ignoregoal = self.goalcurrent;
 					self.ignoregoaltime = time + cvar("bot_ai_ignoregoal_timeout");
-					navigation_routetogoal(newgoal);
+					navigation_clearroute();
+					navigation_routetogoal(newgoal, self.origin);
 					self.aistatus &~= AI_STATUS_OUT_JUMPPAD;
 				}
 			}
@@ -468,21 +469,8 @@ void havocbot_movetogoal()
 
 	// if ran out of goals try to use an alternative goal or get a new strategy asap
 	if(self.goalcurrent == world)
-	if(self.flags & FL_ONGROUND || self.aistatus & AI_STATUS_RUNNING || self.BUTTON_JUMP == TRUE)
 	{
-		if(self.alternativegoal==world)
-		{
-			// ran out of goals
-			self.bot_strategytime = 0;
-			return;
-		}
-
-		// use the alternative goal
-		navigation_findnearestwaypoint(self.alternativegoal, TRUE);
-		navigation_routetogoal(self.alternativegoal);
-		self.alternativegoal = world;
-		bot_strategytoken_taken = TRUE;
-
+		self.bot_strategytime = 0;
 		return;
 	}
 
