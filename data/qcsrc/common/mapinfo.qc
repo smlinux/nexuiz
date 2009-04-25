@@ -399,7 +399,7 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 					MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_ASSAULT;
 				else if(v == "onslaught_generator")
 					MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_ONSLAUGHT;
-				else if(v == "ball_bluegoal")
+				else if(substring(v, 0, 8) == "nexball_" || substring(v, 0, 4) == "ball")
 					MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_NEXBALL;
 				else if(v == "info_player_team1")
 					++spawnpoints;

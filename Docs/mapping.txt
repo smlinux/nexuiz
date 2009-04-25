@@ -366,13 +366,17 @@ add the "type race" line.
 =VI. Nexball=
 =============
 
-There are three required entities: ball_redgoal, ball_bluegoal, and one of ball_basketball
-or ball_football. Pay extra attention to the goals, as their names can be somewhat counter-
-intuitive: ball_redgoal will give a point to the red team when scored in, NOT to the blue team!
+There are three required entities: nexball_redgoal, nexball_bluegoal, and one of nexball_basketball
+or nexball_football. There are also optional nexball_yellowgoal and nexball_pinkgoal entities (don't
+add a pink goal when there is no yellow goal on the map, it will crash)
 
-There are also two other goal-like triggers, ball_fault and ball_bound, the first giving a point to
-the opposing team when the ball hits it, the second simply returning it. You can spawn the ball inside
-a goal-like trigger, this can be useful for basketball maps with separate teams and a common ball spawn.
+Goals are made just like any other regular triggers. You can use multiple brushes for one trigger,
+but avoid this if possible.
+
+There are also two other goal-like entities, nexball_fault and nexball_bound, the first taking a point
+from the team that hits the trigger with the ball, the second simply returning it. You can spawn the
+ball inside a goal-like trigger, this can be useful for basketball maps with separate teams and a
+common ball spawn.
 The different keys for the entities are documented in entities.def.
 
 The ball is affected by trigger_impulse, but not by trigger_push or teleporters.

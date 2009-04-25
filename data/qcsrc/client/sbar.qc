@@ -2201,8 +2201,8 @@ void CSQC_ctf_hud(void)
 #define NBPB_BRGB '1 1 1'
 #define NBPB_BALPH 1                //alpha
 #define NBPB_BFLAG DRAWFLAG_NORMAL
-#define NBPB_IALPH 0.8
-#define NBPB_IFLAG DRAWFLAG_ADDITIVE
+#define NBPB_IALPH 0.4
+#define NBPB_IFLAG DRAWFLAG_NORMAL
 #define NBPB_IRGB '0.7 0.1 0'
 
 void CSQC_nb_hud(void)

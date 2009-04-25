@@ -5,7 +5,12 @@
 #define BALL_ATTACHORG '3 0 16'
 #define BALL_FOOT   1
 #define BALL_BASKET 2
+//spawnflags
 #define GOAL_TOUCHPLAYER 1
+//goal types
+#define GOAL_FAULT -1
+#define GOAL_OUT -2
+
 #define CVTOV(s) s = cvar( #s )
 
 float g_nexball_football_boost_forward;
@@ -21,6 +26,7 @@ float ball_scale;
 
 .float teamtime;
 
+void nb_delayedinit();
 void nb_init() // Called early (worldspawn stage)
 {
 	CVTOV(g_nexball_meter_period); //sent with the client init entity
@@ -34,6 +40,8 @@ void nb_init() // Called early (worldspawn stage)
 	CVTOV(g_nexball_football_boost_up);        //200
 	CVTOV(g_nexball_delay_idle);               //10
 	CVTOV(g_nexball_football_physics);         //0
+
+	InitializeEntity(world, nb_delayedinit, INITPRIO_GAMETYPE);
 }
 
 void ResetBall();
@@ -138,9 +146,9 @@ void InitBall (void)
 	if (gameover) return;
 	self.flags &~= FL_ONGROUND;
 	self.movetype = MOVETYPE_BOUNCE;
-	if (self.classname == "ball_basketball")
+	if (self.classname == "nexball_basketball")
 		self.touch = basketball_touch;
-	else if (self.classname == "ball_football")
+	else if (self.classname == "nexball_football")
 		self.touch = football_touch;
 	self.cnt = 0;
 	self.think = ResetBall;
@@ -235,7 +243,7 @@ void basketball_touch (void)
 		if (self.team != other.team)
 			self.teamtime = time + g_nexball_basketball_delay_hold_forteam;
 
-		self.owner = self.pusher = other;
+		self.owner = self.pusher = other; //"owner" is set to the player carrying, "pusher" to the last player who touched it
 		self.team = other.team;
 		other.ballcarried = self;
 		other.effects = other.effects | g_nexball_basketball_effects_default;
@@ -260,114 +268,112 @@ void basketball_touch (void)
 	}
 }
 
-void ReturnTouch (void)
-{
-	string othername;
-	entity tempother;
-	tempother = other;
-
-	if (gameover) return;
-	if ((self.spawnflags & GOAL_TOUCHPLAYER) && tempother.ballcarried)
-		tempother = tempother.ballcarried; // Can't drop here yet because of EXACTTRIGGER
-	if (tempother.classname != "ball_basketball")
-	if (tempother.classname != "ball_football")
-		return;
-	if (tempother.cnt)
-		return;
-	EXACTTRIGGER_TOUCH;
-	other = tempother;
-
-	if (other.owner)
-	{
-		othername = other.owner.netname;
-		DropBall(other, other.owner.origin, '0 0 0');
-	}
-	else
-		othername = "The ball";
-
-	LogNB("out", other.pusher);
-	if (self.spawnflags & GOAL_TOUCHPLAYER)
-		bprint(othername, "^7 went out of bounds.\n");
-	else
-		bprint("The ball was returned.\n");
-	sound (other, CHAN_AUTO, self.noise, VOL_BASE, ATTN_NONE);
-
-	other.cnt = 1;
-	other.think = ResetBall;
-	if (other.classname == "ball_basketball")
-		other.touch = football_touch;
-	other.nextthink = time + 1.5;
-}
-
 void GoalTouch (void)
 {
-	string othername;
-	entity tempother;
-	float isclient;
-	tempother = other; // EXACTTRIGGER uses "other"
+	entity ball;
+	float isclient, pscore;
+	string pname;
 
 	if (gameover) return;
-	if ((self.spawnflags & GOAL_TOUCHPLAYER) && tempother.ballcarried)
-		tempother = tempother.ballcarried; // Can't drop here yet because of EXACTTRIGGER
-	if (tempother.classname != "ball_basketball")
-	if (tempother.classname != "ball_football")
+	if ((self.spawnflags & GOAL_TOUCHPLAYER) && other.ballcarried)
+		ball = other.ballcarried;
+	else
+		ball = other;
+	if (ball.classname != "nexball_basketball")
+	if (ball.classname != "nexball_football")
 		return;
-	if (!tempother.pusher || tempother.cnt)
+	if ((!ball.pusher && self.team != GOAL_OUT) || ball.cnt)
 		return;
 	EXACTTRIGGER_TOUCH;
-	other = tempother;
 
-	isclient = other.pusher.flags & FL_CLIENT;
 
-	if (isclient)
-		othername = other.pusher.netname;
+	if((isclient = ball.pusher.flags & FL_CLIENT))
+		pname = ball.pusher.netname;
 	else
-		othername = "Someone (?)";
+		pname = "Someone (?)";
 
-	if (self.classname == "ball_fault") { // FIXME?: this is ugly
-		     if (other.team == COLOR_TEAM1) self.team = COLOR_TEAM2;
-		else if (other.team == COLOR_TEAM2) self.team = COLOR_TEAM1;
-		else                                self.team = FALSE;
-
-		if (isclient)
-			PlayerScore_Add(other.pusher, SP_NEXBALL_OWNGOALS, 1);
-		if (self.team)
-		{
-			bprint(ColoredTeamName(self.team), " gets awarded 1 point for ", othername, "^7's silliness.\n");
-			LogNB("fault-score", other.pusher);
-		}
+	if        (ball.team == self.team) //owngoal (regular goals)
+	{
+		LogNB("owngoal", ball.pusher);
+		bprint("Boo! ", pname, "^7 scored a goal against his own team!\n");
+		pscore = -1;
+	} else if (self.team == GOAL_FAULT) {
+		LogNB("fault", ball.pusher);
+		bprint(ColoredTeamName(ball.team), " loses a point due to ", pname, "^7's silliness.\n");
+		pscore = -1;
+	} else if (self.team == GOAL_OUT) {
+		LogNB("out", ball.pusher);
+		if ((self.spawnflags & GOAL_TOUCHPLAYER) && ball.owner)
+			bprint(pname, "^7 went out of bounds.\n");
 		else
-		{
-			bprint("The ball was reset.\n");
-			LogNB("fault-reset", other.pusher);
-		}
-	} else if (other.team == self.team) { // the goal's .team is set to the team it gives points to
-		if (isclient)
-			PlayerScore_Add(other.pusher, SP_NEXBALL_GOALS, 1);
-		bprint("Goaaaaal! ", othername, "^7 scored a point for the ", ColoredTeamName(self.team), ".\n");
-		LogNB("goal", other.pusher);
-	} else if (other.team) {
-		if (isclient)
-			PlayerScore_Add(other.pusher, SP_NEXBALL_OWNGOALS, 1);
-		bprint("Boo! ", othername, "^7 scored a point for the opposing ", ColoredTeamName(self.team), ".\n");
-		LogNB("owngoal", other.pusher);
-	} else {
-		bprint(othername, "^7 scored a point for the ", ColoredTeamName(self.team), ".\n"); //Should not happen
-		LogNB("goal-noteam", other.pusher);
+			bprint("The ball was returned.\n");
+		pscore = 0;
+	} else {                           //score
+		LogNB(strcat("goal:", ftos(self.team)), ball.pusher);
+		bprint("Goaaaaal! ", pname, "^7 scored a point for the ", ColoredTeamName(ball.team), ".\n");
+		pscore = 1;
 	}
-	sound (other, CHAN_AUTO, self.noise, VOL_BASE, ATTN_NONE);
 
-	if (self.team)
-		TeamScore_AddToTeam(self.team, ST_NEXBALL_GOALS, 1);
+	sound (ball, CHAN_AUTO, self.noise, VOL_BASE, ATTN_NONE);
 
-	if (other.owner) // Happens on spawnflag GOAL_TOUCHPLAYER
-		DropBall(other, other.owner.origin, other.owner.velocity);
-	other.cnt = 1;
-	other.think = ResetBall;
-	if (other.classname == "ball_basketball")
-		other.touch = football_touch; // better than SUB_Null: football control until the ball gets reset
-	other.nextthink = time + cvar("g_nexball_delay_goal");
+	if(ball.team && pscore)
+		TeamScore_AddToTeam(ball.team, ST_NEXBALL_GOALS, pscore);
+	if (isclient && pscore > 0)
+		PlayerScore_Add(ball.pusher, SP_NEXBALL_GOALS, pscore);
+	else if (isclient && pscore < 0)
+		PlayerScore_Add(ball.pusher, SP_NEXBALL_FAULTS, pscore);
+
+	if (ball.owner) // Happens on spawnflag GOAL_TOUCHPLAYER
+		DropBall(ball, ball.owner.origin, ball.owner.velocity);
+	ball.cnt = 1;
+	ball.think = ResetBall;
+	if (ball.classname == "nexball_basketball")
+		ball.touch = football_touch; // better than SUB_Null: football control until the ball gets reset
+	ball.nextthink = time + cvar("g_nexball_delay_goal") * (self.team != GOAL_OUT);
 }
+
+//=======================//
+//       team ents       //
+//=======================//
+void spawnfunc_nexball_team (void)
+{
+	if(!g_nexball) { remove(self); return; }
+	self.team = self.cnt + 1;
+}
+
+void nb_spawnteam (string teamname, float teamcolor)
+{
+	dprint("^2spawned team ", teamname, "\n");
+	local entity e;
+	e = spawn();
+	e.classname = "nexball_team";
+	e.netname = teamname;
+	e.cnt = teamcolor;
+	e.team = e.cnt + 1;
+};
+
+void nb_spawnteams (void)
+{
+	float t_r, t_b, t_y, t_p;
+	entity e;
+	for(e = world; (e = find(e, classname, "nexball_goal")); )
+	{
+		switch(e.team)
+		{
+			case COLOR_TEAM1: if(!t_r) { nb_spawnteam ("Red", e.team-1)   ; t_r = 1; } break;
+			case COLOR_TEAM2: if(!t_b) { nb_spawnteam ("Blue", e.team-1)  ; t_b = 1; } break; 
+			case COLOR_TEAM3: if(!t_y) { nb_spawnteam ("Yellow", e.team-1); t_y = 1; } break;
+			case COLOR_TEAM4: if(!t_p) { nb_spawnteam ("Pink", e.team-1)  ; t_p = 1; } break;
+		}
+	}
+}
+
+void nb_delayedinit (void)
+{
+	if (find(world, classname, "nexball_team") == world)
+		nb_spawnteams();
+}
+
 
 //=======================//
 //      spawnfuncs       //
@@ -392,7 +398,7 @@ void SpawnBall (void)
 
 	self.effects = self.effects | EF_LOWPRECISION;
 
-	if (cvar(strcat("g_nex", self.classname, "_trail")))
+	if (cvar(strcat("g_", self.classname, "_trail"))) //nexball_basketball :p
 	{
 		self.glow_color = cvar("g_nexball_trail_color");
 		self.glow_trail = TRUE;
@@ -420,8 +426,9 @@ void SpawnBall (void)
 	self.nextthink = game_starttime + cvar("g_nexball_delay_start");
 }
 
-void spawnfunc_ball_basketball (void)
+void spawnfunc_nexball_basketball (void)
 {
+	self.classname = "nexball_basketball";
 	if(!balls & BALL_BASKET)
 	{
 		CVTOV(g_nexball_basketball_effects_default);
@@ -433,72 +440,78 @@ void spawnfunc_ball_basketball (void)
 	if (!self.effects)
 		self.effects = g_nexball_basketball_effects_default;
 	self.solid = SOLID_TRIGGER;
-
 	balls |= BALL_BASKET;
-
 	SpawnBall();
 }
 
-void spawnfunc_ball_football (void)
+void spawnfunc_nexball_football (void)
 {
+	self.classname = "nexball_football";
 	self.solid = SOLID_TRIGGER;
-
 	balls |= BALL_FOOT;
-
 	SpawnBall();
 }
 
-void spawnfunc_ball (void)
-{
-	self.classname = "ball_football";
-	spawnfunc_ball_football();
-}
-
-// The "red goal" is defended by blue team. A ball in there counts as a point for red.
-void spawnfunc_ball_redgoal (void)
+void SpawnGoal (void)
 {
 	if(!g_nexball) { remove(self); return; }
-	//COLOR_TEAM1 is red
 	EXACTTRIGGER_INIT;
+	self.classname = "nexball_goal";
+	if (!self.noise)
+		self.noise = "ctf/respawn.wav";
+	precache_sound(self.noise);
+	self.touch = GoalTouch;
+}
+
+void spawnfunc_nexball_redgoal (void)
+{
 	self.team = COLOR_TEAM1;
-	if (!self.noise)
-		self.noise = "ctf/redcapture.wav";
-	precache_sound(self.noise);
-	self.touch = GoalTouch;
+	SpawnGoal();
 }
-
-//Same comment.
-void spawnfunc_ball_bluegoal (void)
+void spawnfunc_nexball_bluegoal (void)
 {
-	if(!g_nexball) { remove(self); return; }
-	EXACTTRIGGER_INIT;
 	self.team = COLOR_TEAM2;
-	if (!self.noise)
-		self.noise = "ctf/bluecapture.wav";
-	precache_sound(self.noise);
-	self.touch = GoalTouch;
+	SpawnGoal();
+}
+void spawnfunc_nexball_yellowgoal (void)
+{
+	self.team = COLOR_TEAM3;
+	SpawnGoal();
+}
+void spawnfunc_nexball_pinkgoal (void)
+{
+	self.team = COLOR_TEAM4;
+	SpawnGoal();
 }
 
-void spawnfunc_ball_fault (void)
+void spawnfunc_nexball_fault (void)
 {
-	if(!g_nexball) { remove(self); return; }
-	EXACTTRIGGER_INIT;
+	self.team = GOAL_FAULT;
 	if (!self.noise)
 		self.noise = "misc/typehit.wav";
-	precache_sound(self.noise);
-	self.touch = GoalTouch;
+	SpawnGoal();
 }
 
-void spawnfunc_ball_bound (void)
+void spawnfunc_nexball_out (void)
 {
-	if(!g_nexball) { remove(self); return; }
-	EXACTTRIGGER_INIT;
+	self.team = GOAL_OUT;
 	if (!self.noise)
 		self.noise = "misc/typehit.wav";
-	precache_sound(self.noise);
-	self.touch = ReturnTouch;
+	SpawnGoal();
 }
 
+//
+//Spawnfuncs preserved for compatibility
+//
+
+void spawnfunc_ball            (void) { spawnfunc_nexball_football(); }
+void spawnfunc_ball_football   (void) { spawnfunc_nexball_football(); }
+void spawnfunc_ball_basketball (void) { spawnfunc_nexball_basketball(); }
+// The "red goal" is defended by blue team. A ball in there counts as a point for red.
+void spawnfunc_ball_redgoal    (void) { spawnfunc_nexball_bluegoal(); } // I blame Revenant
+void spawnfunc_ball_bluegoal   (void) { spawnfunc_nexball_redgoal(); }  // but he didn't mean to cause trouble :p
+void spawnfunc_ball_fault      (void) { spawnfunc_nexball_fault(); }
+void spawnfunc_ball_bound      (void) { spawnfunc_nexball_out(); }
 
 //=======================//
 //      Weapon code      //
