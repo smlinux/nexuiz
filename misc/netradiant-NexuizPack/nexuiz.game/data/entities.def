@@ -1550,23 +1550,40 @@ target: disable/enable all relays with this targetname when triggered
 targetname: name that identifies this entity so it can be triggered
 */
 
-/*QUAKED ball_redgoal (1 0 0) ?
-"Red" goal. Defended by blue team, the red team tries to put the ball in there.
+/*QUAKED nexball_redgoal (1 0 0) ?
+Red goal. Defended by the red team.
 -------- KEYS --------
 noise: sound played when a point is scored
 -------- SPAWNFLAGS --------
 GOAL_TOUCHPLAYER: The trigger also affects ball-carrying players (the ball is then auto-dropped)
 */
 
-/*QUAKED ball_bluegoal (0 0 1) ?
-"Blue" goal. Defended by red team, the blue team tries to put the ball in there.
+/*QUAKED nexball_bluegoal (0 0 1) ?
+Blue goal. Defended by the blue team.
 -------- KEYS --------
 noise: sound played when a point is scored
 -------- SPAWNFLAGS --------
 GOAL_TOUCHPLAYER: The trigger also affects ball-carrying players (the ball is then auto-dropped)
 */
 
-/*QUAKED ball_fault (0.6 0.1 0) ?
+/*QUAKED nexball_yellowgoal (1 1 0) ?
+Yellow goal. Defended by the yellow team. Needs both red and blue goals on the map to work.
+-------- KEYS --------
+noise: sound played when a point is scored
+-------- SPAWNFLAGS --------
+GOAL_TOUCHPLAYER: The trigger also affects ball-carrying players (the ball is then auto-dropped)
+*/
+
+/*QUAKED nexball_bluegoal (1 0 1) ?
+Pink goal. Defended by the pink team. Needs red, blue and pink goals on the map to work.
+-------- KEYS --------
+noise: sound played when a point is scored
+-------- SPAWNFLAGS --------
+GOAL_TOUCHPLAYER: The trigger also affects ball-carrying players (the ball is then auto-dropped)
+*/
+
+
+/*QUAKED nexball_fault (0.6 0.1 0) ?
 This acts as a goal that always gives points to the opposing team.
 -------- KEYS --------
 noise: sound played when a point is scored
@@ -1574,7 +1591,7 @@ noise: sound played when a point is scored
 GOAL_TOUCHPLAYER: The trigger also affects ball-carrying players (the ball is then auto-dropped)
 */
 
-/*QUAKED ball_bound (0.1 0.6 0) ?
+/*QUAKED nexball_out (0.1 0.6 0) ?
 When the ball touches this, it is returned.
 -------- KEYS --------
 noise: sound played when a point is scored
@@ -1582,7 +1599,7 @@ noise: sound played when a point is scored
 GOAL_TOUCHPLAYER: The trigger also affects ball-carrying players (the ball is then auto-dropped)
 */
 
-/*QUAKED ball_football (.9 .9 .9) (-16 -16 -16) (16 16 16)
+/*QUAKED nexball_football (.9 .9 .9) (-16 -16 -16) (16 16 16)
 The soccer type Nexball.
 -------- KEYS --------
 model: set this if you want to use your own model
@@ -1591,7 +1608,7 @@ noise: played when the ball bounces
 noise1: played when the ball is dropped on the map
 */
 
-/*QUAKED ball_basketball (.5 .2 0) (-16 -16 -16) (16 16 16)
+/*QUAKED nexball_basketball (.5 .2 0) (-16 -16 -16) (16 16 16)
 The basket ball type Nexball.
 -------- KEYS --------
 model: set this if you want to use your own model
