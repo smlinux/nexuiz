@@ -886,7 +886,7 @@ void readplayerstartcvars()
 					t = (e.spawnflags & WEPSPAWNFLAG_NORMAL);
 				else if(g_race)
 					t = (i == WEP_LASER);
-				else
+				else if(!g_nexball)
 					t = (i == WEP_LASER || i == WEP_SHOTGUN);
 				if(g_grappling_hook) // if possible, redirect off-hand hook to on-hand hook
 					t += (i == WEP_HOOK);
