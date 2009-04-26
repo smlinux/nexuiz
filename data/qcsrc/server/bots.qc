@@ -1542,13 +1542,13 @@ void navigation_add_bestgoal(entity goal)
 	if(bestgoalswindex==MAX_BESTGOALS)
 	{
 		bestgoalswindex=0;
-		bestgoalsrindex=1;
+		if(bestgoalsrindex==0)
+			bestgoalsrindex=1;
 	}
 
 	navigation_bestgoals[bestgoalswindex] = goal;
 
 	++bestgoalswindex;
-
 }
 
 entity navigation_get_bestgoal()
@@ -1639,47 +1639,65 @@ float navigation_routetogoal(entity e, vector startposition)
 
 void navigation_routetogoals()
 {
-	entity e;
-	vector position, v;
+	entity g1, g2;
 
 	navigation_clearroute();
 
-	position = self.origin;
+	g1 = navigation_get_bestgoal();
 	for(;;)
 	{
-		e = navigation_get_bestgoal();
+		if(g2==world)
+			g2 = navigation_get_bestgoal();
 
-		if(e==world)
-			return;
-
-		if(navigation_routetogoal(e, position))
+		if(g2==world)
 		{
-			position = v;
-			self.navigation_hasgoals = TRUE;
+			navigation_routetogoal(g1, self.origin);
+			return;
 		}
+
+		if(navigation_routetogoal(g1, g2.origin))
+		{
+			g1 = g2;
+			g2 = world;
+			continue;
+		}
+
+		navigation_clearroute();
+		g1 = g2;
+		g2 = world;
 	}
 }
 
 // removes any currently touching waypoints from the goal stack
 // (this is how bots detect if they have reached a goal)
+.float lastteleporttime;
+
 void navigation_poptouchedgoals()
 {
 	local vector org, m1, m2;
-	org = self.origin;// + self.velocity * 0.1;
+	org = self.origin;
 	m1 = org + self.mins;
 	m2 = org + self.maxs;
 
-	// Loose goal touching check for running state
+	if(self.goalcurrent.wpflags & WAYPOINTFLAG_TELEPORT)
+	{
+		if(self.lastteleporttime>0)
+		if(time-self.lastteleporttime<0.2)
+		{
+			navigation_poproute();
+			return;
+		}
+	}
+
+	// Loose goal touching check when running
 	if(self.aistatus & AI_STATUS_RUNNING)
 	if(self.goalcurrent.classname=="waypoint")
 	{
 		if(vlen(self.origin - self.goalcurrent.origin)<150)
 		{
-				traceline(self.origin + self.view_ofs , self.goalcurrent.origin, TRUE, world);
-				if(trace_fraction==1)
-				{
-					navigation_poproute();
-				}
+			traceline(self.origin + self.view_ofs , self.goalcurrent.origin, TRUE, world);
+			if(trace_fraction==1)
+				navigation_poproute();
 		}
 	}
 

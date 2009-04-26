@@ -982,10 +982,6 @@ void havocbot_role_kh_freelancer()
 	}
 };
 
-
-
-
-
 void havocbot_chooserole_kh()
 {
 	local float r;

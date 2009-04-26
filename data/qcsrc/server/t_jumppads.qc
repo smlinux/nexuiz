@@ -69,12 +69,12 @@ vector trigger_push_calculatevelocity(vector org, entity tgt, float ht)
 
 	// push him so high...
 	vz = sqrt(2 * grav * jumpheight); // NOTE: sqrt(positive)!
-	
+
 	// we start with downwards velocity only if it's a downjump and the jump apex should be outside the jump!
 	if(ht < 0)
 		if(zdist < 0)
 			vz = -vz;
-	
+
 	vector solution;
 	solution = solve_quadratic(0.5 * grav, -vz, zdist); // equation "z(ti) = zdist"
 	// ALWAYS solvable because jumpheight >= zdist
@@ -82,7 +82,7 @@ vector trigger_push_calculatevelocity(vector org, entity tgt, float ht)
 		solution_y = solution_x; // just in case it is not solvable due to roundoff errors, assume two equal solutions at their center (this is mainly for the usual case with ht == 0)
 	if(zdist == 0)
 		solution_x = solution_y; // solution_x is 0 in this case, so don't use it, but rather use solution_y (which will be sqrt(0.5 * jumpheight / grav), actually)
-	
+
 	if(zdist < 0)
 	{
 		// down-jump
@@ -164,7 +164,9 @@ void trigger_push_touch()
 			sound (other, CHAN_AUTO, self.noise, VOL_BASE, ATTN_NORM);
 			self.pushltime = time + 0.2;
 		}
-		if(clienttype(other) == CLIENTTYPE_REAL)
+		local float ct;
+		ct = clienttype(other);
+		if( ct == CLIENTTYPE_REAL)
 		{
 			local float i;
 			local float found;
@@ -181,6 +183,8 @@ void trigger_push_touch()
 			if(self.message)
 				centerprint(other, self.message);
 		}
+		else if(ct == CLIENTTYPE_BOT)
+			other.lastteleporttime = time;
 		else
 			other.jumppadcount = TRUE;
 	}
