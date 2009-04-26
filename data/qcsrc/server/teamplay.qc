@@ -332,7 +332,6 @@ void InitGameplayMode()
 		fraglimit_override = cvar("g_nexball_goallimit");
 		ActivateTeamplay();
 		nb_init();
-		ScoreRules_nexball();
 	}
 
 	if(teams_matter)
