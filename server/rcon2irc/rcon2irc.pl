@@ -685,12 +685,6 @@ our %config = (
 
 # Nexuiz specific parsing of some server messages
 
-sub nex_is_teamplay($)
-{
-	my ($map) = @_;
-	return $map =~ /^(?:kh|ctf|tdm|dom)_/;
-}
-
 sub nex_slotsstring()
 {
 	my $slotsstr = "";
@@ -1469,7 +1463,7 @@ sub cond($)
 		return if not exists $store{scores};
 		my $s = $store{scores};
 		delete $store{scores};
-		my $teams_matter = nex_is_teamplay($s->{map});
+		my $teams_matter = defined $s->{teams};
 
 		my @t = ();
 		my @p = ();
