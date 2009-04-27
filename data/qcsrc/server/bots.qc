@@ -1634,7 +1634,7 @@ float navigation_routetogoal(entity e, vector startposition)
 			break;
 	}
 
-	return TRUE;
+	return FALSE;
 };
 
 void navigation_routetogoals()

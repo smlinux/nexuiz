@@ -1090,8 +1090,12 @@ void havocbot_ai()
 		aimdistance = vlen(now);
 		//heading = self.velocity;
 		//dprint(self.goalstack01.classname,etos(self.goalstack01),"\n");
-		if(self.goalstack01 != self && self.goalstack01 != world && self.aistatus & AI_STATUS_RUNNING == 0)
+		if(
+			self.goalstack01 != self && self.goalstack01 != world && self.aistatus & AI_STATUS_RUNNING == 0 &&
+			!(self.goalcurrent.wpflags & WAYPOINTFLAG_TELEPORT)
+		)
 			next = self.goalstack01.origin - (self.origin + self.view_ofs);
+
 		skillblend=bound(0,(skill-2.5)*0.5,1); //lower skill player can't preturn
 		distanceblend=bound(0,aimdistance/cvar("bot_ai_keyboard_distance"),1);
 		blend = skillblend * (1-distanceblend);
