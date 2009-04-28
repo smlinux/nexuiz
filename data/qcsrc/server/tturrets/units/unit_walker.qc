@@ -601,7 +601,7 @@ float walker_moveverb_enemy(float eval)
         //if (tracewalk(self.enemy, self.origin, self.mins, self.maxs, self.enemy.origin, MOVE_NORMAL))
         return verb.verb_static_value;
 
-        return VS_CALL_NO;
+        //return VS_CALL_NO;
 
     case VCM_DO:
         switch (self.waterlevel)
