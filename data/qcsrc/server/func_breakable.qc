@@ -34,10 +34,10 @@ void LaunchDebris (string debrisname) =
 	local	entity dbr;
 
 	dbr = spawn();
-	dbr.origin = self.origin + self.absmin
+	setorigin(dbr, self.absmin
 	           + '1 0 0' * random() * (self.absmax_x - self.absmin_x)
 	           + '0 1 0' * random() * (self.absmax_y - self.absmin_y)
-	           + '0 0 1' * random() * (self.absmax_z - self.absmin_z);
+	           + '0 0 1' * random() * (self.absmax_z - self.absmin_z));
 	setmodel (dbr, debrisname );
 	dbr.movetype = MOVETYPE_BOUNCE;
 	dbr.solid = SOLID_NOT;
@@ -126,6 +126,11 @@ void func_breakable_destroy() {
 
 	activator = self.owner;
 
+	// now throw around the debris
+	n = tokenize_console(self.debris);
+	for(i = 0; i < n; ++i)
+		LaunchDebris(argv(i));
+
 	func_breakable_destroyed();
 
 	if(self.noise)
@@ -133,11 +138,6 @@ void func_breakable_destroy() {
 
 	if(self.dmg)
 		RadiusDamage(self, activator, self.dmg, self.dmg_edge, self.dmg_radius, self, self.dmg_force, DEATH_HURTTRIGGER, world);
-
-	// now throw around the debris
-	n = tokenize_console(self.debris);
-	for(i = 0; i < n; ++i)
-		LaunchDebris(argv(i));
 
 	if(self.cnt)
 		pointparticles(self.cnt, self.absmin * 0.5 + self.absmax * 0.5, '0 0 0', self.count);
