@@ -884,10 +884,15 @@ void cvar_settemp(string pKey, string pValue)
 void cvar_settemp_restore()
 {
 	// undo what cvar_settemp did
+	string s1, s2;
 	float n, i;
 	n = tokenize_console(cvar_string("settemp_list"));
 	for(i = 0; i < n - 3; i += 3)
-		cvar_set(argv(i + 1), cvar_string(argv(i + 2)));
+	{
+		s1 = argv(i + 1);
+		s2 = argv(i + 2);
+		cvar_set(s1, s2); // fteqcc sucks
+	}
 	cvar_set("settemp_list", "0");
 }
 #endif

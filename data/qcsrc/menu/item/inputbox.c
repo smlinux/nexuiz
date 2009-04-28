@@ -87,6 +87,7 @@ void enterTextInputBox(entity me, string ch)
 
 float keyDownInputBox(entity me, float key, float ascii, float shift)
 {
+	string s1, s2;
 	me.lastChangeTime = time;
 	me.dragScrollTimer = time;
 	if(ascii >= 32 && ascii != 127)
@@ -112,14 +113,22 @@ float keyDownInputBox(entity me, float key, float ascii, float shift)
 			if(me.cursorPos > 0)
 			{
 				me.cursorPos -= 1;
-				me.setText(me, strcat(substring(me.text, 0, me.cursorPos), substring(me.text, me.cursorPos + 1, strlen(me.text) - me.cursorPos - 1)));
+				s1 = substring(me.text, 0, me.cursorPos);
+				s2 = substring(me.text, me.cursorPos + 1, strlen(me.text) - me.cursorPos - 1);
+				me.setText(me, strcat(s1, s2)); // fteqcc sucks
 			}
 			return 1;
 		case K_DEL:
 			if(shift & S_CTRL)
+			{
 				me.setText(me, "");
+			}
 			else
-				me.setText(me, strcat(substring(me.text, 0, me.cursorPos), substring(me.text, me.cursorPos + 1, strlen(me.text) - me.cursorPos - 1)));
+			{
+				s1 = substring(me.text, 0, me.cursorPos);
+				s2 = substring(me.text, me.cursorPos + 1, strlen(me.text) - me.cursorPos - 1);
+				me.setText(me, strcat(s1, s2)); // fteqcc sucks
+			}
 			return 1;
 	}
 	return 0;

@@ -5,7 +5,10 @@ float prandom_seed;
 float prandom()
 {
 	float c;
-	c = crc16(FALSE, strcat(ftos(prandom_seed), ftos(prandom_seed + 3.1415926535)));
+	string s1, s2;
+	s1 = ftos(prandom_seed);
+	s2 = ftos(prandom_seed + 3.1415926535);
+	c = crc16(FALSE, strcat(s1, s2)); // fteqcc sucks
 	prandom_seed = c;
 
 #ifdef USE_PRANDOM_DEBUG
