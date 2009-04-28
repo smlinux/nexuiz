@@ -568,3 +568,6 @@ void Drag_MoveDrag(entity from, entity to);
 .float ammo_fuel;
 
 .vector prevorigin;
+
+.float nickspamtime; // time of last nick change
+.float nickspamcount;

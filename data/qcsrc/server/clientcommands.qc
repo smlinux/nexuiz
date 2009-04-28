@@ -370,6 +370,18 @@ void SV_ParseClientCommand(string s) {
 			print("WARNING: Invalid clientcommand by ", self.netname, ": ", s, "\n");
 			return;
 		}
+
+		if(self.jointime > 0 && time > self.jointime + 10 && time > self.nickspamtime) // allow any changes in the first 10 seconds since joining
+		if(cmd == "name" || cmd == "playermodel") // TODO also playerskin and color?
+		{
+			if(self.nickspamtime == 0 || time > self.nickspamtime + cvar("g_nick_flood_timeout"))
+				// good, no serious flood
+				self.nickspamcount = 1;
+			else
+				self.nickspamcount += 1;
+			self.nickspamtime = time + cvar("g_nick_flood_penalty");
+		}
+
 		clientcommand(self,s);
 	}
 }

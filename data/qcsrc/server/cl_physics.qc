@@ -370,6 +370,22 @@ void SV_PlayerPhysics()
 	self.movement_old = self.movement;
 	self.v_angle_old = self.v_angle;
 
+	if(time < self.nickspamtime)
+	if(self.nickspamcount >= cvar("g_nick_flood_penalty_yellow"))
+	{
+		// slight annoyance for nick change scripts
+		self.movement = -1 * self.movement;
+		self.BUTTON_ATCK = self.BUTTON_JUMP = self.BUTTON_ATCK2 = self.BUTTON_ZOOM = self.BUTTON_CROUCH = self.BUTTON_HOOK = self.BUTTON_USE = 0;
+
+		if(self.nickspamcount >= cvar("g_nick_flood_penalty_red")) // if you are persistent and the slight annoyance above does not stop you, I'll show you!
+		{
+			self.angles_x = random() * 360;
+			self.angles_y = random() * 360;
+			// at least I'm not forcing retardedview by also assigning to angles_z
+			self.fixangle = 1;
+		}
+	}
+
 	if(time > self.shtest_next)
 	{
 		if(self.shtest_next > 0)
