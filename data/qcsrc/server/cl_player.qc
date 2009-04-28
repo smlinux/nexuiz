@@ -881,16 +881,18 @@ float GetPlayerSoundSampleField_fixed;
 void PrecacheGlobalSound(string samplestring)
 {
 	float n, i;
+	string s;
 	tokenize_console(samplestring);
+	s = argv(0);
 	n = stof(argv(1));
 	if(n > 0)
 	{
 		for(i = 1; i <= n; ++i)
-			precache_sound(strcat(argv(0), ftos(i), ".wav"));
+			precache_sound(strcat(s, ftos(i), ".wav")); // fteqcc sucks
 	}
 	else
 	{
-		precache_sound(strcat(argv(0), ".wav"));
+		precache_sound(strcat(s, ".wav"));
 	}
 }
 
@@ -971,16 +973,18 @@ void GlobalSound(string sample, float chan, float voicetype)
 {
 	float n;
 	float tauntrand;
+	string s;
 
 	if(sample == "")
 		return;
 
 	tokenize_console(sample);
+	s = argv(0);
 	n = stof(argv(1));
 	if(n > 0)
-		sample = strcat(argv(0), ftos(floor(random() * n + 1)), ".wav"); // randomization
+		sample = strcat(s, ftos(floor(random() * n + 1)), ".wav"); // randomization, fteqcc sucks
 	else
-		sample = strcat(argv(0), ".wav"); // randomization
+		sample = strcat(s, ".wav"); // randomization
 	
 	switch(voicetype)
 	{
