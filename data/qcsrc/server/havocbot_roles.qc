@@ -705,10 +705,10 @@ void havocbot_chooserole_ctf()
 		self.havocbot_role = havocbot_role_ctf_rogue;
 	else
 	{
-		r = random() * 3;
-		if (r < 1)
+		r = random() * 100;
+		if (r < 45)
 			self.havocbot_role = havocbot_role_ctf_offense;
-		else if (r < 2)
+		else if (r > 75)
 			self.havocbot_role = havocbot_role_ctf_middle;
 		else
 			self.havocbot_role = havocbot_role_ctf_defense;
