@@ -327,6 +327,9 @@ void Movetype_Physics(float matchserver) // SV_Physics_Entity
 
 	dt = time - self.move_time;
 
+	if(ticrate <= 0)
+		matchserver = 0;
+
 	if(matchserver)
 	{
 		movedt = ticrate;
