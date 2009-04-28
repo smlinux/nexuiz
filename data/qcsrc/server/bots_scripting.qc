@@ -4,21 +4,25 @@
 #define BOT_CMD_CONTINUE		2
 #define BOT_CMD_WAIT			3
 #define BOT_CMD_TURN			4
-#define BOT_CMD_MOVETO			5
-#define BOT_CMD_RESETGOAL		6
-#define BOT_CMD_CC				7
+#define BOT_CMD_MOVETO			5	// Not implemented yet
+#define BOT_CMD_RESETGOAL		6	// Not implemented yet
+#define BOT_CMD_CC			7
 #define BOT_CMD_IF      		8
 #define BOT_CMD_ELSE    		9
 #define BOT_CMD_FI      		10
 #define BOT_CMD_RESETAIM   		11
-#define BOT_CMD_AIM				12
+#define BOT_CMD_AIM			12
 #define BOT_CMD_PRESSKEY		13
 #define BOT_CMD_RELEASEKEY		14
-#define BOT_CMD_SELECTWEAPON	15
+#define BOT_CMD_SELECTWEAPON		15
 #define BOT_CMD_IMPULSE			16
+#define BOT_CMD_WHILE			17	// Not implemented yet
+#define BOT_CMD_WEND			18	// Not implemented yet
+#define BOT_CMD_CHASE			19	// Not implemented yet
 #define BOT_CMD_COUNTER			17
 
 // NOTE: Following commands should be implemented on the bot ai
+//		 If a new command should be handled by the target ai(s) please declare it here
 .float(vector) cmd_moveto;
 .float() cmd_resetgoal;
 
@@ -33,16 +37,18 @@ float bot_cmd_parm_type[BOT_CMD_COUNTER];
 string bot_cmd_string[BOT_CMD_COUNTER];
 
 // Bots command queue
+entity bot_cmd;				// Current command
 
-#define BOT_CMD_QUEUE_SIZE 80
+.float is_bot_cmd;			// Tells if the entity is a bot command
+.float bot_cmd_index;			// Position of the command in the queue
+.float bot_cmd_type;			// If of command (see the BOT_CMD_* defines)
+.float bot_cmd_parm_float;		// Field to store a float parameter
+.string bot_cmd_parm_string;		// Field to store a string parameter
+.vector bot_cmd_parm_vector;		// Field to store a vector parameter
+.float bot_cmd_execution_counter;	// How many times this command on the queue was executed
 
-.float bot_cmd[BOT_CMD_QUEUE_SIZE];
-.float bot_cmd_parm_float[BOT_CMD_QUEUE_SIZE];
-.string bot_cmd_parm_string[BOT_CMD_QUEUE_SIZE];
-.vector bot_cmd_parm_vector[BOT_CMD_QUEUE_SIZE];
-
-.float bot_cmd_execution_index;
-.float bot_cmd_queue_index;
+.float bot_cmd_execution_index;		// Position in the queue of the command to be executed
+.float bot_cmd_queue_index;		// Position of the last command in the queue
 
 // Initialize global commands list
 // NOTE: New commands should be initialized here
@@ -67,34 +73,34 @@ void bot_commands_init()
 	bot_cmd_parm_type[BOT_CMD_MOVETO]		= BOT_CMD_PARAMETER_VECTOR;
 
 	bot_cmd_string[BOT_CMD_RESETGOAL]		= "resetgoal";
-	bot_cmd_parm_type[BOT_CMD_RESETGOAL]	= BOT_CMD_PARAMETER_NONE;
+	bot_cmd_parm_type[BOT_CMD_RESETGOAL]		= BOT_CMD_PARAMETER_NONE;
 
-	bot_cmd_string[BOT_CMD_CC]				= "cc";
+	bot_cmd_string[BOT_CMD_CC]			= "cc";
 	bot_cmd_parm_type[BOT_CMD_CC]			= BOT_CMD_PARAMETER_STRING;
 
-	bot_cmd_string[BOT_CMD_IF]				= "if";
+	bot_cmd_string[BOT_CMD_IF]			= "if";
 	bot_cmd_parm_type[BOT_CMD_IF]			= BOT_CMD_PARAMETER_STRING;
 
 	bot_cmd_string[BOT_CMD_ELSE]			= "else";
 	bot_cmd_parm_type[BOT_CMD_ELSE]			= BOT_CMD_PARAMETER_NONE;
 
-	bot_cmd_string[BOT_CMD_FI]				= "fi";
+	bot_cmd_string[BOT_CMD_FI]			= "fi";
 	bot_cmd_parm_type[BOT_CMD_FI]			= BOT_CMD_PARAMETER_NONE;
 
 	bot_cmd_string[BOT_CMD_RESETAIM]		= "resetaim";
 	bot_cmd_parm_type[BOT_CMD_RESETAIM]		= BOT_CMD_PARAMETER_NONE;
 
-	bot_cmd_string[BOT_CMD_AIM]				= "aim";
+	bot_cmd_string[BOT_CMD_AIM]			= "aim";
 	bot_cmd_parm_type[BOT_CMD_AIM]			= BOT_CMD_PARAMETER_STRING;
 
 	bot_cmd_string[BOT_CMD_PRESSKEY]		= "presskey";
 	bot_cmd_parm_type[BOT_CMD_PRESSKEY]		= BOT_CMD_PARAMETER_STRING;
 
 	bot_cmd_string[BOT_CMD_RELEASEKEY]		= "releasekey";
-	bot_cmd_parm_type[BOT_CMD_RELEASEKEY]	= BOT_CMD_PARAMETER_STRING;
+	bot_cmd_parm_type[BOT_CMD_RELEASEKEY]		= BOT_CMD_PARAMETER_STRING;
 
-	bot_cmd_string[BOT_CMD_SELECTWEAPON]	= "selectweapon";
-	bot_cmd_parm_type[BOT_CMD_SELECTWEAPON]	= BOT_CMD_PARAMETER_FLOAT;
+	bot_cmd_string[BOT_CMD_SELECTWEAPON]		= "selectweapon";
+	bot_cmd_parm_type[BOT_CMD_SELECTWEAPON]		= BOT_CMD_PARAMETER_FLOAT;
 
 	bot_cmd_string[BOT_CMD_IMPULSE]			= "impulse";
 	bot_cmd_parm_type[BOT_CMD_IMPULSE]		= BOT_CMD_PARAMETER_FLOAT;
@@ -142,13 +148,57 @@ entity find_bot_by_number(float number)
 
 void bot_clearqueue()
 {
-	self.(bot_cmd[0]) = BOT_CMD_NULL;
+	entity head, newhead;
+
+	head = findchainfloat(is_bot_cmd, TRUE);
+	newhead = head;
+
+	while(newhead)
+	{
+		newhead = head.chain;
+
+		if(head.owner==self)
+			remove(head);
+
+		head = newhead;
+	}
+
 	self.bot_cmd_queue_index = 0;
 	self.bot_cmd_execution_index = 0;
 }
 
-void bot_queuecommand(entity bot, string cmd, string parm)
+entity bot_spawncmd(entity bot, float type)
 {
+	entity cmd;
+
+	bot.bot_cmd_queue_index++;
+
+	cmd = spawn();
+	cmd.owner = bot;
+	cmd.is_bot_cmd = TRUE;
+	cmd.bot_cmd_type = type;
+	cmd.bot_cmd_index = bot.bot_cmd_queue_index;
+
+	return cmd;
+}
+
+void bot_debugcmd(entity cmd)
+{
+	print(strcat("Owner: ",cmd.owner.netname, "\n"));
+	print(strcat("Cmd Type: ",ftos(cmd.bot_cmd_type), "\n"));
+	print(strcat("Cmd Index: ",ftos(cmd.bot_cmd_index), "\n"));
+
+	print(strcat("Param Float: ",ftos(cmd.bot_cmd_parm_float), "\n"));
+	print(strcat("Param String: ",cmd.bot_cmd_parm_string, "\n"));
+	print(strcat("Param Vector: ",vtos(cmd.bot_cmd_parm_vector), "\n"));
+
+	print(strcat("Bot queue index: ",	ftos(cmd.owner.bot_cmd_queue_index), "\n"));
+	print(strcat("Bot execution index: ",	ftos(cmd.owner.bot_cmd_execution_index), "\n\n"));
+}
+
+void bot_queuecommand(entity bot, string cmdstring, string parm)
+{
+	entity cmd;
 	local float queue_index, cmd_parm_type, i;
 
 	if not(bot.isbot)
@@ -157,73 +207,40 @@ void bot_queuecommand(entity bot, string cmd, string parm)
 	if(!bot_cmds_initialized)
 		bot_commands_init();
 
-	queue_index = bot.bot_cmd_queue_index;
-
-	if(bot.bot_cmd[queue_index]!=BOT_CMD_NULL)
-	{
-		print( strcat("WARNING: Command queue of length (",ftos(BOT_CMD_QUEUE_SIZE),") is full. Command ignored.\n"));
-		return;
-	}
-
 	for(i=1;i<BOT_CMD_COUNTER;++i)
 	{
-		if(bot_cmd_string[i]!=cmd)
+		if(bot_cmd_string[i]!=cmdstring)
 			continue;
 
 		cmd_parm_type = bot_cmd_parm_type[i];
 
 		if(cmd_parm_type!=BOT_CMD_PARAMETER_NONE&&parm=="")
 		{
-			print("ERROR: Invalid parameters count\n");
+			print("ERROR: A parameter is required for this command\n");
 			return;
 		}
 
 		// Load command into queue
-		bot.(bot_cmd[queue_index]) = i;
+		cmd = bot_spawncmd(bot, i);
 
-		// Load parameters into queue
+		// Attach parameter
 		switch(cmd_parm_type)
 		{
 			case BOT_CMD_PARAMETER_FLOAT:
-				bot.(bot_cmd_parm_float[queue_index])	= stof(parm);
+				cmd.bot_cmd_parm_float = stof(parm);
 				break;
 			case BOT_CMD_PARAMETER_STRING:
-				bot.(bot_cmd_parm_string[queue_index])	= strzone(parm);
+				cmd.bot_cmd_parm_string = strzone(parm);
 				break;
 			case BOT_CMD_PARAMETER_VECTOR:
-				bot.(bot_cmd_parm_vector[queue_index])	= stov(parm);
+				cmd.bot_cmd_parm_vector = stov(parm);
 				break;
 			default:
 				break;
 		}
-
-		// Move the queue index to the next position
-		if(queue_index==BOT_CMD_QUEUE_SIZE-1)
-			bot.bot_cmd_queue_index = queue_index = 0;
-		else
-			bot.bot_cmd_queue_index += 1;
-
 		return;
 	}
 	print("ERROR: No such command");
-}
-
-float bot_cmd_getparm_float()
-{
-	local float index = self.bot_cmd_execution_index;
-	return self.bot_cmd_parm_float[index];
-}
-
-string bot_cmd_getparm_string()
-{
-	local float index = self.bot_cmd_execution_index;
-	return self.bot_cmd_parm_string[index];
-}
-
-vector bot_cmd_getparm_vector()
-{
-	local float index = self.bot_cmd_execution_index;
-	return self.bot_cmd_parm_vector[index];
 }
 
 void bot_cmdhelp(string scmd)
@@ -361,18 +378,18 @@ void bot_list_commands()
 #define BOT_EXEC_STATUS_WAITING	2
 
 #define CMD_STATUS_EXECUTING	0
-#define CMD_STATUS_FINISHED		1
-#define CMD_STATUS_ERROR		2
+#define CMD_STATUS_FINISHED	1
+#define CMD_STATUS_ERROR	2
 
-float bot_cmd_raw()
+float bot_cmd_cc()
 {
-	clientcommand(self,bot_cmd_getparm_string());
+	clientcommand(self,bot_cmd.bot_cmd_parm_string);
 	return CMD_STATUS_FINISHED;
 }
 
 float bot_cmd_impulse()
 {
-	self.impulse = bot_cmd_getparm_float();
+	self.impulse = bot_cmd.bot_cmd_parm_float;
 	return CMD_STATUS_FINISHED;
 }
 
@@ -396,14 +413,14 @@ float bot_cmd_wait()
 			return CMD_STATUS_EXECUTING;
 	}
 
-	self.bot_cmd_wait_time = time + bot_cmd_getparm_float();
+	self.bot_cmd_wait_time = time + bot_cmd.bot_cmd_parm_float;
 	self.bot_exec_status |= BOT_EXEC_STATUS_WAITING;
 	return CMD_STATUS_EXECUTING;
 }
 
 float bot_cmd_turn()
 {
-	self.v_angle_y = self.v_angle_y + bot_cmd_getparm_float();
+	self.v_angle_y = self.v_angle_y + bot_cmd.bot_cmd_parm_float;
 	self.v_angle_y = self.v_angle_y - floor(self.v_angle_y / 360) * 360;
 	return CMD_STATUS_FINISHED;
 }
@@ -412,7 +429,7 @@ float bot_cmd_select_weapon()
 {
 	local float id;
 
-	id = bot_cmd_getparm_float();
+	id = bot_cmd.bot_cmd_parm_float;
 
 	if(id < WEP_FIRST || id > WEP_LAST)
 		return CMD_STATUS_ERROR;
@@ -425,9 +442,9 @@ float bot_cmd_select_weapon()
 
 .float bot_cmd_condition_status;
 
-#define CMD_CONDITION_NONE			0
-#define CMD_CONDITION_TRUE			1
-#define CMD_CONDITION_FALSE			2
+#define CMD_CONDITION_NONE		0
+#define CMD_CONDITION_TRUE		1
+#define CMD_CONDITION_FALSE		2
 #define CMD_CONDITION_TRUE_BLOCK	4
 #define CMD_CONDITION_FALSE_BLOCK	8
 
@@ -456,7 +473,7 @@ float bot_cmd_eval(string expr)
 			return ((self.flagcarried!=world));
 	}
 
-	print(strcat("ERROR: Can not convert the expression '",expr,"' into a numeric value\n"));
+	print(strcat("ERROR: Unable to convert the expression '",expr,"' into a numeric value\n"));
 	return 0;
 }
 
@@ -476,7 +493,7 @@ float bot_cmd_if()
 	self.bot_cmd_condition_status |= CMD_CONDITION_TRUE_BLOCK;
 
 	// search for operators
-	expr = bot_cmd_getparm_string();
+	expr = bot_cmd.bot_cmd_parm_string;
 
 	cmpofs = strstrofs(expr,"=",0);
 
@@ -522,7 +539,6 @@ float bot_cmd_if()
 
   		return CMD_STATUS_FINISHED;
 	}
-
 
 	if(bot_cmd_eval(expr))
 		self.bot_cmd_condition_status |= CMD_CONDITION_TRUE;
@@ -579,7 +595,7 @@ float bot_cmd_aim()
 	local string parms;
 	local float tokens, step;
 
-	parms = bot_cmd_getparm_string();
+	parms = bot_cmd.bot_cmd_parm_string;
 
 	tokens = tokenizebyseparator(parms, " ");
 
@@ -609,17 +625,17 @@ float bot_cmd_aim()
 
 .float bot_cmd_keys;
 
-#define BOT_CMD_KEY_NONE		0
+#define BOT_CMD_KEY_NONE	0
 #define BOT_CMD_KEY_FORWARD 	1
 #define BOT_CMD_KEY_BACKWARD	2
-#define BOT_CMD_KEY_RIGHT		4
-#define BOT_CMD_KEY_LEFT		8
-#define BOT_CMD_KEY_JUMP		16
+#define BOT_CMD_KEY_RIGHT	4
+#define BOT_CMD_KEY_LEFT	8
+#define BOT_CMD_KEY_JUMP	16
 #define BOT_CMD_KEY_ATTACK1 	32
 #define BOT_CMD_KEY_ATTACK2 	64
-#define BOT_CMD_KEY_USE			128
-#define BOT_CMD_KEY_HOOK		256
-#define BOT_CMD_KEY_CROUCH		512
+#define BOT_CMD_KEY_USE		128
+#define BOT_CMD_KEY_HOOK	256
+#define BOT_CMD_KEY_CROUCH	512
 
 float bot_presskeys()
 {
@@ -743,7 +759,7 @@ float bot_cmd_presskey()
 {
 	local string key;
 
-	key = bot_cmd_getparm_string();
+	key = bot_cmd.bot_cmd_parm_string;
 
 	bot_cmd_keypress_handler(key,TRUE);
 
@@ -754,7 +770,7 @@ float bot_cmd_releasekey()
 {
 	local string key;
 
-	key = bot_cmd_getparm_string();
+	key = bot_cmd.bot_cmd_parm_string;
 
 	return bot_cmd_keypress_handler(key,FALSE);
 }
@@ -778,59 +794,90 @@ float bot_cmd_pause()
 	return CMD_STATUS_FINISHED;
 }
 
-void bot_command_executed()
+void bot_command_executed(float rm)
 {
-	local float index;
-	index = self.bot_cmd_execution_index;
+	entity cmd;
 
-	self.(bot_cmd[index])=BOT_CMD_NULL;
+	cmd = bot_cmd;
 
-	if(index==BOT_CMD_QUEUE_SIZE-1)
-		self.bot_cmd_execution_index = 0;
-	else
-		self.bot_cmd_execution_index += 1;
+	self.bot_cmd_execution_index++;
+
+	if(rm)
+	{
+		if(bot_cmd_parm_type[cmd.bot_cmd_type]==BOT_CMD_PARAMETER_STRING)
+		{
+			strunzone(cmd.bot_cmd_parm_string);
+		}
+		remove(cmd);
+		return;
+	}
+
+	cmd.bot_cmd_execution_counter++;
+}
+
+void bot_setcurrentcommand()
+{
+	entity cmd;
+
+	bot_cmd = world;
+
+	if(self.bot_cmd_execution_index==0)
+		self.bot_cmd_execution_index=1;
+
+	for (cmd = findchainfloat(bot_cmd_index, self.bot_cmd_execution_index); cmd; cmd = cmd.chain)
+	{
+		if(cmd.owner==self)
+		{
+			bot_cmd = cmd;
+			return;
+		}
+	}
 }
 
 // This function should be (the only) called directly from the bot ai loop
 // It maps commands to functions and deal with complex interactions between commands and execution states
-// NOTE: Of course you need to include your command here too :)
+// NOTE: Of course you need to include your commands here too :)
 float bot_execute_commands()
 {
-	local float cmd, status, index, ispressingkey;
+	local float status, index, ispressingkey;
+	local entity cmd;
 
-	index = self.bot_cmd_execution_index;
+	// Find command
+	bot_setcurrentcommand();
 
 	// Keep pressing keys raised by the "presskey" command
 	ispressingkey = bot_presskeys();
 
+	if(bot_cmd==world)
+		return ispressingkey;
+
 	// Ignore all commands except continue when the bot is paused
 	if(self.bot_exec_status & BOT_EXEC_STATUS_PAUSED)
-	if(self.bot_cmd[index]!=BOT_CMD_CONTINUE)
+	if(bot_cmd.bot_cmd_type!=BOT_CMD_CONTINUE)
 	{
-		if(self.bot_cmd[index]!=BOT_CMD_NULL)
+		if(bot_cmd.bot_cmd_type!=BOT_CMD_NULL)
 		{
-			bot_command_executed();
+			bot_command_executed(TRUE);
 			print( "WARNING: Commands are ignored while the bot is paused. Use the command 'continue' instead.\n");
 		}
 		return TRUE;
 	}
 
 	// Handle conditions
-	if not(self.bot_cmd[index]==BOT_CMD_FI||self.bot_cmd[index]==BOT_CMD_ELSE)
+	if not(bot_cmd.bot_cmd_type==BOT_CMD_FI||bot_cmd.bot_cmd_type==BOT_CMD_ELSE)
 	if(self.bot_cmd_condition_status & CMD_CONDITION_TRUE && self.bot_cmd_condition_status & CMD_CONDITION_FALSE_BLOCK)
 	{
-		bot_command_executed();
+		bot_command_executed(TRUE);
 		return TRUE;
 	}
 	else if(self.bot_cmd_condition_status & CMD_CONDITION_FALSE && self.bot_cmd_condition_status & CMD_CONDITION_TRUE_BLOCK)
 	{
-		bot_command_executed();
+		bot_command_executed(TRUE);
 		return TRUE;
 	}
 
 	// Map commands to functions
-	cmd = self.bot_cmd[index];
-	switch(cmd)
+	switch(bot_cmd.bot_cmd_type)
 	{
 		case BOT_CMD_NULL:
 			return ispressingkey;
@@ -856,7 +903,7 @@ float bot_execute_commands()
 			status = CMD_STATUS_FINISHED;
 			break;
 		case BOT_CMD_CC:
-			status = bot_cmd_raw();
+			status = bot_cmd_cc();
 			break;
 		case BOT_CMD_IF:
 			status = bot_cmd_if();
@@ -886,13 +933,12 @@ float bot_execute_commands()
 			status = bot_cmd_impulse();
 			break;
 		default:
-			print(strcat("ERROR: Invalid command on queue with id '",ftos(cmd),"'\n"));
-			self.(bot_cmd[index]) = BOT_CMD_NULL;
-			return TRUE;
+			print(strcat("ERROR: Invalid command on queue with id '",ftos(bot_cmd.bot_cmd_type),"'\n"));
+			return FALSE;
 	}
 
 	if (status==CMD_STATUS_ERROR)
-		print(strcat("ERROR: The command '",bot_cmd_string[cmd],"' returned an error status\n"));
+		print(strcat("ERROR: The command '",bot_cmd_string[bot_cmd.bot_cmd_type],"' returned an error status\n"));
 
 	// Move execution pointer
 	if not(status==CMD_STATUS_EXECUTING)
@@ -901,25 +947,25 @@ float bot_execute_commands()
 		{
 			local string parms;
 
-			switch(bot_cmd_parm_type[cmd])
+			switch(bot_cmd_parm_type[bot_cmd.bot_cmd_type])
 			{
 				case BOT_CMD_PARAMETER_FLOAT:
-					parms = ftos(bot_cmd_getparm_float());
+					parms = ftos(bot_cmd.bot_cmd_parm_float);
 					break;
 				case BOT_CMD_PARAMETER_STRING:
-					parms = bot_cmd_getparm_string();
+					parms = bot_cmd.bot_cmd_parm_string;
 					break;
 				case BOT_CMD_PARAMETER_VECTOR:
-					parms = vtos(bot_cmd_getparm_vector());
+					parms = vtos(bot_cmd.bot_cmd_parm_vector);
 					break;
 				default:
 					parms = "";
 					break;
 			}
-			clientcommand(self,strcat("say ^7", bot_cmd_string[cmd]," ",parms,"\n"));
+			clientcommand(self,strcat("say ^7", bot_cmd_string[bot_cmd.bot_cmd_type]," ",parms,"\n"));
 		}
 
-		bot_command_executed();
+		bot_command_executed(TRUE);
 	}
 
 	return TRUE;
