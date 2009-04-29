@@ -1613,6 +1613,8 @@ void player_powerups (void)
 
 	if (g_minstagib)
 	{
+		self.effects |= EF_FULLBRIGHT;
+
 		if (self.items & IT_STRENGTH)
 		{
 			play_countdown(self.strength_finished, "misc/poweroff.wav");
