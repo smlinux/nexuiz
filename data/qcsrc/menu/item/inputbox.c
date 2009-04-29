@@ -76,12 +76,15 @@ float mouseReleaseInputBox(entity me, vector pos)
 void enterTextInputBox(entity me, string ch)
 {
 	float i;
+	string s1, s2;
 	for(i = 0; i < strlen(ch); ++i)
 		if(strstrofs(me.forbiddenCharacters, substring(ch, i, 1), 0) > -1)
 			return;
 	if(strlen(ch) + strlen(me.text) > me.maxLength)
 		return;
-	me.setText(me, strcat(substring(me.text, 0, me.cursorPos), ch, substring(me.text, me.cursorPos, strlen(me.text) - me.cursorPos)));
+	s1 = substring(me.text, 0, me.cursorPos);
+	s2 = substring(me.text, me.cursorPos, strlen(me.text) - me.cursorPos);
+	me.setText(me, strcat(s1, ch, s2)); // fteqcc sucks
 	me.cursorPos += strlen(ch);
 }
 
