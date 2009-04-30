@@ -627,6 +627,7 @@ void spawnfunc_onslaught_generator()
 	e.team = self.team;
 	self.think = onslaught_generator_delayed;
 	self.nextthink = time + 0.2;
+	InitializeEntity(self, onslaught_generator_delayed, INITPRIO_LAST);
 
 	WaypointSprite_SpawnFixed(string_null, e.origin + '0 0 1' * e.maxs_z, self, sprite);
 	WaypointSprite_UpdateRule(self.sprite, COLOR_TEAM2, SPRITERULE_TEAMPLAY);
@@ -976,7 +977,6 @@ void spawnfunc_onslaught_link()
 	}
 	if (self.target == "" || self.target2 == "")
 		objerror("target and target2 must be set\n");
-	self.think = onslaught_link_delayed;
-	self.nextthink = time + 0.1;
+	InitializeEntity(self, onslaught_link_delayed, INITPRIO_FINDTARGET);
 	Net_LinkEntity(self, FALSE, 0, onslaught_link_send);
 };
