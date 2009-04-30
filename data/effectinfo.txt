@@ -1269,7 +1269,7 @@ tex 0 8
 count 20
 size 20 40
 sizeincrease 34
-alpha 500 600 556
+alpha 300 550 556
 velocityjitter 256 256 256
 airfriction 5
 color 0x000000 0x111111
@@ -1808,13 +1808,13 @@ lightcolor 8 4 1
 // fire effect which make bright dot inside
 effect hagar_explode
 notunderwater
-count 12
+count 10
 type smoke
 tex 48 55
 color 0xffe955 0xff5a00
 size 16 26
 sizeincrease 5
-alpha 128 256 456
+alpha 80 200 356
 bounce 1.5
 airfriction 8
 liquidfriction 8
@@ -1834,7 +1834,7 @@ bounce 1.5
 airfriction 12
 liquidfriction 8
 originjitter 8 8 8
-velocityjitter 256 256 256
+velocityjitter 286 286 286
 
 // smoke
 effect hagar_explode
@@ -1844,7 +1844,7 @@ tex 0 8
 count 20
 size 20 40
 sizeincrease 20
-alpha 500 600 556
+alpha 200 500 600
 velocityjitter 244 244 244
 airfriction 5
 color 0x000000 0x111111
@@ -2031,7 +2031,7 @@ tex 0 8
 count 64
 size 20 40
 sizeincrease 44
-alpha 400 500 456
+alpha 200 450 456
 velocityjitter 444 444 444
 airfriction 5
 color 0x000000 0x111111
