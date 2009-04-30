@@ -25,7 +25,11 @@ update-cvarcount:
 	[ "$(NEX_BUILDSYSTEM)" != "" ] || { DO_NOT_RUN_MAKE=1 sh update-cvarcount.sh; }
 
 .PHONY: qc
-qc: menu.dat progs.dat csprogs.dat
+qc: update-cvarcount
+	$(MAKE) qc-recursive
+
+.PHONY: qc-recursive
+qc-recursive: menu.dat progs.dat csprogs.dat
 
 .PHONY: skin
 skin: gfx/menu/default/skinvalues.txt
@@ -51,13 +55,13 @@ pk3here: qc
 clean:
 	rm -f progs.dat menu.dat csprogs.dat
 
-csprogs.dat: qcsrc/client/*.* qcsrc/common/*.* update-cvarcount
+csprogs.dat: qcsrc/client/*.* qcsrc/common/*.*
 	cd qcsrc/client && $(FTEQCC) $(FTEQCCFLAGS) $(QCFLAGS_CSPROGS)
 
-progs.dat: qcsrc/server/*.* qcsrc/common/*.* update-cvarcount
+progs.dat: qcsrc/server/*.* qcsrc/common/*.*
 	cd qcsrc/server && $(FTEQCC) $(FTEQCCFLAGS) $(QCFLAGS_PROGS)
 
-menu.dat: qcsrc/menu/*.* qcsrc/menu/*/*.* qcsrc/common/*.* update-cvarcount
+menu.dat: qcsrc/menu/*.* qcsrc/menu/*/*.* qcsrc/common/*.*
 	cd qcsrc/menu && $(FTEQCC) $(FTEQCCFLAGS) $(FTEQCCFLAGS_MENU)
 
 gfx/menu/default/skinvalues.txt: qcsrc/menu/skin-customizables.inc
