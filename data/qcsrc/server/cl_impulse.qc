@@ -314,7 +314,7 @@ void ImpulseCommands (void)
 			if(sv_cheats || (self.lip < sv_clones))
 			{
 				switch(imp)
-				{	
+				{
 					 case 140:
 						makevectors (self.v_angle);
 						self.velocity = self.velocity + v_forward * 300;
@@ -460,11 +460,15 @@ void ImpulseCommands (void)
 			{
 				case 103:
 					waypoint_schedulerelink(waypoint_spawn(self.origin, self.origin, 0));
+					bprint(strcat("Waypoint spawned at ",vtos(self.origin),"\n"));
 					break;
 				case 104:
 					e = navigation_findnearestwaypoint(self, FALSE);
 					if (e)
+					{
+						bprint(strcat("Waypoint removed at ",vtos(e.origin),"\n"));
 						waypoint_remove(e);
+					}
 					break;
 				case 105:
 					waypoint_schedulerelinkall();
