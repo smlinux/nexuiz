@@ -1121,8 +1121,16 @@ void waypoint_spawnforitem(entity e)
 	if(!bot_waypoints_for_items)
 		return;
 
+	// Center of entity
 	org = e.origin + (e.mins + e.maxs) * 0.5;
-	org_z = e.origin_z + e.mins_z - PL_MIN_z + 1;
+
+	// Calculate the altitude where the waypoint will be placed
+	traceline(e.origin, e.origin + '0 0 -65535', TRUE, e);
+	if(e.origin_z + e.mins_z - trace_endpos_z < PL_MAX_z - PL_MIN_z + 10)
+		org_z = trace_endpos_z + PL_MAX_z - PL_MIN_z;
+	else
+		org_z = e.origin_z;
+
 	e.nearestwaypointtimeout = time + 1000000000;
 	// don't spawn an item spawnfunc_waypoint if it already exists
 	w = findchain(classname, "waypoint");
