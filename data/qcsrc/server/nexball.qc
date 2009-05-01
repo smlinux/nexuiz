@@ -525,7 +525,7 @@ void W_Nexball_Touch (void)
 
 	PROJECTILE_TOUCH;
 	if(attacker.team != other.team || g_nexball_basketball_teamsteal)
-	if((ball = other.ballcarried))
+	if((ball = other.ballcarried) && (attacker.classname == "player" || attacker.classname == "gib"))
 	{
 		other.velocity = other.velocity + normalize(self.velocity) * other.damageforcescale * cvar("g_balance_nexball_secondary_force");
 		other.flags &~= FL_ONGROUND;
@@ -558,6 +558,13 @@ void W_Nexball_Touch (void)
 
 			LogNB("stole", attacker);
 			sound (other, CHAN_AUTO, ball.noise2, VOL_BASE, ATTN_NORM);
+
+			if(attacker.team == other.team && time > attacker.teamkill_complain)
+			{
+				attacker.teamkill_complain = time + 5;
+				attacker.teamkill_soundtime = time + 0.4;
+				attacker.teamkill_soundsource = other;
+			}
 		}
 	}
 	remove(self);
