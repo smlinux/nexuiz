@@ -10,7 +10,7 @@ set -e
 base=`pwd`
 
 # customizable specific stuff
-netradiant_release=1.5.0-svn322
+netradiant_release=1.5.0-svn358
 basepk3=$base/data20090403.pk3 # 2.5
 hotbasepk3= # hotfix
 nexdir=$base/nexuiz
@@ -301,17 +301,7 @@ zip $zipflags -9yr "$zipdir/nexuizsource$date$ext.zip"     Nexuiz/gpl.txt       
 ln -snf nexuizsource$date$ext.zip "$zipdir/nexuizsource-$newest.zip"
 
 # TODO remove these excludes after the version after 2.4.2
-$zipdiff -o "Nexuiz/data/datapatch$tag$date.pk3" -f "$basepk3" -t Nexuiz/data/data$tag$date.pk3 \
-	-x 'sound/cdtracks/track*.ogg' \
-	-x 'sound/cdtracks/brainsukker.ogg' \
-	-x 'sound/cdtracks/breakdown-easy.ogg' \
-	-x 'sound/cdtracks/calling-bogus.ogg' \
-	-x 'sound/cdtracks/chaos-fog.ogg' \
-	-x 'sound/cdtracks/digital-pursuit.ogg' \
-	-x 'sound/cdtracks/infight.ogg' \
-	-x 'sound/cdtracks/neuronal-diving.ogg' \
-	-x 'sound/cdtracks/subcities.ogg' \
-	-x 'sound/cdtracks/thru-the-mirror.ogg'
+$zipdiff -o "Nexuiz/data/data$tag$date""patch.pk3" -f "$basepk3" -t Nexuiz/data/data$tag$date.pk3
 mkdir -p sound/cdtracks
 ln -snf track001.ogg sound/cdtracks/digital-pursuit.ogg
 ln -snf track002.ogg sound/cdtracks/breakdown-easy.ogg
@@ -322,22 +312,22 @@ ln -snf track006.ogg sound/cdtracks/neuronal-diving.ogg
 ln -snf track007.ogg sound/cdtracks/subcities.ogg
 ln -snf track008.ogg sound/cdtracks/thru-the-mirror.ogg
 ln -snf track009.ogg sound/cdtracks/calling-bogus.ogg
-zip -9yr "Nexuiz/data/datapatch$tag$date.pk3" sound/cdtracks/*
+zip -9yr "Nexuiz/data/data$tag$date""patch.pk3" sound/cdtracks/*
 rm -rf sound
-[ -n "$hotbasepk3" ] && $zipdiff -o "Nexuiz/data/datapatch$tag$date""hotfix.pk3" -f "$hotbasepk3" -t Nexuiz/data/data$tag$date.pk3
+[ -n "$hotbasepk3" ] && $zipdiff -o "Nexuiz/data/data$tag$date""hotfix.pk3" -f "$hotbasepk3" -t Nexuiz/data/data$tag$date.pk3
 mkdir -p gfx
 if unzip "Nexuiz/data/data$tag$date.pk3" gfx/brand.tga; then
-	zip -9r "Nexuiz/data/datapatch$tag$date.pk3" gfx/brand.tga
-	[ -n "$hotbasepk3" ] && zip -9r "Nexuiz/data/datapatch$tag$date""hotfix.pk3" gfx/brand.tga
+	zip -9r "Nexuiz/data/data$tag$date""patch.pk3" gfx/brand.tga
+	[ -n "$hotbasepk3" ] && zip -9r "Nexuiz/data/data$tag$date""hotfix.pk3" gfx/brand.tga
 	rm -rf gfx
 fi
 
 rm -f "$zipdir/nexuizpatch$date$ext.zip"
-zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/readme.html Nexuiz/server Nexuiz/data/datapatch$tag$date.pk3 Nexuiz/havoc/*
+zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/readme.html Nexuiz/server Nexuiz/data/data$tag$date""patch.pk3 Nexuiz/havoc/*
 ln -snf nexuizpatch$date$ext.zip "$zipdir/nexuizpatch-$newest.zip"
 
 [ -n "$hotbasepk3" ] && rm -f "$zipdir/nexuizhotfix$date$ext.zip"
-[ -n "$hotbasepk3" ] && zip $zipflags -9yr "$zipdir/nexuizhotfix$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/readme.html Nexuiz/server Nexuiz/data/datapatch$tag$date""hotfix.pk3 Nexuiz/havoc/*
+[ -n "$hotbasepk3" ] && zip $zipflags -9yr "$zipdir/nexuizhotfix$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/readme.html Nexuiz/server Nexuiz/data/data$tag$date""hotfix.pk3 Nexuiz/havoc/*
 [ -n "$hotbasepk3" ] && ln -snf nexuizhotfix$date$ext.zip "$zipdir/nexuizhotfix-$newest.zip"
 
 rm -f "$zipdir/nexuizdocs$date$ext.zip"
