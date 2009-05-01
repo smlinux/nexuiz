@@ -1183,6 +1183,7 @@ void waypoint_spawnforteleporter(entity e, vector destination, float timetaken)
 // completely empty the goal stack, used when deciding where to go
 void navigation_clearroute()
 {
+	self.navigation_hasgoals = FALSE;
 	self.goalcurrent = world;
 	self.goalstack01 = world;
 	self.goalstack02 = world;
@@ -1620,6 +1621,8 @@ float navigation_routetogoal(entity e, vector startposition)
 	if (!e)
 		return FALSE;
 
+	self.navigation_hasgoals = TRUE;
+
 	// put the entity on the goal stack
 	navigation_pushroute(e);
 
@@ -1717,7 +1720,7 @@ void navigation_poptouchedgoals()
 void navigation_goalrating_start()
 {
 	navigation_bestrating = -1;
-	self.navigation_hasgoals = TRUE;
+	self.navigation_hasgoals = FALSE;
 	navigation_bestgoals_reset();
 	navigation_markroutes();
 };
