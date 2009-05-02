@@ -2079,11 +2079,7 @@ float vercmp_recursive(string v1, string v2)
 		if(dot2 == -1)
 			return 1;
 		else
-		{
-			s1 = substring(v1, dot1 + 1, -1);
-			s2 = substring(v2, dot2 + 1, -1);
-			return vercmp_recursive(s1, s2); // fteqcc sucks
-		}
+			return vercmp_recursive(substring(v1, dot1 + 1, 999), substring(v2, dot2 + 1, 999));
 }
 
 float vercmp(string v1, string v2)

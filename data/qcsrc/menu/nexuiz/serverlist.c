@@ -104,7 +104,7 @@ float IsFavorite(string srv)
 
 void ToggleFavorite(string srv)
 {
-	string s, s1, s2;
+	string s;
 	float o;
 	s = cvar_string("net_slist_favorites");
 	o = strstrofs(strcat(" ", s, " "), strcat(" ", srv, " "), 0);
@@ -114,9 +114,9 @@ void ToggleFavorite(string srv)
 	}
 	else
 	{
-		s1 = substring(s, 0, o - 1);
-		s2 = substring(s, o + strlen(srv), strlen(s) - o - strlen(srv));
-		cvar_set("net_slist_favorites", strcat(s1, s2)); // fteqcc sucks
+		cvar_set("net_slist_favorites", strcat(
+					substring(s, 0, o - 1), substring(s, o + strlen(srv), strlen(s) - o - strlen(srv))
+					));
 	}
 	resorthostcache();
 }

@@ -76,21 +76,17 @@ float mouseReleaseInputBox(entity me, vector pos)
 void enterTextInputBox(entity me, string ch)
 {
 	float i;
-	string s1, s2;
 	for(i = 0; i < strlen(ch); ++i)
 		if(strstrofs(me.forbiddenCharacters, substring(ch, i, 1), 0) > -1)
 			return;
 	if(strlen(ch) + strlen(me.text) > me.maxLength)
 		return;
-	s1 = substring(me.text, 0, me.cursorPos);
-	s2 = substring(me.text, me.cursorPos, strlen(me.text) - me.cursorPos);
-	me.setText(me, strcat(s1, ch, s2)); // fteqcc sucks
+	me.setText(me, strcat(substring(me.text, 0, me.cursorPos), ch, substring(me.text, me.cursorPos, strlen(me.text) - me.cursorPos)));
 	me.cursorPos += strlen(ch);
 }
 
 float keyDownInputBox(entity me, float key, float ascii, float shift)
 {
-	string s1, s2;
 	me.lastChangeTime = time;
 	me.dragScrollTimer = time;
 	if(ascii >= 32 && ascii != 127)
@@ -116,22 +112,14 @@ float keyDownInputBox(entity me, float key, float ascii, float shift)
 			if(me.cursorPos > 0)
 			{
 				me.cursorPos -= 1;
-				s1 = substring(me.text, 0, me.cursorPos);
-				s2 = substring(me.text, me.cursorPos + 1, strlen(me.text) - me.cursorPos - 1);
-				me.setText(me, strcat(s1, s2)); // fteqcc sucks
+				me.setText(me, strcat(substring(me.text, 0, me.cursorPos), substring(me.text, me.cursorPos + 1, strlen(me.text) - me.cursorPos - 1)));
 			}
 			return 1;
 		case K_DEL:
 			if(shift & S_CTRL)
-			{
 				me.setText(me, "");
-			}
 			else
-			{
-				s1 = substring(me.text, 0, me.cursorPos);
-				s2 = substring(me.text, me.cursorPos + 1, strlen(me.text) - me.cursorPos - 1);
-				me.setText(me, strcat(s1, s2)); // fteqcc sucks
-			}
+				me.setText(me, strcat(substring(me.text, 0, me.cursorPos), substring(me.text, me.cursorPos + 1, strlen(me.text) - me.cursorPos - 1)));
 			return 1;
 	}
 	return 0;

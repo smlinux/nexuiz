@@ -18,11 +18,7 @@ float vlen_maxnorm2d(vector v)
 
 float vlen_minnorm2d(vector v)
 {
-	float a, b;
-	a = max(v_x, -v_x);
-	b = max(v_y, -v_y);
-	return min(a, b);
-	// return min(max(v_x, -v_x), max(v_y, -v_y)); // fteqcc sucks
+	return min(max(v_x, -v_x), max(v_y, -v_y));
 }
 
 vector teamradar_3dcoord_to_texcoord(vector in)

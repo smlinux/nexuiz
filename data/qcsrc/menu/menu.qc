@@ -54,7 +54,7 @@ void UpdateConWidthHeight()
 void() m_init_delayed =
 {
 	float fh, glob, n, i;
-	string s, s1, s2;
+	string s;
 
 	dprint_load();
 
@@ -93,11 +93,7 @@ void() m_init_delayed =
 			continue;
 		n = tokenize_console(s);
 		if(n >= 2)
-		{
-			s1 = argv(0);
-			s2 = substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1));
-			Skin_ApplySetting(s1, s2); // fteqcc sucks
-		}
+			Skin_ApplySetting(argv(0), substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));
 	}
 	fclose(fh);
 

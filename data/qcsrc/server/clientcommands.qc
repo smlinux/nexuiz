@@ -101,7 +101,7 @@ entity GetPlayer(string name)
 float readyrestart_happened;
 .float lms_spectate_warning;
 void SV_ParseClientCommand(string s) {
-	local string cmd, s1, s2;
+	local string cmd;
 	local float tokens, f, effectnum;
 	local vector start, end;
 
@@ -261,11 +261,7 @@ void SV_ParseClientCommand(string s) {
 		sprint(self, records_reply);
 	} else if(argv(0) == "voice") {
 		if(tokens >= 3)
-		{
-			s1 = argv(1);
-			s2 = substring(s, argv_start_index(2), argv_end_index(-1) - argv_start_index(2));
-			VoiceMessage(s1, s2); // fteqcc sucks
-		}
+			VoiceMessage(argv(1), substring(s, argv_start_index(2), argv_end_index(-1) - argv_start_index(2)));
 		else
 			VoiceMessage(argv(1), "");
 	} else if(argv(0) == "say") {
