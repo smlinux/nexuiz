@@ -940,6 +940,100 @@ float waypoint_load_links()
 	return TRUE;
 };
 
+void waypoint_load_links_hardwired()
+{
+	local string filename, s;
+	local float file, tokens, c, found;
+	local entity wp_from, wp_to;
+	local vector wp_to_pos, wp_from_pos;
+	filename = strcat("maps/", mapname);
+	filename = strcat(filename, ".waypoints.hardwired");
+	file = fopen(filename, FILE_READ);
+
+	if (file < 0)
+	{
+		dprint("waypoint links load from ");
+		dprint(filename);
+		dprint(" failed\n");
+		return;
+	}
+
+	for (;;)
+	{
+		s = fgets(file);
+		if (!s)
+			break;
+
+		if(substring(s, 0, 2)=="//")
+			continue;
+
+		if(substring(s, 0, 1)=="#")
+			continue;
+
+		tokens = tokenizebyseparator(s, "*");
+
+		if (tokens!=2)
+			continue;
+
+		wp_from_pos	= stov(argv(0));
+		wp_to_pos	= stov(argv(1));
+
+		// Search "from" waypoint
+		if(wp_from.origin!=wp_from_pos)
+		{
+			wp_from = findradius(wp_from_pos, 1);
+			found = FALSE;
+			while(wp_from)
+			{
+				if(vlen(wp_from.origin-wp_from_pos)<1)
+				if(wp_from.classname == "waypoint")
+				{
+					found = TRUE;
+					break;
+				}
+				wp_from = wp_from.chain;
+			}
+
+			if(!found)
+			{
+				print(strcat("NOTICE: Can not find waypoint at ", vtos(wp_from_pos), ". Path skipped\n"));
+				continue;
+			}
+		}
+
+		// Search "to" waypoint
+		wp_to = findradius(wp_to_pos, 1);
+		found = FALSE;
+		while(wp_to)
+		{
+			if(vlen(wp_to.origin-wp_to_pos)<1)
+			if(wp_to.classname == "waypoint")
+			{
+				found = TRUE;
+				break;
+			}
+			wp_to = wp_to.chain;
+		}
+
+		if(!found)
+		{
+			print(strcat("NOTICE: Can not find waypoint at ", vtos(wp_to_pos), ". Path skipped\n"));
+			continue;
+		}
+
+		++c;
+		waypoint_addlink(wp_from, wp_to);
+	}
+
+	fclose(file);
+
+	dprint("loaded ");
+	dprint(ftos(c));
+	dprint(" waypoint links from maps/");
+	dprint(mapname);
+	dprint(".waypoints.hardwired\n");
+};
+
 
 // Save all waypoint links to a file
 void waypoint_save_links()
@@ -2728,7 +2822,9 @@ void bot_serverframe()
 	if (currentbots > 0 || cvar("g_waypointeditor"))
 	if (botframe_spawnedwaypoints)
 	{
-		if(!botframe_cachedwaypointlinks)
+		if(botframe_cachedwaypointlinks)
+			waypoint_load_links_hardwired();
+		else
 		{
 			// TODO: Make this check cleaner
 			local entity wp = findchain(classname, "waypoint");
