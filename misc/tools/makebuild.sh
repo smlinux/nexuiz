@@ -302,18 +302,6 @@ ln -snf nexuizsource$date$ext.zip "$zipdir/nexuizsource-$newest.zip"
 
 # TODO remove these excludes after the version after 2.4.2
 $zipdiff -o "Nexuiz/data/data$tag$date""patch.pk3" -f "$basepk3" -t Nexuiz/data/data$tag$date.pk3
-mkdir -p sound/cdtracks
-ln -snf track001.ogg sound/cdtracks/digital-pursuit.ogg
-ln -snf track002.ogg sound/cdtracks/breakdown-easy.ogg
-ln -snf track003.ogg sound/cdtracks/brainsukker.ogg
-ln -snf track004.ogg sound/cdtracks/chaos-fog.ogg
-ln -snf track005.ogg sound/cdtracks/infight.ogg
-ln -snf track006.ogg sound/cdtracks/neuronal-diving.ogg
-ln -snf track007.ogg sound/cdtracks/subcities.ogg
-ln -snf track008.ogg sound/cdtracks/thru-the-mirror.ogg
-ln -snf track009.ogg sound/cdtracks/calling-bogus.ogg
-zip -9yr "Nexuiz/data/data$tag$date""patch.pk3" sound/cdtracks/*
-rm -rf sound
 [ -n "$hotbasepk3" ] && $zipdiff -o "Nexuiz/data/data$tag$date""hotfix.pk3" -f "$hotbasepk3" -t Nexuiz/data/data$tag$date.pk3
 mkdir -p gfx
 if unzip "Nexuiz/data/data$tag$date.pk3" gfx/brand.tga; then
