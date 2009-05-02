@@ -434,6 +434,10 @@ void havocbot_role_ctf_carrier()
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
 		navigation_goalrating_start();
 		havocbot_goalrating_ctf_ourflag(50000);
+		if(self.health<100)
+			havocbot_goalrating_ctf_carrieritems(1000, self.origin, 1000);
+		navigation_goalrating_end();
+
 		if (self.navigation_hasgoals)
 			self.bot_cantfindflag = time + 10;
 		else if (time > self.bot_cantfindflag)
@@ -442,9 +446,6 @@ void havocbot_role_ctf_carrier()
 			Damage(self, self, self, 100000, DEATH_KILL, self.origin, '0 0 0');
 			return;
 		}
-		if(self.health<100)
-			havocbot_goalrating_ctf_carrieritems(1000, self.origin, 1000);
-		navigation_goalrating_end();
 	}
 };
 
