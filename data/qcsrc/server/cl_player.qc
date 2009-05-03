@@ -783,10 +783,15 @@ void Say(entity source, float teamsay, entity privatesay, string msgin, float fl
 		msgstr = substring(msgstr, 1, strlen(msgstr) - 1);
 
 		if(getWrappedLine_remaining != "")
+		{
+			msgstr = strcat(msgstr, "\n");
 			flood = 2;
+		}
 
 		if(time >= source.flood_field)
+		{
 			source.flood_field = max(time - flood_burst * flood_spl, source.flood_field) + lines * flood_spl;
+		}
 		else
 		{
 			flood = 1;
@@ -826,7 +831,7 @@ void Say(entity source, float teamsay, entity privatesay, string msgin, float fl
 	
 	// build sourcemsgstr by cutting off a prefix and replacing it by the other one
 	if(privatesay)
-		sourcemsgstr = strcat(privatemsgprefix, substring(msgstr, privatemsgprefixlen, -1));
+		sourcemsgstr = strcat(privatemsgprefix, substring(sourcemsgstr, privatemsgprefixlen, -1));
 
 	if(flood == 1)
 	{
