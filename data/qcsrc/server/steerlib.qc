@@ -128,11 +128,11 @@ vector steerlib_standoff(vector point,float ideal_distance)
     A random heading in a forward halfcicrle
 
     use like:
-    self.target = steerlib_waner(256,32,self.target)
+    self.target = steerlib_wander(256,32,self.target)
 
     where range is the cicrle radius and tresh is how close we need to be to pick a new heading.
 **/
-vector steerlib_waner(float range,float tresh,vector oldpoint)
+vector steerlib_wander(float range,float tresh,vector oldpoint)
 {
     vector wander_point;
     wander_point = v_forward - oldpoint;
@@ -474,7 +474,7 @@ void flocker_think()
 
     if(vlen(dodgemove) == 0)
     {
-        self.pos1 = steerlib_waner(0.5,0.1,self.pos1);
+        self.pos1 = steerlib_wander(0.5,0.1,self.pos1);
         wandermove  = self.pos1 * 50;
     }
     else
