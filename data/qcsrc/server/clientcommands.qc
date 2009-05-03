@@ -101,9 +101,10 @@ entity GetPlayer(string name)
 float readyrestart_happened;
 .float lms_spectate_warning;
 void SV_ParseClientCommand(string s) {
-	local string cmd;
-	local float tokens, f, effectnum;
-	local vector start, end;
+	string cmd;
+	float tokens, f, effectnum;
+	vector start, end;
+	entity e;
 
 	tokens = tokenize_console(s);
 
@@ -266,11 +267,18 @@ void SV_ParseClientCommand(string s) {
 			VoiceMessage(argv(1), "");
 	} else if(argv(0) == "say") {
 		if(tokens >= 2)
-			Say(self, FALSE, substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)), 1);
+			Say(self, FALSE, world, substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)), 1);
 		//clientcommand(self, formatmessage(s));
 	} else if(argv(0) == "say_team") {
 		if(tokens >= 2)
-			Say(self, TRUE, substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)), 1);
+			Say(self, TRUE, world, substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)), 1);
+		//clientcommand(self, formatmessage(s));
+	} else if(argv(0) == "tell") {
+		e = GetCommandPlayerSlotTargetFromTokenizedCommand(tokens, 1);
+		if(e && tokens > ParseCommandPlayerSlotTarget_firsttoken)
+			Say(self, FALSE, e, substring(s, argv_start_index(ParseCommandPlayerSlotTarget_firsttoken), argv_end_index(-1) - argv_start_index(ParseCommandPlayerSlotTarget_firsttoken)), 1);
+		else
+			sprint(self, "ERROR: usage: tell # playerid text...\n");
 		//clientcommand(self, formatmessage(s));
 	} else if(argv(0) == "info") {
 		cmd = cvar_string(strcat("sv_info_", argv(1)));
