@@ -229,7 +229,7 @@ float TrueAimCheck()
 
 	vecs = decompressShotOrigin(getstati(STAT_SHOTORG));
 
-	traceline(view_origin, view_origin + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, trueaim);
+	traceline(view_origin, view_origin + view_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, trueaim);
 	trueaimpoint = trace_endpos;
 
 	if(vecs_x > 0)
