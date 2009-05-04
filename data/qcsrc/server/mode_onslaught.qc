@@ -417,11 +417,11 @@ void onslaught_generator_damage(entity inflictor, entity attacker, float damage,
 		onslaught_updatelinks();
 	}
 	if(self.health < cvar("g_onslaught_gen_health") * 0.75)
-		setmodel(self, "models/onslaught/reactor_dmg1.md3");
+		setmodel(self, "models/onslaught/generator_dmg1.md3");
 	if(self.health < cvar("g_onslaught_gen_health") * 0.35)
-		setmodel(self, "models/onslaught/reactor_dmg2.md3");
+		setmodel(self, "models/onslaught/generator_dmg2.md3");
 	if(self.health <= 0)
-		setmodel(self, "models/onslaught/reactor_dead.md3");
+		setmodel(self, "models/onslaught/generator_dead.md3");
 };
 
 // update links after a delay
@@ -600,9 +600,9 @@ void spawnfunc_onslaught_generator()
 	local entity e;
 	precache_model("models/onslaught/generator.md3");
 	precache_model("models/onslaught/generator_shield.md3");
-	precache_model("models/onslaught/reactor_dmg1.md3");
-	precache_model("models/onslaught/reactor_dmg2.md3");
-	precache_model("models/onslaught/reactor_dead.md3");
+	precache_model("models/onslaught/generator_dmg1.md3");
+	precache_model("models/onslaught/generator_dmg2.md3");
+	precache_model("models/onslaught/generator_dead.md3");
 	precache_sound("onslaught/generator_decay.wav");
 	precache_sound("weapons/grenade_impact.wav");
 	precache_sound("weapons/rocket_impact.wav");
