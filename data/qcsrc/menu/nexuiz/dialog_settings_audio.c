@@ -157,6 +157,14 @@ void fillNexuizAudioSettingsTab(entity me)
 		me.TD(me, 1, 2, sl);
 	me.TR(me);
 	me.TR(me);
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Time warning:"));
+		me.TD(me, 1, 2, e = makeNexuizTextSlider("cl_sound_maptime_warning"));
+			e.addValue(e, "None", "0");
+			e.addValue(e, "1 minute", "1");
+			e.addValue(e, "5 minutes", "2");
+			e.addValue(e, "Both", "3");
+			e.configureNexuizTextSliderValues(e);
+	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_hitsound", "Hit indicator"));
 
 	me.gotoRC(me, me.rows - 1, 0);

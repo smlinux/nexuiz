@@ -1368,8 +1368,6 @@ void CheckRules_Player()
 	//   (div0: and that in CheckRules_World please)
 };
 
-float checkrules_oneminutewarning;
-
 float checkrules_equality;
 float checkrules_suddendeathwarning;
 float checkrules_suddendeathend;
@@ -1899,12 +1897,6 @@ void CheckRules_World()
 	{
 		NextLevel();
 		return;
-	}
-
-	if (!checkrules_oneminutewarning && timelimit > 0 && time > timelimit - 60)
-	{
-		checkrules_oneminutewarning = TRUE;
-		play2all("announcer/robotic/1minuteremains.wav");
 	}
 
 	checkrules_status = WinningCondition_RanOutOfSpawns();

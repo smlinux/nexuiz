@@ -147,6 +147,7 @@ void CSQC_Init(void)
 	GibSplash_Precache();
 	Casings_Precache();
 	DamageInfo_Precache();
+	Announcer_Precache();
 
 	get_mi_min_max_texcoords(1); // try the CLEVER way first
 	minimapname = strcat("gfx/", mi_shortname, "_radar.tga");

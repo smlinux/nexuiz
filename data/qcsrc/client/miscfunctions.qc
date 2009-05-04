@@ -12,6 +12,9 @@ void restartAnnouncer_Think() {
 			centerprint("^1Begin!");
 
 		sound(self, CHAN_VOICE, "announcer/robotic/begin.wav", VOL_BASEVOICE, ATTN_NONE);
+		//reset maptime announcers now as well
+		announcer_5min = announcer_1min = FALSE;
+		
 		remove(self);
 		return;
 	}
@@ -25,6 +28,44 @@ void restartAnnouncer_Think() {
 
 		self.nextthink = getstatf(STAT_GAMESTARTTIME) - (countdown - 1);
 	}
+}
+
+/**
+ * Plays the 1minute or 5 minutes (of maptime) remaining sound, if client wants it
+ */
+void maptimeAnnouncer() {
+    float timelimit;
+    timelimit = getstatf(STAT_TIMELIMIT);
+    float timeleft;
+    timeleft = max(0, timelimit * 60 + getstatf(STAT_GAMESTARTTIME) - time);
+    
+    //5 minute check
+    if (cvar("cl_sound_maptime_warning") >= 2) {
+        //make sure that after connect (and e.g. 4 minutes left) we will not get a wrong sound
+        if (!announcer_5min && timelimit > 0 && timeleft < 300 && timeleft > 299) {
+            announcer_5min = TRUE;
+            //dprint("i will play the sound, I promise!\n");
+            sound(self, CHAN_VOICE, "announcer/robotic/5minutesremain.wav", VOL_BASEVOICE, ATTN_NONE);
+        }
+        
+    }
+    
+    //1 minute check
+    if (cvar("cl_sound_maptime_warning") == 1 || cvar("cl_sound_maptime_warning") == 3) {
+        if (!announcer_1min && timelimit > 0 && timeleft < 60) {
+            announcer_1min = TRUE;
+            sound(self, CHAN_VOICE, "announcer/robotic/1minuteremains.wav", VOL_BASEVOICE, ATTN_NONE);
+        }
+    }
+}
+
+/**
+ * Add all future announcer sounds precaches here.
+ * TODO: make all announcer sound() calls client-side in the end, to allow queues etc.
+ */
+void Announcer_Precache () {
+    precache_sound ("announcer/robotic/1minuteremains.wav");
+	precache_sound ("announcer/robotic/5minutesremain.wav");
 }
 
 void AuditLists()
