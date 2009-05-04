@@ -2213,17 +2213,17 @@ void CSQC_nb_hud(void)
 	stat_items = getstati(STAT_ITEMS);
 	nb_pb_starttime = getstatf(STAT_NB_METERSTART);
 	
-	if(cvar("sbar_flagstatus_right"))
-		pos_x = vid_conwidth - 10 - sbar_x - 64;
+	if(cvar("sbar_ballstatus_right"))
+		pos_x = vid_conwidth - 66 - sbar_x - 64; // the 66 comes from trial and error, no idea about the 64 (see CTF)
 	else
 		pos_x = 10 - sbar_x;
 	
 	pos_z = 0;
 
 	if(sbar_hudselector == 1)
-		pos_y = (vid_conheight - sbar_y) - cvar("sbar_flagstatus_pos") - 64;
+		pos_y = (vid_conheight - sbar_y) - cvar("sbar_ballstatus_pos") - 64;
 	else
-		pos_y = -117;
+		pos_y = -124; // 17 more than flag icons
 
 	pos += sbar;
 	pos_y -= 1; //vertical margin to the picture
