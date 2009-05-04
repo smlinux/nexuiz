@@ -36,6 +36,26 @@ This is a brush model which can be damaged. Once triggered it's active and will 
 health: The damage this trigger can take
 target: The entity/entities to be triggered once this entity gets invisible
 targetname: The name other entities can use to target this entity
+mdl: particle effect name to show when destroyed
+count: particle effect multiplier
+mdl_dead: optional replacement model to show when destroyed
+debris: names of debris models to show when destroyed, separated by spaces
+noise: sound to play when destroyed
+dmg: damage to deal to the environment when destroyed
+dmg_edge: edge damage to deal to the environment when destroyed
+dmg_radius: damage radius
+dmg_force: damage force
+message: death message when a player gets hit by the explosion
+message2: death message when someone gets pushed into this (default: "was pushed into an explosion by"). The # character is replaced by the attacker name if present (and it instead does not get appended to the end)
+debrismovetype: way in which the debris moves: one of 1 = ANGLENOCLIP, 2 = ANGLECLIP, 3 = WALK, 4 = STEP, 5 = FLY, 6 = TOSS, 7 = PUSH, 8 = NOCLIP, 9 = FLYMISSILE, 10 = BOUNCE, 11 = BOUNCEMISSILE
+debrissolid: solidity of the debris: one of 0 = NOT, 1 = TRIGGER, 2 = BBOX, 3 = SLIDEBOX, 4 = BSP, 5 = CORPSE
+debrisvelocity: initial velocity vector of the debris (static part)
+debrisvelocityjitter: initial velocity vector of the debris (random part)
+debrisavelocityjitter: initial angular velocity vector of the debris (random part)
+debristime: time till the debris fades (average)
+debristimejitter: time till the debris fades (random part)
+debrisfadetime: how long debris takes to fade
+debrisdamageforcescale: how much debris is affected by damage force (e.g. explosions)
 */
 
 /*QUAKED func_assault_wall (.5 0 .5) ?
@@ -1406,6 +1426,15 @@ dmg_radius: damage radius
 dmg_force: damage force
 message: death message when a player gets hit by the explosion
 message2: death message when someone gets pushed into this (default: "was pushed into an explosion by"). The # character is replaced by the attacker name if present (and it instead does not get appended to the end)
+debrismovetype: way in which the debris moves: one of 1 = ANGLENOCLIP, 2 = ANGLECLIP, 3 = WALK, 4 = STEP, 5 = FLY, 6 = TOSS, 7 = PUSH, 8 = NOCLIP, 9 = FLYMISSILE, 10 = BOUNCE, 11 = BOUNCEMISSILE
+debrissolid: solidity of the debris: one of 0 = NOT, 1 = TRIGGER, 2 = BBOX, 3 = SLIDEBOX, 4 = BSP, 5 = CORPSE
+debrisvelocity: initial velocity vector of the debris (static part)
+debrisvelocityjitter: initial velocity vector of the debris (random part)
+debrisavelocityjitter: initial angular velocity vector of the debris (random part)
+debristime: time till the debris fades (average)
+debristimejitter: time till the debris fades (random part)
+debrisfadetime: how long debris takes to fade
+debrisdamageforcescale: how much debris is affected by damage force (e.g. explosions)
 -------- SPAWNFLAGS --------
 DISABLED: do not allow damaging this until it is first activated
 INDICATE: indicate amount of damage already taken by coloring

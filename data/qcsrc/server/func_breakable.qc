@@ -4,6 +4,15 @@
 .float dmg_edge;
 .float dmg_radius;
 .float dmg_force;
+.float debrismovetype;
+.float debrissolid;
+.vector debrisvelocity;
+.vector debrisvelocityjitter;
+.vector debrisavelocityjitter;
+.float debristime;
+.float debristimejitter;
+.float debrisfadetime;
+.float debrisdamageforcescale;
 
 .string mdl_dead; // or "" to hide when broken
 .string debris; // space separated list of debris models
@@ -29,7 +38,7 @@ void func_breakable_damage(entity inflictor, entity attacker, float damage, floa
 // func_breakable
 // - basically func_assault_destructible for general gameplay use
 //
-void LaunchDebris (string debrisname) =
+void LaunchDebris (string debrisname, vector force) =
 {
 	local	entity dbr;
 
@@ -39,16 +48,22 @@ void LaunchDebris (string debrisname) =
 	           + '0 1 0' * random() * (self.absmax_y - self.absmin_y)
 	           + '0 0 1' * random() * (self.absmax_z - self.absmin_z));
 	setmodel (dbr, debrisname );
-	dbr.movetype = MOVETYPE_BOUNCE;
-	dbr.solid = SOLID_NOT;
-	// TODO parametrize this
-	dbr.velocity_x = 70 * crandom();
-	dbr.velocity_y = 70 * crandom();
-	dbr.velocity_z = 140 + 70 * random();
-	dbr.avelocity_x = random()*600;
-	dbr.avelocity_y = random()*600;
-	dbr.avelocity_z = random()*600;
-	SUB_SetFade(dbr, time + 1 + random() * 5, 1);
+	dbr.owner = self; // do not be affected by our own explosion
+	dbr.movetype = self.debrismovetype;
+	dbr.solid = self.debrissolid;
+	if(dbr.solid != SOLID_BSP) // SOLID_BSP has exact collision, MAYBE this works? TODO check this out
+		setsize(dbr, '0 0 0', '0 0 0'); // needed for performance, until engine can deal better with it
+	dbr.velocity_x = self.debrisvelocity_x + self.debrisvelocityjitter_x * crandom();
+	dbr.velocity_y = self.debrisvelocity_y + self.debrisvelocityjitter_y * crandom();
+	dbr.velocity_z = self.debrisvelocity_z + self.debrisvelocityjitter_z * crandom();
+	self.velocity = self.velocity + force * self.debrisdamageforcescale;
+	dbr.avelocity_x = random()*self.debrisavelocityjitter_x;
+	dbr.avelocity_y = random()*self.debrisavelocityjitter_y;
+	dbr.avelocity_z = random()*self.debrisavelocityjitter_z;
+	dbr.damageforcescale = self.debrisdamageforcescale;
+	if(dbr.damageforcescale)
+		dbr.takedamage = DAMAGE_YES;
+	SUB_SetFade(dbr, time + self.debristime + crandom() * self.debristimejitter, self.debrisfadetime);
 };
 
 void func_breakable_colormod()
@@ -121,15 +136,17 @@ void func_breakable_restore()
 	func_breakable_behave_restore();
 }
 
+vector debrisforce; // global, set before calling this
 void func_breakable_destroy() {
 	float n, i;
+	string oldmsg;
 
 	activator = self.owner;
 
 	// now throw around the debris
 	n = tokenize_console(self.debris);
 	for(i = 0; i < n; ++i)
-		LaunchDebris(argv(i));
+		LaunchDebris(argv(i), debrisforce);
 
 	func_breakable_destroyed();
 
@@ -142,7 +159,10 @@ void func_breakable_destroy() {
 	if(self.cnt)
 		pointparticles(self.cnt, self.absmin * 0.5 + self.absmax * 0.5, '0 0 0', self.count);
 
+	oldmsg = self.message;
+	self.message = "";
 	SUB_UseTargets();
+	self.message = oldmsg;
 }
 
 void func_breakable_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
@@ -158,7 +178,10 @@ void func_breakable_damage(entity inflictor, entity attacker, float damage, floa
 	func_breakable_colormod();
 
 	if(self.health <= 0)
+	{
+		debrisforce = force;
 		W_PrepareExplosionByDamage(attacker, func_breakable_destroy);
+	}
 }
 
 void func_breakable_reset()
@@ -177,6 +200,15 @@ void spawnfunc_func_breakable() {
 	if(!self.health)
 		self.health = 100;
 	self.max_health = self.health;
+
+	// yes, I know, MOVETYPE_NONE is not available here, not that one would want it here anyway
+	if(!self.debrismovetype) self.debrismovetype = MOVETYPE_BOUNCE;
+	if(!self.debrissolid) self.debrissolid = SOLID_NOT;
+	if(self.debrisvelocity == '0 0 0') self.debrisvelocity = '0 0 140';
+	if(self.debrisvelocityjitter == '0 0 0') self.debrisvelocityjitter = '70 70 70';
+	if(self.debrisavelocityjitter == '0 0 0') self.debrisavelocityjitter = '600 600 600';
+	if(!self.debristime) self.debristime = 3.5;
+	if(!self.debristimejitter) self.debristime = 2.5;
 
 	if(self.mdl != "")
 		self.cnt = particleeffectnum(self.mdl);
