@@ -4,6 +4,7 @@ float trace_dphitcontents;
 float Q3SURFACEFLAG_SLICK = 2; // low friction surface
 float DPCONTENTS_SOLID = 1; // blocks player movement
 float DPCONTENTS_BODY = 32; // blocks player movement
+float DPCONTENTS_CORPSE = 64; // blocks player movement
 float DPCONTENTS_PLAYERCLIP = 256; // blocks player movement
 void Porto_Draw()
 {
@@ -189,6 +190,65 @@ vector GetCurrentFov(float fov)
 	return '1 0 0' * fovx + '0 1 0' * fovy;
 }
 
+// this function must match W_SetupShot!
+float zoomscript_caught;
+entity trueaim;
+void TrueAim_Init()
+{
+	trueaim = spawn();
+	trueaim.classname = "trueaim";
+	trueaim.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE;
+}
+
+float TrueAimCheck()
+{
+	float nudge = 1; // added to traceline target and subtracted from result
+	vector vecs, trueaimpoint, w_shotorg;
+	vector mi, ma;
+
+	mi = ma = '0 0 0';
+
+	switch(activeweapon)
+	{
+		case WEP_PORTO: // shoots from eye
+		case WEP_HOOK: // no trueaim
+		case WEP_GRENADE_LAUNCHER: // toss curve
+			return 1; 
+		case WEP_CAMPINGRIFLE:
+			if(zoomscript_caught)
+				return 1; // shoots from eye when zoomed
+		case WEP_ROCKET_LAUNCHER: // projectile has a size!
+			mi = '-3 -3 -3';
+			ma = '3 3 3';
+			break;
+		case WEP_SEEKER: // projectile has a size!
+			mi = '-2 -2 -2';
+			ma = '2 2 2';
+			break;
+	}
+
+	vecs = decompressShotOrigin(getstati(STAT_SHOTORG));
+
+	traceline(view_origin, view_origin + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, trueaim);
+	trueaimpoint = trace_endpos;
+
+	if(vecs_x > 0)
+		vecs_y = -vecs_y;
+	else
+		vecs = '0 0 0';
+	
+	w_shotorg = view_origin + view_right * vecs_y + view_up * vecs_z;
+
+	// now move the vecs forward as much as requested if possible
+	traceline(w_shotorg, w_shotorg + view_forward * (vecs_x + nudge), MOVE_NORMAL, trueaim); // FIXME this MOVE_NORMAL part will misbehave a little in csqc
+	w_shotorg = trace_endpos - view_forward * nudge;
+
+	// now test whether we will actually hit the trueaimpoint...
+	tracebox(w_shotorg, mi, ma, trueaimpoint, MOVE_NOMONSTERS, trueaim);
+	return vlen(trace_endpos - trueaimpoint) <= vlen(ma - mi) + 1;
+		// yes, this is an ugly hack... but it seems good enough to find out whether the test hits the same place as the initial trace
+}
+
 void CSQC_common_hud(void);
 
 void CSQC_kh_hud(void);
@@ -196,7 +256,6 @@ void CSQC_ctf_hud(void);
 void PostInit(void);
 void CSQC_Demo_Camera();
 float Sbar_WouldDrawScoreboard ();
-float zoomscript_caught;
 float view_set;
 float camera_mode;
 string NextFrameCommand;
@@ -204,7 +263,7 @@ void CSQC_UpdateView(float w, float h)
 {
 	entity e;
 	float fov;
-	float f;
+	float f, i, j;
 
 	dprint_load();
 	WaypointSprite_Load();
@@ -421,6 +480,11 @@ void CSQC_UpdateView(float w, float h)
 
 	// crosshair goes VERY LAST
 	if(!scoreboard_active && !ons_showmap && !camera_active) {
+		// TrueAim check
+		float goodshot;
+
+		goodshot = TrueAimCheck();
+
 		string wcross_style;
 		wcross_style = cvar_string("crosshair");
 
@@ -461,7 +525,17 @@ void CSQC_UpdateView(float w, float h)
 			wcross_size_x *= wcross_sizefloat;
 			wcross_size_y *= wcross_sizefloat;
 
-			drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x) + '0 0.5 0' * (vid_conheight - wcross_size_y), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
+			if(goodshot || !cvar("crosshair_hittest"))
+			{
+				drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x) + '0 0.5 0' * (vid_conheight - wcross_size_y), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
+			}
+			else
+			{
+				wcross_alpha *= 0.04 * 0.75;
+				for(i = -2; i <= 2; ++i)
+					for(j = -2; j <= 2; ++j)
+						drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x + i) + '0 0.5 0' * (vid_conheight - wcross_size_y + j), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
+			}
 		}
 	}
 

@@ -155,3 +155,6 @@ vector solve_quadratic(float a, float b, float c);
 // if no real solution exists, x contains the real part and y the imaginary part of the complex solutions x+iy and x-iy
 
 void check_unacceptable_compiler_bugs();
+
+float compressShotOrigin(vector v);
+vector decompressShotOrigin(float f);

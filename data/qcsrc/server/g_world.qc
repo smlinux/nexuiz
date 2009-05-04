@@ -592,6 +592,7 @@ void spawnfunc_worldspawn (void)
 	addstat(STAT_INVINCIBLE_FINISHED, AS_FLOAT, invincible_finished);
 	addstat(STAT_PRESSED_KEYS, AS_FLOAT, pressedkeys);
 	addstat(STAT_FUEL, AS_INT, ammo_fuel);
+	addstat(STAT_SHOTORG, AS_INT, stat_shotorg);
 
 	next_pingtime = time + 5;
 	InitializeEntity(self, cvar_changes_init, INITPRIO_CVARS);

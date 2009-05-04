@@ -250,6 +250,7 @@ const float STAT_PRESSED_KEYS = 42;
 const float STAT_ALLOW_OLDNEXBEAM = 43; // this stat could later contain some other bits of info, like, more server-side particle config
 const float STAT_FUEL = 44;
 const float STAT_NB_METERSTART = 45;
+const float STAT_SHOTORG = 46; // compressShotOrigin
 const float CTF_STATE_ATTACK = 1;
 const float CTF_STATE_DEFEND = 2;
 const float CTF_STATE_COMMANDER = 3;
@@ -430,3 +431,5 @@ float WATERLEVEL_NONE = 0;
 float WATERLEVEL_WETFEET = 1;
 float WATERLEVEL_SWIMMING = 2;
 float WATERLEVEL_SUBMERGED = 3;
+
+float MAX_SHOT_DISTANCE = 32768;

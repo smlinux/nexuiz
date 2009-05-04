@@ -1457,3 +1457,26 @@ void check_unacceptable_compiler_bugs()
 	if(strcat(argv(0), substring("foo bar", 4, 7 - argv_start_index(1))) == "barbar")
 		error("fteqcc bug introduced with revision 3178 detected. Please upgrade fteqcc to a later revision, downgrade fteqcc to revision 3177, or pester Spike until he fixes it. You can set _allow_unacceptable_compiler_bugs 1 to skip this check, but expect stuff to be horribly broken then.");
 }
+
+float compressShotOrigin(vector v)
+{
+	float x, y, z;
+	x = rint(v_x * 2);
+	y = rint(v_y * 4) + 128;
+	z = rint(v_z * 4) + 128;
+	if(x > 255 || x < 0)
+		error("shot origin x out of bounds");
+	if(y > 255 || y < 0)
+		error("shot origin y out of bounds");
+	if(z > 255 || z < 0)
+		error("shot origin z out of bounds");
+	return x * 0x10000 + y * 0x100 + z;
+}
+vector decompressShotOrigin(float f)
+{
+	vector v;
+	v_x = ((f & 0xFF0000) / 0x10000) / 2;
+	v_y = ((f & 0xFF00) / 0x100 - 128) / 4;
+	v_z = ((f & 0xFF) - 128) / 4;
+	return v;
+}

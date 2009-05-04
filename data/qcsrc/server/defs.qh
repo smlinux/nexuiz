@@ -571,3 +571,5 @@ void Drag_MoveDrag(entity from, entity to);
 
 .float nickspamtime; // time of last nick change
 .float nickspamcount;
+
+.float stat_shotorg; // networked stat for trueaim HUD

@@ -159,8 +159,6 @@ float FLAG_BASE = 1;
 float FLAG_CARRY = 2;
 float FLAG_DROPPED = 3;
 
-float MAX_SHOT_DISTANCE = 32768;
-
 float COLOR_TEAM1	= 5;  // red
 float COLOR_TEAM2	= 14; // blue
 float COLOR_TEAM3	= 13; // yellow
