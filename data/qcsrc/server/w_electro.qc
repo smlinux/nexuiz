@@ -105,6 +105,7 @@ void W_Electro_Attack2()
 	local entity proj;
 
 	W_SetupShot (self, FALSE, 2, "weapons/electro_fire2.wav");
+	w_shotdir = v_forward; // no TrueAim for grenades please
 
 	pointparticles(particleeffectnum("electro_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
