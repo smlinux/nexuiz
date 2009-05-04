@@ -940,6 +940,7 @@ float waypoint_load_links()
 	return TRUE;
 };
 
+float botframe_loadedforcedlinks;
 void waypoint_load_links_hardwired()
 {
 	local string filename, s;
@@ -949,6 +950,8 @@ void waypoint_load_links_hardwired()
 	filename = strcat("maps/", mapname);
 	filename = strcat(filename, ".waypoints.hardwired");
 	file = fopen(filename, FILE_READ);
+
+	botframe_loadedforcedlinks = TRUE;
 
 	if (file < 0)
 	{
@@ -1154,6 +1157,7 @@ void waypoint_saveall()
 		bprint(" failed\n");
 	}
 	waypoint_save_links();
+	botframe_loadedforcedlinks = FALSE;
 };
 
 // load waypoints from file
@@ -2823,7 +2827,10 @@ void bot_serverframe()
 	if (botframe_spawnedwaypoints)
 	{
 		if(botframe_cachedwaypointlinks)
-			waypoint_load_links_hardwired();
+		{
+			if(!botframe_loadedforcedlinks)
+				waypoint_load_links_hardwired();
+		}
 		else
 		{
 			// TODO: Make this check cleaner
