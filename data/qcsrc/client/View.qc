@@ -13,6 +13,12 @@ void Porto_Draw()
 
 	if(activeweapon != WEP_PORTO || spectatee_status)
 		return;
+	if(intermission == 1)
+		return;
+	if(intermission == 2)
+		return;
+	if (getstati(STAT_HEALTH) <= 0)
+		return;
 
 	dir = view_forward;
 
