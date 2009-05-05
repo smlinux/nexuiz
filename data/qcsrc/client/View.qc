@@ -223,6 +223,7 @@ float TrueAimCheck()
 		case WEP_CAMPINGRIFLE:
 			if(zoomscript_caught)
 				return 1; // shoots from eye when zoomed
+			break;
 		case WEP_ROCKET_LAUNCHER: // projectile has a size!
 			mi = '-3 -3 -3';
 			ma = '3 3 3';
@@ -248,9 +249,10 @@ float TrueAimCheck()
 	// now move the vecs forward as much as requested if possible
 	traceline(w_shotorg, w_shotorg + view_forward * (vecs_x + nudge), MOVE_NORMAL, trueaim); // FIXME this MOVE_NORMAL part will misbehave a little in csqc
 	w_shotorg = trace_endpos - view_forward * nudge;
-
+	
 	// now test whether we will actually hit the trueaimpoint...
 	tracebox(w_shotorg, mi, ma, trueaimpoint, MOVE_NOMONSTERS, trueaim);
+
 	return vlen(trace_endpos - trueaimpoint) <= vlen(ma - mi) + 1;
 		// yes, this is an ugly hack... but it seems good enough to find out whether the test hits the same place as the initial trace
 }
