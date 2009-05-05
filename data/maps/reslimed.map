@@ -23357,6 +23357,7 @@ morphed/gelslime_bright
 {
 "classname" "item_strength"
 "origin" "-1344.000000 -64.000000 -264.000000"
+"spawnflags" "1"
 }
 // entity 86
 {
