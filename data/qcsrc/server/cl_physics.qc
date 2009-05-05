@@ -7,6 +7,10 @@ float sv_stopspeed;
 float sv_gravity;
 float sv_airaccel_sideways_friction;
 float sv_airaccel_qw;
+float sv_airstopaccelerate;
+float sv_airstrafeaccelerate;
+float sv_maxairstrafespeed;
+float sv_aircontrol;
 .float ladder_time;
 .entity ladder_entity;
 .float gravity;
@@ -344,6 +348,29 @@ void RaceCarPhysics()
 	smoothangles = vectoangles2(vf1, vu1);
 	self.angles_x = -smoothangles_x;
 	self.angles_z =  smoothangles_z;
+}
+
+void CPM_PM_Aircontrol(vector wishdir, float wishspeed)
+{
+	float zspeed, xyspeed, dot, k;
+
+	if(self.movement_x == 0 || self.movement_y != 0)
+		return;
+	
+	zspeed = self.velocity_z;
+	self.velocity_z = 0;
+	xyspeed = vlen(self.velocity);
+	self.velocity = normalize(self.velocity);
+
+	dot = self.velocity * wishdir;
+	k = 32;
+	k *= sv_aircontrol*dot*dot*frametime;
+
+	if(dot > 0) // we can't change direction while slowing down
+		self.velocity = normalize(self.velocity * xyspeed + wishdir * k);
+
+	self.velocity = self.velocity * xyspeed;
+	self.velocity_z = zspeed;
 }
 
 .vector movement_old;
@@ -837,10 +864,22 @@ void SV_PlayerPhysics()
 			wishspeed = wishspeed * 0.5;
 		if (time >= self.teleport_time)
 		{
+			// CPM: air control
+			float wishspeed2;
+			wishspeed2 = wishspeed;
+			if(self.velocity * wishdir < 0)
+				airaccel = sv_airstopaccelerate;
+			if(self.movement_x == 0 && self.movement_y != 0)
+			{
+				wishspeed = min(wishspeed, sv_maxairstrafespeed);
+				airaccel = sv_airstrafeaccelerate;
+			}
+			// !CPM
+			
 			// NOTE: this does the same as the commented out old code if:
 			//   sv_airaccel_qw 0
 			//   sv_airaccel_sideways_friction 0
-			
+
 			float vel_straight;
 			float vel_z;
 			vector vel_perpend;
@@ -858,6 +897,9 @@ void SV_PlayerPhysics()
 			vel_perpend = vel_perpend * (1 - frametime * (wishspeed / maxairspd) * sv_airaccel_sideways_friction);
 
 			self.velocity = vel_straight * wishdir + vel_z * '0 0 1' + vel_perpend;
+			
+			if(sv_aircontrol)
+				CPM_PM_Aircontrol(wishdir, wishspeed2);
 
 			/*
 			f = wishspeed;// - (self.velocity * wishdir);
