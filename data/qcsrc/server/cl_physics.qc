@@ -355,7 +355,7 @@ void CPM_PM_Aircontrol(vector wishdir, float wishspeed)
 	float zspeed, xyspeed, dot, k;
 
 	if(self.movement_x == 0 || self.movement_y != 0)
-		return;
+		return; // can't control movement if not moving forward or backward
 	
 	zspeed = self.velocity_z;
 	self.velocity_z = 0;
