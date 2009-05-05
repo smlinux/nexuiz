@@ -867,12 +867,15 @@ void SV_PlayerPhysics()
 			// CPM: air control
 			float wishspeed2;
 			wishspeed2 = wishspeed;
-			if(self.velocity * wishdir < 0)
-				airaccel = sv_airstopaccelerate;
+			if(sv_airstopaccelerate)
+				if(self.velocity * wishdir < 0)
+					airaccel = sv_airstopaccelerate;
 			if(self.movement_x == 0 && self.movement_y != 0)
 			{
-				wishspeed = min(wishspeed, sv_maxairstrafespeed);
-				airaccel = sv_airstrafeaccelerate;
+				if(sv_maxairstrafespeed)
+					wishspeed = min(wishspeed, sv_maxairstrafespeed);
+				if(sv_airstrafeaccelerate)
+					airaccel = sv_airstrafeaccelerate;
 			}
 			// !CPM
 			
