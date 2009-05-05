@@ -158,8 +158,11 @@ void StartFrame (void)
 	sv_airaccelerate = cvar("sv_airaccelerate");
 	sv_airaccel_sideways_friction = cvar("sv_airaccel_sideways_friction");
 	sv_airaccel_qw = cvar("sv_airaccel_qw");
-
 	sv_stopspeed = cvar ("sv_stopspeed");
+	sv_airstopaccelerate = cvar("sv_airstopaccelerate");
+	sv_airstrafeaccelerate = cvar("sv_airstrafeaccelerate");
+	sv_maxairstrafespeed = cvar("sv_maxairstrafespeed");
+	sv_aircontrol = cvar("sv_aircontrol");
 	teamplay = cvar ("teamplay");
 
 	if(teams_matter && !teamplay)
