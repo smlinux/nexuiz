@@ -158,3 +158,5 @@ void check_unacceptable_compiler_bugs();
 
 float compressShotOrigin(vector v);
 vector decompressShotOrigin(float f);
+
+string records_reply, lsmaps_reply, maplist_reply; // cached replies

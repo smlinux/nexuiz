@@ -15,8 +15,6 @@ float require_spawnfunc_prefix; // if this float exists, only functions with spa
 
 // Globals
 
-string records_reply, lsmaps_reply, maplist_reply; // cached replies
-
 float ctf_score_value(string parameter);
 
 float g_dm, g_domination, g_ctf, g_tdm, g_keyhunt, g_onslaught, g_assault, g_arena, g_lms, g_runematch, g_race, g_nexball;
