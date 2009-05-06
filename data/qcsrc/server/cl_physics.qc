@@ -522,9 +522,6 @@ void SV_PlayerPhysics()
 		stuffcmd(self, strcat("cl_backspeed ", temps, "\n"));
 		stuffcmd(self, strcat("cl_sidespeed ", temps, "\n"));
 		stuffcmd(self, strcat("cl_upspeed ", temps, "\n"));
-
-		temps = ftos(sv_accelerate * maxspd_mod);
-		stuffcmd(self, strcat("cl_movement_accelerate ", temps, "\n"));
 	}
 
 	// if dead, behave differently
@@ -608,8 +605,8 @@ void SV_PlayerPhysics()
 		// acceleration
 		wishdir = normalize(wishvel);
 		wishspeed = vlen(wishvel);
-		if (wishspeed > sv_maxspeed*maxspd_mod)
-			wishspeed = sv_maxspeed*maxspd_mod;
+		if (wishspeed > spd)
+			wishspeed = spd;
 		if (time >= self.teleport_time)
 		{
 			f = wishspeed - (self.velocity * wishdir);
@@ -630,8 +627,8 @@ void SV_PlayerPhysics()
 
 		wishdir = normalize(wishvel);
 		wishspeed = vlen(wishvel);
-		if (wishspeed > sv_maxspeed*maxspd_mod)
-			wishspeed = sv_maxspeed*maxspd_mod;
+		if (wishspeed > spd)
+			wishspeed = spd;
 		wishspeed = wishspeed * 0.7;
 
 		// water friction
@@ -678,8 +675,8 @@ void SV_PlayerPhysics()
 		// acceleration
 		wishdir = normalize(wishvel);
 		wishspeed = vlen(wishvel);
-		if (wishspeed > sv_maxspeed)
-			wishspeed = sv_maxspeed;
+		if (wishspeed > spd)
+			wishspeed = spd;
 		if (time >= self.teleport_time)
 		{
 			f = wishspeed - (self.velocity * wishdir);
@@ -825,8 +822,8 @@ void SV_PlayerPhysics()
 		// acceleration
 		wishdir = normalize(wishvel);
 		wishspeed = vlen(wishvel);
-		if (wishspeed > sv_maxspeed*maxspd_mod)
-			wishspeed = sv_maxspeed*maxspd_mod;
+		if (wishspeed > spd)
+			wishspeed = spd;
 		if (self.crouch)
 			wishspeed = wishspeed * 0.5;
 		if (time >= self.teleport_time)
@@ -842,10 +839,10 @@ void SV_PlayerPhysics()
 		if((self.items & IT_JETPACK) && self.BUTTON_HOOK && !(buttons_prev & 32))
 			sprint(self, "You don't have any fuel for the ^2Jetpack\n");
 
-		if(maxspd_mod < 1)
+		if(maxspd_mod*swampspd_mod < 1)
 		{
-			maxairspd = sv_maxairspeed*maxspd_mod;
-			airaccel = sv_airaccelerate*maxspd_mod;
+			maxairspd = sv_maxairspeed*maxspd_mod*swampspd_mod;
+			airaccel = sv_airaccelerate*maxspd_mod*swampspd_mod;
 		}
 		else
 		{
