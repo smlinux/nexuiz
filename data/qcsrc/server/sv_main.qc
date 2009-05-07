@@ -163,6 +163,11 @@ void StartFrame (void)
 	sv_airstrafeaccelerate = cvar("sv_airstrafeaccelerate");
 	sv_maxairstrafespeed = cvar("sv_maxairstrafespeed");
 	sv_aircontrol = cvar("sv_aircontrol");
+	sv_warsowbunny_airforwardaccel = cvar("sv_warsowbunny_airforwardaccel");
+	sv_warsowbunny_accel = cvar("sv_warsowbunny_accel");
+	sv_warsowbunny_topspeed = cvar("sv_warsowbunny_topspeed");
+	sv_warsowbunny_turnaccel = cvar("sv_warsowbunny_turnaccel");
+	sv_warsowbunny_backtosideratio = cvar("sv_warsowbunny_backtosideratio");
 	teamplay = cvar ("teamplay");
 
 	if(teams_matter && !teamplay)

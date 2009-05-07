@@ -11,6 +11,12 @@ float sv_airstopaccelerate;
 float sv_airstrafeaccelerate;
 float sv_maxairstrafespeed;
 float sv_aircontrol;
+float sv_warsowbunny_airforwardaccel;
+float sv_warsowbunny_accel;
+float sv_warsowbunny_topspeed;
+float sv_warsowbunny_turnaccel;
+float sv_warsowbunny_backtosideratio;
+
 .float ladder_time;
 .entity ladder_entity;
 .float gravity;
@@ -393,6 +399,46 @@ void PM_Accelerate(vector wishdir, float wishspeed, float accel, float accelqw, 
 	vel_perpend = vel_perpend * (1 - frametime * wishspeed * sidefric);
 
 	self.velocity = vel_straight * wishdir + vel_z * '0 0 1' + vel_perpend;
+}
+
+void PM_AirAccelerate(vector wishdir, float wishspeed)
+{
+	vector curvel, wishvel, acceldir, curdir;
+	float addspeed, accelspeed, curspeed, f;
+	float dot;
+	
+	if(wishspeed == 0)
+		return;
+	
+	curvel = self.velocity;
+	curvel_z = 0;
+	curspeed = vlen(curvel);
+
+	if(wishspeed > curspeed * 1.01)
+	{
+		wishspeed = min(wishspeed, curspeed + sv_warsowbunny_airforwardaccel * sv_maxspeed * frametime);
+	}
+	else
+	{
+		f = max(0, (sv_warsowbunny_topspeed - curspeed) / (sv_warsowbunny_topspeed - sv_maxspeed));
+		wishspeed = max(curspeed, sv_maxspeed) + sv_warsowbunny_accel * f * sv_maxspeed * frametime;
+	}
+	wishvel = wishdir * wishspeed;
+	acceldir = wishvel - curvel;
+	addspeed = vlen(acceldir);
+	acceldir = normalize(acceldir);
+
+	accelspeed = min(addspeed, sv_warsowbunny_turnaccel * sv_maxspeed * frametime);
+
+	if(sv_warsowbunny_backtosideratio < 1)
+	{
+		curdir = normalize(curvel);
+		dot = acceldir * curdir;
+		if(dot < 0)
+			acceldir = acceldir - (1 - sv_warsowbunny_backtosideratio) * dot * curdir;
+	}
+
+	self.velocity += accelspeed * acceldir;
 }
 
 .vector movement_old;
@@ -874,30 +920,59 @@ void SV_PlayerPhysics()
 			wishspeed = wishspeed * 0.5;
 		if (time >= self.teleport_time)
 		{
-			// CPM: air control
-			float wishspeed2;
-			wishspeed2 = wishspeed;
-			if(sv_airstopaccelerate)
-				if(self.velocity * wishdir < 0)
-					airaccel = sv_airstopaccelerate;
-			if(self.movement_x == 0 && self.movement_y != 0)
+			if(sv_warsowbunny_turnaccel)
 			{
-				if(sv_maxairstrafespeed)
-					wishspeed = min(wishspeed, sv_maxairstrafespeed);
-				if(sv_airstrafeaccelerate)
-					airaccel = sv_airstrafeaccelerate;
-			}
-			// !CPM
-			
-			PM_Accelerate(wishdir, wishspeed, airaccel, sv_airaccel_qw, sv_airaccel_sideways_friction / maxairspd);
-			if(sv_aircontrol)
-				CPM_PM_Aircontrol(wishdir, wishspeed2);
+				float accelerating, decelerating, aircontrol;
+				float wishspeed2;
 
-			/*
-			f = wishspeed;// - (self.velocity * wishdir);
-			if (f > 0)
-				self.velocity = self.velocity + wishdir * min(f, airaccel * frametime * wishspeed);
-			*/
+				accelerating = (self.velocity * wishdir > 0);
+				decelerating = (self.velocity * wishdir < 0);
+				aircontrol = FALSE;
+				wishspeed2 = wishspeed;
+
+				if(accelerating && self.movement_y == 0 && self.movement_x != 0)
+				{
+					PM_AirAccelerate(wishdir, wishspeed);
+				}
+				else
+				{
+					if(sv_airstopaccelerate)
+						if(self.velocity * wishdir < 0)
+							airaccel = sv_airstopaccelerate;
+					if(self.movement_x == 0 && self.movement_y != 0)
+					{
+						if(sv_maxairstrafespeed)
+							wishspeed = min(wishspeed, sv_maxairstrafespeed);
+						if(sv_airstrafeaccelerate)
+							airaccel = sv_airstrafeaccelerate;
+						if(sv_aircontrol)
+							aircontrol = TRUE;
+					}
+
+					PM_Accelerate(wishdir, wishspeed, airaccel, sv_airaccel_qw, sv_airaccel_sideways_friction / maxairspd);
+					if(aircontrol)
+						CPM_PM_Aircontrol(wishdir, wishspeed2);
+				}
+			}
+			else
+			{
+				// CPM: air control
+				if(sv_airstopaccelerate)
+					if(self.velocity * wishdir < 0)
+						airaccel = sv_airstopaccelerate;
+				if(self.movement_x == 0 && self.movement_y != 0)
+				{
+					if(sv_maxairstrafespeed)
+						wishspeed = min(wishspeed, sv_maxairstrafespeed);
+					if(sv_airstrafeaccelerate)
+						airaccel = sv_airstrafeaccelerate;
+				}
+				// !CPM
+				
+				PM_Accelerate(wishdir, wishspeed, airaccel, sv_airaccel_qw, sv_airaccel_sideways_friction / maxairspd);
+				if(sv_aircontrol)
+					CPM_PM_Aircontrol(wishdir, wishspeed2);
+			}
 		}
 	}
 
