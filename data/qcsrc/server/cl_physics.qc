@@ -373,6 +373,28 @@ void CPM_PM_Aircontrol(vector wishdir, float wishspeed)
 	self.velocity_z = zspeed;
 }
 
+void PM_Accelerate(vector wishdir, float wishspeed, float accel, float accelqw, float sidefric)
+{
+	float vel_straight;
+	float vel_z;
+	vector vel_perpend;
+	float addspeed;
+
+	vel_straight = self.velocity * wishdir;
+	vel_z = self.velocity_z;
+	vel_perpend = self.velocity - vel_straight * wishdir - vel_z * '0 0 1';
+
+	addspeed = wishspeed - vel_straight;
+	if(addspeed > 0)
+		vel_straight = vel_straight + min(addspeed, accel * frametime * wishspeed) * accelqw;
+	if(wishspeed > 0)
+		vel_straight = vel_straight + min(wishspeed, accel * frametime * wishspeed) * (1 - accelqw);
+
+	vel_perpend = vel_perpend * (1 - frametime * wishspeed * sidefric);
+
+	self.velocity = vel_straight * wishdir + vel_z * '0 0 1' + vel_perpend;
+}
+
 .vector movement_old;
 .float buttons_old;
 .vector v_angle_old;
@@ -610,11 +632,7 @@ void SV_PlayerPhysics()
 		if (wishspeed > sv_maxspeed*maxspd_mod)
 			wishspeed = sv_maxspeed*maxspd_mod;
 		if (time >= self.teleport_time)
-		{
-			f = wishspeed - (self.velocity * wishdir);
-			if (f > 0)
-				self.velocity = self.velocity + wishdir * min(f, sv_accelerate*maxspd_mod * frametime * wishspeed);
-		}
+			PM_Accelerate(wishdir, wishspeed, sv_accelerate*maxspd_mod, 1, 0);
 	}
 	else if (self.waterlevel >= WATERLEVEL_SWIMMING)
 	{
@@ -637,9 +655,7 @@ void SV_PlayerPhysics()
 		self.velocity = self.velocity * (1 - frametime * sv_friction);
 
 		// water acceleration
-		f = wishspeed - (self.velocity * wishdir);
-		if (f > 0)
-			self.velocity = self.velocity + wishdir * min(f, sv_accelerate*maxspd_mod * frametime * wishspeed);
+		PM_Accelerate(wishdir, wishspeed, sv_accelerate*maxspd_mod, 1, 0);
 	}
 	else if (time < self.ladder_time)
 	{
@@ -681,9 +697,8 @@ void SV_PlayerPhysics()
 			wishspeed = sv_maxspeed*maxspd_mod;
 		if (time >= self.teleport_time)
 		{
-			f = wishspeed - (self.velocity * wishdir);
-			if (f > 0)
-				self.velocity = self.velocity + wishdir * min(f, sv_accelerate*maxspd_mod * frametime * wishspeed);
+			// water acceleration
+			PM_Accelerate(wishdir, wishspeed, sv_accelerate*maxspd_mod, 1, 0);
 		}
 	}
 	else if ((self.items & IT_JETPACK) && self.BUTTON_HOOK && (!cvar("g_jetpack_fuel") || self.ammo_fuel >= 0.01 || self.items & IT_UNLIMITED_WEAPON_AMMO))
@@ -829,11 +844,7 @@ void SV_PlayerPhysics()
 		if (self.crouch)
 			wishspeed = wishspeed * 0.5;
 		if (time >= self.teleport_time)
-		{
-			f = wishspeed - (self.velocity * wishdir);
-			if (f > 0)
-				self.velocity = self.velocity + wishdir * min(f, sv_accelerate*maxspd_mod * frametime * wishspeed);
-		}
+			PM_Accelerate(wishdir, wishspeed, sv_accelerate*maxspd_mod, 1, 0);
 	}
 	else
 	{
@@ -878,28 +889,7 @@ void SV_PlayerPhysics()
 			}
 			// !CPM
 			
-			// NOTE: this does the same as the commented out old code if:
-			//   sv_airaccel_qw 0
-			//   sv_airaccel_sideways_friction 0
-
-			float vel_straight;
-			float vel_z;
-			vector vel_perpend;
-			vel_straight = self.velocity * wishdir;
-			vel_z = self.velocity_z;
-			vel_perpend = self.velocity - vel_straight * wishdir - vel_z * '0 0 1';
-
-			f = wishspeed - vel_straight;
-			if(f > 0)
-				vel_straight = vel_straight + min(f, airaccel * frametime * wishspeed) * sv_airaccel_qw;
-			if(wishspeed > 0)
-				vel_straight = vel_straight + min(wishspeed, airaccel * frametime * wishspeed) * (1 - sv_airaccel_qw);
-
-			// anti-sideways friction to fix QW-style bunnyhopping
-			vel_perpend = vel_perpend * (1 - frametime * (wishspeed / maxairspd) * sv_airaccel_sideways_friction);
-
-			self.velocity = vel_straight * wishdir + vel_z * '0 0 1' + vel_perpend;
-			
+			PM_Accelerate(wishdir, wishspeed, airaccel, sv_airaccel_qw, sv_airaccel_sideways_friction / maxairspd);
 			if(sv_aircontrol)
 				CPM_PM_Aircontrol(wishdir, wishspeed2);
 
