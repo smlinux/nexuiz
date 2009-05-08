@@ -688,6 +688,8 @@ void spawnfunc_onslaught_generator()
 };
 
 .float waslinked;
+.float cp_bob_spd;
+.vector cp_origin, cp_bob_origin, cp_bob_dmg;
 void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	entity oself;
@@ -712,6 +714,8 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 	}
 	self.health = self.health - damage;
 	self.pain_finished = time + 1;
+	self.punchangle = (2 * randomvec() - '1 1 1') * 45;
+	self.cp_bob_dmg_z = (2 * random() - 1) * 15;
 	// colormod flash when shot
 	self.colormod = '2 2 2';
 	if (self.health < 0)
@@ -722,13 +726,13 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 			string t;
 			t = ColoredTeamName(attacker.team);
 			bprint(ColoredTeamName(self.team), " ", self.message, " control point destroyed by ", t, "\n");
-			ons_trowgib(self.origin, (2 * randomvec()) - '1 1 1' * 25,'1 1 1',"models/onslaught/controlpoint_icon_gib1.md3",5,1,1);
-			ons_trowgib(self.origin, (2 * randomvec()) - '1 1 1' * 45,'1 1 1',"models/onslaught/controlpoint_icon_gib2.md3",5,1,1);
-			ons_trowgib(self.origin, (2 * randomvec()) - '1 1 1' * 45,'1 1 1',"models/onslaught/controlpoint_icon_gib2.md3",5,1,1);
-			ons_trowgib(self.origin, (2 * randomvec()) - '1 1 1' * 75,'1 1 1',"models/onslaught/controlpoint_icon_gib4.md3",5,1,1);
-			ons_trowgib(self.origin, (2 * randomvec()) - '1 1 1' * 75,'1 1 1',"models/onslaught/controlpoint_icon_gib4.md3",5,1,1);
-			ons_trowgib(self.origin, (2 * randomvec()) - '1 1 1' * 75,'1 1 1',"models/onslaught/controlpoint_icon_gib4.md3",5,1,1);
-			ons_trowgib(self.origin, (2 * randomvec()) - '1 1 1' * 75,'1 1 1',"models/onslaught/controlpoint_icon_gib4.md3",5,1,1);
+			ons_trowgib(self.origin, (2 * randomvec() - '1 1 1') * 25,'1 1 1',"models/onslaught/controlpoint_icon_gib1.md3",5,1,1);
+			ons_trowgib(self.origin, (2 * randomvec() - '1 1 1') * 45,'1 1 1',"models/onslaught/controlpoint_icon_gib2.md3",5,1,1);
+			ons_trowgib(self.origin, (2 * randomvec() - '1 1 1') * 45,'1 1 1',"models/onslaught/controlpoint_icon_gib2.md3",5,1,1);
+			ons_trowgib(self.origin, (2 * randomvec() - '1 1 1') * 75,'1 1 1',"models/onslaught/controlpoint_icon_gib4.md3",5,1,1);
+			ons_trowgib(self.origin, (2 * randomvec() - '1 1 1') * 75,'1 1 1',"models/onslaught/controlpoint_icon_gib4.md3",5,1,1);
+			ons_trowgib(self.origin, (2 * randomvec() - '1 1 1') * 75,'1 1 1',"models/onslaught/controlpoint_icon_gib4.md3",5,1,1);
+			ons_trowgib(self.origin, (2 * randomvec() - '1 1 1') * 75,'1 1 1',"models/onslaught/controlpoint_icon_gib4.md3",5,1,1);
 		}
 		self.owner.goalentity = world;
 		self.owner.islinked = FALSE;
@@ -755,20 +759,20 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 void onslaught_controlpoint_icon_think()
 {
 	entity oself;
-	self.nextthink = time + 0.1;
-	if (time > self.pain_finished + 1)
+	self.nextthink = time + 0.05;
+	if (time > self.pain_finished + 5)
 	{
 		self.health = self.health + self.count;
 		if (self.health >= self.max_health)
 			self.health = self.max_health;
 	}
-	if(self.health < self.max_health * 0.90)
+	if (self.health < self.max_health * 0.90)
 		setmodel(self, "models/onslaught/controlpoint_icon.md3");
-	if(self.health < self.max_health * 0.75)
+	if (self.health < self.max_health * 0.75)
 		setmodel(self, "models/onslaught/controlpoint_icon_dmg1.md3");
-	if(self.health < self.max_health * 0.50)
+	if (self.health < self.max_health * 0.50)
 		setmodel(self, "models/onslaught/controlpoint_icon_dmg2.md3");
-	if(self.health < self.max_health * 0.25)
+	if (self.health < self.max_health * 0.25)
 		setmodel(self, "models/onslaught/controlpoint_icon_dmg3.md3");
 	// colormod flash when shot
 	self.colormod = '1 1 1' * (2 - bound(0, (self.pain_finished - time) / 10, 1));
@@ -791,6 +795,35 @@ void onslaught_controlpoint_icon_think()
 
 		self.owner.waslinked = self.owner.islinked;
 	}
+	if (self.punchangle_x > 2)
+		self.punchangle_x = self.punchangle_x - 2;
+	else if (self.punchangle_x < -2)
+		self.punchangle_x = self.punchangle_x + 2;
+	else
+		self.punchangle_x = 0;
+	if (self.punchangle_y > 2)
+		self.punchangle_y = self.punchangle_y - 2;
+	else if (self.punchangle_y < -2)
+		self.punchangle_y = self.punchangle_y + 2;
+	else
+		self.punchangle_y = 0;
+	if (self.punchangle_z > 2)
+		self.punchangle_z = self.punchangle_z - 2;
+	else if (self.punchangle_z < -2)
+		self.punchangle_z = self.punchangle_z + 2;
+	else
+		self.punchangle_z = 0;
+	self.angles_x = self.punchangle_x;
+	self.angles_y = self.angles_y + self.punchangle_y + 2;
+	self.angles_z = self.punchangle_z;
+
+	self.cp_bob_origin_z = 4 * PI * (1 - cos(self.cp_bob_spd / 8));
+	self.cp_bob_spd = self.cp_bob_spd + 0.5;
+	if(self.cp_bob_dmg_z > 0)
+		self.cp_bob_dmg_z = self.cp_bob_dmg_z - 0.1;
+	else
+		self.cp_bob_dmg_z = 0;
+	self.origin = self.cp_origin + self.cp_bob_origin + self.cp_bob_dmg;
 };
 
 void onslaught_controlpoint_icon_buildthink()
@@ -798,19 +831,19 @@ void onslaught_controlpoint_icon_buildthink()
 	local entity oself;
 	float a;
 
-	self.nextthink = time + 0.1;
+	self.nextthink = time + 0.05;
 
 	// only do this if there is power
 	a = onslaught_controlpoint_can_be_linked(self.owner, self.owner.team);
 	if(!a)
 		return;
 
-	self.health = self.health + self.count;
+	self.health = self.health + (self.count / 2);
 
 	if (self.health >= self.max_health)
 	{
 		self.health = self.max_health;
-		self.count = self.count * 0.2; // slow repair rate from now on
+		self.count = self.count * 0.1; // slow repair rate from now on
 		self.think = onslaught_controlpoint_icon_think;
 		sound(self, CHAN_TRIGGER, "onslaught/controlpoint_built.wav", VOL_BASE, ATTN_NORM);
 		bprint(ColoredTeamName(self.team), " captured ", self.owner.message, " control point\n");
@@ -823,6 +856,9 @@ void onslaught_controlpoint_icon_buildthink()
 		activator = self;
 		SUB_UseTargets ();
 		self = oself;
+		self.cp_origin = self.origin;
+		self.cp_bob_origin = '0 0 0.1';
+		self.cp_bob_spd = 0;
 	}
 	self.alpha = self.health / self.max_health;
 	// colormod flash when shot
