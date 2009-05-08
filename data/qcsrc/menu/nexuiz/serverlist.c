@@ -93,31 +93,42 @@ void ServerList_UpdateFieldIDs()
 
 float IsFavorite(string srv)
 {
-	string s;
-	float o;
-	s = cvar_string("net_slist_favorites");
-	s = strcat(" ", s, " ");
-	srv = strcat(" ", srv, " ");
-	o = strstrofs(s, srv, 0);
-	return (o != -1);
+	float i, n;
+	srv = netaddress_resolve(srv, 26000);
+	n = tokenize_console(cvar_string("net_slist_favorites"));
+	for(i = 0; i < n; ++i)
+		if(srv == netaddress_resolve(argv(i), 26000))
+			return TRUE;
+	return FALSE;
 }
 
 void ToggleFavorite(string srv)
 {
-	string s;
-	float o;
+	string s, s0, s1, s2, srv_resolved;
+	float i, n;
+	srv_resolved = netaddress_resolve(srv, 26000);
 	s = cvar_string("net_slist_favorites");
-	o = strstrofs(strcat(" ", s, " "), strcat(" ", srv, " "), 0);
-	if(o == -1)
-	{
-		cvar_set("net_slist_favorites", strcat(s, " ", srv));
-	}
-	else
-	{
-		cvar_set("net_slist_favorites", strcat(
-					substring(s, 0, o - 1), substring(s, o + strlen(srv), strlen(s) - o - strlen(srv))
-					));
-	}
+	n = tokenize_console(s);
+	for(i = 0; i < n; ++i)
+		if(srv_resolved == netaddress_resolve(argv(i), 26000))
+		{
+			s0 = s1 = s2 = "";
+			if(i > 0)
+				s0 = substring(s, 0, argv_end_index(i - 1));
+			if(i < n-1)
+				s2 = substring(s, argv_start_index(i + 1), -1);
+			if(s0 != "" && s2 != "")
+				s1 = " ";
+			print("s0 = >>", s0, "<<\ns1 = >>", s1, "<<\ns2 = >>", s2, "<<\n");
+			cvar_set("net_slist_favorites", strcat(s0, s1, s2));
+			return;
+		}
+	
+	s1 = "";
+	if(s != "")
+		s1 = " ";
+	cvar_set("net_slist_favorites", strcat(s, " ", srv));
+
 	resorthostcache();
 }
 
@@ -464,11 +475,7 @@ void ServerList_Favorite_Click(entity btn, entity me)
 	string ipstr;
 	ipstr = netaddress_resolve(me.ipAddressBox.text, 26000);
 	if(ipstr != "")
-	{
-		me.ipAddressBox.setText(me.ipAddressBox, ipstr);
-		me.ipAddressBox.cursorPos = strlen(ipstr);
-		ToggleFavorite(ipstr);
-	}
+		ToggleFavorite(me.ipAddressBox.text);
 }
 void ServerList_Info_Click(entity btn, entity me)
 {
