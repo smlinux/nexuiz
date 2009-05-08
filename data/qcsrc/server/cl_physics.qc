@@ -920,62 +920,32 @@ void SV_PlayerPhysics()
 			wishspeed = wishspeed * 0.5;
 		if (time >= self.teleport_time)
 		{
-			if(sv_warsowbunny_turnaccel)
+			float accelerating;
+			float wishspeed2;
+
+			accelerating = (self.velocity * wishdir > 0);
+			wishspeed2 = wishspeed;
+
+			// CPM
+			if(sv_airstopaccelerate)
+				if(self.velocity * wishdir < 0)
+					airaccel = sv_airstopaccelerate;
+			if(self.movement_x == 0 && self.movement_y != 0)
 			{
-				float accelerating, decelerating;
-				//float aircontrol;
-				float wishspeed2;
-
-				accelerating = (self.velocity * wishdir > 0);
-				decelerating = (self.velocity * wishdir < 0);
-				//aircontrol = FALSE;
-				wishspeed2 = wishspeed;
-
-				if(accelerating && self.movement_y == 0 && self.movement_x != 0)
-				{
-					PM_AirAccelerate(wishdir, wishspeed);
-				}
-				else
-				{
-					if(sv_airstopaccelerate)
-						if(self.velocity * wishdir < 0)
-							airaccel = sv_airstopaccelerate;
-					if(self.movement_x == 0 && self.movement_y != 0)
-					{
-						if(sv_maxairstrafespeed)
-							wishspeed = min(wishspeed, sv_maxairstrafespeed);
-						if(sv_airstrafeaccelerate)
-							airaccel = sv_airstrafeaccelerate;
-						//if(sv_aircontrol)
-							//aircontrol = TRUE;
-					}
-
-					PM_Accelerate(wishdir, wishspeed, airaccel, sv_airaccel_qw, sv_airaccel_sideways_friction / maxairspd);
-
-					//if(aircontrol)
-						//CPM_PM_Aircontrol(wishdir, wishspeed2);
-						// div0: this never kicks in, as aircontrol is only set to TRUE if self.movement_x == 0 && self.movement_y != 0, but then the function does nothing
-				}
+				if(sv_maxairstrafespeed)
+					wishspeed = min(wishspeed, sv_maxairstrafespeed);
+				if(sv_airstrafeaccelerate)
+					airaccel = sv_airstrafeaccelerate;
 			}
+			// !CPM
+
+			if(sv_warsowbunny_turnaccel && accelerating && self.movement_y == 0 && self.movement_x != 0)
+				PM_AirAccelerate(wishdir, wishspeed);
 			else
-			{
-				// CPM: air control
-				if(sv_airstopaccelerate)
-					if(self.velocity * wishdir < 0)
-						airaccel = sv_airstopaccelerate;
-				if(self.movement_x == 0 && self.movement_y != 0)
-				{
-					if(sv_maxairstrafespeed)
-						wishspeed = min(wishspeed, sv_maxairstrafespeed);
-					if(sv_airstrafeaccelerate)
-						airaccel = sv_airstrafeaccelerate;
-				}
-				// !CPM
-				
 				PM_Accelerate(wishdir, wishspeed, airaccel, sv_airaccel_qw, sv_airaccel_sideways_friction / maxairspd);
-				if(sv_aircontrol)
-					CPM_PM_Aircontrol(wishdir, wishspeed2);
-			}
+
+			if(sv_aircontrol)
+				CPM_PM_Aircontrol(wishdir, wishspeed2);
 		}
 	}
 
