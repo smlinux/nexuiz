@@ -362,7 +362,7 @@ void CPM_PM_Aircontrol(vector wishdir, float wishspeed)
 
 	if(self.movement_x == 0 || self.movement_y != 0)
 		return; // can't control movement if not moving forward or backward
-	
+
 	zspeed = self.velocity_z;
 	self.velocity_z = 0;
 	xyspeed = vlen(self.velocity);
@@ -922,12 +922,13 @@ void SV_PlayerPhysics()
 		{
 			if(sv_warsowbunny_turnaccel)
 			{
-				float accelerating, decelerating, aircontrol;
+				float accelerating, decelerating;
+				//float aircontrol;
 				float wishspeed2;
 
 				accelerating = (self.velocity * wishdir > 0);
 				decelerating = (self.velocity * wishdir < 0);
-				aircontrol = FALSE;
+				//aircontrol = FALSE;
 				wishspeed2 = wishspeed;
 
 				if(accelerating && self.movement_y == 0 && self.movement_x != 0)
@@ -945,13 +946,15 @@ void SV_PlayerPhysics()
 							wishspeed = min(wishspeed, sv_maxairstrafespeed);
 						if(sv_airstrafeaccelerate)
 							airaccel = sv_airstrafeaccelerate;
-						if(sv_aircontrol)
-							aircontrol = TRUE;
+						//if(sv_aircontrol)
+							//aircontrol = TRUE;
 					}
 
 					PM_Accelerate(wishdir, wishspeed, airaccel, sv_airaccel_qw, sv_airaccel_sideways_friction / maxairspd);
-					if(aircontrol)
-						CPM_PM_Aircontrol(wishdir, wishspeed2);
+
+					//if(aircontrol)
+						//CPM_PM_Aircontrol(wishdir, wishspeed2);
+						// div0: this never kicks in, as aircontrol is only set to TRUE if self.movement_x == 0 && self.movement_y != 0, but then the function does nothing
 				}
 			}
 			else
