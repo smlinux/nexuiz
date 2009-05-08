@@ -17,6 +17,47 @@ void onslaught_link_checkupdate();
 
 .string model1, model2, model3;
 
+void ons_gib_damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector vforce)
+{
+    self.velocity += vforce;
+}
+
+void ons_trowgib(
+    vector v_from, vector v_to, vector v_colormod,
+    string smodel,
+    float f_lifetime, float f_fadetime, float b_burn)
+{
+    local entity gib;
+    local entity burn;
+
+    gib = spawn();
+
+    gib.classname = "turret_gib";
+    setmodel(gib,smodel);
+    setorigin(gib,v_from);
+    SUB_SetFade(gib,time + f_lifetime,2);
+
+    gib.solid              = SOLID_BBOX;
+
+    gib.movetype           = MOVETYPE_BOUNCE;
+    gib.takedamage         = DAMAGE_YES;
+    gib.event_damage       = ons_gib_damage;
+    gib.health             = -1;
+    gib.effects            = EF_LOWPRECISION;
+    gib.flags              = FL_NOTARGET;
+    gib.colormod           = v_colormod;
+    gib.velocity           = v_to;
+
+    if (b_burn)
+    {
+        burn = spawn();
+        burn.effects        = EF_LOWPRECISION;//|EF_FLAME;
+        setattachment(burn,gib,"");
+        setorigin(burn,(gib.mins + gib.maxs) * 0.5);
+        SUB_SetFade(burn,time + (f_lifetime * 0.5) ,2);
+    }
+}
+
 void onslaught_updatelinks()
 {
 	local entity l, links;
@@ -670,7 +711,6 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 		self.pain_finished = time + 5;
 	}
 	self.health = self.health - damage;
-	self.alpha = self.health / self.max_health;
 	self.pain_finished = time + 1;
 	// colormod flash when shot
 	self.colormod = '2 2 2';
@@ -682,6 +722,13 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 			string t;
 			t = ColoredTeamName(attacker.team);
 			bprint(ColoredTeamName(self.team), " ", self.message, " control point destroyed by ", t, "\n");
+			ons_trowgib(self.origin, (2 * randomvec()) - '1 1 1' * 25,'1 1 1',"models/onslaught/controlpoint_icon_gib1.md3",5,1,1);
+			ons_trowgib(self.origin, (2 * randomvec()) - '1 1 1' * 45,'1 1 1',"models/onslaught/controlpoint_icon_gib2.md3",5,1,1);
+			ons_trowgib(self.origin, (2 * randomvec()) - '1 1 1' * 45,'1 1 1',"models/onslaught/controlpoint_icon_gib2.md3",5,1,1);
+			ons_trowgib(self.origin, (2 * randomvec()) - '1 1 1' * 75,'1 1 1',"models/onslaught/controlpoint_icon_gib4.md3",5,1,1);
+			ons_trowgib(self.origin, (2 * randomvec()) - '1 1 1' * 75,'1 1 1',"models/onslaught/controlpoint_icon_gib4.md3",5,1,1);
+			ons_trowgib(self.origin, (2 * randomvec()) - '1 1 1' * 75,'1 1 1',"models/onslaught/controlpoint_icon_gib4.md3",5,1,1);
+			ons_trowgib(self.origin, (2 * randomvec()) - '1 1 1' * 75,'1 1 1',"models/onslaught/controlpoint_icon_gib4.md3",5,1,1);
 		}
 		self.owner.goalentity = world;
 		self.owner.islinked = FALSE;
@@ -698,6 +745,8 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 		self = oself;
 
 		self.owner.waslinked = self.owner.islinked;
+		if(self.owner.model != "models/onslaught/controlpoint_pad.md3")
+			setmodel(self.owner, "models/onslaught/controlpoint_pad.md3");
 
 		remove(self);
 	}
@@ -713,7 +762,14 @@ void onslaught_controlpoint_icon_think()
 		if (self.health >= self.max_health)
 			self.health = self.max_health;
 	}
-	self.alpha = self.health / self.max_health;
+	if(self.health < self.max_health * 0.90)
+		setmodel(self, "models/onslaught/controlpoint_icon.md3");
+	if(self.health < self.max_health * 0.75)
+		setmodel(self, "models/onslaught/controlpoint_icon_dmg1.md3");
+	if(self.health < self.max_health * 0.50)
+		setmodel(self, "models/onslaught/controlpoint_icon_dmg2.md3");
+	if(self.health < self.max_health * 0.25)
+		setmodel(self, "models/onslaught/controlpoint_icon_dmg3.md3");
 	// colormod flash when shot
 	self.colormod = '1 1 1' * (2 - bound(0, (self.pain_finished - time) / 10, 1));
 
@@ -771,6 +827,8 @@ void onslaught_controlpoint_icon_buildthink()
 	self.alpha = self.health / self.max_health;
 	// colormod flash when shot
 	self.colormod = '1 1 1' * (2 - bound(0, (self.pain_finished - time) / 10, 1));
+	if(self.owner.model != "models/onslaught/controlpoint_pad2.md3")
+		setmodel(self.owner, "models/onslaught/controlpoint_pad2.md3");
 };
 
 void onslaught_controlpoint_touch()
@@ -790,7 +848,6 @@ void onslaught_controlpoint_touch()
 	e.owner = self;
 	e.max_health = cvar("g_onslaught_cp_health");
 	e.health = e.max_health * 0.1;
-	e.alpha = e.health / e.max_health;
 	e.solid = SOLID_BBOX;
 	e.movetype = MOVETYPE_NONE;
 	setmodel(e, "models/onslaught/controlpoint_icon.md3");
@@ -849,8 +906,15 @@ void spawnfunc_onslaught_controlpoint()
 		return;
 	}
 	precache_model("models/onslaught/controlpoint_pad.md3");
+	precache_model("models/onslaught/controlpoint_pad2.md3");
 	precache_model("models/onslaught/controlpoint_shield.md3");
 	precache_model("models/onslaught/controlpoint_icon.md3");
+	precache_model("models/onslaught/controlpoint_icon_dmg1.md3");
+	precache_model("models/onslaught/controlpoint_icon_dmg2.md3");
+	precache_model("models/onslaught/controlpoint_icon_dmg3.md3");
+	precache_model("models/onslaught/controlpoint_icon_gib1.md3");
+	precache_model("models/onslaught/controlpoint_icon_gib2.md3");
+	precache_model("models/onslaught/controlpoint_icon_gib4.md3");
 	precache_sound("onslaught/controlpoint_build.wav");
 	precache_sound("onslaught/controlpoint_built.wav");
 	precache_sound("weapons/grenade_impact.wav");
