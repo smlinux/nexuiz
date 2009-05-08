@@ -577,7 +577,7 @@ void W_Nexball_Attack (float t)
 	if (!(ball = self.ballcarried))
 		return;
 
-	W_SetupShot (self, FALSE, 4, "weapons/grenade_fire.wav");
+	W_SetupShot (self, FALSE, 4, "nexball/shoot1.wav");
 	tracebox(w_shotorg, BALL_MINS, BALL_MAXS, w_shotorg, MOVE_WORLDONLY, world);
 	if(trace_startsolid)
 	{
@@ -608,8 +608,8 @@ void W_Nexball_Attack2 (void)
 	local entity missile;
 	if (!(balls & BALL_BASKET))
 		return;
-	W_SetupShot (self, FALSE, 2, "weapons/grenade_fire.wav");
-	pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
+	W_SetupShot (self, FALSE, 2, "nexball/shoot2.ogg");
+//	pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 	missile = spawn ();
 
 	missile.owner = self;
@@ -667,14 +667,15 @@ float w_nexball_weapon(float req)
 	}
 	else if (req == WR_PRECACHE)
 	{
-		precache_model ("models/weapons/g_gl.md3");
-		precache_model ("models/weapons/v_gl.md3");
-		precache_model ("models/weapons/h_gl.dpm");
+		precache_model ("models/weapons/g_porto.md3");
+		precache_model ("models/weapons/v_porto.md3");
+		precache_model ("models/weapons/h_porto.dpm");
 		precache_model ("models/elaser.mdl");
-		precache_sound ("weapons/grenade_fire.wav");
+		precache_sound ("nexball/shoot1.wav");
+		precache_sound ("nexball/shoot2.ogg");
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_GRENADE_LAUNCHER);
+		weapon_setup(WEP_PORTO);
 	else if (req == WR_SUICIDEMESSAGE)
 	{
 		w_deathtypestring = "is a weirdo";

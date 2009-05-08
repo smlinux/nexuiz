@@ -11,7 +11,7 @@ void Porto_Draw()
 	vector p, dir, ang, q, nextdir;
 	float idx, portal_number, portal1_idx;
 
-	if(activeweapon != WEP_PORTO || spectatee_status)
+	if(activeweapon != WEP_PORTO || spectatee_status || gametype == GAME_NEXBALL)
 		return;
 	if(intermission == 1)
 		return;
