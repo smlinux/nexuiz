@@ -30,6 +30,7 @@ float sv_warsowbunny_backtosideratio;
 #define SHTEST_THRESHOLD 1.1
 .float shtest_next;
 .float shtest_accumulator;
+.float doublejump_nextjumptime;
 
 /*
 =============
@@ -55,7 +56,6 @@ void PlayerJump (void)
 		return;
 	}
 
-
 	if (!(self.flags & FL_ONGROUND))
 		return;
 
@@ -65,6 +65,10 @@ void PlayerJump (void)
 			
 	if(self.health <= g_bloodloss)
 		return;
+	
+	if(sv_doublejump)
+		if(time < self.doublejump_nextjumptime)
+			return;
 
 	if(g_runematch)
 	{
@@ -99,6 +103,17 @@ void PlayerJump (void)
 
 	if(g_jump_grunt)
 		PlayerSound(playersound_jump, CHAN_PLAYER, VOICETYPE_PLAYERSOUND);
+	
+	if(sv_doublejump)
+	{
+		// we're moving upwards at self.velocity_z
+		// only allow jumping after we got 3 units upwards
+		// so we for sure leave the FL_ONGROUND check
+		//
+		// but as this sucks because of factoring in gravity, we'll just do it
+		// for 4 units, and constant velocity
+		self.doublejump_nextjumptime = time + 4 / max(40, self.velocity_z); // max 0.1s blocking of jumps
+	}
 }
 
 void CheckWaterJump()
