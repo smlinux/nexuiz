@@ -1,10 +1,12 @@
 .float aistatus;
-float AI_STATUS_ROAMING			= 1;	// Bot is just crawling the map. No enemies at sight
-float AI_STATUS_ATTACKING		= 2;	// There are enemies at sight
-float AI_STATUS_RUNNING			= 4;	// Bot is bunny hopping
-float AI_STATUS_DANGER_AHEAD	= 8;	// There is lava/slime/trigger_hurt ahead
-float AI_STATUS_OUT_JUMPPAD		= 16;	// Trying to get out of a "vertical" jump pad
-float AI_STATUS_OUT_WATER		= 32;	// Trying to get out of water
+float AI_STATUS_ROAMING				= 1;	// Bot is just crawling the map. No enemies at sight
+float AI_STATUS_ATTACKING			= 2;	// There are enemies at sight
+float AI_STATUS_RUNNING				= 4;	// Bot is bunny hopping
+float AI_STATUS_DANGER_AHEAD			= 8;	// There is lava/slime/trigger_hurt ahead
+float AI_STATUS_OUT_JUMPPAD			= 16;	// Trying to get out of a "vertical" jump pad
+float AI_STATUS_OUT_WATER			= 32;	// Trying to get out of water
+float AI_STATUS_WAYPOINT_PERSONAL_GOING		= 64;	// Going to a personal waypoint
+float AI_STATUS_WAYPOINT_PERSONAL_REACHED	= 128;	// Personal waypoint reached
 
 // utilities for path debugging
 #ifdef DEBUG_TRACEWALK
@@ -470,6 +472,7 @@ float WAYPOINTFLAG_GENERATED = 8388608;
 float WAYPOINTFLAG_ITEM = 4194304;
 float WAYPOINTFLAG_TELEPORT = 2097152;
 float WAYPOINTFLAG_NORELINK = 1048576;
+float WAYPOINTFLAG_PERSONAL = 524288;
 
 // add a new link to the spawnfunc_waypoint, replacing the furthest link it already has
 void waypoint_addlink(entity from, entity to)
@@ -680,6 +683,8 @@ entity waypoint_spawn(vector m1, vector m2, float f)
 	local entity w;
 	local vector org;
 	w = find(world, classname, "waypoint");
+
+	if not(f & WAYPOINTFLAG_PERSONAL)
 	while (w)
 	{
 		// if a matching spawnfunc_waypoint already exists, don't add a duplicate
@@ -687,6 +692,7 @@ entity waypoint_spawn(vector m1, vector m2, float f)
 			return w;
 		w = find(w, classname, "waypoint");
 	}
+
 	w = spawn();
 	w.classname = "waypoint";
 	w.wpflags = f;
@@ -1270,9 +1276,17 @@ void waypoint_spawnforteleporter(entity e, vector destination, float timetaken)
 	e.nearestwaypointtimeout = time + 1000000000;
 };
 
+entity waypoint_spawnpersonal(vector position)
+{
+	entity w;
 
+	w = waypoint_spawn(position, position, WAYPOINTFLAG_GENERATED | WAYPOINTFLAG_PERSONAL);
+	w.nearestwaypoint = world;
+	w.nearestwaypointtimeout = 0;
+	w.owner = self;
 
-
+	return w;
+};
 
 /////////////////////////////////////////////////////////////////////////////
 // goal stack
@@ -1359,6 +1373,9 @@ void navigation_pushroute(entity e)
 // (used when a spawnfunc_waypoint is reached)
 void navigation_poproute()
 {
+	if(self.goalcurrent.wpflags & WAYPOINTFLAG_PERSONAL && self.goalcurrent.owner==self)
+		remove(self.goalcurrent);
+
 	self.goalcurrent = self.goalstack01;
 	self.goalstack01 = self.goalstack02;
 	self.goalstack02 = self.goalstack03;
@@ -1806,12 +1823,32 @@ void navigation_poptouchedgoals()
 		{
 			traceline(self.origin + self.view_ofs , self.goalcurrent.origin, TRUE, world);
 			if(trace_fraction==1)
+			{
+				// Detect personal waypoints
+				if(self.aistatus & AI_STATUS_WAYPOINT_PERSONAL_GOING)
+				if(self.goalcurrent.wpflags & WAYPOINTFLAG_PERSONAL && self.goalcurrent.owner==self)
+				{
+					self.aistatus &~= AI_STATUS_WAYPOINT_PERSONAL_GOING;
+					self.aistatus |= AI_STATUS_WAYPOINT_PERSONAL_REACHED;
+				}
+
 				navigation_poproute();
+			}
 		}
 	}
 
 	while (self.goalcurrent && boxesoverlap(m1, m2, self.goalcurrent.absmin, self.goalcurrent.absmax))
+	{
+		// Detect personal waypoints
+		if(self.aistatus & AI_STATUS_WAYPOINT_PERSONAL_GOING)
+		if(self.goalcurrent.wpflags & WAYPOINTFLAG_PERSONAL && self.goalcurrent.owner==self)
+		{
+			self.aistatus &~= AI_STATUS_WAYPOINT_PERSONAL_GOING;
+			self.aistatus |= AI_STATUS_WAYPOINT_PERSONAL_REACHED;
+		}
+
 		navigation_poproute();
+	}
 }
 
 // begin a goal selection session (queries spawnfunc_waypoint network)
