@@ -208,6 +208,7 @@ void havocbot_bunnyhop(vector dir)
 
 					if(self.aistatus & AI_STATUS_ROAMING)
 					if(self.goalcurrent.classname=="waypoint")
+					if not(self.goalcurrent.wpflags & WAYPOINTFLAG_PERSONAL)
 					if(fabs(self.goalcurrent.origin_z - self.origin_z) < self.maxs_z - self.mins_z)
 					if(self.goalstack01!=world)
 					{
@@ -1117,9 +1118,75 @@ void havocbot_ai()
 	havocbot_movetogoal();
 };
 
+float havocbot_moveto(vector pos)
+{
+	if(self.aistatus & AI_STATUS_WAYPOINT_PERSONAL_GOING)
+	{
+		if(self.goalcurrent==world)
+			return CMD_STATUS_ERROR;
+
+		if (!bot_strategytoken_taken)
+		if(self.bot_strategytime<time)
+		{
+			// Refresh path to goal if necessary
+			local entity g;
+			g = self.goalentity;
+			navigation_clearroute();
+			navigation_routetogoal(g,self.origin);
+			bot_strategytoken_taken = TRUE;
+			self.bot_strategytime = time + 10;
+		}
+
+		#ifdef DEBUG_BOT_GOALSTACK
+			debuggoalstack();
+		#endif
+
+		// Heading
+		local vector dir = self.goalcurrent.origin - (self.origin + self.view_ofs);
+		dir_z = 0;
+		bot_aimdir(dir, -1);
+
+		// Go!
+		havocbot_movetogoal();
+		return CMD_STATUS_EXECUTING;
+	}
+
+	if(self.aistatus & AI_STATUS_WAYPOINT_PERSONAL_REACHED)
+	{
+		self.aistatus &~= AI_STATUS_WAYPOINT_PERSONAL_REACHED;
+		return CMD_STATUS_FINISHED;
+	}
+
+	// Spawn personal waypoint
+	entity wp;
+	wp = waypoint_spawnpersonal(pos);
+	if(wp==world)
+		return CMD_STATUS_ERROR;
+
+	// Put it as next goal
+	navigation_clearroute();
+	navigation_findnearestwaypoint(wp, TRUE);
+	navigation_routetogoal(wp,self.origin);
+	bot_strategytoken_taken = TRUE;
+	self.bot_strategytime = time + 10;
+
+	self.aistatus |= AI_STATUS_WAYPOINT_PERSONAL_GOING;
+
+	return CMD_STATUS_EXECUTING;
+}
+
+float havocbot_resetgoal()
+{
+	navigation_clearroute();
+	return CMD_STATUS_FINISHED;
+}
+
 void havocbot_setupbot()
 {
 	self.bot_ai = havocbot_ai;
+	self.cmd_moveto = havocbot_moveto;
+	self.cmd_resetgoal = havocbot_resetgoal;
+
 	// will be updated by think code
 	//Generate some random skill levels
 	self.havocbot_keyboardskill=random()-0.5;

@@ -292,8 +292,10 @@ void bot_cmdhelp(string scmd)
 				print("Look to the right or left N degrees. For turning to the left use positive numbers.");
 				break;
 			case BOT_CMD_MOVETO:
+				print("Walk to an specific coordinate on the map. Usage: moveto \"x y z\"");
 				break;
 			case BOT_CMD_RESETGOAL:
+				print("Resets the goal stack");
 				break;
 			case BOT_CMD_CC:
 				print("Execute client command. Examples: cc \"say something\"; cc god; cc \"name newnickname\"; cc kill;");
@@ -794,6 +796,16 @@ float bot_cmd_pause()
 	return CMD_STATUS_FINISHED;
 }
 
+float bot_cmd_moveto()
+{
+	return self.cmd_moveto(bot_cmd.bot_cmd_parm_vector);
+}
+
+float bot_cmd_resetgoal()
+{
+	return self.cmd_resetgoal();
+}
+
 void bot_command_executed(float rm)
 {
 	entity cmd;
@@ -895,12 +907,10 @@ float bot_execute_commands()
 			status = bot_cmd_turn();
 			break;
 		case BOT_CMD_MOVETO:
-		//	status = bot.bot_cmd_moveto();
-			status = CMD_STATUS_FINISHED;
+			status = bot_cmd_moveto();
 			break;
 		case BOT_CMD_RESETGOAL:
-		//	status = bot.cmd_resetgoal();
-			status = CMD_STATUS_FINISHED;
+			status = bot_cmd_resetgoal();
 			break;
 		case BOT_CMD_CC:
 			status = bot_cmd_cc();
