@@ -1378,8 +1378,11 @@ void ClientDisconnect (void)
 		return;
 	}
 
-	fclose(self.hitplotfh);
-	self.hitplotfh = -1;
+	if(self.hitplotfh >= 0)
+	{
+		fclose(self.hitplotfh);
+		self.hitplotfh = -1;
+	}
 
 	bot_clientdisconnect();
 
