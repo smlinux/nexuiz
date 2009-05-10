@@ -46,8 +46,8 @@ vector W_HitPlotNormalizedUntransform(vector org, entity targ, vector screenforw
 	for(i = 0; i < 2; ++i) for(j = 0; j < 2; ++j) for(k = 0; k < 2; ++k)
 	{
 		thisv = targ.origin;
-		if(i) thisv_x += targ.maxs_z; else thisv_x += targ.mins_x;
-		if(j) thisv_y += targ.maxs_z; else thisv_y += targ.mins_y;
+		if(i) thisv_x += targ.maxs_x; else thisv_x += targ.mins_x;
+		if(j) thisv_y += targ.maxs_y; else thisv_y += targ.mins_y;
 		if(k) thisv_z += targ.maxs_z; else thisv_z += targ.mins_z;
 		thisv = W_HitPlotUnnormalizedUntransform(screenforward, screenright, screenup, thisv);
 		if(i || j || k)
@@ -83,9 +83,9 @@ void W_HitPlotAnalysis(entity player, vector screenforward, vector screenright, 
 		traceline_antilag_force(player, org, org + screenforward * MAX_SHOT_DISTANCE, MOVE_NORMAL, player, lag);
 		if(trace_ent.flags & FL_CLIENT)
 		{
-			antilag_takeback(player, time - lag);
+			antilag_takeback(trace_ent, time - lag);
 			hitplot = W_HitPlotNormalizedUntransform(org, trace_ent, screenforward, screenright, screenup, trace_endpos);
-			antilag_restore(player);
+			antilag_restore(trace_ent);
 			fputs(player.hitplotfh, strcat(ftos(hitplot_x), " ", ftos(hitplot_y), " ", ftos(hitplot_z), "\n"));
 		}
 	}
