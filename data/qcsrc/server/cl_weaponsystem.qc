@@ -25,6 +25,72 @@ float WFRAME_RELOAD = 3;
 
 void(float fr, float t, void() func) weapon_thinkf;
 
+vector W_HitPlotUnnormalizedUntransform(vector screenforward, vector screenright, vector screenup, vector v)
+{
+	vector ret;
+	ret_x = screenright * v;
+	ret_y = screenup * v;
+	ret_z = screenforward * v;
+	return ret;
+}
+
+vector W_HitPlotNormalizedUntransform(vector org, entity targ, vector screenforward, vector screenright, vector screenup, vector v)
+{
+	float i, j, k;
+	vector mi, ma, thisv, myv, ret;
+
+	myv = W_HitPlotUnnormalizedUntransform(screenforward, screenright, screenup, org);
+
+	// x = 0..1 relative to hitbox; y = 0..1 relative to hitbox; z = distance
+
+	for(i = 0; i < 2; ++i) for(j = 0; j < 2; ++j) for(k = 0; k < 2; ++k)
+	{
+		thisv = targ.origin;
+		if(i) thisv_x += targ.maxs_z; else thisv_x += targ.mins_x;
+		if(j) thisv_y += targ.maxs_z; else thisv_y += targ.mins_y;
+		if(k) thisv_z += targ.maxs_z; else thisv_z += targ.mins_z;
+		thisv = W_HitPlotUnnormalizedUntransform(screenforward, screenright, screenup, thisv);
+		if(i || j || k)
+		{
+			if(mi_x > thisv_x) mi_x = thisv_x; if(ma_x < thisv_x) ma_x = thisv_x;
+			if(mi_y > thisv_y) mi_y = thisv_y; if(ma_y < thisv_y) ma_y = thisv_y;
+			//if(mi_z > thisv_z) mi_z = thisv_z; if(ma_z < thisv_z) ma_y = thisv_z;
+		}
+		else
+		{
+			// first run
+			mi = ma = thisv;
+		}
+	}
+
+	thisv = W_HitPlotUnnormalizedUntransform(screenforward, screenright, screenup, v);
+	ret_x = (thisv_x - mi_x) / (ma_x - mi_x);
+	ret_y = (thisv_y - mi_y) / (ma_y - mi_y);
+	ret_z = thisv_z - myv_z;
+	return ret;
+}
+
+void W_HitPlotAnalysis(entity player, vector screenforward, vector screenright, vector screenup)
+{
+	vector hitplot; 
+	vector org;
+	float lag;
+
+	if(player.hitplotfh >= 0)
+	{
+		lag = ANTILAG_LATENCY(player);
+		org = player.origin + player.view_ofs;
+		traceline_antilag_force(player, org, org + screenforward * MAX_SHOT_DISTANCE, MOVE_NORMAL, player, lag);
+		if(trace_ent.flags & FL_CLIENT)
+		{
+			antilag_takeback(player, time - lag);
+			hitplot = W_HitPlotNormalizedUntransform(org, trace_ent, screenforward, screenright, screenup, trace_endpos);
+			antilag_restore(player);
+			fputs(player.hitplotfh, strcat(ftos(hitplot_x), " ", ftos(hitplot_y), " ", ftos(hitplot_z), "\n"));
+		}
+	}
+}
+
 vector w_shotorg;
 vector w_shotdir;
 
@@ -41,6 +107,8 @@ void W_SetupShot(entity ent, float antilag, float recoil, string snd)
 	ent.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE;
 	traceline(ent.origin + ent.view_ofs, ent.origin + ent.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, ent);
 	trueaimpoint = trace_endpos;
+
+	W_HitPlotAnalysis(ent, v_forward, v_right, v_up);
 
 	if(ent.weaponentity.movedir_x > 0)
 	{

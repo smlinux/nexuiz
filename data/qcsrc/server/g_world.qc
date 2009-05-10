@@ -504,6 +504,8 @@ void spawnfunc_worldspawn (void)
 	{
 		s = strcat(cvar_string("sv_eventlog_files_counter"), ".");
 		s = strcat(s, ftos(random()));
+		matchid = strzone(s);
+
 		GameLogEcho(strcat(":gamestart:", GetGametype(), "_", GetMapname(), ":", s));
 		s = ":gameinfo:mutators:LIST";
 		if(cvar("g_grappling_hook"))
@@ -531,6 +533,8 @@ void spawnfunc_worldspawn (void)
 		GameLogEcho(s);
 		GameLogEcho(":gameinfo:end");
 	}
+	else
+		matchid = strzone(ftos(random()));
 
 	cvar_set("nextmap", "");
 

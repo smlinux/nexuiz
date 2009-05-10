@@ -1350,6 +1350,14 @@ void ClientConnect (void)
 		stuffcmd(self, strcat("\nfog ", world.fog, "\nr_fog_exp2 0\nr_drawfog 1\n"));
 
 	SoundEntity_Attach(self);
+
+	if(cvar("g_hitplots"))
+	{
+		self.hitplotfh = fopen(strcat("hits-", matchid, "-", ftos(self.playerid), ".plot"), FILE_WRITE);
+		fputs(self.hitplotfh, strcat("#name ", self.netname, "\n"));
+	}
+	else
+		self.hitplotfh = -1;
 }
 
 /*
@@ -1369,6 +1377,9 @@ void ClientDisconnect (void)
 		print("Warning: ClientDisconnect without ClientConnect\n");
 		return;
 	}
+
+	fclose(self.hitplotfh);
+	self.hitplotfh = -1;
 
 	bot_clientdisconnect();
 
