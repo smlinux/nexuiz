@@ -465,6 +465,7 @@ void ImpulseCommands (void)
 				case 104:
 					e = navigation_findnearestwaypoint(self, FALSE);
 					if (e)
+					if not(e.wpflags & WAYPOINTFLAG_GENERATED)
 					{
 						bprint(strcat("Waypoint removed at ",vtos(e.origin),"\n"));
 						waypoint_remove(e);
