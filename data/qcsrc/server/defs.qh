@@ -567,7 +567,13 @@ void Drag_MoveDrag(entity from, entity to);
 
 .vector prevorigin;
 
+//flood fields
 .float nickspamtime; // time of last nick change
 .float nickspamcount;
+.float floodcontrol_chat;
+.float floodcontrol_chatteam;
+.float floodcontrol_chattell;
+.float floodcontrol_voice;
+.float floodcontrol_voiceteam;
 
 .float stat_shotorg; // networked stat for trueaim HUD

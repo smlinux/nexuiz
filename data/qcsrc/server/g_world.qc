@@ -79,6 +79,10 @@ void timeoutHandler_Think() {
 		else {
 			//now pause the game:
 			timeoutStatus = 2;
+			//reset all the flood variables
+			FOR_EACH_CLIENT(plr) {
+				plr.nickspamcount = plr.nickspamtime = plr.floodcontrol_chat = plr.floodcontrol_chatteam = plr.floodcontrol_chattell = plr.floodcontrol_voice = plr.floodcontrol_voiceteam = 0;
+			}
 			cvar_set("slowmo", ftos(TIMEOUT_SLOWMO_VALUE));
 			//copy .v_angle to .lastV_angle for every player in order to fix their view during pause (see PlayerPreThink)
 			FOR_EACH_REALPLAYER(plr) {

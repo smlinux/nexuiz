@@ -665,9 +665,6 @@ void UpdateSelectedPlayer()
 		self.last_selected_player = self.selected_player;
 }
 
-.float floodcontrol_chat;
-.float floodcontrol_chatteam;
-.float floodcontrol_chattell;
 void Say(entity source, float teamsay, entity privatesay, string msgin, float floodcontrol)
 {
 	string msgstr, colorstr, cmsgstr, namestr, fullmsgstr, sourcemsgstr, fullcmsgstr, sourcecmsgstr, privatemsgprefix;
@@ -798,6 +795,9 @@ void Say(entity source, float teamsay, entity privatesay, string msgin, float fl
 			msgstr = fullmsgstr;
 		}
 	}
+	
+	if (timeoutStatus == 2) //when game is paused, no flood protection
+		source.flood_field = flood = 0;
 
 	if(flood == 2)
 	{
@@ -1100,8 +1100,6 @@ void PlayerSound(.string samplefield, float chan, float voicetype)
 	GlobalSound(sample, chan, voicetype);
 }
 
-.float floodcontrol_voice;
-.float floodcontrol_voiceteam;
 void VoiceMessage(string type, string msg)
 {
 	var .string sample;
@@ -1137,6 +1135,9 @@ void VoiceMessage(string type, string msg)
 		self.flood_field = max(time, self.flood_field) + flood_spv;
 	else
 		flood = 1;
+		
+	if (timeoutStatus == 2) //when game is paused, no flood protection
+		self.flood_field = flood = 0;
 
 	if (msg != "")
 		Say(self, ownteam, world, msg, 0);

@@ -388,6 +388,9 @@ void SV_ParseClientCommand(string s) {
 			else
 				self.nickspamcount += 1;
 			self.nickspamtime = time + cvar("g_nick_flood_penalty");
+			
+			if (timeoutStatus == 2) //when game is paused, no flood protection
+				self.nickspamcount = self.nickspamtime = 0;
 		}
 
 		clientcommand(self,s);
