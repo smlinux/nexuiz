@@ -79,6 +79,11 @@ void W_HitPlotAnalysis(entity player, vector screenforward, vector screenright, 
 	if(player.hitplotfh >= 0)
 	{
 		lag = ANTILAG_LATENCY(player);
+		if(lag < 0.001)
+			lag = 0;
+		if(clienttype(player) != CLIENTTYPE_REAL)
+			lag = 0; // only antilag for clients
+
 		org = player.origin + player.view_ofs;
 		traceline_antilag_force(player, org, org + screenforward * MAX_SHOT_DISTANCE, MOVE_NORMAL, player, lag);
 		if(trace_ent.flags & FL_CLIENT)
@@ -87,6 +92,7 @@ void W_HitPlotAnalysis(entity player, vector screenforward, vector screenright, 
 			hitplot = W_HitPlotNormalizedUntransform(org, trace_ent, screenforward, screenright, screenup, trace_endpos);
 			antilag_restore(trace_ent);
 			fputs(player.hitplotfh, strcat(ftos(hitplot_x), " ", ftos(hitplot_y), " ", ftos(hitplot_z), "\n"));
+			print(strcat(ftos(hitplot_x), " ", ftos(hitplot_y), " ", ftos(hitplot_z), "\n"));
 		}
 	}
 }
