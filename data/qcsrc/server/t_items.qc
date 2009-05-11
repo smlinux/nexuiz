@@ -732,9 +732,15 @@ void weapon_defaultspawnfunc(float wpn)
 
 	if(e.items && e.items != IT_SUPERWEAPON)
 	{
-		ammofield = Item_CounterField(e.items);
-		if(!self.ammofield)
-			self.ammofield = cvar(strcat("g_pickup_", Item_CounterFieldName(e.items)));
+		for(i = 0, j = 1; i < 24; ++i, j *= 2)
+		{
+			if(e.items & j)
+			{
+				ammofield = Item_CounterField(j);
+				if(!self.ammofield)
+					self.ammofield = cvar(strcat("g_pickup_", Item_CounterFieldName(j)));
+			}
+		}
 	}
 	else
 	{

@@ -173,11 +173,12 @@ void thrown_wep_think()
 	SUB_SetFade(self, time + 20, 1);
 }
 
-// returns amount of ammo used, or -1 for failure, or 0 for no ammo count
-float W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vector velo)
+// returns amount of ammo used as string, or -1 for failure, or 0 for no ammo count
+string W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vector velo)
 {
 	entity oldself, wep;
-	float wa, thisammo;
+	float wa, thisammo, i, j;
+	string s;
 	var .float ammofield;
 
 	wep = spawn();
@@ -198,29 +199,38 @@ float W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vector
 		weapon_defaultspawnfunc(wpn);
 		self = oldself;
 		if(startitem_failed)
-			return -1;
+			return string_null;
 		wep.think = thrown_wep_think;
 		wep.nextthink = time + 0.5;
-		return 0;
+		return "";
 	}
 	else
 	{
-		ammofield = Item_CounterField(wa);
+		s = "";
 		oldself = self;
 		self = wep;
 		weapon_defaultspawnfunc(wpn);
 		self = oldself;
 		if(startitem_failed)
-			return -1;
+			return string_null;
 		if(doreduce)
 		{
-			thisammo = min(own.ammofield, wep.ammofield);
-			wep.ammofield = thisammo;
-			own.ammofield -= thisammo;
+			for(i = 0, j = 1; i < 24; ++i, j *= 2)
+			{
+				if(wa & j)
+				{
+					ammofield = Item_CounterField(j);
+					thisammo = min(own.ammofield, wep.ammofield);
+					wep.ammofield = thisammo;
+					own.ammofield -= thisammo;
+					s = strcat(s, " and ", ftos(thisammo), " ", Item_CounterFieldName(j));
+				}
+			}
+			s = substring(s, 5, -1);
 		}
 		wep.think = thrown_wep_think;
 		wep.nextthink = time + 0.5;
-		return wep.ammofield;
+		return s;
 	}
 }
 
@@ -248,7 +258,8 @@ float W_IsWeaponThrowable(float w)
 // toss current weapon
 void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 {
-	local float w, a, wb;
+	local float w, wb;
+	string a;
 
 	w = self.weapon;
 	if (w == 0)
@@ -273,14 +284,14 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 	self.weapons &~= wb;
 	W_SwitchWeapon_Force(self, w_getbestweapon(self));
 	a = W_ThrowNewWeapon(self, w, doreduce, self.origin + delta, velo);
-	if(a < 0)
+	if not(a)
 		return;
 	if(self.health >= 1)
 	{
-		if(a == 0)
+		if(a == "")
 			sprint(self, strcat("You dropped the ^2", W_Name(w), "\n"));
 		else
-			sprint(self, strcat("You dropped the ^2", W_Name(w), " with ", ftos(a), " ", Item_CounterFieldName(W_AmmoItemCode(w)), "\n"));
+			sprint(self, strcat("You dropped the ^2", W_Name(w), " with ", a, "\n"));
 	}
 };
 
@@ -346,7 +357,7 @@ void W_WeaponFrame()
 	while (c < 5)
 	{
 		c = c + 1;
-		if(wb && self.weapons & wb == 0)
+		if(wb && ((self.weapons & wb) == 0))
 		{
 			W_SwitchWeapon_Force(self, w_getbestweapon(self));
 			wb = 0;

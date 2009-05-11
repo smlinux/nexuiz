@@ -15,7 +15,7 @@ void W_Porto_Success (void)
 	remove(self);
 }
 
-float W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vector velo);
+string W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vector velo);
 void W_Porto_Fail (float failhard)
 {
 	if(self.owner == world)

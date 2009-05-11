@@ -98,21 +98,21 @@ string W_FixWeaponOrder(string order, float complete)
 void RegisterWeapons()
 {
 	// %weaponaddpoint
-	register_weapon(WEP_LASER,            w_laser,        0,          1, 1, 1, 0,                      "laser",        "laser",           "Laser");
-	register_weapon(WEP_SHOTGUN,          w_shotgun,      IT_SHELLS,  2, 1, 0, BOT_PICKUP_RATING_LOW,  "shotgun",      "shotgun",         "Shotgun");
-	register_weapon(WEP_UZI,              w_uzi,          IT_NAILS,   3, 1, 0, BOT_PICKUP_RATING_MID,  "uzi",          "uzi",             "Machine Gun");
-	register_weapon(WEP_GRENADE_LAUNCHER, w_glauncher,    IT_ROCKETS, 4, 1, 1, BOT_PICKUP_RATING_MID,  "gl",           "grenadelauncher", "Mortar");
-	register_weapon(WEP_ELECTRO,          w_electro,      IT_CELLS,   5, 1, 0, BOT_PICKUP_RATING_MID,  "electro",      "electro",         "Electro");
-	register_weapon(WEP_CRYLINK,          w_crylink,      IT_CELLS,   6, 1, 0, BOT_PICKUP_RATING_MID,  "crylink",      "crylink",         "Crylink");
-	register_weapon(WEP_NEX,              w_nex,          IT_CELLS,   7, 1, 0, BOT_PICKUP_RATING_HIGH, "nex",          "nex",             "Nex");
-	register_weapon(WEP_HAGAR,            w_hagar,        IT_ROCKETS, 8, 1, 1, BOT_PICKUP_RATING_MID,  "hagar",        "hagar",           "Hagar");
-	register_weapon(WEP_ROCKET_LAUNCHER,  w_rlauncher,    IT_ROCKETS, 9, 1, 1, BOT_PICKUP_RATING_HIGH, "rl",           "rocketlauncher",  "Rocket Launcher");
-	register_weapon(WEP_PORTO,            w_porto,        0,          0, 0, 0, 0,                      "porto" ,       "porto",           "Port-O-Launch");
-	register_weapon(WEP_MINSTANEX,        w_minstanex,    IT_CELLS,   7, 0, 1, BOT_PICKUP_RATING_HIGH, "minstanex",    "minstanex",       "MinstaNex");
-	register_weapon(WEP_HOOK,             w_hook,         IT_CELLS,   0, 0, 1, 0,                      "hookgun",      "hook",            "Grappling Hook");
-	register_weapon(WEP_SEEKER,           w_seeker,       IT_ROCKETS, 8, 0, 0, BOT_PICKUP_RATING_HIGH, "seeker",       "seeker",          "T.A.G. Seeker");
-	register_weapon(WEP_HLAC,             w_hlac,         IT_CELLS,   6, 1, 0, BOT_PICKUP_RATING_MID,  "hlac",         "hlac",            "Heavy Laser Assault Cannon");
-	register_weapon(WEP_CAMPINGRIFLE,     w_campingrifle, IT_NAILS,   3, 1, 0, BOT_PICKUP_RATING_MID,  "campingrifle", "campingrifle",    "Rifle");
+	register_weapon(WEP_LASER,            w_laser,        0,                1, 1, 1, 0,                      "laser",        "laser",           "Laser");
+	register_weapon(WEP_SHOTGUN,          w_shotgun,      IT_SHELLS,        2, 1, 0, BOT_PICKUP_RATING_LOW,  "shotgun",      "shotgun",         "Shotgun");
+	register_weapon(WEP_UZI,              w_uzi,          IT_NAILS,         3, 1, 0, BOT_PICKUP_RATING_MID,  "uzi",          "uzi",             "Machine Gun");
+	register_weapon(WEP_GRENADE_LAUNCHER, w_glauncher,    IT_ROCKETS,       4, 1, 1, BOT_PICKUP_RATING_MID,  "gl",           "grenadelauncher", "Mortar");
+	register_weapon(WEP_ELECTRO,          w_electro,      IT_CELLS,         5, 1, 0, BOT_PICKUP_RATING_MID,  "electro",      "electro",         "Electro");
+	register_weapon(WEP_CRYLINK,          w_crylink,      IT_CELLS,         6, 1, 0, BOT_PICKUP_RATING_MID,  "crylink",      "crylink",         "Crylink");
+	register_weapon(WEP_NEX,              w_nex,          IT_CELLS,         7, 1, 0, BOT_PICKUP_RATING_HIGH, "nex",          "nex",             "Nex");
+	register_weapon(WEP_HAGAR,            w_hagar,        IT_ROCKETS,       8, 1, 1, BOT_PICKUP_RATING_MID,  "hagar",        "hagar",           "Hagar");
+	register_weapon(WEP_ROCKET_LAUNCHER,  w_rlauncher,    IT_ROCKETS,       9, 1, 1, BOT_PICKUP_RATING_HIGH, "rl",           "rocketlauncher",  "Rocket Launcher");
+	register_weapon(WEP_PORTO,            w_porto,        0,                0, 0, 0, 0,                      "porto" ,       "porto",           "Port-O-Launch");
+	register_weapon(WEP_MINSTANEX,        w_minstanex,    IT_CELLS,         7, 0, 1, BOT_PICKUP_RATING_HIGH, "minstanex",    "minstanex",       "MinstaNex");
+	register_weapon(WEP_HOOK,             w_hook,         IT_CELLS|IT_FUEL, 0, 0, 1, 0,                      "hookgun",      "hook",            "Grappling Hook");
+	register_weapon(WEP_SEEKER,           w_seeker,       IT_ROCKETS,       8, 0, 0, BOT_PICKUP_RATING_HIGH, "seeker",       "seeker",          "T.A.G. Seeker");
+	register_weapon(WEP_HLAC,             w_hlac,         IT_CELLS,         6, 1, 0, BOT_PICKUP_RATING_MID,  "hlac",         "hlac",            "Heavy Laser Assault Cannon");
+	register_weapon(WEP_CAMPINGRIFLE,     w_campingrifle, IT_NAILS,         3, 1, 0, BOT_PICKUP_RATING_MID,  "campingrifle", "campingrifle",    "Rifle");
 
 	register_weapons_done();
 }

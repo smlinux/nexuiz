@@ -2182,6 +2182,7 @@ Called every frame for each client before the physics are run
 */
 void() ctf_setstatus;
 void() nexball_setstatus;
+.float items_added;
 void PlayerPreThink (void)
 {
 	self.stat_sys_ticrate = cvar("sys_ticrate");
@@ -2405,12 +2406,16 @@ void PlayerPreThink (void)
 
 		if(frametime)
 		{
+			self.items &~= self.items_added;
+
 			W_WeaponFrame();
 
-			self.items &~= IT_FUEL; // TODO don't do this if the current weapon actually USES fuel...
+			self.items_added = 0;
 			if(self.items & IT_JETPACK)
 				if(self.items & IT_FUEL_REGEN || self.ammo_fuel >= 0.01)
-					self.items |= IT_FUEL;
+					self.items_added |= IT_FUEL;
+
+			self.items |= self.items_added;
 		}
 
 		player_regen();
