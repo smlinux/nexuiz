@@ -362,7 +362,7 @@ string Sbar_DefaultColumnLayout()
 		"+lms/lives +lms/rank ",
 		"+kh/caps +kh/pushes +kh/destroyed ",
 		"?+race/laps ?+race/time ?+race/fastest ",
-		"+as/objectives +nexball/faults +nexball/goals",
+		"+as/objectives +nexball/faults +nexball/goals ",
 		"-lms,race,nexball/score");
 }
 
