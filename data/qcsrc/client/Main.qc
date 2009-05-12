@@ -886,6 +886,8 @@ void Ent_Init()
 		strunzone(forcefog);
 	forcefog = strzone(ReadString());
 
+	armorblockpercent = ReadByte() / 255.0;
+
 	if(!postinit)
 		PostInit();
 }

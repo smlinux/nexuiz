@@ -923,7 +923,7 @@ float ClientInit_SendEntity(entity to, float sf)
 		WriteString(MSG_ENTITY, world.fog);
 	else
 		WriteString(MSG_ENTITY, "");
-
+	WriteByte(MSG_ENTITY, cvar("g_balance_armor_blockpercent") * 255.0);
 	return TRUE;
 }
 

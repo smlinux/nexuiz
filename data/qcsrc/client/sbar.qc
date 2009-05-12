@@ -61,7 +61,7 @@ void Sbar_DrawWeapon(float nr, float fade, float active)
 	value = (active) ? 1 : 0.6;
 	color_x = color_y = color_z = value;
 	
-	if(sbar_hudselector == 1)
+	if(sbar_hudselector == 1 || sbar_hudselector == 2)
 	{
 		// width = 300, height = 100
 		const float w_width = 32, w_height = 12, w_space = 2, font_size = 8;
@@ -1957,162 +1957,213 @@ void Sbar_Draw (void)
 		}
 		else
 		{
-			if (sb_lines && sbar_hudselector == 1)
+			if(sb_lines)
 			{
-				stat_items = getstati(STAT_ITEMS);
-				stat_weapons = getstati(STAT_WEAPONS);
+				float armor, health;
+				armor = getstati(STAT_ARMOR);
+				health = getstati(STAT_HEALTH);
 
-				sbar_x = (vid_conwidth - 320.0)*0.5;
-				sbar_y = vid_conheight - 24.0 - 16.0;
-				sbar_z = 0;
-			
-				fade = 3.2 - 2 * (time - weapontime);
-				fade = bound(0.7, fade, 1);
-
-				x = 1.0;
-				Sbar_DrawWeapon_Clear();
-				for(i = 1; i <= 24; ++i)
+				if (sbar_hudselector == 1 || sbar_hudselector == 2)
 				{
-					if(weaponimpulse[i-1] >= 0)
-					if(stat_weapons & x)
+					stat_items = getstati(STAT_ITEMS);
+					stat_weapons = getstati(STAT_WEAPONS);
+
+					sbar_x = (vid_conwidth - 320.0)*0.5;
+					sbar_y = vid_conheight - 24.0 - 16.0;
+					sbar_z = 0;
+				
+					fade = 3.2 - 2 * (time - weapontime);
+					fade = bound(0.7, fade, 1);
+
+					x = 1.0;
+					Sbar_DrawWeapon_Clear();
+					for(i = 1; i <= 24; ++i)
 					{
-						Sbar_DrawWeapon(i-1, fade, (i == activeweapon));
+						if(weaponimpulse[i-1] >= 0)
+						if(stat_weapons & x)
+						{
+							Sbar_DrawWeapon(i-1, fade, (i == activeweapon));
+						}
+						x *= 2;
 					}
-					x *= 2;
-				}
 
-				// armor
-				x = getstati(STAT_ARMOR);
-				if (x > 0)
-				{
-					// "gfx/sb_armor"
-					//Sbar_DrawStretchPic (72, 0, sb_armor[0], sbar_alpha_fg.value, 24, 24);
-					drawpic(sbar + '72 0 0', "gfx/sb_armor", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
-					if(x > 200)
-						Sbar_DrawXNum('0 0 0', x, 3, 24, '0 1 0', 1, 0);
-					else if(x > 100)
-						Sbar_DrawXNum('0 0 0', x, 3, 24, '0.2 1 0', 1, 0);
-					else if(x > 50)
-						Sbar_DrawXNum('0 0 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
-					else if(x > 25)
-						Sbar_DrawXNum('0 0 0', x, 3, 24, '1 1 0.2', 1, 0);
-					else
-						Sbar_DrawXNum('0 0 0', x, 3, 24, '0.7 0 0', 1, 0);
-				}
-
-				// health
-				x = getstati(STAT_HEALTH);
-				if (x != 0)
-				{
-					// "gfx/sb_health"
-					//Sbar_DrawStretchPic (184, 0, sb_health, sbar_alpha_fg.value, 24, 24);
-					drawpic(sbar + '184 0 0', "gfx/sb_health", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
-					if(x > 200)
-						Sbar_DrawXNum('112 0 0', x, 3, 24, '0 1 0', 1, 0);
-					else if(x > 100)
-						Sbar_DrawXNum('112 0 0', x, 3, 24, '0.2 1 0', 1, 0);
-					else if(x > 50)
-						Sbar_DrawXNum('112 0 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
-					else if(x > 25)
-						Sbar_DrawXNum('112 0 0', x, 3, 24, '1 1 0.2', 1, 0);
-					else
-						Sbar_DrawXNum('112 0 0', x, 3, 24, '0.7 0 0', 1, 0);
-				}
-
-				// ammo
-				for(i = 0, v = '0 0 0'; (x = GetAmmoStat(i)) >= 0; ++i)
-					if(stat_items & GetAmmoItemCode(i))
+					if(health != 0)
 					{
-						x = getstati(x);
-						drawpic(sbar + '296 0 0' + v, GetAmmoPicture(i), '24 24 0', '1 1 1', sbar_alpha_fg, 0);
-						if(x > 10)
-							Sbar_DrawXNum('224 0 0' + v, x, 3, 24, '0.6 0.7 0.8', 1, 0);
+						if(sbar_hudselector == 2)
+						{
+							// NOTE: we'll always choose the SMALLER value...
+							float healthdamage, armordamage, armorideal;
+							healthdamage = (health - 1) / (1 - armorblockpercent); // damage we can take if we could use more health
+							armordamage = armor + (health - 1); // damage we can take if we could use more armor
+							armorideal = healthdamage * armorblockpercent;
+
+							if(armordamage < healthdamage)
+							{
+								// here, armorideal > armor
+								x = floor(armordamage + 1);
+								drawpic(sbar + '116 0 0', "gfx/sb_health", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
+								drawpic(sbar + '142 2 0', "gfx/sb_armor", '20 20 0', '1 1 1', sbar_alpha_fg * armor / armorideal, 0);
+								if(healthdamage > 200)
+									Sbar_DrawXNum('44 0 0', x, 3, 24, '0 1 0', 1, 0);
+								else if(healthdamage > 100)
+									Sbar_DrawXNum('44 0 0', x, 3, 24, '0.2 1 0', 1, 0);
+								else if(healthdamage > 50)
+									Sbar_DrawXNum('44 0 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
+								else if(healthdamage > 25)
+									Sbar_DrawXNum('44 0 0', x, 3, 24, '1 1 0.2', 1, 0);
+								else
+									Sbar_DrawXNum('44 0 0', x, 3, 24, '0.7 0 0', 1, 0);
+							}
+							else
+							{
+								x = floor(armordamage + 1);
+								drawpic(sbar + '116 2 0', "gfx/sb_health", '20 20 0', '1 1 1', sbar_alpha_fg * armorideal / armor, 0);
+								drawpic(sbar + '140 0 0', "gfx/sb_armor", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
+								if(healthdamage > 200)
+									Sbar_DrawXNum('44 0 0', x, 3, 24, '0 1 0', 1, 0);
+								else if(healthdamage > 100)
+									Sbar_DrawXNum('44 0 0', x, 3, 24, '0.2 1 0', 1, 0);
+								else if(healthdamage > 50)
+									Sbar_DrawXNum('44 0 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
+								else if(healthdamage > 25)
+									Sbar_DrawXNum('44 0 0', x, 3, 24, '1 1 0.2', 1, 0);
+								else
+									Sbar_DrawXNum('44 0 0', x, 3, 24, '0.7 0 0', 1, 0);
+							}
+						}
 						else
-							Sbar_DrawXNum('224 0 0' + v, x, 3, 24, '0.7 0 0', 1, 0);
-						v_y -= 30;
+						{
+							// armor
+							x = armor;
+							if (x > 0)
+							{
+								// "gfx/sb_armor"
+								//Sbar_DrawStretchPic (72, 0, sb_armor[0], sbar_alpha_fg.value, 24, 24);
+								drawpic(sbar + '72 0 0', "gfx/sb_armor", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
+								if(x > 200)
+									Sbar_DrawXNum('0 0 0', x, 3, 24, '0 1 0', 1, 0);
+								else if(x > 100)
+									Sbar_DrawXNum('0 0 0', x, 3, 24, '0.2 1 0', 1, 0);
+								else if(x > 50)
+									Sbar_DrawXNum('0 0 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
+								else if(x > 25)
+									Sbar_DrawXNum('0 0 0', x, 3, 24, '1 1 0.2', 1, 0);
+								else
+									Sbar_DrawXNum('0 0 0', x, 3, 24, '0.7 0 0', 1, 0);
+							}
+
+							x = health;
+							// "gfx/sb_health"
+							//Sbar_DrawStretchPic (184, 0, sb_health, sbar_alpha_fg.value, 24, 24);
+							drawpic(sbar + '184 0 0', "gfx/sb_health", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
+							if(x > 200)
+								Sbar_DrawXNum('112 0 0', x, 3, 24, '0 1 0', 1, 0);
+							else if(x > 100)
+								Sbar_DrawXNum('112 0 0', x, 3, 24, '0.2 1 0', 1, 0);
+							else if(x > 50)
+								Sbar_DrawXNum('112 0 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
+							else if(x > 25)
+								Sbar_DrawXNum('112 0 0', x, 3, 24, '1 1 0.2', 1, 0);
+							else
+								Sbar_DrawXNum('112 0 0', x, 3, 24, '0.7 0 0', 1, 0);
+						}
 					}
 
-				if (sbar_x + 320 + 160 <= vid_conwidth)
-					Sbar_MiniDeathmatchOverlay(sbar + '320 0 0');
-				if (sbar_x > 0)
-					Sbar_Score(16);
-				// The margin can be at most 8 to support 640x480 console size:
-				//   320 + 2 * (144 + 16) = 640
-			}
-			else if (sb_lines)
-			{
-			
-				stat_items = getstati(STAT_ITEMS);
-				stat_weapons = getstati(STAT_WEAPONS);
-			
-				sbar_x = (vid_conwidth - 640.0)*0.5;
-				sbar_y = vid_conheight - 47;
-				sbar_z = 0;
+					// ammo
+					for(i = 0, v = '0 0 0'; (x = GetAmmoStat(i)) >= 0; ++i)
+						if(stat_items & GetAmmoItemCode(i))
+						{
+							x = getstati(x);
+							drawpic(sbar + '296 0 0' + v, GetAmmoPicture(i), '24 24 0', '1 1 1', sbar_alpha_fg, 0);
+							if(x > 10)
+								Sbar_DrawXNum('224 0 0' + v, x, 3, 24, '0.6 0.7 0.8', 1, 0);
+							else
+								Sbar_DrawXNum('224 0 0' + v, x, 3, 24, '0.7 0 0', 1, 0);
+							v_y -= 30;
+						}
 
-				fade = 3 - 2 * (time - weapontime);
-
-				x = 1.0;
-				Sbar_DrawWeapon_Clear();
-				for(i = 1; i <= 24; ++i)
-				{
-					if(weaponimpulse[i-1] >= 0)
-					if(stat_weapons & x)
-					{
-						Sbar_DrawWeapon(i-1, fade, (i == activeweapon));
-					}
-					x *= 2;
+					if (sbar_x + 320 + 160 <= vid_conwidth)
+						Sbar_MiniDeathmatchOverlay(sbar + '320 0 0');
+					if (sbar_x > 0)
+						Sbar_Score(16);
+					// The margin can be at most 8 to support 640x480 console size:
+					//   320 + 2 * (144 + 16) = 640
 				}
-
-				if (sb_lines > 24)
-					drawpic(sbar, "gfx/sbar", '0 0 0', '1 1 1', sbar_alpha_fg, 0);
 				else
-					drawpic(sbar, "gfx/sbar_minimal", '0 0 0', '1 1 1', sbar_alpha_fg, 0);
+				{
+				
+					stat_items = getstati(STAT_ITEMS);
+					stat_weapons = getstati(STAT_WEAPONS);
+				
+					sbar_x = (vid_conwidth - 640.0)*0.5;
+					sbar_y = vid_conheight - 47;
+					sbar_z = 0;
 
-				// armor
-				// (340-3*24) = 268
-				Sbar_DrawXNum('268 12 0', getstati(STAT_ARMOR), 3, 24, '0.6 0.7 0.8', 1, 0);
+					fade = 3 - 2 * (time - weapontime);
 
-				// health
-				// (154-3*24) = 82
-				x = getstati(STAT_HEALTH);
-				if(x > 100)
-					Sbar_DrawXNum('82 12 0', x, 3, 24, '1 1 1', 1, 0);
-				else if(x <= 25 && time - floor(time) > 0.5)
-					Sbar_DrawXNum('82 12 0', x, 3, 24, '0.7 0 0', 1, 0);
-				else
-					Sbar_DrawXNum('81 12 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
-
-				// ammo
-				for(i = 0, v = '0 0 0'; (x = GetAmmoStat(i)) >= 0; ++i)
-					if(stat_items & GetAmmoItemCode(i))
+					x = 1.0;
+					Sbar_DrawWeapon_Clear();
+					for(i = 1; i <= 24; ++i)
 					{
-						x = getstati(x);
-						drawpic(sbar + '519 0 0' + v, GetAmmoPicture(i), '0 0 0', '1 1 1', sbar_alpha_fg, 0);
-						if(x > 10)
-							Sbar_DrawXNum('447 12 0' + v, x, 3, 24, '0.6 0.7 0.8', 1, 0);
-						else
-							Sbar_DrawXNum('447 12 0' + v, x, 3, 24, '0.7 0 0', 1, 0);
-						v_y -= 40;
+						if(weaponimpulse[i-1] >= 0)
+						if(stat_weapons & x)
+						{
+							Sbar_DrawWeapon(i-1, fade, (i == activeweapon));
+						}
+						x *= 2;
 					}
 
-				if (sb_lines > 24)
-					drawpic(sbar, "gfx/sbar_overlay", '0 0 0', '1 1 1', 1, DRAWFLAG_MODULATE);
+					if (sb_lines > 24)
+						drawpic(sbar, "gfx/sbar", '0 0 0', '1 1 1', sbar_alpha_fg, 0);
+					else
+						drawpic(sbar, "gfx/sbar_minimal", '0 0 0', '1 1 1', sbar_alpha_fg, 0);
 
-				if (sbar_x + 600 + 160 <= vid_conwidth)
-					Sbar_MiniDeathmatchOverlay (sbar + '600 0 0');
+					// armor
+					// (340-3*24) = 268
+					Sbar_DrawXNum('268 12 0', getstati(STAT_ARMOR), 3, 24, '0.6 0.7 0.8', 1, 0);
 
-				if (sbar_x > 0)
-					Sbar_Score(-16);
-				// Because:
-				//   Mini scoreboard uses 12*4 per other team, that is, 144
-				//   pixels when there are four teams...
-				//   Nexuiz by default sets vid_conwidth to 800... makes
-				//   sbar_x == 80...
-				//   so we need to shift it by 64 pixels to the right to fit
-				//   BUT: then it overlaps with the image that gets drawn
-				//   for viewsize 100! Therefore, just account for 3 teams,
-				//   that is, 96 pixels mini scoreboard size, needing 16 pixels
-				//   to the right!
+					// health
+					// (154-3*24) = 82
+					x = getstati(STAT_HEALTH);
+					if(x > 100)
+						Sbar_DrawXNum('82 12 0', x, 3, 24, '1 1 1', 1, 0);
+					else if(x <= 25 && time - floor(time) > 0.5)
+						Sbar_DrawXNum('82 12 0', x, 3, 24, '0.7 0 0', 1, 0);
+					else
+						Sbar_DrawXNum('81 12 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
+
+					// ammo
+					for(i = 0, v = '0 0 0'; (x = GetAmmoStat(i)) >= 0; ++i)
+						if(stat_items & GetAmmoItemCode(i))
+						{
+							x = getstati(x);
+							drawpic(sbar + '519 0 0' + v, GetAmmoPicture(i), '0 0 0', '1 1 1', sbar_alpha_fg, 0);
+							if(x > 10)
+								Sbar_DrawXNum('447 12 0' + v, x, 3, 24, '0.6 0.7 0.8', 1, 0);
+							else
+								Sbar_DrawXNum('447 12 0' + v, x, 3, 24, '0.7 0 0', 1, 0);
+							v_y -= 40;
+						}
+
+					if (sb_lines > 24)
+						drawpic(sbar, "gfx/sbar_overlay", '0 0 0', '1 1 1', 1, DRAWFLAG_MODULATE);
+
+					if (sbar_x + 600 + 160 <= vid_conwidth)
+						Sbar_MiniDeathmatchOverlay (sbar + '600 0 0');
+
+					if (sbar_x > 0)
+						Sbar_Score(-16);
+					// Because:
+					//   Mini scoreboard uses 12*4 per other team, that is, 144
+					//   pixels when there are four teams...
+					//   Nexuiz by default sets vid_conwidth to 800... makes
+					//   sbar_x == 80...
+					//   so we need to shift it by 64 pixels to the right to fit
+					//   BUT: then it overlaps with the image that gets drawn
+					//   for viewsize 100! Therefore, just account for 3 teams,
+					//   that is, 96 pixels mini scoreboard size, needing 16 pixels
+					//   to the right!
+				}
 			}
 			
 			//show strength/invincibility ICON and timer:
@@ -2163,7 +2214,7 @@ void CSQC_ctf_hud(void)
 	
 	pos_z = 0;
 
-	if(sbar_hudselector == 1)
+	if(sbar_hudselector == 1 || sbar_hudselector == 2)
 		pos_y = (vid_conheight - sbar_y) - cvar("sbar_flagstatus_pos") - 64;
 	else
 		pos_y = -117;
@@ -2220,7 +2271,7 @@ void CSQC_nb_hud(void)
 	
 	pos_z = 0;
 
-	if(sbar_hudselector == 1)
+	if(sbar_hudselector == 1 || sbar_hudselector == 2)
 		pos_y = (vid_conheight - sbar_y) - cvar_or("sbar_ballstatus_pos", 123) - 64;
 	else
 		pos_y = -124; // 17 more than flag icons
