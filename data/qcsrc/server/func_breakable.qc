@@ -13,6 +13,7 @@
 .float debristimejitter;
 .float debrisfadetime;
 .float debrisdamageforcescale;
+.float debrisskin;
 
 .string mdl_dead; // or "" to hide when broken
 .string debris; // space separated list of debris models
@@ -48,6 +49,8 @@ void LaunchDebris (string debrisname, vector force) =
 	           + '0 1 0' * random() * (self.absmax_y - self.absmin_y)
 	           + '0 0 1' * random() * (self.absmax_z - self.absmin_z));
 	setmodel (dbr, debrisname );
+	dbr.skin = self.debrisskin;
+	dbr.colormap = self.colormap; // inherit team colors
 	dbr.owner = self; // do not be affected by our own explosion
 	dbr.movetype = self.debrismovetype;
 	dbr.solid = self.debrissolid;
