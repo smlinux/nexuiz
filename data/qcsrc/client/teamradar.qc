@@ -144,7 +144,7 @@ void draw_teamradar_icon(vector coord, float icon, entity pingdata, vector rgb, 
 			if(dt == 0)
 				continue;
 			dt = time - dt;
-			if(dt > 1)
+			if(dt >= 1 || dt <= 0)
 				continue;
 			v = '2 2 0' * teamradar_size * dt;
 			drawpic(coord - 0.5 * v, "gfx/teamradar_ping", v, '1 1 1', 1 - dt, DRAWFLAG_ADDITIVE);
