@@ -18,6 +18,15 @@ void err(int ex, const char *fmt, ...)
 	exit(ex);
 }
 
+void errx(int ex, const char *fmt, ...)
+{
+    va_list list;
+    va_start(list, fmt);
+    vfprintf(stderr, fmt, list);
+    fputs("\n", stderr);
+    exit(ex);
+}
+
 typedef void (*colorfunc_t) (double x, double y, double dx, double dy, double *r, double *g, double *b);
 
 double rnd()
@@ -58,8 +67,6 @@ void writepic(colorfunc_t f, const char *fn, int width, int height)
 			uint8_t rgb[3];
 			double rr, gg, bb;
 			double xx, yy;
-			double xxx, yyy, zzz;
-			double r;
 			xx = (x + 0.5) / width;
 			yy = (y + 0.5) / height;
 			f(xx, yy, 0.5 / width, 0.5 / height, &rr, &gg, &bb);
@@ -165,11 +172,11 @@ void calcplot(double x, double y, double dx, double dy, double *r, double *g, do
 
 int main(int argc, char **argv)
 {
-	FILE *in;
-
 	if(argc != 3)
 		errx(1, "Usage: %s infile.plot outfile.tga", *argv);
 	
 	readpoints(argv[1]);
 	writepic(calcplot, argv[2], 512, 512);
+
+	return 0;
 }
