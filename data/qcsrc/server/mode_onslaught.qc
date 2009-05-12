@@ -457,10 +457,24 @@ void onslaught_generator_damage(entity inflictor, entity attacker, float damage,
 		self.think(); // do the first explosion now
 		onslaught_updatelinks();
 	}
-	if(self.health < cvar("g_onslaught_gen_health") * 0.75)
+	if(self.health < cvar("g_onslaught_gen_health") * 0.90)
 		setmodel(self, "models/onslaught/generator_dmg1.md3");
-	if(self.health < cvar("g_onslaught_gen_health") * 0.35)
+	if(self.health < cvar("g_onslaught_gen_health") * 0.80)
 		setmodel(self, "models/onslaught/generator_dmg2.md3");
+	if(self.health < cvar("g_onslaught_gen_health") * 0.70)
+		setmodel(self, "models/onslaught/generator_dmg3.md3");
+	if(self.health < cvar("g_onslaught_gen_health") * 0.60)
+		setmodel(self, "models/onslaught/generator_dmg4.md3");
+	if(self.health < cvar("g_onslaught_gen_health") * 0.50)
+		setmodel(self, "models/onslaught/generator_dmg5.md3");
+	if(self.health < cvar("g_onslaught_gen_health") * 0.40)
+		setmodel(self, "models/onslaught/generator_dmg6.md3");
+	if(self.health < cvar("g_onslaught_gen_health") * 0.30)
+		setmodel(self, "models/onslaught/generator_dmg7.md3");
+	if(self.health < cvar("g_onslaught_gen_health") * 0.20)
+		setmodel(self, "models/onslaught/generator_dmg8.md3");
+	if(self.health < cvar("g_onslaught_gen_health") * 0.10)
+		setmodel(self, "models/onslaught/generator_dmg9.md3");
 	if(self.health <= 0)
 		setmodel(self, "models/onslaught/generator_dead.md3");
 };
@@ -643,6 +657,13 @@ void spawnfunc_onslaught_generator()
 	precache_model("models/onslaught/generator_shield.md3");
 	precache_model("models/onslaught/generator_dmg1.md3");
 	precache_model("models/onslaught/generator_dmg2.md3");
+	precache_model("models/onslaught/generator_dmg3.md3");
+	precache_model("models/onslaught/generator_dmg4.md3");
+	precache_model("models/onslaught/generator_dmg5.md3");
+	precache_model("models/onslaught/generator_dmg6.md3");
+	precache_model("models/onslaught/generator_dmg7.md3");
+	precache_model("models/onslaught/generator_dmg8.md3");
+	precache_model("models/onslaught/generator_dmg9.md3");
 	precache_model("models/onslaught/generator_dead.md3");
 	precache_sound("onslaught/generator_decay.wav");
 	precache_sound("weapons/grenade_impact.wav");

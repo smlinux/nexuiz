@@ -36,3 +36,13 @@ ons_icon_thrust
 	tcMod rotate 10
  }
 }
+ons_gen_spark
+{
+	cull none
+ {
+	animmap 9 textures/generator_lightning.tga textures/generator_lightning2.tga
+	tcMod scroll 0.5 0
+	blendfunc add
+
+ }
+}
