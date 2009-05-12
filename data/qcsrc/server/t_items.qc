@@ -85,7 +85,7 @@ void Item_RespawnCountdown (void)
 			switch(self.items)
 			{
 				case IT_FUEL_REGEN:     name = "item-fuelregen"; rgb = '1 0.5 0'; break;
-				case IT_JETPACK:        name = "item-jetpack"; rgb = '1 0.5 0'; break;
+				case IT_JETPACK:        name = "item-jetpack"; rgb = '0.5 0.5 0.5'; break;
 			}
 			if(name)
 			{

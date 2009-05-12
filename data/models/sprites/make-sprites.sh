@@ -198,4 +198,4 @@ sprite item-speed         "SPEED"         ff00ff 000000 0.5 ff00ff ffff00 0.5
 sprite item-strength      "STRENGTH"      0000ff 000000 0.5 0000ff ffff00 0.5
 sprite item-shield        "SHIELD"        ff00ff 000000 0.5 ff00ff ffff00 0.5
 sprite item-fuelregen     "FUEL REGEN"    ff8000 000000 0.5 ff8000 ffff00 0.5
-sprite item-jetpack       "JET PACK"      ff8000 000000 0.5 ff8000 ffff00 0.5
+sprite item-jetpack       "JET PACK"      808080 000000 0.5 808080 ffff00 0.5
