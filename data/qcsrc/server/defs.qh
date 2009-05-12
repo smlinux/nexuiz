@@ -33,6 +33,12 @@ float g_pickup_respawntime_short;
 float g_pickup_respawntime_medium;
 float g_pickup_respawntime_long;
 float g_pickup_respawntime_powerup;
+float g_pickup_respawntimejitter_weapon;
+float g_pickup_respawntimejitter_ammo;
+float g_pickup_respawntimejitter_short;
+float g_pickup_respawntimejitter_medium;
+float g_pickup_respawntimejitter_long;
+float g_pickup_respawntimejitter_powerup;
 float g_maplist_allow_hidden;
 float g_jetpack;
 
@@ -162,6 +168,7 @@ void setanim(entity e, vector anim, float looping, float override, float restart
 .string playerskin;
 
 .float	respawntime;
+.float	respawntimejitter;
 //.float	chasecam;
 
 .float	damageforcescale;

@@ -16,6 +16,7 @@ float waypointsprite_scale;
 .float fadetime;
 .float maxdistance;
 .float hideflags;
+.float spawntime;
 
 vector SPRITE_SIZE = '128 32 0';
 vector SPRITE_HOTSPOT = '64 32 0';
@@ -185,7 +186,7 @@ void Draw_WaypointSprite()
 	if(t == 0)
 		spriteimage = strcat("models/sprites/", spriteimage);
 	else
-		spriteimage = strcat("models/sprites/", spriteimage, "_frame", ftos(mod(floor(time * 2), t)));
+		spriteimage = strcat("models/sprites/", spriteimage, "_frame", ftos(mod(floor((max(0, time - self.spawntime)) * 2), t)));
 
 	drawrotpic(o, rot * 90 * DEG2RAD, spriteimage, SPRITE_SIZE * waypointsprite_scale * vidscale, SPRITE_HOTSPOT * waypointsprite_scale * vidscale, '1 1 1', a, DRAWFLAG_MIPMAP);
 }
@@ -204,6 +205,9 @@ void Ent_WaypointSprite()
 {
 	float sendflags, f;
 	sendflags = ReadByte();
+
+	if(!self.spawntime)
+		self.spawntime = time;
 
 	self.draw2d = Draw_WaypointSprite;
 

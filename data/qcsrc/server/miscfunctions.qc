@@ -1064,6 +1064,12 @@ void readlevelcvars(void)
 	g_pickup_respawntime_medium = cvar("g_pickup_respawntime_medium");
 	g_pickup_respawntime_long = cvar("g_pickup_respawntime_long");
 	g_pickup_respawntime_powerup = cvar("g_pickup_respawntime_powerup");
+	g_pickup_respawntimejitter_weapon = cvar("g_pickup_respawntimejitter_weapon");
+	g_pickup_respawntimejitter_ammo = cvar("g_pickup_respawntimejitter_ammo");
+	g_pickup_respawntimejitter_short = cvar("g_pickup_respawntimejitter_short");
+	g_pickup_respawntimejitter_medium = cvar("g_pickup_respawntimejitter_medium");
+	g_pickup_respawntimejitter_long = cvar("g_pickup_respawntimejitter_long");
+	g_pickup_respawntimejitter_powerup = cvar("g_pickup_respawntimejitter_powerup");
 
 	if(g_minstagib) g_nixnex = g_weaponarena = 0;
 	if(g_nixnex) g_weaponarena = 0;
