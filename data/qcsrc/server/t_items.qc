@@ -51,7 +51,6 @@ void Item_RespawnCountdown (void)
 {
 	if(self.count >= 5)
 	{
-		self.count = 0;
 		if(self.waypointsprite_attached)
 			WaypointSprite_Kill(self.waypointsprite_attached);
 		Item_Respawn();
@@ -89,7 +88,7 @@ void Item_RespawnCountdown (void)
 			}
 			if(name)
 			{
-				WaypointSprite_Attach(name, FALSE);
+				WaypointSprite_Spawn(name, 0, 0, self, '0 0 64', world, 0, self, waypointsprite_attached, FALSE);
 				if(self.waypointsprite_attached)
 					WaypointSprite_UpdateTeamRadar(self.waypointsprite_attached, RADARICON_POWERUP, rgb);
 			}
@@ -106,6 +105,7 @@ void Item_ScheduleRespawn(entity e)
 	{
 		e.think = Item_RespawnCountdown;
 		e.nextthink = time + ITEM_RESPAWNTIME(e) - 5;
+		e.count = 0;
 	}
 	else
 	{
@@ -374,14 +374,14 @@ void Item_FindTeam()
 				head.model = string_null;
 				head.state = 1; // state 1 = initially hidden item
 			}
-			head.effects = head.effects - (head.effects & EF_NODRAW);
+			head.effects &~= EF_NODRAW;
 		}
 
-		if(head.flags & FL_POWERUP) // do not spawn powerups initially!
+		if(e.flags & FL_POWERUP) // do not spawn powerups initially!
 		{
-			head.solid = SOLID_NOT;
-			head.model = string_null;
-			Item_ScheduleRespawn(head);
+			e.solid = SOLID_NOT;
+			e.model = string_null;
+			Item_ScheduleRespawn(e);
 		}
 	}
 }
