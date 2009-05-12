@@ -2003,29 +2003,29 @@ void Sbar_Draw (void)
 								x = floor(armordamage + 1);
 								drawpic(sbar + '116 0 0', "gfx/sb_health", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
 								drawpic(sbar + '142 2 0', "gfx/sb_armor", '20 20 0', '1 1 1', sbar_alpha_fg * armor / armorideal, 0);
-								if(healthdamage > 200)
+								if(x > 200)
 									Sbar_DrawXNum('44 0 0', x, 3, 24, '0 1 0', 1, 0);
-								else if(healthdamage > 100)
+								else if(x > 100)
 									Sbar_DrawXNum('44 0 0', x, 3, 24, '0.2 1 0', 1, 0);
-								else if(healthdamage > 50)
+								else if(x > 50)
 									Sbar_DrawXNum('44 0 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
-								else if(healthdamage > 25)
+								else if(x > 25)
 									Sbar_DrawXNum('44 0 0', x, 3, 24, '1 1 0.2', 1, 0);
 								else
 									Sbar_DrawXNum('44 0 0', x, 3, 24, '0.7 0 0', 1, 0);
 							}
 							else
 							{
-								x = floor(armordamage + 1);
+								x = floor(healthdamage + 1);
 								drawpic(sbar + '116 2 0', "gfx/sb_health", '20 20 0', '1 1 1', sbar_alpha_fg * armorideal / armor, 0);
 								drawpic(sbar + '140 0 0', "gfx/sb_armor", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
-								if(healthdamage > 200)
+								if(x > 200)
 									Sbar_DrawXNum('44 0 0', x, 3, 24, '0 1 0', 1, 0);
-								else if(healthdamage > 100)
+								else if(x > 100)
 									Sbar_DrawXNum('44 0 0', x, 3, 24, '0.2 1 0', 1, 0);
-								else if(healthdamage > 50)
+								else if(x > 50)
 									Sbar_DrawXNum('44 0 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
-								else if(healthdamage > 25)
+								else if(x > 25)
 									Sbar_DrawXNum('44 0 0', x, 3, 24, '1 1 0.2', 1, 0);
 								else
 									Sbar_DrawXNum('44 0 0', x, 3, 24, '0.7 0 0', 1, 0);
