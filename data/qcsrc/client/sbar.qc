@@ -1449,8 +1449,8 @@ void CSQC_Strength_Timer() {
 	vector pos, picsize, number_position;
 	float strength_time, invincibility_time, countdown_fontsize;
 
-	picsize = '40 40 0';
-	countdown_fontsize = 22;
+	picsize = '48 48 0';
+	countdown_fontsize = 24;
 	
 	//element will be positioned on the right side of the screen:
 	pos_x = vid_conwidth - picsize_x - 10; //margin 10 from right border
@@ -1462,7 +1462,7 @@ void CSQC_Strength_Timer() {
 	//now calculate the values Sbar_DrawXNum() will be called with:
 	number_position_x = number_position_x - sbar_x; //relative to sbar coordinates
 	number_position_y = number_position_y - sbar_y; //relative to sbar coordinates
-	number_position_y += 10; //center number vertically to the icon
+	number_position_y += 14; //center number vertically to the icon
 	
 	pos_z = number_position_z = 0;
 	
