@@ -1,4 +1,7 @@
-#define ITEM_RESPAWNTIME(i) ((i).respawntime + crandom() * (i).respawntimejitter)
+#define ITEM_RESPAWNTIME(i)         ((i).respawntime + crandom() * (i).respawntimejitter)
+	// range: respawntime - respawntimejitter .. respawntime + respawntimejitter
+#define ITEM_RESPAWNTIME_INITIAL(i) (10 + random() * ((i).respawntime + (i).respawntimejitter - 10))
+	// range: 10 .. respawntime + respawntimejitter
 
 floatfield Item_CounterField(float it)
 {
@@ -99,19 +102,29 @@ void Item_RespawnCountdown (void)
 	}
 }
 
-void Item_ScheduleRespawn(entity e)
+void Item_ScheduleRespawnIn(entity e, float t)
 {
 	if(e.flags & FL_POWERUP)
 	{
 		e.think = Item_RespawnCountdown;
-		e.nextthink = time + ITEM_RESPAWNTIME(e) - 5;
+		e.nextthink = time + max(0, t - 5);
 		e.count = 0;
 	}
 	else
 	{
 		e.think = Item_Respawn;
-		e.nextthink = time + ITEM_RESPAWNTIME(e);
+		e.nextthink = time + t;
 	}
+}
+
+void Item_ScheduleRespawn(entity e)
+{
+	Item_ScheduleRespawnIn(e, ITEM_RESPAWNTIME(e));
+}
+
+void Item_ScheduleInitialRespawn(entity e)
+{
+	Item_ScheduleRespawnIn(e, ITEM_RESPAWNTIME_INITIAL(e));
 }
 
 float Item_GiveTo(entity item, entity player)
@@ -381,7 +394,7 @@ void Item_FindTeam()
 		{
 			e.solid = SOLID_NOT;
 			e.model = string_null;
-			Item_ScheduleRespawn(e);
+			Item_ScheduleInitialRespawn(e);
 		}
 	}
 }
@@ -406,7 +419,7 @@ void Item_Reset()
 	{
 		self.solid = SOLID_NOT;
 		self.model = string_null;
-		Item_ScheduleRespawn(self);
+		Item_ScheduleInitialRespawn(self);
 	}
 }
 
@@ -656,7 +669,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	{
 		self.solid = SOLID_NOT;
 		self.model = string_null;
-		Item_ScheduleRespawn(self);
+		Item_ScheduleInitialRespawn(self);
 	}
 }
 

@@ -1745,9 +1745,6 @@ void player_regen (void)
 	limita = cvar("g_balance_armor_limit");
 	limitf = cvar("g_balance_fuel_limit");
 
-	if (g_minstagib || (g_lms && !cvar("g_lms_regenerate")))
-		return;
-
 	max_mod = regen_mod = rot_mod = limit_mod = 1;
 
 	if (self.runes & RUNE_REGEN)
@@ -1783,38 +1780,51 @@ void player_regen (void)
 	limita = limita * limit_mod;
 	//limitf = limitf * limit_mod;
 
-	if (self.armorvalue > maxa)
+	if (!g_minstagib && (!g_lms || cvar("g_lms_regenerate")))
 	{
-		if (time > self.pauserotarmor_finished)
+		if (self.armorvalue > maxa)
 		{
-			self.armorvalue = max(maxa, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_rot") * frametime);
-			self.armorvalue = max(maxa, self.armorvalue - cvar("g_balance_armor_rotlinear") * frametime);
+			if (time > self.pauserotarmor_finished)
+			{
+				self.armorvalue = max(maxa, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_rot") * frametime);
+				self.armorvalue = max(maxa, self.armorvalue - cvar("g_balance_armor_rotlinear") * frametime);
+			}
 		}
-	}
-	else if (self.armorvalue < maxa)
-	{
-		if (time > self.pauseregen_finished)
+		else if (self.armorvalue < maxa)
 		{
-			self.armorvalue = CalcRegen(self.armorvalue, maxa, cvar("g_balance_armor_regen"));
-			self.armorvalue = min(maxa, self.armorvalue + cvar("g_balance_armor_regenlinear") * frametime);
+			if (time > self.pauseregen_finished)
+			{
+				self.armorvalue = CalcRegen(self.armorvalue, maxa, cvar("g_balance_armor_regen"));
+				self.armorvalue = min(maxa, self.armorvalue + cvar("g_balance_armor_regenlinear") * frametime);
+			}
 		}
-	}
-	if (self.health > maxh)
-	{
-		if (time > self.pauserothealth_finished)
+		if (self.armorvalue > limita)
+			self.armorvalue = limita;
+
+		if (self.health > maxh)
 		{
-			self.health = max(maxh, self.health + (maxh - self.health) * rot_mod*cvar("g_balance_health_rot") * frametime);
-			self.health = max(maxh, self.health - rot_mod*cvar("g_balance_health_rotlinear") * frametime);
+			if (time > self.pauserothealth_finished)
+			{
+				self.health = max(maxh, self.health + (maxh - self.health) * rot_mod*cvar("g_balance_health_rot") * frametime);
+				self.health = max(maxh, self.health - rot_mod*cvar("g_balance_health_rotlinear") * frametime);
+			}
 		}
-	}
-	else if (self.health < maxh)
-	{
-		if (time > self.pauseregen_finished)
+		else if (self.health < maxh)
 		{
-			self.health = CalcRegen(self.health, maxh, regen_mod * cvar("g_balance_health_regen"));
-			self.health = min(maxh, self.health + regen_mod*cvar("g_balance_health_regenlinear") * frametime);
+			if (time > self.pauseregen_finished)
+			{
+				self.health = CalcRegen(self.health, maxh, regen_mod * cvar("g_balance_health_regen"));
+				self.health = min(maxh, self.health + regen_mod*cvar("g_balance_health_regenlinear") * frametime);
+			}
 		}
+		if (self.health > limith)
+			self.health = limith;
+
+		// if player rotted to death...  die!
+		if(self.health < 1)
+			self.event_damage(self, self, 1, DEATH_ROT, self.origin, '0 0 0');
 	}
+
 	if (self.ammo_fuel > maxf)
 	{
 		if (time > self.pauserotfuel_finished)
@@ -1834,17 +1844,8 @@ void player_regen (void)
 			}
 		}
 	}
-
-	if (self.health > limith)
-		self.health = limith;
-	if (self.armorvalue > limita)
-		self.armorvalue = limita;
 	if (self.ammo_fuel > limitf)
 		self.ammo_fuel = limitf;
-
-	// if player rotted to death...  die!
-	if(self.health < 1)
-		self.event_damage(self, self, 1, DEATH_ROT, self.origin, '0 0 0');
 }
 
 float zoomstate_set;
