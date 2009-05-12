@@ -7,6 +7,7 @@ COMPAT_FILES="
 	sound/misc/itemrespawncountdown.ogg
 	sound/misc/armor25.wav
 	sound/misc/poweroff.wav
+	scripts/onslaught.shader
 	models/sprites/item-extralife_frame0.tga
 	models/sprites/item-extralife_frame1.tga
 	models/sprites/item-fuelregen_frame0.tga
