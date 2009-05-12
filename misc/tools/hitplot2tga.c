@@ -1,9 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <err.h>
 #include <string.h>
 #include <math.h>
+#include <stdarg.h>
+#include <errno.h>
+
+void err(int ex, const char *fmt, ...)
+{
+	va_list list;
+	int e = errno;
+	va_start(list, fmt);
+	vfprintf(stderr, fmt, list);
+	fputs(": ", stderr);
+	fputs(strerror(e), stderr);
+	fputs("\n", stderr);
+	exit(ex);
+}
 
 typedef void (*colorfunc_t) (double x, double y, double dx, double dy, double *r, double *g, double *b);
 
