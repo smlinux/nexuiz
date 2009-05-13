@@ -27,7 +27,11 @@ COMPAT_FILES="
 rm -rf pack
 mkdir pack
 for F in $COMPAT_FILES; do
-	mkdir -p pack/${F%/*}
+	case "$F" in
+		*/*)
+			mkdir -p pack/${F%/*}
+			;;
+	esac
 	cp "$F" pack/"$F"
 done
 
