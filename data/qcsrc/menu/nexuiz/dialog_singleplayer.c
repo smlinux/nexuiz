@@ -40,7 +40,7 @@ void InstantAction_LoadMap(entity btn, entity dummy)
 		else if(argv(0) == "changelevel")
 		{
 			fclose(fh);
-			localcmd("\ndisconnect\nwait\ng_campaign 0\nmaxplayers $menu_maxplayers\n");
+			localcmd("\nmenu_loadmap_prepare\n");
 			MapInfo_SwitchGameType(MAPINFO_TYPE_DEATHMATCH);
 			MapInfo_LoadMap(argv(1));
 			cvar_set("lastlevel", "1");
