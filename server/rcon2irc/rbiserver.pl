@@ -80,6 +80,18 @@ sub markmap($$$$;$)
 	out irc => 0, "PRIVMSG $config{irc_channel} :\001ACTION thinks $nick is $status\001";
 	return 0;
 } ],
+[ dp => q{pure: \*DETAIL_MISMATCH (.*) (\S+)$} => sub {
+	my ($nick, $file) = @_;
+	$nick = color_dp2irc $nick;
+	out irc => 0, "PRIVMSG $config{irc_channel} :\001ACTION thinks $nick has a modified $file\001";
+	return 0;
+} ],
+[ dp => q{pure: \*DETAIL_TIMEOUT (.*)} => sub {
+	my ($nick) = @_;
+	$nick = color_dp2irc $nick;
+	out irc => 0, "PRIVMSG $config{irc_channel} :\001ACTION thinks $nick refuses to tell us which file is modified\001";
+	return 0;
+} ],
 [ dp => q{:recordset:(\d+):.*} => sub {
 	my ($id) = @_;
 	my $ip = $store{"playerip_byid_$id"};
@@ -89,7 +101,7 @@ sub markmap($$$$;$)
 	my $map = $store{map};
 	$map =~ s/^[a-z]*_//;
 	$ip =~ s/\./-/g;
-	my $pattern = "/nexuiz/data/home-$name/data/sv_autodemos/????-??-??_??-??_${map}_${slot}_${ip}-*.dem";
+	my $pattern = "/home/nexuiz/home-$name/data/sv_autodemos/????-??-??_??-??_${map}_${slot}_${ip}-*.dem";
 	if(my @result = glob $pattern)
 	{
 		for(@result)
@@ -114,7 +126,7 @@ sub markmap($$$$;$)
 [ dp => q{:end} => sub {
 	my $name = $config{irc_nick};
 	$name =~ s/Nex//; # haggerNexCTF -> haggerCTF
-	my $pattern = "/nexuiz/data/home-$name/data/sv_autodemos/*.dem";
+	my $pattern = "/home/nexuiz/data/home-$name/data/sv_autodemos/*.dem";
 	print "Checking $pattern...\n";
 	for(glob $pattern)
 	{
