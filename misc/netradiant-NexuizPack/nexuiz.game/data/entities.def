@@ -56,6 +56,7 @@ debristime: time till the debris fades (average)
 debristimejitter: time till the debris fades (random part)
 debrisfadetime: how long debris takes to fade
 debrisdamageforcescale: how much debris is affected by damage force (e.g. explosions)
+debrisskin: skin number of debris
 */
 
 /*QUAKED func_assault_wall (.5 0 .5) ?
@@ -1435,6 +1436,7 @@ debristime: time till the debris fades (average)
 debristimejitter: time till the debris fades (random part)
 debrisfadetime: how long debris takes to fade
 debrisdamageforcescale: how much debris is affected by damage force (e.g. explosions)
+debrisskin: skin number of debris
 -------- SPAWNFLAGS --------
 DISABLED: do not allow damaging this until it is first activated
 INDICATE: indicate amount of damage already taken by coloring
