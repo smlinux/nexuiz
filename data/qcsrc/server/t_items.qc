@@ -141,6 +141,20 @@ float Item_GiveTo(entity item, entity player)
 
 	if (g_minstagib)
 	{
+		if (item.ammo_fuel)
+		if (player.ammo_fuel < g_pickup_fuel_max)
+		{
+			pickedup = TRUE;
+			player.ammo_fuel = min(player.ammo_fuel + item.ammo_fuel, g_pickup_fuel_max);
+			player.pauserotfuel_finished = max(player.pauserotfuel_finished, time + cvar("g_balance_pause_fuel_rot"));
+		}
+		if((it = (item.items - (item.items & player.items)) & IT_PICKUPMASK))
+		{
+			pickedup = TRUE;
+			player.items |= it;
+			sprint (player, strcat("You got the ^2", item.netname, "\n"));
+		}
+
 		_switchweapon = TRUE;
 		if (item.ammo_cells)
 		{
@@ -189,6 +203,15 @@ float Item_GiveTo(entity item, entity player)
 			// play2(player, "announce/robotic/speed.wav");
 			player.invincible_finished = max(player.invincible_finished, time) + cvar("g_balance_powerup_strength_time");
 		}
+
+		if (item.ammo_fuel)
+		if (player.ammo_fuel < g_pickup_fuel_max)
+		{
+			pickedup = TRUE;
+			player.ammo_fuel = min(player.ammo_fuel + item.ammo_fuel, g_pickup_fuel_max);
+			player.pauserotfuel_finished = max(player.pauserotfuel_finished, time + cvar("g_balance_pause_fuel_rot"));
+		}
+
 	}
 	else
 	{
@@ -266,6 +289,7 @@ float Item_GiveTo(entity item, entity player)
 		{
 			pickedup = TRUE;
 			player.items |= it;
+			sprint (player, strcat("You got the ^2", item.netname, "\n"));
 		}
 
 		if (item.strength_finished)
@@ -1371,14 +1395,24 @@ void spawnfunc_item_fuel(void)
 
 void spawnfunc_item_fuel_regen(void)
 {
+	if(start_items & IT_FUEL_REGEN)
+	{
+		spawnfunc_item_fuel();
+		return;
+	}
 	StartItem ("models/items/g_fuelregen.md3", "misc/itempickup.wav", g_pickup_respawntime_powerup, g_pickup_respawntimejitter_powerup, "Fuel regenerator", IT_FUEL_REGEN, 0, FL_POWERUP, commodity_pickupevalfunc, BOT_PICKUP_RATING_LOW);
 }
 
 void spawnfunc_item_jetpack(void)
 {
 	if(g_grappling_hook)
-		return; // sorry, but these two can't coexist (same button)
+		return; // sorry, but these two can't coexist (same button); spawn fuel instead
 	if(!self.ammo_fuel)
 		self.ammo_fuel = g_pickup_fuel_jetpack;
+	if(start_items & IT_JETPACK)
+	{
+		spawnfunc_item_fuel();
+		return;
+	}
 	StartItem ("models/items/g_jetpack.md3", "misc/itempickup.wav", g_pickup_respawntime_powerup, g_pickup_respawntimejitter_powerup, "Jet pack", IT_JETPACK, 0, FL_POWERUP, commodity_pickupevalfunc, BOT_PICKUP_RATING_LOW);
 }
