@@ -362,6 +362,13 @@ string CheckPlayerModel(string plyermodel) {
 		if(substring(plyermodel,strlen(plyermodel)-4,4) != ".md3")
 		if(substring(plyermodel,strlen(plyermodel)-4,4) != ".psk")
 			return FallbackPlayerModel;
+#ifdef ALLOW_VARIABLE_LOD
+		// forbid the LOD models
+		if(substring(plyermodel, strlen(plyermodel)-6,2) == "_1")
+			return FallbackPlayerModel;
+		if(substring(plyermodel, strlen(plyermodel)-6,2) == "_2")
+			return FallbackPlayerModel;
+#endif
 		if(plyermodel != strtolower(plyermodel))
 			return FallbackPlayerModel;
 		if(!fexists(plyermodel))
