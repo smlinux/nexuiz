@@ -138,7 +138,7 @@ void Draw_WaypointSprite()
 		
 		//d = o - '0.5 0 0' * vid_conwidth - '0 0.5 0' * vid_conheight;
 
-		if(cvar("v_flipped"))
+		if(!cvar("v_flipped"))
 			d_x = -d_x;
 
 		f1 = d_x / vid_conwidth;
