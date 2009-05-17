@@ -665,6 +665,7 @@ void UpdateSelectedPlayer()
 		self.last_selected_player = self.selected_player;
 }
 
+.float muted; // to be used by prvm_edictset server playernumber muted 1
 void Say(entity source, float teamsay, entity privatesay, string msgin, float floodcontrol)
 {
 	string msgstr, colorstr, cmsgstr, namestr, fullmsgstr, sourcemsgstr, fullcmsgstr, sourcecmsgstr, privatemsgprefix;
@@ -833,12 +834,23 @@ void Say(entity source, float teamsay, entity privatesay, string msgin, float fl
 	if(privatesay)
 		sourcemsgstr = strcat(privatemsgprefix, substring(sourcemsgstr, privatemsgprefixlen, -1));
 
-	if(flood == 1)
+	if(source.muted)
+	{
+		// always fake the message
+		sprint(source, sourcemsgstr);
+		if(cmsgstr != "" && !privatesay)
+			centerprint(source, sourcecmsgstr);
+	}
+	else if(flood == 1)
 	{
 		if(cvar("g_chat_flood_notify_flooder"))
 			sprint(source, strcat("^3FLOOD CONTROL: ^7wait ^1", ftos(source.flood_field - time), "^3 seconds\n"));
 		else
+		{
 			sprint(source, sourcemsgstr);
+			if(cmsgstr != "" && !privatesay)
+				centerprint(source, sourcecmsgstr);
+		}
 	}
 	else if(privatesay)
 	{
