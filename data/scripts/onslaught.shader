@@ -46,3 +46,44 @@ ons_gen_spark
 
  }
 }
+ons_fire
+{
+ {
+	map textures/ons_boom1.tga
+	tcMod scroll 0.05 0.1
+	tcMod rotate 0.01
+	blendfunc add
+
+ }
+}
+ons_smoke
+{
+	deformVertexes wave sin 1 3 2 0.2
+ {
+	map textures/ons_smoke1.tga
+	tcMod scroll 0.01 0.04
+	tcMod rotate 0.01
+	alphaFunc GE128
+
+ }
+}
+ons_shockwave
+{
+	cull none
+ {
+	map textures/ons_shockwave1.tga
+	tcMod scroll 0.2 0
+	blendfunc add
+
+ }
+}
+ons_shockwave2
+{
+ {
+	map textures/ons_shockwave2.tga
+	tcMod rotate 85
+	tcMod scroll 0.03 0.6
+	tcGen environment
+	blendfunc add
+ }
+}
