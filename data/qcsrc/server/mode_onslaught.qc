@@ -380,23 +380,165 @@ void onslaught_generator_think()
 	}
 };
 
+void onslaught_generator_ring_think()
+{
+	self.nextthink = time;
+	if(self.count>20)
+	{
+		self.think = SUB_Remove;
+		return;
+	}
+
+	self.scale = self.count * 4;
+	setsize(self, self.mins * self.scale, self.maxs * self.scale);
+
+	self.frame = self.count * 4;
+
+	self.count +=1;
+	self.alpha = 0.3;
+};
+
+void onslaught_generator_ring_spawn(vector org)
+{
+	entity e;
+	e = spawn();
+	setmodel(e, "models/onslaught/shockwavetransring.md3");
+	setorigin(e,org);
+
+	e.count = 1;
+	e.alpha = 0;
+
+	e.think = onslaught_generator_ring_think;
+	e.nextthink = time;
+};
+
+void onslaught_generator_shockwave_think()
+{
+	self.nextthink = time;
+	if(self.count>20)
+	{
+		self.think = SUB_Remove;
+		return;
+	}
+
+	if(self.count>10)
+		self.alpha -= 0.1;
+	else
+		self.alpha = 1;
+
+	self.scale = self.count * 4;
+	setsize(self, self.mins * self.scale, self.maxs * self.scale);
+	self.frame = self.count * 4;
+
+	self.count +=1;
+};
+
+void onslaught_generator_shockwave_spawn(vector org)
+{
+	entity e;
+	e = spawn();
+	setmodel(e, "models/onslaught/shockwave.md3");
+	setorigin(e,org);
+
+	e.alpha = 0;
+	e.frame = 0;
+
+	e.think = onslaught_generator_shockwave_think;
+	e.nextthink = time;
+};
+
+void onslaught_generator_boom_think()
+{
+	self.nextthink = time;
+	if(self.frame==15)
+	{
+		self.think = SUB_Remove;
+		return;
+	}
+
+	if(self.frame>11)
+		self.alpha -= 0.3;
+
+	self.frame +=1;
+};
+
+void onslaught_generator_boom_spawn(vector org, float fscale)
+{
+	entity e;
+	e = spawn();
+	setmodel(e, "models/onslaught/boom.md3");
+	setorigin(e,org);
+
+	self.scale = fscale;
+	setsize(self, self.mins * self.scale, self.maxs * self.scale);
+
+	e.effects = EF_NOSHADOW;
+
+	e.think = onslaught_generator_boom_think;
+	e.nextthink = time;
+};
+
 void onslaught_generator_deaththink()
 {
 	local vector org;
-	if (self.count > 0)
+	local float i, scale;
+
+	if not (self.count)
+		self.count = 40;
+
+	// White shockwave
+	if(self.count==40||self.count==20)
 	{
-		self.nextthink = time + 0.1;
-		self.count = self.count - 1;
-		org = randompos(self.origin + self.mins + '8 8 8', self.origin + self.maxs + '-8 -8 -8');
-		pointparticles(particleeffectnum("onslaught_generator_smallexplosion"), org, '0 0 0', 1);
+		onslaught_generator_ring_spawn(self.origin);
+		sound(self, CHAN_TRIGGER, "onslaught/shockwave.wav", VOL_BASE, ATTN_NORM);
+	}
+
+	// Throw some gibs
+	if(random()<0.2)
+	{
+		i = random();
+		if(i<0.3)
+			ons_trowgib(self.origin, (100 * randomvec() - '1 1 1') * 25,'1 1 1',"models/onslaught/gen_gib1.md3",20,1,0);
+		else if(i>0.7)
+			ons_trowgib(self.origin, (100 * randomvec() - '1 1 1') * 25,'1 1 1',"models/onslaught/gen_gib2.md3",20,1,0);
+		else
+			ons_trowgib(self.origin, (100 * randomvec() - '1 1 1') * 25,'1 1 1',"models/onslaught/gen_gib3.md3",20,1,0);
+	}
+
+	// Spawn fire balls
+	for(i=0;i<6;++i)
+	{
+		org = self.origin + self.mins;
+		org_z = self.origin_z - 20;
+		org = randompos(org, self.origin + self.maxs + '0 0 20');
+
+		onslaught_generator_boom_spawn(org, 1);
+	}
+
+	// Short explosion sound + small explosion
+	if(random()<0.25)
+	{
+		te_explosion(self.origin);
 		sound(self, CHAN_TRIGGER, "weapons/grenade_impact.wav", VOL_BASE, ATTN_NORM);
 	}
-	else
+
+	// Particles
+	org = randompos(self.origin + self.mins + '8 8 8', self.origin + self.maxs + '-8 -8 -8');
+	pointparticles(particleeffectnum("onslaught_generator_smallexplosion"), org, '0 0 0', 1);
+
+	// Final explosion
+	if(self.count==1)
 	{
 		org = self.origin;
+		te_explosion(org);
+		onslaught_generator_shockwave_spawn(org);
 		pointparticles(particleeffectnum("onslaught_generator_finalexplosion"), org, '0 0 0', 1);
 		sound(self, CHAN_TRIGGER, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
 	}
+	else
+		self.nextthink = time;
+
+	self.count = self.count - 1;
 };
 
 void onslaught_generator_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
@@ -451,7 +593,7 @@ void onslaught_generator_damage(entity inflictor, entity attacker, float damage,
 		self.isshielded = FALSE;
 		self.takedamage = DAMAGE_NO; // can't be hurt anymore
 		self.event_damage = SUB_Null; // won't do anything if hurt
-		self.count = 30; // 30 explosions
+		self.count = 0;	// reset counter
 		self.think = onslaught_generator_deaththink; // explosion sequence
 		self.nextthink = time; // start exploding immediately
 		self.think(); // do the first explosion now
@@ -665,10 +807,17 @@ void spawnfunc_onslaught_generator()
 	precache_model("models/onslaught/generator_dmg8.md3");
 	precache_model("models/onslaught/generator_dmg9.md3");
 	precache_model("models/onslaught/generator_dead.md3");
+	precache_model("models/onslaught/boom.md3");
+	precache_model("models/onslaught/shockwave.md3");
+	precache_model("models/onslaught/shockwavetransring.md3");
+	precache_model("models/onslaught/gen_gib1.md3");
+	precache_model("models/onslaught/gen_gib2.md3");
+	precache_model("models/onslaught/gen_gib3.md3");
 	precache_sound("onslaught/generator_decay.wav");
 	precache_sound("weapons/grenade_impact.wav");
 	precache_sound("weapons/rocket_impact.wav");
 	precache_sound("onslaught/generator_underattack.wav");
+	precache_sound("onslaught/shockwave.wav");
 	if (!self.team)
 		objerror("team must be set");
 	self.team_saved = self.team;
@@ -937,7 +1086,7 @@ void onslaught_controlpoint_reset()
 	self.enemy.colormap = self.colormap;
 	self.think = self.enemy.think = SUB_Null;
 	self.nextthink = 0; // don't like SUB_Null :P
-	
+
 	onslaught_updatelinks();
 
 	activator = self;
