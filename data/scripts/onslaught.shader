@@ -87,3 +87,13 @@ ons_shockwave2
 	blendfunc add
  }
 }
+
+ons_ray
+{
+cull none
+ {
+	map textures/ons_ray.tga
+	tcMod rotate 85
+	blendfunc add
+ }
+}
