@@ -416,6 +416,15 @@ void ImpulseCommands (void)
 						traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 65536, FALSE, self);
 						sprint(self, strcat("distance: ", ftos(fabs(vlen(trace_endpos - (self.origin + self.view_ofs)))), "\n"));
 						break;
+					case 146:
+						makevectors(self.v_angle);
+						i = self.dphitcontentsmask;
+						self.dphitcontentsmask = DPCONTENTS_OPAQUE;
+						traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 65536, FALSE, self);
+						self.dphitcontentsmask = i;
+						sprint(self, strcat("distance: ", ftos(fabs(vlen(trace_endpos - (self.origin + self.view_ofs)))), "\n"));
+						pointparticles(particleeffectnum("fire_big"), trace_endpos, '0 0 0', 10);
+						break;
 					case 148:
 						FOR_EACH_PLAYER(e)
 						{
