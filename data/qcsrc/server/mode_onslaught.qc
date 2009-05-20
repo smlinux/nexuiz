@@ -469,8 +469,8 @@ void onslaught_generator_boom_spawn(vector org, float fscale)
 	setmodel(e, "models/onslaught/boom.md3");
 	setorigin(e,org);
 
-	self.scale = fscale;
-	setsize(self, self.mins * self.scale, self.maxs * self.scale);
+	e.scale = fscale;
+	setsize(e, e.mins * e.scale, e.maxs * e.scale);
 
 	e.effects = EF_NOSHADOW;
 
