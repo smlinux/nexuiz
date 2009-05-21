@@ -14914,20 +14914,20 @@
 // entity 340
 {
 "classname" "dom_controlpoint"
-"origin" "64 256 -48"
+"origin" "-16.000000 -304.000000 -48.000000"
 "message" " has captured the lava room"
 }
 // entity 341
 {
 "classname" "dom_controlpoint"
-"origin" "832 1160 144"
+"origin" "832.000000 1128.000000 144.000000"
 "message" " has captured the machinegun room"
 }
 // entity 342
 {
 "classname" "dom_controlpoint"
-"origin" "-288 560 304"
-"message" " has captured the nexgun balcony"
+"origin" "320.000000 512.000000 400.000000"
+"message" " has captured the catwalk"
 }
 // entity 343
 {

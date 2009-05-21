@@ -6963,6 +6963,7 @@ evil4_metals/defaultmetal
 {
 "classname" "dom_team"
 "model" "models/domination/dom_unclaimed.md3"
+"origin" "0.000000 0.000000 64.000000"
 }
 // entity 88
 {
@@ -6973,6 +6974,7 @@ evil4_metals/defaultmetal
 "netname" "^4Blue Team^3"
 "noise" "domination/claim.wav"
 "noise1" "domination/claim.wav"
+"origin" "0.000000 0.000000 32.000000"
 }
 // entity 89
 {
@@ -6987,36 +6989,23 @@ evil4_metals/defaultmetal
 // entity 90
 {
 "classname" "dom_controlpoint"
-"message" "^3 has captured the ^1Nex"
-"origin" "-560.000000 400.000000 288.000000"
-}
-// entity 91
-{
-"classname" "dom_controlpoint"
 "angle" "90"
 "message" "^3 has captured the ^1Electro"
 "origin" "-65.000000 1350.000000 112.000000"
 }
-// entity 92
+// entity 91
 {
 "classname" "dom_controlpoint"
 "message" "^3 has captured the ^1Viewpoint"
 "origin" "1170.000000 230.000000 430.000000"
 }
-// entity 93
-{
-"classname" "dom_controlpoint"
-"angle" "45"
-"message" "^3 has captured a ^1Skyway"
-"origin" "620.000000 400.000000 984.000000"
-}
-// entity 94
+// entity 92
 {
 "classname" "dom_controlpoint"
 "message" "^3 has captured a ^1Skyway"
 "origin" "190.000000 70.000000 792.000000"
 }
-// entity 95
+// entity 93
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -7047,7 +7036,7 @@ evil4_metals/defaultmetal
 }
 }
 }
-// entity 96
+// entity 94
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -7065,7 +7054,7 @@ evil4_metals/defaultmetal
 }
 }
 }
-// entity 97
+// entity 95
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -7096,28 +7085,28 @@ evil4_techfloors/tflooroddtile
 }
 }
 }
-// entity 98
+// entity 96
 {
 "classname" "light"
 "_fade" "1.0"
 "_light" "255 255 255 100"
 "origin" "1382 261 364"
 }
-// entity 99
+// entity 97
 {
 "classname" "light"
 "_fade" "1.0"
 "_light" "255 255 255 100"
 "origin" "1398 54 364"
 }
-// entity 100
+// entity 98
 {
 "classname" "light"
 "_fade" "1.0"
 "_light" "255 255 255 100"
 "origin" "1398 -174 364"
 }
-// entity 101
+// entity 99
 {
 "classname" "light_spot"
 "_cone" "45"
@@ -7128,7 +7117,7 @@ evil4_techfloors/tflooroddtile
 "origin" "1382 261 359"
 "pitch" "-90"
 }
-// entity 102
+// entity 100
 {
 "classname" "light_spot"
 "_cone" "45"
@@ -7139,7 +7128,7 @@ evil4_techfloors/tflooroddtile
 "origin" "1398 54 359"
 "pitch" "-90"
 }
-// entity 103
+// entity 101
 {
 "classname" "light_spot"
 "_cone" "45"
@@ -7150,21 +7139,21 @@ evil4_techfloors/tflooroddtile
 "origin" "1398 -174 359"
 "pitch" "-90"
 }
-// entity 104
+// entity 102
 {
 "classname" "light"
 "_fade" "1.0"
 "_light" "255 255 128 50"
 "origin" "-365 1146 255"
 }
-// entity 105
+// entity 103
 {
 "classname" "light"
 "_fade" "1.0"
 "_light" "255 255 128 50"
 "origin" "170 1138 255"
 }
-// entity 106
+// entity 104
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -7195,7 +7184,7 @@ evil4_techfloors/tflooroddtile
 }
 }
 }
-// entity 107
+// entity 105
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -7226,7 +7215,7 @@ evil4_d_techwalls/d_tech_dw2
 }
 }
 }
-// entity 108
+// entity 106
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -7244,7 +7233,7 @@ evil4_techfloors/tfloor4
 }
 }
 }
-// entity 109
+// entity 107
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -7262,7 +7251,7 @@ evil4_d_techwalls/d_tech_drkwall
 }
 }
 }
-// entity 110
+// entity 108
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -7280,7 +7269,7 @@ evil4_techtrims/drttrimmulti
 }
 }
 }
-// entity 111
+// entity 109
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -7298,7 +7287,7 @@ evil4_techtrims/drttrimmulti
 }
 }
 }
-// entity 112
+// entity 110
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -7316,7 +7305,7 @@ evil4_d_techwalls/d_tech_drkwall_seam2
 }
 }
 }
-// entity 113
+// entity 111
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -7334,7 +7323,7 @@ evil4_d_techwalls/d_tech_drkwall_seam2
 }
 }
 }
-// entity 114
+// entity 112
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -7352,7 +7341,7 @@ evil4_d_techwalls/d_tech_wall2_huge
 }
 }
 }
-// entity 115
+// entity 113
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -7370,7 +7359,7 @@ evil4_d_techwalls/d_tech_wall2_huge
 }
 }
 }
-// entity 116
+// entity 114
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -7388,7 +7377,7 @@ evil4_techtrims/dwtrim_bevel
 }
 }
 }
-// entity 117
+// entity 115
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -7406,7 +7395,7 @@ evil4_techtrims/dwtrim_bevel
 }
 }
 }
-// entity 118
+// entity 116
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -7424,7 +7413,7 @@ evil4_d_techwalls/d_tech_drkwall2
 }
 }
 }
-// entity 119
+// entity 117
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -7442,49 +7431,49 @@ evil4_d_techwalls/d_tech_drkwall
 }
 }
 }
-// entity 120
+// entity 118
 {
 "classname" "misc_model"
 "model" "models/mapobjects/asedoor.ase"
 "origin" "64 712 664"
 "spawnflags" "6"
 }
-// entity 121
+// entity 119
 {
 "classname" "misc_model"
 "model" "models/mapobjects/asejp.ase"
 "origin" "568 296 252"
 "spawnflags" "6"
 }
-// entity 122
+// entity 120
 {
 "classname" "misc_model"
 "model" "models/mapobjects/asejp.ase"
 "origin" "568 -120 252"
 "spawnflags" "6"
 }
-// entity 123
+// entity 121
 {
 "classname" "misc_model"
 "model" "models/mapobjects/asetrim.ase"
 "origin" "824 448 672"
 "spawnflags" "6"
 }
-// entity 124
+// entity 122
 {
 "classname" "misc_model"
 "model" "models/mapobjects/asesupport.ase"
 "origin" "712 152 248"
 "spawnflags" "6"
 }
-// entity 125
+// entity 123
 {
 "classname" "misc_model"
 "model" "models/mapobjects/asesupport.ase"
 "origin" "512 152 248"
 "spawnflags" "6"
 }
-// entity 126
+// entity 124
 {
 "classname" "misc_model"
 "angle" "180"
@@ -7492,28 +7481,28 @@ evil4_d_techwalls/d_tech_drkwall
 "origin" "448 -144 664"
 "spawnflags" "6"
 }
-// entity 127
+// entity 125
 {
 "classname" "misc_model"
 "model" "models/mapobjects/asejp.ase"
 "origin" "-152 552 516"
 "spawnflags" "6"
 }
-// entity 128
+// entity 126
 {
 "classname" "misc_model"
 "angle" "180"
 "model" "models/mapobjects/asedoor.ase"
 "origin" "768 -144 912"
 }
-// entity 129
+// entity 127
 {
 "classname" "misc_model"
 "angle" "360"
 "model" "models/mapobjects/asedoor.ase"
 "origin" "560 944 912"
 }
-// entity 130
+// entity 128
 {
 "classname" "misc_model"
 "angle" "90"
@@ -7521,7 +7510,7 @@ evil4_d_techwalls/d_tech_drkwall
 "origin" "-632 648 912"
 "spawnflags" "6"
 }
-// entity 131
+// entity 129
 {
 "classname" "misc_model"
 "angle" "180"
@@ -7529,42 +7518,42 @@ evil4_d_techwalls/d_tech_drkwall
 "origin" "-320 -376 912"
 "spawnflags" "6"
 }
-// entity 132
+// entity 130
 {
 "classname" "misc_model"
 "angle" "90"
 "model" "models/mapobjects/asedoor.ase"
 "origin" "-632 -320 1104"
 }
-// entity 133
+// entity 131
 {
 "classname" "misc_model"
 "angle" "360"
 "model" "models/mapobjects/asedoor.ase"
 "origin" "704 944 1104"
 }
-// entity 134
+// entity 132
 {
 "classname" "misc_model"
 "model" "models/mapobjects/asedoor2.ase"
 "origin" "-144 848 232"
 "spawnflags" "6"
 }
-// entity 135
+// entity 133
 {
 "classname" "misc_model"
 "model" "models/mapobjects/asedoor3.ase"
 "origin" "-320 976 328"
 "spawnflags" "6"
 }
-// entity 136
+// entity 134
 {
 "classname" "misc_model"
 "angle" "270"
 "model" "models/mapobjects/asedoor.ase"
 "origin" "920 640 912"
 }
-// entity 137
+// entity 135
 {
 "classname" "misc_model"
 "angle" "270"
@@ -7572,720 +7561,720 @@ evil4_d_techwalls/d_tech_drkwall
 "origin" "944 764 240"
 "spawnflags" "6"
 }
-// entity 138
+// entity 136
 {
 "classname" "misc_model"
 "model" "models/mapobjects/aseceiling.ase"
 "origin" "1192 56 392"
 "spawnflags" "6"
 }
-// entity 139
+// entity 137
 {
 "classname" "light"
 "light" "50"
 "origin" "-536 648 168"
 }
-// entity 140
+// entity 138
 {
 "classname" "light"
 "light" "20"
 "origin" "248 1096 168"
 }
-// entity 141
+// entity 139
 {
 "classname" "light"
 "light" "20"
 "origin" "-360 48 16"
 }
-// entity 142
+// entity 140
 {
 "classname" "light"
 "light" "20"
 "origin" "648 488 16"
 }
-// entity 143
+// entity 141
 {
 "classname" "light"
 "light" "20"
 "origin" "544 712 168"
 }
-// entity 144
+// entity 142
 {
 "classname" "light"
 "light" "20"
 "origin" "624 1160 528"
 }
-// entity 145
+// entity 143
 {
 "classname" "light"
 "light" "20"
 "origin" "1160 376 528"
 }
-// entity 146
+// entity 144
 {
 "classname" "light"
 "light" "50"
 "origin" "-792 40 560"
 }
-// entity 147
+// entity 145
 {
 "classname" "light"
 "light" "50"
 "origin" "-480 -256 168"
 }
-// entity 148
+// entity 146
 {
 "classname" "light"
 "light" "20"
 "origin" "584 16 168"
 }
-// entity 149
+// entity 147
 {
 "classname" "light"
 "light" "20"
 "origin" "-16 200 176"
 }
-// entity 150
+// entity 148
 {
 "classname" "light"
 "light" "20"
 "origin" "208 600 176"
 }
-// entity 151
+// entity 149
 {
 "classname" "light"
 "light" "20"
 "origin" "376 968 176"
 }
-// entity 152
+// entity 150
 {
 "classname" "light"
 "light" "20"
 "origin" "608 -56 168"
 }
-// entity 153
+// entity 151
 {
 "classname" "light_environment"
 "origin" "608 -56 160"
 }
-// entity 154
+// entity 152
 {
 "classname" "misc_model"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-432 1144 256"
 }
-// entity 155
+// entity 153
 {
 "classname" "misc_model"
 "angle" "180"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "256 1144 256"
 }
-// entity 156
+// entity 154
 {
 "classname" "light"
 "light" "20"
 "origin" "152 304 96"
 }
-// entity 157
+// entity 155
 {
 "classname" "light"
 "light" "100"
 "origin" "-312 -32 840"
 }
-// entity 158
+// entity 156
 {
 "classname" "light"
 "light" "100"
 "origin" "-528 200 840"
 }
-// entity 159
+// entity 157
 {
 "classname" "light"
 "light" "100"
 "origin" "392 192 880"
 }
-// entity 160
+// entity 158
 {
 "classname" "light"
 "light" "100"
 "origin" "176 424 880"
 }
-// entity 161
+// entity 159
 {
 "classname" "light"
 "light" "100"
 "origin" "768 648 880"
 }
-// entity 162
+// entity 160
 {
 "classname" "light"
 "light" "100"
 "origin" "688 136 896"
 }
-// entity 163
+// entity 161
 {
 "classname" "light"
 "light" "100"
 "origin" "-296 -32 576"
 }
-// entity 164
+// entity 162
 {
 "classname" "light"
 "light" "100"
 "origin" "-512 200 576"
 }
-// entity 165
+// entity 163
 {
 "classname" "light"
 "light" "100"
 "origin" "408 192 616"
 }
-// entity 166
+// entity 164
 {
 "classname" "light"
 "light" "100"
 "origin" "192 424 616"
 }
-// entity 167
+// entity 165
 {
 "classname" "light"
 "light" "100"
 "origin" "784 648 616"
 }
-// entity 168
+// entity 166
 {
 "classname" "light"
 "light" "100"
 "origin" "704 136 632"
 }
-// entity 169
+// entity 167
 {
 "classname" "light"
 "light" "100"
 "origin" "-280 -32 296"
 }
-// entity 170
+// entity 168
 {
 "classname" "light"
 "light" "100"
 "origin" "-496 200 296"
 }
-// entity 171
+// entity 169
 {
 "classname" "light"
 "light" "100"
 "origin" "424 192 336"
 }
-// entity 172
+// entity 170
 {
 "classname" "light"
 "light" "200"
 "origin" "208 424 336"
 }
-// entity 173
+// entity 171
 {
 "classname" "light"
 "light" "100"
 "origin" "800 648 336"
 }
-// entity 174
+// entity 172
 {
 "classname" "light"
 "light" "100"
 "origin" "720 136 352"
 }
-// entity 175
+// entity 173
 {
 "classname" "misc_model"
 "model" "models/mapobjects/aseplats.ase"
 "origin" "160 320 968"
 "spawnflags" "6"
 }
-// entity 176
+// entity 174
 {
 "classname" "light"
 "light" "100"
 "origin" "560 872 856"
 }
-// entity 177
+// entity 175
 {
 "classname" "light"
 "light" "100"
 "origin" "704 856 1064"
 }
-// entity 178
+// entity 176
 {
 "classname" "light"
 "light" "100"
 "origin" "768 -80 880"
 }
-// entity 179
+// entity 177
 {
 "classname" "light"
 "light" "100"
 "origin" "-528 -320 1072"
 }
-// entity 180
+// entity 178
 {
 "classname" "misc_model"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-896 56 320"
 }
-// entity 181
+// entity 179
 {
 "classname" "misc_model"
 "angle" "180"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-736 56 320"
 }
-// entity 182
+// entity 180
 {
 "classname" "misc_model"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-896 216 320"
 }
-// entity 183
+// entity 181
 {
 "classname" "misc_model"
 "angle" "180"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-736 216 320"
 }
-// entity 184
+// entity 182
 {
 "classname" "misc_model"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-896 -96 320"
 }
-// entity 185
+// entity 183
 {
 "classname" "misc_model"
 "angle" "180"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-736 -96 320"
 }
-// entity 186
+// entity 184
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "25"
 "origin" "-760 216 320"
 }
-// entity 187
+// entity 185
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "25"
 "origin" "-872 216 320"
 }
-// entity 188
+// entity 186
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "25"
 "origin" "-760 56 320"
 }
-// entity 189
+// entity 187
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "25"
 "origin" "-872 56 320"
 }
-// entity 190
+// entity 188
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "25"
 "origin" "-760 -96 320"
 }
-// entity 191
+// entity 189
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "25"
 "origin" "-872 -96 320"
 }
-// entity 192
+// entity 190
 {
 "classname" "misc_model"
 "angle" "180"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-664 408 376"
 }
-// entity 193
+// entity 191
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "-688 408 376"
 }
-// entity 194
+// entity 192
 {
 "classname" "misc_model"
 "angle" "360"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-624 408 376"
 }
-// entity 195
+// entity 193
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "-600 408 376"
 }
-// entity 196
+// entity 194
 {
 "classname" "misc_model"
 "angle" "180"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-448 408 376"
 }
-// entity 197
+// entity 195
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "-472 408 376"
 }
-// entity 198
+// entity 196
 {
 "classname" "misc_model"
 "angle" "360"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-408 408 376"
 }
-// entity 199
+// entity 197
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "-384 408 376"
 }
-// entity 200
+// entity 198
 {
 "classname" "misc_model"
 "angle" "180"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-240 408 376"
 }
-// entity 201
+// entity 199
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "-264 408 376"
 }
-// entity 202
+// entity 200
 {
 "classname" "misc_model"
 "angle" "360"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-200 408 376"
 }
-// entity 203
+// entity 201
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "-176 408 376"
 }
-// entity 204
+// entity 202
 {
 "classname" "misc_model"
 "angle" "360"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-624 408 224"
 }
-// entity 205
+// entity 203
 {
 "classname" "misc_model"
 "angle" "180"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-448 408 224"
 }
-// entity 206
+// entity 204
 {
 "classname" "misc_model"
 "angle" "360"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-408 408 224"
 }
-// entity 207
+// entity 205
 {
 "classname" "misc_model"
 "angle" "180"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-240 408 224"
 }
-// entity 208
+// entity 206
 {
 "classname" "misc_model"
 "angle" "360"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-200 408 224"
 }
-// entity 209
+// entity 207
 {
 "classname" "light"
 "_color" "0.978622 1.000000 0.819196"
 "light" "50"
 "origin" "-536 408 336"
 }
-// entity 210
+// entity 208
 {
 "classname" "light"
 "_color" "0.978622 1.000000 0.819196"
 "light" "50"
 "origin" "-312 408 336"
 }
-// entity 211
+// entity 209
 {
 "classname" "light"
 "_color" "0.978622 1.000000 0.819196"
 "light" "50"
 "origin" "-752 408 336"
 }
-// entity 212
+// entity 210
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "-600 408 224"
 }
-// entity 213
+// entity 211
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "-472 408 224"
 }
-// entity 214
+// entity 212
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "-384 408 224"
 }
-// entity 215
+// entity 213
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "-264 408 224"
 }
-// entity 216
+// entity 214
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "-176 408 224"
 }
-// entity 217
+// entity 215
 {
 "classname" "light"
 "_color" "0.978622 1.000000 0.819196"
 "light" "50"
 "origin" "-536 408 184"
 }
-// entity 218
+// entity 216
 {
 "classname" "light"
 "_color" "0.978622 1.000000 0.819196"
 "light" "50"
 "origin" "-312 408 184"
 }
-// entity 219
+// entity 217
 {
 "classname" "misc_model"
 "angle" "180"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "512 160 232"
 }
-// entity 220
+// entity 218
 {
 "classname" "misc_model"
 "angle" "360"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "552 160 232"
 }
-// entity 221
+// entity 219
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "488 160 232"
 }
-// entity 222
+// entity 220
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "576 160 232"
 }
-// entity 223
+// entity 221
 {
 "classname" "light"
 "_color" "0.978622 1.000000 0.819196"
 "light" "50"
 "origin" "632 160 184"
 }
-// entity 224
+// entity 222
 {
 "classname" "misc_model"
 "angle" "180"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "712 160 232"
 }
-// entity 225
+// entity 223
 {
 "classname" "misc_model"
 "angle" "360"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "752 160 232"
 }
-// entity 226
+// entity 224
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "688 160 232"
 }
-// entity 227
+// entity 225
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "776 160 232"
 }
-// entity 228
+// entity 226
 {
 "classname" "light"
 "_color" "0.978622 1.000000 0.819196"
 "light" "50"
 "origin" "832 160 184"
 }
-// entity 229
+// entity 227
 {
 "classname" "misc_model"
 "angle" "90"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "212 -576 552"
 }
-// entity 230
+// entity 228
 {
 "classname" "light"
 "_color" "0.978622 1.000000 0.819196"
 "light" "50"
 "origin" "212 -552 552"
 }
-// entity 231
+// entity 229
 {
 "classname" "misc_model"
 "angle" "90"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-44 -576 552"
 }
-// entity 232
+// entity 230
 {
 "classname" "light"
 "_color" "0.978622 1.000000 0.819196"
 "light" "50"
 "origin" "-44 -552 552"
 }
-// entity 233
+// entity 231
 {
 "classname" "misc_model"
 "angle" "90"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-556 -576 552"
 }
-// entity 234
+// entity 232
 {
 "classname" "light"
 "_color" "0.978622 1.000000 0.819196"
 "light" "50"
 "origin" "-556 -552 552"
 }
-// entity 235
+// entity 233
 {
 "classname" "misc_model"
 "angle" "90"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-300 -576 552"
 }
-// entity 236
+// entity 234
 {
 "classname" "light"
 "_color" "0.978622 1.000000 0.819196"
 "light" "50"
 "origin" "-300 -552 552"
 }
-// entity 237
+// entity 235
 {
 "classname" "misc_model"
 "angle" "180"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "256 -304 200"
 }
-// entity 238
+// entity 236
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "232 -304 200"
 }
-// entity 239
+// entity 237
 {
 "classname" "misc_model"
 "angle" "90"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "128 -408 200"
 }
-// entity 240
+// entity 238
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "128 -384 200"
 }
-// entity 241
+// entity 239
 {
 "classname" "misc_model"
 "angle" "270"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "128 -192 200"
 }
-// entity 242
+// entity 240
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "128 -216 200"
 }
-// entity 243
+// entity 241
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "100"
 "origin" "128 -304 200"
 }
-// entity 244
+// entity 242
 {
 "classname" "misc_model"
 "angle" "360"
 "model" "models/mapobjects/el_wlight/el_wlight.md3"
 "origin" "-896 648 512"
 }
-// entity 245
+// entity 243
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"
 "light" "5"
 "origin" "-872 648 512"
 }
-// entity 246
+// entity 244
 {
 "classname" "light"
 "_color" "0.978616 1.000000 0.819195"

@@ -16328,6 +16328,7 @@ evil6_lights/e6v_light_s_nolight
 {
 "classname" "dom_team"
 "model" "models/domination/dom_unclaimed.md3"
+"origin" "0.000000 0.000000 56.000000"
 }
 // entity 69
 {
@@ -16338,6 +16339,7 @@ evil6_lights/e6v_light_s_nolight
 "netname" "^4Blue Team^3"
 "noise" "domination/claim.wav"
 "noise1" "domination/claim.wav"
+"origin" "0.000000 0.000000 88.000000"
 }
 // entity 70
 {
@@ -16348,24 +16350,17 @@ evil6_lights/e6v_light_s_nolight
 "netname" "^1Red Team^3"
 "noise" "domination/claim.wav"
 "noise1" "domination/claim.wav"
+"origin" "0.000000 0.000000 24.000000"
 }
 // entity 71
 {
 "classname" "dom_controlpoint"
 "frags" "1"
-"message" "^3 has captured ^1Main Area"
-"origin" "768.000000 -256.000000 240.000000"
+"message" "^3 has captured the ^1Mega Health"
+"origin" "784.000000 840.000000 304.000000"
 "wait" "5"
 }
 // entity 72
-{
-"classname" "dom_controlpoint"
-"frags" "1"
-"message" "^3 has captured the ^1Mega Health"
-"origin" "784.000000 816.000000 304.000000"
-"wait" "5"
-}
-// entity 73
 {
 "classname" "dom_controlpoint"
 "frags" "1"
@@ -16373,24 +16368,24 @@ evil6_lights/e6v_light_s_nolight
 "origin" "-1056.000000 -208.000000 208.000000"
 "wait" "5"
 }
-// entity 74
+// entity 73
 {
 "classname" "dom_controlpoint"
 "frags" "2"
 "message" "^3 has captured the ^1Nex-Tunnel"
 "origin" "256.000000 -176.000000 -376.000000"
-"scale" "1.3"
+"scale" "0.8"
 "wait" "5"
 }
-// entity 75
+// entity 74
 {
 "classname" "dom_controlpoint"
 "frags" "1"
-"message" "^3 has captured the ^1lower Floor"
-"origin" "352.000000 -656.000000 -224.000000"
+"message" "^3 has captured the ^1lower teleport Floor"
+"origin" "304.000000 -1024.000000 -144.000000"
 "wait" "5"
 }
-// entity 76
+// entity 75
 {
 "classname" "trigger_teleport"
 "target" "t26"
@@ -16404,62 +16399,62 @@ evil6_lights/e6v_light_s_nolight
 ( -32 -992 -160 ) ( -64 -992 -160 ) ( -64 -1088 -160 ) common/trigger 0 0 0 0.5 0.5 0 7 0
 }
 }
-// entity 77
+// entity 76
 {
 "classname" "misc_teleporter_dest"
 "angle" "90"
 "origin" "-992.000000 -528.000000 208.000000"
 "targetname" "t26"
 }
-// entity 78
+// entity 77
 {
 "classname" "item_armor_small"
 "origin" "-264.000000 -480.000000 192.000000"
 }
-// entity 79
+// entity 78
 {
 "classname" "item_armor_small"
 "origin" "-368.000000 -480.000000 192.000000"
 }
-// entity 80
+// entity 79
 {
 "classname" "item_armor_small"
 "origin" "-480.000000 -480.000000 192.000000"
 }
-// entity 81
+// entity 80
 {
 "classname" "item_armor_small"
 "origin" "-584.000000 -480.000000 192.000000"
 }
-// entity 82
+// entity 81
 {
 "classname" "item_armor_large"
 "origin" "-120.000000 144.000000 200.000000"
 }
-// entity 83
+// entity 82
 {
 "classname" "weapon_hagar"
 "origin" "280.000000 -608.000000 40.000000"
 }
-// entity 84
+// entity 83
 {
 "classname" "target_position"
 "origin" "-221.000000 226.000000 36.000000"
 "targetname" "t27"
 }
-// entity 85
+// entity 84
 {
 "classname" "target_position"
 "origin" "-633.000000 -410.000000 208.000000"
 "targetname" "t28"
 }
-// entity 86
+// entity 85
 {
 "classname" "target_position"
 "origin" "-631.000000 -14.000000 204.000000"
 "targetname" "t29"
 }
-// entity 87
+// entity 86
 {
 "classname" "trigger_multiple"
 "target" "t30"
@@ -16475,14 +16470,14 @@ evil6_lights/e6v_light_s_nolight
 ( 1240 -424 1384 ) ( 1168 -424 1384 ) ( 1168 -552 1384 ) common/trigger -16 -48 0 0.5 0.5 0 7 0
 }
 }
-// entity 88
+// entity 87
 {
 "classname" "target_print"
 "message" "You're really shooting everything, don't you ?"
 "origin" "1152.000000 -392.000000 1600.000000"
 "targetname" "t30"
 }
-// entity 89
+// entity 88
 {
 "classname" "trigger_multiple"
 "target" "t31"
@@ -16496,14 +16491,14 @@ evil6_lights/e6v_light_s_nolight
 ( 112 -976 1824 ) ( 112 -1104 1824 ) ( 112 -1104 1384 ) common/trigger 0 0 0 0.5 0.5 0 7 0
 }
 }
-// entity 90
+// entity 89
 {
 "classname" "target_print"
 "message" "HIT ME !!!!"
 "origin" "96.000000 -976.000000 1600.000000"
 "targetname" "t31"
 }
-// entity 91
+// entity 90
 {
 "classname" "trigger_multiple"
 "target" "t32"
@@ -16517,14 +16512,14 @@ evil6_lights/e6v_light_s_nolight
 ( -528 -240 1384 ) ( -528 -168 1384 ) ( -656 -168 1384 ) common/trigger 0 0 -90 0.5 0.5 0 7 0
 }
 }
-// entity 92
+// entity 91
 {
 "classname" "target_print"
 "message" "Try to aim a little lower"
 "origin" "-552.000000 -200.000000 1736.000000"
 "targetname" "t32"
 }
-// entity 93
+// entity 92
 {
 "classname" "trigger_multiple"
 "target" "t33"
@@ -16538,21 +16533,21 @@ evil6_lights/e6v_light_s_nolight
 ( -408 -184 1824 ) ( -536 -184 1824 ) ( -536 -184 1384 ) common/trigger 16 0 0 0.5 0.5 0 7 0
 }
 }
-// entity 94
+// entity 93
 {
 "classname" "target_print"
 "message" "Try to aim a little higher"
 "origin" "-408.000000 -152.000000 1600.000000"
 "targetname" "t33"
 }
-// entity 95
+// entity 94
 {
 "classname" "target_print"
 "message" "Yeah ! You got me ;)"
 "origin" "-448.000000 -160.000000 1680.000000"
 "targetname" "t34"
 }
-// entity 96
+// entity 95
 {
 "classname" "trigger_multiple"
 "target" "t34"
@@ -16566,7 +16561,7 @@ evil6_lights/e6v_light_s_nolight
 ( -552 -152 1664 ) ( -568 -152 1664 ) ( -568 -240 1664 ) common/trigger 0 0 0 0.5 0.5 0 7 0
 }
 }
-// entity 97
+// entity 96
 {
 "classname" "func_rotating"
 "origin" "-0.000000 0.000000 0.000000"
@@ -16590,7 +16585,7 @@ evil6_lights/e6v_light_s_nolight
 ( -32 -1032 -144 ) ( -120 -1032 -144 ) ( -120 -1048 -144 ) common/origin 0 0 0 0.5 0.5 0 14 0
 }
 }
-// entity 98
+// entity 97
 {
 "classname" "func_rotating"
 "origin" "0.000000 -0.000000 -0.000000"
@@ -16614,7 +16609,7 @@ evil6_lights/e6v_light_s_nolight
 ( -88 -1040 -128 ) ( -72 -1040 -128 ) ( -72 -1040 -144 ) common/origin 16 0 -180 0.5 -0.5 0 14 0
 }
 }
-// entity 99
+// entity 98
 {
 "classname" "func_rotating"
 "origin" "-0.000000 0.000000 -0.000000"
@@ -16638,7 +16633,7 @@ evil6_lights/e6v_light_s_nolight
 ( -952 -640 188 ) ( -1040 -640 188 ) ( -1040 -656 188 ) common/origin 48 16 0 0.5 0.5 0 14 0
 }
 }
-// entity 100
+// entity 99
 {
 "classname" "func_rotating"
 "origin" "-0.000000 -0.000000 -0.000000"
@@ -16662,13 +16657,13 @@ evil6_lights/e6v_light_s_nolight
 ( -1008 -648 204 ) ( -992 -648 204 ) ( -992 -648 188 ) common/origin -31 24 -180 0.5 -0.5 0 14 0
 }
 }
-// entity 101
+// entity 100
 {
 "classname" "target_position"
 "origin" "500.000000 -664.000000 -244.000000"
 "targetname" "t35"
 }
-// entity 102
+// entity 101
 {
 "classname" "func_group"
 // brush 0
@@ -16805,7 +16800,7 @@ evil6_lights/e6v_light_s_nolight
 ( 136 48 -64 ) ( 160 48 -64 ) ( 160 -128 -64 ) common/caulk 0 0 0 0.5 0.5 0 0 0
 }
 }
-// entity 103
+// entity 102
 {
 "classname" "func_group"
 // brush 0
@@ -16889,7 +16884,7 @@ evil6_lights/e6v_light_s_nolight
 ( 528 -400 0 ) ( 528 -352 0 ) ( 576 -352 0 ) evil8_base/e8metal01 0 0 0 0.5 0.5 0 0 0
 }
 }
-// entity 104
+// entity 103
 {
 "classname" "func_group"
 // brush 0
@@ -16966,7 +16961,7 @@ evil6_lights/e6v_light_s_nolight
 ( 304 -288 -64 ) ( 256 -288 -64 ) ( 304 -464 -64 ) common/caulk 0 -16 0 0.5 0.5 0 0 0
 }
 }
-// entity 105
+// entity 104
 {
 "classname" "func_group"
 // brush 0
@@ -17045,7 +17040,7 @@ evil6_lights/e6v_light_s_nolight
 ( 704 -128 256 ) ( 704 304 256 ) ( 704 304 192 ) evil8_base/e8metal01 0 0 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 106
+// entity 105
 {
 "classname" "func_group"
 // brush 0
@@ -17102,7 +17097,7 @@ evil6_lights/e6v_light_s_nolight
 ( -624 -368 0 ) ( -768 -416 0 ) ( -624 -368 48 ) common/caulk 0 47 -180 0.5 0.5 134217728 0 0
 }
 }
-// entity 107
+// entity 106
 {
 "classname" "func_group"
 // brush 0
@@ -17142,7 +17137,7 @@ evil6_lights/e6v_light_s_nolight
 ( -384 -544 0 ) ( -640 -544 32 ) ( -384 -512 0 ) evil8_base/e8_base1 -128 64 -180 0.5 0.5 134217728 0 0
 }
 }
-// entity 108
+// entity 107
 {
 "classname" "func_group"
 // brush 0
@@ -17163,7 +17158,7 @@ evil6_lights/e6v_light_s_nolight
 ( 560 -16 -96 ) ( 576 0 -96 ) ( 576 0 -19 ) common/caulk 0 -64 0 0.5 0.5 0 0 0
 }
 }
-// entity 109
+// entity 108
 {
 "classname" "func_group"
 // brush 0
@@ -17211,7 +17206,7 @@ evil6_lights/e6v_light_s_nolight
 ( 576 512 0 ) ( 576 544 0 ) ( 352 512 0 ) common/caulk 0 -16 -180 0.5 0.5 134217728 0 0
 }
 }
-// entity 110
+// entity 109
 {
 "classname" "func_group"
 // brush 0
@@ -17224,7 +17219,7 @@ evil6_lights/e6v_light_s_nolight
 ( 576 672 0 ) ( 320 704 32 ) ( 576 704 0 ) evil8_base/e8_base1 0 -127 -180 0.5 0.5 134217728 0 0
 }
 }
-// entity 111
+// entity 110
 {
 "classname" "func_group"
 // brush 0
@@ -17237,7 +17232,7 @@ evil6_lights/e6v_light_s_nolight
 ( 192 64 0 ) ( 192 32 0 ) ( 448 64 0 ) common/caulk 0 -16 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 112
+// entity 111
 {
 "classname" "func_group"
 // brush 0
@@ -17251,7 +17246,7 @@ evil6_lights/e6v_light_s_nolight
 ( 416 64 0 ) ( 416 32 0 ) ( 576 64 0 ) common/caulk -32 47 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 113
+// entity 112
 {
 "classname" "func_group"
 // brush 0
@@ -17264,7 +17259,7 @@ evil6_lights/e6v_light_s_nolight
 ( 576 -1176 -128 ) ( 576 -1144 -128 ) ( 560 -1144 -96 ) evil8_base/e8_base1 -224 -80 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 114
+// entity 113
 {
 "classname" "func_group"
 // brush 0
@@ -17277,7 +17272,7 @@ evil6_lights/e6v_light_s_nolight
 ( 720 80 448 ) ( 736 80 448 ) ( 736 112 448 ) evil8_base/e8_base1 64 0 -180 0.5 0.5 134217728 0 0
 }
 }
-// entity 115
+// entity 114
 {
 "classname" "func_group"
 // brush 0
@@ -17356,7 +17351,7 @@ evil6_lights/e6v_light_s_nolight
 ( 608 304 176 ) ( 640 320 176 ) ( 608 304 768 ) evil8_base/e8metal01 0 0 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 116
+// entity 115
 {
 "classname" "func_group"
 // brush 0
@@ -17369,7 +17364,7 @@ evil6_lights/e6v_light_s_nolight
 ( 800 272 576 ) ( 800 304 576 ) ( 736 304 448 ) evil8_lights/e8tmtllight2b 0 127 -180 0.5 -0.5 134217728 0 0
 }
 }
-// entity 117
+// entity 116
 {
 "classname" "func_group"
 // brush 0
@@ -17448,7 +17443,7 @@ evil6_lights/e6v_light_s_nolight
 ( 608 -464 176 ) ( 640 -448 176 ) ( 608 -464 768 ) evil8_base/e8metal01 0 0 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 118
+// entity 117
 {
 "classname" "func_group"
 // brush 0
@@ -17461,7 +17456,7 @@ evil6_lights/e6v_light_s_nolight
 ( -48 -1176 32 ) ( -48 -1144 32 ) ( -48 -1144 -96 ) evil8_lights/e8tmtllight2b 16 -63 -180 0.5 -0.5 134217728 0 0
 }
 }
-// entity 119
+// entity 118
 {
 "classname" "func_group"
 // brush 0
@@ -17474,7 +17469,7 @@ evil6_lights/e6v_light_s_nolight
 ( 128 -1216 -128 ) ( 160 -1216 -128 ) ( 160 -1200 -96 ) evil8_base/e8_base1 -16 -79 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 120
+// entity 119
 {
 "classname" "func_group"
 // brush 0
@@ -17487,7 +17482,7 @@ evil6_lights/e6v_light_s_nolight
 ( 384 -1200 32 ) ( 352 -1200 32 ) ( 352 -1200 -96 ) evil8_lights/e8tmtllight2b 0 -63 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 121
+// entity 120
 {
 "classname" "func_group"
 // brush 0
@@ -17509,21 +17504,21 @@ evil6_lights/e6v_light_s_nolight
 ( -208 -192 896 ) ( -224 -192 896 ) ( -224 -192 288 ) evil8_base/e8_base1 0 0 -180 0.5 -0.5 134217728 0 0
 }
 }
-// entity 122
+// entity 121
 {
 "classname" "misc_model"
 "angle" "225"
 "model" "models/mapobjects/strale5_lamp.ase"
 "origin" "152 216 176"
 }
-// entity 123
+// entity 122
 {
 "classname" "misc_model"
 "angle" "153.5"
 "model" "models/mapobjects/strale5_lamp.ase"
 "origin" "0 224 176"
 }
-// entity 124
+// entity 123
 {
 "classname" "func_group"
 // brush 0
@@ -17545,7 +17540,7 @@ evil6_lights/e6v_light_s_nolight
 ( 464 688 768 ) ( 464 704 768 ) ( 464 704 160 ) evil8_base/e8_base1 -192 0 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 125
+// entity 124
 {
 "classname" "func_group"
 // brush 0
@@ -17593,7 +17588,7 @@ evil6_lights/e6v_light_s_nolight
 ( 1024 608 0 ) ( 1024 672 0 ) ( 1248 672 8 ) evil8_base/e8metal01 128 -127 -180 0.5 0.5 134217728 0 0
 }
 }
-// entity 126
+// entity 125
 {
 "classname" "func_group"
 // brush 0
@@ -17606,7 +17601,7 @@ evil6_lights/e6v_light_s_nolight
 ( 1280 512 0 ) ( 1024 544 0 ) ( 1024 512 0 ) common/caulk 0 -15 -180 0.5 0.5 134217728 0 0
 }
 }
-// entity 127
+// entity 126
 {
 "classname" "func_group"
 // brush 0
@@ -17619,7 +17614,7 @@ evil6_lights/e6v_light_s_nolight
 ( 768 208 576 ) ( 768 176 576 ) ( 832 176 448 ) evil8_lights/e8tmtllight2b 0 127 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 128
+// entity 127
 {
 "classname" "func_group"
 // brush 0
@@ -17685,7 +17680,7 @@ evil6_lights/e6v_light_s_nolight
 ( 928 192 672 ) ( 928 208 672 ) ( 928 208 768 ) evil8_base/e8metal01 64 0 -180 0.5 -0.5 134217728 0 0
 }
 }
-// entity 129
+// entity 128
 {
 "classname" "func_group"
 // brush 0
@@ -17698,7 +17693,7 @@ evil6_lights/e6v_light_s_nolight
 ( 848 208 632 ) ( 848 176 632 ) ( 848 176 192 ) evil8_base/e8_base1 64 127 -180 0.5 -0.5 134217728 0 0
 }
 }
-// entity 130
+// entity 129
 {
 "classname" "func_group"
 // brush 0
@@ -17711,7 +17706,7 @@ evil6_lights/e6v_light_s_nolight
 ( 952 120 656 ) ( 960 120 672 ) ( 960 88 672 ) evil8_base/e8_base1 64 127 -180 0.5 -0.5 134217728 0 0
 }
 }
-// entity 131
+// entity 130
 {
 "classname" "func_group"
 // brush 0
@@ -17724,7 +17719,7 @@ evil6_lights/e6v_light_s_nolight
 ( 960 72 192 ) ( 992 72 192 ) ( 992 504 192 ) common/caulk -32 32 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 132
+// entity 131
 {
 "classname" "func_group"
 // brush 0
@@ -17737,7 +17732,7 @@ evil6_lights/e6v_light_s_nolight
 ( 1120 288 192 ) ( 1072 288 192 ) ( 1120 256 192 ) evil8_base/e8_base1 -192 14 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 133
+// entity 132
 {
 "classname" "func_group"
 // brush 0
@@ -17750,14 +17745,14 @@ evil6_lights/e6v_light_s_nolight
 ( 1104 96 584 ) ( 1104 128 584 ) ( 1104 128 144 ) evil8_base/e8_base1 144 30 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 134
+// entity 133
 {
 "classname" "misc_model"
 "angle" "135"
 "model" "models/mapobjects/strale5_lamp2.ase"
 "origin" "928 -224 384"
 }
-// entity 135
+// entity 134
 {
 "classname" "func_group"
 // brush 0
@@ -17779,7 +17774,7 @@ evil6_lights/e6v_light_s_nolight
 ( 1136 688 208 ) ( 1136 704 176 ) ( 1104 704 176 ) evil8_base/e8_base1 -64 0 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 136
+// entity 135
 {
 "classname" "func_group"
 // brush 0
@@ -17801,7 +17796,7 @@ evil6_lights/e6v_light_s_nolight
 ( 816 -432 416 ) ( 832 -432 384 ) ( 832 -400 384 ) evil8_base/e8_base1 64 0 -180 0.5 -0.5 134217728 0 0
 }
 }
-// entity 137
+// entity 136
 {
 "classname" "func_group"
 // brush 0
@@ -17823,7 +17818,7 @@ evil6_lights/e6v_light_s_nolight
 ( 1232 -112 896 ) ( 1232 -128 896 ) ( 1232 -128 288 ) evil8_base/e8_base1 192 0 -180 0.5 -0.5 134217728 0 0
 }
 }
-// entity 138
+// entity 137
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
@@ -17831,14 +17826,14 @@ evil6_lights/e6v_light_s_nolight
 "origin" "80 -524 172"
 "target" "t2"
 }
-// entity 139
+// entity 138
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "250"
 "origin" "80 -516 168"
 }
-// entity 140
+// entity 139
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
@@ -17846,14 +17841,14 @@ evil6_lights/e6v_light_s_nolight
 "origin" "-192 -868 -130"
 "target" "t5"
 }
-// entity 141
+// entity 140
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "40"
 "origin" "-192 -868 -126"
 }
-// entity 142
+// entity 141
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
@@ -17861,14 +17856,14 @@ evil6_lights/e6v_light_s_nolight
 "origin" "0 -508 -124"
 "target" "t6"
 }
-// entity 143
+// entity 142
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "75"
 "origin" "0 -516 -128"
 }
-// entity 144
+// entity 143
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
@@ -17876,56 +17871,56 @@ evil6_lights/e6v_light_s_nolight
 "origin" "-424 -656 -128"
 "target" "t7"
 }
-// entity 145
+// entity 144
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "40"
 "origin" "-416 -656 -132"
 }
-// entity 146
+// entity 145
 {
 "classname" "light"
 "_color" "0.314264 0.528486 0.7500000"
 "light" "400"
 "origin" "-120 -176 -360"
 }
-// entity 147
+// entity 146
 {
 "classname" "light"
 "_color" "0.314264 0.528486 0.7500000"
 "light" "400"
 "origin" "16 -40 -360"
 }
-// entity 148
+// entity 147
 {
 "classname" "light"
 "_color" "0.314264 0.528486 0.7500000"
 "light" "400"
 "origin" "208 -40 -360"
 }
-// entity 149
+// entity 148
 {
 "classname" "light"
 "_color" "0.314264 0.528486 0.7500000"
 "light" "400"
 "origin" "192 -312 -360"
 }
-// entity 150
+// entity 149
 {
 "classname" "light"
 "_color" "0.314264 0.528486 0.7500000"
 "light" "400"
 "origin" "384 -312 -360"
 }
-// entity 151
+// entity 150
 {
 "classname" "light"
 "_color" "0.314264 0.528486 0.7500000"
 "light" "400"
 "origin" "552 -176 -360"
 }
-// entity 152
+// entity 151
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
@@ -17933,14 +17928,14 @@ evil6_lights/e6v_light_s_nolight
 "origin" "1108 -112 60"
 "target" "t11"
 }
-// entity 153
+// entity 152
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "175"
 "origin" "1116 -112 56"
 }
-// entity 154
+// entity 153
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
@@ -17948,14 +17943,14 @@ evil6_lights/e6v_light_s_nolight
 "origin" "879 -235 -4"
 "target" "t12"
 }
-// entity 155
+// entity 154
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "175"
 "origin" "885 -241 -8"
 }
-// entity 156
+// entity 155
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
@@ -17963,14 +17958,14 @@ evil6_lights/e6v_light_s_nolight
 "origin" "516 -240 -52"
 "target" "t13"
 }
-// entity 157
+// entity 156
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "175"
 "origin" "524 -240 -56"
 }
-// entity 158
+// entity 157
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
@@ -17978,21 +17973,21 @@ evil6_lights/e6v_light_s_nolight
 "origin" "172 -168 -124"
 "target" "t14"
 }
-// entity 159
+// entity 158
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "100"
 "origin" "180 -168 -128"
 }
-// entity 160
+// entity 159
 {
 "classname" "light"
 "_color" "0.314264 0.528486 0.7500000"
 "light" "400"
 "origin" "552 -24 -360"
 }
-// entity 161
+// entity 160
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
@@ -18000,14 +17995,14 @@ evil6_lights/e6v_light_s_nolight
 "origin" "-424 112 -128"
 "target" "t15"
 }
-// entity 162
+// entity 161
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "40"
 "origin" "-418 112 -130"
 }
-// entity 163
+// entity 162
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
@@ -18015,14 +18010,14 @@ evil6_lights/e6v_light_s_nolight
 "origin" "-192 294 -128"
 "target" "t16"
 }
-// entity 164
+// entity 163
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "40"
 "origin" "-192 286 -130"
 }
-// entity 165
+// entity 164
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
@@ -18030,14 +18025,14 @@ evil6_lights/e6v_light_s_nolight
 "origin" "60 192 -124"
 "target" "t17"
 }
-// entity 166
+// entity 165
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "100"
 "origin" "60 192 -144"
 }
-// entity 167
+// entity 166
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
@@ -18045,14 +18040,14 @@ evil6_lights/e6v_light_s_nolight
 "origin" "620 192 -284"
 "target" "t18"
 }
-// entity 168
+// entity 167
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "150"
 "origin" "620 192 -296"
 }
-// entity 169
+// entity 168
 {
 "classname" "func_group"
 // brush 0
@@ -18074,7 +18069,7 @@ evil6_lights/e6v_light_s_nolight
 ( 1392 464 768 ) ( 1408 464 768 ) ( 1408 464 160 ) evil8_base/e8_base1 -64 0 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 170
+// entity 169
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
@@ -18082,14 +18077,14 @@ evil6_lights/e6v_light_s_nolight
 "origin" "432 -524 172"
 "target" "t21"
 }
-// entity 171
+// entity 170
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "250"
 "origin" "432 -516 168"
 }
-// entity 172
+// entity 171
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
@@ -18097,14 +18092,14 @@ evil6_lights/e6v_light_s_nolight
 "origin" "-1044 180 292"
 "target" "t22"
 }
-// entity 173
+// entity 172
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "100"
 "origin" "-1038 174 288"
 }
-// entity 174
+// entity 173
 {
 "classname" "light"
 "_color" "0.9 0.9 1"
@@ -18112,14 +18107,14 @@ evil6_lights/e6v_light_s_nolight
 "origin" "272 632 176"
 "target" "t23"
 }
-// entity 175
+// entity 174
 {
 "classname" "light"
 "_color" "0.9 0.9 1"
 "light" "75"
 "origin" "278 630 172"
 }
-// entity 176
+// entity 175
 {
 "classname" "light"
 "_color" "0.9 0.9 1"
@@ -18127,105 +18122,105 @@ evil6_lights/e6v_light_s_nolight
 "origin" "1336 628 172"
 "target" "t24"
 }
-// entity 177
+// entity 176
 {
 "classname" "light"
 "_color" "0.9 0.9 1"
 "light" "75"
 "origin" "1330 622 168"
 }
-// entity 178
+// entity 177
 {
 "classname" "light"
 "_color" "0.768002 0.768185 0.900000"
 "light" "350"
 "origin" "384 192 256"
 }
-// entity 179
+// entity 178
 {
 "classname" "light"
 "_color" "0.768002 0.768185 0.900000"
 "light" "275"
 "origin" "384 512 256"
 }
-// entity 180
+// entity 179
 {
 "classname" "light"
 "_color" "0.768002 0.768185 0.900000"
 "light" "250"
 "origin" "1216 512 256"
 }
-// entity 181
+// entity 180
 {
 "classname" "light"
 "_color" "0.768002 0.768185 0.900000"
 "light" "250"
 "origin" "1248 224 352"
 }
-// entity 182
+// entity 181
 {
 "classname" "light"
 "_color" "0.768002 0.768185 0.900000"
 "light" "300"
 "origin" "364 88 280"
 }
-// entity 183
+// entity 182
 {
 "classname" "light"
 "_color" "0.768002 0.768185 1.00000"
 "light" "350"
 "origin" "60 -72 380"
 }
-// entity 184
+// entity 183
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "200"
 "origin" "-432 -208 -64"
 }
-// entity 185
+// entity 184
 {
 "classname" "light"
 "_color" "0.768002 0.768185 0.900000"
 "light" "280"
 "origin" "-484 -208 92"
 }
-// entity 186
+// entity 185
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "170"
 "origin" "-1072 -208 304"
 }
-// entity 187
+// entity 186
 {
 "classname" "light"
 "_color" "0.768002 0.768185 0.900000"
 "light" "200"
 "origin" "256 -1024 -32"
 }
-// entity 188
+// entity 187
 {
 "classname" "light"
 "_color" "0.768002 0.768185 0.900000"
 "light" "100"
 "origin" "784 512 96"
 }
-// entity 189
+// entity 188
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "50"
 "origin" "784 240 96"
 }
-// entity 190
+// entity 189
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "25"
 "origin" "944 144 -320"
 }
-// entity 191
+// entity 190
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
@@ -18233,35 +18228,35 @@ evil6_lights/e6v_light_s_nolight
 "origin" "327 -339 -124"
 "target" "t25"
 }
-// entity 192
+// entity 191
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "40"
 "origin" "333 -345 -128"
 }
-// entity 193
+// entity 192
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "50"
 "origin" "-992 -440 248"
 }
-// entity 194
+// entity 193
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "75"
 "origin" "-144 -564 -176"
 }
-// entity 195
+// entity 194
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "75"
 "origin" "144 -564 -176"
 }
-// entity 196
+// entity 195
 {
 "classname" "func_group"
 // brush 0
@@ -18283,7 +18278,7 @@ evil6_lights/e6v_light_s_nolight
 ( 172 218 768 ) ( 161 229 768 ) ( 161 229 160 ) common/clip -30 0 0 0.3595579863 0.5 134217728 13 0
 }
 }
-// entity 197
+// entity 196
 {
 "classname" "func_group"
 // brush 0
@@ -18305,7 +18300,7 @@ evil6_lights/e6v_light_s_nolight
 ( 5 201 208 ) ( 13 215 176 ) ( -16 230 176 ) common/clip 5 0 0 0.4449020028 0.5 134217728 13 0
 }
 }
-// entity 198
+// entity 197
 {
 "classname" "func_group"
 // brush 0
@@ -18327,14 +18322,14 @@ evil6_lights/e6v_light_s_nolight
 ( 906 -226 896 ) ( 916 -238 896 ) ( 916 -238 288 ) common/clip 62 0 -180 0.3716279864 -0.5 134217728 13 0
 }
 }
-// entity 199
+// entity 198
 {
 "classname" "misc_model"
 "angle" "225"
 "model" "models/mapobjects/strale5_lamp.ase"
 "origin" "-172 240 176"
 }
-// entity 200
+// entity 199
 {
 "classname" "func_group"
 // brush 0
@@ -18356,7 +18351,7 @@ evil6_lights/e6v_light_s_nolight
 ( -152 242 208 ) ( -163 253 176 ) ( -186 230 176 ) common/clip -40 0 0 0.3597260118 0.5 134217728 13 0
 }
 }
-// entity 201
+// entity 200
 {
 "classname" "func_group"
 // brush 0
@@ -18378,7 +18373,7 @@ evil6_lights/e6v_light_s_nolight
 ( 172 218 208 ) ( 161 229 176 ) ( 138 206 176 ) common/weapclip 0 0 0 0.5 0.5 134217728 5 0
 }
 }
-// entity 202
+// entity 201
 {
 "classname" "func_group"
 // brush 0
@@ -18400,7 +18395,7 @@ evil6_lights/e6v_light_s_nolight
 ( 5 201 768 ) ( 13 215 768 ) ( 13 215 160 ) common/weapclip 0 0 0 0.5 0.5 134217728 5 0
 }
 }
-// entity 203
+// entity 202
 {
 "classname" "func_group"
 // brush 0
@@ -18422,35 +18417,35 @@ evil6_lights/e6v_light_s_nolight
 ( -152 242 768 ) ( -163 253 768 ) ( -163 253 160 ) common/weapclip 0 0 0 0.5 0.5 134217728 5 0
 }
 }
-// entity 204
+// entity 203
 {
 "classname" "light"
 "_color" "0.968002 0.968185 1.000000"
 "light" "7"
 "origin" "660 288 764"
 }
-// entity 205
+// entity 204
 {
 "classname" "light"
 "_color" "0.968002 0.968185 1.000000"
 "light" "7"
 "origin" "660 96 764"
 }
-// entity 206
+// entity 205
 {
 "classname" "light"
 "_color" "0.968002 0.968185 1.000000"
 "light" "7"
 "origin" "908 192 764"
 }
-// entity 207
+// entity 206
 {
 "classname" "light"
 "_color" "0.968002 0.968185 1.000000"
 "light" "7"
 "origin" "660 -480 764"
 }
-// entity 208
+// entity 207
 {
 "classname" "func_group"
 // brush 0
@@ -18463,7 +18458,7 @@ evil6_lights/e6v_light_s_nolight
 ( 136 432 960 ) ( 144 432 960 ) ( 144 400 960 ) common/caulk -32 0 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 209
+// entity 208
 {
 "classname" "func_group"
 // brush 0
@@ -18485,7 +18480,7 @@ evil6_lights/e6v_light_s_nolight
 ( 208 432 208 ) ( 192 432 176 ) ( 192 400 176 ) evil8_base/e8_base1 64 0 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 210
+// entity 209
 {
 "classname" "func_group"
 // brush 0
@@ -18498,7 +18493,7 @@ evil6_lights/e6v_light_s_nolight
 ( 464 752 736 ) ( 464 768 704 ) ( 432 768 704 ) evil8_base/e8_base1 0 128 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 211
+// entity 210
 {
 "classname" "func_group"
 // brush 0
@@ -18511,7 +18506,7 @@ evil6_lights/e6v_light_s_nolight
 ( 784 760 960 ) ( 784 752 960 ) ( 752 752 960 ) common/caulk 32 0 -90 0.5 0.5 134217728 0 0
 }
 }
-// entity 212
+// entity 211
 {
 "classname" "func_group"
 // brush 0
@@ -18524,7 +18519,7 @@ evil6_lights/e6v_light_s_nolight
 ( 1136 752 736 ) ( 1136 768 704 ) ( 1104 768 704 ) evil8_base/e8_base1 -64 128 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 213
+// entity 212
 {
 "classname" "func_group"
 // brush 0
@@ -18537,7 +18532,7 @@ evil6_lights/e6v_light_s_nolight
 ( 1464 464 960 ) ( 1456 464 960 ) ( 1456 496 960 ) common/caulk 32 0 -180 0.5 0.5 134217728 0 0
 }
 }
-// entity 214
+// entity 213
 {
 "classname" "func_group"
 // brush 0
@@ -18550,7 +18545,7 @@ evil6_lights/e6v_light_s_nolight
 ( 1232 -176 736 ) ( 1232 -192 704 ) ( 1264 -192 704 ) evil8_base/e8_base1 -192 126 -180 0.5 -0.5 134217728 0 0
 }
 }
-// entity 215
+// entity 214
 {
 "classname" "func_group"
 // brush 0
@@ -18563,7 +18558,7 @@ evil6_lights/e6v_light_s_nolight
 ( 888 -432 960 ) ( 880 -432 960 ) ( 880 -400 960 ) common/caulk 32 63 -180 0.5 0.5 134217728 0 0
 }
 }
-// entity 216
+// entity 215
 {
 "classname" "func_group"
 // brush 0
@@ -18576,7 +18571,7 @@ evil6_lights/e6v_light_s_nolight
 ( -272 -192 736 ) ( -288 -192 704 ) ( -288 -224 704 ) evil8_base/e8_base1 32 125 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 217
+// entity 216
 {
 "classname" "func_group"
 // brush 0
@@ -18589,7 +18584,7 @@ evil6_lights/e6v_light_s_nolight
 ( -520 240 960 ) ( -512 240 960 ) ( -512 208 960 ) common/caulk 0 -1 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 218
+// entity 217
 {
 "classname" "func_group"
 // brush 0
@@ -18602,7 +18597,7 @@ evil6_lights/e6v_light_s_nolight
 ( -224 336 736 ) ( -224 352 704 ) ( -256 352 704 ) evil8_base/e8_base1 -160 125 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 219
+// entity 218
 {
 "classname" "func_group"
 // brush 0
@@ -18615,7 +18610,7 @@ evil6_lights/e6v_light_s_nolight
 ( 226 684 736 ) ( 215 696 704 ) ( 192 673 704 ) evil8_base/e8_base1 179 191 -180 0.353576988 -0.5 134217728 0 0
 }
 }
-// entity 220
+// entity 219
 {
 "classname" "func_group"
 // brush 0
@@ -18628,35 +18623,35 @@ evil6_lights/e6v_light_s_nolight
 ( -2 289 960 ) ( -6 282 960 ) ( -34 297 960 ) common/caulk 38 3 -119 0.4999780059 0.4999839962 134217728 0 0
 }
 }
-// entity 221
+// entity 220
 {
 "classname" "light"
 "_color" "0.968002 0.968185 1.000000"
 "light" "7"
 "origin" "388 -432 916"
 }
-// entity 222
+// entity 221
 {
 "classname" "light"
 "_color" "0.95 0.95 1.000000"
 "light" "7"
 "origin" "228 -432 916"
 }
-// entity 223
+// entity 222
 {
 "classname" "light"
 "_color" "0.968002 0.968185 1.000000"
 "light" "7"
 "origin" "68 -432 916"
 }
-// entity 224
+// entity 223
 {
 "classname" "light"
 "_color" "0.968002 0.968185 1.000000"
 "light" "7"
 "origin" "-92 -432 916"
 }
-// entity 225
+// entity 224
 {
 "classname" "func_group"
 // brush 0
@@ -18669,7 +18664,7 @@ evil6_lights/e6v_light_s_nolight
 ( 955 -282 960 ) ( 950 -276 960 ) ( 972 -254 960 ) common/caulk 5 38 135 0.4999899864 0.4999470115 134217728 0 0
 }
 }
-// entity 226
+// entity 225
 {
 "classname" "func_group"
 // brush 0
@@ -18682,49 +18677,49 @@ evil6_lights/e6v_light_s_nolight
 ( -448 -192 368 ) ( -480 -192 384 ) ( -480 -224 384 ) evil8_base/e8_base1 -223 -192 90 0.5 -0.5 134217728 0 0
 }
 }
-// entity 227
+// entity 226
 {
 "classname" "light"
 "_color" "0.968002 0.968185 1.000000"
 "light" "7"
 "origin" "388 -304 404"
 }
-// entity 228
+// entity 227
 {
 "classname" "light"
 "_color" "0.95 0.95 1.000000"
 "light" "7"
 "origin" "228 -304 404"
 }
-// entity 229
+// entity 228
 {
 "classname" "light"
 "_color" "0.968002 0.968185 1.000000"
 "light" "7"
 "origin" "68 -304 404"
 }
-// entity 230
+// entity 229
 {
 "classname" "light"
 "_color" "0.968002 0.968185 1.000000"
 "light" "7"
 "origin" "-92 -304 404"
 }
-// entity 231
+// entity 230
 {
 "classname" "misc_model"
 "angle" "270"
 "model" "models/mapobjects/morphed_tele/telepad.ase"
 "origin" "-1000 -632 176"
 }
-// entity 232
+// entity 231
 {
 "classname" "misc_model"
 "angle" "270"
 "model" "models/mapobjects/morphed_tele/telepad.ase"
 "origin" "-80 -1024 -160"
 }
-// entity 233
+// entity 232
 {
 "classname" "light"
 "_color" "0.9 0.9 1"
@@ -18732,14 +18727,14 @@ evil6_lights/e6v_light_s_nolight
 "origin" "-210 270 120"
 "target" "t27"
 }
-// entity 234
+// entity 233
 {
 "classname" "light"
 "_color" "0.9 0.9 1"
 "light" "40"
 "origin" "-207 264 116"
 }
-// entity 235
+// entity 234
 {
 "classname" "light"
 "_color" "0.9 0.9 1"
@@ -18747,14 +18742,14 @@ evil6_lights/e6v_light_s_nolight
 "origin" "-634 -338 272"
 "target" "t28"
 }
-// entity 236
+// entity 235
 {
 "classname" "light"
 "_color" "0.9 0.9 1"
 "light" "75"
 "origin" "-631 -344 268"
 }
-// entity 237
+// entity 236
 {
 "classname" "light"
 "_color" "0.9 0.9 1"
@@ -18762,42 +18757,42 @@ evil6_lights/e6v_light_s_nolight
 "origin" "-630 -78 272"
 "target" "t29"
 }
-// entity 238
+// entity 237
 {
 "classname" "light"
 "_color" "0.9 0.9 1"
 "light" "75"
 "origin" "-633 -72 268"
 }
-// entity 239
+// entity 238
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "75"
 "origin" "368 444 -176"
 }
-// entity 240
+// entity 239
 {
 "classname" "light"
 "_color" "0.768002 0.768185 0.900000"
 "light" "20"
 "origin" "-76 -1036 -124"
 }
-// entity 241
+// entity 240
 {
 "classname" "light"
 "_color" "0.768002 0.768185 0.900000"
 "light" "20"
 "origin" "-996 -644 208"
 }
-// entity 242
+// entity 241
 {
 "classname" "light"
 "_color" "0.4 0.4 0.4"
 "light" "20"
 "origin" "-996 -644 259"
 }
-// entity 243
+// entity 242
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
@@ -18805,14 +18800,14 @@ evil6_lights/e6v_light_s_nolight
 "origin" "552 -664 -128"
 "target" "t35"
 }
-// entity 244
+// entity 243
 {
 "classname" "light"
 "_color" "0.846769 0.846769 1.000000"
 "light" "40"
 "origin" "546 -664 -130"
 }
-// entity 245
+// entity 244
 {
 "classname" "func_group"
 // brush 0
@@ -18834,7 +18829,7 @@ evil6_lights/e6v_light_s_nolight
 ( 1404 128 352 ) ( 1416 128 352 ) ( 1416 128 384 ) evil8_base/e8_base1 -64 -183 0 0.5 -0.5 134217728 0 0
 }
 }
-// entity 246
+// entity 245
 {
 "classname" "func_group"
 // brush 0
@@ -18856,7 +18851,7 @@ evil6_lights/e6v_light_s_nolight
 ( 1440 -84 256 ) ( 1440 -84 224 ) ( 1376 12 224 ) evil8_base/e8_base1 224 -57 90 0.5 0.5 134217728 0 0
 }
 }
-// entity 247
+// entity 246
 {
 "classname" "func_group"
 // brush 0

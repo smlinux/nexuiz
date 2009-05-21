@@ -39460,7 +39460,7 @@ brushDef
 // entity 115
 {
 "classname" "item_strength"
-"origin" "-506.000000 -1267.000000 -13.000000"
+"origin" "-512.000000 -1280.000000 -64.000000"
 }
 // entity 116
 {
@@ -39486,16 +39486,18 @@ brushDef
 {
 "classname" "dom_team"
 "model" "models/domination/dom_unclaimed.md3"
+"origin" "0.000000 0.000000 32.000000"
 }
 // entity 121
 {
 "classname" "dom_team"
-"cnt" "13"
-"message" "Blue team has captured a control point"
-"model" "models/domination/dom_blue.md3"
-"netname" "^4Blue Team^3"
+"cnt" "12"
+"message" "Yellow team has captured a control point"
+"model" "models/domination/dom_yellow.md3"
+"netname" "^3Yellow Team^3"
 "noise" "domination/claim.wav"
 "noise1" "domination/claim.wav"
+"origin" "0.000000 0.000000 96.000000"
 }
 // entity 122
 {
@@ -39510,97 +39512,31 @@ brushDef
 // entity 123
 {
 "classname" "dom_controlpoint"
-"origin" "1028.000000 384.000000 24.000000"
+"origin" "1024.000000 384.000000 16.000000"
 }
 // entity 124
 {
 "classname" "dom_controlpoint"
-"origin" "1028.000000 -1024.000000 88.000000"
+"origin" "1024.000000 -1024.000000 80.000000"
 }
 // entity 125
 {
 "classname" "dom_controlpoint"
-"angle" "90"
-"origin" "-160.000000 820.000000 24.000000"
+"origin" "-572.000000 -538.000000 24.000000"
 }
 // entity 126
 {
 "classname" "dom_controlpoint"
-"origin" "-572.000000 -538.000000 24.000000"
+"origin" "328.000000 -64.000000 152.000000"
 }
 // entity 127
 {
-"classname" "dom_controlpoint"
-"origin" "326.000000 -60.000000 152.000000"
-}
-// entity 128
-{
-"classname" "item_flag_team1"
-"origin" "1028.000000 -1024.000000 88.000000"
-}
-// entity 129
-{
-"classname" "item_flag_team2"
-"angle" "90"
-"origin" "-160.000000 820.000000 24.000000"
-}
-// entity 130
-{
-"classname" "info_player_team1"
-"angle" "0"
-"origin" "630.000000 -1280.000000 88.000000"
-}
-// entity 131
-{
-"classname" "info_player_team1"
-"angle" "85"
-"origin" "770.000000 -1280.000000 88.000000"
-}
-// entity 132
-{
-"classname" "info_player_team1"
-"angle" "-25"
-"origin" "570.000000 -1000.000000 -72.000000"
-}
-// entity 133
-{
-"classname" "info_player_team1"
-"angle" "90"
-"origin" "830.000000 -1010.000000 -72.000000"
-}
-// entity 134
-{
-"classname" "info_player_team1"
-"angle" "135"
-"origin" "1080.000000 -1370.000000 88.000000"
-}
-// entity 135
-{
-"classname" "info_player_team2"
-"angle" "-90"
-"origin" "-220.000000 780.000000 -168.000000"
-}
-// entity 136
-{
-"classname" "info_player_team2"
-"angle" "-45"
-"origin" "-100.000000 780.000000 -168.000000"
-}
-// entity 137
-{
-"classname" "info_player_team2"
-"angle" "90"
-"origin" "-680.000000 210.000000 -168.000000"
-}
-// entity 138
-{
-"classname" "info_player_team2"
-"angle" "90"
-"origin" "-580.000000 190.000000 24.000000"
-}
-// entity 139
-{
-"classname" "info_player_team2"
-"angle" "90"
-"origin" "-330.000000 590.000000 24.000000"
+"classname" "dom_team"
+"cnt" "13"
+"message" "Blue team has captured a control point"
+"model" "models/domination/dom_blue.md3"
+"netname" "^4Blue Team^3"
+"noise" "domination/claim.wav"
+"noise1" "domination/claim.wav"
+"origin" "0.000000 0.000000 64.000000"
 }

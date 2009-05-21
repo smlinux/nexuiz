@@ -15240,20 +15240,12 @@ evil8_floor/e8cretefloor01c
 // entity 575
 {
 "classname" "dom_controlpoint"
-"message" " has captured the ^1Hallways"
-"origin" "-206.0 -488.8 -150.0"
-"frags" "3"
-"wait" "5"
-}
-// entity 576
-{
-"classname" "dom_controlpoint"
 "message" " has captured the ^1Lavaroom"
 "origin" "1457.1  19.9 -110.0"
 "frags" "1"
 "wait" "5"
 }
-// entity 577
+// entity 576
 {
 "classname" "dom_controlpoint"
 "message" " controls the ^1Nex & Strength"
@@ -15261,7 +15253,7 @@ evil8_floor/e8cretefloor01c
 "frags" "1"
 "wait" "5"
 }
-// entity 578
+// entity 577
 {
 "classname" "dom_controlpoint"
 "message" " has captured the ^1Upper Platform"
@@ -15269,7 +15261,7 @@ evil8_floor/e8cretefloor01c
 "frags" "1"
 "wait" "5"
 }
-// entity 579
+// entity 578
 {
 "classname" "dom_controlpoint"
 "message" " has captured the ^1Teleport Room"
@@ -15277,103 +15269,103 @@ evil8_floor/e8cretefloor01c
 "frags" "1"
 "wait" "5"
 }
-// entity 580
+// entity 579
 {
 "classname" "light"
 "origin" "416 12 -16"
 "light" "25"
 }
-// entity 581
+// entity 580
 {
 "classname" "light"
 "origin" "-496 400 -16"
 "light" "25"
 }
-// entity 582
+// entity 581
 {
 "classname" "light"
 "origin" "-496 276 -16"
 "light" "25"
 }
-// entity 583
+// entity 582
 {
 "classname" "light"
 "origin" "-128 12 -16"
 "light" "25"
 }
-// entity 584
+// entity 583
 {
 "classname" "light"
 "origin" "192 12 -16"
 "light" "25"
 }
-// entity 585
+// entity 584
 {
 "classname" "light"
 "origin" "-472 40 -16"
 "light" "25"
 }
-// entity 586
+// entity 585
 {
 "classname" "light"
 "origin" "-372 12 -16"
 "light" "25"
 }
-// entity 587
+// entity 586
 {
 "classname" "light"
 "origin" "-320 624 -16"
 "light" "25"
 }
-// entity 588
+// entity 587
 {
 "classname" "light"
 "origin" "-432 568 -16"
 "light" "25"
 }
-// entity 589
+// entity 588
 {
 "classname" "light"
 "origin" "560 68 -16"
 "light" "25"
 }
-// entity 590
+// entity 589
 {
 "classname" "light"
 "origin" "336 624 -16"
 "light" "25"
 }
-// entity 591
+// entity 590
 {
 "classname" "light"
 "origin" "492 568 -16"
 "light" "25"
 }
-// entity 592
+// entity 591
 {
 "classname" "light"
 "origin" "560 420 -16"
 "light" "25"
 }
-// entity 593
+// entity 592
 {
 "classname" "light"
 "origin" "560 192 -16"
 "light" "25"
 }
-// entity 594
+// entity 593
 {
 "classname" "light"
 "light" "20"
 "origin" "1112 368 -16"
 }
-// entity 595
+// entity 594
 {
 "classname" "light"
 "light" "20"
 "origin" "988 200 -16"
 }
-// entity 596
+// entity 595
 {
 "classname" "light"
 "light" "20"
