@@ -381,13 +381,15 @@ void PrintWelcomeMessage(entity pl)
 	string s, modifications, motd;
 
 	if(self.cvar_scr_centertime == 0) return;
-	if((time - self.jointime) > cvar("welcome_message_time")
-	   && !self.BUTTON_INFO)
-		return;
+
+	if(!cvar("g_campaign"))
+		if((time - self.jointime) > cvar("welcome_message_time")
+		   && !self.BUTTON_INFO)
+			return;
 
 	if( !(timeoutStatus >= 1) ) { //really print the WelcomeMessage to the player every frame when timeout-seconds are shown or the game is restarted, to make sure that the shown number is accurate
 		if(self.welcomemessage_time > time) return;
-		self.welcomemessage_time = time + self.cvar_scr_centertime * 0.6;
+		self.welcomemessage_time = time + max(0.5, self.cvar_scr_centertime * 0.6);
 	}
 
 	if(cvar("g_campaign"))
