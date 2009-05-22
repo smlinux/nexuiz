@@ -199,7 +199,7 @@ void bot_debugcmd(entity cmd)
 void bot_queuecommand(entity bot, string cmdstring, string parm)
 {
 	entity cmd;
-	local float queue_index, cmd_parm_type, i;
+	local float cmd_parm_type, i;
 
 	if not(bot.isbot)
 		return;
@@ -245,7 +245,7 @@ void bot_queuecommand(entity bot, string cmdstring, string parm)
 
 void bot_cmdhelp(string scmd)
 {
-	local float i, index, ntype;
+	local float i, ntype;
 	local string stype;
 
 	if(!bot_cmds_initialized)
@@ -851,8 +851,7 @@ void bot_setcurrentcommand()
 // NOTE: Of course you need to include your commands here too :)
 float bot_execute_commands()
 {
-	local float status, index, ispressingkey;
-	local entity cmd;
+	local float status, ispressingkey;
 
 	// Find command
 	bot_setcurrentcommand();

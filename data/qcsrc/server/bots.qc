@@ -1653,8 +1653,6 @@ void navigation_bestgoals_reset()
 
 void navigation_add_bestgoal(entity goal)
 {
-	local float i;
-
 	if(bestgoalsrindex>0)
 	{
 		++bestgoalsrindex;
@@ -1677,7 +1675,6 @@ void navigation_add_bestgoal(entity goal)
 
 entity navigation_get_bestgoal()
 {
-	local float i;
 	local entity ent;
 
 	ent = navigation_bestgoals[bestgoalsrindex];
