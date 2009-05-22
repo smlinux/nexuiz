@@ -587,9 +587,7 @@ void CheckAllowedTeams (entity for_whom)
 		else if(g_race)
 			dm = race_teams;
 		else
-			dm = cvar("g_tdm_teams");
-		if(dm < 2)
-			error("g_tdm_teams < 2, not enough teams to play team deathmatch\n");
+			dm = 2;
 
 		if(dm >= 4)
 		{
@@ -1289,7 +1287,10 @@ void tdm_spawnteams()
 {
 	float numteams;
 
-	numteams = cvar("g_tdm_teams");
+	numteams = cvar("g_tdm_teams_override");
+	if(numteams < 2)
+		numteams = cvar("g_tdm_teams");
+	numteams = bound(2, numteams, 4);
 
 	tdm_spawnteam("Red", COLOR_TEAM1-1);
 	tdm_spawnteam("Blue", COLOR_TEAM2-1);
