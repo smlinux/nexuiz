@@ -22,6 +22,8 @@ COMPAT_FILES="
 	models/sprites/item-speed_frame1.tga
 	models/sprites/item-strength_frame0.tga
 	models/sprites/item-strength_frame1.tga
+	sound/weapons/weaponpickup.ogg
+	particles/particlefont.tga
 "
 
 rm -rf pack
