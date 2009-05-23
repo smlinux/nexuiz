@@ -86,6 +86,9 @@ When a button is touched by a player, it moves in the direction set by the "angl
 -------- KEYS --------
 angle: determines the direction in which the button will move (up = -1, down = -2).
 target: all entities with a matching targetname will be triggered.
+target2: all entities with a matching targetname will be triggered.
+target3: all entities with a matching targetname will be triggered.
+target4: all entities with a matching targetname will be triggered.
 speed: speed of button's displacement (default 40).
 wait: number of seconds button stays pressed (default 1, -1 = return immediately).
 lip: lip remaining at end of move (default 4 units).
