@@ -1328,7 +1328,7 @@ float isGametypeInFilter(float gt, float tp, string pattern)
 	return 1;
 }
 
-void shuffle(float n, shuffle_swapfunc_t swap)
+void shuffle(float n, swapfunc_t swap, entity pass)
 {
 	float i, j;
 	for(i = 1; i < n; ++i)
@@ -1344,7 +1344,7 @@ void shuffle(float n, shuffle_swapfunc_t swap)
 		//     q.e.d.
 		j = floor(random() * (i + 1));
 		if(j != i)
-			swap(j, i);
+			swap(j, i, pass);
 	}
 }
 
@@ -1374,7 +1374,7 @@ string swapwords(string str, float i, float j)
 }
 
 string _shufflewords_str;
-void _shufflewords_swapfunc(float i, float j)
+void _shufflewords_swapfunc(float i, float j, entity pass)
 {
 	_shufflewords_str = swapwords(_shufflewords_str, i, j);
 }
@@ -1383,7 +1383,7 @@ string shufflewords(string str)
 	float n;
 	_shufflewords_str = str;
 	n = tokenizebyseparator(str, " ");
-	shuffle(n, _shufflewords_swapfunc);
+	shuffle(n, _shufflewords_swapfunc, world);
 	str = _shufflewords_str;
 	_shufflewords_str = string_null;
 	return str;
@@ -1479,4 +1479,57 @@ vector decompressShotOrigin(float f)
 	v_y = ((f & 0xFF00) / 0x100 - 128) / 4;
 	v_z = ((f & 0xFF) - 128) / 4;
 	return v;
+}
+
+void heapsort(float n, swapfunc_t swap, comparefunc_t cmp, entity pass)
+{
+	float start, end, root, child;
+
+	// heapify
+	start = floor((n - 2) / 2);
+	while(start >= 0)
+	{
+		// siftdown(start, count-1);
+		root = start;
+		while(root * 2 + 1 <= n-1)
+		{
+			child = root * 2 + 1;
+			if(child < n-1)
+				if(cmp(child, child+1, pass) < 0)
+					++child;
+			if(cmp(root, child, pass) < 0)
+			{
+				swap(root, child, pass);
+				root = child;
+			}
+			else
+				break;
+		}
+		// end of siftdown
+		--start;
+	}
+
+	// extract
+	end = n - 1;
+	while(end > 0)
+	{
+		swap(0, end, pass);
+		--end;
+		// siftdown(0, end);
+		root = 0;
+		while(root * 2 + 1 <= end)
+		{
+			child = root * 2 + 1;
+			if(child < end && cmp(child, child+1, pass) < 0)
+				++child;
+			if(cmp(root, child, pass) < 0)
+			{
+				swap(root, child, pass);
+				root = child;
+			}
+			else
+				break;
+		}
+		// end of siftdown
+	}
 }
