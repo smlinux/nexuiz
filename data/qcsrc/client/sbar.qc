@@ -1727,12 +1727,12 @@ void Sbar_DrawPressedKeys(void)
 	
 	pressedkeys = getstatf(STAT_PRESSED_KEYS);
 	drawpic(pos + '-15   -6   0', "gfx/keys/key_bg.tga",           bgsize, '1 1 1', .1, DRAWFLAG_NORMAL);
-	drawpic(pos + ' 83.5  9   0', "gfx/keys/key_crouch.tga",   ' 24 24 0', '1 1 1', .5 * ((pressedkeys & KEY_CROUCH) + 1), DRAWFLAG_NORMAL);
-	drawpic(pos + ' 32   -1.5 0', "gfx/keys/key_forward.tga",  ' 32 32 0', '1 1 1', .5 * ((pressedkeys & KEY_FORWARD) + 1), DRAWFLAG_NORMAL);
-	drawpic(pos + '-11.5  9   0', "gfx/keys/key_jump.tga",     ' 24 24 0', '1 1 1', .5 * ((pressedkeys & KEY_JUMP) + 1), DRAWFLAG_NORMAL);
-	drawpic(pos + ' -1   32   0', "gfx/keys/key_left.tga",     ' 32 32 0', '1 1 1', .5 * ((pressedkeys & KEY_LEFT) + 1), DRAWFLAG_NORMAL);
-	drawpic(pos + ' 32   32   0', "gfx/keys/key_backward.tga", ' 32 32 0', '1 1 1', .5 * ((pressedkeys & KEY_BACKWARD) + 1), DRAWFLAG_NORMAL);
-	drawpic(pos + ' 65   32   0', "gfx/keys/key_right.tga",    ' 32 32 0', '1 1 1', .5 * ((pressedkeys & KEY_RIGHT) + 1), DRAWFLAG_NORMAL);
+	drawpic(pos + ' 83.5  9   0', ((pressedkeys & KEY_CROUCH) ? "gfx/keys/key_crouch_inv.tga" : "gfx/keys/key_crouch.tga"), ' 24 24 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawpic(pos + ' 32   -1.5 0', ((pressedkeys & KEY_FORWARD) ? "gfx/keys/key_forward_inv.tga" : "gfx/keys/key_forward.tga"),  ' 32 32 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawpic(pos + '-11.5  9   0', ((pressedkeys & KEY_JUMP) ? "gfx/keys/key_jump_inv.tga" : "gfx/keys/key_jump.tga"),     ' 24 24 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawpic(pos + ' -1   32   0', ((pressedkeys & KEY_LEFT) ? "gfx/keys/key_left_inv.tga" : "gfx/keys/key_left.tga"),     ' 32 32 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawpic(pos + ' 32   32   0', ((pressedkeys & KEY_BACKWARD) ? "gfx/keys/key_backward_inv.tga" : "gfx/keys/key_backward.tga"), ' 32 32 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawpic(pos + ' 65   32   0', ((pressedkeys & KEY_RIGHT) ? "gfx/keys/key_right_inv.tga" : "gfx/keys/key_right.tga"),    ' 32 32 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 }
 
 float GetAmmoStat(float i)
