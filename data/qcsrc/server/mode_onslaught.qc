@@ -20,7 +20,7 @@ void onslaught_link_checkupdate();
 
 void onslaught_generator_boom_think()
 {
-	self.nextthink = time;
+	self.nextthink = time + 0.05;
 	if(self.frame > 14)
 	{
 		self.think = SUB_Remove;
@@ -43,12 +43,12 @@ void onslaught_generator_boom_spawn(vector org, float fscale)
 	e.effects = EF_NOSHADOW;
 
 	e.think = onslaught_generator_boom_think;
-	e.nextthink = time;
+	e.nextthink = time + 0.05;
 };
 
 void ons_gib_damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector vforce)
 {
-	self.velocity += vforce;
+	self.velocity = self.velocity + vforce;
 }
 
 .float giblifetime;
@@ -56,7 +56,7 @@ void ons_throwgib_think()
 {
 	local vector org;
 
-	self.nextthink = time;
+	self.nextthink = time + 0.05;
 	if(self.count > self.giblifetime)
 	{
 		self.think = SUB_Remove;
@@ -64,8 +64,7 @@ void ons_throwgib_think()
 	}
 	if(self.count > self.giblifetime-10)
 		self.alpha -= 0.1;
-	org = self.origin + '-20 -20 -20';
-	org = randompos(org, self.origin + '20 20 20');
+	org = self.origin + 20 * randomvec();
 	onslaught_generator_boom_spawn(org, random()*0.5+0.3);
 	self.count +=1;
 };
@@ -86,12 +85,12 @@ void ons_throwgib(vector v_from, vector v_to, string smodel, float f_lifetime, f
 	gib.effects = EF_LOWPRECISION;
 	gib.flags = FL_NOTARGET;
 	gib.velocity = v_to;
-	gib.giblifetime		 = f_lifetime;
+	gib.giblifetime	= f_lifetime;
 
 	if (b_burn)
 	{
 		gib.think = ons_throwgib_think;
-		gib.nextthink = time;
+		gib.nextthink = time + 0.05;
 	}
 	else
 		SUB_SetFade(gib, time + f_lifetime, 2);
@@ -422,7 +421,7 @@ void onslaught_generator_think()
 
 void onslaught_generator_ring_think()
 {
-	self.nextthink = time;
+	self.nextthink = time + 0.05;
 	if(self.count > 24)
 	{
 		self.think = SUB_Remove;
@@ -430,11 +429,10 @@ void onslaught_generator_ring_think()
 	}
 
 	self.scale = self.count * 4;
-	setsize(self, self.mins * self.scale, self.maxs * self.scale);
 
 	self.frame = self.count;
 
-	self.count +=1;
+	self.count += 1;
 	self.alpha = 0.1;
 };
 
@@ -449,11 +447,11 @@ void onslaught_generator_ring_spawn(vector org)
 	e.alpha = 0;
 
 	e.think = onslaught_generator_ring_think;
-	e.nextthink = time;
+	e.nextthink = time + 0.05;
 };
 void onslaught_generator_ray_think()
 {
-	self.nextthink = time;
+	self.nextthink = time + 0.05;
 	if(self.count > 10)
 	{
 		self.think = SUB_Remove;
@@ -479,12 +477,12 @@ void onslaught_generator_ray_spawn(vector org)
 	e.alpha = 0;
 	e.scale = random() * 5 + 8;
 	e.think = onslaught_generator_ray_think;
-	e.nextthink = time;
+	e.nextthink = time + 0.05;
 };
 
 void onslaught_generator_shockwave_think()
 {
-	self.nextthink = time;
+	self.nextthink = time + 0.05;
 	if(self.count > 25)
 	{
 		self.think = SUB_Remove;
@@ -516,7 +514,7 @@ void onslaught_generator_shockwave_spawn(vector org)
 
 
 	e.think = onslaught_generator_shockwave_think;
-	e.nextthink = time;
+	e.nextthink = time + 0.05;
 };
 
 void onslaught_generator_damage_think()
@@ -532,11 +530,11 @@ void onslaught_generator_damage_think()
 	if(random() < 0.9 - self.owner.health / self.owner.max_health)
 		if(random() < 0.01)
 		{
-			pointparticles(particleeffectnum("electro_ballexplode"), randompos(self.origin+ '50 50 50', self.origin - '50 50 20'), '0 0 0', 1);
+			pointparticles(particleeffectnum("electro_ballexplode"), self.origin + randompos('-50 -50 -20', '50 50 50'), '0 0 0', 1);
 			sound(self, CHAN_TRIGGER, "onslaught/electricity_explode.ogg", VOL_BASE, ATTN_NORM);
 		}
 		else
-			pointparticles(particleeffectnum("torch_small"), randompos(self.origin + '60 60 60', self.origin - '60 60 20'), '0 0 0', 1);
+			pointparticles(particleeffectnum("torch_small"), self.origin + randompos('-60 -60 -20', '60 60 60'), '0 0 0', 1);
 };
 
 void onslaught_generator_damage_spawn(entity gd_owner)
@@ -580,10 +578,7 @@ void onslaught_generator_deaththink()
 	// Spawn fire balls
 	for(i=0;i < 6;++i)
 	{
-		org = self.origin - '20 20 20' * i*1.5;
-		org_z = self.origin_z - 20;
-		org = randompos(org, self.origin + '20 20 20' * i * 1.5 + '0 0 20');
-
+		org = self.origin + randompos('-30 -30 -30' * i + '0 0 -20', '30 30 30' * i + '0 0 20');
 		onslaught_generator_boom_spawn(org, (6-i)/5+0.3);
 	}
 
@@ -595,7 +590,7 @@ void onslaught_generator_deaththink()
 	}
 
 	// Particles
-	org = randompos(self.origin + self.mins + '8 8 8', self.origin + self.maxs + '-8 -8 -8');
+	org = self.origin + randompos(self.mins + '8 8 8', self.maxs + '-8 -8 -8');
 	pointparticles(particleeffectnum("onslaught_generator_smallexplosion"), org, '0 0 0', 1);
 
 	// rays
@@ -614,7 +609,7 @@ void onslaught_generator_deaththink()
 		sound(self, CHAN_TRIGGER, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
 	}
 	else
-		self.nextthink = time;
+		self.nextthink = time + 0.05;
 
 	self.count = self.count - 1;
 };
@@ -1109,7 +1104,7 @@ void onslaught_controlpoint_icon_think()
 	else
 		self.punchangle_z = 0;
 	self.angles_x = self.punchangle_x;
-	self.angles_y = self.angles_y + self.punchangle_y + 2;
+	self.angles_y = self.punchangle_y;
 	self.angles_z = self.punchangle_z;
 
 	self.cp_bob_origin_z = 4 * PI * (1 - cos(self.cp_bob_spd / 8));
@@ -1123,7 +1118,7 @@ void onslaught_controlpoint_icon_think()
 	// damaged fx
 	if(random() < 0.6 - self.health / self.max_health)
 	{
-		pointparticles(particleeffectnum("electricity_sparks"), randompos(self.origin+ '10 10 20', self.origin - '10 10 20'), '0 0 0', 1);
+		pointparticles(particleeffectnum("electricity_sparks"), self.origin + randompos('-10 -10 -20', '10 10 20'), '0 0 0', 1);
 
 		if(random() > 0.8)
 			sound(self, CHAN_PAIN, "onslaught/ons_spark1.wav", VOL_BASE, ATTN_NORM);
@@ -1144,7 +1139,7 @@ void onslaught_controlpoint_icon_buildthink()
 	if(!a)
 		return;
 
-	self.health = self.health + (self.count / 2);
+	self.health = self.health + self.count;
 
 	if (self.health >= self.max_health)
 	{
@@ -1174,7 +1169,7 @@ void onslaught_controlpoint_icon_buildthink()
 	//setsize(self, '-32 -32 0', '32 32 8');
 
 	if(random() < 0.9 - self.health / self.max_health)
-		pointparticles(particleeffectnum("rage"), randompos(self.origin + '10 10 10', self.origin - '10 10 10'), '0 0 -1', 1);
+		pointparticles(particleeffectnum("rage"), self.origin + 10 * randomvec(), '0 0 -1', 1);
 };
 
 
@@ -1209,7 +1204,7 @@ void onslaught_controlpoint_touch()
 	e.colormap = 1024 + (e.team - 1) * 17;
 	e.think = onslaught_controlpoint_icon_buildthink;
 	e.nextthink = time + 0.1;
-	e.count = e.max_health / 50; // how long it takes to build
+	e.count = e.max_health / 100; // how long it takes to build
 	sound(e, CHAN_TRIGGER, "onslaught/controlpoint_build.wav", VOL_BASE, ATTN_NORM);
 	self.team = e.team;
 	self.colormap = e.colormap;
