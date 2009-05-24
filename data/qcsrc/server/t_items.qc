@@ -124,7 +124,7 @@ void Item_ScheduleRespawn(entity e)
 
 void Item_ScheduleInitialRespawn(entity e)
 {
-	Item_ScheduleRespawnIn(e, ITEM_RESPAWNTIME_INITIAL(e));
+	Item_ScheduleRespawnIn(e, game_starttime - time + ITEM_RESPAWNTIME_INITIAL(e));
 }
 
 float Item_GiveTo(entity item, entity player)
