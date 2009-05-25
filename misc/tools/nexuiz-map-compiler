@@ -30,6 +30,9 @@ use File::Temp;
 	# Default flags for the -minimap stage
 	our $MINIMAPFLAGS = '';
 
+	# Default order of commands
+	our $ORDER = 'light,vis,minimap';
+
 # end of user changable part
 
 do "$ENV{HOME}/.nexuiz-map-compiler";
@@ -49,6 +52,7 @@ my $options =
 	vis => [split /\s+/, $VISFLAGS],
 	light => [split /\s+/, $LIGHTFLAGS],
 	minimap => [split /\s+/, $MINIMAPFLAGS],
+	order => [split /\s*,\s*/, $ORDER],
 	maps => [],
 	scale => 1
 };
@@ -94,6 +98,10 @@ while(@ARGV)
 	elsif($_ eq '-nominimap')
 	{
 		$options->{minimap} = undef;
+	}
+	elsif($_ eq '-order')
+	{
+		$options->{order} = [split /\s*,\s*/, shift @ARGV];
 	}
 	elsif($_ =~ /^-(-.*)/)
 	{
@@ -244,27 +252,45 @@ for my $m(@{$options->{maps}})
 			rename "${m}_s.bsp", "$m.bsp"
 				or die "rename ${m}_s.bsp $m.bsp: $!";
 		}
-		if(defined $options->{light})
+		my @o = @{$options->{order}};
+		push @o, qw/light vis minimap/;
+		my %o = ();
+
+		for(@o)
 		{
-			q3map2 '-light',        @{$options->{light}}, "$m.map"
-				or die "-light: $?";
+			next if $o{$_}++;
+			if($_ eq 'light')
+			{
+				if(defined $options->{light})
+				{
+					q3map2 '-light',        @{$options->{light}}, "$m.map"
+						or die "-light: $?";
+				}
+			}
+			if($_ eq 'vis')
+			{
+				if(defined $options->{vis})
+				{
+					q3map2 '-vis',          @{$options->{vis}},   "$m.map"
+						or die "-vis: $?";
+				}
+			}
+			if($_ eq 'minimap')
+			{
+				if(defined $options->{minimap})
+				{
+					q3map2 '-minimap',      @{$options->{minimap}}, "$m.map"
+						or die "-minimap: $?";
+				}
+			}
 		}
-		if(defined $options->{vis})
-		{
-			q3map2 '-vis',          @{$options->{vis}},   "$m.map"
-				or die "-vis: $?";
-		}
+
 		if($postscale != 1)
 		{
 			q3map2 '-scale', $postscale, "$m.bsp"
 				or die "-scale: $?";
 			rename "${m}_s.bsp", "$m.bsp"
 				or die "rename ${m}_s.bsp $m.bsp: $!";
-		}
-		if(defined $options->{minimap})
-		{
-			q3map2 '-minimap',      @{$options->{minimap}}, "$m.map"
-				or die "-minimap: $?";
 		}
 
 		unlink "$m.srf";
