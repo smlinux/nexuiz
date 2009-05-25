@@ -77,7 +77,8 @@ sub markmap($$$$;$)
 [ dp => q{pure: -(\S+) (.*)} => sub {
 	my ($status, $nick) = @_;
 	$nick = color_dp2irc $nick;
-	out irc => 0, "PRIVMSG $config{irc_channel} :\001ACTION thinks $nick is $status\001";
+	out irc => 0, "PRIVMSG $config{irc_channel} :\001ACTION thinks $nick is $status\001"
+		unless $status eq 'MODIFIED'; # in this case, either DETAIL_TIMEOUT or DETAIL_MISMATCH follows
 	return 0;
 } ],
 [ dp => q{pure: \*DETAIL_MISMATCH (.*) (\S+)$} => sub {

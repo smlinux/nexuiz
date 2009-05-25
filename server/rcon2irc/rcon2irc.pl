@@ -466,7 +466,7 @@ sub send($$$)
 	my ($self, $line, $nothrottle) = @_;
 	if($self->{secure})
 	{
-		my $t = sprintf "%ld", time();
+		my $t = sprintf "%ld.%06d", time(), int rand 1000000;
 		my $key = Digest::HMAC::hmac("$t $line", $self->{password}, \&Digest::MD4::md4);
 		return $self->{connector}->send("\377\377\377\377srcon HMAC-MD4 TIME $key $t $line");
 	}
