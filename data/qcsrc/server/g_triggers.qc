@@ -221,10 +221,14 @@ void multi_eventdamage (entity inflictor, entity attacker, float damage, float d
 
 void multi_reset()
 {
-	self.touch = multi_touch;
-	self.health = self.max_health;
-	self.takedamage = DAMAGE_YES;
-	self.solid = SOLID_BBOX;
+	if ( !(self.spawnflags & SPAWNFLAG_NOTOUCH) )
+		self.touch = multi_touch;
+	if (self.max_health)
+	{
+		self.health = self.max_health;
+		self.takedamage = DAMAGE_YES;
+		self.solid = SOLID_BBOX;
+	}
 	self.think = SUB_Null;
 	self.team = self.team_saved;
 }
