@@ -2,6 +2,7 @@ Quark
 models/player/quark
 0
 models/player/crash.zym
+species robot_shiny
 
 Robot Fighter
 

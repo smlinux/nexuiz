@@ -20,9 +20,10 @@ void Violence_GibSplash_At(vector org, vector mi, vector ma, vector dir, float t
 	e = spawn();
 	e.classname = "gibsplash";
 	e.cnt = amount;
-	e.state = type;
+	e.state = type; // should stay smaller than 15
 	if(sv_gentle)
 		e.state |= 0x80; // "force gentle" bit
+	e.state |= 8 * self.species; // gib type, ranges from 0 to 15
 	setorigin(e, org);
 	setsize(e, mi, ma);
 	e.velocity = dir;

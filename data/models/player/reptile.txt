@@ -2,6 +2,7 @@ Reptile
 models/player/reptile
 1
 models/player/lurk.zym
+species alien
 
 Reptilian Combatant
 

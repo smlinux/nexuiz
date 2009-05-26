@@ -45,6 +45,7 @@ void CopyBody(float keepvelocity)
 	self.armortype = oldself.armortype;
 	self.model = oldself.model;
 	self.modelindex = oldself.modelindex;
+	self.species = oldself.species;
 	self.movetype = oldself.movetype;
 	self.nextthink = oldself.nextthink;
 	self.skin = oldself.skin;
@@ -66,6 +67,58 @@ void CopyBody(float keepvelocity)
 	Drag_MoveDrag(oldself, self);
 
 	self = oldself;
+}
+
+float player_getspecies()
+{
+	local float glob, i, j, fh, len, s, sk;
+	local string fn, l;
+
+	s = -1;
+
+	glob = search_begin("models/player/*.txt", TRUE, TRUE);
+	if(glob < 0)
+		return s;
+	for(j = 0; j <= 1; ++j)
+	{
+		for(i = 0; i < search_getsize(glob); ++i)
+		{
+			fn = search_getfilename(glob, i);
+			fh = fopen(fn, FILE_READ);
+			if(fh < 0)
+				continue;
+			fgets(fh); fgets(fh);
+			sk = stof(fgets(fh));
+			if(sk == (j ? 0 : self.skin)) // 2nd pass skips the skin test
+			if(fgets(fh) == self.model)
+			{
+				l = fgets(fh);
+				len = tokenize_console(l);
+				if (len != 2)
+					break;
+				if (argv(0) != "species")
+					break;
+				switch(argv(1))
+				{
+					case "human":       s = SPECIES_HUMAN;       break;
+					case "alien":       s = SPECIES_ALIEN;       break;
+					case "robot_shiny": s = SPECIES_ROBOT_SHINY; break;
+					case "robot_rusty": s = SPECIES_ROBOT_RUSTY; break;
+					case "animal":      s = SPECIES_ANIMAL;      break;
+					case "reserved":    s = SPECIES_RESERVED;    break;
+				}
+			}
+			fclose(fh);
+		}
+		if (s >= 0)
+			break;
+	}
+	search_end(glob);
+
+	if (s < 0)
+		s = SPECIES_HUMAN;
+
+	return s;
 }
 
 void player_setupanimsformodel()

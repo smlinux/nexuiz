@@ -167,6 +167,8 @@ void setanim(entity e, vector anim, float looping, float override, float restart
 .string playermodel;
 .string playerskin;
 
+.float species;
+
 .float	respawntime;
 .float	respawntimejitter;
 //.float	chasecam;

@@ -741,6 +741,7 @@ type blood
 tex 24 32
 size 3 8
 alpha 256 256 64
+color 0xBEFFFF 0xBEFFFFF
 bounce -1
 airfriction 1
 liquidfriction 4
@@ -782,7 +783,7 @@ stretchfactor 0.6
 effect TR_BLOOD
 trailspacing 16
 type blood
-color 0xFFFFFF 0xFFFFFF
+color 0xBEFFFF 0xBEFFFF
 tex 24 32
 size 8 8
 alpha 384 384 192
@@ -799,7 +800,7 @@ velocitymultiplier 0.5
 effect TR_SLIGHTBLOOD
 trailspacing 32
 type blood
-color 0xFFFFFF 0xFFFFFF
+color 0xBEFFFF 0xBEFFFF
 tex 24 32
 size 8 8
 alpha 384 384 192
@@ -3252,3 +3253,99 @@ velocityjitter 32 32 0
 tex 40 40
 //lightradius 200
 //lighttime 0
+
+effect alien_blood
+count 0.333
+type blood
+tex 24 32
+size 3 8
+alpha 256 256 64
+color 0xDC9BCD 0xDC9BCD
+bounce -1
+airfriction 1
+liquidfriction 4
+velocityjitter 64 64 64
+velocitymultiplier 5
+//blood mist
+effect alien_blood
+countabsolute 1
+type alphastatic
+tex 0 8
+size 25 30
+alpha 100 256 400
+color 0x000000 0x236432
+originjitter 11 11 11
+
+effect robot_blood
+count 0.333
+type blood
+tex 24 32
+size 3 8
+alpha 256 256 64
+bounce -1
+airfriction 1
+liquidfriction 4
+velocityjitter 64 64 64
+velocitymultiplier 5
+//blood mist
+effect robot_blood
+countabsolute 1
+type alphastatic
+tex 0 8
+size 25 30
+alpha 100 256 400
+color 0x000000 0x321964
+originjitter 11 11 11
+
+
+effect alien_TR_BLOOD
+trailspacing 16
+type blood
+color 0xDC9BCD 0xDC9BCD
+tex 24 32
+size 8 8
+alpha 384 384 192
+bounce -1
+airfriction 1
+liquidfriction 4
+velocityjitter 64 64 64
+velocitymultiplier 0.5
+
+effect robot_TR_BLOOD
+trailspacing 16
+type blood
+color 0xCDE69B 0xCDE69B
+tex 24 32
+size 8 8
+alpha 384 384 192
+bounce -1
+airfriction 1
+liquidfriction 4
+velocityjitter 64 64 64
+velocitymultiplier 0.5
+
+effect alien_TR_SLIGHTBLOOD
+trailspacing 32
+type blood
+color 0xDC9BCD 0xDC9BCD
+tex 24 32
+size 80 80
+alpha 384 384 192
+bounce -1
+airfriction 1
+liquidfriction 4
+velocityjitter 64 64 64
+velocitymultiplier 0.5
+
+effect robot_TR_SLIGHTBLOOD
+trailspacing 32
+type blood
+color 0xCDE69B 0xCDE69B
+tex 24 32
+size 8 8
+alpha 384 384 192
+bounce -1
+airfriction 1
+liquidfriction 4
+velocityjitter 64 64 64
+velocitymultiplier 0.5

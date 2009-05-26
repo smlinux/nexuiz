@@ -2,6 +2,7 @@ Marine
 models/player/marine
 0
 models/player/marine.zym
+species human
 
 Service Man
 

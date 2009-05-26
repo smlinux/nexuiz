@@ -80,6 +80,7 @@ void loadCvarsNexuizPlayerModelSelector(entity me)
 			me.currentModelTxtName = strzone(fn);
 			me.currentModelTitle = strzone(t);
 			me.currentModelDescription = "";
+			fgets(fh); // Skip species
 			while((l = fgets(fh)))
 			{
 				if(me.currentModelDescription != "")
@@ -141,6 +142,7 @@ void goNexuizPlayerModelSelector(entity me, float d)
 	me.currentSkin = stof(fgets(fh));
 	me.currentModel = strzone(fgets(fh));
 	me.currentModelDescription = "";
+	fgets(fh); // Skip species
 	while((l = fgets(fh)))
 	{
 		if(me.currentModelDescription != "")

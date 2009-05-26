@@ -2,6 +2,7 @@ Carni
 models/player/carni
 0
 models/player/carni.zym
+species alien
 
 Mutated Warrior
 

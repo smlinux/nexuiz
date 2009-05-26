@@ -2,6 +2,7 @@ Lycanthrope
 models/player/lycanthrope
 0
 models/player/lycanthrope.zym
+species human
 
 Monsterous Opponent
 

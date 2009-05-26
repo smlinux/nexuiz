@@ -381,6 +381,13 @@ float PROJECTILE_HAGAR_BOUNCING = 17;
 float PROJECTILE_BULLET_GLOWING = 18;
 float PROJECTILE_CRYLINK_BOUNCING = 19;
 
+float SPECIES_HUMAN        =  0;
+float SPECIES_ROBOT_SHINY  =  1;
+float SPECIES_ALIEN        =  2;
+float SPECIES_ROBOT_RUSTY  =  3;
+float SPECIES_ANIMAL       =  4;
+float SPECIES_RESERVED     = 15;
+
 // Deathtypes (weapon deathtypes are the IT_* constants below)
 // NOTE: when adding death types, please add an explanation to Docs/spamlog.txt too.
 float DEATH_SPECIAL_START = 10000;

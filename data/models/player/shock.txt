@@ -2,6 +2,7 @@ Shock Trooper
 models/player/shock
 0
 models/player/shock.zym
+species human
 
 Necro Warrior
 

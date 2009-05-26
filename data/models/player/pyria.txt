@@ -2,6 +2,7 @@ Pyria
 models/player/pyria
 0
 models/player/pyria.zym
+species human
 
 Necro Warrior
 

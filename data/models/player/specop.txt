@@ -2,6 +2,7 @@ Specop
 models/player/specop
 0
 models/player/specop.zym
+species human
 
 Solo Warrior
 

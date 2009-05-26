@@ -610,7 +610,7 @@ float RestrictSkin(float s)
 void FixPlayermodel()
 {
 	local string defaultmodel;
-	local float defaultskin;
+	local float defaultskin, chmdl, oldskin;
 	local vector m1, m2;
 
 	defaultmodel = "";
@@ -649,6 +649,7 @@ void FixPlayermodel()
 		}
 
 		self.skin = defaultskin;
+		self.species = player_getspecies();
 	} else {
 		if (self.playermodel != self.model)
 		{
@@ -657,9 +658,14 @@ void FixPlayermodel()
 			m2 = self.maxs;
 			setmodel_lod (self, self.playermodel);
 			setsize (self, m1, m2);
+			chmdl = TRUE;
 		}
 
+		oldskin = self.skin;
 		self.skin = RestrictSkin(stof(self.playerskin));
+
+		if(chmdl || oldskin != self.skin)
+			self.species = player_getspecies(); // model or skin has changed
 	}
 
 	if(!teams_matter)

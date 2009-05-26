@@ -2,6 +2,7 @@ Insurrectionist
 models/player/insurrectionist
 0
 models/player/insurrectionist.zym
+species human
 
 Warrior
 

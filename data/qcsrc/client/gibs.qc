@@ -1,3 +1,17 @@
+string species_prefix(float specnum)
+{
+	switch(specnum)
+	{
+		case SPECIES_HUMAN:       return "";
+		case SPECIES_ALIEN:       return "alien_";
+		case SPECIES_ROBOT_SHINY: return "robot_";
+		case SPECIES_ROBOT_RUSTY: return "robot_"; // use the same effects, only different gibs
+		case SPECIES_ANIMAL:      return "animal_";
+		case SPECIES_RESERVED:    return "reserved_";
+		default:         return "";
+	}
+}
+
 void SUB_RemoveOnNoImpact()
 {
 	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
@@ -15,7 +29,7 @@ void Gib_Touch()
 	}
 	
 	sound(self, CHAN_PAIN, strcat("misc/gib_splat0", ftos(floor(prandom() * 4 + 1)), ".wav"), VOL_BASE, ATTN_NORM);
-	pointparticles(particleeffectnum("blood"), self.origin + '0 0 1', '0 0 30', 10);
+	pointparticles(particleeffectnum(strcat(species_prefix(self.cnt), "_blood")), self.origin + '0 0 1', '0 0 30', 10);
 
 	remove(self);
 }
@@ -30,9 +44,9 @@ void Gib_Draw()
 		return;
 	
 	if(self.touch == Gib_Touch) // don't do this for the "chunk" thingie...
-		trailparticles(self, particleeffectnum("TR_SLIGHTBLOOD"), oldorg, self.origin);
+		trailparticles(self, particleeffectnum(strcat(species_prefix(self.cnt), "TR_SLIGHTBLOOD")), oldorg, self.origin);
 	else
-		trailparticles(self, particleeffectnum("TR_BLOOD"), oldorg, self.origin);
+		trailparticles(self, particleeffectnum(strcat(species_prefix(self.cnt), "TR_BLOOD")), oldorg, self.origin);
 
 	self.renderflags = 0;
 	self.alpha = bound(0, self.nextthink - time, 1);
@@ -43,7 +57,7 @@ void Gib_Draw()
 		R_AddEntity(self);
 }
 
-void TossGib (string mdlname, vector org, vector vconst, vector vrand, float destroyontouch)
+void TossGib (string mdlname, vector org, vector vconst, vector vrand, float specnum, float destroyontouch)
 {
 	entity gib;
 
@@ -54,8 +68,10 @@ void TossGib (string mdlname, vector org, vector vconst, vector vrand, float des
 	gib.move_movetype = MOVETYPE_BOUNCE;
 	gib.gravity = 1;
 	gib.solid = SOLID_CORPSE;
+	gib.cnt = specnum;
 
 	setmodel (gib, mdlname); // precision set above
+	gib.skin = specnum;
 
 	setsize (gib, '-8 -8 -8', '8 8 8');
                                           
@@ -76,8 +92,9 @@ void TossGib (string mdlname, vector org, vector vconst, vector vrand, float des
 
 void Ent_GibSplash()
 {
-	float amount, type;
+	float amount, type, specnum;
 	vector org, vel, mi, ma;
+	string specstr;
 
 	float c, gibfactor, randomvalue;
 
@@ -104,51 +121,55 @@ void Ent_GibSplash()
 	
 	self.origin = org; // for the sounds
 
+	specnum = (type & 0x78) / 8; // blood/gibmodel type: using four bits (0..15, bit indexes 3,4,5,6)
+	type = type & 0x87; // remove the species bits: bit 7 = gentle, bit 0,1,2 = kind of gib
+	specstr = species_prefix(specnum);
+
 	switch(type)
 	{
 		case 0x01:
 			sound (self, CHAN_PAIN, "misc/gib.wav", VOL_BASE, ATTN_NORM);
 
 			if(prandom() < amount)
-				TossGib("models/gibs/eye.md3", org, vel, prandomvec() * 150, 0);
+				TossGib ("models/gibs/eye.md3", org, vel, prandomvec() * 150, specnum, 0);
 			te_bloodshower(org + mi, org + ma, 1200, 1000 * amount);
 			if(prandom() < amount)
-				TossGib("models/gibs/bloodyskull.md3", org, vel, prandomvec() * 100, 0);
+				TossGib ("models/gibs/bloodyskull.md3", org, vel, prandomvec() * 100, specnum, 0);
 
 			for(c = 0; c < amount; ++c)
 			{
 				randomvalue = amount - c;
 					
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/arm.md3", org, vel, prandomvec() * (prandom() * 120 + 90),0);
+					TossGib ("models/gibs/arm.md3", org, vel, prandomvec() * (prandom() * 120 + 90), specnum,0);
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/arm.md3", org, vel, prandomvec() * (prandom() * 120 + 90),0);
+					TossGib ("models/gibs/arm.md3", org, vel, prandomvec() * (prandom() * 120 + 90), specnum,0);
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/chest.md3", org + '0 0 -12', vel, prandomvec() * (prandom() * 120 + 80),0);
+					TossGib ("models/gibs/chest.md3", org + '0 0 -12', vel, prandomvec() * (prandom() * 120 + 80), specnum,0);
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/smallchest.md3", org, vel, prandomvec() * (prandom() * 120 + 80),0);
+					TossGib ("models/gibs/smallchest.md3", org, vel, prandomvec() * (prandom() * 120 + 80), specnum,0);
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/leg1.md3", org + '0 0 -5', vel, prandomvec() * (prandom() * 120 + 85),0);
+					TossGib ("models/gibs/leg1.md3", org + '0 0 -5', vel, prandomvec() * (prandom() * 120 + 85), specnum,0);
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/leg2.md3", org + '0 0 -9', vel, prandomvec() * (prandom() * 120 + 85),0);
+					TossGib ("models/gibs/leg2.md3", org + '0 0 -9', vel, prandomvec() * (prandom() * 120 + 85), specnum,0);
 
 				// these splat on impact
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/chunk.mdl", org, vel, prandomvec() * 450,1);
+					TossGib ("models/gibs/chunk.mdl", org, vel, prandomvec() * 450, specnum,1);
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/chunk.mdl", org, vel, prandomvec() * 450,1);
+					TossGib ("models/gibs/chunk.mdl", org, vel, prandomvec() * 450, specnum,1);
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/chunk.mdl", org, vel, prandomvec() * 450,1);
+					TossGib ("models/gibs/chunk.mdl", org, vel, prandomvec() * 450, specnum,1);
 				if(prandom() < randomvalue)
-					TossGib ("models/gibs/chunk.mdl", org, vel, prandomvec() * 450,1);
+					TossGib ("models/gibs/chunk.mdl", org, vel, prandomvec() * 450, specnum,1);
 			}
 			break;
 		case 0x02:
-			pointparticles(particleeffectnum("blood"), org, vel, amount * 16);
+			pointparticles(particleeffectnum(strcat(specstr, "blood")), org, vel, amount * 16);
 			break;
 		case 0x03:
 			if(prandom() < amount)
-				TossGib ("models/gibs/chunk.mdl", org, vel, prandomvec() * (prandom() * 30 + 20), 1); // TODO maybe adjust to more randomization?
+				TossGib ("models/gibs/chunk.mdl", org, vel, prandomvec() * (prandom() * 30 + 20), specnum, 1); // TODO maybe adjust to more randomization?
 			break;
 		case 0x81:
 			pointparticles(particleeffectnum("damage_dissolve"), org, vel, amount);

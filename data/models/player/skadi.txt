@@ -2,6 +2,7 @@ Skadi
 models/player/skadi
 0
 models/player/skadi.zym
+species human
 
 Necro Warrior
 

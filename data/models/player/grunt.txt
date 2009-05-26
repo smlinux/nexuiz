@@ -2,6 +2,7 @@ Grunt
 models/player/grunt
 0
 models/player/grunt.zym
+species robot_shiny
 
 Half Mechanical 
 Human Fighter

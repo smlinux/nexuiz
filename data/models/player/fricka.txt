@@ -2,6 +2,7 @@ Fricka
 models/player/fricka
 1
 models/player/visitant.zym
+species alien
 
 Mutated Warrior
 
