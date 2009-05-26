@@ -741,7 +741,7 @@ type blood
 tex 24 32
 size 3 8
 alpha 256 256 64
-color 0xBEFFFF 0xBEFFFFF
+color 0x90FFFF 0x90FFFFF
 bounce -1
 airfriction 1
 liquidfriction 4
@@ -783,7 +783,7 @@ stretchfactor 0.6
 effect TR_BLOOD
 trailspacing 16
 type blood
-color 0xBEFFFF 0xBEFFFF
+color 0x90FFFF 0x90FFFF
 tex 24 32
 size 8 8
 alpha 384 384 192
@@ -800,7 +800,7 @@ velocitymultiplier 0.5
 effect TR_SLIGHTBLOOD
 trailspacing 32
 type blood
-color 0xBEFFFF 0xBEFFFF
+color 0x90FFFF 0x90FFFF
 tex 24 32
 size 8 8
 alpha 384 384 192
