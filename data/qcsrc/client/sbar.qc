@@ -1094,12 +1094,20 @@ string MakeRaceString(float cp, float mytime, float histime, float lapdelta, str
 
 void Sbar_Score(float margin)
 {
-	float timelimit, minutes, seconds, timeleft, minutesLeft, secondsLeft, distribution, myplace, score;
+	float timelimit, minutes, seconds, timeleft, minutesLeft, secondsLeft, distribution, myplace, score, desiredPlayerId;
 	vector sbar_save, place, timer_color;
 	entity tm, pl, me;
 	sbar_save = sbar;
 	
-	myteam = GetPlayerColor(player_localentnum - 1);
+	//get the ID (could be "me", or the player I'm spectating)
+	desiredPlayerId = player_localentnum - 1;
+	if (spectatee_status) {
+		if (spectatee_status != -1) {
+			desiredPlayerId = spectatee_status - 1;
+		}
+	}
+	
+	myteam = GetPlayerColor(desiredPlayerId);
 
 	sbar_y = vid_conheight - (32+12);
 	sbar_x -= margin;
@@ -1134,7 +1142,7 @@ void Sbar_Score(float margin)
 		{
 			if(me.team != COLOR_SPECTATOR)
 				++myplace;
-			if(me.sv_entnum == player_localentnum - 1)
+			if(me.sv_entnum == desiredPlayerId)
 				break;
 		}
 		pl = players.sort_next;
