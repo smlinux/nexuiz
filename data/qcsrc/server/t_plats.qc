@@ -1181,6 +1181,7 @@ void door_init_startopen()
 void door_reset()
 {
 	setorigin(self, self.pos1);
+	self.velocity = '0 0 0';
 	self.state = STATE_BOTTOM;
 	self.think = SUB_Null;
 }
@@ -1282,6 +1283,7 @@ FIXME: only one sound set available at the time being
 void door_rotating_reset()
 {
 	self.angles = self.pos1;
+	self.avelocity = '0 0 0';
 	self.state = STATE_BOTTOM;
 	self.think = SUB_Null;
 }
