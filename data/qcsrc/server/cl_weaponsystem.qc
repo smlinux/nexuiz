@@ -108,7 +108,7 @@ void W_SetupShot(entity ent, float antilag, float recoil, string snd)
 	float nudge = 1; // added to traceline target and subtracted from result
 	local vector trueaimpoint;
 	local float oldsolid;
-	vector vecs;
+	vector vecs, dv;
 	oldsolid = ent.dphitcontentsmask;
 	ent.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE;
 	traceline(ent.origin + ent.view_ofs, ent.origin + ent.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, ent);
@@ -127,7 +127,12 @@ void W_SetupShot(entity ent, float antilag, float recoil, string snd)
 	if(debug_shotorg != '0 0 0')
 		vecs = debug_shotorg;
 	
-	w_shotorg = ent.origin + ent.view_ofs + v_right * vecs_y + v_up * vecs_z;
+	dv = v_right * vecs_y + v_up * vecs_z;
+	w_shotorg = ent.origin + ent.view_ofs + dv;
+
+	// move the vecs sideways as much as requested if possible
+	traceline(ent.origin + ent.view_ofs, w_shotorg + normalize(dv) * nudge, MOVE_NORMAL, ent);
+	w_shotorg = trace_endpos - normalize(dv) * nudge;
 
 	// now move the shotorg forward as much as requested if possible
 	traceline(w_shotorg, w_shotorg + v_forward * (vecs_x + nudge), MOVE_NORMAL, ent);

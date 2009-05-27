@@ -210,7 +210,7 @@ float TrueAimCheck()
 {
 	float nudge = 1; // added to traceline target and subtracted from result
 	vector vecs, trueaimpoint, w_shotorg;
-	vector mi, ma;
+	vector mi, ma, dv;
 
 	mi = ma = '0 0 0';
 
@@ -244,7 +244,12 @@ float TrueAimCheck()
 	else
 		vecs = '0 0 0';
 
-	w_shotorg = view_origin + view_right * vecs_y + view_up * vecs_z;
+	dv = view_right * vecs_y + view_up * vecs_z;
+	w_shotorg = view_origin + dv;
+
+	// move the vecs sideways as much as requested if possible
+	traceline(view_origin, w_shotorg + normalize(dv) * nudge, MOVE_NORMAL, trueaim);
+	w_shotorg = trace_endpos - normalize(dv) * nudge;
 
 	// now move the vecs forward as much as requested if possible
 	traceline(w_shotorg, w_shotorg + view_forward * (vecs_x + nudge), MOVE_NORMAL, trueaim); // FIXME this MOVE_NORMAL part will misbehave a little in csqc
