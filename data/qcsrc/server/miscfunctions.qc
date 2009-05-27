@@ -7,37 +7,6 @@ void() spawnfunc_info_player_deathmatch; // needed for the other spawnpoints
 void() spawnpoint_use;
 string ColoredTeamName(float t);
 
-float RandomSelection_totalweight;
-float RandomSelection_best_priority;
-entity RandomSelection_chosen_ent;
-float RandomSelection_chosen_float;
-void RandomSelection_Init()
-{
-	RandomSelection_totalweight = 0;
-	RandomSelection_chosen_ent = world;
-	RandomSelection_chosen_float = 0;
-	RandomSelection_best_priority = -1;
-}
-void RandomSelection_Add(entity e, float f, float weight, float priority)
-{
-	if(priority > RandomSelection_best_priority)
-	{
-		RandomSelection_best_priority = priority;
-		RandomSelection_chosen_ent = e;
-		RandomSelection_chosen_float = f;
-		RandomSelection_totalweight = weight;
-	}
-	else if(priority == RandomSelection_best_priority)
-	{
-		RandomSelection_totalweight += weight;
-		if(random() * RandomSelection_totalweight <= weight)
-		{
-			RandomSelection_chosen_ent = e;
-			RandomSelection_chosen_float = f;
-		}
-	}
-}
-
 float DistributeEvenly_amount;
 float DistributeEvenly_totalweight;
 void DistributeEvenly_Init(float amount, float totalweight)

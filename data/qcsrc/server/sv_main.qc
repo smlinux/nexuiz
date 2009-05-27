@@ -200,7 +200,7 @@ void StartFrame (void)
 	{
 		RandomSelection_Init();
 		for(self = world; (self = find(self, classname, "player")); )
-			RandomSelection_Add(self, 0, 1, 0);
+			RandomSelection_Add(self, 0, string_null, 1, 0);
 		self = RandomSelection_chosen_ent;
 		SelectSpawnPoint(0);
 	}

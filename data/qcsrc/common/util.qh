@@ -162,3 +162,11 @@ float compressShotOrigin(vector v);
 vector decompressShotOrigin(float f);
 
 string records_reply, lsmaps_reply, maplist_reply; // cached replies
+
+float RandomSelection_totalweight;
+float RandomSelection_best_priority;
+entity RandomSelection_chosen_ent;
+float RandomSelection_chosen_float;
+string RandomSelection_chosen_string;
+void RandomSelection_Init();
+void RandomSelection_Add(entity e, float f, string s, float weight, float priority);

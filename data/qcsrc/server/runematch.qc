@@ -59,7 +59,7 @@ entity rune_find_spawnpoint()
 
 	for(e = world; (e = find(e, classname, "runematch_spawn_point")); )
 		if(e.owner == world)
-			RandomSelection_Add(e, 0, e.cnt, 0);
+			RandomSelection_Add(e, 0, string_null, e.cnt, 0);
 
 	return RandomSelection_chosen_ent;
 }
@@ -460,14 +460,14 @@ void spawn_runes()
 		RandomSelection_Init();
 		for(rn = RUNE_FIRST; rn <= RUNE_LAST; rn *= 2)
 			if not(runes_used & rn)
-				RandomSelection_Add(world, rn, 1, 1);
+				RandomSelection_Add(world, rn, string_null, 1, 1);
 		rn = RandomSelection_chosen_float;
 
 		RandomSelection_Init();
 		for(cs = CURSE_FIRST; cs <= CURSE_LAST; cs *= 2)
 			if not(curses_used & cs)
 				if not(prevent_same && cs == RuneMatchesCurse(rn, cs))
-					RandomSelection_Add(world, cs, 1, 1);
+					RandomSelection_Add(world, cs, string_null, 1, 1);
 		cs = RandomSelection_chosen_float;
 
 		if(!rn || !cs)

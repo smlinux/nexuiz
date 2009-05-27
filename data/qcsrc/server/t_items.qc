@@ -379,7 +379,7 @@ void Item_Touch (void)
 		{
 			RandomSelection_Init();
 			for(head = world; (head = findfloat(head, team, self.team)); ) if(head.flags & FL_ITEM)
-				RandomSelection_Add(head, 0, head.cnt, 0);
+				RandomSelection_Add(head, 0, string_null, head.cnt, 0);
 			e = RandomSelection_chosen_ent;
 		}
 		else
@@ -398,7 +398,7 @@ void Item_FindTeam()
 		dprint("Initializing item team ", ftos(self.team), "\n");
 		RandomSelection_Init();
 		for(head = world; (head = findfloat(head, team, self.team)); ) if(head.flags & FL_ITEM)
-			RandomSelection_Add(head, 0, head.cnt, 0);
+			RandomSelection_Add(head, 0, string_null, head.cnt, 0);
 		e = RandomSelection_chosen_ent;
 		e.state = 0;
 

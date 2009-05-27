@@ -428,7 +428,7 @@ void Nixnex_ChooseNextWeapon()
 	RandomSelection_Init();
 	for(j = WEP_FIRST; j <= WEP_LAST; ++j)
 		if(NixNex_CanChooseWeapon(j))
-			RandomSelection_Add(world, j, 1, (j != nixnex_weapon));
+			RandomSelection_Add(world, j, string_null, 1, (j != nixnex_weapon));
 	nixnex_nextweapon = RandomSelection_chosen_float;
 }
 
