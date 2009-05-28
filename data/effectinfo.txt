@@ -830,7 +830,6 @@ velocityjitter 32 32 0
 //lighttime 0
 //lightcolor 0.4 0.9 0.9
 
-
 // flare particle and light
 // used in qcsrc/server/t_items.qc:	//pointparticles(particleeffectnum("item_respawn"), self.origin + self.mins_z * '0 0 1' + '0 0 48', '0 0 0', 1)
 // used in qcsrc/server/t_items.qc:	pointparticles(particleeffectnum("item_respawn"), self.origin + 0.5 * (self.mins + self.maxs), '0 0 0', 1)
@@ -3349,3 +3348,25 @@ airfriction 1
 liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 0.5
+
+
+// flare particle and light
+// used in qcsrc/server/t_items.qc:	pointparticles(particleeffectnum("item_pickup"), self.origin, '0 0 0', 1)
+effect item_pickup
+countabsolute 1
+type static
+color 0x63F2EA 0x63f2EA
+size 16 16
+alpha 128 128 128
+// cloud of particles which expand rapidly and then slow to form a ball
+effect item_pickup
+count 256
+type spark
+tex 41 41
+color 0x63F2EA 0x63f2EA
+size 1 1
+alpha 256 256 1280
+//originjitter 24 24 24
+velocityjitter 256 256 256
+
+
