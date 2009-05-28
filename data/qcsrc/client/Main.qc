@@ -420,12 +420,13 @@ void GameCommand(string msg)
 
 	if(argv(0) == "help" || argc == 0)
 	{
-		print("Usage: sv_cmd COMMAND..., where possible commands are:\n");
+		print("Usage: cl_cmd COMMAND..., where possible commands are:\n");
 		print("  settemp cvar value\n");
 		print("  radar\n");
 		print("  sbar_columns_set ...\n");
 		print("  sbar_columns_help\n");
 		GameCommand_Generic("help");
+		return;
 	}
 
 	if(GameCommand_Generic(msg))
