@@ -88,6 +88,7 @@ void W_Crylink_Attack (void)
 		//proj.gravity = 0.001;
 
 		setorigin (proj, w_shotorg);
+		setsize(proj, '0 0 0', '0 0 0');
 
 
 		s = '0 0 0';
@@ -151,6 +152,7 @@ void W_Crylink_Attack2 (void)
 		//proj.gravity = 0.001;
 
 		setorigin (proj, w_shotorg);
+		setsize(proj, '0 0 0', '0 0 0');
 
 		proj.velocity = (w_shotdir + (((counter + 0.5) / shots) * 2 - 1) * v_right * cvar("g_balance_crylink_secondary_spread")) * cvar("g_balance_crylink_secondary_speed");
 		W_SetupProjectileVelocity(proj);

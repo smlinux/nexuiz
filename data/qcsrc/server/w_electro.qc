@@ -69,7 +69,7 @@ void W_Electro_Attack()
 {
 	local entity proj;
 
-	W_SetupShot (self, FALSE, 2, "weapons/electro_fire.wav");
+	W_SetupShot_ProjectileSize (self, '0 0 -3', '0 0 -3', FALSE, 2, "weapons/electro_fire.wav");
 
 	pointparticles(particleeffectnum("electro_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
@@ -92,6 +92,7 @@ void W_Electro_Attack()
 	W_SetupProjectileVelocity(proj);
 	proj.angles = vectoangles(proj.velocity);
 	proj.touch = W_Plasma_TouchExplode;
+	setsize(proj, '0 0 -3', '0 0 -3');
 	proj.flags = FL_PROJECTILE;
 
 	//sound (proj, CHAN_PAIN, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
@@ -104,7 +105,7 @@ void W_Electro_Attack2()
 {
 	local entity proj;
 
-	W_SetupShot (self, FALSE, 2, "weapons/electro_fire2.wav");
+	W_SetupShot_ProjectileSize (self, '0 0 -3', '0 0 -3', FALSE, 2, "weapons/electro_fire2.wav");
 	w_shotdir = v_forward; // no TrueAim for grenades please
 
 	pointparticles(particleeffectnum("electro_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);

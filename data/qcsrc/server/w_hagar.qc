@@ -65,6 +65,7 @@ void W_Hagar_Attack (void)
 	missile.solid = SOLID_BBOX;
 	missile.projectiledeathtype = WEP_HAGAR;
 	setorigin (missile, w_shotorg);
+	setsize(missile, '0 0 0', '0 0 0');
 	//missile.takedamage = DAMAGE_YES;
 	//missile.damageforcescale = 4;
 	//missile.health = 10;
@@ -104,6 +105,7 @@ void W_Hagar_Attack2 (void)
 	missile.solid = SOLID_BBOX;
 	missile.projectiledeathtype = WEP_HAGAR | HITTYPE_SECONDARY;
 	setorigin (missile, w_shotorg);
+	setsize(missile, '0 0 0', '0 0 0');
 	//missile.takedamage = DAMAGE_YES;
 	//missile.damageforcescale = 4;
 	//missile.health = 10;

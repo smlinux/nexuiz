@@ -103,7 +103,7 @@ vector w_shotdir;
 // this function calculates w_shotorg and w_shotdir based on the weapon model
 // offset, trueaim and antilag, and won't put w_shotorg inside a wall.
 // make sure you call makevectors first (FIXME?)
-void W_SetupShot(entity ent, float antilag, float recoil, string snd)
+void W_SetupShot_ProjectileSize(entity ent, vector mi, vector ma, float antilag, float recoil, string snd)
 {
 	float nudge = 1; // added to traceline target and subtracted from result
 	local vector trueaimpoint;
@@ -130,12 +130,8 @@ void W_SetupShot(entity ent, float antilag, float recoil, string snd)
 	dv = v_right * vecs_y + v_up * vecs_z;
 	w_shotorg = ent.origin + ent.view_ofs + dv;
 
-	// move the vecs sideways as much as requested if possible
-	traceline(ent.origin + ent.view_ofs, w_shotorg + normalize(dv) * nudge, MOVE_NORMAL, ent);
-	w_shotorg = trace_endpos - normalize(dv) * nudge;
-
 	// now move the shotorg forward as much as requested if possible
-	traceline(w_shotorg, w_shotorg + v_forward * (vecs_x + nudge), MOVE_NORMAL, ent);
+	tracebox(w_shotorg, mi, ma, w_shotorg + v_forward * (vecs_x + nudge), MOVE_NORMAL, ent);
 	w_shotorg = trace_endpos - v_forward * nudge;
 	// calculate the shotdir from the chosen shotorg
 	w_shotdir = normalize(trueaimpoint - w_shotorg);
@@ -266,6 +262,11 @@ void W_SetupShot(entity ent, float antilag, float recoil, string snd)
 	if (!g_minstagib)
 		sound (ent, CHAN_AUTO, "weapons/strength_fire.wav", VOL_BASE, ATTN_NORM);
 };
+
+void W_SetupShot(entity ent, float antilag, float recoil, string snd)
+{
+	W_SetupShot_ProjectileSize(ent, '0 0 0', '0 0 0', antilag, recoil, snd);
+}
 
 void LaserTarget_Think()
 {

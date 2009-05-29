@@ -174,6 +174,7 @@ void W_Porto_Attack (void)
 	gren.effects = EF_RED;
 	gren.scale = 4;
 	setorigin(gren, w_shotorg);
+	setsize(gren, '0 0 0', '0 0 0');
 
 	gren.nextthink = time + cvar("g_balance_porto_primary_lifetime");
 	gren.think = W_Porto_Think;

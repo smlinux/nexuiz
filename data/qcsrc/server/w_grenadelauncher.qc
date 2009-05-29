@@ -74,7 +74,7 @@ void W_Grenade_Attack (void)
 
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_primary_ammo");
-	W_SetupShot (self, FALSE, 4, "weapons/grenade_fire.wav");
+	W_SetupShot_ProjectileSize (self, '0 0 -3', '0 0 -3', FALSE, 4, "weapons/grenade_fire.wav");
 	w_shotdir = v_forward; // no TrueAim for grenades please
 
 	pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
@@ -88,6 +88,7 @@ void W_Grenade_Attack (void)
 	gren.solid = SOLID_BBOX;
 	gren.projectiledeathtype = WEP_GRENADE_LAUNCHER;
 	setorigin(gren, w_shotorg);
+	setsize(gren, '0 0 -3', '0 0 -3');
 
 	gren.nextthink = time + cvar("g_balance_grenadelauncher_primary_lifetime");
 	gren.think = adaptor_think2use;
@@ -108,7 +109,7 @@ void W_Grenade_Attack2 (void)
 
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_secondary_ammo");
-	W_SetupShot (self, FALSE, 4, "weapons/grenade_fire.wav");
+	W_SetupShot_ProjectileSize (self, '0 0 -3', '0 0 -3', FALSE, 4, "weapons/grenade_fire.wav");
 	w_shotdir = v_forward; // no TrueAim for grenades please
 
 	pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
@@ -121,7 +122,7 @@ void W_Grenade_Attack2 (void)
 	gren.movetype = MOVETYPE_BOUNCE;
 	gren.solid = SOLID_BBOX;
 	gren.projectiledeathtype = WEP_GRENADE_LAUNCHER | HITTYPE_SECONDARY;
-	setsize(gren, '0 0 -3', '0 0 -3'); // why, just, why?
+	setsize(gren, '0 0 -3', '0 0 -3');
 	setorigin(gren, w_shotorg);
 
 	gren.nextthink = time + cvar("g_balance_grenadelauncher_secondary_lifetime");

@@ -71,6 +71,7 @@ void W_Hook_Attack2()
 	gren.solid = SOLID_BBOX;
 	gren.projectiledeathtype = WEP_HOOK | HITTYPE_SECONDARY;
 	setorigin(gren, w_shotorg);
+	setsize(gren, '0 0 0', '0 0 0');
 
 	gren.nextthink = time + cvar("g_balance_hook_secondary_lifetime");
 	gren.think = adaptor_think2use;

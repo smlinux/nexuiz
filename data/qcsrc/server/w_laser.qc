@@ -37,6 +37,7 @@ void W_Laser_Attack (float issecondary)
 		missile.projectiledeathtype |= HITTYPE_SECONDARY;
 
 	setorigin (missile, w_shotorg);
+	setsize(missile, '0 0 0', '0 0 0');
 
 	if (issecondary)
 		missile.velocity = w_shotdir * cvar("g_balance_laser_secondary_speed");
