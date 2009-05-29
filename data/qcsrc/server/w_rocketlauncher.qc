@@ -189,19 +189,22 @@ void W_Rocket_Think (void)
 		{
 			if(!self.rl_release && !self.owner.rl_release && cvar("g_balance_rocketlauncher_guiderate"))
 			{
-				velspeed = vlen(self.velocity);
+				if(time > self.pushltime)
+				{
+					velspeed = vlen(self.velocity);
 
-				makevectors(self.owner.v_angle);
-				desireddir = v_forward;
-				desiredorigin = self.owner.origin + self.owner.view_ofs;
-				olddir = normalize(self.velocity);
+					makevectors(self.owner.v_angle);
+					desireddir = v_forward;
+					desiredorigin = self.owner.origin + self.owner.view_ofs;
+					olddir = normalize(self.velocity);
 
-				// now it gets tricky... we want to move like some curve to approximate the target direction
-				// but we are limiting the rate at which we can turn!
-				goal = desiredorigin + ((self.origin - desiredorigin) * desireddir + cvar("g_balance_rocketlauncher_guidegoal")) * desireddir;
-				newdir = rocket_steerto(olddir, normalize(goal - self.origin), cos(cvar("g_balance_rocketlauncher_guiderate") * frametime * PI / 180));
+					// now it gets tricky... we want to move like some curve to approximate the target direction
+					// but we are limiting the rate at which we can turn!
+					goal = desiredorigin + ((self.origin - desiredorigin) * desireddir + cvar("g_balance_rocketlauncher_guidegoal")) * desireddir;
+					newdir = rocket_steerto(olddir, normalize(goal - self.origin), cos(cvar("g_balance_rocketlauncher_guiderate") * frametime * PI / 180));
 
-				self.velocity = newdir * velspeed;
+					self.velocity = newdir * velspeed;
+				}
 			}
 			else
 				self.rl_release = 1;
@@ -249,6 +252,7 @@ void W_Rocket_Attack (void)
 		missile.spawnshieldtime = time + cvar("g_balance_rocketlauncher_detonatedelay");
 	else
 		missile.spawnshieldtime = -1;
+	missile.pushltime = time + cvar("g_balance_rocketlauncher_guidedelay");
 	missile.classname = "rocket";
 	missile.bot_dodge = TRUE;
 	missile.bot_dodgerating = cvar("g_balance_rocketlauncher_primary_damage") * 2; // * 2 because it can be detonated inflight which makes it even more dangerous
