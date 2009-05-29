@@ -12,6 +12,14 @@ string species_prefix(float specnum)
 	}
 }
 
+void new_te_bloodshower (float ef, vector org, float explosionspeed, float howmany)
+{
+	float i, pmod;
+	pmod = cvar("cl_particles_quality");
+	for (i = 0; i < 250 * pmod; i++)
+		pointparticles(ef, org, randomvec() * explosionspeed, howmany / 250);
+}
+
 void SUB_RemoveOnNoImpact()
 {
 	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
@@ -93,7 +101,7 @@ void TossGib (string mdlname, vector org, vector vconst, vector vrand, float spe
 void Ent_GibSplash()
 {
 	float amount, type, specnum;
-	vector org, vel, mi, ma;
+	vector org, vel;
 	string specstr;
 
 	float c, gibfactor, randomvalue;
@@ -104,8 +112,6 @@ void Ent_GibSplash()
 	org_y = ReadShort() * 4 + 2;
 	org_z = ReadShort() * 4 + 2;
 	vel = decompressShortVector(ReadShort());
-	mi = decompressShortVector(ReadShort());
-	ma = decompressShortVector(ReadShort());
 
 	if(cvar("cl_gentle"))
 		type |= 0x80; // set gentle bit
@@ -132,7 +138,7 @@ void Ent_GibSplash()
 
 			if(prandom() < amount)
 				TossGib ("models/gibs/eye.md3", org, vel, prandomvec() * 150, specnum, 0);
-			te_bloodshower(org + mi, org + ma, 1200, 1000 * amount);
+			new_te_bloodshower(particleeffectnum(strcat(specstr, "bloodshower")), org, 1200, amount);
 			if(prandom() < amount)
 				TossGib ("models/gibs/bloodyskull.md3", org, vel, prandomvec() * 100, specnum, 0);
 

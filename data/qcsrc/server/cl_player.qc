@@ -275,7 +275,7 @@ void SpawnThrownWeapon (vector org, float w)
 void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	local float take, save;
-	Violence_GibSplash_At(hitloc, '0 0 0', '0 0 0', force, 2, bound(0, damage, 200) / 16);
+	Violence_GibSplash_At(hitloc, force, 2, bound(0, damage, 200) / 16);
 
 	// damage resistance (ignore most of the damage from a bullet or similar)
 	damage = max(damage - 5, 1);
@@ -291,9 +291,9 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 		sound (self, CHAN_PROJECTILE, "misc/bodyimpact1.wav", VOL_BASE, ATTN_NORM);
 
 	if (take > 50)
-		Violence_GibSplash_At(hitloc, '0 0 0', '0 0 0', force * -0.1, 3, 1);
+		Violence_GibSplash_At(hitloc, force * -0.1, 3, 1);
 	if (take > 100)
-		Violence_GibSplash_At(hitloc, '0 0 0', '0 0 0', force * -0.2, 3, 1);
+		Violence_GibSplash_At(hitloc, force * -0.2, 3, 1);
 
 	if (!(self.flags & FL_GODMODE))
 	{
@@ -333,7 +333,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 			damage /= sqrt(bound(1.0, attacker.cvar_cl_handicap, 100.0));
 	}
 
-	Violence_GibSplash_At(hitloc, '0 0 0', '0 0 0', force, 2, bound(0, damage, 200) / 16);
+	Violence_GibSplash_At(hitloc, force, 2, bound(0, damage, 200) / 16);
 
 	if(g_arena)
 	if(numspawned < 2)
@@ -358,9 +358,9 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		sound (self, CHAN_PROJECTILE, "misc/bodyimpact1.wav", VOL_BASE, ATTN_NORM); // FIXME possibly remove them?
 
 	if (take > 50)
-		Violence_GibSplash_At(hitloc, '0 0 0', '0 0 0', force * -0.1, 3, 1);
+		Violence_GibSplash_At(hitloc, force * -0.1, 3, 1);
 	if (take > 100)
-		Violence_GibSplash_At(hitloc, '0 0 0', '0 0 0', force * -0.2, 3, 1);
+		Violence_GibSplash_At(hitloc, force * -0.2, 3, 1);
 
 	if (time > self.spawnshieldtime)
 	{

@@ -741,7 +741,7 @@ type blood
 tex 24 32
 size 3 8
 alpha 256 256 64
-color 0x90FFFF 0x90FFFFF
+color 0xA8FFFF 0xA8FFFFF
 bounce -1
 airfriction 1
 liquidfriction 4
@@ -783,7 +783,7 @@ stretchfactor 0.6
 effect TR_BLOOD
 trailspacing 16
 type blood
-color 0x90FFFF 0x90FFFF
+color 0xA8FFFF 0xA8FFFF
 tex 24 32
 size 8 8
 alpha 384 384 192
@@ -800,7 +800,7 @@ velocitymultiplier 0.5
 effect TR_SLIGHTBLOOD
 trailspacing 32
 type blood
-color 0x90FFFF 0x90FFFF
+color 0xA8FFFF 0xA8FFFF
 tex 24 32
 size 8 8
 alpha 384 384 192
@@ -3272,7 +3272,7 @@ type alphastatic
 tex 0 8
 size 25 30
 alpha 100 256 400
-color 0x000000 0x236432
+color 0x000000 0x204010
 originjitter 11 11 11
 
 effect robot_blood
@@ -3300,7 +3300,7 @@ originjitter 11 11 11
 effect alien_TR_BLOOD
 trailspacing 16
 type blood
-color 0xDC9BCD 0xDC9BCD
+color 0xC080B0 0xC080B0
 tex 24 32
 size 8 8
 alpha 384 384 192
@@ -3313,7 +3313,7 @@ velocitymultiplier 0.5
 effect robot_TR_BLOOD
 trailspacing 16
 type blood
-color 0xCDE69B 0xCDE69B
+color 0xC0D890 0xC0D890
 tex 24 32
 size 8 8
 alpha 384 384 192
@@ -3326,7 +3326,7 @@ velocitymultiplier 0.5
 effect alien_TR_SLIGHTBLOOD
 trailspacing 32
 type blood
-color 0xDC9BCD 0xDC9BCD
+color 0xC080B0 0xC080B0
 tex 24 32
 size 80 80
 alpha 384 384 192
@@ -3339,7 +3339,7 @@ velocitymultiplier 0.5
 effect robot_TR_SLIGHTBLOOD
 trailspacing 32
 type blood
-color 0xCDE69B 0xCDE69B
+color 0xC0D890 0xC0D890
 tex 24 32
 size 8 8
 alpha 384 384 192
@@ -3369,4 +3369,41 @@ alpha 256 256 1280
 //originjitter 24 24 24
 velocityjitter 256 256 256
 
+effect bloodshower
+countabsolute 1
+type blood
+tex 24 32
+size 8 8
+color 0xA8FFFF 0xA8FFFFF
+alpha 256 256 64
+bounce -1
+airfriction 1
+liquidfriction 4
+velocityjitter 64 64 64
+velocitymultiplier 1
 
+effect alien_bloodshower
+countabsolute 1
+type blood
+tex 24 32
+size 8 8
+color 0xC080B0 0xC080B0
+alpha 256 256 64
+bounce -1
+airfriction 1
+liquidfriction 4
+velocityjitter 64 64 64
+velocitymultiplier 1
+
+effect robot_bloodshower
+countabsolute 1
+type blood
+tex 24 32
+size 8 8
+color 0xC0D890 0xC0D890
+alpha 256 256 64
+bounce -1
+airfriction 1
+liquidfriction 4
+velocityjitter 64 64 64
+velocitymultiplier 1
