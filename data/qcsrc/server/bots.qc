@@ -1907,126 +1907,71 @@ float sv_maxspeed;
 vector shotorg;
 vector shotdir;
 
-const float BOTSKINS = 19;
-const float BOTNAMES = 32;
-string bot_namefornumber(float r)
-{
-	if (r <  1) return "Thunderstorm";
-	if (r <  2) return "Darkness";
-	if (r <  3) return "Scorcher";
-	if (r <  4) return "Paranoia";
-	if (r <  5) return "Eureka";
-	if (r <  6) return "Mystery";
-	if (r <  7) return "Toxic";
-	if (r <  8) return "Dominion";
-	if (r <  9) return "Pegasus";
-	if (r < 10) return "Sensible";
-	if (r < 11) return "Gator";
-	if (r < 12) return "Kangaroo";
-	if (r < 13) return "Deadline";
-	if (r < 14) return "Frosty";
-	if (r < 15) return "Roadkill";
-	if (r < 16) return "Death";
-	if (r < 17) return "Panic";
-	if (r < 18) return "Discovery";
-	if (r < 19) return "Shadow";
-	if (r < 20) return "Acidic";
-	if (r < 21) return "Dominator";
-	if (r < 22) return "Hellfire";
-	if (r < 23) return "Necrotic";
-	if (r < 24) return "Newbie";
-	if (r < 25) return "Spellbinder";
-	if (r < 26) return "Lion";
-	if (r < 27) return "Controlled";
-	if (r < 28) return "Airhead";
-	if (r < 29) return "Delirium";
-	if (r < 30) return "Resurrection";
-	if (r < 31) return "Danger";
-	return "Flatline";
-};
-
-string bot_skinfornumber(float r)
-{
-	     if (r <  1) {self.playermodel = "models/player/carni.zym"          ;self.playerskin = "0";return "Carni"          ;}
-	else if (r <  2) {self.playermodel = "models/player/carni.zym"          ;self.playerskin = "1";return "Armored Carni"  ;}
-	else if (r <  3) {self.playermodel = "models/player/crash.zym"          ;self.playerskin = "0";return "Quark"          ;}
-	else if (r <  4) {self.playermodel = "models/player/grunt.zym"          ;self.playerskin = "0";return "Grunt"          ;}
-	else if (r <  5) {self.playermodel = "models/player/headhunter.zym"     ;self.playerskin = "0";return "HeadHunter"     ;}
-	else if (r <  6) {self.playermodel = "models/player/insurrectionist.zym";self.playerskin = "0";return "Insurrectionist";}
-	else if (r <  7) {self.playermodel = "models/player/lurk.zym"           ;self.playerskin = "0";return "Lurk"           ;}
-	else if (r <  8) {self.playermodel = "models/player/lurk.zym"           ;self.playerskin = "1";return "Reptile"        ;}
-	else if (r <  9) {self.playermodel = "models/player/lycanthrope.zym"    ;self.playerskin = "0";return "Lycanthrope"    ;}
-	else if (r < 10) {self.playermodel = "models/player/marine.zym"         ;self.playerskin = "0";return "Marine"         ;}
-	else if (r < 11) {self.playermodel = "models/player/nexus.zym"          ;self.playerskin = "0";return "Nexus"          ;}
-	else if (r < 12) {self.playermodel = "models/player/nexus.zym"          ;self.playerskin = "1";return "Mulder"         ;}
-	else if (r < 13) {self.playermodel = "models/player/nexus.zym"          ;self.playerskin = "2";return "Xolar"          ;}
-	else if (r < 14) {self.playermodel = "models/player/pyria.zym"          ;self.playerskin = "0";return "Pyria"          ;}
-	else if (r < 15) {self.playermodel = "models/player/shock.zym"          ;self.playerskin = "0";return "Shock"          ;}
-	else if (r < 16) {self.playermodel = "models/player/skadi.zym"          ;self.playerskin = "0";return "Skadi"          ;}
-	else if (r < 17) {self.playermodel = "models/player/specop.zym"         ;self.playerskin = "0";return "Specop"         ;}
-	else             {self.playermodel = "models/player/visitant.zym"       ;self.playerskin = "0";return "Fricka"         ;}
-};
-
+.float bot_team;
 void bot_setnameandstuff()
 {
-	local string name, prefix, suffix;
-	local float r, b, shirt, pants;
+	local string readfile, s;
+	local float file, tokens;
 
+	local string bot_name, bot_model, bot_skin, bot_shirt, bot_pants;
+	local string name, prefix, suffix;
+
+	file = fopen(cvar_string("bot_config_file"), FILE_READ);
+
+	if(file < 0)
+		print(strcat("Error: Can not open the bot configuration file '",cvar_string("bot_config_file"),"'\n"));
+	else
+	{
+		RandomSelection_Init();
+		for(;;)
+		{
+			s = fgets(file);
+			if(!s)
+				break;
+			if(substring(s, 0, 2) == "//")
+				continue;
+			if(substring(s, 0, 1) == "#")
+				continue;
+			RandomSelection_Add(world, 0, s, 1, 0);
+			readfile = RandomSelection_chosen_string;
+		}
+		fclose(file);
+	}
+
+	tokens = tokenizebyseparator(readfile, "\t");
+	if(argv(0) != "") bot_name = argv(0);
+	else bot_name = "Bot";
+
+	if(argv(1) != "") bot_model = argv(1);
+	else bot_model = "marine";
+
+	if(argv(2) != "") bot_skin = argv(2);
+	else bot_skin = "0";
+
+	if(argv(3) != "" && stof(argv(3)) >= 0) bot_shirt = argv(3);
+	else bot_shirt = ftos(floor(random() * 15));
+
+	if(argv(4) != "" && stof(argv(4)) >= 0) bot_pants = argv(4);
+	else bot_pants = ftos(floor(random() * 15));
+
+	self.bot_team = stof(argv(5));
 	prefix = cvar_string("bot_prefix");
 	suffix = cvar_string("bot_suffix");
 
 	// this is really only a default, JoinBestTeam is called later
-	pants = floor(random() * 15);
-	shirt = floor(random() * 15);
-	//shirt = pants;
-	setcolor(self, shirt * 16 + pants);
+	setcolor(self, stof(bot_shirt) * 16 + stof(bot_pants));
 	self.bot_preferredcolors = self.clientcolors;
 
-	// now pick a name...
-
+	// pick the name
 	if (cvar("bot_usemodelnames"))
-	{
-		// first see if all skins are taken
-		b = 0;
-		do
-		{
-			name = bot_skinfornumber(b);
-			b = b + 1;
-		}
-		while (b < BOTSKINS && find(world, netname, name));
-
-		// randomly pick a skin, if it's taken either repeat until we find one,
-		// or give up if we already know all skins are taken
-		do
-		{
-			r = floor(random() * BOTSKINS);
-			name = bot_skinfornumber(r);
-		}
-		while (b < BOTSKINS && find(world, netname, name));
-	}
+		name = bot_model;
 	else
-	{
-		// first see if all names are taken
-		b = 0;
-		do
-		{
-			name = bot_namefornumber(b);
-			b = b + 1;
-		}
-		while (b < BOTNAMES && find(world, netname, name));
+		name = bot_name;
 
-		// randomly pick a name, if it's taken either repeat until we find one,
-		// or give up if we already know all names are taken
-		do
-		{
-			r = floor(random() * BOTNAMES);
-			name = bot_namefornumber(r);
-		}
-		while (b < BOTNAMES && find(world, netname, name));
+	// pick the model and skin
+	self.playermodel = strzone(strcat("models/player/", bot_model, ".zym"));
+	self.playerskin = strzone(bot_skin);
 
-		// randomly pick a skin
-		bot_skinfornumber(floor(random() * BOTSKINS));
-	}
  	if(!cvar("g_campaign"))
  		self.netname = self.netname_freeme = strzone(strcat(prefix, name, suffix));
  	else
@@ -2523,7 +2468,17 @@ void bot_clientconnect()
 	self.lag_func = bot_lagfunc;
 	self.isbot = TRUE;
 	self.createdtime = self.nextthink;
-	JoinBestTeam(self, FALSE, TRUE);
+
+	switch(self.bot_team)
+	{
+		case 1: self.team = COLOR_TEAM1;
+		case 2:	self.team = COLOR_TEAM2;
+		case 3:	self.team = COLOR_TEAM3;
+		case 4:	self.team = COLOR_TEAM4;
+		default:
+			JoinBestTeam(self, FALSE, TRUE);
+	}
+
 	havocbot_setupbot();
 	self.bot_mouseskill=random()-0.5;
 	self.bot_thinkskill=random()-0.5;
