@@ -1,6 +1,7 @@
 #ifdef INTERFACE
 CLASS(MainWindow) EXTENDS(ModalController)
 	METHOD(MainWindow, configureMainWindow, void(entity))
+	ATTRIB(MainWindow, advancedDialog, entity, NULL)
 	ATTRIB(MainWindow, mutatorsDialog, entity, NULL)
 	ATTRIB(MainWindow, weaponsDialog, entity, NULL)
 	ATTRIB(MainWindow, mapInfoDialog, entity, NULL)
@@ -29,6 +30,10 @@ void configureMainWindowMainWindow(entity me)
 	entity n, i;
 
 	i = spawnNexuizTeamSelectDialog();
+	i.configureDialog(i);
+	me.addItemCentered(me, i, i.intendedWidth * eX + i.intendedHeight * eY, SKINALPHAS_MAINMENU_z);
+
+	me.advancedDialog = i = spawnNexuizAdvancedDialog();
 	i.configureDialog(i);
 	me.addItemCentered(me, i, i.intendedWidth * eX + i.intendedHeight * eY, SKINALPHAS_MAINMENU_z);
 
