@@ -2469,15 +2469,16 @@ void bot_clientconnect()
 	self.isbot = TRUE;
 	self.createdtime = self.nextthink;
 
-	switch(self.bot_team)
-	{
-		case 1: self.team = COLOR_TEAM1;
-		case 2:	self.team = COLOR_TEAM2;
-		case 3:	self.team = COLOR_TEAM3;
-		case 4:	self.team = COLOR_TEAM4;
-		default:
-			JoinBestTeam(self, FALSE, TRUE);
-	}
+	if(self.bot_team==1)
+		self.team = COLOR_TEAM1;
+	else if(self.bot_team==2)
+		self.team = COLOR_TEAM2;
+	else if(self.bot_team==3)
+		self.team = COLOR_TEAM3;
+	else if(self.bot_team==4)
+		self.team = COLOR_TEAM4;
+	else 
+		JoinBestTeam(self, FALSE, TRUE);
 
 	havocbot_setupbot();
 	self.bot_mouseskill=random()-0.5;
