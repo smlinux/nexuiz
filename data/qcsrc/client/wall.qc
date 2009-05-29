@@ -1,13 +1,20 @@
 .float lip;
+.float bgmscriptangular;
 
 void Ent_Wall_Draw()
 {
 	float f;
 	vector save;
+	var .vector fld;
 
 	InterpolateOrigin_Do();
 
-	save = self.origin;
+	if(self.bgmscriptangular)
+		fld = angles;
+	else
+		fld = origin;
+	
+	save = self.fld;
 	f = BGMScript(self);
 	if(f >= 0)
 	{
@@ -15,7 +22,7 @@ void Ent_Wall_Draw()
 			self.alpha = 1 + self.lip * f;
 		else // > 0: alpha goes from 1-|lip| to 1 when toggled (toggling adds lip)
 			self.alpha = 1 - self.lip * (1 - f);
-		self.origin = self.origin + self.movedir * f;
+		self.fld = self.fld + self.movedir * f;
 	}
 	else
 		self.alpha = 1;
@@ -23,7 +30,7 @@ void Ent_Wall_Draw()
 	if(self.alpha >= ALPHA_MIN_VISIBLE)
 		R_AddEntity(self);
 
-	self.origin = save;
+	self.fld = save;
 }
 
 void Ent_Wall_Remove()
@@ -84,9 +91,20 @@ void Ent_Wall()
 		}
 		else
 			self.mins = self.maxs = '0 0 0';
+
 		if(self.bgmscript)
 			strunzone(self.bgmscript);
-		self.bgmscript = strzone(ReadString());
+		self.bgmscript = ReadString();
+		if(substring(self.bgmscript, 0, 1) == "<")
+		{
+			self.bgmscript = strzone(substring(self.bgmscript, 1, -1));
+			self.bgmscriptangular = 1;
+		}
+		else
+		{
+			self.bgmscript = strzone(self.bgmscript);
+			self.bgmscriptangular = 0;
+		}
 		if(self.bgmscript != "")
 		{
 			self.bgmscriptattack = ReadByte() / 64.0;
