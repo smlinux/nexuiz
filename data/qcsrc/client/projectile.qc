@@ -303,6 +303,10 @@ void Ent_Projectile()
 				self.mins = '-2 -2 -2';
 				self.maxs = '2 2 2';
 				break;
+			case PROJECTILE_GRENADE:
+				self.mins = '0 0 -3';
+				self.maxs = '0 0 -3';
+				break;
 			case PROJECTILE_GRENADE_BOUNCING:
 				self.mins = '0 0 -3';
 				self.maxs = '0 0 -3';
