@@ -82,9 +82,9 @@ done
 
 cd pack
 
-if false; then
-	find . -type f -print0 | qual=85 scaledown=256x256 xargs -0 ../../misc/tools/jpeg-if-not-alpha.sh
+find textures/ -type f -print0 | qual=85 scaledown=256x256 xargs -0 ../../misc/tools/jpeg-if-not-alpha.sh
 
+if false; then
 	find . -name \*.ogg | while IFS= read -r NAME; do
 		c=`vorbiscomment -l "$NAME"`
 		oggdec -o "$NAME.wav" "$NAME"
