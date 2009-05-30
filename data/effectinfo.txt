@@ -3355,15 +3355,15 @@ velocitymultiplier 0.5
 effect item_pickup
 countabsolute 1
 type static
-color 0x63F2EA 0x63f2EA
-size 16 16
-alpha 128 128 128
+color 0x63F2EA 0xB0C5C4
+size 8 16
+alpha 128 64 64
 // cloud of particles which expand rapidly and then slow to form a ball
 effect item_pickup
-count 256
+count 64
 type spark
 tex 41 41
-color 0x63F2EA 0x63f2EA
+color 0x63F2EA 0xB0C5C4
 size 1 1
 alpha 256 256 1280
 //originjitter 24 24 24
