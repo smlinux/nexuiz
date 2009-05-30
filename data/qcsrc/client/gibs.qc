@@ -16,7 +16,7 @@ void new_te_bloodshower (float ef, vector org, float explosionspeed, float howma
 {
 	float i, pmod;
 	pmod = cvar("cl_particles_quality");
-	for (i = 0; i < 250 * pmod; i++)
+	for (i = 0; i < 250 * pmod; ++i)
 		pointparticles(ef, org, randomvec() * explosionspeed, howmany / 250);
 }
 
