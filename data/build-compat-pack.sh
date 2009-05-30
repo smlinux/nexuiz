@@ -24,6 +24,32 @@ COMPAT_FILES="
 	models/sprites/item-strength_frame1.tga
 	sound/weapons/weaponpickup.ogg
 	particles/particlefont.tga
+	models/gibs/arm.md3
+	models/gibs/arm.md3_0.skin
+	models/gibs/arm.md3_1.skin
+	models/gibs/arm.md3_2.skin
+	models/gibs/bloodyskull.md3
+	models/gibs/bloodyskull.md3_0.skin
+	models/gibs/bloodyskull.md3_1.skin
+	models/gibs/bloodyskull.md3_2.skin
+	models/gibs/chest.md3
+	models/gibs/chest.md3_0.skin
+	models/gibs/chest.md3_1.skin
+	models/gibs/chest.md3_2.skin
+	models/gibs/chunk.mdl
+	models/gibs/eye.md3
+	models/gibs/leg1.md3
+	models/gibs/leg1.md3_0.skin
+	models/gibs/leg1.md3_1.skin
+	models/gibs/leg1.md3_2.skin
+	models/gibs/leg2.md3
+	models/gibs/leg2.md3_0.skin
+	models/gibs/leg2.md3_1.skin
+	models/gibs/leg2.md3_2.skin
+	models/gibs/smallchest.md3
+	models/gibs/smallchest.md3_0.skin
+	models/gibs/smallchest.md3_1.skin
+	models/gibs/smallchest.md3_2.skin
 "
 
 rm -rf pack
