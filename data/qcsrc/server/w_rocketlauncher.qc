@@ -1,7 +1,7 @@
 .float rl_release;
 .float rl_detonate_later;
 
-void W_Rocket_Unregister(float complain)
+void W_Rocket_Unregister()
 {
 	if(self.owner && self.owner.lastrocket == self)
 	{
@@ -86,6 +86,7 @@ entity FindLaserTarget(entity e, float dist_variance, float dot_variance)
 void W_Rocket_RemoteExplode()
 {
 	if(self.owner.deadflag == DEAD_NO)
+	if(self.owner.lastrocket)
 	{
 		if((self.spawnshieldtime >= 0)
 			? (time >= self.spawnshieldtime) // timer
@@ -202,6 +203,7 @@ void W_Rocket_Think (void)
 			if(!self.owner.rl_release)
 			if(cvar("g_balance_rocketlauncher_guiderate"))
 			if(time > self.pushltime)
+			if(self.owner.deadflag == DEAD_NO)
 			{
 				velspeed = vlen(self.velocity);
 
