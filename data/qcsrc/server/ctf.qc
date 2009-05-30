@@ -681,6 +681,24 @@ void item_flag_reset()
 	ReturnFlag(self);
 }
 
+void item_flag_postspawn()
+{ // Check CTF Item Flag Post Spawn
+
+	// Flag Glow Trail Support
+	if(cvar("g_ctf_flag_glowtrails"))
+	{ // Provide Flag Glow Trail
+		if(self.team == COLOR_TEAM1)
+			// Red
+			self.glow_color = 233;
+		else
+		if(self.team == COLOR_TEAM2)
+			// Blue
+			self.glow_color = 215;
+			
+		self.glow_size = 25;
+		self.glow_trail = 1;
+	}
+};
 
 /*QUAKED spawnfunc_item_flag_team1 (0 0.5 0.8) (-48 -48 -37) (48 48 37)
 CTF flag for team one (Red).
@@ -770,6 +788,9 @@ void spawnfunc_item_flag_team1()
 		self.effects |= EF_FULLBRIGHT;
 	if(cvar("g_ctf_dynamiclights"))
 		self.effects |= EF_RED;
+
+	// From Spidflisk
+	item_flag_postspawn();
 
 	waypoint_spawnforitem(self);
 
@@ -868,6 +889,9 @@ void spawnfunc_item_flag_team2()
 		self.effects |= EF_FULLBRIGHT;
 	if(cvar("g_ctf_dynamiclights"))
 		self.effects |= EF_BLUE;
+
+	// From Spidflisk
+	item_flag_postspawn();
 
 	waypoint_spawnforitem(self);
 
