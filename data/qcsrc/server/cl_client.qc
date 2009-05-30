@@ -852,6 +852,7 @@ void PutClientInServer (void)
 		// don't reset back to last position, even if new position is stuck in solid
 		self.oldorigin = self.origin;
 		self.prevorigin = self.origin;
+		self.lastrocket = world; // stop rocket guiding, no revenge from the grave!
 
 		if(g_arena)
 		{
