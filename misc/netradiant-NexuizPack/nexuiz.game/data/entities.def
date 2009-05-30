@@ -748,7 +748,7 @@ scale: scale factor of the model (range: 0.0625 to 15.9375)
 colormap: 1024 + 16 * pantscolor + shirtcolor
 angles: initial looking direction
 targetname: when invoking it by a button etc., it changes the color to the initiator of the action (e.g. the one pressing a button). In Onslaught, this can be used to color control points for team who owns them. In other game types, this can be used as a fun feature. Works only with _shirt and _pants textures.
-bgmscript: emitter class from the BGM script
+bgmscript: emitter class from the BGM script (if prefixed with <, movedir is treated as an angle value)
 bgmscriptattack: attack time of the effect strength (0 to 3.9)
 bgmscriptdecay: decay time of the effect strength (0 to 3.9)
 bgmscriptsustain: sustain level of the effect strength (0.1 to 1, set to -1 to disable sustain)
