@@ -50,6 +50,23 @@ COMPAT_FILES="
 	models/gibs/smallchest.md3_0.skin
 	models/gibs/smallchest.md3_1.skin
 	models/gibs/smallchest.md3_2.skin
+	textures/meat_alien_gloss.tga
+	textures/meat_alien_glow.tga
+	textures/meat_alien_norm.tga
+	textures/meat_alien.tga
+	textures/meat_gloss.tga
+	textures/meat_norm.tga
+	textures/meat_robot_gloss.tga
+	textures/meat_robot_glow.tga
+	textures/meat_robot_norm.tga
+	textures/meat_robot.tga
+	textures/meat.tga
+	textures/bloodyskull_alien_glow.tga
+	textures/bloodyskull_alien.tga
+	textures/bloodyskull.jpg
+	textures/bloodyskull_robot_gloss.tga
+	textures/bloodyskull_robot_glow.tga
+	textures/bloodyskull_robot.tga
 "
 
 rm -rf pack
