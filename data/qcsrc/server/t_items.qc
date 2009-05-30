@@ -364,10 +364,10 @@ void Item_Touch (void)
 	if (self.owner == other)
 		return;
 
-	pointparticles(particleeffectnum("item_pickup"), self.origin, '0 0 0', 1);
-
 	if(!Item_GiveTo(self, other))
 		return;
+
+	pointparticles(particleeffectnum("item_pickup"), self.origin, '0 0 0', 1);
 
 	if (self.classname == "droppedweapon")
 		remove (self);
