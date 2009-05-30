@@ -313,9 +313,13 @@ void Ent_Projectile()
 				self.move_movetype = MOVETYPE_BOUNCE;
 				self.move_touch = SUB_Null;
 				break;
-			case PROJECTILE_SEEKER:
+			case PROJECTILE_FLAC:
 				self.mins = '-2 -2 -2';
 				self.maxs = '2 2 2';
+				break;
+			case PROJECTILE_SEEKER:
+				self.mins = '-4 -4 -4';
+				self.maxs = '4 4 4';
 				break;
 			case PROJECTILE_PORTO_RED:
 				self.colormod = '2 1 1';

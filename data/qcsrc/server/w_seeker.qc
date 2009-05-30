@@ -190,7 +190,7 @@ void Seeker_Fire_Missile(vector f_diff)
 	missile.projectiledeathtype = WEP_SEEKER;
 
 	setorigin (missile, w_shotorg);
-	setsize (missile, '-2 -2 -2', '2 2 2');
+	setsize (missile, '-4 -4 -4', '4 4 4');
 
 
 	missile.movetype    = MOVETYPE_FLYMISSILE;// MOVETYPE_TOSS;
