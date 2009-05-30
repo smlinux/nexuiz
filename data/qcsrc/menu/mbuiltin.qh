@@ -169,6 +169,8 @@ string  altstr_get(string str, float num) = #84;
 string  altstr_set(string str, float num, string set) = #85;
 string 	altstr_ins(string str, float num, string set) = #86;
 
+float	isdemo() = #349;
+
 /////////////////////////////////////////////////
 // Write* Functions
 /////////////////////////////////////////////////

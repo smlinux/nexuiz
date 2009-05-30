@@ -57,7 +57,8 @@ void GameCommand(string theCommand)
 	if(argv(0) == "directmenu") if(argc == 2)
 	{
 		// switch to a menu item
-		m_goto(argv(1));
+		if(!isdemo()) // don't allow this command in demos
+			m_goto(argv(1));
 		return;
 	}
 
