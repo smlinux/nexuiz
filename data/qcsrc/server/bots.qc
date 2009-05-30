@@ -1907,7 +1907,9 @@ float sv_maxspeed;
 vector shotorg;
 vector shotdir;
 
-.float bot_team, bot_checked;
+.float bot_forced_team;
+.float bot_config_loaded;
+
 void bot_setnameandstuff()
 {
 	local string readfile, s;
@@ -1954,8 +1956,8 @@ void bot_setnameandstuff()
 	if(argv(4) != "" && stof(argv(4)) >= 0) bot_pants = argv(4);
 	else bot_pants = ftos(floor(random() * 15));
 
-	self.bot_team = stof(argv(5));
-	self.bot_checked = 1;
+	self.bot_forced_team = stof(argv(5));
+	self.bot_config_loaded = TRUE;
 	prefix = cvar_string("bot_prefix");
 	suffix = cvar_string("bot_suffix");
 
@@ -2470,15 +2472,16 @@ void bot_clientconnect()
 	self.isbot = TRUE;
 	self.createdtime = self.nextthink;
 
-	if(!self.bot_checked) // This is needed so team overrider doesn't break between matches
+	if(!self.bot_config_loaded) // This is needed so team overrider doesn't break between matches
 		bot_setnameandstuff();
-	if(self.bot_team==1)
+
+	if(self.bot_forced_team==1)
 		self.team = COLOR_TEAM1;
-	else if(self.bot_team==2)
+	else if(self.bot_forced_team==2)
 		self.team = COLOR_TEAM2;
-	else if(self.bot_team==3)
+	else if(self.bot_forced_team==3)
 		self.team = COLOR_TEAM3;
-	else if(self.bot_team==4)
+	else if(self.bot_forced_team==4)
 		self.team = COLOR_TEAM4;
 	else
 		JoinBestTeam(self, FALSE, TRUE);
