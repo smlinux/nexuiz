@@ -353,6 +353,37 @@ void havocbot_goalrating_ctf_ourflag(float ratingscale)
 		navigation_routerating(head, ratingscale, 10000);
 };
 
+void havocbot_goalrating_ctf_ourbase(float ratingscale)
+{
+	if not(bot_waypoints_for_items)
+	{
+		havocbot_goalrating_ctf_ourflag(ratingscale);
+		return;
+	}
+
+	local entity head;
+	head = ctf_worldflaglist;
+	while (head)
+	{
+		if (self.team == head.team)
+			break;
+		head = head.ctf_worldflagnext;
+	}
+	if not(head)
+		return;
+
+	head = findradius(head.dropped_origin, 100);
+	while(head)
+	{
+		if(head.classname=="waypoint")
+		{
+			navigation_routerating(head, ratingscale, 10000);
+			return;
+		}
+		head=head.chain;
+	}
+};
+
 void havocbot_goalrating_ctf_enemyflag(float ratingscale)
 {
 	local entity head;
@@ -433,7 +464,7 @@ void havocbot_role_ctf_carrier()
 	{
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
 		navigation_goalrating_start();
-		havocbot_goalrating_ctf_ourflag(50000);
+		havocbot_goalrating_ctf_ourbase(50000);
 		if(self.health<100)
 			havocbot_goalrating_ctf_carrieritems(1000, self.origin, 1000);
 		navigation_goalrating_end();
