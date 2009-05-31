@@ -1874,6 +1874,8 @@ float skill;
 entity bot_list;
 .entity nextbot;
 .string netname_freeme;
+.string playermodel_freeme;
+.string playerskin_freeme;
 
 float sv_maxspeed;
 .float createdtime;
@@ -1972,13 +1974,13 @@ void bot_setnameandstuff()
 		name = bot_name;
 
 	// pick the model and skin
-	self.playermodel = strzone(strcat("models/player/", bot_model, ".zym"));
-	self.playerskin = strzone(bot_skin);
+	self.playermodel = self.playermodel_freeme = strzone(strcat("models/player/", bot_model, ".zym"));
+	self.playerskin = self.playerskin_freeme = strzone(bot_skin);
 
  	if(!cvar("g_campaign"))
  		self.netname = self.netname_freeme = strzone(strcat(prefix, name, suffix));
  	else
- 		self.netname = name;
+ 		self.netname = self.netname_freeme = strzone(name);
 };
 
 float bot_custom_weapon;
@@ -2459,7 +2461,13 @@ void bot_clientdisconnect()
 		return;
 	if(self.netname_freeme)
 		strunzone(self.netname_freeme);
+	if(self.playermodel_freeme)
+		strunzone(self.playermodel_freeme);
+	if(self.playerskin_freeme)
+		strunzone(self.playerskin_freeme);
 	self.netname_freeme = string_null;
+	self.playermodel_freeme = string_null;
+	self.playerskin_freeme = string_null;
 }
 
 void bot_clientconnect()

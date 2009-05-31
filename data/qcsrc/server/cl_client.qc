@@ -1453,6 +1453,8 @@ void ClientDisconnect (void)
 
 	if(self.netname_previous)
 		strunzone(self.netname_previous);
+	if(self.clientstatus)
+		strunzone(self.clientstatus);
 
 	ClearPlayerSounds();
 
