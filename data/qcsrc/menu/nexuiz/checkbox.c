@@ -64,6 +64,8 @@ void configureNexuizCheckBoxNexuizCheckBox(entity me, float theYesValue, float t
 	if(theCvar)
 	{
 		me.cvarName = theCvar;
+		if(cvar_description(theCvar) != "custom cvar")
+			me.tooltip = strzone(cvar_description(theCvar));
 		me.loadCvars(me);
 	}
 	me.configureCheckBox(me, theText, me.fontSize, me.image);

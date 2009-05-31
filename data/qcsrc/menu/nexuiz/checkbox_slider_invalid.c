@@ -41,6 +41,7 @@ void configureNexuizSliderCheckBoxNexuizSliderCheckBox(entity me, float theOffVa
 		me.savedValue = theControlledSlider.valueMin; 
 	me.controlledSlider = theControlledSlider;
 	me.configureCheckBox(me, theText, me.fontSize, me.image);
+	me.tooltip = theControlledSlider.tooltip;
 }
 void drawNexuizSliderCheckBox(entity me)
 {
