@@ -382,10 +382,16 @@ void PrintWelcomeMessage(entity pl)
 
 	if(self.cvar_scr_centertime == 0) return;
 
-	if(!cvar("g_campaign"))
-		if((time - self.jointime) > cvar("welcome_message_time")
-		   && !self.BUTTON_INFO)
+	if(cvar("g_campaign"))
+	{
+		if(self.classname == "player")
 			return;
+	}
+	else
+	{
+		if((time - self.jointime) > cvar("welcome_message_time") && !self.BUTTON_INFO)
+			return;
+	}
 
 	if( !(timeoutStatus >= 1) ) { //really print the WelcomeMessage to the player every frame when timeout-seconds are shown or the game is restarted, to make sure that the shown number is accurate
 		if(self.welcomemessage_time > time) return;
