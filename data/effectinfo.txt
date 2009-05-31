@@ -3281,6 +3281,7 @@ type blood
 tex 24 32
 size 3 8
 alpha 256 256 64
+color 0xC0D890 0xC0D890
 bounce -1
 airfriction 1
 liquidfriction 4
@@ -3293,7 +3294,7 @@ type alphastatic
 tex 0 8
 size 25 30
 alpha 100 256 400
-color 0x000000 0x321964
+color 0x000000 0x301860
 originjitter 11 11 11
 
 
