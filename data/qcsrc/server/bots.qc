@@ -218,10 +218,22 @@ float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float 
 					}
 					else
 					{
-						#ifdef DEBUG_TRACEWALK
-							debugnodestatus(trace_endpos, DEBUG_NODE_FAIL);
-						#endif
-						return FALSE; // failed
+						// Check if we can jump over the obstacle
+						local vector jumpheight;
+						// this is an estimate, a proper calculation should involve the cvars sv_jumpvelocity and sv_gravity
+						jumpheight = (PL_VIEW_OFS_z + PL_MIN_z) * '0 0 1';
+						tracebox(org + jumpheight, m1, m2, move + jumpheight, movemode, e);
+
+						if (trace_fraction < 1)
+						{
+							#ifdef DEBUG_TRACEWALK
+								debugnodestatus(trace_endpos, DEBUG_NODE_FAIL);
+							#endif
+							return FALSE; // failed
+						}
+						// Here we will avoid the trace down because we jumped
+						org = trace_endpos;
+						continue;
 					}
 				}
 				else

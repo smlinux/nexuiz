@@ -4,11 +4,6 @@
 .void() havocbot_role;
 float bot_ignore_bots;
 
-float canreach(entity e)
-{
-	return vlen(self.origin - e.origin) < 1500;
-}
-
 .float max_armorvalue;
 float havocbot_pickupevalfunc(entity item)
 {
@@ -307,6 +302,27 @@ void havocbot_goalrating_enemyplayers(float ratingscale, vector org, float sradi
 	}
 };
 
+// Functions for CTF
+
+float canreach(entity e)
+{
+	return vlen(self.origin - e.origin) < 1500;
+}
+
+float teamcount()
+{
+	if not(teams_matter)
+		return 0;
+
+	float c;
+	entity head;
+
+	FOR_EACH_PLAYER(head)
+	if(head.team==self.team)
+		++c;
+
+	return c;
+}
 
 void() havocbot_role_ctf_middle;
 void() havocbot_role_ctf_defense;
