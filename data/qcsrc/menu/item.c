@@ -21,6 +21,7 @@ CLASS(Item) EXTENDS(Object)
 	ATTRIB(Item, preferredFocusPriority, float, 0)
 	ATTRIB(Item, origin, vector, '0 0 0')
 	ATTRIB(Item, size, vector, '0 0 0')
+	ATTRIB(Item, tooltip, string, string_null)
 ENDCLASS(Item)
 #endif
 
@@ -41,6 +42,7 @@ void resizeNotifyItem(entity me, vector relOrigin, vector relSize, vector absOri
 {
 	me.origin = absOrigin;
 	me.size = absSize;
+	// me.tooltip = "The quick brown fox jumped over the lazy sleeping dog's back then sat on a tack. Franz jagt im komplett verwahrlosten Taxi quer durch Bayern.";
 }
 
 void drawItem(entity me)

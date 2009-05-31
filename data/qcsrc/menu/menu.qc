@@ -206,6 +206,224 @@ void(string img, float a) drawBackground =
 	draw_Picture('0.5 0.5 0' - 0.5 * isz, img, isz, '1 1 1', a);
 }
 
+
+vector menuTooltipAveragedMousePos;
+entity menuTooltipItem;
+vector menuTooltipOrigin;
+vector menuTooltipSize;
+float menuTooltipAlpha;
+float menuTooltipState; // 0: no tooltip, 1: fading in, 2: displaying, 3: fading out
+float m_testmousetooltipbox(vector pos)
+{
+	if(pos_x >= menuTooltipOrigin_x && pos_x < menuTooltipOrigin_x + menuTooltipSize_x)
+	if(pos_y >= menuTooltipOrigin_y && pos_y < menuTooltipOrigin_y + menuTooltipSize_y)
+		return FALSE;
+	return TRUE;
+}
+float m_testtooltipbox(vector tooltippos)
+{
+	if(tooltippos_x < 0)
+		return FALSE;
+	if(tooltippos_y < 0)
+		return FALSE;
+	if(tooltippos_x + menuTooltipSize_x > 1)
+		return FALSE;
+	if(tooltippos_y + menuTooltipSize_y > 1)
+		return FALSE;
+	menuTooltipOrigin = tooltippos;
+	return TRUE;
+}
+float m_allocatetooltipbox(vector pos)
+{
+	vector avoidplus, avoidminus;
+	vector v;
+
+	avoidplus_x = (SKINAVOID_TOOLTIP_x + SKINSIZE_CURSOR_x - SKINOFFSET_CURSOR_x) / conwidth;
+	avoidplus_y = (SKINAVOID_TOOLTIP_y + SKINSIZE_CURSOR_y - SKINOFFSET_CURSOR_y) / conheight;
+	avoidplus_z = 0;
+
+	avoidminus_x = (SKINAVOID_TOOLTIP_x + SKINOFFSET_CURSOR_x) / conwidth + menuTooltipSize_x;
+	avoidminus_y = (SKINAVOID_TOOLTIP_y + SKINOFFSET_CURSOR_y) / conheight + menuTooltipSize_y;
+	avoidminus_z = 0;
+
+	// bottom right
+	v = pos + avoidplus;
+	if(m_testtooltipbox(v))
+		return TRUE;
+	
+	// bottom center
+	v_x = pos_x - menuTooltipSize_x * 0.5;
+	if(m_testtooltipbox(v))
+		return TRUE;
+
+	// bottom left
+	v_x = pos_x - avoidminus_x;
+	if(m_testtooltipbox(v))
+		return TRUE;
+
+	// top left
+	v_y = pos_y - avoidminus_y;
+	if(m_testtooltipbox(v))
+		return TRUE;
+
+	// top center
+	v_x = pos_x - menuTooltipSize_x * 0.5;
+	if(m_testtooltipbox(v))
+		return TRUE;
+	
+	// top right
+	v_x = pos_x + avoidplus_x;
+	if(m_testtooltipbox(v))
+		return TRUE;
+	
+	return FALSE;
+}
+entity m_findtooltipitem(entity root, vector pos)
+{
+	entity it;
+	entity best;
+
+	best = world;
+	it = root;
+
+	while(it.instanceOfContainer)
+	{
+		if(it.instanceOfNexposee)
+		{
+			if(it.focusedChild)
+			{
+				it = it.focusedChild;
+			}
+			else
+			{
+				it = it.itemFromPoint(it, pos);
+				if(it.tooltip)
+					best = it;
+				break;
+			}
+		}
+		else if(it.instanceOfModalController)
+			it = it.focusedChild;
+		else
+			it = it.itemFromPoint(it, pos);
+		if(it.tooltip)
+			best = it;
+		pos = globalToBox(pos, it.Container_origin, it.Container_size);
+	}
+
+	return best;
+}
+void m_tooltip(vector pos)
+{
+	float f, i, w;
+	entity it;
+	vector fontsize, p;
+	string s;
+
+	fontsize = '1 0 0' * (SKINFONTSIZE_TOOLTIP / conwidth) + '0 1 0' * (SKINFONTSIZE_TOOLTIP / conheight);
+
+	f = bound(0, frametime * 2, 1);
+	menuTooltipAveragedMousePos = menuTooltipAveragedMousePos * (1 - f) + pos * f;
+	f = vlen(pos - menuTooltipAveragedMousePos);
+
+	if(f < 0.01)
+		it = m_findtooltipitem(main, pos);
+	else	
+		it = world;
+
+	// float menuTooltipState; // 0: static, 1: fading in, 2: fading out
+	if(it != menuTooltipItem)
+	{
+		switch(menuTooltipState)
+		{
+			case 0:
+				if(menuTooltipItem)
+				{
+					// another item: fade out first
+					menuTooltipState = 2;
+				}
+				else
+				{
+					// new item: fade in
+					menuTooltipState = 1;
+					menuTooltipItem = it;
+
+					menuTooltipOrigin_x = -1; // unallocated
+					i = 0;
+					w =  0;
+					getWrappedLine_remaining = it.tooltip;
+					while(getWrappedLine_remaining)
+					{
+						s = getWrappedLine(SKINWIDTH_TOOLTIP / fontsize_x, draw_TextWidth_WithoutColors);
+						++i;
+						f = draw_TextWidth(s, FALSE);
+						if(f > w)
+							w = f;
+					}
+					menuTooltipSize_x = w * fontsize_x + 2 * (SKINMARGIN_TOOLTIP_x / conwidth);
+					menuTooltipSize_y = i * fontsize_y + 2 * (SKINMARGIN_TOOLTIP_y / conheight);
+					menuTooltipSize_z = 0;
+				}
+				break;
+			case 1:
+				// changing item while fading in: fade out first
+				menuTooltipState = 2;
+				break;
+			case 2:
+				// changing item while fading out: can't
+				break;
+		}
+	}
+	else if(menuTooltipState == 2) // re-fade in?
+		menuTooltipState = 1;
+
+	if(menuTooltipItem)
+		if(!m_testmousetooltipbox(pos))
+			menuTooltipState = 2; // fade out if mouse touches it
+
+	switch(menuTooltipState)
+	{
+		case 1:
+			menuTooltipAlpha = bound(0, menuTooltipAlpha + 5 * frametime, 1);
+			if(menuTooltipAlpha == 1)
+				menuTooltipState = 0;
+			break;
+		case 2:
+			menuTooltipAlpha = bound(0, menuTooltipAlpha - 2 * frametime, 1);
+			if(menuTooltipAlpha == 0)
+			{
+				menuTooltipState = 0;
+				menuTooltipItem = world;
+			}
+			break;
+	}
+
+	if(menuTooltipItem)
+	{
+		if(menuTooltipOrigin_x < 0) // unallocated?
+			m_allocatetooltipbox(pos);
+
+		if(menuTooltipOrigin_x >= 0)
+		{
+			// draw the tooltip!
+			p = SKINBORDER_TOOLTIP;
+			p_x *= 1 / conwidth;
+			p_y *= 1 / conheight;
+			draw_BorderPicture(menuTooltipOrigin, SKINGFX_TOOLTIP, menuTooltipSize, '1 1 1', menuTooltipAlpha, p);
+			p = menuTooltipOrigin;
+			p_x += SKINMARGIN_TOOLTIP_x / conwidth;
+			p_y += SKINMARGIN_TOOLTIP_y / conheight;
+			getWrappedLine_remaining = menuTooltipItem.tooltip;
+			while(getWrappedLine_remaining)
+			{
+				s = getWrappedLine(SKINWIDTH_TOOLTIP / fontsize_x, draw_TextWidth_WithoutColors);
+				draw_Text(p, s, fontsize, '1 1 1', SKINALPHA_TOOLTIP * menuTooltipAlpha, FALSE);
+				p_y += fontsize_y;
+			}
+		}
+	}
+}
+
 void() m_draw =
 {
 	float t;
@@ -356,6 +574,9 @@ void() m_draw =
 		}
 	}
 	main.draw(main);
+
+	m_tooltip(menuMousePos);
+
 	draw_alpha = max(draw_alpha, SKINALPHA_CURSOR_INTRO * bound(0, menuLogoAlpha, 1));
 
 	draw_drawMousePointer(menuMousePos);

@@ -8,6 +8,15 @@ FONTSIZE_TITLE                  16
 HEIGHT_TITLE                    1.5
 HEIGHT_ZOOMEDTITLE              -1
 
+// tooltips
+//   uses "tooltip" images
+MARGIN_TOOLTIP                  '5 5 0'
+BORDER_TOOLTIP                  '8 8 0'
+FONTSIZE_TOOLTIP                12
+ALPHA_TOOLTIP                   0.7
+WIDTH_TOOLTIP                   0.3
+AVOID_TOOLTIP                   '8 8 0'
+
 // the individual dialog background colors
 COLOR_DIALOG_MULTIPLAYER        '1 1 1'
 COLOR_DIALOG_SETTINGS           '1 1 1'
