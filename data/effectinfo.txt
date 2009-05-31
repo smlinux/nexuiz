@@ -3350,7 +3350,6 @@ liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 0.5
 
-
 // flare particle and light
 // used in qcsrc/server/t_items.qc:	pointparticles(particleeffectnum("item_pickup"), self.origin, '0 0 0', 1)
 effect item_pickup
