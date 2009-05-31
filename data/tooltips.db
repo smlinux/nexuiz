@@ -1,0 +1,28 @@
+0
+\NexuizSingleplayerDialog\here you can play the singleplayer campaign or instant action matches against bots
+\NexuizMultiplayerDialog\here you can play online and set up your player appearance
+\NexuizSettingsDialog\here you can change various game settings
+\NexuizCreditsDialog\check out who was involved with this game
+\NexuizQuitDialog\this dialog is just there to ask you whether you are really sure about quitting
+\NexuizTeamSelectDialog\-
+\NexuizAdvancedDialog\-
+\NexuizMutatorsDialog\-
+\NexuizMapInfoDialog\-
+\NexuizUserbindEditDialog\-
+\NexuizWinnerDialog\-
+\NexuizWeaponsDialog\-
+\NexuizRadarDialog\-
+\NexuizServerInfoDialog\-
+\NexuizCvarsDialog\-
+\NexuizCvarsDialog\-
+\crosshair_color_override\also set the color of the crosshair depending on the weapon you are currently using
+\cl_teamradar_position\-
+\cl_teamradar_size\-
+\cl_teamradar_zoommode\-
+\cl_teamradar_rotation\-
+\cl_teamradar_scale\-
+\cl_teamradar_size\-
+\cl_teamradar_foreground_alpha\-
+\cl_teamradar_background_alpha\-
+\cl_hidewaypoints\-
+\cl_shownames\-

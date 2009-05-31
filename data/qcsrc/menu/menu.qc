@@ -111,7 +111,11 @@ void() m_init_delayed =
 	conwidth = conheight = -1;
 	draw_reset();
 	UpdateConWidthHeight();
+
+	loadTooltips();
 	main = spawnMainWindow(); main.configureMainWindow(main);
+	unloadTooltips();
+
 	main.resizeNotify(main, '0 0 0', eX * conwidth + eY * conheight, '0 0 0', eX * conwidth + eY * conheight);
 	main.focused = 1;
 	menuShiftState = 0;
@@ -230,6 +234,11 @@ float m_testtooltipbox(vector tooltippos)
 		return FALSE;
 	if(tooltippos_y + menuTooltipSize_y > 1)
 		return FALSE;
+	/*
+	menuTooltipOrigin_x = rint(tooltippos_x * cvar("vid_width")) / cvar("vid_width");
+	menuTooltipOrigin_y = rint(tooltippos_y * cvar("vid_height")) / cvar("vid_height");
+	menuTooltipOrigin_z = 0;
+	*/
 	menuTooltipOrigin = tooltippos;
 	return TRUE;
 }
@@ -293,6 +302,8 @@ entity m_findtooltipitem(entity root, vector pos)
 			if(it.focusedChild)
 			{
 				it = it.focusedChild;
+				pos = globalToBox(pos, it.Container_origin, it.Container_size);
+				continue; // don't show dialog tooltips when the dialog is open
 			}
 			else
 			{

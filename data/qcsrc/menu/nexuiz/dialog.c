@@ -26,8 +26,17 @@ CLASS(NexuizDialog) EXTENDS(Dialog)
 	ATTRIB(NexuizDialog, zoomedOutTitleBar, float, SKINHEIGHT_ZOOMEDTITLE != 0)
 
 	ATTRIB(NexuizDialog, alpha, float, SKINALPHA_TEXT)
+
+	METHOD(NexuizDialog, configureDialog, void(entity))
 ENDCLASS(NexuizDialog)
+entity currentDialog;
 #endif
 
 #ifdef IMPLEMENTATION
+void configureDialogNexuizDialog(entity me)
+{
+	currentDialog = me;
+	configureDialogDialog(me);
+	me.tooltip = getZonedTooltipForIdentifier(me.classname);
+}
 #endif

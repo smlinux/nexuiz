@@ -8,7 +8,6 @@ CLASS(NexuizCreditsDialog) EXTENDS(NexuizDialog)
 	ATTRIB(NexuizCreditsDialog, rows, float, SKINROWS_CREDITS)
 	ATTRIB(NexuizCreditsDialog, columns, float, 2)
 	ATTRIB(NexuizCreditsDialog, creditsList, entity, NULL)
-	ATTRIB(NexuizCreditsDialog, tooltip, string, "Information about who was involved in making this game.")
 ENDCLASS(NexuizCreditsDialog)
 #endif
 

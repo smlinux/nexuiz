@@ -44,8 +44,7 @@ void configureNexuizSliderNexuizSlider(entity me, float theValueMin, float theVa
 	if(theCvar)
 	{
 		me.cvarName = theCvar;
-		if((cvar_type(theCvar) & (CVAR_TYPEFLAG_ENGINE | CVAR_TYPEFLAG_HASDESCRIPTION)) == CVAR_TYPEFLAG_HASDESCRIPTION)
-			me.tooltip = strzone(cvar_description(theCvar));
+		me.tooltip = getZonedTooltipForIdentifier(theCvar);
 		me.loadCvars(me);
 	}
 }

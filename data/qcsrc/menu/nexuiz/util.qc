@@ -1,3 +1,30 @@
+float tooltipdb;
+void loadTooltips()
+{
+	tooltipdb = db_load("tooltips.db");
+}
+void unloadTooltips()
+{
+	db_close(tooltipdb);
+	tooltipdb = -1;
+}
+string getZonedTooltipForIdentifier(string s)
+{
+	string t;
+	if(s == "")
+		return string_null;
+	t = db_get(tooltipdb, s);
+	if(t == "-")
+		return string_null;
+	if(t != "")
+		return strzone(t);
+	t = cvar_description(s);
+	if(t != "" && t != "custom cvar")
+		return strzone(t);
+	dprint("WARNING: no tooltip set for ", s, "\n");
+	return string_null;
+}
+
 void forAllDescendants(entity root, void(entity, entity) funcPre, void(entity, entity) funcPost, entity pass)
 {
 	depthfirst(root, parent, firstChild, nextSibling, funcPre, funcPost, pass);
