@@ -38,8 +38,9 @@ void configureNexuizTextSliderNexuizTextSlider(entity me, string theCvar)
 	if(theCvar)
 	{
 		me.cvarName = theCvar;
-		if(cvar_description(theCvar) != "custom cvar")
-			me.tooltip = strzone(cvar_description(theCvar));
+		if not(cvar_type(theCvar) & CVAR_TYPEFLAG_ENGINE)
+			if(cvar_description(theCvar) != "custom cvar")
+				me.tooltip = strzone(cvar_description(theCvar));
 		// don't load it yet
 	}
 }

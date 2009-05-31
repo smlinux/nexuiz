@@ -35,8 +35,9 @@ void configureNexuizGametypeButtonNexuizGametypeButton(entity me, float theGroup
 	if(theCvar)
 	{
 		me.cvarName = theCvar;
-		if(cvar_description(theCvar) != "custom cvar")
-			me.tooltip = strzone(cvar_description(theCvar));
+		if not(cvar_type(theCvar) & CVAR_TYPEFLAG_ENGINE)
+			if(cvar_description(theCvar) != "custom cvar")
+				me.tooltip = strzone(cvar_description(theCvar));
 		me.loadCvars(me);
 	}
 	me.configureRadioButton(me, theText, me.fontSize, me.image, theGroup, 0);
