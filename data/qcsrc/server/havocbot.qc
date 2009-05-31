@@ -713,13 +713,13 @@ void havocbot_chooseenemy()
 	if (time < self.havocbot_chooseenemy_finished)
 		return;
 	self.havocbot_chooseenemy_finished = time + cvar("bot_ai_enemydetectioninterval");
-	eye = (self.origin + self.view_ofs);
+	eye = self.origin + self.view_ofs + '0 0 -25'; // lowered a bit to give room for projectiles
 	best = world;
 	bestrating = 100000000;
 	head = findchainfloat(bot_attack, TRUE);
 	while (head)
 	{
-		v = (head.absmin + head.absmax) * 0.5;
+		v = (head.absmin + head.absmax) * 0.65;
 		rating = vlen(v - eye);
 		if (bestrating > rating)
 		if (bot_shouldattack(head))
