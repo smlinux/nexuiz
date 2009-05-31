@@ -317,6 +317,8 @@ entity m_findtooltipitem(entity root, vector pos)
 			it = it.focusedChild;
 		else
 			it = it.itemFromPoint(it, pos);
+		if(!it)
+			break;
 		if(it.tooltip)
 			best = it;
 		pos = globalToBox(pos, it.Container_origin, it.Container_size);
