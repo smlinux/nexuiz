@@ -7,6 +7,29 @@
 ===========================================================================
 */
 
+float W_WeaponSpeedFactor()
+{
+	float t;
+	t = 1.0 / g_weaponspeedfactor;
+
+	if(g_runematch)
+	{
+		if(self.runes & RUNE_SPEED)
+		{
+			if(self.runes & CURSE_SLOW)
+				t = t * cvar("g_balance_rune_speed_combo_atkrate");
+			else
+				t = t * cvar("g_balance_rune_speed_atkrate");
+		}
+		else if(self.runes & CURSE_SLOW)
+		{
+			t = t * cvar("g_balance_curse_slow_atkrate");
+		}
+	}
+
+	return t;
+}
+
 void W_SwitchWeapon_Force(entity e, float w)
 {
 	e.cnt = e.switchweapon;
@@ -602,7 +625,7 @@ void CL_Weaponentity_Think()
 	f = 0;
 	if (self.state == WS_RAISE)
 	{
-		f = (self.owner.weapon_nextthink - time) / cvar("g_balance_weaponswitchdelay");
+		f = (self.owner.weapon_nextthink - time) * g_weaponspeedfactor / cvar("g_balance_weaponswitchdelay");
 		self.angles_x = -90 * f * f;
 		if (qcweaponanimation)
 		{
@@ -612,7 +635,7 @@ void CL_Weaponentity_Think()
 	}
 	else if (self.state == WS_DROP)
 	{
-		f = 1 - (self.owner.weapon_nextthink - time) / cvar("g_balance_weaponswitchdelay");
+		f = 1 - (self.owner.weapon_nextthink - time) * g_weaponspeedfactor / cvar("g_balance_weaponswitchdelay");
 		self.angles_x = -90 * f * f;
 		if (qcweaponanimation)
 		{
@@ -991,7 +1014,7 @@ float weapon_prepareattack(float secondary, float attacktime)
 			ATTACK_FINISHED(self) = time;
 			//dprint("resetting attack finished to ", ftos(time), "\n");
 		}
-		ATTACK_FINISHED(self) = ATTACK_FINISHED(self) + attacktime;
+		ATTACK_FINISHED(self) = ATTACK_FINISHED(self) + attacktime * W_WeaponSpeedFactor();
 	}
 	self.bulletcounter += 1;
 	//dprint("attack finished ", ftos(ATTACK_FINISHED(self)), "\n");
@@ -1094,6 +1117,7 @@ void weapon_thinkf(float fr, float t, void() func)
 				a = self.weaponentity.anim_fire2;
 			else if (fr == WFRAME_RELOAD)
 				a = self.weaponentity.anim_reload;
+			a_z *= g_weaponspeedfactor;
 			setanim(self.weaponentity, a, restartanim == FALSE, restartanim, restartanim);
 		}
 
@@ -1112,20 +1136,7 @@ void weapon_thinkf(float fr, float t, void() func)
 		backtrace("Tried to override initial weapon think function - should this really happen?");
 	}
 
-	if(g_runematch)
-	{
-		if(self.runes & RUNE_SPEED)
-		{
-			if(self.runes & CURSE_SLOW)
-				t = t * cvar("g_balance_rune_speed_combo_atkrate");
-			else
-				t = t * cvar("g_balance_rune_speed_atkrate");
-		}
-		else if(self.runes & CURSE_SLOW)
-		{
-			t = t * cvar("g_balance_curse_slow_atkrate");
-		}
-	}
+	t *= W_WeaponSpeedFactor();
 
 	// VorteX: haste can be added here
 	if (self.weapon_think == w_ready)

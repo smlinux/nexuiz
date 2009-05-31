@@ -702,6 +702,9 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			}
 		}
 
+		if not(DEATH_ISSPECIAL(deathtype))
+			damage *= g_weapondamagefactor;
+
 		// apply strength multiplier
 		if ((attacker.items & IT_STRENGTH) && !g_minstagib)
 		{

@@ -135,8 +135,6 @@ void W_HLAC_Attack2 (void)
 		self.punchangle_x = random () - 0.5;
 		self.punchangle_y = random () - 0.5;
 	}
-
-	// ATTACK_FINISHED(self) = time + cvar("g_balance_hlac_secondary_refire");
 }
 
 
@@ -158,7 +156,7 @@ void HLAC_fire1_02()
 			return;
 		}
 
-		ATTACK_FINISHED(self) = time + cvar("g_balance_hlac_primary_refire");
+		ATTACK_FINISHED(self) = time + cvar("g_balance_hlac_primary_refire") * W_WeaponSpeedFactor();
 		W_HLAC_Attack();
 		self.HLAC_bulletcounter = self.HLAC_bulletcounter + 1;
         weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_hlac_primary_refire"), HLAC_fire1_02);

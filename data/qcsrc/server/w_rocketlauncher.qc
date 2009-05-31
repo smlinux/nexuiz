@@ -26,7 +26,7 @@ void W_Rocket_Explode (void)
 			self.owner.switchweapon = w_getbestweapon(self.owner);
 		}
 		if(g_laserguided_missile)
-			ATTACK_FINISHED(self.owner) = time + cvar("g_balance_rocketlauncher_refire");
+			ATTACK_FINISHED(self.owner) = time + cvar("g_balance_rocketlauncher_refire") * W_WeaponSpeedFactor();
 	}
 	remove (self);
 }
@@ -194,7 +194,7 @@ void W_Rocket_Think (void)
 				self.velocity = newdir * velspeed;					// make me fly in the new direction at my flight speed
 				self.angles = vectoangles(self.velocity);			// turn model in the new flight direction
 
-				ATTACK_FINISHED(self.owner) = time + 0.2;
+				ATTACK_FINISHED(self.owner) = time + 0.2 * W_WeaponSpeedFactor();
 			}
 		}
 		else
