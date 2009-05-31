@@ -132,11 +132,13 @@ void Draw_WaypointSprite()
 		float f1, f2;
 
 		// get the waypoint angle vector
+		/*
 		d_x = view_right * (self.origin - view_origin) * vid_conwidth / vid_width;
 		d_y = -view_up * (self.origin - view_origin) * vid_conheight / (vid_height * vid_pixelheight);
 		d_z = 0;
+		*/
 		
-		//d = o - '0.5 0 0' * vid_conwidth - '0 0.5 0' * vid_conheight;
+		d = o - '0.5 0 0' * vid_conwidth - '0 0.5 0' * vid_conheight;
 
 		if(cvar("v_flipped"))
 			d_x = -d_x;
