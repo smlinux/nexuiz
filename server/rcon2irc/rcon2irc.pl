@@ -664,6 +664,9 @@ our %config = (
 	irc_quakenet_challengeauth => 'PRIVMSG Q@CServe.quakenet.org :CHALLENGEAUTH',
 	irc_quakenet_challengeprefix => ':Q!TheQBot@CServe.quakenet.org NOTICE [^:]+ :CHALLENGE',
 
+	irc_announce_slotsfree => 1,
+	irc_announce_mapchange => 'always',
+
 	dp_server => undef,
 	dp_secure => 1,
 	dp_listen => "", 
@@ -1050,8 +1053,8 @@ sub cond($)
 		if($full != ($store{slots_full} || 0))
 		{
 			$store{slots_full} = $full;
-			return 0
-				if $store{lms_blocked};
+			return 0 if $store{lms_blocked};
+			return 0 if !$config{irc_announce_slotsfree};
 			if($full)
 			{
 				out irc => 0, "PRIVMSG $config{irc_channel} :\001ACTION is full!\001";
@@ -1142,7 +1145,7 @@ sub cond($)
 			$dpreason =~ s/(["\\])/\\$1/g;
 			out dp => 0, "kick # $id $dpreason";
 			my $slotnik = "playerslot_$id";
-			out irc => 0, "PRIVMSG $nick :kicked #$id (@{[color_dp2irc $store{$slotnik}{name}]} @ $store{$slotnik}{ip}) ($reason)";
+			out irc => 0, "PRIVMSG $nick :kicked #$id (@{[color_dp2irc $store{$slotnik}{name}]}\017 @ $store{$slotnik}{ip}) ($reason)";
 			return 0;
 		}
 
@@ -1154,7 +1157,7 @@ sub cond($)
 			$dpreason =~ s/(["\\])/\\$1/g;
 			out dp => 0, "kickban # $id $bantime $mask $dpreason";
 			my $slotnik = "playerslot_$id";
-			out irc => 0, "PRIVMSG $nick :kickbanned #$id (@{[color_dp2irc $store{$slotnik}{name}]} @ $store{$slotnik}{ip}), netmask $mask, for $bantime seconds ($reason)";
+			out irc => 0, "PRIVMSG $nick :kickbanned #$id (@{[color_dp2irc $store{$slotnik}{name}]}\017 @ $store{$slotnik}{ip}), netmask $mask, for $bantime seconds ($reason)";
 			return 0;
 		}
 
@@ -1178,6 +1181,24 @@ sub cond($)
 			return 0;
 		}
 
+		if($command =~ /^mute (\d+)$/)
+		{
+			my $id = $1;
+			out dp => 0, "mute $id";
+			my $slotnik = "playerslot_$id";
+			out irc => 0, "PRIVMSG $nick :muted $id (@{[color_dp2irc $store{$slotnik}{name}]}\017 @ $store{$slotnik}{ip})";
+			return 0;
+		}
+
+		if($command =~ /^unmute (\d+)$/)
+		{
+			my ($id) = ($1);
+			out dp => 0, "unmute $id";
+			my $slotnik = "playerslot_$id";
+			out irc => 0, "PRIVMSG $nick :unmuted $id (@{[color_dp2irc $store{$slotnik}{name}]}\017 @ $store{$slotnik}{ip})";
+			return 0;
+		}
+
 		if($command =~ /^quote (.*)$/)
 		{
 			my ($cmd) = ($1);
@@ -1193,7 +1214,7 @@ sub cond($)
 			return 0;
 		}
 
-		out irc => 0, "PRIVMSG $nick :unknown command (supported: status [substring], kick # id reason, kickban # id bantime mask reason, bans, unban banid)";
+		out irc => 0, "PRIVMSG $nick :unknown command (supported: status [substring], kick # id reason, kickban # id bantime mask reason, bans, unban banid, mute id, unmute id)";
 
 		return -1;
 	} ],
@@ -1402,8 +1423,10 @@ sub cond($)
 		$store{playing} = 1;
 		$store{map} = $map;
 		$store{map_starttime} = time();
-		my $slotsstr = nex_slotsstring();
-		out irc => 0, "PRIVMSG $config{irc_channel} :\00304" . $map . "\017 has begun$slotsstr";
+		if ($config{irc_announce_mapchange} eq 'always' || ($config{irc_announce_mapchange} eq 'notempty' && $store{slots_active} > 0)) {
+			my $slotsstr = nex_slotsstring();
+			out irc => 0, "PRIVMSG $config{irc_channel} :\00304" . $map . "\017 has begun$slotsstr";
+		}
 		delete $store{lms_blocked};
 		return 0;
 	} ],
