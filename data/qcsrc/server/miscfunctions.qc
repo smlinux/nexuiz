@@ -1437,6 +1437,7 @@ void precache()
 	// common weapon precaches
 	precache_sound ("weapons/weapon_switch.wav");
 	precache_sound ("weapons/weaponpickup.wav");
+	precache_sound ("weapons/unavailable.wav");
 	if(g_grappling_hook)
 	{
 		precache_sound ("weapons/hook_fire.wav"); // hook
