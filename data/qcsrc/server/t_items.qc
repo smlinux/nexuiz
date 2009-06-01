@@ -43,7 +43,12 @@ void Item_Respawn (void)
 {
 	self.model = self.mdl;		// restore original model
 	self.solid = SOLID_TRIGGER;	// allow it to be touched again
-	sound (self, CHAN_TRIGGER, "misc/itemrespawn.wav", VOL_BASE, ATTN_NORM);	// play respawn sound
+	if(!g_minstagib && self.items == IT_STRENGTH)
+		sound (self, CHAN_TRIGGER, "misc/strength_respawn.wav", VOL_BASE, ATTN_NORM);	// play respawn sound
+	else if(!g_minstagib && self.items == IT_INVINCIBLE)
+		sound (self, CHAN_TRIGGER, "misc/shield_respawn.wav", VOL_BASE, ATTN_NORM);	// play respawn sound
+	else
+		sound (self, CHAN_TRIGGER, "misc/itemrespawn.wav", VOL_BASE, ATTN_NORM);	// play respawn sound
 	setorigin (self, self.origin);
 
 	//pointparticles(particleeffectnum("item_respawn"), self.origin + self.mins_z * '0 0 1' + '0 0 48', '0 0 0', 1);
