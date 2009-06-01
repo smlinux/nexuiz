@@ -4,8 +4,26 @@
 
 COMPAT_FILES="
 	effectinfo.txt
+	sound/announcer/male/amazing.ogg
+	sound/announcer/male/awesome.ogg
+	sound/misc/shield_respawn.wav
+	sound/misc/strength_respawn.wav
+	sound/player/pyria-skadi/coms/needhelp2.ogg
+	sound/weapons/unavailable.wav
+	sound/ctf/blue_dropped.wav
+	sound/ctf/red_dropped.wav
+	sound/ctf/flag_respawn.wav
+	sound/ctf/blue_taken.wav
+	sound/ctf/blue_capture.wav
+	sound/ctf/red_taken.wav
+	sound/ctf/red_capture.wav
+	sound/ctf/blue_returned.wav
+	sound/ctf/red_returned.wav
 	sound/misc/itemrespawncountdown.ogg
 	sound/misc/armor25.wav
+	sound/misc/powerup.ogg
+	sound/misc/armor17_5.wav
+	sound/misc/armor10.wav
 	sound/misc/poweroff.wav
 	scripts/onslaught.shader
 	models/sprites/item-extralife_frame0.tga
