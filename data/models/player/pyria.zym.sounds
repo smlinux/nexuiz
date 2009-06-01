@@ -12,7 +12,7 @@ freelance sound/player/pyria-skadi/coms/freelance 2
 //getflag sound/player/carni-lycan/player/getflag 0
 //incoming sound/player/pyria-skadi/coms/incoming 0
 meet sound/player/pyria-skadi/coms/meet 0
-needhelp sound/player/pyria-skadi/coms/needhelp 1
+needhelp sound/player/pyria-skadi/coms/needhelp 2
 //negative sound/player/carni-lycan/player/negative 0
 //onmyway sound/player/carni-lycan/player/onmyway 0
 //roaming sound/player/carni-lycan/player/roaming 0

@@ -290,6 +290,7 @@ void DropFlag(entity e, entity penalty_receiver, entity attacker)
 		backtrace("Flag carrier had no flag sprite?!?");
 	}
 	LogCTF("dropped", p.team, p);
+	sound (self, CHAN_TRIGGER, self.noise4, VOL_BASE, ATTN_NONE);
 
 	setattachment(e, world, "");
 	e.damageforcescale = cvar("g_balance_ctf_damageforcescale");
@@ -759,19 +760,22 @@ void spawnfunc_item_flag_team1()
 	if (!self.model)
 		self.model = cvar_string("g_ctf_flag_red_model");
 	if (!self.noise)
-		self.noise = "ctf/take.wav";
+		self.noise = "ctf/red_taken.wav";
 	if (!self.noise1)
-		self.noise1 = "ctf/return.wav";
+		self.noise1 = "ctf/red_returned.wav";
 	if (!self.noise2)
-		self.noise2 = "ctf/redcapture.wav"; // blue team scores by capturing the red flag
+		self.noise2 = "ctf/red_capture.wav"; // blue team scores by capturing the red flag
 	if (!self.noise3)
-		self.noise3 = "ctf/respawn.wav";
+		self.noise3 = "ctf/flag_respawn.wav";
+	if (!self.noise4)
+		self.noise4 = "ctf/red_dropped.wav";
 	precache_model (self.model);
 	setmodel (self, self.model); // precision set below
 	precache_sound (self.noise);
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
+	precache_sound (self.noise4);
 	//setsize(self, '-16 -16 -37', '16 16 37');
 	setsize(self, FLAG_MIN, FLAG_MAX);
 	setorigin(self, self.origin + '0 0 37');
@@ -860,19 +864,22 @@ void spawnfunc_item_flag_team2()
 	if (!self.model)
 		self.model = cvar_string("g_ctf_flag_blue_model");
 	if (!self.noise)
-		self.noise = "ctf/take.wav";
+		self.noise = "ctf/blue_taken.wav";
 	if (!self.noise1)
-		self.noise1 = "ctf/return.wav";
+		self.noise1 = "ctf/blue_returned.wav";
 	if (!self.noise2)
-		self.noise2 = "ctf/bluecapture.wav"; // red team scores by capturing the blue flag
+		self.noise2 = "ctf/blue_capture.wav"; // blue team scores by capturing the red flag
 	if (!self.noise3)
-		self.noise3 = "ctf/respawn.wav";
+		self.noise3 = "ctf/flag_respawn.wav";
+	if (!self.noise4)
+		self.noise4 = "ctf/blue_dropped.wav";
 	precache_model (self.model);
 	setmodel (self, self.model); // precision set below
 	precache_sound (self.noise);
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
+	precache_sound (self.noise4);
 	//setsize(self, '-16 -16 -37', '16 16 37');
 	setsize(self, FLAG_MIN, FLAG_MAX);
 	setorigin(self, self.origin + '0 0 37');

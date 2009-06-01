@@ -589,3 +589,4 @@ void Drag_MoveDrag(entity from, entity to);
 
 string matchid;
 .float hitplotfh;
+.string noise4;

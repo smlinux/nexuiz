@@ -139,7 +139,7 @@ void W_BallisticBullet_Hit (void)
 			if(headshot)
 				announce(self.owner, "announcer/male/headshot.wav");
 			if(yoda)
-				announce(self.owner, "announcer/male/yoda.wav");
+				announce(self.owner, "announcer/male/awesome.wav");
 		}
 
 		//sound (self, CHAN_PROJECTILE, "weapons/electro_impact.wav", VOL_BASE, ATTN_NORM);

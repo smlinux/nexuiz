@@ -1395,6 +1395,8 @@ void precache()
 	precache_sound ("announcer/male/30kills.wav");
 	precache_sound ("announcer/male/botlike.wav");
 	precache_sound ("announcer/male/yoda.wav");
+	precache_sound ("announcer/male/amazing.wav");
+	precache_sound ("announcer/male/awesome.wav");
 	precache_sound ("announcer/male/headshot.wav");
 	precache_sound ("announcer/male/impressive.wav");
 

@@ -151,7 +151,14 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 		return 0;
 	}
 
+	tdeath_hit = 0;
 	TeleportPlayer(teleporter, player, to, ang, newvel, teleporter.enemy.absmin, teleporter.enemy.absmax);
+	if(tdeath_hit)
+	{
+		// telefrag within 1 second of portal creation = amazing
+		if(time < teleporter.teleport_time + 1)
+			announce(player, "announcer/male/amazing.wav");
+	}
 
 	if not(teleporter.enemy)
 	{
@@ -336,6 +343,7 @@ void Portal_Connect(entity teleporter, entity destination)
 	destination.fade_time = time + 15;
 	teleporter.portal_wants_to_vanish = 0;
 	destination.portal_wants_to_vanish = 0;
+	teleporter.teleport_time = time;
 }
 
 void Portal_Remove(entity portal, float killed)

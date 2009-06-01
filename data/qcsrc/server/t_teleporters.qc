@@ -4,6 +4,7 @@ void trigger_teleport_use()
 		self.team = activator.team;
 }
 
+float tdeath_hit;
 void tdeath(entity player, entity teleporter, entity telefragger, vector telefragmin, vector telefragmax)
 {
 	entity head;
@@ -33,6 +34,7 @@ void tdeath(entity player, entity teleporter, entity telefragger, vector telefra
 						Damage (head, teleporter, telefragger, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
 					else // dead bodies and monsters gib themselves instead of telefragging
 						Damage (telefragger, teleporter, telefragger, 10000, DEATH_TELEFRAG, telefragger.origin, '0 0 0');
+					++tdeath_hit;
 				}
 }
 
