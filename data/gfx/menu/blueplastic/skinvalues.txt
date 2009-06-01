@@ -12,7 +12,7 @@ HEIGHT_ZOOMEDTITLE              -1
 // tooltips
 //   uses "tooltip" images
 MARGIN_TOOLTIP                  '5 5 0'
-BORDER_TOOLTIP                  '8 8 0'
+BORDER_TOOLTIP                  '2 2 0'
 FONTSIZE_TOOLTIP                12
 ALPHA_TOOLTIP                   0.7
 WIDTH_TOOLTIP                   0.3
