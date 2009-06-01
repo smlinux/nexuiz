@@ -24,6 +24,7 @@ COMPAT_FILES="
 	sound/misc/powerup.ogg
 	sound/misc/armor17_5.wav
 	sound/misc/armor10.wav
+	sound/misc/armor1.wav
 	sound/misc/poweroff.wav
 	scripts/onslaught.shader
 	models/sprites/item-extralife_frame0.tga
