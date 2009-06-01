@@ -1104,8 +1104,9 @@ void onslaught_controlpoint_icon_think()
 	else
 		self.punchangle_z = 0;
 	self.angles_x = self.punchangle_x;
-	self.angles_y = self.punchangle_y;
+	self.angles_y = self.punchangle_y + self.mangle_y;
 	self.angles_z = self.punchangle_z;
+	self.mangle_y = self.mangle_y + 1.5;
 
 	self.cp_bob_origin_z = 4 * PI * (1 - cos(self.cp_bob_spd / 8));
 	self.cp_bob_spd = self.cp_bob_spd + 0.5;
