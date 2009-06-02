@@ -39,7 +39,7 @@ casings.qc
 effects.qc
 wall.qc
 
-vehicles/spiderbot.qc
+//vehicles/spiderbot.qc
 Main.qc
 View.qc
 interpolate.qc
