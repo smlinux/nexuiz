@@ -1,3 +1,12 @@
+float  gibcount;
+entity giblist;
+
+void Gib_Delete()
+{
+    --gibcount;
+    remove(self);
+}
+
 string species_prefix(float specnum)
 {
 	switch(specnum)
@@ -23,7 +32,7 @@ void new_te_bloodshower (float ef, vector org, float explosionspeed, float howma
 void SUB_RemoveOnNoImpact()
 {
 	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-		remove(self);
+		Gib_Delete();
 }
 
 void Gib_Touch()
@@ -32,14 +41,14 @@ void Gib_Touch()
 
 	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
-		remove(self);
+		Gib_Delete();
 		return;
 	}
-	
+
 	sound(self, CHAN_PAIN, strcat("misc/gib_splat0", ftos(floor(prandom() * 4 + 1)), ".wav"), VOL_BASE, ATTN_NORM);
 	pointparticles(particleeffectnum(strcat(species_prefix(self.cnt), "blood")), self.origin + '0 0 1', '0 0 30', 10);
 
-	remove(self);
+	Gib_Delete();
 }
 
 void Gib_Draw()
@@ -50,7 +59,7 @@ void Gib_Draw()
 	Movetype_Physics(FALSE);
 	if(wasfreed(self))
 		return;
-	
+
 	if(self.touch == Gib_Touch) // don't do this for the "chunk" thingie...
 		trailparticles(self, particleeffectnum(strcat(species_prefix(self.cnt), "TR_SLIGHTBLOOD")), oldorg, self.origin);
 	else
@@ -60,7 +69,7 @@ void Gib_Draw()
 	self.alpha = bound(0, self.nextthink - time, 1);
 
 	if(self.alpha < ALPHA_MIN_VISIBLE)
-		remove(self);
+		Gib_Delete();
 	else
 		R_AddEntity(self);
 }
@@ -69,9 +78,17 @@ void TossGib (string mdlname, vector org, vector vconst, vector vrand, float spe
 {
 	entity gib;
 
+	if not(giblist)
+        giblist = spawn();
+
 	// TODO remove some gibs according to cl_nogibs
-	
-	gib = spawn();
+	gib = RubbleNew(giblist);
+	++gibcount;
+	if(gibcount >= cvar_or("cl_gibs_maxcount",100))
+        RubbleDrop(giblist,Gib_Delete);
+
+	//gib = spawn();
+
 	gib.classname = "gib";
 	gib.move_movetype = MOVETYPE_BOUNCE;
 	gib.gravity = 1;
@@ -82,7 +99,7 @@ void TossGib (string mdlname, vector org, vector vconst, vector vrand, float spe
 	gib.skin = specnum;
 
 	setsize (gib, '-8 -8 -8', '8 8 8');
-                                          
+
 	gib.draw = Gib_Draw;
 	if(destroyontouch)
 		gib.move_touch = Gib_Touch;
@@ -115,16 +132,16 @@ void Ent_GibSplash()
 
 	if(cvar("cl_gentle"))
 		type |= 0x80; // set gentle bit
-	
+
 	gibfactor = 1 - cvar("cl_nogibs");
 	if(gibfactor <= 0)
 		return;
-	
+
 	amount *= gibfactor;
 
 	if(cvar("ekg"))
 		amount *= 5;
-	
+
 	self.origin = org; // for the sounds
 
 	specnum = (type & 0x78) / 8; // blood/gibmodel type: using four bits (0..15, bit indexes 3,4,5,6)
@@ -145,7 +162,7 @@ void Ent_GibSplash()
 			for(c = 0; c < amount; ++c)
 			{
 				randomvalue = amount - c;
-					
+
 				if(prandom() < randomvalue)
 					TossGib ("models/gibs/arm.md3", org, vel, prandomvec() * (prandom() * 120 + 90), specnum,0);
 				if(prandom() < randomvalue)

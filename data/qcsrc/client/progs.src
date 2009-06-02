@@ -28,6 +28,7 @@ ctf.qc
 sbar.qc
 mapvoting.qc
 
+rubble.qc
 hook.qc
 particles.qc
 laser.qc
@@ -38,6 +39,7 @@ casings.qc
 effects.qc
 wall.qc
 
+vehicles/spiderbot.qc
 Main.qc
 View.qc
 interpolate.qc

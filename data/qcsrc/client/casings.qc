@@ -1,3 +1,12 @@
+float  casecount;
+entity caselist;
+
+void Casing_Delete()
+{
+    --casecount;
+    remove(self);
+}
+
 void Casing_Draw()
 {
 	if(self.move_flags & FL_ONGROUND)
@@ -8,12 +17,12 @@ void Casing_Draw()
 	}
 
 	Movetype_Physics(FALSE);
-	
+
 	self.renderflags = 0;
 	self.alpha = bound(0, self.cnt - time, 1);
 
 	if(self.alpha < ALPHA_MIN_VISIBLE)
-		remove(self);
+		Casing_Delete();
 	else
 		R_AddEntity(self);
 }
@@ -22,7 +31,7 @@ void Casing_Touch()
 {
 	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
-		remove(self);
+		Casing_Delete();
 		return;
 	}
 
@@ -66,7 +75,14 @@ void Ent_Casing()
 {
 	entity casing;
 
-	casing = spawn();
+	if not(caselist)
+        caselist = spawn();
+
+	casing = RubbleNew(caselist);
+	++casecount;
+	if(casecount >= cvar_or("cl_casings_maxcount",100))
+        RubbleDrop(caselist,Casing_Delete);
+
 	casing.state = ReadByte();
 	casing.origin_x = ReadCoord();
 	casing.origin_y = ReadCoord();
@@ -75,7 +91,7 @@ void Ent_Casing()
 	casing.angles_x = ReadByte() * 360 / 256;
 	casing.angles_y = ReadByte() * 360 / 256;
 	casing.angles_z = ReadByte() * 360 / 256;
-	
+
 	if(cvar("cl_casings")) {
 		casing.draw = Casing_Draw;
 		casing.move_origin = casing.origin;
@@ -101,7 +117,9 @@ void Ent_Casing()
 		}
 
 		setsize(casing, '0 0 -1', '0 0 -1');
-	} else remove(self);
+	}
+    else
+        Casing_Delete();
 }
 
 void Casings_Precache()
