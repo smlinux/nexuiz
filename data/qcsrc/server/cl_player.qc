@@ -95,9 +95,9 @@ float player_getspecies()
 				l = fgets(fh);
 				len = tokenize_console(l);
 				if (len != 2)
-					break;
+					goto nospecies;
 				if (argv(0) != "species")
-					break;
+					goto nospecies;
 				switch(argv(1))
 				{
 					case "human":       s = SPECIES_HUMAN;       break;
@@ -108,6 +108,7 @@ float player_getspecies()
 					case "reserved":    s = SPECIES_RESERVED;    break;
 				}
 			}
+:nospecies
 			fclose(fh);
 		}
 		if (s >= 0)
