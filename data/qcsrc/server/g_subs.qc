@@ -297,7 +297,7 @@ A version of traceline that must be used by SOLID_SLIDEBOX things that want to h
 Additionally it moves players back into the past before the trace and restores them afterward.
 ==================
 */
-void traceline_antilag_force (entity source, vector v1, vector v2, float nomonst, entity forent, float lag)
+void tracebox_antilag_force (entity source, vector v1, vector mi, vector ma, vector v2, float nomonst, entity forent, float lag)
 {
 	local entity player;
 	local float oldsolid;
@@ -309,8 +309,11 @@ void traceline_antilag_force (entity source, vector v1, vector v2, float nomonst
 		lag = 0; // only antilag for clients
 
 	// change shooter to SOLID_BBOX so the shot can hit corpses
-	oldsolid = source.dphitcontentsmask;
-	source.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE;
+	if(source)
+	{
+		oldsolid = source.dphitcontentsmask;
+		source.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE;
+	}
 
 	if (lag)
 	{
@@ -324,7 +327,7 @@ void traceline_antilag_force (entity source, vector v1, vector v2, float nomonst
 	}
 
 	// do the trace
-	traceline (v1, v2, nomonst, forent);
+	tracebox (v1, mi, ma, v2, nomonst, forent);
 
 	// restore players to current positions
 	if (lag)
@@ -338,13 +341,24 @@ void traceline_antilag_force (entity source, vector v1, vector v2, float nomonst
 	}
 
 	// restore shooter solid type
-	source.dphitcontentsmask = oldsolid;
+	if(source)
+		source.dphitcontentsmask = oldsolid;
+}
+void traceline_antilag_force (entity source, vector v1, vector v2, float nomonst, entity forent, float lag)
+{
+	tracebox_antilag_force(source, v1, '0 0 0', '0 0 0', v2, nomonst, forent, lag);
 }
 void traceline_antilag (entity source, vector v1, vector v2, float nomonst, entity forent, float lag)
 {
 	if (cvar("g_antilag") != 2)
 		lag = 0;
 	traceline_antilag_force(source, v1, v2, nomonst, forent, lag);
+}
+void tracebox_antilag (entity source, vector v1, vector mi, vector ma, vector v2, float nomonst, entity forent, float lag)
+{
+	if (cvar("g_antilag") != 2)
+		lag = 0;
+	tracebox_antilag_force(source, v1, mi, ma, v2, nomonst, forent, lag);
 }
 
 float tracebox_inverted (vector v1, vector mi, vector ma, vector v2, float nomonsters, entity forent) // returns the number of traces done, for benchmarking
