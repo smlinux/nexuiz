@@ -144,7 +144,7 @@ my %bots = ();
 LoadData();
 while(my $addr = sockaddr_readable $sock->recv($_, 2048, 0))
 {
-	$addr = ""
+	$addr = $server
 		if not defined $bind;
 	s/^\377\377\377\377n//
 		or next;
