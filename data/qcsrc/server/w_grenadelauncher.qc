@@ -61,6 +61,8 @@ void W_Grenade_Touch2 (void)
 
 void W_Grenade_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
+	if (self.health <= 0)
+		return;
 	self.health = self.health - damage;
 	if (self.health <= 0)
 	{
@@ -131,7 +133,7 @@ void W_Grenade_Attack2 (void)
 	gren.touch = W_Grenade_Touch2;
 	gren.takedamage = DAMAGE_YES;
 	gren.health = cvar("g_balance_grenadelauncher_secondary_health");
-	gren.damageforcescale = 4;
+	gren.damageforcescale = cvar("g_balance_grenadelauncher_secondary_damageforcescale");
 	gren.event_damage = W_Grenade_Damage;
 	gren.velocity = w_shotdir * cvar("g_balance_grenadelauncher_secondary_speed") + v_up * cvar("g_balance_grenadelauncher_secondary_speed_up");
 	W_SetupProjectileVelocity(gren);

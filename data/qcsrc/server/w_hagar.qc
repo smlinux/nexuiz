@@ -36,13 +36,6 @@ void W_Hagar_Touch2 (void)
 	}
 }
 
-void W_Hagar_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
-{
-	self.health = self.health - damage;
-	if (self.health <= 0)
-		W_PrepareExplosionByDamage(attacker, self.think);
-}
-
 void W_Hagar_Attack (void)
 {
 	local entity missile;
@@ -66,10 +59,6 @@ void W_Hagar_Attack (void)
 	missile.projectiledeathtype = WEP_HAGAR;
 	setorigin (missile, w_shotorg);
 	setsize(missile, '0 0 0', '0 0 0');
-	//missile.takedamage = DAMAGE_YES;
-	//missile.damageforcescale = 4;
-	//missile.health = 10;
-	//missile.event_damage = W_Hagar_Damage;
 
 	missile.movetype = MOVETYPE_FLY;
 	missile.velocity = (w_shotdir + randomvec() * cvar("g_balance_hagar_primary_spread")) * cvar("g_balance_hagar_primary_speed");
@@ -106,10 +95,6 @@ void W_Hagar_Attack2 (void)
 	missile.projectiledeathtype = WEP_HAGAR | HITTYPE_SECONDARY;
 	setorigin (missile, w_shotorg);
 	setsize(missile, '0 0 0', '0 0 0');
-	//missile.takedamage = DAMAGE_YES;
-	//missile.damageforcescale = 4;
-	//missile.health = 10;
-	//missile.event_damage = W_Hagar_Damage;
 
 	missile.movetype = MOVETYPE_BOUNCEMISSILE;
 	missile.velocity = (w_shotdir + randomvec() * cvar("g_balance_hagar_secondary_spread")) * cvar("g_balance_hagar_secondary_speed");

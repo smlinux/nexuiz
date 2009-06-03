@@ -120,6 +120,9 @@ void Seeker_Missile_Damage (entity inflictor, entity attacker, float damage, flo
 	float d;
 	d = damage;
 
+	if (self.health <= 0)
+		return;
+
 	if (self.owner == attacker)
 		d = d * 0.25;
 
@@ -185,8 +188,8 @@ void Seeker_Fire_Missile(vector f_diff)
 	missile.solid           = SOLID_BBOX;
 	missile.scale           = 2;
 	missile.takedamage          = DAMAGE_YES;
-	missile.damageforcescale    = 4;
-	missile.health              = 5;
+	missile.health          = cvar("g_balance_seeker_missile_health");
+	missile.damageforcescale = cvar("g_balance_seeker_missile_damageforcescale");
 	missile.projectiledeathtype = WEP_SEEKER;
 
 	setorigin (missile, w_shotorg);
@@ -259,6 +262,8 @@ void Seeker_Tag_Explode ()
 
 void Seeker_Tag_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
+	if (self.health <= 0)
+		return;
 	self.health = self.health - damage;
 	if (self.health <= 0)
 		Seeker_Tag_Explode();
@@ -328,7 +333,8 @@ void Seeker_Fire_Tag()
 
 	missile.takedamage       = DAMAGE_YES;
 	missile.event_damage    = Seeker_Tag_Explode;
-	missile.health          = 5;
+	missile.health          = cvar("g_balance_seeker_tag_health");
+	missile.damageforcescale = cvar("g_balance_seeker_tag_damageforcescale");
 
 	setorigin (missile, w_shotorg);
 	setsize (missile, '-2 -2 -2', '2 2 2');

@@ -239,6 +239,8 @@ void W_Rocket_Touch (void)
 
 void W_Rocket_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
+	if (self.health <= 0)
+		return;
 	self.health = self.health - damage;
 	self.angles = vectoangles(self.velocity);
 	if (self.health <= 0)
@@ -269,7 +271,7 @@ void W_Rocket_Attack (void)
 	missile.bot_dodgerating = cvar("g_balance_rocketlauncher_primary_damage") * 2; // * 2 because it can be detonated inflight which makes it even more dangerous
 
 	missile.takedamage = DAMAGE_YES;
-	missile.damageforcescale = 4;
+	missile.damageforcescale = cvar("g_balance_rocketlauncher_damageforcescale");
 	missile.health = cvar("g_balance_rocketlauncher_health");
 	missile.event_damage = W_Rocket_Damage;
 
