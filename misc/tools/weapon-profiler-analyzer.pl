@@ -126,16 +126,18 @@ sub Evaluate($)
 {
 	my ($matrix) = @_;
 	my %allweps;
-	for(keys %$matrix)
+	while(my ($k, $v) = each %$matrix)
 	{
-		++$allweps{$_};
-		for(keys %{$matrix->{$_}})
+		for(my ($k2, $v2) = each %$v)
 		{
-			++$allweps{$_};
+			next if $k eq $k2;
+			next if !$v2;
+			++$allweps{$k};
+			++$allweps{$k2};
 		}
 	}
 	delete $allweps{"@!#%'n Tuba"};
-	delete $allweps{"Port-O-Launch"};
+#delete $allweps{"Port-O-Launch"};
 	my @allweps = keys %allweps;
 	my %values;
 
