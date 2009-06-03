@@ -646,10 +646,11 @@ void FixPlayermodel()
 			m2 = self.maxs;
 			setmodel_lod (self, defaultmodel);
 			setsize (self, m1, m2);
+			chmdl = TRUE;
 		}
 
+		oldskin = self.skin;
 		self.skin = defaultskin;
-		self.species = player_getspecies();
 	} else {
 		if (self.playermodel != self.model)
 		{
@@ -663,10 +664,10 @@ void FixPlayermodel()
 
 		oldskin = self.skin;
 		self.skin = RestrictSkin(stof(self.playerskin));
-
-		if(chmdl || oldskin != self.skin)
-			self.species = player_getspecies(); // model or skin has changed
 	}
+	
+	if(chmdl || oldskin != self.skin)
+		self.species = player_getspecies(); // model or skin has changed
 
 	if(!teams_matter)
 		if(strlen(cvar_string("sv_defaultplayercolors")))
