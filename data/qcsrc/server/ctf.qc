@@ -690,11 +690,11 @@ void item_flag_postspawn()
 	{ // Provide Flag Glow Trail
 		if(self.team == COLOR_TEAM1)
 			// Red
-			self.glow_color = 233;
+			self.glow_color = 251;
 		else
 		if(self.team == COLOR_TEAM2)
 			// Blue
-			self.glow_color = 215;
+			self.glow_color = 210;
 			
 		self.glow_size = 25;
 		self.glow_trail = 1;
