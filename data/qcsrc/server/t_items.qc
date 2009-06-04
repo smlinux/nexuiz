@@ -1229,7 +1229,7 @@ void target_item_change(float binary, .float field, float(float a, float b) func
 
 void target_items_use (void)
 {
-	float h0, a0;
+	float h0, a0, f0;
 
 	if(activator.classname == "droppedweapon")
 	{
@@ -1257,6 +1257,7 @@ void target_items_use (void)
 
 	a0 = activator.armorvalue;
 	h0 = activator.health;
+	f0 = activator.ammo_fuel;
 	target_item_changed = 0;
 
 	if(self.spawnflags == 0) // SET
@@ -1337,6 +1338,11 @@ void target_items_use (void)
 		activator.pauserothealth_finished = max(activator.pauserothealth_finished, time + cvar("g_balance_pause_health_rot"));
 	else if(activator.health < h0)
 		activator.pauseregen_finished = max(activator.pauseregen_finished, time + cvar("g_balance_pause_health_regen"));
+
+	if(activator.ammo_fuel > f0)
+		activator.pauserotfuel_finished = max(activator.pauserotfuel_finished, time + cvar("g_balance_pause_fuel_rot"));
+	else if(activator.ammo_fuel < f0)
+		activator.pauseregen_finished = max(activator.pauseregen_finished, time + cvar("g_balance_pause_fuel_regen"));
 
 	if(activator.armorvalue > a0)
 		activator.pauserotarmor_finished = max(activator.pauserothealth_finished, time + cvar("g_balance_pause_health_rot"));
