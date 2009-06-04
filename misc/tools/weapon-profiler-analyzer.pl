@@ -184,40 +184,85 @@ sub Evaluate($)
 	return \%values;
 }
 
+sub out_text($@)
+{
+	my ($event, @data) = @_;
+	if($event eq 'start')
+	{
+	}
+	elsif($event eq 'startmatrix')
+	{
+		my ($addr, $map, @columns) = @data;
+		$addr ||= 'any';
+		$map ||= 'any';
+		print "For server @{[$addr || 'any']} map @{[$map || 'any']}:\n";
+	}
+	elsif($event eq 'startrow')
+	{
+		my ($row, $val) = @data;
+		printf "  %-30s %8s |", $row, defined $val ? sprintf("%8.5f", $val) : "N/A";
+	}
+	elsif($event eq 'cell')
+	{
+		my ($win, $lose, $p) = @data;
+		if(!defined $p)
+		{
+			print "   .   ";
+		}
+		elsif(!$p)
+		{
+			printf " %6.3f", 0;
+		}
+		else
+		{
+			printf " %+6.3f", $p;
+		}
+	}
+	elsif($event eq 'endrow')
+	{
+		print "\n";
+	}
+	elsif($event eq 'endmatrix')
+	{
+		my ($min) = @data;
+		$min ||= 0;
+		print "  Relevance: $min\n";
+		print "\n";
+	}
+	elsif($event eq 'end')
+	{
+		my ($min) = @data;
+		$min ||= 0;
+		print "  Relevance: $min\n";
+		print "\n";
+	}
+}
+
+my $out = \&out_text;
+
 LoadData();
+$out->(start => ());
 $stats->allstats(sub
 {
 	my ($addr, $map, $data) = @_;
-	print "For server @{[$addr || 'any']} map @{[$map || 'any']}:\n";
 	my $values = Evaluate $data;
 	my $valid = defined [values %$values]->[0];
 	my @weapons_sorted = sort { $valid ? $values->{$b} <=> $values->{$a} : $a cmp $b } keys %$values;
 	my $min = undef;
+	$out->(startmatrix => ($addr, $map, @weapons_sorted));
 	for my $row(@weapons_sorted)
 	{
-		printf "  %-30s %8s |", $row, $valid ? sprintf("%8.5f", $values->{$row}) : "N/A";
+		$out->(startrow => $row, ($valid ? $values->{$row} : undef));
 		for my $col(@weapons_sorted)
 		{
 			my $win = ($data->{$row}{$col} || 0);
 			my $lose = ($data->{$col}{$row} || 0);
 			$min = $win + $lose
 				if $row ne $col and (not defined $min or $min > $win + $lose);
-			if(($row eq $col) || ($win + $lose == 0))
-			{
-				print "   .   ";
-			}
-			elsif($win == $lose)
-			{
-				printf " %6.3f", 0;
-			}
-			else
-			{
-				my $p = 2 * ($win / ($win + $lose) - 0.5);
-				printf " %+6.3f", $p;
-			}
+			$out->(cell => ($win, $lose, (($row ne $col) && ($win + $lose)) ? (2 * $win / ($win + $lose) - 1) : undef));
 		}
-		print "\n";
+		$out->(endrow => ());
 	}
-	$min ||= 0;
-	print "  Relevance: $min\n";
+	$out->(endmatrix => ($addr, $min));
 });
+$out->(end => ());
