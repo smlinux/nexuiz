@@ -465,7 +465,7 @@ void havocbot_role_ctf_retriever()
 	}
 
 	if (!self.havocbot_role_timeout)
-		self.havocbot_role_timeout = time + random() * 30 + 60;
+		self.havocbot_role_timeout = time + 20;
 
 	if (time > self.havocbot_role_timeout)
 	{
@@ -483,7 +483,7 @@ void havocbot_role_ctf_retriever()
 		havocbot_goalrating_ctf_ourstolenflag(50000);
 		havocbot_goalrating_ctf_droppedflags(40000, self.origin, radius);
 		havocbot_goalrating_ctf_enemybase(30000);
-		havocbot_goalrating_items(5000, self.origin, radius);
+		havocbot_goalrating_items(500, self.origin, radius);
 		navigation_goalrating_end();
 	}
 };
@@ -522,12 +522,17 @@ void havocbot_role_ctf_middle()
 
 	if (self.bot_strategytime < time)
 	{
+		local vector org;
+
+		org = havocbot_ctf_middlepoint;
+		org_z = self.origin_z;
+
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
 		navigation_goalrating_start();
 		havocbot_goalrating_ctf_ourstolenflag(50000);
 		havocbot_goalrating_ctf_droppedflags(30000, self.origin, 10000);
-		havocbot_goalrating_enemyplayers(10000, havocbot_ctf_middlepoint, havocbot_ctf_middlepoint_radius * 0.5);
-		havocbot_goalrating_items(5000, havocbot_ctf_middlepoint, havocbot_ctf_middlepoint_radius * 0.5);
+		havocbot_goalrating_enemyplayers(10000, org, havocbot_ctf_middlepoint_radius * 0.5);
+		havocbot_goalrating_items(5000, org, havocbot_ctf_middlepoint_radius * 0.5);
 		havocbot_goalrating_items(2500, self.origin, 10000);
 		havocbot_goalrating_ctf_enemybase(2500);
 		navigation_goalrating_end();
@@ -554,9 +559,7 @@ void havocbot_role_ctf_defense()
 	mf = havocbot_ctf_find_flag(self);
 	if(mf.cnt!=FLAG_BASE)
 	{
-		// And its located as far as about half the distance between the two bases
-		if(vlen(self.origin-mf.origin)<havocbot_ctf_middlepoint_radius*1.2)
-			havocbot_role_ctf_setrole(self, HAVOCBOT_CTF_ROLE_RETRIEVER);
+		havocbot_role_ctf_setrole(self, HAVOCBOT_CTF_ROLE_RETRIEVER);
 		return;
 	}
 
@@ -578,10 +581,35 @@ void havocbot_role_ctf_defense()
 
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
 		navigation_goalrating_start();
-		havocbot_goalrating_ctf_ourstolenflag(200000);
-		havocbot_goalrating_ctf_droppedflags(50000, org, radius);
-		havocbot_goalrating_enemyplayers(20000, org, radius);
+
+		// if enemies are closer to our base, go there
+		local entity head, closestplayer;
+		local float distance, bestdistance;
+		distance = 10000;
+		FOR_EACH_PLAYER(head)
+		{
+			if(head.deadflag!=DEAD_NO)
+				continue;
+
+			distance = vlen(org - head.origin);
+			if(distance<bestdistance)
+			{
+				closestplayer = head;
+				bestdistance = distance;
+			}
+		}
+
+		if(closestplayer)
+		if(closestplayer.team!=self.team)
+		if(vlen(org - self.origin)>1000)
+		if(checkpvs(self.origin,closestplayer)||random()<0.5)
+			havocbot_goalrating_ctf_ourbase(30000);
+
+		havocbot_goalrating_ctf_ourstolenflag(20000);
+		havocbot_goalrating_ctf_droppedflags(20000, org, radius);
+		havocbot_goalrating_enemyplayers(15000, org, radius);
 		havocbot_goalrating_items(10000, org, radius);
+		havocbot_goalrating_items(5000, self.origin, 10000);
 		navigation_goalrating_end();
 	}
 };
@@ -608,7 +636,8 @@ void havocbot_calculate_middlepoint()
 void havocbot_ctf_reset_role(entity bot)
 {
 	local float cdefense, cmiddle, coffense;
-	local entity mf, ef;
+	local entity mf, ef, head;
+	local float c;
 
 	if(self.deadflag != DEAD_NO)
 		return;
@@ -633,10 +662,22 @@ void havocbot_ctf_reset_role(entity bot)
 		return;
 	}
 
-	// Go to the middle to intercept pursuers
+	// If enemy flag is taken go to the middle to intercept pursuers
 	if(ef.cnt!=FLAG_BASE)
 	{
 		havocbot_role_ctf_setrole(bot, HAVOCBOT_CTF_ROLE_MIDDLE);
+		return;
+	}
+
+	// if there is only me on the team switch to offense
+	c = 0;
+	FOR_EACH_PLAYER(head)
+	if(head.team==self.team)
+		++c;
+
+	if(c==1)
+	{
+		havocbot_role_ctf_setrole(bot, HAVOCBOT_CTF_ROLE_OFFENSE);
 		return;
 	}
 
