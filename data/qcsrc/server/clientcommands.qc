@@ -348,7 +348,7 @@ void SV_ParseClientCommand(string s) {
 			//   modelname mode
 			f = stof(argv(2));
 			W_SetupShot(self, FALSE, FALSE, "");
-			traceline(w_shotorg, w_shotorg + w_shotdir * 512, MOVE_NORMAL, self);
+			traceline(w_shotorg, w_shotorg + w_shotdir * 2048, MOVE_NORMAL, self);
 			if((trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT) || trace_fraction == 1)
 			{
 				sprint(self, "cannot make stuff there (bad surface)\n");
