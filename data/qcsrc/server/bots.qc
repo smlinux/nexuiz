@@ -1235,7 +1235,10 @@ void waypoint_spawnforitem(entity e)
 	else
 		org_z = e.origin_z;
 
-	e.nearestwaypointtimeout = time + 1000000000;
+	// TODO: Cleaner solution
+	if(e.classname!="item_flag_team")
+		e.nearestwaypointtimeout = time + 1000000000;
+
 	// don't spawn an item spawnfunc_waypoint if it already exists
 	w = findchain(classname, "waypoint");
 	while (w)
@@ -1411,14 +1414,15 @@ void navigation_poproute()
 };
 
 // find the spawnfunc_waypoint near a dynamic goal such as a dropped weapon
-entity navigation_findnearestwaypoint(entity player, float walkfromwp)
+entity navigation_findnearestwaypoint(entity ent, float walkfromwp)
 {
 	local entity waylist, w, best;
 	local float dist, bestdist;
 	local vector v, org, pm1, pm2;
-	pm1 = player.origin + PL_MIN;
-	pm2 = player.origin + PL_MAX;
+	pm1 = ent.origin + PL_MIN;
+	pm2 = ent.origin + PL_MAX;
 	waylist = findchain(classname, "waypoint");
+
 	// do two scans, because box test is cheaper
 	w = waylist;
 	while (w)
@@ -1429,9 +1433,9 @@ entity navigation_findnearestwaypoint(entity player, float walkfromwp)
 		w = w.chain;
 	}
 
-	org = player.origin + (player.mins_z - PL_MIN_z) * '0 0 1';
-	if(player.tag_entity)
-		org = org + player.tag_entity.origin;
+	org = ent.origin + (ent.mins_z - PL_MIN_z) * '0 0 1';
+	if(ent.tag_entity)
+		org = org + ent.tag_entity.origin;
 	if (navigation_testtracewalk)
 		te_plasmaburn(org);
 	best = world;
@@ -1458,9 +1462,9 @@ entity navigation_findnearestwaypoint(entity player, float walkfromwp)
 		{
 			if (walkfromwp)
 			{
-				traceline(v, org, TRUE, player);
+				traceline(v, org, TRUE, ent);
 				if (trace_fraction == 1)
-				if (tracewalk(player, v, PL_MIN, PL_MAX, org, MOVE_NORMAL))
+				if (tracewalk(ent, v, PL_MIN, PL_MAX, org, MOVE_NORMAL))
 				{
 					bestdist = dist;
 					best = w;
@@ -1468,9 +1472,9 @@ entity navigation_findnearestwaypoint(entity player, float walkfromwp)
 			}
 			else
 			{
-				traceline(v, org, TRUE, player);
+				traceline(v, org, TRUE, ent);
 				if (trace_fraction == 1)
-				if (tracewalk(player, org, PL_MIN, PL_MAX, v, MOVE_NORMAL))
+				if (tracewalk(ent, org, PL_MIN, PL_MAX, v, MOVE_NORMAL))
 				{
 					bestdist = dist;
 					best = w;
@@ -1702,9 +1706,14 @@ void navigation_routerating(entity e, float f, float rangebias)
 	if (time > e.nearestwaypointtimeout)
 	{
 		e.nearestwaypoint = navigation_findnearestwaypoint(e, TRUE);
-		e.nearestwaypointtimeout = time + random() * 3 + 5;
+
+		// TODO: Cleaner solution, probably handling this timeout from ctf.qc
+		if(e.classname=="item_flag_team")
+			e.nearestwaypointtimeout = time + 2;
+		else
+			e.nearestwaypointtimeout = time + random() * 3 + 5;
 	}
-	//dprint(e.classname, " ", ftos(f));
+
 	//dprint("-- checking ", e.classname, " (with cost ", ftos(e.nearestwaypoint.wpcost), ")\n");
 	if (e.nearestwaypoint)
 	if (e.nearestwaypoint.wpcost < 10000000)
@@ -1713,7 +1722,7 @@ void navigation_routerating(entity e, float f, float rangebias)
 		//dprint(e.classname, " ", ftos(f), "/(1+", ftos((e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint))), "/", ftos(rangebias), ") = ");
 		f = f * rangebias / (rangebias + (e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint)));
 		//if (self.havocbot_role == havocbot_role_ctf_offense)
-		//	dprint("-- considering ", e.classname, " (with rating ", ftos(f), ")\n");
+		//dprint("considering ", e.classname, " (with rating ", ftos(f), ")\n");
 		//dprint(ftos(f));
 		if (navigation_bestrating < f)
 		{
@@ -1805,7 +1814,7 @@ void navigation_poptouchedgoals()
 	if(self.goalcurrent.wpflags & WAYPOINTFLAG_TELEPORT)
 	{
 		if(self.lastteleporttime>0)
-		if(time-self.lastteleporttime<0.2)
+		if(time-self.lastteleporttime<0.15)
 		{
 			navigation_poproute();
 			return;
@@ -1861,6 +1870,22 @@ void navigation_goalrating_start()
 void navigation_goalrating_end()
 {
 	navigation_routetogoals();
+
+	// If can't walk to any goal just move blindly to the first visible waypoint
+	if not (self.navigation_hasgoals)
+	{
+		dprint(self.netname, " can't walk to any goal, moving to the closest waypoint\n");
+		local entity head;
+		head = findradius(self.origin,500);
+		while(head)
+		{
+			if(head.classname=="waypoint")
+			if(checkpvs(self.origin,head))
+				navigation_routetogoal(head,self.origin);
+
+			head = head.chain;
+		}
+	}
 };
 
 
@@ -2412,7 +2437,6 @@ void bot_think()
 			self.BUTTON_JUMP = 1; // press jump to respawn
 			self.bot_strategytime = 0;
 		}
-		return;
 	}
 
 	// now call the current bot AI (havocbot for example)

@@ -713,13 +713,13 @@ void havocbot_chooseenemy()
 	if (time < self.havocbot_chooseenemy_finished)
 		return;
 	self.havocbot_chooseenemy_finished = time + cvar("bot_ai_enemydetectioninterval");
-	eye = self.origin + self.view_ofs + '0 0 -25'; // lowered a bit to give room for projectiles
+	eye = self.origin + self.view_ofs;
 	best = world;
 	bestrating = 100000000;
 	head = findchainfloat(bot_attack, TRUE);
 	while (head)
 	{
-		v = (head.absmin + head.absmax) * 0.65;
+		v = (head.absmin + head.absmax) * 0.5;
 		rating = vlen(v - eye);
 		if (bestrating > rating)
 		if (bot_shouldattack(head))
@@ -1011,6 +1011,7 @@ void havocbot_ai()
 
 		// TODO: tracewalk() should take care of this job (better path finding under water)
 		// if we don't have a goal and we're under water look for a waypoint near the "shore" and push it
+		if(self.deadflag != DEAD_NO)
 		if(self.goalcurrent==world)
 		if(self.waterlevel==WATERLEVEL_SWIMMING || self.aistatus & AI_STATUS_OUT_WATER)
 		{
@@ -1057,6 +1058,10 @@ void havocbot_ai()
 		// token has been used this frame
 		bot_strategytoken_taken = TRUE;
 	}
+
+	if(self.deadflag != DEAD_NO)
+		return;
+
 	havocbot_chooseenemy();
 	if (self.bot_chooseweapontime < time )
 	{
