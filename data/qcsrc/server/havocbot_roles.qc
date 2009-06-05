@@ -319,471 +319,16 @@ void havocbot_goalrating_enemyplayers(float ratingscale, vector org, float sradi
 	}
 };
 
-// Functions for CTF
-
-float canreach(entity e)
-{
-	return vlen(self.origin - e.origin) < 1500;
-}
-
-float teamcount()
-{
-	if not(teams_matter)
-		return 0;
-
-	float c;
-	entity head;
-
-	FOR_EACH_PLAYER(head)
-	if(head.team==self.team)
-		++c;
-
-	return c;
-}
-
-void() havocbot_role_ctf_middle;
-void() havocbot_role_ctf_defense;
-void() havocbot_role_ctf_offense;
-void() havocbot_role_ctf_interceptor;
-
-void havocbot_goalrating_ctf_carrieritems(float ratingscale, vector org, float sradius)
-{
-	local entity head;
-	local float t;
-	head = findchainfloat(bot_pickup, TRUE);
-	while (head)
-	{
-		// look for health and armor only
-		if (head.solid) // must be possible to pick up (respawning items don't count)
-		if (head.health || head.armorvalue)
-		if (vlen(head.origin - org) < sradius)
-		{
-			// debugging
-			//if (!head.bot_pickupevalfunc || head.model == "")
-			//	eprint(head);
-			// get the value of the item
-			t = head.bot_pickupevalfunc(self, head) * 0.0001;
-			if (t > 0)
-				navigation_routerating(head, t * ratingscale, 500);
-		}
-		head = head.chain;
-	}
-};
-
-entity ctf_worldflaglist;
-.entity ctf_worldflagnext;
-void havocbot_goalrating_ctf_ourflag(float ratingscale)
-{
-	local entity head;
-	head = ctf_worldflaglist;
-	while (head)
-	{
-		if (self.team == head.team)
-			break;
-		head = head.ctf_worldflagnext;
-	}
-	if (head)
-		navigation_routerating(head, ratingscale, 10000);
-};
-
-void havocbot_goalrating_ctf_ourbase(float ratingscale)
-{
-	if not(bot_waypoints_for_items)
-	{
-		havocbot_goalrating_ctf_ourflag(ratingscale);
-		return;
-	}
-
-	local entity head;
-	head = ctf_worldflaglist;
-	while (head)
-	{
-		if (self.team == head.team)
-			break;
-		head = head.ctf_worldflagnext;
-	}
-	if not(head)
-		return;
-
-	head = findradius(head.dropped_origin, 100);
-	while(head)
-	{
-		if(head.classname=="waypoint")
-		{
-			navigation_routerating(head, ratingscale, 10000);
-			return;
-		}
-		head=head.chain;
-	}
-};
-
-void havocbot_goalrating_ctf_enemyflag(float ratingscale)
-{
-	local entity head;
-	head = ctf_worldflaglist;
-	while (head)
-	{
-		if (self.team != head.team)
-			break;
-		head = head.ctf_worldflagnext;
-	}
-	if (head)
-		navigation_routerating(head, ratingscale, 10000);
-};
-
-void havocbot_goalrating_ctf_enemybase(float ratingscale)
-{
-	// div0: needs a change in the CTF code
-};
-
-void havocbot_goalrating_ctf_ourstolenflag(float ratingscale)
-{
-	local entity head;
-	head = ctf_worldflaglist;
-	while (head)
-	{
-		if (self.team == head.team)
-			break;
-		head = head.ctf_worldflagnext;
-	}
-	if (head)
-	if (head.cnt != FLAG_BASE)
-		navigation_routerating(head, ratingscale, 10000);
-};
-
-void havocbot_goalrating_ctf_droppedflags(float ratingscale)
-{
-	local entity head;
-	head = ctf_worldflaglist;
-	while (head)
-	{
-		if (head.cnt != FLAG_BASE) // flag is carried or out in the field
-			navigation_routerating(head, ratingscale, 10000);
-		head = head.ctf_worldflagnext;
-	}
-};
-
-// CTF: (always teamplay)
-
-//role rogue: (is this used?)
-//pick up items and dropped flags (with big rating boost to dropped flags)
-void havocbot_role_ctf_rogue()
-{
-	if (self.bot_strategytime < time)
-	{
-		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
-		navigation_goalrating_start();
-		havocbot_goalrating_ctf_droppedflags(5000);
-		//havocbot_goalrating_enemyplayers(3000, self.origin, 3000);
-		havocbot_goalrating_items(10000, self.origin, 10000);
-		navigation_goalrating_end();
-	}
-}
-
-//role flag carrier:
-//pick up armor and health
-//go to our flag spot
-.float bot_cantfindflag;
-void havocbot_role_ctf_carrier()
-{
-	if (self.flagcarried == world)
-	{
-		dprint("changing role to middle\n");
-		self.havocbot_role = havocbot_role_ctf_middle;
-		self.havocbot_role_timeout = 0;
-		return;
-	}
-	if (self.bot_strategytime < time)
-	{
-		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
-		navigation_goalrating_start();
-		havocbot_goalrating_ctf_ourbase(50000);
-		if(self.health<100)
-			havocbot_goalrating_ctf_carrieritems(1000, self.origin, 1000);
-		navigation_goalrating_end();
-
-		if (self.navigation_hasgoals)
-			self.bot_cantfindflag = time + 10;
-		else if (time > self.bot_cantfindflag)
-		{
-			// can't navigate to our own flag :(
-			Damage(self, self, self, 100000, DEATH_KILL, self.origin, '0 0 0');
-			return;
-		}
-	}
-};
-
-//role offense:
-//pick up armor and health
-//if rockets < 25 || health < 100, change role to middle
-//if carrying flag, change role to flag carrier
-//if our flag taken, change role to interceptor
-//(60-90 second timer) change role to middle
-//go to enemy flag
-void havocbot_role_ctf_offense()
-{
-	local entity f;
-	if (self.flagcarried)
-	{
-		dprint("changing role to carrier\n");
-		self.havocbot_role = havocbot_role_ctf_carrier;
-		self.havocbot_role_timeout = 0;
-		self.bot_cantfindflag = time + 10;
-		return;
-	}
-	// check our flag
-	f = ctf_worldflaglist;
-	while (f)
-	{
-		if (self.team == f.team)
-			break;
-		f = f.ctf_worldflagnext;
-	}
-	if (f.cnt != FLAG_BASE && canreach(f))
-	{
-		dprint("changing role to interceptor\n");
-		self.havocbot_previous_role = self.havocbot_role;
-		self.havocbot_role = havocbot_role_ctf_interceptor;
-		self.havocbot_role_timeout = 0;
-		return;
-	}
-	if (!self.havocbot_role_timeout)
-		self.havocbot_role_timeout = time + random() * 30 + 60;
-	if (time > self.havocbot_role_timeout)
-	{
-		dprint("changing role to middle\n");
-		self.havocbot_role = havocbot_role_ctf_middle;
-		self.havocbot_role_timeout = 0;
-		return;
-	}
-	if (self.bot_strategytime < time)
-	{
-		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
-		navigation_goalrating_start();
-		havocbot_goalrating_ctf_ourstolenflag(50000);
-		havocbot_goalrating_ctf_enemyflag(30000);
-		havocbot_goalrating_ctf_enemybase(20000);
-		havocbot_goalrating_items(10000, self.origin, 10000);
-		navigation_goalrating_end();
-	}
-};
-
-//role interceptor (temporary role):
-//pick up items
-//if carrying flag, change role to flag carrier
-//if our flag is back, change role to previous role
-//follow our flag
-//go to least recently visited area
-void havocbot_role_ctf_interceptor()
-{
-	local entity f;
-	if (self.flagcarried)
-	{
-		dprint("changing role to carrier\n");
-		self.havocbot_role = havocbot_role_ctf_carrier;
-		self.havocbot_role_timeout = 0;
-		self.bot_cantfindflag = time + 10;
-		return;
-	}
-	// check our flag
-	f = ctf_worldflaglist;
-	while (f)
-	{
-		if (self.team == f.team)
-			break;
-		f = f.ctf_worldflagnext;
-	}
-	if (f.cnt == FLAG_BASE)
-	{
-		dprint("changing role back\n");
-		self.havocbot_role = self.havocbot_previous_role;
-		self.havocbot_role_timeout = 0;
-		return;
-	}
-
-	if (self.bot_strategytime < time)
-	{
-		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
-		navigation_goalrating_start();
-		havocbot_goalrating_ctf_ourstolenflag(50000);
-		havocbot_goalrating_ctf_droppedflags(50000);
-		havocbot_goalrating_items(10000, self.origin, 10000);
-		navigation_goalrating_end();
-	}
-};
-
-//role middle:
-//pick up items
-//if carrying flag, change role to flag carrier
-//if our flag taken, change role to interceptor
-//if see flag (of either team) follow it (this has many implications)
-//(10-20 second timer) change role to defense or offense
-//go to least recently visited area
-void havocbot_role_ctf_middle()
-{
-	local entity f;
-	if (self.flagcarried)
-	{
-		dprint("changing role to carrier\n");
-		self.havocbot_role = havocbot_role_ctf_carrier;
-		self.havocbot_role_timeout = 0;
-		self.bot_cantfindflag = time + 10;
-		return;
-	}
-	// check our flag
-	f = ctf_worldflaglist;
-	while (f)
-	{
-		if (self.team == f.team)
-			break;
-		f = f.ctf_worldflagnext;
-	}
-	if (f.cnt != FLAG_BASE && canreach(f))
-	{
-		dprint("changing role to interceptor\n");
-		self.havocbot_previous_role = self.havocbot_role;
-		self.havocbot_role = havocbot_role_ctf_interceptor;
-		self.havocbot_role_timeout = 0;
-		return;
-	}
-	if (!self.havocbot_role_timeout)
-		self.havocbot_role_timeout = time + random() * 10 + 10;
-	if (time > self.havocbot_role_timeout)
-	{
-		if (random() < 0.5)
-		{
-			dprint("changing role to offense\n");
-			self.havocbot_role = havocbot_role_ctf_offense;
-		}
-		else
-		{
-			dprint("changing role to defense\n");
-			self.havocbot_role = havocbot_role_ctf_defense;
-		}
-		self.havocbot_role_timeout = 0;
-		return;
-	}
-
-	if (self.bot_strategytime < time)
-	{
-		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
-		navigation_goalrating_start();
-		havocbot_goalrating_ctf_ourstolenflag(50000);
-		havocbot_goalrating_ctf_droppedflags(30000);
-		//havocbot_goalrating_enemyplayers(1000, self.origin, 1000);
-		havocbot_goalrating_items(10000, self.origin, 10000);
-		navigation_goalrating_end();
-	}
-};
-
-//role defense:
-//if rockets < 25 || health < 100, change role to middle
-//if carrying flag, change role to flag carrier
-//if our flag taken, change role to interceptor
-//(30-50 second timer) change role to middle
-//move to nearest unclaimed defense spot
-void havocbot_role_ctf_defense()
-{
-	local entity f;
-	if (self.flagcarried)
-	{
-		dprint("changing role to carrier\n");
-		self.havocbot_role = havocbot_role_ctf_carrier;
-		self.havocbot_role_timeout = 0;
-		self.bot_cantfindflag = time + 10;
-		return;
-	}
-	// check our flag
-	f = ctf_worldflaglist;
-	while (f)
-	{
-		if (self.team == f.team)
-			break;
-		f = f.ctf_worldflagnext;
-	}
-	if (f.cnt != FLAG_BASE && canreach(f))
-	{
-		dprint("changing role to interceptor\n");
-		self.havocbot_previous_role = self.havocbot_role;
-		self.havocbot_role = havocbot_role_ctf_interceptor;
-		self.havocbot_role_timeout = 0;
-		return;
-	}
-	if (!self.havocbot_role_timeout)
-		self.havocbot_role_timeout = time + random() * 20 + 30;
-	if (time > self.havocbot_role_timeout)
-	{
-		dprint("changing role to middle\n");
-		self.havocbot_role = havocbot_role_ctf_middle;
-		self.havocbot_role_timeout = 0;
-		return;
-	}
-	if (self.bot_strategytime < time)
-	{
-		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
-		navigation_goalrating_start();
-		havocbot_goalrating_ctf_ourstolenflag(200000);
-		havocbot_goalrating_ctf_droppedflags(50000);
-		havocbot_goalrating_items(10000, f.origin, 10000);
-		navigation_goalrating_end();
-	}
-	/*
-	// FIXME: place info_ctf_defensepoint entities in CTF maps and use them
-	// change position occasionally
-	if (time > self.bot_strategytime || self.goalentity.classname != "info_ctf_defensepoint")
-	{
-		self.bot_strategytime = time + random() * 45 + 15;
-		self.goalentity = world;
-		head = findchain(classname, "info_ctf_defensepoint");
-		while (head)
-		{
-			if (time > head.count)
-			{
-				self.goalentity = head;
-				head.chain = world;
-			}
-			head = head.chain;
-		}
-		// if there are no defensepoints defined, switch to middle
-		if (self.goalentity == world)
-		{
-			dprint("changing role to middle\n");
-			self.havocbot_role = havocbot_role_ctf_middle;
-			self.havocbot_role_timeout = 0;
-			return;
-		}
-	}
-	// keep anyone else from taking this spot
-	if (self.goalentity != world)
-		self.goalentity.count = time + 0.5;
-	*/
-};
-
-// CTF:
 // choose a role according to the situation
 void() havocbot_role_dm;
-void havocbot_chooserole_ctf()
-{
-	local float r;
-	dprint("choose CTF role...\n");
-	if (self.team == COLOR_TEAM3 || self.team == COLOR_TEAM4)
-		self.havocbot_role = havocbot_role_ctf_rogue;
-	else
-	{
-		r = random() * 100;
-		if (r < 45)
-			self.havocbot_role = havocbot_role_ctf_offense;
-		else if (r > 75)
-			self.havocbot_role = havocbot_role_ctf_middle;
-		else
-			self.havocbot_role = havocbot_role_ctf_defense;
-	}
-};
 
 //DOM:
 //go to best items, or control points you don't own
 void havocbot_role_dom()
 {
+	if(self.deadflag != DEAD_NO)
+		return;
+
 	if (self.bot_strategytime < time)
 	{
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
@@ -800,6 +345,9 @@ void havocbot_role_dom()
 //go to best items
 void havocbot_role_dm()
 {
+	if(self.deadflag != DEAD_NO)
+		return;
+
 	if (self.bot_strategytime < time)
 	{
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
@@ -816,6 +364,9 @@ void havocbot_role_dm()
 .float race_checkpoint;
 void havocbot_role_race()
 {
+	if(self.deadflag != DEAD_NO)
+		return;
+
 	entity e;
 	if (self.bot_strategytime < time)
 	{
@@ -897,6 +448,9 @@ void() havocbot_role_kh_offense;
 void() havocbot_role_kh_freelancer;
 void havocbot_role_kh_carrier()
 {
+	if(self.deadflag != DEAD_NO)
+		return;
+
 	if (!(self.items & IT_KEY1))
 	{
 		dprint("changing role to freelancer\n");
@@ -922,6 +476,9 @@ void havocbot_role_kh_carrier()
 
 void havocbot_role_kh_defense()
 {
+	if(self.deadflag != DEAD_NO)
+		return;
+
 	if (self.items & IT_KEY1)
 	{
 		dprint("changing role to carrier\n");
@@ -961,6 +518,9 @@ void havocbot_role_kh_defense()
 
 void havocbot_role_kh_offense()
 {
+	if(self.deadflag != DEAD_NO)
+		return;
+
 	if (self.items & IT_KEY1)
 	{
 		dprint("changing role to carrier\n");
@@ -1001,6 +561,9 @@ void havocbot_role_kh_offense()
 
 void havocbot_role_kh_freelancer()
 {
+	if(self.deadflag != DEAD_NO)
+		return;
+
 	if (self.items & IT_KEY1)
 	{
 		dprint("changing role to carrier\n");
@@ -1050,6 +613,10 @@ void havocbot_role_kh_freelancer()
 void havocbot_chooserole_kh()
 {
 	local float r;
+
+	if(self.deadflag != DEAD_NO)
+		return;
+
 	r = random() * 3;
 	if (r < 1)
 		self.havocbot_role = havocbot_role_kh_offense;
