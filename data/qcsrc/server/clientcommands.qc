@@ -374,7 +374,7 @@ void SV_ParseClientCommand(string s) {
 					tracebox(self.origin, self.mins, self.maxs, self.origin, MOVE_NORMAL, self);
 					if(trace_startsolid)
 					{
-						sprint(self, "cannot make stuff there (no space)\n");
+						sprint(oldself, "cannot make stuff there (no space)\n");
 						remove(self);
 					}
 				}
