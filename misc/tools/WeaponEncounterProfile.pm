@@ -25,6 +25,10 @@ sub load($)
 	{
 		chomp;
 		my ($addr, $map, $attackerweapon, $targweapon, $value) = split /\t/, $_;
+		$targweapon = int $self->weaponid_from_name($targweapon)
+			if $targweapon ne int $targweapon;
+		$attackerweapon = int $self->weaponid_from_name($attackerweapon)
+			if $attackerweapon ne int $attackerweapon;
 		$self->{stats}->{$addr}{$map}{$attackerweapon}{$targweapon} += $value;
 		$self->{mapstats}->{$map}{$attackerweapon}{$targweapon} += $value;
 		$self->{addrstats}->{$addr}{$attackerweapon}{$targweapon} += $value;
@@ -87,6 +91,52 @@ sub allstats($$)
 		{
 			$callback->($k1, $k2, $v2);
 		}
+	}
+}
+
+our %WeaponMap = (
+         1 => ["Laser", "laser"],
+         2 => ["Shotgun", "shotgun"],
+         3 => ["Uzi", "uzi"],
+         4 => ["Mortar", "gl"],
+         5 => ["Electro", "electro"],
+         6 => ["Crylink", "crylink"],
+         7 => ["Nex", "nex"],
+         8 => ["Hagar", "hagar"],
+         9 => ["Rocket Launcher", "rl"],
+        10 => ["Port-O-Launch", "porto"],
+        11 => ["MinstaNex", "minstanex"],
+        12 => ["Grappling Hook", "hookgun"],
+        13 => ["Heavy Laser Assault Cannon", "hlac"],
+        14 => ["T.A.G. Seeker", "seeker"],
+        15 => ["Camping Rifle", "campingrifle"],
+);
+
+sub weaponid_valid($$)
+{
+	my ($self, $id) = @_;
+	return exists $WeaponMap{$id};
+}
+
+sub weaponid_to_name($$)
+{
+	my ($self, $id) = @_;
+	return $WeaponMap{$id}[0];
+}
+
+sub weaponid_to_model($$)
+{
+	my ($self, $id) = @_;
+	return $WeaponMap{$id}[1];
+}
+
+sub weaponid_from_name($$)
+{
+	my ($self, $name) = @_;
+	for(keys %WeaponMap)
+	{
+		return $_
+			if $WeaponMap{$_}[0] eq $name;
 	}
 }
 

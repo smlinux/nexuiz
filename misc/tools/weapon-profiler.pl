@@ -12,25 +12,6 @@ use Socket;
 use sigtrap qw(die normal-signals);
 use WeaponEncounterProfile;
 
-my %weaponmap = (
-         1 => "Laser",
-         2 => "Shotgun",
-         3 => "Uzi",
-         4 => "Mortar",
-         5 => "Electro",
-         6 => "Crylink",
-         7 => "Nex",
-         8 => "Hagar",
-         9 => "Rocket Launcher",
-        10 => "Port-O-Launch",
-        11 => "MinstaNex",
-        12 => "Grappling Hook",
-        13 => "Heavy Laser Assault Cannon",
-        14 => "T.A.G. Seeker",
-        15 => "Camping Rifle",
-	0 => "@!#%'n Tuba"
-);
-
 my ($statsfile) = @ARGV;
 my $password = $ENV{rcon_password};
 my $server = $ENV{rcon_address};
@@ -173,13 +154,11 @@ while(my $addr = sockaddr_readable $sock->recv($_, 2048, 0))
 			$type &= 0xFF
 				if $type < 10000;
 			$killweapon = $type
-				if defined $weaponmap{$type}; # if $type is not a weapon deathtype, count the weapon of the killer
+				if $stats->weaponid_valid($type); # if $type is not a weapon deathtype, count the weapon of the killer
 			$killweapon = 0
-				if not defined $weaponmap{$killweapon}; # invalid weapon? that's 0 then
+				if not $stats->weaponid_valid($killweapon); # invalid weapon? that's 0 then
 			$victimweapon = 0
-				if not defined $weaponmap{$victimweapon}; # dito
-			$killweapon = $weaponmap{$killweapon};
-			$victimweapon = $weaponmap{$victimweapon};
+				if not $stats->weaponid_valid($victimweapon); # dito
 			next
 				if $killflags =~ /S|I/ or $victimflags =~ /T/; # no strength, shield or typekills (these skew the statistics)
 			AddKill($addr, $currentmap{$addr}, $killweapon, $victimweapon, +1);
@@ -190,10 +169,9 @@ while(my $addr = sockaddr_readable $sock->recv($_, 2048, 0))
 			$type &= 0xFF
 				if $type < 10000;
 			$killweapon = $type
-				if defined $weaponmap{$type};
+				if $stats->weaponid_valid($type);
 			$killweapon = 0
-				if not defined $weaponmap{$killweapon};
-			$killweapon = $weaponmap{$killweapon};
+				if not $stats->weaponid_valid($killweapon);
 			next
 				if $killflags =~ /S/; # no strength suicides (happen too easily accidentally)
 			AddKill($addr, $currentmap{$addr}, $killweapon, $killweapon, +1);

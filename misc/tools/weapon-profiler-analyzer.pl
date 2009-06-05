@@ -136,8 +136,6 @@ sub Evaluate($)
 			++$allweps{$k2};
 		}
 	}
-	delete $allweps{"@!#%'n Tuba"};
-#delete $allweps{"Port-O-Launch"};
 	my @allweps = keys %allweps;
 	my %values;
 
@@ -200,7 +198,7 @@ sub out_text($@)
 	elsif($event eq 'startrow')
 	{
 		my ($row, $val) = @data;
-		printf "  %-30s %8s |", $row, defined $val ? sprintf("%8.5f", $val) : "N/A";
+		printf "  %-30s %8s |", $stats->weaponid_to_name($row), defined $val ? sprintf("%8.5f", $val) : "N/A";
 	}
 	elsif($event eq 'cell')
 	{
@@ -231,14 +229,69 @@ sub out_text($@)
 	}
 	elsif($event eq 'end')
 	{
-		my ($min) = @data;
-		$min ||= 0;
-		print "  Relevance: $min\n";
-		print "\n";
 	}
 }
 
-my $out = \&out_text;
+sub out_html($@)
+{
+	my ($event, @data) = @_;
+	if($event eq 'start')
+	{
+		print "<html><body><h1>Weapon Profiling</h1>\n";
+	}
+	elsif($event eq 'startmatrix')
+	{
+		my ($addr, $map, @columns) = @data;
+		$addr ||= 'any';
+		$map ||= 'any';
+		print "<h2>For server @{[$addr || 'any']} map @{[$map || 'any']}:</h2>\n";
+		print "<table><tr><th>Weapon</th><th>Rating</th>\n";
+		printf '<th><img width=70 height=80 src="http://svn.icculus.org/*checkout*/nexuiz/trunk/Docs/htmlfiles/weaponimg/thirdperson-%s.png" alt="%s"></th>', $stats->weaponid_to_model($_), $stats->weaponid_to_name($_) for @columns;
+		print "</tr>\n";
+	}
+	elsif($event eq 'startrow')
+	{
+		my ($row, $val) = @data;
+		printf '<tr><th><img width=108 height=53 src="http://svn.icculus.org/*checkout*/nexuiz/trunk/Docs/htmlfiles/weaponimg/firstperson-%s.png" alt="%s"></th><th align=right>%s</th>', $stats->weaponid_to_model($row), $stats->weaponid_to_name($row), defined $val ? sprintf("%8.5f", $val) : "N/A";
+	}
+	elsif($event eq 'cell')
+	{
+		my ($win, $lose, $p) = @data;
+		my $v = 200;
+		if(!defined $p)
+		{
+			printf '<td align=center bgcolor="#808080">%d</td>', $win;
+		}
+		elsif($p > 0)
+		{
+			printf '<td align=center bgcolor="#%02x%02x%02x">%d</td>', $v - $v * $p, 255, 0, $win;
+		}
+		elsif($p < 0)
+		{
+			#printf '<td align=center bgcolor="#%02x%02x%02x">%d</td>', (255 - $v) - $v * $p, $v + $v * $p, 0, $win;
+			printf '<td align=center bgcolor="#%02x%02x%02x">%d</td>', 255, $v + $v * $p, 0, $win;
+		}
+		else
+		{
+			printf '<td align=center bgcolor="#ffff00">%d</td>', $win;
+		}
+	}
+	elsif($event eq 'endrow')
+	{
+		print "</tr>";
+	}
+	elsif($event eq 'endmatrix')
+	{
+		my ($min) = @data;
+		$min ||= 0;
+		print "</table>Relevance: $min\n";
+	}
+	elsif($event eq 'end')
+	{
+	}
+}
+
+my $out = $ENV{html} ? \&out_html : \&out_text;
 
 LoadData();
 $out->(start => ());
@@ -247,7 +300,7 @@ $stats->allstats(sub
 	my ($addr, $map, $data) = @_;
 	my $values = Evaluate $data;
 	my $valid = defined [values %$values]->[0];
-	my @weapons_sorted = sort { $valid ? $values->{$b} <=> $values->{$a} : $a cmp $b } keys %$values;
+	my @weapons_sorted = sort { $valid ? $values->{$b} <=> $values->{$a} : $a <=> $b } keys %$values;
 	my $min = undef;
 	$out->(startmatrix => ($addr, $map, @weapons_sorted));
 	for my $row(@weapons_sorted)
@@ -263,6 +316,6 @@ $stats->allstats(sub
 		}
 		$out->(endrow => ());
 	}
-	$out->(endmatrix => ($addr, $min));
+	$out->(endmatrix => ($min));
 });
 $out->(end => ());
