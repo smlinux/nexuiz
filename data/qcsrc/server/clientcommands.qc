@@ -100,11 +100,12 @@ entity GetPlayer(string name)
 //float ctf_clientcommand();
 float readyrestart_happened;
 .float lms_spectate_warning;
+void spawnfunc_func_breakable();
 void SV_ParseClientCommand(string s) {
 	string cmd;
 	float tokens, f, effectnum;
 	vector start, end;
-	entity e;
+	entity e, oldself;
 
 	tokens = tokenize_console(s);
 
@@ -334,12 +335,54 @@ void SV_ParseClientCommand(string s) {
 			// arguments:
 			//   effectname
 			effectnum = particleeffectnum(argv(1));
-			W_SetupShot(self,  FALSE, FALSE, "");
+			W_SetupShot(self, FALSE, FALSE, "");
 			traceline(w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
 			trailparticles(self, effectnum, w_shotorg, trace_endpos);
 		}
 		else
 			sprint(self, "Usage: sv_cheats 1; restart; cmd trailparticles effectname\n");
+	} else if(argv(0) == "make") {
+		if(sv_cheats && tokens == 3)
+		{
+			// arguments:
+			//   modelname mode
+			f = stof(argv(2));
+			W_SetupShot(self, FALSE, FALSE, "");
+			traceline(w_shotorg, w_shotorg + w_shotdir * 512, MOVE_NORMAL, self);
+			if((trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT) || trace_fraction == 1)
+			{
+				sprint(self, "cannot make stuff there (bad surface)\n");
+			}
+			else
+			{
+				oldself = self;
+				self = spawn();
+				self.model = strzone(argv(1));
+				self.mdl = "rocket_explode";
+				self.health = 1000;
+				self.origin = trace_endpos;
+				self.effects = EF_NOMODELFLAGS;
+				if(f == 1)
+				{
+					self.angles = fixedvectoangles2(trace_plane_normal, v_forward);
+					self.angles = AnglesTransform_Multiply(self.angles, '-90 0 0'); // so unrotated models work
+				}
+				spawnfunc_func_breakable();
+				// now, is it valid?
+				if(f == 0)
+				{
+					tracebox(self.origin, self.mins, self.maxs, self.origin, MOVE_NORMAL, self);
+					if(trace_startsolid)
+					{
+						sprint(self, "cannot make stuff there (no space)\n");
+						remove(self);
+					}
+				}
+				self = oldself;
+			}
+		}
+		else
+			sprint(self, "Usage: sv_cheats 1; restart; cmd make models/... 0/1/2\n");
 	} else {
 		//if(ctf_clientcommand())
 		//	return;
