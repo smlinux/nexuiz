@@ -344,7 +344,7 @@ float GameCommand_Generic(string command)
 
 			if(c != " ")
 			{
-				rgb = hsl_to_rgb('1 0 0' * (j * i + f) + '0 1 .5');
+				rgb = hsl_to_rgb('1 0 0' * (j * i + f) + '0 .5 .5');
 				c = strcat(rgb_to_hexcolor(rgb), c);
 			}
 			s2 = strcat(s2, c);
