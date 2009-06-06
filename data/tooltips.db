@@ -84,7 +84,6 @@
 \NexuizRadarDialog\-
 \NexuizServerInfoDialog\-
 \NexuizCvarsDialog\-
-\NexuizCvarsDialog\-
 
 \NexuizQuitDialog\Quit the game
 \NexuizQuitDialog/Yes\Back to work...
@@ -123,8 +122,8 @@
 \v_flipped\Poor man's left handed mode
 
 \NexuizSettingsDialog/Effects\Effect settings
-\r_subdivisions_tolerance\Tweak this slider to change the smoothness of the curves on the map
-\gl_picmip\Tweak this slider to change the sharpness of the textures. Lowering it will effectively reduce texture memory usage, but make the textures appear very blurry.
+\r_subdivisions_tolerance\Change the smoothness of the curves on the map
+\gl_picmip\Change the sharpness of the textures. Lowering it will effectively reduce texture memory usage, but make the textures appear very blurry.
 \r_picmipworld\If set, only reduce the texture quality of models
 \mod_q3bsp_nolightmaps\Use high resolution lightmaps, which will look pretty but use up some extra video memory (default: enabled)
 \cl_particles_quality\Multiplier for amount of particles. Less means less particles, which in turn gives for better performance (default: 0.5)
@@ -148,21 +147,22 @@
 \r_glsl_offsetmapping\Offset mapping effect that will make textures with bumpmaps appear like they "pop out" of the in fact flat 2D surface
 \r_glsl_offsetmapping_reliefmapping\Higher quality offset mapping, which also has a huge impact on performance
 \r_water\Reflection and refraction quality, has a huge impact on performance on maps with reflecting surfaces
+\r_water_resolutionmultiplier\Multiplier for screen resolution when rendering refracted/reflected scenes
 \r_coronas\Enable corona flares around certain lights
 \r_bloom\Enable bloom effect, which brightens the neighboring pixels of very bright pixels. Has a big impact on performance.
 \r_hdr\Higher quality version of bloom, which has a huge impact on performance.
 
 \NexuizSettingsDialog/Audio\Audio settings
-\bgmvolume\Volume of background music
-\volume\Volume of sound effects
-\snd_staticvolume\Volume of ambient sound effects
-\snd_worldchannel0volume\Volume of info entities
-\snd_entchannel3volume\Volume of item pickups and respawns
-\snd_csqcchannel6volume\Volume of pain sounds
-\snd_snd_entchannel7volume\Volume of player sounds
-\snd_playerchannel4volume\Volume of shots
-\snd_playerchannel2volume\Volume of voices
-\snd_entchannel1volume\Volume of weapons
+\bgmvolume\-
+\volume\-
+\snd_staticvolume\-
+\snd_worldchannel0volume\-
+\snd_entchannel3volume\-
+\snd_playerchannel6volume\-
+\snd_playerchannel7volume\-
+\snd_entchannel4volume\-
+\snd_playerchannel2volume\-
+\snd_playerchannel1volume\-
 \snd_speed\Sound output frequency
 \snd_channels\Number of channels for the sound output
 \snd_swapstereo\Swap left/right channels
@@ -197,7 +197,6 @@
 \cl_teamradar_zoommode\-
 \cl_teamradar_rotation\-
 \cl_teamradar_scale\-
-\cl_teamradar_size\-
 \cl_teamradar_foreground_alpha\-
 \cl_teamradar_background_alpha\-
 \cl_hidewaypoints\-
