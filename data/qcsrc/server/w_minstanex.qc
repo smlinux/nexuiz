@@ -178,7 +178,7 @@ float w_minstanex(float req)
 			return self.ammo_cells >= cvar("g_balance_minstanex_ammo");
 	}
 	else if (req == WR_CHECKAMMO2)
-		return FALSE;
+		return TRUE;
 	else if (req == WR_SUICIDEMESSAGE)
 		w_deathtypestring = "did the impossible";
 	else if (req == WR_KILLMESSAGE)
