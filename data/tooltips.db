@@ -1,11 +1,81 @@
 0
-\NexuizSingleplayerDialog\here you can play the singleplayer campaign or instant action matches against bots
-\NexuizMultiplayerDialog\here you can play online and set up your player appearance
-\NexuizSettingsDialog\here you can change various game settings
-\NexuizCreditsDialog\check out who was involved with this game
-\NexuizQuitDialog\this dialog is just there to ask you whether you are really sure about quitting
+\NexuizSingleplayerDialog\Play the singleplayer campaign or instant action matches against bots
+
+
+\NexuizMultiplayerDialog\Play online, against your friends in LAN, view demos or change player settings
+\NexuizMultiplayerDialog/Servers\Find servers to play on
+\menu_slist_showempty\Show empty servers
+\menu_slist_showfull\Show full servers that have no slots available
+\net_slist_pause\Pause updating the server list to prevent servers from "jumping around"
+\NexuizMultiplayerDialog/Info\Show more information about the currently highlighted server
+\NexuizMultiplayerDialog/Bookmark\Bookmark the currently highlighted server so that it's faster to find in the future
+\NexuizMultiplayerDialog/Havoc\Change to Havoc mode which has some modifications to the gameplay
+\NexuizMultiplayerDialog/Create\Host your own game
+\NexuizMultiplayerDialog/Demos\Browse and view demos
+\NexuizMultiplayerDialog/Player Setup\Customize your player settings
+
+\NexuizTeamSelectDialog/join 'best' team (auto-select)\Autoselect team (recommended)
+\NexuizTeamSelectDialog/red\Join the red team
+\NexuizTeamSelectDialog/blue\Join the blue team
+\NexuizTeamSelectDialog/yellow\Join the yellow team
+\NexuizTeamSelectDialog/pink\Join the pink team
+
+\timelimit_override\Timelimit in minutes that when hit, will end the match
+\fraglimit_override\The amount of frags needed before the match will end
+\menu_maxplayers\The maximum amount of players or bots that can be connected to your server at once
+\bot_number\Amount of bots on your server
+\skill\Specify how experienced the bots will be
+\g_maplist_votable\Number of maps that are shown in the map voting at the end of a match
+\sv_vote_simple_majority_factor\Simple majority wins a vote
+\NexuizMultiplayerDialog/Advanced settings...\Advanced server settings
+\NexuizMultiplayerDialog/Mutators...\Mutators and weapon arenas
+\g_cloaked\All players are almost invisible
+\g_footsteps\Enable footstep sounds
+\g_midair\Only possible to inflict damage on your enemy while he's airborn
+\g_vampire\Damage done to your enemy gets added to your own health
+\g_bloodloss\Amount of health below which your player gets stunned because of blood loss
+\sv_gravity\Make things fall to the ground slower, lower value means lower gravity
+\g_grappling_hook\Players spawn with the grappling hook
+\g_jetpack\Players spawn with the jetpack
+\g_laserguided_missile\Rockets can be steered using a laser pointer
+\g_pinata\Players will drop all weapons they possessed when they are killed
+\g_weapon_stay\Weapons stay after they are picked up
+\g_weaponarena\Selecting a weapon arena will give all players that wepon at spawn as well as unlimited ammo, and disable all other weapon pickups.
+\menu_weaponarena_with_laser\Also enable the laser in the weapon arena
+\g_minstagib\Players will be given the Minstanex, which is a railgun with infinite damage. If the player runs out of ammo, he will have 10 seconds to find some or if he fails to do so, face death. The secondary fire mode is a laser which does not inflict any damage and is good for doing trickjumps.
+\g_nixnex\No items Nexuiz - instead of pickup items, everyone plays with the same weapon. After some time, a countdown will start, after which everyone will switch to another weapon.
+\g_nixnex_with_laser\Always carry the laser as an additional weapon in NixNex
+\NexuizMultiplayerDialog/All\Select all maps
+\NexuizMultiplayerDialog/None\Unselect all maps
+
+
+\NexuizMultiplayerDialog/Timedemo\Benchmark how fast your computer can run the highlighted demo
+
+\fov\Field of vision in degrees from 60 to 130, default is 90
+\cl_bobcycle\View bobbing frequency, disable for no bobbing
+\cl_zoomfactor\How big the zoom factor is when the zoom button is pressed
+\cl_zoomsensitivity\How zoom changes sensitivity, from 0 (lower sensitivity) to 1 (no sensitivity change)
+\cl_zoomspeed\How fast the view will be zoomed, disable to zoom instantly
+\NexuizMultiplayerDialog/Weapon settings...\Set your most preferred weapons, autoswitch and weapon model settings
+
+\cl_weaponpriority_useforcycling\Make use of the list above when cycling through weapons with the mouse wheel
+\cl_autoswitch\Automatically switch to newly picked up weapons if they are better than what you are carrying
+\r_drawviewmodel\Draw the weapon model
+
+\crosshair_per_weapon\Set a different crosshair for each weapon, good if you play without weapon models
+\crosshair_color_override\Also set the color of the crosshair depending on the weapon you are currently holding
+\crosshair_size\Adjust the size of the crosshair
+\crosshair_color_alpha\Adjust the opacity of the crosshair
+\crosshair_color_red\Red color component of the crosshair color
+\crosshair_color_green\Green color component of the crosshair color
+\crosshair_color_blue\Blue color component of the crosshair color
+\sbar_hudselector\Use the old HUD layout
+\NexuizMultiplayerDialog/Radar, HUD & Waypoints...\Adjust the radar and waypoint settings
+\_cl_name\Name under which you will appear in the game
+
+\NexuizSettingsDialog\Change the game settings
+\NexuizCreditsDialog\The Nexuiz credits
 \NexuizTeamSelectDialog\-
-\NexuizAdvancedDialog\-
 \NexuizMutatorsDialog\-
 \NexuizMapInfoDialog\-
 \NexuizUserbindEditDialog\-
@@ -15,7 +85,112 @@
 \NexuizServerInfoDialog\-
 \NexuizCvarsDialog\-
 \NexuizCvarsDialog\-
-\crosshair_color_override\also set the color of the crosshair depending on the weapon you are currently using
+
+\NexuizQuitDialog\Quit the game
+\NexuizQuitDialog/Yes\Back to work...
+\NexuizQuitDialog/No\I got some more fragging to do!
+
+\NexuizSettingsDialog/Input\Input settings
+\sensitivity\Mouse speed multiplier
+\menu_mouse_speed\Mouse speed multiplier in the menu, does not affect aiming in the game
+\m_filter\Smoothes the mouse movement, but makes aiming slightly less responsive
+\m_pitch\Invert mouse movement on the Y-axis
+\vid_dgamouse\Make use of DGA mouse input
+\con_closeontoggleconsole\Allow the console toggling bind to also close the console
+\sbar_showbinds\Enable display of keybinds, short for a shorter string and long to display longer strings
+\cl_showpressedkeys\Show which movement keys the player is pressing
+
+\NexuizSettingsDialog/Video\Video settings
+\vid_width\Screen resolution
+\vid_bitsperpixel\How many bits per pixel (BPP) to render at, 32 is recommended
+\vid_fullscreen\Enable fullscreen mode
+\vid_vsync\Enable vertical synchronization to prevent tearing, will cap your fps to the screen refresh rate (default: disabled)
+\r_glsl\Enable OpenGL 2.0 pixel shaders for lightning (default: enabled)
+\r_coronas_occlusionquery\Fade coronas according to visibility (default: enabled)
+\gl_vbo\Make use of Vertex Buffer Objects to store static geometry in video memory for faster rendering (default: Vertex and Triangles)
+\r_depthfirst\Eliminate overdraw by rendering a depth-only version of the scene before the normal rendering starts (default: disabled)
+\gl_texturecompression\Compress the textures for video cards with small amounts of video memory available (default: None)
+\gl_finish\Make the CPU wait for the GPU to finish each frame, can help with some strange input or video lag on some machines (default: disabled)
+\v_brightness\Brightness of black
+\v_contrast\Brightness of white
+\v_gamma\Inverse gamma correction value, a brightness effect that does not affect white or black
+\v_contrastboost\By how much to multiply the contrast in dark areas
+\v_glslgamma\Enable use of GLSL to apply gamma correction, note that it might decrease performance by a lot (default: disabled)
+\r_ambient\Ambient lighting, if set too high it tends to make light on maps look dull and flat (default: 4)
+\r_hdr_scenebrightness\Global rendering brightness (default: 1)
+\vid_samples\Enable 4x antialiasing, which smooths the edges of 3D geometry. Note that it might decrease performance by quite a lot (default: off)
+\v_flipped\Poor man's left handed mode
+
+\NexuizSettingsDialog/Effects\Effect settings
+\r_subdivisions_tolerance\Tweak this slider to change the smoothness of the curves on the map
+\gl_picmip\Tweak this slider to change the sharpness of the textures. Lowering it will effectively reduce texture memory usage, but make the textures appear very blurry.
+\r_picmipworld\If set, only reduce the texture quality of models
+\mod_q3bsp_nolightmaps\Use high resolution lightmaps, which will look pretty but use up some extra video memory (default: enabled)
+\cl_particles_quality\Multiplier for amount of particles. Less means less particles, which in turn gives for better performance (default: 0.5)
+\r_drawparticles_drawdistance\Particles further away than this will not be drawn
+\cl_decals\Enable decals (bullet holes and blood)
+\r_drawdecals_drawdistance\Decals further away than this will not be drawn
+\cl_decals_time\Time in seconds before decals fade away
+\cl_gentle\Replace blood and gibs with content that does not have any gore effects
+\cl_nogibs\Reduce the amount of gibs or remove them completely
+\v_kicktime\How long a view kick from damage lasts
+\gl_texture_anisotropy\Anisotropic filtering quality
+\r_glsl_deluxemapping\Use per-pixel lighting effects
+\r_shadow_gloss\Enable the use of glossmaps on textures that support it
+\gl_flashblend\Enable faster but uglier dynamic lights by rendering bright coronas instead of real dynamic lights
+\r_shadow_realtime_dlight\Enable rendering of dynamic lights such as explosions and rocket lights
+\r_shadow_realtime_dlight_shadows\Enable rendering of shadows from dynamic lights
+\r_shadow_realtime_world\Enable rendering of full realtime world lighting on maps that support it. Note that this might have a big impact on performance.
+\r_shadow_realtime_world_shadows\Enable rendering of shadows from realtime world lights
+\r_shadow_usenormalmap\Enable use of directional shading on textures
+\r_showsurfaces\Disable textures completely for very slow hardware. This gives a huge performance boost, but looks very ugly.
+\r_glsl_offsetmapping\Offset mapping effect that will make textures with bumpmaps appear like they "pop out" of the in fact flat 2D surface
+\r_glsl_offsetmapping_reliefmapping\Higher quality offset mapping, which also has a huge impact on performance
+\r_water\Reflection and refraction quality, has a huge impact on performance on maps with reflecting surfaces
+\r_coronas\Enable corona flares around certain lights
+\r_bloom\Enable bloom effect, which brightens the neighboring pixels of very bright pixels. Has a big impact on performance.
+\r_hdr\Higher quality version of bloom, which has a huge impact on performance.
+
+\NexuizSettingsDialog/Audio\Audio settings
+\bgmvolume\Volume of background music
+\volume\Volume of sound effects
+\snd_staticvolume\Volume of ambient sound effects
+\snd_worldchannel0volume\Volume of info entities
+\snd_entchannel3volume\Volume of item pickups and respawns
+\snd_csqcchannel6volume\Volume of pain sounds
+\snd_snd_entchannel7volume\Volume of player sounds
+\snd_playerchannel4volume\Volume of shots
+\snd_playerchannel2volume\Volume of voices
+\snd_entchannel1volume\Volume of weapons
+\snd_speed\Sound output frequency
+\snd_channels\Number of channels for the sound output
+\snd_swapstereo\Swap left/right channels
+\snd_spatialization_control\Enable spatialization (blend the right and left channel slightly to decrease stereo separation a bit for headphones)
+\cl_voice_directional\Enable directional voices
+\cl_voice_directional_taunt_attenuation\Define the distance from which taunts can be heared
+\cl_autotaunt\Automatically taunt enemies when fragging them
+\cl_sound_maptime_warning\Announcer sound telling you the remaining minutes of the match
+\cl_hitsound\Play a hit notifier sound when you have hit an enemy
+
+\NexuizSettingsDialog/Network\Network settings
+\cl_movement\Enable clientside movement prediction
+\cl_nolerp\Enable network update smoothing
+\shownetgraph\Show a graph of packet sizes and other information
+\_cl_rate\Specify your network speed with this slider
+\cl_netfps\How many input packets to send to the server each second
+\cl_curl_maxdownloads\Maximum number of concurrent HTTP/FTP downloads
+\cl_curl_maxspeed\Maximum download speed
+\cl_port\Force client to use chosen port unless it is set to 0
+
+\NexuizSettingsDialog/Misc\Misc settings
+\showtime\Show current time of day, useful on screenshots
+\showdate\Show current date, useful on screenshots
+\showfps\Show your rendered frames per second
+\showspeed\Show your current speed
+\showtopspeed\Show your top speed, kept on the screen for a maximum of 3 seconds
+
+\NexuizSettingsDialog/Advanced settings...\Advanced settings where you can tweak every single variable of the game
+
 \cl_teamradar_position\-
 \cl_teamradar_size\-
 \cl_teamradar_zoommode\-
