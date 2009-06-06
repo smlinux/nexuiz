@@ -1,5 +1,4 @@
-
-#define HAVOCBOT_ROLE_NONE 		0
+#define HAVOCBOT_CTF_ROLE_NONE 		0
 #define HAVOCBOT_CTF_ROLE_DEFENSE	2
 #define HAVOCBOT_CTF_ROLE_MIDDLE	4
 #define HAVOCBOT_CTF_ROLE_OFFENSE	8
@@ -639,16 +638,16 @@ void havocbot_ctf_reset_role(entity bot)
 	local entity mf, ef, head;
 	local float c;
 
-	if(self.deadflag != DEAD_NO)
+	if(bot.deadflag != DEAD_NO)
 		return;
 
 	if(vlen(havocbot_ctf_middlepoint)==0)
 		havocbot_calculate_middlepoint();
 
 	// Check ctf flags
-	if (self.flagcarried)
+	if (bot.flagcarried)
 	{
-		havocbot_role_ctf_setrole(self, HAVOCBOT_CTF_ROLE_CARRIER);
+		havocbot_role_ctf_setrole(bot, HAVOCBOT_CTF_ROLE_CARRIER);
 		return;
 	}
 
@@ -672,7 +671,7 @@ void havocbot_ctf_reset_role(entity bot)
 	// if there is only me on the team switch to offense
 	c = 0;
 	FOR_EACH_PLAYER(head)
-	if(head.team==self.team)
+	if(head.team==bot.team)
 		++c;
 
 	if(c==1)
