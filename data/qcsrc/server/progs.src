@@ -105,6 +105,7 @@ w_hook.qc
 w_hlac.qc
 w_seeker.qc
 w_campingrifle.qc
+w_tuba.qc
 
 t_items.qc
 cl_weapons.qc

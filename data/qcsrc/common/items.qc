@@ -113,6 +113,7 @@ void RegisterWeapons()
 	register_weapon(WEP_SEEKER,           w_seeker,       IT_ROCKETS,       8, 0, 0, BOT_PICKUP_RATING_HIGH, "seeker",       "seeker",          "T.A.G. Seeker");
 	register_weapon(WEP_HLAC,             w_hlac,         IT_CELLS,         6, 1, 0, BOT_PICKUP_RATING_MID,  "hlac",         "hlac",            "Heavy Laser Assault Cannon");
 	register_weapon(WEP_CAMPINGRIFLE,     w_campingrifle, IT_NAILS,         3, 1, 0, BOT_PICKUP_RATING_MID,  "campingrifle", "campingrifle",    "Rifle");
+	register_weapon(WEP_TUBA,             w_tuba,         0,                1, 0, 0, BOT_PICKUP_RATING_MID,  "tuba",         "tuba",            "@!#%'n Tuba");
 
 	register_weapons_done();
 }
