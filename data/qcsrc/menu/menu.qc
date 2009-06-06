@@ -297,21 +297,17 @@ entity m_findtooltipitem(entity root, vector pos)
 
 	while(it.instanceOfContainer)
 	{
+		while(it.instanceOfNexposee && it.focusedChild)
+		{
+			it = it.focusedChild;
+			pos = globalToBox(pos, it.Container_origin, it.Container_size);
+		}
 		if(it.instanceOfNexposee)
 		{
-			if(it.focusedChild)
-			{
-				it = it.focusedChild;
-				pos = globalToBox(pos, it.Container_origin, it.Container_size);
-				continue; // don't show dialog tooltips when the dialog is open
-			}
-			else
-			{
-				it = it.itemFromPoint(it, pos);
-				if(it.tooltip)
-					best = it;
-				break;
-			}
+			it = it.itemFromPoint(it, pos);
+			if(it.tooltip)
+				best = it;
+			it = world;
 		}
 		else if(it.instanceOfModalController)
 			it = it.focusedChild;

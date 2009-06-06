@@ -115,6 +115,7 @@
 \v_contrast\Brightness of white
 \v_gamma\Inverse gamma correction value, a brightness effect that does not affect white or black
 \v_contrastboost\By how much to multiply the contrast in dark areas
+\r_glsl_saturation\Saturation adjustment (0 = gray, 1 = normal, 2 = oversaturated), note that it might decrease performance by a lot to set this to anything other than 1
 \v_glslgamma\Enable use of GLSL to apply gamma correction, note that it might decrease performance by a lot (default: disabled)
 \r_ambient\Ambient lighting, if set too high it tends to make light on maps look dull and flat (default: 4)
 \r_hdr_scenebrightness\Global rendering brightness (default: 1)
