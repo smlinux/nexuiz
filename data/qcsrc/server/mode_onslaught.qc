@@ -962,6 +962,8 @@ void spawnfunc_onslaught_generator()
 	WaypointSprite_SpawnFixed(string_null, e.origin + '0 0 1' * e.maxs_z, self, sprite);
 	WaypointSprite_UpdateRule(self.sprite, COLOR_TEAM2, SPRITERULE_TEAMPLAY);
 
+	waypoint_spawnforitem(self);
+
 	onslaught_updatelinks();
 
 	self.reset = onslaught_generator_reset;
