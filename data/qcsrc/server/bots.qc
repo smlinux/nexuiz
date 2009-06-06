@@ -2467,7 +2467,10 @@ void bot_relinkplayerlist()
 			if (prevbot)
 				prevbot.nextbot = e;
 			else
+			{
 				bot_list = e;
+				bot_list.nextbot = world;
+			}
 			prevbot = e;
 			currentbots = currentbots + 1;
 		}
