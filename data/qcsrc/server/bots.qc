@@ -1226,14 +1226,15 @@ void waypoint_spawnforitem(entity e)
 		return;
 
 	// Center of entity
-	org = e.origin + (e.mins + e.maxs) * 0.5;
+	org = (e.absmax + e.absmin) * 0.5;
 
-	// Calculate the altitude where the waypoint will be placed
-	traceline(e.origin, e.origin + '0 0 -65535', TRUE, e);
-	if(e.origin_z + e.mins_z - trace_endpos_z < PL_MAX_z - PL_MIN_z + 10)
+	// Fix the waypoint altitude if necessary
+	traceline(org, org + '0 0 -65535', TRUE, e);
+	if(
+		org_z - trace_endpos_z > PL_MAX_z - PL_MIN_z + 10 // If middle of entiy is above player heigth
+		|| org_z - trace_endpos_z < (PL_MAX_z - PL_MIN_z) * 0.5 // or below half player height
+	)
 		org_z = trace_endpos_z + PL_MAX_z - PL_MIN_z;
-	else
-		org_z = e.origin_z;
 
 	// TODO: Cleaner solution
 	if(e.classname!="item_flag_team")
@@ -1871,10 +1872,10 @@ void navigation_goalrating_end()
 {
 	navigation_routetogoals();
 
-	// If can't walk to any goal just move blindly to the first visible waypoint
+	// Hack: if it can't walk to any goal just move blindly to the first visible waypoint
 	if not (self.navigation_hasgoals)
 	{
-		dprint(self.netname, " can't walk to any goal, moving to the closest waypoint\n");
+		dprint(self.netname, " can't walk to any goal, going to a near waypoint\n");
 		local entity head;
 		head = findradius(self.origin,500);
 		while(head)
@@ -1885,6 +1886,7 @@ void navigation_goalrating_end()
 
 			head = head.chain;
 		}
+		self.navigation_hasgoals = FALSE; // Reset this value
 	}
 };
 
