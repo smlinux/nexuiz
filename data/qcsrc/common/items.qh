@@ -74,6 +74,7 @@ void RegisterWeapons();
 
 #define WEPSPAWNFLAG_NORMAL 1
 #define WEPSPAWNFLAG_CANCLIMB 2
+#define WEPSPAWNFLAG_HIDDEN 4
 
 // entity properties of weaponinfo:
 .float weapon; // WEP_...
