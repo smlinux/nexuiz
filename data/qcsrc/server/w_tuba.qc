@@ -121,11 +121,11 @@ float w_tuba(float req)
 		return TRUE; // TODO use fuel?
 	else if (req == WR_SUICIDEMESSAGE)
 	{
-		w_deathtypestring = "hurt his own ears";
+		w_deathtypestring = "hurt his own ears with the @!#%'n Tuba";
 	}
 	else if (req == WR_KILLMESSAGE)
 	{
-		w_deathtypestring = "died of #'s great playing";
+		w_deathtypestring = "died of #'s great playing on the @!#%'n Tuba";
 	}
 	return TRUE;
 };
