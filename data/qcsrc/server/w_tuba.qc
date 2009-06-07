@@ -1,8 +1,10 @@
+#define TUBA_NOTE(n) strcat("weapons/tuba_note", ftos(n), ".wav")
+.float tuba_notecount;
+
 float Tuba_GetNote(entity pl, float hittype)
 {
 	float note;
 	float movestate;
-	print(etos(pl), "\n");
 	movestate = 5;
 	if(pl.movement_x < 0) movestate -= 3;
 	if(pl.movement_x > 0) movestate += 3;
@@ -10,21 +12,44 @@ float Tuba_GetNote(entity pl, float hittype)
 	if(pl.movement_y > 0) movestate += 1;
 	switch(movestate)
 	{
+	// layout: originally I wanted
+	//   eb e  e#=f
+	//   B  c  d
+	//   Gb G  G#
+	// but then you only use forward and right key. So to make things more
+	// interesting, I swapped B with e#. Har har har...
+	//   eb e  B
+	// f=e# c  d
+	//   Gb G  G#
 		case 1: note = -6; break; // Gb
 		case 2: note = -5; break; // G
 		case 3: note = -4; break; // G#
-		case 4: note = -1; break; // B
+		case 4: note = +5; break; // e#
 		case 5: note =  0; break; // c
 		case 6: note = +2; break; // d
 		case 7: note = +3; break; // eb
 		case 8: note = +4; break; // e
-		case 9: note = +5; break; // e#
+		case 9: note = -1; break; // B
 	}
-	print(ftos(movestate), "\n");
 	if(pl.BUTTON_CROUCH)
 		note -= 12;
 	if(hittype & HITTYPE_SECONDARY)
 		note += 7;
+	
+	// we support two kinds of tubas, those tuned in Eb and those tuned in C
+	// kind of tuba currently is player slot number, or team number if in
+	// teamplay
+	// that way, holes in the range of notes are "plugged"
+	if(teams_matter)
+	{
+		if(pl.team == COLOR_TEAM2 || pl.team == COLOR_TEAM4)
+			note += 3;
+	}
+	else
+	{
+		if(mod(num_for_edict(pl), 2) == 0)
+			note += 3;
+	}
 	
 	// total range of notes:
 	//                       0
@@ -32,14 +57,21 @@ float Tuba_GetNote(entity pl, float hittype)
 	//                        ***  ** ****
 	//     ***  ** ****
 	//            ***  ** ****
+	//     ***  ********************* ****
 	//     -18.........................+12
+	//        ***  ********************* ****
+	//     -18............................+15
 	return note;
 }
 
 void W_Tuba_Attack(float hittype)
 {
 	W_SetupShot(self, FALSE, 2, "");
-	sound(self, CHAN_WEAPON, strcat("weapons/tuba_note", ftos(Tuba_GetNote(self, hittype)), ".wav"), VOL_BASE, cvar("g_balance_tuba_attenuation"));
+	self.tuba_notecount = !self.tuba_notecount;
+	if(self.tuba_notecount)
+		sound(self, CHAN_WEAPON, TUBA_NOTE(Tuba_GetNote(self, hittype)), VOL_BASE, cvar("g_balance_tuba_attenuation"));
+	else
+		sound(self, CHAN_WEAPON2, TUBA_NOTE(Tuba_GetNote(self, hittype)), VOL_BASE, cvar("g_balance_tuba_attenuation"));
 	RadiusDamage(self, self, cvar("g_balance_tuba_damage"), cvar("g_balance_tuba_edgedamage"), cvar("g_balance_tuba_radius"), world, cvar("g_balance_tuba_force"), hittype | WEP_TUBA, world);
 }
 
@@ -76,6 +108,10 @@ float w_tuba(float req)
 		precache_model ("models/weapons/g_tuba.md3");
 		precache_model ("models/weapons/v_tuba.md3");
 		precache_model ("models/weapons/h_tuba.dpm");
+
+		float i;
+		for(i = -18; i <= +15; ++i)
+			precache_sound(TUBA_NOTE(i));
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_TUBA);
