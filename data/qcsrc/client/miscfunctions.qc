@@ -298,8 +298,6 @@ vector project_3d_to_2d(vector vec)
 	}
 	vec_x *= vid_conwidth / vid_width;
 	vec_y *= vid_conheight / vid_height;
-	print(vtos(vec), " -> ");
-	print(vtos(cs_project(cs_unproject(vec))), "\n");
 	return vec;
 }
 
