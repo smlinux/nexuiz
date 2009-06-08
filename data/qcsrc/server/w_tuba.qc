@@ -77,7 +77,6 @@ void W_Tuba_Attack(float hittype)
 
 void spawnfunc_weapon_tuba (void)
 {
-	error("The tuba does not work yet. Forget it.");
 	weapon_defaultspawnfunc(WEP_TUBA);
 }
 
