@@ -337,7 +337,6 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	if(DEATH_ISWEAPON(deathtype, WEP_TUBA))
 	{
 		// tuba causes blood to come out of the ears
-		print(ftos(self.health), "\n");
 		vector ear1, ear2;
 		vector d;
 		float f;
