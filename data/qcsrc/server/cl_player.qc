@@ -337,11 +337,12 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	if(DEATH_ISWEAPON(deathtype, WEP_TUBA))
 	{
 		// tuba causes blood to come out of the ears
+		print(ftos(self.health), "\n");
 		vector ear1, ear2;
 		vector d;
 		float f;
 		ear1 = self.origin;
-		ear1_z += 0.25 * self.view_ofs_z + 0.75 * self.maxs_z; // middle of headshot bbox
+		ear1_z += 0.125 * self.view_ofs_z + 0.875 * self.maxs_z; // 7/8
 		ear2 = ear1;
 		makevectors(self.angles);
 		ear1 += v_right * -10;
@@ -349,8 +350,8 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		d = inflictor.origin - self.origin;
 		f = (d * v_right) / vlen(d); // this is cos of angle of d and v_right!
 		force = v_right * vlen(force);
-		Violence_GibSplash_At(ear1, force * -1, 2, bound(0, damage, 200) / 16 * (0.5 - 0.5 * f));
-		Violence_GibSplash_At(ear2, force,      2, bound(0, damage, 200) / 16 * (0.5 + 0.5 * f));
+		Violence_GibSplash_At(ear1, force * -1, 2, bound(0, damage, 25) / 2 * (0.5 - 0.5 * f));
+		Violence_GibSplash_At(ear2, force,      2, bound(0, damage, 25) / 2 * (0.5 + 0.5 * f));
 		if(f > 0)
 		{
 			hitloc = ear1;
@@ -406,10 +407,13 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 				self.pain_finished = time + 0.5;	//Supajoe
 
 				if(sv_gentle < 1) {		
-					if (random() > 0.5)
-						setanim(self, self.anim_pain1, FALSE, TRUE, TRUE);
-					else
-						setanim(self, self.anim_pain2, FALSE, TRUE, TRUE);
+					if(self.classname != "body") // pain anim is BORKED on our ZYMs, FIXME remove this once we have good models
+					{
+						if (random() > 0.5)
+							setanim(self, self.anim_pain1, FALSE, TRUE, TRUE);
+						else
+							setanim(self, self.anim_pain2, FALSE, TRUE, TRUE);
+					}
 
 					if(!DEATH_ISWEAPON(deathtype, WEP_LASER) || attacker != self || self.health < 2 * cvar("g_balance_laser_primary_damage") * cvar("g_balance_selfdamagepercent") + 1)
 					// exclude pain sounds for laserjumps as long as you aren't REALLY low on health and would die of the next two
