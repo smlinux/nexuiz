@@ -119,7 +119,7 @@ float w_tuba(float req)
 		precache_model ("models/weapons/h_tuba.dpm");
 
 		float i;
-		for(i = -18; i <= +15; ++i)
+		for(i = -18; i <= +27; ++i)
 			precache_sound(TUBA_NOTE(i));
 	}
 	else if (req == WR_SETUP)
