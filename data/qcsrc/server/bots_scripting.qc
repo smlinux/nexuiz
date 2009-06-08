@@ -16,10 +16,11 @@
 #define BOT_CMD_RELEASEKEY		14
 #define BOT_CMD_SELECTWEAPON		15
 #define BOT_CMD_IMPULSE			16
-#define BOT_CMD_WHILE			17	// Not implemented yet
-#define BOT_CMD_WEND			18	// Not implemented yet
-#define BOT_CMD_CHASE			19	// Not implemented yet
-#define BOT_CMD_COUNTER			17
+#define BOT_CMD_WAIT_UNTIL		17
+#define BOT_CMD_WHILE			18	// Not implemented yet
+#define BOT_CMD_WEND			19	// Not implemented yet
+#define BOT_CMD_CHASE			20	// Not implemented yet
+#define BOT_CMD_COUNTER			18
 
 // NOTE: Following commands should be implemented on the bot ai
 //		 If a new command should be handled by the target ai(s) please declare it here
@@ -104,6 +105,9 @@ void bot_commands_init()
 
 	bot_cmd_string[BOT_CMD_IMPULSE]			= "impulse";
 	bot_cmd_parm_type[BOT_CMD_IMPULSE]		= BOT_CMD_PARAMETER_FLOAT;
+
+	bot_cmd_string[BOT_CMD_WAIT_UNTIL]		= "wait_until";
+	bot_cmd_parm_type[BOT_CMD_WAIT_UNTIL]	= BOT_CMD_PARAMETER_FLOAT;
 
 	bot_cmds_initialized = TRUE;
 }
@@ -240,7 +244,7 @@ void bot_queuecommand(entity bot, string cmdstring, string parm)
 		}
 		return;
 	}
-	print("ERROR: No such command");
+	print("ERROR: No such command\n");
 }
 
 void bot_cmdhelp(string scmd)
@@ -287,6 +291,9 @@ void bot_cmdhelp(string scmd)
 				break;
 			case BOT_CMD_WAIT:
 				print("Pause command parsing and bot ai for N seconds. Pressed key will remain pressed");
+				break;
+			case BOT_CMD_WAIT_UNTIL:
+				print("Pause command parsing and bot ai until time is N. Pressed key will remain pressed");
 				break;
 			case BOT_CMD_TURN:
 				print("Look to the right or left N degrees. For turning to the left use positive numbers.");
@@ -418,6 +425,17 @@ float bot_cmd_wait()
 	self.bot_cmd_wait_time = time + bot_cmd.bot_cmd_parm_float;
 	self.bot_exec_status |= BOT_EXEC_STATUS_WAITING;
 	return CMD_STATUS_EXECUTING;
+}
+
+float bot_cmd_wait_until()
+{
+	if(time < bot_cmd.bot_cmd_parm_float)
+	{
+		self.bot_exec_status |= BOT_EXEC_STATUS_WAITING;
+		return CMD_STATUS_EXECUTING;
+	}
+	self.bot_exec_status &~= BOT_EXEC_STATUS_WAITING;
+	return CMD_STATUS_FINISHED;
 }
 
 float bot_cmd_turn()
@@ -853,6 +871,7 @@ float bot_execute_commands()
 {
 	local float status, ispressingkey;
 
+:next
 	// Find command
 	bot_setcurrentcommand();
 
@@ -879,12 +898,12 @@ float bot_execute_commands()
 	if(self.bot_cmd_condition_status & CMD_CONDITION_TRUE && self.bot_cmd_condition_status & CMD_CONDITION_FALSE_BLOCK)
 	{
 		bot_command_executed(TRUE);
-		return TRUE;
+		goto next;
 	}
 	else if(self.bot_cmd_condition_status & CMD_CONDITION_FALSE && self.bot_cmd_condition_status & CMD_CONDITION_TRUE_BLOCK)
 	{
 		bot_command_executed(TRUE);
-		return TRUE;
+		goto next;
 	}
 
 	// Map commands to functions
@@ -901,6 +920,9 @@ float bot_execute_commands()
 			break;
 		case BOT_CMD_WAIT:
 			status = bot_cmd_wait();
+			break;
+		case BOT_CMD_WAIT_UNTIL:
+			status = bot_cmd_wait_until();
 			break;
 		case BOT_CMD_TURN:
 			status = bot_cmd_turn();
@@ -950,7 +972,11 @@ float bot_execute_commands()
 		print(strcat("ERROR: The command '",bot_cmd_string[bot_cmd.bot_cmd_type],"' returned an error status\n"));
 
 	// Move execution pointer
-	if not(status==CMD_STATUS_EXECUTING)
+	if(status==CMD_STATUS_EXECUTING)
+	{
+		return TRUE;
+	}
+	else
 	{
 		if(cvar("g_debug_bot_commands"))
 		{
@@ -977,5 +1003,5 @@ float bot_execute_commands()
 		bot_command_executed(TRUE);
 	}
 
-	return TRUE;
+	goto next;
 }

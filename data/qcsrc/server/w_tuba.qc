@@ -47,7 +47,7 @@ float Tuba_GetNote(entity pl, float hittype)
 	}
 	else
 	{
-		if(pl.colormap & 1)
+		if(pl.clientcolors & 1)
 			note += 3;
 	}
 	
