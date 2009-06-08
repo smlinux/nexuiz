@@ -2676,7 +2676,7 @@ bounce 1
 
 //smoke_ring
 //smoke
-// used nowhere in code
+// used in qcsrc/server/ctf.qc:		pointparticles(particleeffectnum("smoke_ring"), 0.5 * (self.absmin + self.absmax), '0 0 0', 1);
 effect smoke_ring
 type smoke
 count 90
@@ -3407,3 +3407,130 @@ airfriction 1
 liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 1
+
+
+//red_ground_quake
+//smoke
+// used in qsrc/server/ctf.qc:		pointparticles(particleeffectnum("red_ground_quake"), self.origin, '0 0 0', 1);
+effect red_ground_quake
+type smoke
+count 180
+tex 0 8
+size 20 50
+sizeincrease 100
+gravity 0.5
+time 5 10
+airfriction 3
+alpha 100 126 200
+color 0x111111 0xbbbbbb
+//originjitter 2 2 0
+velocityjitter 190 190 50
+bounce 1.1
+notunderwater
+effect red_ground_quake
+type smoke
+count 80
+tex 0 8
+size 10 30
+sizeincrease 60
+gravity 0.2
+time 10 15
+airfriction 4
+alpha 100 126 200
+color 0x111111 0x979797
+//originjitter 2 2 0
+velocityjitter 190 190 50
+bounce 1.2
+notunderwater
+effect red_ground_quake
+//notunderwater
+count 32
+type smoke
+tex 48 55
+size 4 20
+time 15 25
+alpha 200 356 512
+gravity -0.5
+color 0x9E6A64 0x91302D
+origin 0 0 -20
+bounce 6
+sizeincrease 5
+originjitter 33 33 33
+velocityjitter 22 22 50
+// smoke
+effect red_ground_quake
+type alphastatic
+count 22
+tex 0 8
+size 22 33
+sizeincrease 11
+time 25 35
+alpha 200 256 200
+color 0x000000 0xffffff
+gravity -0.3
+originjitter 44 44 44
+velocityjitter 11 11 50
+bounce 2
+
+//blue_ground_quake
+//smoke
+// used in qsrc/server/ctf.qc:		pointparticles(particleeffectnum("blue_ground_quake"), self.origin, '0 0 0', 1);
+effect blue_ground_quake
+type smoke
+count 180
+tex 0 8
+size 20 50
+sizeincrease 100
+gravity 0.5
+time 5 10
+airfriction 3
+alpha 100 126 200
+color 0x111111 0xbbbbbb
+//originjitter 2 2 0
+velocityjitter 190 190 50
+bounce 1.1
+notunderwater
+effect blue_ground_quake
+type smoke
+count 80
+tex 0 8
+size 10 30
+sizeincrease 60
+gravity 0.2
+time 10 15
+airfriction 4
+alpha 100 126 200
+color 0x111111 0x979797
+//originjitter 2 2 0
+velocityjitter 190 190 50
+bounce 1.2
+notunderwater
+effect blue_ground_quake
+//notunderwater
+count 32
+type smoke
+tex 48 55
+size 4 20
+time 15 25
+alpha 200 356 512
+gravity -0.5
+color 0x64679E 0x2D4C91
+origin 0 0 -20
+bounce 6
+sizeincrease 5
+originjitter 33 33 33
+velocityjitter 22 22 50
+// smoke
+effect blue_ground_quake
+type alphastatic
+count 22
+tex 0 8
+size 22 33
+sizeincrease 11
+time 25 35
+alpha 200 256 200
+color 0x000000 0xffffff
+gravity -0.3
+originjitter 44 44 44
+velocityjitter 11 11 50
+bounce 2

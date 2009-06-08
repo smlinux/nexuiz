@@ -115,7 +115,7 @@ void ctf_captureshield_spawn()
 	e.solid = SOLID_TRIGGER;
 	e.avelocity = '7 0 11';
 	setorigin(e, self.origin);
-	setmodel(e, "models/onslaught/generator_shield.md3");
+	setmodel(e, "models/ctf/shield.md3");
 	e.scale = 0.5;
 	setsize(e, e.scale * e.mins, e.scale * e.maxs);
 }
@@ -404,6 +404,38 @@ void FlagThink()
 		DropFlag(self, e, world);
 };
 
+void flag_cap_ring_think()
+{
+	self.nextthink = time + 0.05;
+	if(self.count > 24)
+	{
+		self.think = SUB_Remove;
+		return;
+	}
+
+	self.scale = self.count / 30;
+
+	self.frame = self.count;
+
+	self.count += 1;
+	self.alpha = self.alpha-0.04;
+};
+
+void flag_cap_ring_spawn(vector org)
+{
+	entity e;
+	e = spawn();
+	setmodel(e, "models/ctf/shockwavetransring.md3");
+	org_z=org_z-15;
+	setorigin(e, org);
+
+	e.count = 1;
+	e.alpha = 0.9;
+	
+	e.think = flag_cap_ring_think;
+	e.nextthink = time;
+};
+
 void FlagTouch()
 {
 	if(gameover) return;
@@ -468,6 +500,17 @@ void FlagTouch()
 		// give credit to the individual player
 		UpdateFrags(other, ctf_score_value("score_capture"));
 
+		if (cvar("g_ctf_flag_capture_effects")) {
+			if (other.team == COLOR_TEAM1) { // red team scores effect
+				pointparticles(particleeffectnum("red_ground_quake"), self.origin, '0 0 0', 1);
+				flag_cap_ring_spawn(self.origin);
+			}
+			if (other.team == COLOR_TEAM2) { // blue team scores effect
+				pointparticles(particleeffectnum("blue_ground_quake"), self.origin, '0 0 0', 1);
+				flag_cap_ring_spawn(self.origin);
+			}
+		}
+
 		sound (other, CHAN_AUTO, self.noise2, VOL_BASE, ATTN_NONE);
 		WaypointSprite_DetachCarrier(other);
 		if(self.speedrunning)
@@ -484,6 +527,10 @@ void FlagTouch()
 	{
 		if (other.next_take_time > time)
 			return;
+			
+		if (cvar("g_ctf_flag_pickup_effects")) // pickup effect
+			pointparticles(particleeffectnum("smoke_ring"), 0.5 * (self.absmin + self.absmax), '0 0 0', 1);
+			
 		// pick up
 		self.flagpickuptime = time; // used for timing runs
 		self.speedrunning = other.speedrunning; // if speedrunning, flag will self-return and teleport the owner back after the record
@@ -561,6 +608,9 @@ void FlagTouch()
 		}
 		else if (!other.flagcarried && (other.playerid != self.dropperid || time > self.ctf_droptime + cvar("g_balance_ctf_delay_collect")))
 		{
+			if (cvar("g_ctf_flag_pickup_effects")) // field pickup effect
+				pointparticles(particleeffectnum("smoke_ring"), 0.5 * (self.absmin + self.absmax), '0 0 0', 1);
+			
 			// pick up
 			self.solid = SOLID_NOT;
 			setorigin(self, self.origin); // relink
@@ -801,7 +851,7 @@ void spawnfunc_item_flag_team1()
 	WaypointSprite_SpawnFixed("redbase", self.origin + '0 0 37', self, sprite);
 	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_FLAG, '1 0 0');
 
-	precache_model("models/onslaught/generator_shield.md3");
+	precache_model("models/ctf/shield.md3");
 
 	self.reset = item_flag_reset;
 };
@@ -905,7 +955,7 @@ void spawnfunc_item_flag_team2()
 	WaypointSprite_SpawnFixed("bluebase", self.origin + '0 0 37', self, sprite);
 	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_FLAG, '0 0 1');
 
-	precache_model("models/onslaught/generator_shield.md3");
+	precache_model("models/ctf/shield.md3");
 
 	self.reset = item_flag_reset;
 };
