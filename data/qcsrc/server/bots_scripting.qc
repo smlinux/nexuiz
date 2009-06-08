@@ -17,10 +17,12 @@
 #define BOT_CMD_SELECTWEAPON		15
 #define BOT_CMD_IMPULSE			16
 #define BOT_CMD_WAIT_UNTIL		17
-#define BOT_CMD_WHILE			18	// Not implemented yet
-#define BOT_CMD_WEND			19	// Not implemented yet
-#define BOT_CMD_CHASE			20	// Not implemented yet
-#define BOT_CMD_COUNTER			18
+#define BOT_CMD_RESETQUEUE		18
+#define BOT_CMD_WHILE			19	// TODO: Not implemented yet
+#define BOT_CMD_WEND			20	// TODO: Not implemented yet
+#define BOT_CMD_CHASE			20	// TODO: Not implemented yet
+
+#define BOT_CMD_COUNTER			19	// Update this value if you add/remove a command
 
 // NOTE: Following commands should be implemented on the bot ai
 //		 If a new command should be handled by the target ai(s) please declare it here
@@ -109,6 +111,9 @@ void bot_commands_init()
 
 	bot_cmd_string[BOT_CMD_WAIT_UNTIL]		= "wait_until";
 	bot_cmd_parm_type[BOT_CMD_WAIT_UNTIL]	= BOT_CMD_PARAMETER_FLOAT_RELATIVE_TO_TIME;
+
+	bot_cmd_string[BOT_CMD_RESETQUEUE]		= "resetqueue";
+	bot_cmd_parm_type[BOT_CMD_RESETQUEUE]	= BOT_CMD_PARAMETER_NONE;
 
 	bot_cmds_initialized = TRUE;
 }
@@ -969,6 +974,10 @@ float bot_execute_commands()
 		case BOT_CMD_IMPULSE:
 			status = bot_cmd_impulse();
 			break;
+		case BOT_CMD_RESETQUEUE:
+			bot_clearqueue();
+			status = CMD_STATUS_FINISHED;
+			break;
 		default:
 			print(strcat("ERROR: Invalid command on queue with id '",ftos(bot_cmd.bot_cmd_type),"'\n"));
 			return FALSE;
@@ -1010,5 +1019,8 @@ float bot_execute_commands()
 		bot_command_executed(TRUE);
 	}
 
-	goto next;
+	if(status>-1) // Always true, just to fix a compiler warning
+		goto next;
+	else
+		return status;
 }
