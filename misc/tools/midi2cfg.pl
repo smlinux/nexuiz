@@ -96,6 +96,7 @@ sub busybot_findfree($$$)
 		if(!$l->[$_])
 		{
 			my $bot = {id => $_ + 1, busy => 0, busytime => 0, channel => $vchannel, curtime => -$walktime, curbuttons => 0, noteoffset => 0};
+			$l->[$_] = $bot;
 			return $bot;
 		}
 		return $l->[$_] if
@@ -146,18 +147,20 @@ sub busybot_setbuttons($$)
 	my $b0 = $bot->{curbuttons};
 	my $press = $b & ~$b0;
 	my $release = $b0 & ~$b;
+	print "sv_cmd bot_cmd $bot->{id} releasekey attack1\n" if $release & 32;
+	print "sv_cmd bot_cmd $bot->{id} releasekey attack2\n" if $release & 64;
 	print "sv_cmd bot_cmd $bot->{id} releasekey forward\n" if $release & 1;
 	print "sv_cmd bot_cmd $bot->{id} releasekey backward\n" if $release & 2;
 	print "sv_cmd bot_cmd $bot->{id} releasekey left\n" if $release & 4;
 	print "sv_cmd bot_cmd $bot->{id} releasekey right\n" if $release & 8;
 	print "sv_cmd bot_cmd $bot->{id} releasekey crouch\n" if $release & 16;
-	print "sv_cmd bot_cmd $bot->{id} releasekey attack1\n" if $release & 32;
-	print "sv_cmd bot_cmd $bot->{id} releasekey attack2\n" if $release & 64;
+	print "sv_cmd bot_cmd $bot->{id} releasekey jump\n" if $release & 128;
 	print "sv_cmd bot_cmd $bot->{id} presskey forward\n" if $press & 1;
 	print "sv_cmd bot_cmd $bot->{id} presskey backward\n" if $press & 2;
 	print "sv_cmd bot_cmd $bot->{id} presskey left\n" if $press & 4;
 	print "sv_cmd bot_cmd $bot->{id} presskey right\n" if $press & 8;
 	print "sv_cmd bot_cmd $bot->{id} presskey crouch\n" if $press & 16;
+	print "sv_cmd bot_cmd $bot->{id} presskey jump\n" if $press & 128;
 	print "sv_cmd bot_cmd $bot->{id} presskey attack1\n" if $press & 32;
 	print "sv_cmd bot_cmd $bot->{id} presskey attack2\n" if $press & 64;
 	$bot->{curbuttons} = $b;
@@ -188,10 +191,22 @@ my %notes = (
 	5 => '1l',
 	6 => '2fr',
 	7 => '2',
+	8 => '1brj',
 	9 => '2r',
 	10 => '2fl',
 	11 => '2f',
-	12 => '2l'
+	12 => '2l',
+	13 => '2lbj',
+	14 => '1rj',
+	15 => '1flj',
+	16 => '1fj',
+	17 => '1lj',
+	18 => '2frj',
+	19 => '2j',
+	21 => '2rj',
+	22 => '2flj',
+	23 => '2fj',
+	24 => '2lj'
 );
 
 my $note_min = +99;
@@ -221,6 +236,7 @@ sub busybot_playnote($$)
 	$buttons |= 16 if $s =~ /c/;
 	$buttons |= 32 if $s =~ /1/;
 	$buttons |= 64 if $s =~ /2/;
+	$buttons |= 128 if $s =~ /j/;
 	busybot_setbuttons $bot => $buttons;
 	return 1;
 }
@@ -308,9 +324,9 @@ for(@allmidievents)
 }
 
 print STDERR "Range of notes: $note_min .. $note_max\n";
-print STDERR "Safe transpose range: @{[$note_max - 7]} .. @{[$note_min + 13]}\n";
-print STDERR "Unsafe transpose range: @{[$note_max - 12]} .. @{[$note_min + 18]}\n";
-printf STDERR "%d bots allocated for tuba, %d for percussion\n", scalar grep { defined $_ } @busybots_tuba, scalar grep { defined $_ } @busybots_percussion;
+print STDERR "Safe transpose range: @{[$note_max - 19]} .. @{[$note_min + 13]}\n";
+print STDERR "Unsafe transpose range: @{[$note_max - 24]} .. @{[$note_min + 18]}\n";
+printf STDERR "%d bots allocated for tuba, %d for percussion\n", int scalar grep { defined $_ } @busybots_tuba, int scalar grep { defined $_ } @busybots_percussion;
 
 my $n = 0;
 for(@busybots_percussion, @busybots_tuba)
