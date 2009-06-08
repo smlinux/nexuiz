@@ -70,6 +70,7 @@ float Tuba_GetNote(entity pl, float hittype)
 
 void W_Tuba_Attack(float hittype)
 {
+	vector o;
 	W_SetupShot(self, FALSE, 2, "");
 	self.tuba_notecount = !self.tuba_notecount;
 	if(self.tuba_notecount)
@@ -77,6 +78,9 @@ void W_Tuba_Attack(float hittype)
 	else
 		sound(self, CHAN_WEAPON2, TUBA_NOTE(Tuba_GetNote(self, hittype)), VOL_BASE, cvar("g_balance_tuba_attenuation"));
 	RadiusDamage(self, self, cvar("g_balance_tuba_damage"), cvar("g_balance_tuba_edgedamage"), cvar("g_balance_tuba_radius"), world, cvar("g_balance_tuba_force"), hittype | WEP_TUBA, world);
+
+	o = gettaginfo(self.exteriorweaponentity, 0);
+	pointparticles(particleeffectnum("smoke_ring"), o + v_up * 45 + v_right * -6 + v_forward * 8, v_up * 100, 1);
 }
 
 void spawnfunc_weapon_tuba (void)
