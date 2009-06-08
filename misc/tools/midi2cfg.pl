@@ -9,7 +9,7 @@ use warnings;
 use MIDI;
 use MIDI::Opus;
 
-my ($filename, $transpose, $walktime, @coords) = @ARGV;
+my ($filename, $transpose, $walktime, $staccato, @coords) = @ARGV;
 my @coords_percussion = ();
 my @coords_tuba = ();
 my $l = \@coords_tuba;
@@ -26,6 +26,7 @@ for(@coords)
 }
 
 my $opus = MIDI::Opus->new({from_file => $filename});
+#$opus->write_to_file("/tmp/y.mid");
 my $ticksperquarter = $opus->ticks();
 my $tracks = $opus->tracks_r();
 my @tempi = (); # list of start tick, time per tick pairs (calculated as seconds per quarter / ticks per quarter)
@@ -136,7 +137,7 @@ sub busybot_advance($$)
 	if($t != $t0)
 	{
 		#print "sv_cmd bot_cmd $bot->{id} wait @{[$t - $t0]}\n";
-		print "sv_cmd bot_cmd $bot->{id} wait_until $t\n";
+		print "w $bot->{id} $t\n";
 	}
 	$bot->{curtime} = $t;
 }
@@ -147,25 +148,28 @@ sub busybot_setbuttonsandadvance($$$)
 	my $b0 = $bot->{curbuttons};
 	my $press = $b & ~$b0;
 	my $release = $b0 & ~$b;
-	busybot_advance $bot => $t - 0.1;
-	print "sv_cmd bot_cmd $bot->{id} releasekey attack1\n" if $release & 32;
-	print "sv_cmd bot_cmd $bot->{id} releasekey attack2\n" if $release & 64;
-	busybot_advance $bot => $t - 0.05;
-	print "sv_cmd bot_cmd $bot->{id} releasekey forward\n" if $release & 1;
-	print "sv_cmd bot_cmd $bot->{id} releasekey backward\n" if $release & 2;
-	print "sv_cmd bot_cmd $bot->{id} releasekey left\n" if $release & 4;
-	print "sv_cmd bot_cmd $bot->{id} releasekey right\n" if $release & 8;
-	print "sv_cmd bot_cmd $bot->{id} releasekey crouch\n" if $release & 16;
-	print "sv_cmd bot_cmd $bot->{id} releasekey jump\n" if $release & 128;
-	print "sv_cmd bot_cmd $bot->{id} presskey forward\n" if $press & 1;
-	print "sv_cmd bot_cmd $bot->{id} presskey backward\n" if $press & 2;
-	print "sv_cmd bot_cmd $bot->{id} presskey left\n" if $press & 4;
-	print "sv_cmd bot_cmd $bot->{id} presskey right\n" if $press & 8;
-	print "sv_cmd bot_cmd $bot->{id} presskey crouch\n" if $press & 16;
-	print "sv_cmd bot_cmd $bot->{id} presskey jump\n" if $press & 128;
-	busybot_advance $bot => $t;
-	print "sv_cmd bot_cmd $bot->{id} presskey attack1\n" if $press & 32;
-	print "sv_cmd bot_cmd $bot->{id} presskey attack2\n" if $press & 64;
+	busybot_advance $bot => $t - 0.1
+		if $release & (32 | 64);
+	print "r $bot->{id} attack1\n" if $release & 32;
+	print "r $bot->{id} attack2\n" if $release & 64;
+	busybot_advance $bot => $t - 0.05
+		if ($release | $press) & (1 | 2 | 4 | 8 | 16 | 128);
+	print "r $bot->{id} forward\n" if $release & 1;
+	print "r $bot->{id} backward\n" if $release & 2;
+	print "r $bot->{id} left\n" if $release & 4;
+	print "r $bot->{id} right\n" if $release & 8;
+	print "r $bot->{id} crouch\n" if $release & 16;
+	print "r $bot->{id} jump\n" if $release & 128;
+	print "p $bot->{id} forward\n" if $press & 1;
+	print "p $bot->{id} backward\n" if $press & 2;
+	print "p $bot->{id} left\n" if $press & 4;
+	print "p $bot->{id} right\n" if $press & 8;
+	print "p $bot->{id} crouch\n" if $press & 16;
+	print "p $bot->{id} jump\n" if $press & 128;
+	busybot_advance $bot => $t
+		if $press & (32 | 64);
+	print "p $bot->{id} attack1\n" if $press & 32;
+	print "p $bot->{id} attack2\n" if $press & 64;
 	$bot->{curbuttons} = $b;
 }
 
@@ -251,8 +255,8 @@ sub busybot_stopnoteandadvance($$$)
 	return 0
 		unless defined $s;
 	my $buttons = $bot->{curbuttons};
-	$buttons &= ~(32 | 64);
-	#$buttons = 0;
+	#$buttons &= ~(32 | 64);
+	$buttons = 0;
 	busybot_setbuttonsandadvance $bot => $t, $buttons;
 	return 1;
 }
@@ -265,7 +269,7 @@ sub note_on($$$)
 		note_off($t, $channel, $note); # MIDI allows redoing a note-on for the same note
 	}
 	++$notes;
-	if($channel == 10)
+	if($channel == 9)
 	{
 		$channel = 16 + $note; # percussion
 	}
@@ -277,7 +281,8 @@ sub note_on($$$)
 			$bot->{busy} = 1;
 			$bot->{note} = $note;
 			$bot->{busytime} = $t + 0.25;
-			busybot_stopnoteandadvance $bot => $t + 0.15, $note;
+			busybot_stopnoteandadvance $bot => $t + 0.15, $note
+				if $staccato;
 		}
 	}
 	if($channel >= 16)
@@ -295,7 +300,7 @@ sub note_off($$$)
 {
 	my ($t, $channel, $note) = @_;
 	--$notes;
-	if($channel == 10)
+	if($channel == 9)
 	{
 		$channel = 16 + $note; # percussion
 	}
@@ -311,6 +316,7 @@ sub note_off($$$)
 
 print 'alias p "sv_cmd bot_cmd $1 presskey $2"' . "\n";
 print 'alias r "sv_cmd bot_cmd $1 releasekey $2"' . "\n";
+print 'alias w "sv_cmd bot_cmd $1 wait_until $2"' . "\n";
 
 for(@allmidievents)
 {
@@ -319,11 +325,13 @@ for(@allmidievents)
 	if($_->[0] eq 'note_on')
 	{
 		my $chan = $_->[4];
+		#next if $chan != 6;
 		note_on($t, $chan, $_->[5]);
 	}
 	elsif($_->[0] eq 'note_off')
 	{
 		my $chan = $_->[4];
+		#next if $chan != 6;
 		note_off($t, $chan, $_->[5]);
 	}
 }
