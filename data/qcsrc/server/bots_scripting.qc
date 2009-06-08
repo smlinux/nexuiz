@@ -32,6 +32,7 @@
 #define BOT_CMD_PARAMETER_FLOAT		1
 #define BOT_CMD_PARAMETER_STRING	2
 #define BOT_CMD_PARAMETER_VECTOR	3
+#define BOT_CMD_PARAMETER_FLOAT_RELATIVE_TO_TIME		4
 
 float bot_cmds_initialized;
 float bot_cmd_parm_type[BOT_CMD_COUNTER];
@@ -107,7 +108,7 @@ void bot_commands_init()
 	bot_cmd_parm_type[BOT_CMD_IMPULSE]		= BOT_CMD_PARAMETER_FLOAT;
 
 	bot_cmd_string[BOT_CMD_WAIT_UNTIL]		= "wait_until";
-	bot_cmd_parm_type[BOT_CMD_WAIT_UNTIL]	= BOT_CMD_PARAMETER_FLOAT;
+	bot_cmd_parm_type[BOT_CMD_WAIT_UNTIL]	= BOT_CMD_PARAMETER_FLOAT_RELATIVE_TO_TIME;
 
 	bot_cmds_initialized = TRUE;
 }
@@ -233,6 +234,9 @@ void bot_queuecommand(entity bot, string cmdstring, string parm)
 			case BOT_CMD_PARAMETER_FLOAT:
 				cmd.bot_cmd_parm_float = stof(parm);
 				break;
+			case BOT_CMD_PARAMETER_FLOAT_RELATIVE_TO_TIME:
+				cmd.bot_cmd_parm_float = stof(parm) + time;
+				break;
 			case BOT_CMD_PARAMETER_STRING:
 				cmd.bot_cmd_parm_string = strzone(parm);
 				break;
@@ -265,6 +269,7 @@ void bot_cmdhelp(string scmd)
 		switch(ntype)
 		{
 			case BOT_CMD_PARAMETER_FLOAT:
+			case BOT_CMD_PARAMETER_FLOAT_RELATIVE_TO_TIME:
 				stype = "float number";
 				break;
 			case BOT_CMD_PARAMETER_STRING:
@@ -293,7 +298,7 @@ void bot_cmdhelp(string scmd)
 				print("Pause command parsing and bot ai for N seconds. Pressed key will remain pressed");
 				break;
 			case BOT_CMD_WAIT_UNTIL:
-				print("Pause command parsing and bot ai until time is N. Pressed key will remain pressed");
+				print("Pause command parsing and bot ai until time is N from NOW (when the command is added). Pressed key will remain pressed");
 				break;
 			case BOT_CMD_TURN:
 				print("Look to the right or left N degrees. For turning to the left use positive numbers.");
@@ -363,6 +368,7 @@ void bot_list_commands()
 		switch(bot_cmd_parm_type[i])
 		{
 			case BOT_CMD_PARAMETER_FLOAT:
+			case BOT_CMD_PARAMETER_FLOAT_RELATIVE_TO_TIME:
 				ptype = "float number";
 				break;
 			case BOT_CMD_PARAMETER_STRING:
@@ -985,6 +991,7 @@ float bot_execute_commands()
 			switch(bot_cmd_parm_type[bot_cmd.bot_cmd_type])
 			{
 				case BOT_CMD_PARAMETER_FLOAT:
+				case BOT_CMD_PARAMETER_FLOAT_RELATIVE_TO_TIME:
 					parms = ftos(bot_cmd.bot_cmd_parm_float);
 					break;
 				case BOT_CMD_PARAMETER_STRING:
