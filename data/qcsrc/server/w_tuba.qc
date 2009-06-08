@@ -33,6 +33,8 @@ float Tuba_GetNote(entity pl, float hittype)
 	}
 	if(pl.BUTTON_CROUCH)
 		note -= 12;
+	if(pl.BUTTON_JUMP)
+		note += 12;
 	if(hittype & HITTYPE_SECONDARY)
 		note += 7;
 	
@@ -61,6 +63,8 @@ float Tuba_GetNote(entity pl, float hittype)
 	//     -18.........................+12
 	//        ***  ********************* ****
 	//     -18............................+15
+	//     with jump: ... +24
+	//     ... +27
 	return note;
 }
 
