@@ -883,6 +883,10 @@ float bot_execute_commands()
 	local float status, ispressingkey;
 
 :next
+
+	if(self.deadflag!=DEAD_NO)
+		return FALSE;
+
 	// Find command
 	bot_setcurrentcommand();
 
