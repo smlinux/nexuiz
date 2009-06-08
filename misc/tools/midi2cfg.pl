@@ -141,14 +141,16 @@ sub busybot_advance($$)
 	$bot->{curtime} = $t;
 }
 
-sub busybot_setbuttons($$)
+sub busybot_setbuttonsandadvance($$$)
 {
-	my ($bot, $b) = @_;
+	my ($bot, $t, $b) = @_;
 	my $b0 = $bot->{curbuttons};
 	my $press = $b & ~$b0;
 	my $release = $b0 & ~$b;
+	busybot_advance $bot => $t - 0.1;
 	print "sv_cmd bot_cmd $bot->{id} releasekey attack1\n" if $release & 32;
 	print "sv_cmd bot_cmd $bot->{id} releasekey attack2\n" if $release & 64;
+	busybot_advance $bot => $t - 0.05;
 	print "sv_cmd bot_cmd $bot->{id} releasekey forward\n" if $release & 1;
 	print "sv_cmd bot_cmd $bot->{id} releasekey backward\n" if $release & 2;
 	print "sv_cmd bot_cmd $bot->{id} releasekey left\n" if $release & 4;
@@ -161,6 +163,7 @@ sub busybot_setbuttons($$)
 	print "sv_cmd bot_cmd $bot->{id} presskey right\n" if $press & 8;
 	print "sv_cmd bot_cmd $bot->{id} presskey crouch\n" if $press & 16;
 	print "sv_cmd bot_cmd $bot->{id} presskey jump\n" if $press & 128;
+	busybot_advance $bot => $t;
 	print "sv_cmd bot_cmd $bot->{id} presskey attack1\n" if $press & 32;
 	print "sv_cmd bot_cmd $bot->{id} presskey attack2\n" if $press & 64;
 	$bot->{curbuttons} = $b;
@@ -222,9 +225,9 @@ sub getnote($$)
 	return $s;
 }
 
-sub busybot_playnote($$)
+sub busybot_playnoteandadvance($$$)
 {
-	my ($bot, $note) = @_;
+	my ($bot, $t, $note) = @_;
 	my $s = getnote $bot => $note;
 	return (warn("note $note not found"), 0)
 		unless defined $s;
@@ -237,20 +240,20 @@ sub busybot_playnote($$)
 	$buttons |= 32 if $s =~ /1/;
 	$buttons |= 64 if $s =~ /2/;
 	$buttons |= 128 if $s =~ /j/;
-	busybot_setbuttons $bot => $buttons;
+	busybot_setbuttonsandadvance $bot => $t, $buttons;
 	return 1;
 }
 
-sub busybot_stopnote($$)
+sub busybot_stopnoteandadvance($$$)
 {
-	my ($bot, $note) = @_;
+	my ($bot, $t, $note) = @_;
 	my $s = getnote $bot => $note;
 	return 0
 		unless defined $s;
 	my $buttons = $bot->{curbuttons};
 	$buttons &= ~(32 | 64);
 	#$buttons = 0;
-	busybot_setbuttons $bot => $buttons;
+	busybot_setbuttonsandadvance $bot => $t, $buttons;
 	return 1;
 }
 
@@ -269,19 +272,19 @@ sub note_on($$$)
 	my $bot = busybot_findfree($t, $channel, $note);
 	if($channel < 16)
 	{
-		busybot_advance $bot => $t if getnote $bot => $note;
-		if(busybot_playnote $bot => $note)
+		if(busybot_playnoteandadvance $bot => $t, $note)
 		{
 			$bot->{busy} = 1;
 			$bot->{note} = $note;
 			$bot->{busytime} = $t + 0.25;
-			busybot_stopnote $bot => $note;
+			busybot_stopnoteandadvance $bot => $t + 0.15, $note;
 		}
 	}
 	if($channel >= 16)
 	{
-		print "sv_cmd bot_cmd $bot->{id} presskey attack1\n";
-		print "sv_cmd bot_cmd $bot->{id} releasekey attack1\n";
+		busybot_advance $bot => $t;
+		print "p $bot->{id} attack1\n";
+		print "r $bot->{id} attack1\n";
 		$bot->{busy} = 1;
 		$bot->{note} = $note;
 		$bot->{busytime} = $t + 1.5;
@@ -301,11 +304,13 @@ sub note_off($$$)
 	$bot->{busy} = 0;
 	if($channel < 16)
 	{
-		busybot_advance $bot => $t;
-		busybot_stopnote $bot => $note;
+		busybot_stopnoteandadvance $bot => $t, $note;
 		$bot->{busytime} = $t + 0.25;
 	}
 }
+
+print 'alias p "sv_cmd bot_cmd $1 presskey $2"' . "\n";
+print 'alias r "sv_cmd bot_cmd $1 releasekey $2"' . "\n";
 
 for(@allmidievents)
 {
