@@ -77,6 +77,12 @@ void W_Tuba_Attack(float hittype)
 
 void spawnfunc_weapon_tuba (void)
 {
+	if(!sv_cheats && !cvar("developer"))
+	{
+		print("The @!#%'n Tuba awaits you... not.\n");
+		remove(self);
+		return;
+	}
 	weapon_defaultspawnfunc(WEP_TUBA);
 }
 
