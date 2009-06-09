@@ -497,7 +497,10 @@ void CSQC_UpdateView(float w, float h)
 		// TrueAim check
 		float goodshot;
 
-		goodshot = TrueAimCheck();
+		if(cvar("crosshair_hittest"))
+			goodshot = TrueAimCheck();
+		else
+			goodshot = TRUE;
 
 		string wcross_style;
 		wcross_style = cvar_string("crosshair");
@@ -539,7 +542,7 @@ void CSQC_UpdateView(float w, float h)
 			wcross_size_x *= wcross_sizefloat;
 			wcross_size_y *= wcross_sizefloat;
 
-			if(goodshot || !cvar("crosshair_hittest"))
+			if(goodshot)
 			{
 				drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x) + '0 0.5 0' * (vid_conheight - wcross_size_y), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
 			}
