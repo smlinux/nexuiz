@@ -48,11 +48,15 @@ void Ent_DamageInfo()
 			thisforce = forcemul * force;
 		}
 
+		//print("check ", ftos(num_for_edict(self)), " ", self.classname, "\n");
+		//print(ftos(self.damageforcescale), "\n");
+		//print(vtos(thisforce), "\n");
 		if(self.damageforcescale)
 			if(vlen(thisforce))
 			{
 				self.move_velocity = self.move_velocity + self.damageforcescale * thisforce;
 				self.move_flags &~= FL_ONGROUND;
+				//print("pushed ", ftos(num_for_edict(self)), " loose\n");
 			}
 
 		if(self.event_damage)

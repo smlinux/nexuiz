@@ -407,15 +407,15 @@ void Movetype_Physics(float matchserver) // SV_Physics_Entity
 		{
 			_Movetype_PushEntityTrace(dt * self.velocity);
 			if(!trace_startsolid)
-				self.origin = trace_endpos;
+				setorigin(self, trace_endpos);
 		}
 		else
-			self.origin = self.move_origin + dt * self.velocity;
+			setorigin(self, self.move_origin + dt * self.velocity);
 	}
 	else
 	{
 		self.velocity = self.move_velocity;
 		self.angles = self.move_angles;
-		self.origin = self.move_origin;
+		setorigin(self, self.move_origin);
 	}
 }
