@@ -1348,7 +1348,7 @@ void ClientConnect (void)
 
 	if(clienttype(self) == CLIENTTYPE_REAL)
 	{
-		if(cvar("g_bugrigs"))
+		if(cvar("g_bugrigs") || g_weaponarena == WEPBIT_TUBA)
 			stuffcmd(self, "cl_cmd settemp chase_active 1\n");
 	}
 
