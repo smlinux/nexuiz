@@ -2386,6 +2386,11 @@ void bot_think()
 {
 	if (self.bot_nextthink > time)
 		return;
+	
+	self.flags &~= FL_GODMODE;
+	if(cvar("bot_god"))
+		self.flags |= FL_GODMODE;
+
 	self.bot_nextthink = self.bot_nextthink + cvar("bot_ai_thinkinterval");
 	//if (self.bot_painintensity > 0)
 	//	self.bot_painintensity = self.bot_painintensity - (skill + 1) * 40 * frametime;
