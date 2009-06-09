@@ -857,6 +857,8 @@ void bot_command_executed(float rm)
 			strunzone(cmd.bot_cmd_parm_string);
 		}
 		self.bot_cmd_next = cmd.bot_cmd_next;
+		if(cmd == self.bot_cmd_newest)
+			self.bot_cmd_newest = world;
 		remove(cmd);
 		return;
 	}
@@ -869,6 +871,9 @@ void bot_setcurrentcommand()
 	entity cmd;
 
 	bot_cmd = world;
+
+	if(!self.bot_cmd_newest) // no command in the queue?
+		return;
 
 	if(self.bot_cmd_execution_index==0)
 		self.bot_cmd_execution_index=1;
