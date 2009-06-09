@@ -54,6 +54,9 @@ entity bot_cmd;				// Current command
 .float bot_cmd_execution_index;		// Position in the queue of the command to be executed
 .float bot_cmd_queue_index;		// Position of the last command in the queue
 
+.entity bot_cmd_next; // next command of the same bot (field on a command), or next command for this bot to execute (field on a bot)
+.entity bot_cmd_newest; // last command of this bot (field on a bot, used for adding new commands)
+
 // Initialize global commands list
 // NOTE: New commands should be initialized here
 void bot_commands_init()
@@ -188,6 +191,10 @@ entity bot_spawncmd(entity bot, float type)
 	cmd.is_bot_cmd = TRUE;
 	cmd.bot_cmd_type = type;
 	cmd.bot_cmd_index = bot.bot_cmd_queue_index;
+
+	if(bot.bot_cmd_newest)
+		bot.bot_cmd_newest.bot_cmd_next = cmd;
+	bot.bot_cmd_newest = cmd;
 
 	return cmd;
 }
@@ -849,6 +856,7 @@ void bot_command_executed(float rm)
 		{
 			strunzone(cmd.bot_cmd_parm_string);
 		}
+		self.bot_cmd_next = cmd.bot_cmd_next;
 		remove(cmd);
 		return;
 	}
@@ -865,11 +873,39 @@ void bot_setcurrentcommand()
 	if(self.bot_cmd_execution_index==0)
 		self.bot_cmd_execution_index=1;
 
+	cmd = self.bot_cmd_next;
+	if(cmd)
+	if(cmd.owner == self)
+	if(cmd.bot_cmd_index == self.bot_cmd_execution_index)
+	{
+		bot_cmd = cmd;
+		return;
+	}
+
+/*
+	if(!cmd)
+	{
+		print("next bot cmd not set\n");
+	}
+
+	if(cmd && cmd.owner != self)
+	{
+		print("next bot cmd has wrong owner ", etos(cmd.owner), " for ", etos(self), "\n");
+	}
+
+	if(cmd && cmd.owner == self && cmd.bot_cmd_index != self.bot_cmd_execution_index)
+	{
+		print("next bot cmd has wrong index ", ftos(cmd.bot_cmd_execution_index), " for ", ftos(self.bot_cmd_execution_index), "\n");
+	}
+*/
+
 	for (cmd = findchainfloat(bot_cmd_index, self.bot_cmd_execution_index); cmd; cmd = cmd.chain)
 	{
 		if(cmd.owner==self)
 		{
 			bot_cmd = cmd;
+			self.bot_cmd_next = cmd;
+			//print(etos(self), " probably a jump...\n");
 			return;
 		}
 	}
