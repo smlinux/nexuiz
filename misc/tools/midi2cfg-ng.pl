@@ -71,6 +71,11 @@ for my $track(0..@$tracks-1)
 @allmidievents = sort { $a->[1] <=> $b->[1] or $a->[2] <=> $b->[2] } @allmidievents;
 
 
+sub unsort(@)
+{
+	return map { $_->[0] } sort { $a->[1] <=> $b->[1] } map { [$_, rand] } @_;
+}
+
 
 
 
@@ -315,7 +320,7 @@ sub busybot_note_on($$$)
 
 	my $overflow = 0;
 
-	for(@busybots_allocated)
+	for(unsort @busybots_allocated)
 	{
 		my $canplay = busybot_note_on_bot $_, $time, $channel, $note, 0;
 		if($canplay > 0)
@@ -328,7 +333,7 @@ sub busybot_note_on($$$)
 		# wrong
 	}
 
-	for(map { $_->[0] } sort { $a->[1] <=> $b->[1] } map { [$_, rand] } keys %$busybots)
+	for(unsort keys %$busybots)
 	{
 		next if $busybots->{$_}->{count} <= 0;
 		my $bot = Storable::dclone $busybots->{$_};
