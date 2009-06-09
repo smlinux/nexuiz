@@ -117,7 +117,7 @@ sub busybot_findfree($$$)
 	}
 	use Data::Dumper;
 	print STDERR Dumper $l;
-	die "No free channel found ($notes notes active)\n";
+	die "No free channel found at time $time ($notes notes active)\n";
 }
 
 sub busybot_find($$)
