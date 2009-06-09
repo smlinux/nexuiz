@@ -101,7 +101,7 @@ sub busybot_findfree($$$)
 			return $bot;
 		}
 		return $l->[$_] if
-			$l->[$_]{channel} == $vchannel
+			(($vchannel < 16) || ($l->[$_]{channel} == $vchannel))
 			&&
 			!$l->[$_]{busy}
 			&&
@@ -148,7 +148,7 @@ sub busybot_setbuttonsandadvance($$$)
 	my $b0 = $bot->{curbuttons};
 	my $press = $b & ~$b0;
 	my $release = $b0 & ~$b;
-	busybot_advance $bot => $t - 0.1
+	busybot_advance $bot => $t - 0.10
 		if $release & (32 | 64);
 	print "r $bot->{id} attack1\n" if $release & 32;
 	print "r $bot->{id} attack2\n" if $release & 64;
@@ -281,8 +281,11 @@ sub note_on($$$)
 			$bot->{busy} = 1;
 			$bot->{note} = $note;
 			$bot->{busytime} = $t + 0.25;
-			busybot_stopnoteandadvance $bot => $t + 0.15, $note
-				if $staccato;
+			if($staccato)
+			{
+				busybot_stopnoteandadvance $bot => $t + 0.15, $note;
+				$bot->{busy} = 0;
+			}
 		}
 	}
 	if($channel >= 16)
