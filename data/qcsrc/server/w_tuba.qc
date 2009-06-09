@@ -98,8 +98,15 @@ float w_tuba(float req)
 {
 	if (req == WR_AIM)
 	{
-		// bots cannot play the Tuba yet
+		// bots cannot play the Tuba well yet
 		// I think they should start with the recorder first
+		if(vlen(self.origin - self.enemy.origin) < cvar("g_balance_tuba_radius"))
+		{
+			if(random() > 0.5)
+				self.BUTTON_ATCK = 1;
+			else
+				self.BUTTON_ATCK2 = 1;
+		}
 	}
 	else if (req == WR_THINK)
 	{
