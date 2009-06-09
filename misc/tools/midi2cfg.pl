@@ -9,6 +9,9 @@ use warnings;
 use MIDI;
 use MIDI::Opus;
 
+use constant MIDI_FIRST_NONCHANNEL => 17;
+use constant MIDI_DRUMS_CHANNEL => 10;
+
 my ($filename, $transpose, $walktime, $staccato, @coords) = @ARGV;
 my @coords_percussion = ();
 my @coords_tuba = ();
@@ -91,17 +94,22 @@ my $notes = 0;
 sub busybot_findfree($$$)
 {
 	my ($time, $vchannel, $note) = @_;
-	my $l = ($vchannel < 16) ? \@busybots_tuba : \@busybots_percussion;
+	my $l = ($vchannel < MIDI_FIRST_NONCHANNEL) ? \@busybots_tuba : \@busybots_percussion;
+	my $c = ($vchannel < MIDI_FIRST_NONCHANNEL) ? \@coords_tuba : \@coords_percussion;
 	for(0..@$l-1)
 	{
 		if(!$l->[$_])
 		{
 			my $bot = {id => $_ + 1, busy => 0, busytime => 0, channel => $vchannel, curtime => -$walktime, curbuttons => 0, noteoffset => 0};
 			$l->[$_] = $bot;
+
+			# let the bot walk to his place
+			printf "m $_ $c->[$_]->[0] $c->[$_]->[1] $c->[$_]->[2]\n";
+
 			return $bot;
 		}
 		return $l->[$_] if
-			(($vchannel < 16) || ($l->[$_]{channel} == $vchannel))
+			(($vchannel < MIDI_FIRST_NONCHANNEL) || ($l->[$_]{channel} == $vchannel))
 			&&
 			!$l->[$_]{busy}
 			&&
@@ -113,7 +121,7 @@ sub busybot_findfree($$$)
 sub busybot_find($$)
 {
 	my ($vchannel, $note) = @_;
-	my $l = ($vchannel < 16) ? \@busybots_tuba : \@busybots_percussion;
+	my $l = ($vchannel < MIDI_FIRST_NONCHANNEL) ? \@busybots_tuba : \@busybots_percussion;
 	for(0..@$l-1)
 	{
 		return $l->[$_] if
@@ -264,17 +272,14 @@ sub busybot_stopnoteandadvance($$$)
 sub note_on($$$)
 {
 	my ($t, $channel, $note) = @_;
-	if(busybot_find($channel, $note))
-	{
-		note_off($t, $channel, $note); # MIDI allows redoing a note-on for the same note
-	}
 	++$notes;
-	if($channel == 9)
+	if($channel == MIDI_DRUMS_CHANNEL)
 	{
-		$channel = 16 + $note; # percussion
+		$channel = MIDI_FIRST_NONCHANNEL + $note; # percussion
+		return if !@coords_percussion;
 	}
 	my $bot = busybot_findfree($t, $channel, $note);
-	if($channel < 16)
+	if($channel < MIDI_FIRST_NONCHANNEL)
 	{
 		if(busybot_playnoteandadvance $bot => $t, $note)
 		{
@@ -288,7 +293,7 @@ sub note_on($$$)
 			}
 		}
 	}
-	if($channel >= 16)
+	if($channel >= MIDI_FIRST_NONCHANNEL)
 	{
 		busybot_advance $bot => $t;
 		print "p $bot->{id} attack1\n";
@@ -303,14 +308,14 @@ sub note_off($$$)
 {
 	my ($t, $channel, $note) = @_;
 	--$notes;
-	if($channel == 9)
+	if($channel == MIDI_DRUMS_CHANNEL)
 	{
-		$channel = 16 + $note; # percussion
+		$channel = MIDI_FIRST_NONCHANNEL + $note; # percussion
 	}
 	my $bot = busybot_find($channel, $note)
 		or return;
 	$bot->{busy} = 0;
-	if($channel < 16)
+	if($channel < MIDI_FIRST_NONCHANNEL)
 	{
 		busybot_stopnoteandadvance $bot => $t, $note;
 		$bot->{busytime} = $t + 0.25;
@@ -320,22 +325,31 @@ sub note_off($$$)
 print 'alias p "sv_cmd bot_cmd $1 presskey $2"' . "\n";
 print 'alias r "sv_cmd bot_cmd $1 releasekey $2"' . "\n";
 print 'alias w "sv_cmd bot_cmd $1 wait_until $2"' . "\n";
+print 'alias m "sv_cmd bot_cmd $1 moveto \"$2 $3 $4\""' . "\n";
 
+my %midinotes = ();
 for(@allmidievents)
 {
 	my $t = tick2sec $_->[1];
 	my $track = $_->[3];
 	if($_->[0] eq 'note_on')
 	{
-		my $chan = $_->[4];
-		#next if $chan != 6;
+		my $chan = $_->[4] + 1;
+		if($midinotes{$chan}{$_->[5]})
+		{
+			note_off($t, $chan, $_->[5]);
+		}
 		note_on($t, $chan, $_->[5]);
+		$midinotes{$chan}{$_->[5]} = 1;
 	}
 	elsif($_->[0] eq 'note_off')
 	{
-		my $chan = $_->[4];
-		#next if $chan != 6;
-		note_off($t, $chan, $_->[5]);
+		my $chan = $_->[4] + 1;
+		if($midinotes{$chan}{$_->[5]})
+		{
+			note_off($t, $chan, $_->[5]);
+		}
+		$midinotes{$chan}{$_->[5]} = 0;
 	}
 }
 
@@ -351,5 +365,7 @@ for(@busybots_percussion, @busybots_tuba)
 }
 if($n)
 {
+	use Data::Dumper;
+	print STDERR Dumper \%midinotes;
 	die "$n channels blocked ($notes MIDI notes)";
 }

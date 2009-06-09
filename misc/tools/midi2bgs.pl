@@ -103,7 +103,7 @@ for(@allmidievents)
 		unless $trackno < 0 || $trackno == $track;
 	if($_->[0] eq 'note_on')
 	{
-		my $chan = $_->[4];
+		my $chan = $_->[4] + 1;
 		my $note = sprintf $notepattern, $notenames[$_->[5]], $trackno, $channelno;
 		my $velocity = $_->[6] / 127.0;
 		push @outevents, [$note, $t, $velocity]
@@ -114,7 +114,7 @@ for(@allmidievents)
 	}
 	elsif($_->[0] eq 'note_off')
 	{
-		my $chan = $_->[4];
+		my $chan = $_->[4] + 1;
 		my $note = sprintf $notepattern, $notenames[$_->[5]], $trackno, $channelno;
 		my $velocity = $_->[6] / 127.0;
 		--$notecounters_converted{$note}
