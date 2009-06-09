@@ -41,7 +41,7 @@ for($tracks->[0]->events())
     $tick += $_->[1];
     if($_->[0] eq 'set_tempo')
     {   
-        push @tempi, [$_->[1], $_->[2] * 0.000001 / $ticksperquarter];
+        push @tempi, [$tick, $_->[2] * 0.000001 / $ticksperquarter];
     }
 }
 sub tick2sec($)
