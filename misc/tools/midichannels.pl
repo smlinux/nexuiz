@@ -61,8 +61,11 @@ while(<STDIN>)
 				my $name = undef;
 				my %channels = ();
 				my $notes = 0;
+				my %notehash = ();
+				my $t = 0;
 				for($tracks->[$_]->events())
 				{
+					$t += $_->[1];
 					my $p = $chanpos{$_->[0]};
 					if(defined $p)
 					{
@@ -70,12 +73,24 @@ while(<STDIN>)
 						++$channels{$c};
 					}
 					++$notes if $_->[0] eq 'note_on';
+					$notehash{$_->[2]}{$_->[3]} = $t if $_->[0] eq 'note_on';
+					$notehash{$_->[2]}{$_->[3]} = undef if $_->[0] eq 'note_off';
 					$name = $_->[2] if $_->[0] eq 'track_name';
 				}
 				my $channels = join " ", sort keys %channels;
+				my @stuck = ();
+				while(my ($k1, $v1) = each %notehash)
+				{
+					while(my ($k2, $v2) = each %$v1)
+					{
+						push @stuck, sprintf "%d:%d@%.1f%%", $k1+1, $k2, $v2 * 100.0 / $t
+							if defined $v2;
+					}
+				}
 				print " $name" if defined $name;
 				print " (channel $channels)" if $channels ne "";
 				print " ($notes notes)" if $notes;
+				print " (notes @stuck stuck)" if @stuck;
 				print "\n";
 			}
 		}

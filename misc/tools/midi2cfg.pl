@@ -115,6 +115,8 @@ sub busybot_findfree($$$)
 			&&
 			$time > $l->[$_]{busytime};
 	}
+	use Data::Dumper;
+	print STDERR Dumper $l;
 	die "No free channel found ($notes notes active)\n";
 }
 
@@ -365,7 +367,5 @@ for(@busybots_percussion, @busybots_tuba)
 }
 if($n)
 {
-	use Data::Dumper;
-	print STDERR Dumper \%midinotes;
 	die "$n channels blocked ($notes MIDI notes)";
 }
