@@ -1524,8 +1524,6 @@ entity navigation_findnearestwaypoint(entity ent, float walkfromwp)
 						}
 					}
 				}
-				else
-					te_lightning1(world, v, org);
 			}
 		}
 		w = w.chain;
