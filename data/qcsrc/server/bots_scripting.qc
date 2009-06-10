@@ -695,7 +695,7 @@ float bot_cmd_aimtarget()
 	if(!e)
 		return CMD_STATUS_ERROR;
 
-	v = (e.absmin + e.absmax) * 0.5;
+	v = e.origin + (e.mins + e.maxs) * 0.5;
 
 	if(tokens==1)
 	{
@@ -896,10 +896,11 @@ float bot_cmd_moveto()
 float bot_cmd_movetotarget()
 {
 	entity e;
-	e = find(world, targetname, argv(0));
+	e = find(world, targetname, bot_cmd.bot_cmd_parm_string);
+	print(etos(e), "\n");
 	if(!e)
 		return CMD_STATUS_ERROR;
-	return self.cmd_moveto((e.absmin + e.absmax) * 0.5);
+	return self.cmd_moveto(e.origin + (e.mins + e.maxs) * 0.5);
 }
 
 float bot_cmd_resetgoal()
