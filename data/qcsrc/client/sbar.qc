@@ -1308,7 +1308,7 @@ void Sbar_Score(float margin)
 		
 		if (cvar("viewsize") <= 100) { // draw timer background when viewsize <= 100
 			if (teamplay)
-				drawpic(bgpos, "gfx/hud/sb_timerbg", '120 30 0', GetTeamRGB(myteam), sbar_alpha_bg, 0); // timer bg color = myteam color
+				drawpic(bgpos, "gfx/hud/sb_timerbg", '120 30 0', GetTeamRGB(myteam) * cvar("sbar_color_bg_team"), sbar_alpha_bg, 0); // timer bg color = myteam color
 			else {
 				color_x = cvar("sbar_color_bg_r");
 				color_y = cvar("sbar_color_bg_g");
@@ -2011,10 +2011,10 @@ void Sbar_Draw (void)
 			
 			if (cvar("viewsize") <= 100) {
 				if (teamplay) {
-					if (myteam == 13) // 13 = blue shirt color
-						drawpic(bottomleft - '0 58 0' + bgoffset, "gfx/hud/sbar", bg_size, '0 0.3 1', sbar_alpha_bg, 0); // blue hud is too dark at '0 0 1'
-					else
-						drawpic(bottomleft - '0 58 0' + bgoffset, "gfx/hud/sbar", bg_size, GetTeamRGB(myteam), sbar_alpha_bg, 0); // hud color = myteam color
+					//if (myteam == 13) // 13 = blue shirt color
+					//	drawpic(bottomleft - '0 58 0' + bgoffset, "gfx/hud/sbar", bg_size, '0 0.3 1', sbar_alpha_bg, 0); // blue hud is too dark at '0 0 1'
+					//else
+						drawpic(bottomleft - '0 58 0' + bgoffset, "gfx/hud/sbar", bg_size, GetTeamRGB(myteam) * cvar("sbar_color_bg_team"), sbar_alpha_bg, 0); // hud color = myteam color
 					}
 				else {
 					// allow for custom HUD colors in non-teamgames
