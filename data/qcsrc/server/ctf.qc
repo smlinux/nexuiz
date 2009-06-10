@@ -852,6 +852,7 @@ void spawnfunc_item_flag_team1()
 	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_FLAG, '1 0 0');
 
 	precache_model("models/ctf/shield.md3");
+	precache_model("models/ctf/shockwavetransring.md3");
 
 	self.reset = item_flag_reset;
 };
