@@ -1136,6 +1136,7 @@ float havocbot_moveto(vector pos)
 			// Refresh path to goal if necessary
 			local entity g;
 			g = self.goalentity;
+			//print("bot ", etos(self), " goal = ", etos(g), "\n");
 			navigation_clearroute();
 			navigation_routetogoal(g,self.origin);
 			bot_strategytoken_taken = TRUE;
@@ -1170,8 +1171,9 @@ float havocbot_moveto(vector pos)
 
 	// Put it as next goal
 	navigation_clearroute();
-	navigation_findnearestwaypoint(wp, TRUE);
+	wp.nearestwaypoint = navigation_findnearestwaypoint(wp, TRUE);
 	navigation_routetogoal(wp,self.origin);
+	//print("bot ", etos(self), " goal = ", etos(self.goalentity), "\n");
 	bot_strategytoken_taken = TRUE;
 	self.bot_strategytime = time + 10;
 

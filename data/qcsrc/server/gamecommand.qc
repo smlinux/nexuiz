@@ -913,6 +913,15 @@ void GameCommand(string command)
 		}
 	}
 
+	if(argv(0) == "tracewalk")
+	{
+		e = nextent(world);
+		if(tracewalk(e, stov(argv(1)), e.mins, e.maxs, stov(argv(2)), MOVE_NORMAL))
+			print("can walk\n");
+		else
+			print("cannot walk\n");
+	}
+
 	if(argv(0) == "bot_cmd")
 	{
 		if(argv(1) == "help")

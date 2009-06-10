@@ -897,7 +897,6 @@ float bot_cmd_movetotarget()
 {
 	entity e;
 	e = find(world, targetname, bot_cmd.bot_cmd_parm_string);
-	print(etos(e), "\n");
 	if(!e)
 		return CMD_STATUS_ERROR;
 	return self.cmd_moveto(e.origin + (e.mins + e.maxs) * 0.5);

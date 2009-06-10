@@ -111,6 +111,7 @@ float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float 
 		#ifdef DEBUG_TRACEWALK
 			debugnodestatus(start, DEBUG_NODE_FAIL);
 		#endif
+		//print("tracewalk: ", vtos(start), " is a bad start\n");
 		return FALSE;
 	}
 
@@ -125,6 +126,7 @@ float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float 
 			#ifdef DEBUG_TRACEWALK
 				debugnodestatus(org, DEBUG_NODE_SUCCESS);
 			#endif
+			//print("tracewalk: ", vtos(start), " can reach ", vtos(end), "\n");
 			return TRUE;
 		}
 		#ifdef DEBUG_TRACEWALK
@@ -145,6 +147,7 @@ float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float 
 				#ifdef DEBUG_TRACEWALK
 					debugnodestatus(org, DEBUG_NODE_FAIL);
 				#endif
+				//print("tracewalk: ", vtos(start), " hits a hazard when trying to reach ", vtos(end), "\n");
 				return FALSE;
 			}
 		}
@@ -176,6 +179,7 @@ float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float 
 						debugnodestatus(org, DEBUG_NODE_FAIL);
 					#endif
 					return FALSE;
+					//print("tracewalk: ", vtos(start), " failed under water\n");
 				}
 				continue;
 
@@ -221,6 +225,9 @@ float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float 
 						#ifdef DEBUG_TRACEWALK
 							debugnodestatus(trace_endpos, DEBUG_NODE_FAIL);
 						#endif
+						//print("tracewalk: ", vtos(start), " hit something when trying to reach ", vtos(end), "\n");
+						//te_explosion(trace_endpos);
+						//print(ftos(e.dphitcontentsmask), "\n");
 						return FALSE; // failed
 					}
 				}
@@ -250,6 +257,8 @@ float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float 
 			org = trace_endpos;
 		}
 	}
+
+	//print("tracewalk: ", vtos(start), " did not arrive at ", vtos(end), " but at ", vtos(org), "\n");
 
 	// moved but didn't arrive at the intended destination
 	#ifdef DEBUG_TRACEWALK
@@ -561,10 +570,12 @@ void waypoint_think()
 {
 	local entity e;
 	local vector sv, sm1, sm2, ev, em1, em2, dv;
+
+	stepheightvec = cvar("sv_stepheight") * '0 0 1';
+
 	//dprint("waypoint_think wpisbox = ", ftos(self.wpisbox), "\n");
 	sm1 = self.origin + self.mins;
 	sm2 = self.origin + self.maxs;
-	stepheightvec = cvar("sv_stepheight") * '0 0 1';
 	for(e = world; (e = find(e, classname, "waypoint")); )
 	{
 		if (boxesoverlap(self.absmin, self.absmax, e.absmin, e.absmax))
@@ -769,6 +780,23 @@ entity waypoint_spawn(vector m1, vector m2, float f)
 
 	waypoint_clearlinks(w);
 	//waypoint_schedulerelink(w);
+
+	if (cvar("g_waypointeditor"))
+	{
+		m1 = w.mins;
+		m2 = w.maxs;
+		setmodel(w, "models/runematch/rune.mdl"); w.effects = EF_LOWPRECISION;
+		setsize(w, m1, m2);
+		if (w.wpflags & WAYPOINTFLAG_ITEM)
+			w.colormod = '1 0 0';
+		else if (w.wpflags & WAYPOINTFLAG_GENERATED)
+			w.colormod = '1 1 0';
+		else
+			w.colormod = '1 1 1';
+	}
+	else
+		w.model = "";
+
 	return w;
 };
 
@@ -1285,6 +1313,9 @@ entity waypoint_spawnpersonal(vector position)
 {
 	entity w;
 
+	tracebox(position, PL_MIN, PL_MAX, position + '0 0 -1024', MOVE_NORMAL, world);
+	if(trace_fraction < 1)
+		position = trace_endpos;
 	w = waypoint_spawn(position, position, WAYPOINTFLAG_GENERATED | WAYPOINTFLAG_PERSONAL);
 	w.nearestwaypoint = world;
 	w.nearestwaypointtimeout = 0;
@@ -1300,6 +1331,7 @@ entity waypoint_spawnpersonal(vector position)
 // completely empty the goal stack, used when deciding where to go
 void navigation_clearroute()
 {
+	//print("bot ", etos(self), " clear\n");
 	self.navigation_hasgoals = FALSE;
 	self.goalcurrent = world;
 	self.goalstack01 = world;
@@ -1339,6 +1371,7 @@ void navigation_clearroute()
 // (in other words: add a new prerequisite before going to the later goals)
 void navigation_pushroute(entity e)
 {
+	//print("bot ", etos(self), " push ", etos(e), "\n");
 	self.goalstack31 = self.goalstack30;
 	self.goalstack30 = self.goalstack29;
 	self.goalstack29 = self.goalstack28;
@@ -1378,6 +1411,7 @@ void navigation_pushroute(entity e)
 // (used when a spawnfunc_waypoint is reached)
 void navigation_poproute()
 {
+	//print("bot ", etos(self), " pop\n");
 	if(self.goalcurrent.wpflags & WAYPOINTFLAG_PERSONAL && self.goalcurrent.owner==self)
 		remove(self.goalcurrent);
 
@@ -1430,8 +1464,9 @@ entity navigation_findnearestwaypoint(entity ent, float walkfromwp)
 	while (w)
 	{
 		// if object is touching spawnfunc_waypoint
-		if (boxesoverlap(pm1, pm2, w.absmin, w.absmax))
-			return w;
+		if(w != ent)
+			if (boxesoverlap(pm1, pm2, w.absmin, w.absmax))
+				return w;
 		w = w.chain;
 	}
 
@@ -1448,39 +1483,45 @@ entity navigation_findnearestwaypoint(entity ent, float walkfromwp)
 	while (w)
 	{
 		// if object can walk from spawnfunc_waypoint
-		if (w.wpisbox)
+		if(w != ent)
 		{
-			local vector wm1, wm2;
-			wm1 = w.origin + w.mins;
-			wm2 = w.origin + w.maxs;
-			v_x = bound(wm1_x, org_x, wm2_x);
-			v_y = bound(wm1_y, org_y, wm2_y);
-			v_z = bound(wm1_z, org_z, wm2_z);
-		}
-		else
-			v = w.origin;
-		dist = vlen(v - org);
-		if (bestdist > dist)
-		{
-			if (walkfromwp)
+			if (w.wpisbox)
 			{
-				traceline(v, org, TRUE, ent);
-				if (trace_fraction == 1)
-				if (tracewalk(ent, v, PL_MIN, PL_MAX, org, MOVE_NORMAL))
-				{
-					bestdist = dist;
-					best = w;
-				}
+				local vector wm1, wm2;
+				wm1 = w.origin + w.mins;
+				wm2 = w.origin + w.maxs;
+				v_x = bound(wm1_x, org_x, wm2_x);
+				v_y = bound(wm1_y, org_y, wm2_y);
+				v_z = bound(wm1_z, org_z, wm2_z);
 			}
 			else
+				v = w.origin;
+			dist = vlen(v - org);
+			if (bestdist > dist)
 			{
 				traceline(v, org, TRUE, ent);
 				if (trace_fraction == 1)
-				if (tracewalk(ent, org, PL_MIN, PL_MAX, v, MOVE_NORMAL))
 				{
-					bestdist = dist;
-					best = w;
+					if (walkfromwp)
+					{
+						//print("^1can I reach ", vtos(org), " from ", vtos(v), "?\n");
+						if (tracewalk(ent, v, PL_MIN, PL_MAX, org, MOVE_NORMAL))
+						{
+							bestdist = dist;
+							best = w;
+						}
+					}
+					else
+					{
+						if (tracewalk(ent, org, PL_MIN, PL_MAX, v, MOVE_NORMAL))
+						{
+							bestdist = dist;
+							best = w;
+						}
+					}
 				}
+				else
+					te_lightning1(world, v, org);
 			}
 		}
 		w = w.chain;
@@ -2639,6 +2680,7 @@ void botframe_showwaypointlinks()
 		{
 			//navigation_testtracewalk = TRUE;
 			head = navigation_findnearestwaypoint(player, FALSE);
+			print("currently selected WP is ", etos(head), "\n");
 			//navigation_testtracewalk = FALSE;
 			if (head)
 			{
@@ -2789,6 +2831,8 @@ void bot_serverframe()
 
 	if (time < 2)
 		return;
+
+	stepheightvec = cvar("sv_stepheight") * '0 0 1';
 
 	if(time > autoskill_nextthink)
 	{
