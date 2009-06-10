@@ -988,155 +988,155 @@ float bot_execute_commands()
 {
 	local float status, ispressingkey;
 
-:next
-
-	if(self.deadflag!=DEAD_NO)
-		return FALSE;
-
-	// Find command
-	bot_setcurrentcommand();
-
-	// Keep pressing keys raised by the "presskey" command
-	ispressingkey = bot_presskeys();
-
-	if(bot_cmd==world)
-		return ispressingkey;
-
-	// Ignore all commands except continue when the bot is paused
-	if(self.bot_exec_status & BOT_EXEC_STATUS_PAUSED)
-	if(bot_cmd.bot_cmd_type!=BOT_CMD_CONTINUE)
+	do
 	{
-		if(bot_cmd.bot_cmd_type!=BOT_CMD_NULL)
+
+		if(self.deadflag!=DEAD_NO)
+			return FALSE;
+
+		// Find command
+		bot_setcurrentcommand();
+
+		// Keep pressing keys raised by the "presskey" command
+		ispressingkey = bot_presskeys();
+
+		if(bot_cmd==world)
+			return ispressingkey;
+
+		// Ignore all commands except continue when the bot is paused
+		if(self.bot_exec_status & BOT_EXEC_STATUS_PAUSED)
+		if(bot_cmd.bot_cmd_type!=BOT_CMD_CONTINUE)
+		{
+			if(bot_cmd.bot_cmd_type!=BOT_CMD_NULL)
+			{
+				bot_command_executed(TRUE);
+				print( "WARNING: Commands are ignored while the bot is paused. Use the command 'continue' instead.\n");
+			}
+			return TRUE;
+		}
+
+		// Handle conditions
+		if not(bot_cmd.bot_cmd_type==BOT_CMD_FI||bot_cmd.bot_cmd_type==BOT_CMD_ELSE)
+		if(self.bot_cmd_condition_status & CMD_CONDITION_TRUE && self.bot_cmd_condition_status & CMD_CONDITION_FALSE_BLOCK)
 		{
 			bot_command_executed(TRUE);
-			print( "WARNING: Commands are ignored while the bot is paused. Use the command 'continue' instead.\n");
+			continue;
 		}
-		return TRUE;
-	}
-
-	// Handle conditions
-	if not(bot_cmd.bot_cmd_type==BOT_CMD_FI||bot_cmd.bot_cmd_type==BOT_CMD_ELSE)
-	if(self.bot_cmd_condition_status & CMD_CONDITION_TRUE && self.bot_cmd_condition_status & CMD_CONDITION_FALSE_BLOCK)
-	{
-		bot_command_executed(TRUE);
-		goto next;
-	}
-	else if(self.bot_cmd_condition_status & CMD_CONDITION_FALSE && self.bot_cmd_condition_status & CMD_CONDITION_TRUE_BLOCK)
-	{
-		bot_command_executed(TRUE);
-		goto next;
-	}
-
-	// Map commands to functions
-	switch(bot_cmd.bot_cmd_type)
-	{
-		case BOT_CMD_NULL:
-			return ispressingkey;
-			break;
-		case BOT_CMD_PAUSE:
-			status = bot_cmd_pause();
-			break;
-		case BOT_CMD_CONTINUE:
-			status = bot_cmd_continue();
-			break;
-		case BOT_CMD_WAIT:
-			status = bot_cmd_wait();
-			break;
-		case BOT_CMD_WAIT_UNTIL:
-			status = bot_cmd_wait_until();
-			break;
-		case BOT_CMD_TURN:
-			status = bot_cmd_turn();
-			break;
-		case BOT_CMD_MOVETO:
-			status = bot_cmd_moveto();
-			break;
-		case BOT_CMD_MOVETOTARGET:
-			status = bot_cmd_movetotarget();
-			break;
-		case BOT_CMD_RESETGOAL:
-			status = bot_cmd_resetgoal();
-			break;
-		case BOT_CMD_CC:
-			status = bot_cmd_cc();
-			break;
-		case BOT_CMD_IF:
-			status = bot_cmd_if();
-			break;
-		case BOT_CMD_ELSE:
-			status = bot_cmd_else();
-			break;
-		case BOT_CMD_FI:
-			status = bot_cmd_fi();
-			break;
-		case BOT_CMD_RESETAIM:
-			status = bot_cmd_resetaim();
-			break;
-		case BOT_CMD_AIM:
-			status = bot_cmd_aim();
-			break;
-		case BOT_CMD_AIMTARGET:
-			status = bot_cmd_aimtarget();
-			break;
-		case BOT_CMD_PRESSKEY:
-			status = bot_cmd_presskey();
-			break;
-		case BOT_CMD_RELEASEKEY:
-			status = bot_cmd_releasekey();
-			break;
-		case BOT_CMD_SELECTWEAPON:
-			status = bot_cmd_select_weapon();
-			break;
-		case BOT_CMD_IMPULSE:
-			status = bot_cmd_impulse();
-			break;
-		case BOT_CMD_RESETQUEUE:
-			bot_clearqueue();
-			status = CMD_STATUS_FINISHED;
-			break;
-		default:
-			print(strcat("ERROR: Invalid command on queue with id '",ftos(bot_cmd.bot_cmd_type),"'\n"));
-			return FALSE;
-	}
-
-	if (status==CMD_STATUS_ERROR)
-		print(strcat("ERROR: The command '",bot_cmd_string[bot_cmd.bot_cmd_type],"' returned an error status\n"));
-
-	// Move execution pointer
-	if(status==CMD_STATUS_EXECUTING)
-	{
-		return TRUE;
-	}
-	else
-	{
-		if(cvar("g_debug_bot_commands"))
+		else if(self.bot_cmd_condition_status & CMD_CONDITION_FALSE && self.bot_cmd_condition_status & CMD_CONDITION_TRUE_BLOCK)
 		{
-			local string parms;
-
-			switch(bot_cmd_parm_type[bot_cmd.bot_cmd_type])
-			{
-				case BOT_CMD_PARAMETER_FLOAT:
-				case BOT_CMD_PARAMETER_FLOAT_RELATIVE_TO_TIME:
-					parms = ftos(bot_cmd.bot_cmd_parm_float);
-					break;
-				case BOT_CMD_PARAMETER_STRING:
-					parms = bot_cmd.bot_cmd_parm_string;
-					break;
-				case BOT_CMD_PARAMETER_VECTOR:
-					parms = vtos(bot_cmd.bot_cmd_parm_vector);
-					break;
-				default:
-					parms = "";
-					break;
-			}
-			clientcommand(self,strcat("say ^7", bot_cmd_string[bot_cmd.bot_cmd_type]," ",parms,"\n"));
+			bot_command_executed(TRUE);
+			continue;
 		}
 
-		bot_command_executed(TRUE);
-	}
+		// Map commands to functions
+		switch(bot_cmd.bot_cmd_type)
+		{
+			case BOT_CMD_NULL:
+				return ispressingkey;
+				break;
+			case BOT_CMD_PAUSE:
+				status = bot_cmd_pause();
+				break;
+			case BOT_CMD_CONTINUE:
+				status = bot_cmd_continue();
+				break;
+			case BOT_CMD_WAIT:
+				status = bot_cmd_wait();
+				break;
+			case BOT_CMD_WAIT_UNTIL:
+				status = bot_cmd_wait_until();
+				break;
+			case BOT_CMD_TURN:
+				status = bot_cmd_turn();
+				break;
+			case BOT_CMD_MOVETO:
+				status = bot_cmd_moveto();
+				break;
+			case BOT_CMD_MOVETOTARGET:
+				status = bot_cmd_movetotarget();
+				break;
+			case BOT_CMD_RESETGOAL:
+				status = bot_cmd_resetgoal();
+				break;
+			case BOT_CMD_CC:
+				status = bot_cmd_cc();
+				break;
+			case BOT_CMD_IF:
+				status = bot_cmd_if();
+				break;
+			case BOT_CMD_ELSE:
+				status = bot_cmd_else();
+				break;
+			case BOT_CMD_FI:
+				status = bot_cmd_fi();
+				break;
+			case BOT_CMD_RESETAIM:
+				status = bot_cmd_resetaim();
+				break;
+			case BOT_CMD_AIM:
+				status = bot_cmd_aim();
+				break;
+			case BOT_CMD_AIMTARGET:
+				status = bot_cmd_aimtarget();
+				break;
+			case BOT_CMD_PRESSKEY:
+				status = bot_cmd_presskey();
+				break;
+			case BOT_CMD_RELEASEKEY:
+				status = bot_cmd_releasekey();
+				break;
+			case BOT_CMD_SELECTWEAPON:
+				status = bot_cmd_select_weapon();
+				break;
+			case BOT_CMD_IMPULSE:
+				status = bot_cmd_impulse();
+				break;
+			case BOT_CMD_RESETQUEUE:
+				bot_clearqueue();
+				status = CMD_STATUS_FINISHED;
+				break;
+			default:
+				print(strcat("ERROR: Invalid command on queue with id '",ftos(bot_cmd.bot_cmd_type),"'\n"));
+				return FALSE;
+		}
 
-	if(status>-1) // Always true, just to fix a compiler warning
-		goto next;
-	else
-		return status;
+		if (status==CMD_STATUS_ERROR)
+			print(strcat("ERROR: The command '",bot_cmd_string[bot_cmd.bot_cmd_type],"' returned an error status\n"));
+
+		// Move execution pointer
+		if(status==CMD_STATUS_EXECUTING)
+		{
+			return TRUE;
+		}
+		else
+		{
+			if(cvar("g_debug_bot_commands"))
+			{
+				local string parms;
+
+				switch(bot_cmd_parm_type[bot_cmd.bot_cmd_type])
+				{
+					case BOT_CMD_PARAMETER_FLOAT:
+					case BOT_CMD_PARAMETER_FLOAT_RELATIVE_TO_TIME:
+						parms = ftos(bot_cmd.bot_cmd_parm_float);
+						break;
+					case BOT_CMD_PARAMETER_STRING:
+						parms = bot_cmd.bot_cmd_parm_string;
+						break;
+					case BOT_CMD_PARAMETER_VECTOR:
+						parms = vtos(bot_cmd.bot_cmd_parm_vector);
+						break;
+					default:
+						parms = "";
+						break;
+				}
+				clientcommand(self,strcat("say ^7", bot_cmd_string[bot_cmd.bot_cmd_type]," ",parms,"\n"));
+			}
+
+			bot_command_executed(TRUE);
+		}
+
+	} while(status==CMD_STATUS_FINISHED);
+
+	return status;
 }
