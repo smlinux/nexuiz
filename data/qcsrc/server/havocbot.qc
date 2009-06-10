@@ -743,6 +743,13 @@ void havocbot_chooseweapon()
 {
 	local float i;
 
+	// ;)
+	if(g_weaponarena == WEPBIT_TUBA)
+	{
+		self.switchweapon = WEP_TUBA;
+		return;
+	}
+
 	// TODO: clean this up by moving it to weapon code
 	if(self.enemy.classname!="player")
 	{
