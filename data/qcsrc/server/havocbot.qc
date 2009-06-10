@@ -1134,6 +1134,7 @@ float havocbot_moveto(vector pos)
 		if(self.havocbot_personal_waypoint==world)
 		{
 			dprint("Error: ", self.netname, " trying to walk to a non existent personal waypoint\n");
+			self.aistatus &~= AI_STATUS_WAYPOINT_PERSONAL_GOING;
 			return CMD_STATUS_ERROR;
 		}
 
@@ -1151,6 +1152,7 @@ float havocbot_moveto(vector pos)
 			else
 			{
 				dprint("Warning: can't walk to the personal waypoint located at ", vtos(wp.origin),"\n");
+				self.aistatus &~= AI_STATUS_WAYPOINT_PERSONAL_GOING;
 				return CMD_STATUS_ERROR;
 			}
 
@@ -1174,6 +1176,7 @@ float havocbot_moveto(vector pos)
 		{
 			// Step 5: Waypoint reached
 			dprint(self.netname, "'s personal waypoint reached\n");
+			remove(self.havocbot_personal_waypoint);
 			self.aistatus &~= AI_STATUS_WAYPOINT_PERSONAL_REACHED;
 			return CMD_STATUS_FINISHED;
 		}
@@ -1200,6 +1203,7 @@ float havocbot_moveto(vector pos)
 		if(!self.navigation_hasgoals)
 		{
 			dprint("Warning: can't walk to the personal waypoint located at ", vtos(wp.origin),"\n");
+			self.aistatus &~= AI_STATUS_WAYPOINT_PERSONAL_LINKING;
 			remove(wp);
 			return CMD_STATUS_ERROR;
 		}

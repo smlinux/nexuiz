@@ -1416,9 +1416,6 @@ void navigation_pushroute(entity e)
 void navigation_poproute()
 {
 	//print("bot ", etos(self), " pop\n");
-	if(self.goalcurrent.wpflags & WAYPOINTFLAG_PERSONAL && self.goalcurrent.owner==self)
-		remove(self.goalcurrent);
-
 	self.goalcurrent = self.goalstack01;
 	self.goalstack01 = self.goalstack02;
 	self.goalstack02 = self.goalstack03;
