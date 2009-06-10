@@ -13,7 +13,7 @@ use Storable;
 use constant MIDI_FIRST_NONCHANNEL => 17;
 use constant MIDI_DRUMS_CHANNEL => 10;
 
-my ($filename, $transpose, $timeoffset) = @ARGV;
+my ($filename, $transpose, $timeoffset, $timeoffset2, @preallocate) = @ARGV;
 
 my $opus = MIDI::Opus->new({from_file => $filename});
 #$opus->write_to_file("/tmp/y.mid");
@@ -80,6 +80,8 @@ sub unsort(@)
 
 
 
+my $inittime = undef;
+my $notetime = undef;
 sub botconfig_read($)
 {
 	my ($fn) = @_;
@@ -172,18 +174,50 @@ sub botconfig_read($)
 		}
 	}
 
-	my $lowesttimeoffset = 0;
+	my $lowesttime = undef;
+	my $highesttime = undef;
+	my $highestbusytime = undef;
+	my $lowestnotestart = undef;
 	for(values %bots)
 	{
 		my $l = $_->{init};
 		next unless defined $l;
-		next unless $l->[0]->[0] eq 'time';
-		my $t = $l->[0]->[1];
-		$lowesttimeoffset = $t
-			if $t < $lowesttimeoffset;
+		my $t = $l->[0]->[0] eq 'time' ? $l->[0]->[1] : 0;
+		$lowesttime = $t if not defined $lowesttime or $t < $lowesttime;
+		for(@$l)
+		{
+			if($_->[0] eq 'time')
+			{
+				$highesttime = $_->[1] if not defined $highesttime or $_->[1] > $highesttime;
+			}
+			if($_->[0] eq 'busy')
+			{
+				$highestbusytime = $_->[1] if not defined $highestbusytime or $_->[1] > $highestbusytime;
+			}
+		}
+		for(values %{$_->{notes_on}}, values %{$_->{percussion}})
+		{
+			my $t = $_->[0]->[0] eq 'time' ? $_->[0]->[1] : 0;
+			$lowestnotestart = $t if not defined $lowestnotestart or $t < $lowestnotestart;
+		}
 	}
-	print STDERR "Using a time adjustment of $lowesttimeoffset\n";
-	$timeoffset -= $lowesttimeoffset;
+
+	my $initdelta = $highesttime - $lowesttime - $lowestnotestart;
+	if(defined $highestbusytime)
+	{
+		my $initdelta2 = $highestbusytime - $lowesttime;
+		$initdelta = $initdelta2
+			if $initdelta2 > $initdelta;
+	}
+
+	# init shall take place at $timeoffset
+	# note playing shall take place at $timeoffset + $initdelta + $timeoffset2
+
+	$inittime = $timeoffset - $lowesttime;
+	$notetime = $timeoffset + $initdelta + $timeoffset2;
+
+	print STDERR "Initialization offset: $inittime (start: @{[$inittime + $lowesttime]}, end: @{[$inittime + $highesttime]})\n";
+	print STDERR "Note offset: $notetime (start: @{[$notetime + $lowestnotestart]})\n";
 
 	return \%bots;
 }
@@ -192,8 +226,8 @@ sub busybot_cmd_bot_test($$@)
 {
 	my ($bot, $time, @commands) = @_;
 
-	my $bottime = defined $bot->{timer} ? $bot->{timer} : -$timeoffset-1;
-	my $botbusytime = defined $bot->{busytimer} ? $bot->{busytimer} : -$timeoffset-1;
+	my $bottime = defined $bot->{timer} ? $bot->{timer} : -1;
+	my $botbusytime = defined $bot->{busytimer} ? $bot->{busytimer} : -1;
 
 	return 0
 		if $time < $botbusytime;
@@ -214,7 +248,7 @@ sub busybot_cmd_bot_execute($$@)
 	{
 		if($_->[0] eq 'time')
 		{
-			printf "w %d %f\n", $bot->{id}, $time + $_->[1] + $timeoffset;
+			printf "w %d %f\n", $bot->{id}, $time + $_->[1];
 			$bot->{timer} = $time + $_->[1];
 		}
 		elsif($_->[0] eq 'busy')
@@ -257,7 +291,8 @@ sub busybot_note_off_bot($$$$)
 	my $cmds = $bot->{notes_off}->{$note - $bot->{transpose} - $transpose};
 	return 1
 		if not defined $cmds; # note off cannot fail
-	busybot_cmd_bot_execute $bot, $time, @$cmds; 
+	$bot->{busy} = 0;
+	busybot_cmd_bot_execute $bot, $time + $notetime, @$cmds; 
 	return 1;
 }
 
@@ -266,7 +301,14 @@ sub busybot_note_on_bot($$$$$)
 	my ($bot, $time, $channel, $note, $init) = @_;
 	return -1 # I won't play on this channel
 		if defined $bot->{channels} and not grep { $_ == $channel } $bot->{channels};
+	return 0
+		if $bot->{busy};
 	my $cmds = $bot->{notes_on}->{$note - $bot->{transpose} - $transpose};
+	my $cmds_off = $bot->{notes_off}->{$note - $bot->{transpose} - $transpose};
+	if(defined $cmds_off)
+	{
+		$bot->{busy} = 1;
+	}
 	if(not defined $cmds)
 	{
 		$cmds = $bot->{percussion}->{$note};
@@ -276,17 +318,17 @@ sub busybot_note_on_bot($$$$$)
 	if($init && $bot->{init})
 	{
 		return 0
-			if not busybot_cmd_bot_test $bot, 0, @{$bot->{init}};
+			if not busybot_cmd_bot_test $bot, $inittime, @{$bot->{init}};
 		return 0
-			if not busybot_cmd_bot_test $bot, $time, @$cmds; 
-		busybot_cmd_bot_execute $bot, 0, @{$bot->{init}};
-		busybot_cmd_bot_execute $bot, $time, @$cmds; 
+			if not busybot_cmd_bot_test $bot, $time + $notetime, @$cmds; 
+		busybot_cmd_bot_execute $bot, $inittime, @{$bot->{init}};
+		busybot_cmd_bot_execute $bot, $time + $notetime, @$cmds; 
 	}
 	else
 	{
 		return 0
-			if not busybot_cmd_bot_test $bot, $time, @$cmds; 
-		busybot_cmd_bot_execute $bot, $time, @$cmds; 
+			if not busybot_cmd_bot_test $bot, $time + $notetime, @$cmds; 
+		busybot_cmd_bot_execute $bot, $time + $notetime, @$cmds; 
 	}
 	return 1;
 }
@@ -369,6 +411,18 @@ print 'alias p "sv_cmd bot_cmd $1 presskey $2"' . "\n";
 print 'alias r "sv_cmd bot_cmd $1 releasekey $2"' . "\n";
 print 'alias w "sv_cmd bot_cmd $1 wait_until $2"' . "\n";
 print 'alias m "sv_cmd bot_cmd $1 moveto \"$2 $3 $4\""' . "\n";
+
+for(@preallocate)
+{
+	die "Cannot preallocate any more $_ bots"
+		if $busybots->{$_}->{count} <= 0;
+	my $bot = Storable::dclone $busybots->{$_};
+	$bot->{id} = @busybots_allocated + 1;
+	$bot->{classname} = $_;
+	busybot_cmd_bot_execute $bot, $inittime, @{$bot->{init}};
+	--$busybots->{$_}->{count};
+	push @busybots_allocated, $bot;
+}
 
 my %midinotes = ();
 my $note_min = undef;
