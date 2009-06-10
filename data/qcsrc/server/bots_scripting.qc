@@ -18,11 +18,13 @@
 #define BOT_CMD_IMPULSE			16
 #define BOT_CMD_WAIT_UNTIL		17
 #define BOT_CMD_RESETQUEUE		18
-#define BOT_CMD_WHILE			19	// TODO: Not implemented yet
-#define BOT_CMD_WEND			20	// TODO: Not implemented yet
-#define BOT_CMD_CHASE			20	// TODO: Not implemented yet
+#define BOT_CMD_MOVETOTARGET    19
+#define BOT_CMD_AIMTARGET       20
+#define BOT_CMD_WHILE			21	// TODO: Not implemented yet
+#define BOT_CMD_WEND			22	// TODO: Not implemented yet
+#define BOT_CMD_CHASE			23	// TODO: Not implemented yet
 
-#define BOT_CMD_COUNTER			19	// Update this value if you add/remove a command
+#define BOT_CMD_COUNTER			21	// Update this value if you add/remove a command
 
 // NOTE: Following commands should be implemented on the bot ai
 //		 If a new command should be handled by the target ai(s) please declare it here
@@ -79,6 +81,9 @@ void bot_commands_init()
 	bot_cmd_string[BOT_CMD_MOVETO]			= "moveto";
 	bot_cmd_parm_type[BOT_CMD_MOVETO]		= BOT_CMD_PARAMETER_VECTOR;
 
+	bot_cmd_string[BOT_CMD_MOVETOTARGET]			= "movetotarget";
+	bot_cmd_parm_type[BOT_CMD_MOVETOTARGET]		= BOT_CMD_PARAMETER_STRING;
+
 	bot_cmd_string[BOT_CMD_RESETGOAL]		= "resetgoal";
 	bot_cmd_parm_type[BOT_CMD_RESETGOAL]		= BOT_CMD_PARAMETER_NONE;
 
@@ -99,6 +104,9 @@ void bot_commands_init()
 
 	bot_cmd_string[BOT_CMD_AIM]			= "aim";
 	bot_cmd_parm_type[BOT_CMD_AIM]			= BOT_CMD_PARAMETER_STRING;
+
+	bot_cmd_string[BOT_CMD_AIMTARGET]			= "aimtarget";
+	bot_cmd_parm_type[BOT_CMD_AIMTARGET]			= BOT_CMD_PARAMETER_STRING;
 
 	bot_cmd_string[BOT_CMD_PRESSKEY]		= "presskey";
 	bot_cmd_parm_type[BOT_CMD_PRESSKEY]		= BOT_CMD_PARAMETER_STRING;
@@ -318,6 +326,9 @@ void bot_cmdhelp(string scmd)
 			case BOT_CMD_MOVETO:
 				print("Walk to an specific coordinate on the map. Usage: moveto \"x y z\"");
 				break;
+			case BOT_CMD_MOVETOTARGET:
+				print("Walk to the specific target on the map");
+				break;
 			case BOT_CMD_RESETGOAL:
 				print("Resets the goal stack");
 				break;
@@ -347,6 +358,9 @@ void bot_cmdhelp(string scmd)
 				print("There is a 3rd optional parameter telling in how many seconds the aim has to reach the new position\n");
 				print("Examples: aim \"90 0\"	// Turn 90 degrees inmediately (positive numbers move to the left/up)\n");
 				print("          aim \"0 90 2\"	// Will gradually look to the sky in the next two seconds");
+				break;
+			case BOT_CMD_AIMTARGET:
+				print("Points the aim to given target");
 				break;
 			case BOT_CMD_PRESSKEY:
 				print("Press one of the following keys: forward, backward, left, right, jump, crouch, attack1, attack2, use\n");
@@ -644,7 +658,7 @@ float bot_cmd_aim()
 		return CMD_STATUS_FINISHED;
 	}
 
-	if(tokens<1||tokens>3)
+	if(tokens<2||tokens>3)
 		return CMD_STATUS_ERROR;
 
 	step = stof(argv(2));
@@ -654,6 +668,48 @@ float bot_cmd_aim()
 	self.bot_cmd_aim_end_x = self.v_angle_x - stof(argv(1));
 	self.bot_cmd_aim_end_y = self.v_angle_y + stof(argv(0));
 	self.bot_cmd_aim_end_z = 0;
+
+	self.bot_cmd_aim_begintime = time;
+	self.bot_cmd_aim_endtime = time + step;
+
+	return CMD_STATUS_EXECUTING;
+}
+
+float bot_cmd_aimtarget()
+{
+	if(self.bot_cmd_aim_endtime)
+	{
+		return bot_cmd_aim();
+	}
+
+	local entity e;
+	local string parms;
+	local vector v;
+	local float tokens, step;
+
+	parms = bot_cmd.bot_cmd_parm_string;
+
+	tokens = tokenizebyseparator(parms, " ");
+
+	e = find(world, targetname, argv(0));
+	if(!e)
+		return CMD_STATUS_ERROR;
+
+	v = (e.absmin + e.absmax) * 0.5;
+
+	if(tokens==1)
+	{
+		self.v_angle = vectoangles(v - (self.origin + self.view_ofs));
+		return CMD_STATUS_FINISHED;
+	}
+
+	if(tokens<1||tokens>2)
+		return CMD_STATUS_ERROR;
+
+	step = stof(argv(1));
+
+	self.bot_cmd_aim_begin = self.v_angle;
+	self.bot_cmd_aim_end = vectoangles(v - (self.origin + self.view_ofs));
 
 	self.bot_cmd_aim_begintime = time;
 	self.bot_cmd_aim_endtime = time + step;
@@ -837,6 +893,15 @@ float bot_cmd_moveto()
 	return self.cmd_moveto(bot_cmd.bot_cmd_parm_vector);
 }
 
+float bot_cmd_movetotarget()
+{
+	entity e;
+	e = find(world, targetname, argv(0));
+	if(!e)
+		return CMD_STATUS_ERROR;
+	return self.cmd_moveto((e.absmin + e.absmax) * 0.5);
+}
+
 float bot_cmd_resetgoal()
 {
 	return self.cmd_resetgoal();
@@ -986,6 +1051,9 @@ float bot_execute_commands()
 		case BOT_CMD_MOVETO:
 			status = bot_cmd_moveto();
 			break;
+		case BOT_CMD_MOVETOTARGET:
+			status = bot_cmd_movetotarget();
+			break;
 		case BOT_CMD_RESETGOAL:
 			status = bot_cmd_resetgoal();
 			break;
@@ -1006,6 +1074,9 @@ float bot_execute_commands()
 			break;
 		case BOT_CMD_AIM:
 			status = bot_cmd_aim();
+			break;
+		case BOT_CMD_AIMTARGET:
+			status = bot_cmd_aimtarget();
 			break;
 		case BOT_CMD_PRESSKEY:
 			status = bot_cmd_presskey();
