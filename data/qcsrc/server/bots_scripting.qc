@@ -422,9 +422,10 @@ void bot_list_commands()
 #define CMD_STATUS_FINISHED	1
 #define CMD_STATUS_ERROR	2
 
+void SV_ParseClientCommand(string s);
 float bot_cmd_cc()
 {
-	clientcommand(self,bot_cmd.bot_cmd_parm_string);
+	SV_ParseClientCommand(bot_cmd.bot_cmd_parm_string);
 	return CMD_STATUS_FINISHED;
 }
 
