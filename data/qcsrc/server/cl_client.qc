@@ -1,6 +1,7 @@
 .float spectatee_status;
 .float zoomstate;
 .float bloodloss_timer;
+.float restriction;
 
 .entity clientdata;
 float ClientData_Send(entity to, float sf)
@@ -118,6 +119,17 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 	if(race_spawns)
 		if(spot.target == "")
 			return -1;
+	
+	if(clienttype(self) == CLIENTTYPE_REAL)
+	{
+		if(spot.restriction == 1)
+			return -1;
+	}
+	else
+	{
+		if(spot.restriction == 2)
+			return -1;
+	}
 
 	// filter out spots for assault
 	if(spot.target != "") {
