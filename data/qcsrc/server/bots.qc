@@ -5,8 +5,9 @@ float AI_STATUS_RUNNING				= 4;	// Bot is bunny hopping
 float AI_STATUS_DANGER_AHEAD			= 8;	// There is lava/slime/trigger_hurt ahead
 float AI_STATUS_OUT_JUMPPAD			= 16;	// Trying to get out of a "vertical" jump pad
 float AI_STATUS_OUT_WATER			= 32;	// Trying to get out of water
-float AI_STATUS_WAYPOINT_PERSONAL_GOING		= 64;	// Going to a personal waypoint
-float AI_STATUS_WAYPOINT_PERSONAL_REACHED	= 128;	// Personal waypoint reached
+float AI_STATUS_WAYPOINT_PERSONAL_LINKING	= 64;	// Waiting for the personal waypoint to be linked
+float AI_STATUS_WAYPOINT_PERSONAL_GOING		= 128;	// Going to a personal waypoint
+float AI_STATUS_WAYPOINT_PERSONAL_REACHED	= 256;	// Personal waypoint reached
 
 // utilities for path debugging
 #ifdef DEBUG_TRACEWALK
@@ -448,6 +449,7 @@ float lag_additem(float t, float f1, float f2, entity e1, vector v1, vector v2, 
 .float wpisbox;
 .float wpflags;
 .vector wpnearestpoint;
+.float wplinked;
 
 // stack of current goals (the last one of which may be an item or other
 // desirable object, the rest are typically waypoints to reach it)
@@ -640,6 +642,7 @@ void waypoint_think()
 		}
 	}
 	navigation_testtracewalk = 0;
+	self.wplinked = TRUE;
 };
 
 void waypoint_clearlinks(entity wp)
@@ -651,6 +654,7 @@ void waypoint_clearlinks(entity wp)
 	wp.wp08 = wp.wp09 = wp.wp10 = wp.wp11 = wp.wp12 = wp.wp13 = wp.wp14 = wp.wp15 = world;wp.wp08mincost = wp.wp09mincost = wp.wp10mincost = wp.wp11mincost = wp.wp12mincost = wp.wp13mincost = wp.wp14mincost = wp.wp15mincost = f;
 	wp.wp16 = wp.wp17 = wp.wp18 = wp.wp19 = wp.wp20 = wp.wp21 = wp.wp22 = wp.wp23 = world;wp.wp16mincost = wp.wp17mincost = wp.wp18mincost = wp.wp19mincost = wp.wp20mincost = wp.wp21mincost = wp.wp22mincost = wp.wp23mincost = f;
 	wp.wp24 = wp.wp25 = wp.wp26 = wp.wp27 = wp.wp28 = wp.wp29 = wp.wp30 = wp.wp31 = world;wp.wp24mincost = wp.wp25mincost = wp.wp26mincost = wp.wp27mincost = wp.wp28mincost = wp.wp29mincost = wp.wp30mincost = wp.wp31mincost = f;
+	wp.wplinked = FALSE;
 };
 
 // tell a spawnfunc_waypoint to relink
@@ -677,7 +681,8 @@ void waypoint_schedulerelink(entity wp)
 		wp.model = "";
 	wp.wpisbox = vlen(wp.size) > 0;
 	wp.enemy = world;
-	wp.owner = world;
+	if (!(wp.wpflags & WAYPOINTFLAG_PERSONAL))
+		wp.owner = world;
 	if (!(wp.wpflags & WAYPOINTFLAG_NORELINK))
 		waypoint_clearlinks(wp);
 	// schedule an actual relink on next frame
@@ -1313,13 +1318,12 @@ entity waypoint_spawnpersonal(vector position)
 {
 	entity w;
 
-	tracebox(position, PL_MIN, PL_MAX, position + '0 0 -1024', MOVE_NORMAL, world);
-	if(trace_fraction < 1)
-		position = trace_endpos;
 	w = waypoint_spawn(position, position, WAYPOINTFLAG_GENERATED | WAYPOINTFLAG_PERSONAL);
 	w.nearestwaypoint = world;
 	w.nearestwaypointtimeout = 0;
 	w.owner = self;
+
+	waypoint_schedulerelink(w);
 
 	return w;
 };
@@ -2428,7 +2432,7 @@ void bot_think()
 {
 	if (self.bot_nextthink > time)
 		return;
-	
+
 	self.flags &~= FL_GODMODE;
 	if(cvar("bot_god"))
 		self.flags |= FL_GODMODE;
