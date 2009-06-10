@@ -2,8 +2,10 @@ float teamradar_angle; // player yaw angle
 vector teamradar_origin3d_in_texcoord; // player origin
 vector teamradar_origin2d; // 2D origin
 vector teamradar_size2d; // 2D size
+vector teamradar_extraclip_mins, teamradar_extraclip_maxs; // don't even ask
 float teamradar_size; // 2D scale factor
 float cl_teamradar_scale; // window size = ...qu
+float cl_teamradar_nohudhack;
 float v_flipped;
 
 float vlen2d(vector v)
@@ -58,10 +60,10 @@ void draw_teamradar_background(float bg, float fg)
 	if(bg > 0)
 	{
 		R_BeginPolygon("", 0);
-		R_PolygonVertex('1 0 0' * (teamradar_origin2d_x - teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y - teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', bg);
-		R_PolygonVertex('1 0 0' * (teamradar_origin2d_x + teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y - teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', bg);
-		R_PolygonVertex('1 0 0' * (teamradar_origin2d_x + teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y + teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', bg);
-		R_PolygonVertex('1 0 0' * (teamradar_origin2d_x - teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y + teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', bg);
+		R_PolygonVertex('1 0 0' * (teamradar_origin2d_x - teamradar_size2d_x * 0.5 + teamradar_extraclip_mins_x) + '0 1 0' * (teamradar_origin2d_y - teamradar_size2d_y * 0.5 + teamradar_extraclip_mins_y), '0 0 0', '0 0 0', bg);
+		R_PolygonVertex('1 0 0' * (teamradar_origin2d_x + teamradar_size2d_x * 0.5 + teamradar_extraclip_maxs_x) + '0 1 0' * (teamradar_origin2d_y - teamradar_size2d_y * 0.5 + teamradar_extraclip_mins_y), '0 0 0', '0 0 0', bg);
+		R_PolygonVertex('1 0 0' * (teamradar_origin2d_x + teamradar_size2d_x * 0.5 + teamradar_extraclip_maxs_x) + '0 1 0' * (teamradar_origin2d_y + teamradar_size2d_y * 0.5 + teamradar_extraclip_maxs_y), '0 0 0', '0 0 0', bg);
+		R_PolygonVertex('1 0 0' * (teamradar_origin2d_x - teamradar_size2d_x * 0.5 + teamradar_extraclip_mins_x) + '0 1 0' * (teamradar_origin2d_y + teamradar_size2d_y * 0.5 + teamradar_extraclip_maxs_y), '0 0 0', '0 0 0', bg);
 		R_EndPolygon();
 	}
 
@@ -197,6 +199,7 @@ void teamradar_loadcvars()
 		cl_teamradar_size = '256 256 0'; // TODO make somewhat variable?
 		cl_teamradar_position = '0.5 0.5 0';
 		cl_teamradar_zoommode = 3;
+		cl_teamradar_nohudhack = 0;
 	}
 	else
 	{
@@ -217,6 +220,7 @@ void teamradar_loadcvars()
 		if(!cl_teamradar_size_y) cl_teamradar_size_y = cl_teamradar_size_x;
 
 		cl_teamradar_size_z = 0;
+		cl_teamradar_nohudhack = cl_teamradar_position_z;
 		cl_teamradar_position_z = 0;
 	}
 }
@@ -263,9 +267,26 @@ void() teamradar_view =
 
 	scale2d = vlen_maxnorm2d(mi_picmax - mi_picmin);
 	teamradar_size2d = cl_teamradar_size;
+
 	teamradar_origin2d =
 		  '1 0 0' * (0.5 * teamradar_size2d_x + cl_teamradar_position_x * (vid_conwidth - teamradar_size2d_x))
 		+ '0 1 0' * (0.5 * teamradar_size2d_y + cl_teamradar_position_y * (vid_conheight - teamradar_size2d_y));
+	
+	teamradar_extraclip_mins = teamradar_extraclip_maxs = '0 0 0';
+	if(cl_teamradar_position == '1 0 0')
+	{
+		if(cl_teamradar_nohudhack < 2)
+			teamradar_origin2d_y += 25;
+		if(cl_teamradar_nohudhack < 1)
+			teamradar_extraclip_mins_y -= 25;
+	}
+	else if(cl_teamradar_position == '0 1 0' || cl_teamradar_position == '1 1 0')
+	{
+		if(cl_teamradar_nohudhack < 2)
+			teamradar_origin2d_y -= 50;
+		//if(cl_teamradar_nohudhack < 1)
+			//teamradar_extraclip_size_y += 50; // don't, the HUD looks nice
+	}
 
 	// pixels per world qu to match the teamradar_size2d_x range in the longest dimension
 	if(cl_teamradar_rotation == 0)
@@ -306,10 +327,10 @@ void() teamradar_view =
 	rgb = GetTeamRGB(color1);
 
 	drawsetcliparea(
-		teamradar_origin2d_x - teamradar_size2d_x * 0.5,
-		teamradar_origin2d_y - teamradar_size2d_y * 0.5,
-		teamradar_size2d_x,
-		teamradar_size2d_y
+		teamradar_origin2d_x - teamradar_size2d_x * 0.5 + teamradar_extraclip_mins_x,
+		teamradar_origin2d_y - teamradar_size2d_y * 0.5 + teamradar_extraclip_mins_y,
+		teamradar_size2d_x + teamradar_extraclip_maxs_x - teamradar_extraclip_mins_x,
+		teamradar_size2d_y + teamradar_extraclip_maxs_y - teamradar_extraclip_mins_y
 	);
 
 	draw_teamradar_background(cl_teamradar_background_alpha, cl_teamradar_foreground_alpha);
