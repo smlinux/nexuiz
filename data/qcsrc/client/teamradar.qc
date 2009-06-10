@@ -223,7 +223,7 @@ void teamradar_loadcvars()
 
 void() teamradar_view =
 {
-	local float color, color2;
+	local float color1, color2; // color already declared as a global in sbar.qc
 	local vector rgb;
 	local entity tm;
 	float scale2d, normalsize, bigsize;
@@ -302,8 +302,8 @@ void() teamradar_view =
 		  f * (mi_min + mi_max) * 0.5
 		+ (1 - f) * view_origin);
 
-	color = GetPlayerColor(player_localentnum-1);
-	rgb = GetTeamRGB(color);
+	color1 = GetPlayerColor(player_localentnum-1);
+	rgb = GetTeamRGB(color1);
 
 	drawsetcliparea(
 		teamradar_origin2d_x - teamradar_size2d_x * 0.5,

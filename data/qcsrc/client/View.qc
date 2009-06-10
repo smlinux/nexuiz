@@ -488,9 +488,12 @@ void CSQC_UpdateView(float w, float h)
 	}
 
 	// draw sbar
-	if(cvar("r_letterbox") == 0)
-	if(cvar("viewsize") < 120)
-		CSQC_common_hud();
+ 	if(cvar("r_letterbox") == 0) {
+ 		Sbar_DrawCenterPrint(); // draw centerprint messages even if viewsize >= 120
+ 		
+ 		if(cvar("viewsize") < 120)
+ 			CSQC_common_hud();
+ 	}
 
 	// crosshair goes VERY LAST
 	if(!scoreboard_active && !ons_showmap && !camera_active) {
@@ -568,98 +571,6 @@ void CSQC_common_hud(void)
 {
 	// Sbar_SortFrags(); done in Sbar_Draw
 	Sbar_Draw();
-}
-
-// KeyHunt HUD by victim
-void CSQC_kh_hud(void)
-{
-	// HUD 0 has the weapons on the right hand side - temporarily shown when needed
-	// HUD 1 has the weapons on the bottom - permanently
-
-	// use the following two binds to check the icons move correctly
-	// bind g "toggle sbar_flagstatus_right; echo Menu right $sbar_flagstatus_right"  // move the icons
-	// bind h "toggle sbar_hudselector; echo HUD $sbar_hudselector"  // change the HUD
-
-	float kh_keys, kh_keys_status, kh_teams_set;
-	float kh_margin_x, kh_margin_y, kh_key_box;
-	string kh_carrying, kh_outline;
-	vector red_pos, blue_pos, yellow_pos, pink_pos, kh_size;
-	vector red, blue, yellow, pink;
-
-	kh_keys = getstati(STAT_KH_KEYS);
-	kh_keys_status = kh_keys / 256;
-	kh_teams_set = cvar("_teams_available");  // set in keyhunt.qc
-
-	kh_margin_y = 8;
-	kh_margin_x = (cvar("sbar_flagstatus_right") * sbar_hudselector * (vid_conwidth - 67)) + 10;
-//	sbar_flagstatus_right 0/1; sbar_hudselector 0/1; screen width - key width + margin
-
-	red_pos_x = blue_pos_x = yellow_pos_x = pink_pos_x = kh_margin_x;
-
-	kh_key_box = 120;
-
-	pink_pos_y = kh_margin_y + 0;  // top
-	yellow_pos_y = kh_margin_y + kh_key_box;
-	blue_pos_y = kh_margin_y + kh_key_box * 2;
-	red_pos_y = kh_margin_y + kh_key_box * 3;  //bottom
-
-	red = '1 0 0';
-	blue = '0 0 1';
-	yellow = '1 1 0';
-	pink = '1 0 1';
-
-	kh_size = '0 0 0';  // don't resize the image
-
-	kh_carrying = "gfx/sb_kh_full";
-	kh_outline = "gfx/sb_kh_outline";
-
-// 	drawpic(vector position, string pic, vector size, vector rgb, float alpha, float flag)
-// 	vector position = '0 0';  // 'x y' 0 0 (the origin) is the top left. X 0 - 799, Y 0 - 599
-
-// 	vector size = '0 0';  // 'x y' changes the x & y dimensions. '0 0' gives the default pic size
-// 	vector rgb = '0 0 0';  // 'r g b' range 0 - 1
-
-	if (kh_keys_status & 1)  // red
-		drawpic (red_pos, kh_carrying, kh_size, red, 0.2, 0);  // show 20% alpha key
-	else
-		drawpic (red_pos, kh_outline, kh_size, red, 0.4, 0);  // show key outline 40% alpha
-
-	if (kh_keys & 1)
-		drawpic (red_pos, kh_carrying, kh_size, red, 1.0, 0);  // show solid key 100% alpha
-
-
-	if (kh_keys_status & 2)  // blue
-		drawpic (blue_pos, kh_carrying, kh_size, blue, 0.2, 0);
-	else
-		drawpic (blue_pos, kh_outline, kh_size, blue, 0.4, 0);
-
-	if (kh_keys & 2)
-		drawpic (blue_pos, kh_carrying, kh_size, blue, 1.0, 0);
-
-
-	if (kh_teams_set & 4)  // yellow
-	{
-		if (kh_keys_status & 4)
-			drawpic (yellow_pos, kh_carrying, kh_size, yellow, 0.2, 0);
-		else
-			drawpic (yellow_pos, kh_outline, kh_size, yellow, 0.4, 0);
-
-		if (kh_keys & 4)
-			drawpic (yellow_pos, kh_carrying, kh_size, yellow, 1.0, 0);
-	}
-
-
-	if (kh_teams_set & 8)  // pink
-	{
-		if (kh_keys_status & 8)
-			drawpic (pink_pos, kh_carrying, kh_size, pink, 0.2, 0);
-		else
-			drawpic (pink_pos, kh_outline, kh_size, pink, 0.4, 0);
-
-		if (kh_keys & 8)
-			drawpic (pink_pos, kh_carrying, kh_size, pink, 1.0, 0);
-	}
-
 }
 
 // following vectors must be global to allow seamless switching between camera modes

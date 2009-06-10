@@ -1,4 +1,3 @@
-float numteams; // NOTE: This is changed in Sbar_SortFrags, so use it only AFTER that
 float teamplay;
 float myteam;
 

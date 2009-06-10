@@ -92,9 +92,6 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Zoom Factor:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(2, 16, 0.5, "cl_zoomfactor"));
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Zoom Sens.:"));
-		me.TD(me, 1, 2, e = makeNexuizSlider(0, 1, 0.01, "cl_zoomsensitivity"));
-	me.TR(me);
 		sl = makeNexuizSlider(1, 8, 0.5, "cl_zoomspeed");
 		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(-1, 1, sl, "Zoom speed:"));
 		me.TD(me, 1, 2, sl);
@@ -143,23 +140,9 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TD(me, 1, 2, e = makeNexuizSlider(0, 1, 0.01, "crosshair_color_blue"));
 		setDependentOR(e, "crosshair_per_weapon", 0, 0, "crosshair_color_override", 1, 1);
 	me.TR(me);
-	/*
-	 * not supported by the current csqc code
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "HUD size:"));
-		me.TD(me, 1, 2, e = makeNexuizTextSlider("viewsize"));
-			e.addValue(e, "None", "120");
-			e.addValue(e, "Reduced", "110");
-			e.addValue(e, "Full", "100");
-			e.configureNexuizTextSliderValues(e);
-	*/
-	me.TR(me);
-		me.TDempty(me, 0.2);
-		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(1, "sbar_hudselector", "Use old-style HUD layout"));
-			setDependent(e, "viewsize", 0, 110);
-	me.TR(me);
-		me.TDempty(me, 0.5);
-		me.TD(me, 1, 2, e = makeNexuizButton("Radar & Waypoints...", '0 0 0'));
+		me.TDempty(me, 0.4);
+		me.TD(me, 1, 2.2, e = makeNexuizButton("Radar, HUD & Waypoints...", '0 0 0'));
 			e.onClick = DialogOpenButton_Click;
 			e.onClickEntity = main.radarDialog;
 		me.TDempty(me, 0.5);
