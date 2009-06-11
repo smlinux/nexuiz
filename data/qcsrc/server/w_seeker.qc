@@ -326,7 +326,7 @@ void Seeker_Fire_Tag()
 	missile.bot_dodgerating = 50;
 	missile.touch           = Seeker_Tag_Touch;
 	missile.think           = Seeker_Tag_Think;
-	missile.nextthink       = time + 15;
+	missile.nextthink       = time + cvar("g_balance_seeker_tag_lifetime");
 	missile.movetype        = MOVETYPE_FLY;
 	missile.solid           = SOLID_BBOX;
 	missile.owner           = self;

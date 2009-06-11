@@ -162,8 +162,11 @@ void multi_trigger()
 
 	if (self.wait > 0)
 	{
-		self.think = multi_wait;
-		self.nextthink = time + self.wait;
+		if(self.wait > 0.01)
+		{
+			self.think = multi_wait;
+			self.nextthink = time + self.wait;
+		}
 	}
 	else
 	{	// we can't just remove (self) here, because this is a touch function
@@ -265,8 +268,6 @@ void spawnfunc_trigger_multiple()
 		self.noise = "misc/trigger1.wav";
 	}
 
-	if (!self.wait)
-		self.wait = 0.2;
 	self.use = multi_use;
 
 	EXACTTRIGGER_INIT;

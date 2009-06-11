@@ -268,7 +268,7 @@ void bot_queuecommand(entity bot, string cmdstring, string parm)
 		}
 		return;
 	}
-	print("ERROR: No such command\n");
+	print("ERROR: No such command '", cmdstring, "'\n");
 }
 
 void bot_cmdhelp(string scmd)
@@ -489,6 +489,8 @@ float bot_cmd_select_weapon()
 
 	if(client_hasweapon(self, id, TRUE, FALSE))
 		self.switchweapon = id;
+	else
+		return CMD_STATUS_ERROR;
 
 	return CMD_STATUS_FINISHED;
 }
@@ -701,6 +703,7 @@ float bot_cmd_aimtarget()
 	if(tokens==1)
 	{
 		self.v_angle = vectoangles(v - (self.origin + self.view_ofs));
+		self.v_angle_x = -self.v_angle_x;
 		return CMD_STATUS_FINISHED;
 	}
 
@@ -711,6 +714,7 @@ float bot_cmd_aimtarget()
 
 	self.bot_cmd_aim_begin = self.v_angle;
 	self.bot_cmd_aim_end = vectoangles(v - (self.origin + self.view_ofs));
+	self.bot_cmd_aim_end_x = -self.bot_cmd_aim_end_x;
 
 	self.bot_cmd_aim_begintime = time;
 	self.bot_cmd_aim_endtime = time + step;
@@ -731,6 +735,7 @@ float bot_cmd_aimtarget()
 #define BOT_CMD_KEY_USE		128
 #define BOT_CMD_KEY_HOOK	256
 #define BOT_CMD_KEY_CROUCH	512
+#define BOT_CMD_KEY_CHAT	1024
 
 float bot_presskeys()
 {
@@ -763,6 +768,12 @@ float bot_presskeys()
 
 	if(self.bot_cmd_keys & BOT_CMD_KEY_USE)
 		self.BUTTON_USE = TRUE;
+
+	if(self.bot_cmd_keys & BOT_CMD_KEY_HOOK)
+		self.BUTTON_HOOK = TRUE;
+
+	if(self.bot_cmd_keys & BOT_CMD_KEY_CHAT)
+		self.BUTTON_CHAT = TRUE;
 
 	return TRUE;
 }
@@ -842,6 +853,18 @@ float bot_cmd_keypress_handler(string key, float enabled)
 				self.bot_cmd_keys |= BOT_CMD_KEY_USE;
 			else
 				self.bot_cmd_keys &~= BOT_CMD_KEY_USE;
+			break;
+		case "hook":
+			if(enabled)
+				self.bot_cmd_keys |= BOT_CMD_KEY_HOOK;
+			else
+				self.bot_cmd_keys &~= BOT_CMD_KEY_HOOK;
+			break;
+		case "chat":
+			if(enabled)
+				self.bot_cmd_keys |= BOT_CMD_KEY_CHAT;
+			else
+				self.bot_cmd_keys &~= BOT_CMD_KEY_CHAT;
 			break;
 		default:
 			break;

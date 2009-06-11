@@ -1384,22 +1384,28 @@ void spawnfunc_target_items (void)
 	n = tokenize_console(self.netname);
 	for(i = 0; i < n; ++i)
 	{
-		if(argv(i) == "unlimited_ammo")         self.items |= IT_UNLIMITED_AMMO;
-		if(argv(i) == "unlimited_weapon_ammo")  self.items |= IT_UNLIMITED_WEAPON_AMMO;
-		if(argv(i) == "unlimited_superweapons") self.items |= IT_UNLIMITED_SUPERWEAPONS;
-		if(argv(i) == "strength")               self.items |= IT_STRENGTH;
-		if(argv(i) == "invincible")             self.items |= IT_INVINCIBLE;
-		if(argv(i) == "jetpack")                self.items |= IT_JETPACK;
-		if(argv(i) == "fuel_regen")             self.items |= IT_FUEL_REGEN;
-		for(j = WEP_FIRST; j <= WEP_LAST; ++j)
+		if     (argv(i) == "unlimited_ammo")         self.items |= IT_UNLIMITED_AMMO;
+		else if(argv(i) == "unlimited_weapon_ammo")  self.items |= IT_UNLIMITED_WEAPON_AMMO;
+		else if(argv(i) == "unlimited_superweapons") self.items |= IT_UNLIMITED_SUPERWEAPONS;
+		else if(argv(i) == "strength")               self.items |= IT_STRENGTH;
+		else if(argv(i) == "invincible")             self.items |= IT_INVINCIBLE;
+		else if(argv(i) == "jetpack")                self.items |= IT_JETPACK;
+		else if(argv(i) == "fuel_regen")             self.items |= IT_FUEL_REGEN;
+		else
 		{
-			e = get_weaponinfo(j);
-			if(argv(i) == e.netname)
+			for(j = WEP_FIRST; j <= WEP_LAST; ++j)
 			{
-				self.weapons |= e.weapons;
-				if(self.spawnflags == 0 || self.spawnflags == 2)
-					weapon_action(e.weapon, WR_PRECACHE);
+				e = get_weaponinfo(j);
+				if(argv(i) == e.netname)
+				{
+					self.weapons |= e.weapons;
+					if(self.spawnflags == 0 || self.spawnflags == 2)
+						weapon_action(e.weapon, WR_PRECACHE);
+					break;
+				}
 			}
+			if(j > WEP_LAST)
+				print("target_items: invalid item ", argv(i), "\n");
 		}
 	}
 }
