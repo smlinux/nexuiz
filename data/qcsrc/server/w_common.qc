@@ -1,3 +1,8 @@
+.float bullets_hit[WEP_COUNT]; 		//for hitscan bullets hit
+.float bullets_fired[WEP_COUNT];	//for hitscan bullets fired
+
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(bullets_hit);
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(bullets_fired);
 
 void W_GiveWeapon (entity e, float wep, string name)
 {
@@ -28,7 +33,10 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 	local entity ent, endent;
 	local float endq3surfaceflags;
 	//local entity explosion;
-	
+	float did_hit;
+
+	did_hit = 0;
+
 	railgun_start = start;
 	railgun_end = end;
 
@@ -91,6 +99,15 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 		ent.railgunhitsolidbackup = SOLID_NOT;
 		ent.railgunhit = FALSE;
 
+		//for stats so that team hit will count as a miss
+		if(ent.flags & FL_CLIENT)
+		if(ent.deadflag == DEAD_NO)
+			did_hit = 1;
+
+		if(teams_matter)
+		if(ent.team == self.team)
+			did_hit = 0;
+
 		// apply the damage
 		if (ent.takedamage || ent.classname == "case")
 			Damage (ent, self, self, bdamage, deathtype, hitloc, force);
@@ -101,6 +118,17 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 
 		// advance to the next entity
 		ent = findfloat(ent, railgunhit, TRUE);
+	}
+	//calculate hits and fired shots for hitscan
+	if not(self.isbot)
+	{
+		self.bullets_fired[self.weapon] += 1;
+		if(did_hit)
+			self.bullets_hit[self.weapon] += 1;
+
+		// update the client and store in addstat() in g_world
+		self.damage_hits = self.weapon + 64 * rint(self.bullets_hit[self.weapon]);
+		self.maxdamage_fired = self.weapon + 64 * rint(self.bullets_fired[self.weapon]);
 	}
 
 	// we're done with the explosion entity, remove it
@@ -118,6 +146,9 @@ void W_BallisticBullet_Hit (void)
 {
 	float f;
 
+	float hit;
+	hit = 0;
+
 	f = pow(bound(0, vlen(self.velocity) / vlen(self.oldvelocity), 1), 2); // energy multiplier
 
 	if(other.solid == SOLID_BSP)
@@ -131,6 +162,14 @@ void W_BallisticBullet_Hit (void)
 		railgun_start = self.origin - 2 * frametime * self.velocity;
 		railgun_end = self.origin + 2 * frametime * self.velocity;
 
+		if(other.flags & FL_CLIENT)
+		if(other.deadflag == DEAD_NO)
+			hit = 1;
+
+		if(teamplay)
+		if(other.team == self.owner.team)
+			hit = 0;
+
 		Damage(other, self, self.owner, self.dmg * f, self.projectiledeathtype, self.origin, self.dmg_force * normalize(self.velocity) * f);
 		damage_headshotbonus = 0;
 
@@ -140,6 +179,15 @@ void W_BallisticBullet_Hit (void)
 				announce(self.owner, "announcer/male/headshot.wav");
 			if(yoda)
 				announce(self.owner, "announcer/male/awesome.wav");
+		}
+
+		//calculate hits for ballistic weapons
+		if not(self.owner.isbot)
+		{
+			if(hit)
+				self.owner.bullets_hit[self.owner.weapon] += 1;
+			// update the client
+			self.owner.damage_hits = self.owner.weapon + 64 * rint(self.owner.bullets_hit[self.owner.weapon]);
 		}
 
 		//sound (self, CHAN_PROJECTILE, "weapons/electro_impact.wav", VOL_BASE, ATTN_NORM);
@@ -170,7 +218,7 @@ void W_BallisticBullet_LeaveSolid_think()
 		f = pow(bound(0, vlen(self.velocity) / vlen(self.oldvelocity), 1), 2); // energy multiplier
 		Damage_DamageInfo(self.origin, 0, 0, 0, self.dmg_force * normalize(self.velocity) * -f, self.projectiledeathtype);
 	}
-	
+
 	UpdateCSQCProjectile(self);
 }
 
@@ -187,7 +235,7 @@ float log(float x)
 float W_BallisticBullet_LeaveSolid(entity e, vector vel, float constant)
 {
 	// move the entity along its velocity until it's out of solid, then let it resume
-	
+
 	float dt, dst, velfactor, v0, vs;
 	float maxdist;
 	float E0_m, Es_m;
@@ -297,6 +345,13 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 
 	proj.oldvelocity = proj.velocity;
 
+	//calculate fired bullets for ballistics
+	if not(self.isbot)
+	{
+		self.bullets_fired[self.weapon] += 1;
+		self.maxdamage_fired = self.weapon + 64 * rint(self.bullets_fired[self.weapon]);
+	}
+
 	if(cvar("g_antilag_bullets"))
 	if(pSpeed >= cvar("g_antilag_bullets"))
 	{
@@ -334,6 +389,12 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 			tracetoss(self, oldself);
 			self.velocity = v0;
 			self.gravity = g0;
+
+			if not(self.isbot)
+			{
+				self.bullets_fired[self.weapon] += 1;
+				self.maxdamage_fired = self.weapon + 64 * rint(self.bullets_fired[self.weapon]);
+			}
 
 			if(vlen(trace_endpos - self.origin) > 32)
 				zcurveparticles_from_tracetoss(particleeffectnum("tr_bullet"), self.origin, trace_endpos, self.velocity);

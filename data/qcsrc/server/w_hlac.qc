@@ -36,7 +36,7 @@ void W_HLAC_Attack (void)
     if(self.crouch)
         spread = spread * cvar("g_balance_hlac_primary_spread_crouchmod");
 
-	W_SetupShot (self, FALSE, 3, "weapons/lasergun_fire.wav");
+	W_SetupShot (self, FALSE, 3, "weapons/lasergun_fire.wav", cvar("g_balance_hlac_primary_damage"));
 	pointparticles(particleeffectnum("laser_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 	if (!g_norecoil)
 	{
@@ -85,7 +85,7 @@ void W_HLAC_Attack2f (void)
     if(self.crouch)
         spread = spread * cvar("g_balance_hlac_secondary_spread_crouchmod");
 
-	W_SetupShot (self, FALSE, 3, "weapons/lasergun_fire.wav");
+	W_SetupShot (self, FALSE, 3, "weapons/lasergun_fire.wav", cvar("g_balance_hlac_secondary_damage"));
 	pointparticles(particleeffectnum("laser_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
 	missile = spawn ();

@@ -34,7 +34,7 @@ float Nagger_SendEntity(entity to, float sendflags)
 		else
 			WriteString(MSG_ENTITY, "");
 	}
-	
+
 	if(nags & 1)
 	{
 		for(i = 1; i <= maxclients; i += 8)
@@ -335,7 +335,7 @@ void SV_ParseClientCommand(string s) {
 			// arguments:
 			//   effectname
 			effectnum = particleeffectnum(argv(1));
-			W_SetupShot(self, FALSE, FALSE, "");
+			W_SetupShot(self, FALSE, FALSE, "",0);
 			traceline(w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
 			trailparticles(self, effectnum, w_shotorg, trace_endpos);
 		}
@@ -347,7 +347,7 @@ void SV_ParseClientCommand(string s) {
 			// arguments:
 			//   modelname mode
 			f = stof(argv(2));
-			W_SetupShot(self, FALSE, FALSE, "");
+			W_SetupShot(self, FALSE, FALSE, "", 0);
 			traceline(w_shotorg, w_shotorg + w_shotdir * 2048, MOVE_NORMAL, self);
 			if((trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT) || trace_fraction == 1)
 			{
@@ -431,7 +431,7 @@ void SV_ParseClientCommand(string s) {
 			else
 				self.nickspamcount += 1;
 			self.nickspamtime = time + cvar("g_nick_flood_penalty");
-			
+
 			if (timeoutStatus == 2) //when game is paused, no flood protection
 				self.nickspamcount = self.nickspamtime = 0;
 		}
@@ -456,9 +456,9 @@ void ReadyRestartForce()
 		newTL -= checkrules_overtimesadded * cvar("timelimit_overtime");
 		cvar_set("timelimit", ftos(newTL));
 	}
-	
+
 	checkrules_suddendeathend = checkrules_overtimesadded = checkrules_suddendeathwarning = 0;
-	
+
 
 	readyrestart_happened = 1;
 	game_starttime = time + RESTART_COUNTDOWN;
@@ -506,7 +506,7 @@ void ReadyRestart()
 	if(g_arena | g_assault | gameover | intermission_running | race_completing)
 		localcmd("restart\n");
 
-	// reset ALL scores, but only do that at the beginning 
+	// reset ALL scores, but only do that at the beginning
 	//of the countdown if sv_ready_restart_after_countdown is off!
 	//Otherwise scores could be manipulated during the countdown!
 	if (!cvar("sv_ready_restart_after_countdown"))

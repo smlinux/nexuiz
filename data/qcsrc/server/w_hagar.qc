@@ -42,7 +42,7 @@ void W_Hagar_Attack (void)
 
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_hagar_primary_ammo");
-	W_SetupShot (self, FALSE, 2, "weapons/hagar_fire.wav");
+	W_SetupShot (self, FALSE, 2, "weapons/hagar_fire.wav", cvar("g_balance_hagar_primary_damage"));
 
 	pointparticles(particleeffectnum("hagar_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
@@ -76,7 +76,7 @@ void W_Hagar_Attack2 (void)
 
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_hagar_secondary_ammo");
-	W_SetupShot (self, FALSE, 2, "weapons/hagar_fire.wav");
+	W_SetupShot (self, FALSE, 2, "weapons/hagar_fire.wav", cvar("g_balance_hagar_secondary_damage"));
 	//W_SetupShot (self, FALSE, 2, "weapons/hagar_fire.wav"); // TODO: move model a little to the right
 
 	pointparticles(particleeffectnum("hagar_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);

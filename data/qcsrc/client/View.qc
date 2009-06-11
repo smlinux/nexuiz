@@ -353,6 +353,7 @@ void CSQC_UpdateView(float w, float h)
 
 	sbar_alpha_fg = cvar("sbar_alpha_fg" );
 	sbar_hudselector = cvar("sbar_hudselector");
+	sbar_hud_accuracy = cvar("sbar_hud_accuracy");
 	ColorTranslateMode = cvar("cl_stripcolorcodes");
 	activeweapon = getstati(STAT_SWITCHWEAPON);
 	f = cvar("teamplay");

@@ -2679,7 +2679,7 @@ void botframe_showwaypointlinks()
 		{
 			//navigation_testtracewalk = TRUE;
 			head = navigation_findnearestwaypoint(player, FALSE);
-			print("currently selected WP is ", etos(head), "\n");
+		//	print("currently selected WP is ", etos(head), "\n");
 			//navigation_testtracewalk = FALSE;
 			if (head)
 			{

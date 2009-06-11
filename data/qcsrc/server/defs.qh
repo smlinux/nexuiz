@@ -590,3 +590,5 @@ void Drag_MoveDrag(entity from, entity to);
 string matchid;
 .float hitplotfh;
 .string noise4;
+
+.float damage_hits, maxdamage_fired;

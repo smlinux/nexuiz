@@ -24,6 +24,10 @@ float BOT_PICKUP_RATING_LOW	= 2500;
 float BOT_PICKUP_RATING_MID	= 5000;
 float BOT_PICKUP_RATING_HIGH	= 10000;
 
+float WEP_TYPE_OTHER	= 0;	// e.g: Hook, Port-o-launch, etc
+float WEP_TYPE_SPLASH	= 1;
+float WEP_TYPE_HITSCAN	= 2;
+
 float	IT_UNLIMITED_WEAPON_AMMO  = 1;
 // when this bit is set, using a weapon does not reduce ammo. Checkpoints can give this powerup.
 float	IT_UNLIMITED_SUPERWEAPONS = 2;
@@ -87,5 +91,6 @@ void RegisterWeapons();
 .string model; // full name of g_ model
 .float spawnflags; // WEPSPAWNFLAG_... combined
 .float impulse; // weapon impulse
+.float weapon_type; // see WEP_TYPE_* constants
 .float bot_pickupbasevalue; // bot weapon priority
 .string model2; // wpn- sprite name

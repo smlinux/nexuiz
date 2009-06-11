@@ -5,7 +5,7 @@ void W_MinstaNex_Attack (void)
 	float flying;
 	flying = IsFlying(self); // do this BEFORE to make the trace values from FireRailgunBullet last
 
-	W_SetupShot (self, TRUE, 5, "weapons/minstanexfire.wav");
+	W_SetupShot (self, TRUE, 5, "weapons/minstanexfire.wav", 0);
 
 	yoda = 0;
 	damage_goodhits = 0;

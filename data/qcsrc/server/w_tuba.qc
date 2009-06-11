@@ -71,7 +71,7 @@ float Tuba_GetNote(entity pl, float hittype)
 void W_Tuba_Attack(float hittype)
 {
 	vector o;
-	W_SetupShot(self, FALSE, 2, "");
+	W_SetupShot(self, FALSE, 2, "", cvar("g_balance_tuba_damage"));
 	self.tuba_notecount = !self.tuba_notecount;
 	if(self.tuba_notecount)
 		sound(self, CHAN_WEAPON, TUBA_NOTE(Tuba_GetNote(self, hittype)), VOL_BASE, cvar("g_balance_tuba_attenuation"));
