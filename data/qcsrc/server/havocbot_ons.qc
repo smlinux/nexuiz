@@ -4,6 +4,7 @@
 #define HAVOCBOT_ONS_ROLE_OFFENSE	8
 
 .float havocbot_role_flags;
+.float havocbot_attack_time;
 
 .void() havocbot_role;
 .void() havocbot_previous_role;
@@ -19,8 +20,8 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_enemyplay
 .float isshielded;
 .float iscaptured;
 .float islinked;
-float (entity controlpoint, float team) onslaught_controlpoint_can_be_linked;
-float (entity controlpoint, float team) onslaught_controlpoint_attackable;
+.float isgenneighbor_blue, iscpneighbor_blue;
+.float isgenneighbor_red, iscpneighbor_red;
 
 void havocbot_role_ons_setrole(entity bot, float role)
 {
@@ -62,28 +63,31 @@ float havocbot_ons_teamcount(entity bot, float role)
 	return c;
 };
 
-void havocbot_goalrating_ons_controlpoints_attack(float ratingscale)
+float havocbot_goalrating_ons_controlpoints_attack(float ratingscale)
 {
-	local entity cps, cp, wp, bestwp;
+	local entity cp, wp, bestwp;
 	local float radius, found, bestcounter, status;
 
-	for (cps = findchain(classname, "onslaught_controlpoint_shield"); cps; cps = cps.chain)
+	for (cp = findchain(classname, "onslaught_controlpoint"); cp; cp = cp.chain)
 	{
-		// Found its corresponding onslaught_controlpoint entity (...)
-		for (cp = findradius(cps.origin, 100); cp; cp = cp.chain)
-		{
-			if(cp.classname=="onslaught_controlpoint")
-				break;
-		}
-
 		if(cp==world)
 			continue;
 
-		status = onslaught_controlpoint_attackable(cp, self.team);
+		if(cp.isshielded)
+			continue;
 
-		dprint(self.classname," found a controlpoint with status ",ftos(status),"\n");
+		if(self.team == COLOR_TEAM1)
+		{
+			if( (cp.isgenneighbor_blue || cp.iscpneighbor_blue) && !(cp.isgenneighbor_red || cp.iscpneighbor_red) )
+				continue;
+		}
+		else if(self.team == COLOR_TEAM2)
+		{
+			if( (cp.isgenneighbor_red || cp.iscpneighbor_red) && !(cp.isgenneighbor_blue || cp.iscpneighbor_blue) )
+				continue;
+		}
 
-		if(status==1 || status == 3)
+		if(cp.goalentity)
 		{
 			// Should be attacked
 			// Rate waypoints near it
@@ -94,6 +98,7 @@ void havocbot_goalrating_ons_controlpoints_attack(float ratingscale)
 			{
 				for(wp=findradius(cp.origin,radius); wp; wp=wp.chain)
 				{
+					if(!(wp.wpflags & WAYPOINTFLAG_GENERATED))
 					if(wp.classname=="waypoint")
 					if(checkpvs(wp.origin,cp))
 					{
@@ -105,25 +110,31 @@ void havocbot_goalrating_ons_controlpoints_attack(float ratingscale)
 						}
 					}
 				}
-
-				if(found)
-					break;
 			}
 
 			if(bestwp)
 			{
 				navigation_routerating(bestwp, ratingscale, 10000);
 				bestwp.cnt += 1;
+
+				if(checkpvs(self.view_ofs,cp))
+				if(checkpvs(self.view_ofs,bestwp))
+					self.havocbot_attack_time = time + 2;
 			}
-			dprint("attackable controlpoint found at ", vtos(cp.origin) ,"\n");
+			else
+			{
+				navigation_routerating(cp, ratingscale, 10000);
+			}
+			dprint(self.netname, " found an attackable controlpoint at ", vtos(cp.origin) ,"\n");
 		}
-		else if(status==2 || status==4)
+		else
 		{
+			dprint(self.netname, " found a touchable controlpoint at ", vtos(cp.origin) ,"\n");
 			// Should be touched
 			if not(bot_waypoints_for_items)
 			{
 				navigation_routerating(cp, ratingscale, 10000);
-				return;
+				return TRUE;
 			}
 
 			for (wp = findradius(cp.origin,100); wp; wp = wp.chain)
@@ -131,18 +142,19 @@ void havocbot_goalrating_ons_controlpoints_attack(float ratingscale)
 				if(wp.classname=="waypoint")
 				{
 					navigation_routerating(wp, ratingscale, 10000);
-					return;
+					return TRUE;
 				}
 			}
-			dprint("touchable controlpoint found at ", vtos(cp.origin) ,"\n");
+			navigation_routerating(cp, ratingscale, 10000);
 		}
 	}
+	return FALSE;
 };
 
-void havocbot_goalrating_ons_generator_attack(float ratingscale)
+float havocbot_goalrating_ons_generator_attack(float ratingscale)
 {
 	local entity g, wp, bestwp;
-	local float radius, found, bestcounter;
+	local float found, best, distance;
 
 	for (g = findchain(classname, "onslaught_generator"); g; g = g.chain)
 	{
@@ -153,25 +165,20 @@ void havocbot_goalrating_ons_generator_attack(float ratingscale)
 		// Rate waypoints near it
 		found = FALSE;
 		bestwp = world;
-		bestcounter = 99999999999;
-		for(radius=0; radius<1500 && !found; radius+=500)
+		best = 99999999999;
+
+		for(wp=findradius(g.origin,350); wp; wp=wp.chain)
 		{
-			for(wp=findradius(g.origin,radius); wp; wp=wp.chain)
+			if(wp.classname=="waypoint")
+			if(checkpvs(wp.origin,g))
 			{
-				if(wp.classname=="waypoint")
-				if(checkpvs(wp.origin,g))
+				found = TRUE;
+				if(wp.cnt<best)
 				{
-					found = TRUE;
-					if(wp.cnt<bestcounter)
-					{
-						bestwp = wp;
-						bestcounter = wp.cnt;
-					}
+					bestwp = wp;
+					best = wp.cnt;
 				}
 			}
-
-			if(found)
-				break;
 		}
 
 		if(bestwp)
@@ -179,20 +186,30 @@ void havocbot_goalrating_ons_generator_attack(float ratingscale)
 			dprint("waypoints found around generator\n");
 			navigation_routerating(bestwp, ratingscale, 10000);
 			bestwp.cnt += 1;
+
+			if(checkpvs(self.view_ofs,g))
+			if(checkpvs(self.view_ofs,bestwp))
+				self.havocbot_attack_time = time + 5;
+
+			return TRUE;
 		}
 		else
 		{
 			dprint("generator found without waypoints around\n");
 			// if there aren't waypoints near the generator go straight to it
 			navigation_routerating(g, ratingscale, 10000);
+			self.havocbot_attack_time = 0;
+			return TRUE;
 		}
 	}
+	return FALSE;
 };
 
 void havocbot_role_ons_offense()
 {
 	if(self.deadflag != DEAD_NO)
 	{
+		self.havocbot_attack_time = 0;
 		havocbot_ons_reset_role(self);
 		return;
 	}
@@ -207,14 +224,22 @@ void havocbot_role_ons_offense()
 		return;
 	}
 
+	if(self.havocbot_attack_time>time)
+		return;
+
 	if (self.bot_strategytime < time)
 	{
 		navigation_goalrating_start();
-		havocbot_goalrating_enemyplayers(20000, self.origin, 500);
-		havocbot_goalrating_ons_generator_attack(20000);
-		havocbot_goalrating_ons_controlpoints_attack(20000);
-		havocbot_goalrating_items(15000, self.origin, 1000);
-		havocbot_goalrating_items(2500, self.origin, 10000);
+		havocbot_goalrating_enemyplayers(20000, self.origin, 650);
+
+		if(havocbot_goalrating_ons_generator_attack(20000))
+			havocbot_goalrating_items(10000, self.origin, 300);
+		else
+		{
+			havocbot_goalrating_ons_controlpoints_attack(20000);
+			havocbot_goalrating_items(10000, self.origin, 500);
+		}
+		havocbot_goalrating_items(500, self.origin, 10000);
 		navigation_goalrating_end();
 
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
