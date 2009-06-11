@@ -721,6 +721,7 @@ void havocbot_chooseenemy()
 	{
 		v = (head.absmin + head.absmax) * 0.5;
 		rating = vlen(v - eye);
+		if (rating<cvar("bot_ai_enemydetectionradius"))
 		if (bestrating > rating)
 		if (bot_shouldattack(head))
 		{
