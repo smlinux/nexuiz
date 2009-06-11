@@ -66,7 +66,7 @@ float havocbot_ons_teamcount(entity bot, float role)
 float havocbot_goalrating_ons_controlpoints_attack(float ratingscale)
 {
 	local entity cp, wp, bestwp;
-	local float radius, found, bestcounter, status;
+	local float radius, found, bestcounter;
 
 	for (cp = findchain(classname, "onslaught_controlpoint"); cp; cp = cp.chain)
 	{
@@ -154,7 +154,7 @@ float havocbot_goalrating_ons_controlpoints_attack(float ratingscale)
 float havocbot_goalrating_ons_generator_attack(float ratingscale)
 {
 	local entity g, wp, bestwp;
-	local float found, best, distance;
+	local float found, best;
 
 	for (g = findchain(classname, "onslaught_generator"); g; g = g.chain)
 	{
