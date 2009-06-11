@@ -79,7 +79,7 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 
 	if(player.classname == "player")
 	{
-		if(player.takedamage && player.deadflag == DEAD_NO && !g_race)
+		if(player.takedamage && player.deadflag == DEAD_NO && !g_race && cvar("g_telefrags"))
 			tdeath(player, teleporter, telefragger, telefragmin, telefragmax);
 
 		// player no longer is on ground
