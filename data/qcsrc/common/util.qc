@@ -235,7 +235,7 @@ vector colormapPaletteColor(float c, float isPants)
 		case  2: return '0.000000 1.000000 0.501961';
 		case  3: return '0.000000 1.000000 0.000000';
 		case  4: return '1.000000 0.000000 0.000000';
-		case  5: return '0.000000 0.501961 1.000000';
+		case  5: return '0.000000 0.658824 1.000000';
 		case  6: return '0.000000 1.000000 1.000000';
 		case  7: return '0.501961 1.000000 0.000000';
 		case  8: return '0.501961 0.000000 1.000000';
@@ -243,7 +243,7 @@ vector colormapPaletteColor(float c, float isPants)
 		case 10: return '1.000000 0.000000 0.501961';
 		case 11: return '0.600000 0.600000 0.600000';
 		case 12: return '1.000000 1.000000 0.000000';
-		case 13: return '0.000000 0.000000 1.000000';
+		case 13: return '0.000000 0.313725 1.000000';
 		case 14: return '1.000000 0.501961 0.000000';
 		case 15:
 			if(isPants)
