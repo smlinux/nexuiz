@@ -1,8 +1,8 @@
 void drawstringright(vector, string, vector, vector, float, float);
 void drawstringcenter(vector, string, vector, vector, float, float);
-void Sbar_DrawStats();
-void Sbar_DrawStats_Description_Splash(vector);
-void Sbar_DrawStats_Description_Hitscan(vector);
+void Sbar_DrawAccuracyStats();
+void Sbar_DrawAccuracyStats_Description_Splash(vector);
+void Sbar_DrawAccuracyStats_Description_Hitscan(vector);
 float weapon_hits[WEP_COUNT];
 float weapon_fired[WEP_COUNT];
 float weapon_number;
@@ -1759,7 +1759,7 @@ void Sbar_DrawPressedKeys(void)
 	drawpic(pos + ' 65   32   0', ((pressedkeys & KEY_RIGHT) ? "gfx/hud/keys/key_right_inv.tga" : "gfx/hud/keys/key_right.tga"),    ' 32 32 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 }
 
-void Sbar_DrawStats()
+void Sbar_DrawAccuracyStats()
 {
 	float i, count_hitscan, count_splash, row;  // count is the number of 'colums'
 	float weapon_hit, weapon_damage, weapon_stats;
@@ -1780,10 +1780,10 @@ void Sbar_DrawStats()
 	left_border = col_margin + 11 * sbar_fontsize_x;
 
 	top_border = 80;
-	Sbar_DrawStats_Description_Hitscan('1 0 0' * col_margin + '0 1 0' * top_border);
+	Sbar_DrawAccuracyStats_Description_Hitscan('1 0 0' * col_margin + '0 1 0' * top_border);
 
 	top_border = 220;
-	Sbar_DrawStats_Description_Splash('1 0 0' * col_margin + '0 1 0' * top_border);
+	Sbar_DrawAccuracyStats_Description_Splash('1 0 0' * col_margin + '0 1 0' * top_border);
 
 
 	for(i = WEP_FIRST; i <= WEP_LAST; ++i)
@@ -1819,7 +1819,7 @@ void Sbar_DrawStats()
 			{
 				count_splash = 0;
 				++row;
-				Sbar_DrawStats_Description_Splash('1 0 0' * col_margin + '0 1 0' * (top_border + row * (fill_size_y + row_margin)));
+				Sbar_DrawAccuracyStats_Description_Splash('1 0 0' * col_margin + '0 1 0' * (top_border + row * (fill_size_y + row_margin)));
 			}
 
 			pos_x = left_border + count_splash * (fill_size_x + col_margin);
@@ -1871,7 +1871,7 @@ void Sbar_DrawStats()
 			{
 				count_hitscan = 0;
 				++row;
-				Sbar_DrawStats_Description_Hitscan('1 0 0' * col_margin + '0 1 0' * (top_border + row * (fill_size_y + row_margin)));
+				Sbar_DrawAccuracyStats_Description_Hitscan('1 0 0' * col_margin + '0 1 0' * (top_border + row * (fill_size_y + row_margin)));
 			}
 
 			pos_x = left_border + count_hitscan * (fill_size_x + col_margin);
@@ -1900,7 +1900,7 @@ void Sbar_DrawStats()
 	}
 }
 
-void Sbar_DrawStats_Description_Hitscan(vector position)
+void Sbar_DrawAccuracyStats_Description_Hitscan(vector position)
 {
 	drawfont = sbar_font;
 	 // hitscan stats
@@ -1910,7 +1910,7 @@ void Sbar_DrawStats_Description_Hitscan(vector position)
 	drawstring(position + '0 9 0' * sbar_fontsize_y, "Shots missed:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 }
 
-void Sbar_DrawStats_Description_Splash(vector position)
+void Sbar_DrawAccuracyStats_Description_Splash(vector position)
 {
 	//splash stats
 	drawfont = sbar_font;
@@ -2161,8 +2161,11 @@ void Sbar_Draw (void)
 
 	if (intermission == 1)
 	{
-		Sbar_DrawScoreboard();
 		Sbar_DrawCenterPrint();
+		if(sb_showaccuracy)
+			Sbar_DrawAccuracyStats();
+		else
+			Sbar_DrawScoreboard();
 		return;
 	}
 	else if (intermission == 2)
@@ -2170,9 +2173,9 @@ void Sbar_Draw (void)
 		Sbar_FinaleOverlay();
 		Sbar_DrawCenterPrint();
 	}
-	else if(sb_showaccuracy == 1)
+	else if(sb_showaccuracy)
  	{
- 		Sbar_DrawStats();
+ 		Sbar_DrawAccuracyStats();
  	}
 	else
 	{
