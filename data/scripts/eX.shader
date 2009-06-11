@@ -713,3 +713,90 @@ textures/eX/eXmetalrib01
 	}
 }
 
+textures/eX/eX_clangfloor_01b
+{
+	qer_EditorImage textures/eX/eX_clangfloor_01b.tga
+	{
+		map textures/eX/eX_clangfloor_01b
+	}
+	{
+		map $lightmap
+	}
+}
+
+textures/eX/eX_cretebase_02
+{
+	qer_EditorImage textures/eX/eX_cretebase_02.tga
+	{
+		map textures/eX/eX_cretebase_02
+	}
+	{
+		map $lightmap
+	}
+}
+
+textures/eX/eX_cretebase_03_dark
+{
+	qer_EditorImage textures/eX/eX_cretebase_03_dark.tga
+	{
+		map textures/eX/eX_cretebase_03_dark
+	}
+	{
+		map $lightmap
+	}
+}
+
+textures/eX/eX_cretefloor_01b
+{
+	qer_EditorImage textures/eX/eX_cretefloor_01b.tga
+	{
+		map textures/eX/eX_cretefloor_01b
+	}
+	{
+		map $lightmap
+	}
+}
+
+textures/eX/eX_floor_grate03
+{
+	qer_EditorImage textures/eX/eX_floor_grate03.tga
+	{
+		map textures/eX/eX_floor_grate03
+	}
+	{
+		map $lightmap
+	}
+}
+
+textures/eX/eXmetalBase06rust
+{
+	qer_EditorImage textures/eX/eXmetalBase06rust.tga
+	{
+		map textures/eX/eXmetalBase06rust
+	}
+	{
+		map $lightmap
+	}
+}
+
+textures/eX/eXmetalBase07rust
+{
+	qer_EditorImage textures/eX/eXmetalBase07rust.tga
+	{
+		map textures/eX/eXmetalBase07rust
+	}
+	{
+		map $lightmap
+	}
+}
+
+textures/eX/eX_wall_01b
+{
+	qer_EditorImage textures/eX/eX_wall_01b.tga
+	{
+		map textures/eX/eX_wall_01b
+	}
+	{
+		map $lightmap
+	}
+}
