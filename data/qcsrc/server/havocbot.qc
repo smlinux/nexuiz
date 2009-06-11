@@ -751,7 +751,7 @@ void havocbot_chooseweapon()
 	}
 
 	// TODO: clean this up by moving it to weapon code
-	if(self.enemy.classname!="player")
+	if(self.enemy==world)
 	{
 		// If no weapon was chosen get the first available weapon
 		if(self.weapon==0)
