@@ -13,7 +13,9 @@ use Storable;
 use constant MIDI_FIRST_NONCHANNEL => 17;
 use constant MIDI_DRUMS_CHANNEL => 10;
 
-my ($filename, $transpose, $timeoffset, $timeoffset2, @preallocate) = @ARGV;
+die "Usage: $0 filename.mid transpose timeoffset timeoffset2 timeoffset3 preallocatedbots..."
+	unless @ARGV >= 5;
+my ($filename, $transpose, $timeoffset, $timeoffset2, $timeoffset3, @preallocate) = @ARGV;
 
 my $opus = MIDI::Opus->new({from_file => $filename});
 #$opus->write_to_file("/tmp/y.mid");
@@ -102,7 +104,12 @@ sub botconfig_read($)
 			my @cmd = split /\s+/, $_;
 			if($cmd[0] eq 'super')
 			{
-				push @$appendref, @$super;
+				push @$appendref, @$super
+					if $super;
+			}
+			elsif($cmd[0] eq 'percussion') # simple import
+			{
+				push @$appendref, @{$currentbot->{percussion}->{$cmd[1]}};
 			}
 			else
 			{
@@ -144,6 +151,11 @@ sub botconfig_read($)
 				$super = $currentbot->{init};
 				$currentbot->{init} = $appendref = [];
 			}
+			elsif(/^done$/)
+			{
+				$super = $currentbot->{done};
+				$currentbot->{done} = $appendref = [];
+			}
 			elsif(/^note on (-?\d+)/)
 			{
 				$super = $currentbot->{notes_on}->{$1};
@@ -166,7 +178,7 @@ sub botconfig_read($)
 		}
 		elsif(/^bot (.*)/)
 		{
-			$currentbot = ($bots{$1} ||= {});
+			$currentbot = ($bots{$1} ||= {count => 0, transpose => 0});
 		}
 		else
 		{
@@ -280,6 +292,10 @@ sub busybot_cmd_bot_execute($$@)
 		{
 			printf "sv_cmd bot_cmd %d %s\n", $bot->{id}, join " ", @{$_}[1..@$_-1];
 		}
+		elsif($_->[0] eq 'raw')
+		{
+			printf join " ", @{$_}[1..@$_-1];
+		}
 	}
 
 	return 1;
@@ -300,21 +316,25 @@ sub busybot_note_on_bot($$$$$)
 {
 	my ($bot, $time, $channel, $note, $init) = @_;
 	return -1 # I won't play on this channel
-		if defined $bot->{channels} and not grep { $_ == $channel } $bot->{channels};
+		if defined $bot->{channels} and not $bot->{channels}->{$channel};
 	return 0
 		if $bot->{busy};
-	my $cmds = $bot->{notes_on}->{$note - $bot->{transpose} - $transpose};
-	my $cmds_off = $bot->{notes_off}->{$note - $bot->{transpose} - $transpose};
-	if(defined $cmds_off)
-	{
-		$bot->{busy} = 1;
-	}
-	if(not defined $cmds)
+	my $cmds;
+	if($channel == 10)
 	{
 		$cmds = $bot->{percussion}->{$note};
-		return -1 # I won't play this note
-			if not defined $cmds;
 	}
+	else
+	{
+		$cmds = $bot->{notes_on}->{$note - $bot->{transpose} - $transpose};
+		my $cmds_off = $bot->{notes_off}->{$note - $bot->{transpose} - $transpose};
+		if(defined $cmds and defined $cmds_off)
+		{
+			$bot->{busy} = 1;
+		}
+	}
+	return -1 # I won't play this note
+		if not defined $cmds;
 	if($init && $bot->{init})
 	{
 		return 0
@@ -340,6 +360,9 @@ my %notechannelbots;
 sub busybot_note_off($$$)
 {
 	my ($time, $channel, $note) = @_;
+
+	return 0
+		if $channel == 10;
 
 	if(my $bot = $notechannelbots{$channel}{$note})
 	{
@@ -395,9 +418,7 @@ sub busybot_note_on($$$)
 
 	if($overflow)
 	{
-		warn "Not enough bots to play this";
-		use Data::Dumper;
-		print STDERR Dumper \@busybots_allocated;
+		warn "Not enough bots to play this (when playing $channel:$note)";
 	}
 	else
 	{
@@ -428,17 +449,18 @@ my %midinotes = ();
 my $note_min = undef;
 my $note_max = undef;
 my $notes_stuck = 0;
+my $t = 0;
 for(@allmidievents)
 {
-	my $t = tick2sec $_->[1];
+	$t = tick2sec $_->[1];
 	my $track = $_->[3];
 	if($_->[0] eq 'note_on')
 	{
 		my $chan = $_->[4] + 1;
 		$note_min = $_->[5]
-			if not defined $note_min or $_->[5] < $note_min;
+			if not defined $note_min or $_->[5] < $note_min and $chan != 10;
 		$note_max = $_->[5]
-			if not defined $note_max or $_->[5] > $note_max;
+			if not defined $note_max or $_->[5] > $note_max and $chan != 10;
 		if($midinotes{$chan}{$_->[5]})
 		{
 			--$notes_stuck;
@@ -457,6 +479,14 @@ for(@allmidievents)
 			busybot_note_off($t, $chan, $_->[5]);
 		}
 		$midinotes{$chan}{$_->[5]} = 0;
+	}
+}
+
+for(@busybots_allocated)
+{
+	if($_->{done})
+	{
+		busybot_cmd_bot_execute $_, $notetime + $t + $timeoffset3, @{$_->{done}};
 	}
 }
 
