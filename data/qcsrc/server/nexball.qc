@@ -410,13 +410,13 @@ void SpawnBall (void)
 	if (!cvar("g_nexball_sound_bounce"))
 		self.noise = "";
 	else if (!self.noise)
-		self.noise = "sound/nexball/bounce.ogg";
+		self.noise = "sound/nexball/bounce.wav";
 		//bounce sound placeholder (FIXME)
 	if (!self.noise1)
-		self.noise1 = "sound/nexball/drop.ogg";
+		self.noise1 = "sound/nexball/drop.wav";
 		//ball drop sound placeholder (FIXME)
 	if (!self.noise2)
-		self.noise2 = "sound/nexball/steal.ogg";
+		self.noise2 = "sound/nexball/steal.wav";
 		//stealing sound placeholder (FIXME)
 	if (self.noise) precache_sound (self.noise);
 	precache_sound (self.noise1);
@@ -608,7 +608,7 @@ void W_Nexball_Attack2 (void)
 	local entity missile;
 	if (!(balls & BALL_BASKET))
 		return;
-	W_SetupShot (self, FALSE, 2, "nexball/shoot2.ogg",0);
+	W_SetupShot (self, FALSE, 2, "nexball/shoot2.wav",0);
 //	pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 	missile = spawn ();
 
@@ -672,7 +672,7 @@ float w_nexball_weapon(float req)
 		precache_model ("models/weapons/h_porto.dpm");
 		precache_model ("models/elaser.mdl");
 		precache_sound ("nexball/shoot1.wav");
-		precache_sound ("nexball/shoot2.ogg");
+		precache_sound ("nexball/shoot2.wav");
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_PORTO);

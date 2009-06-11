@@ -531,7 +531,7 @@ void onslaught_generator_damage_think()
 		if(random() < 0.01)
 		{
 			pointparticles(particleeffectnum("electro_ballexplode"), self.origin + randompos('-50 -50 -20', '50 50 50'), '0 0 0', 1);
-			sound(self, CHAN_TRIGGER, "onslaught/electricity_explode.ogg", VOL_BASE, ATTN_NORM);
+			sound(self, CHAN_TRIGGER, "onslaught/electricity_explode.wav", VOL_BASE, ATTN_NORM);
 		}
 		else
 			pointparticles(particleeffectnum("torch_small"), self.origin + randompos('-60 -60 -20', '60 60 60'), '0 0 0', 1);

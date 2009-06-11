@@ -50,7 +50,7 @@ void beam_think()
     if (time - self.shot_spread > 0)
     {
         self.shot_spread = time + 2;
-        sound (self, CHAN_VOICE, "turrets/phaser.ogg", VOL_BASE, ATTN_NORM);
+        sound (self, CHAN_VOICE, "turrets/phaser.wav", VOL_BASE, ATTN_NORM);
     }
 
 
@@ -94,7 +94,7 @@ void turret_phaser_attack()
     beam.enemy = self.enemy;
     beam.bot_dodge = TRUE;
     beam.bot_dodgerating = beam.shot_dmg;
-    sound (beam, CHAN_PROJECTILE, "turrets/phaser.ogg", VOL_BASE, ATTN_NORM);
+    sound (beam, CHAN_PROJECTILE, "turrets/phaser.wav", VOL_BASE, ATTN_NORM);
     self.fireflag = 1;
 
     beam.attack_finished_single = self.attack_finished_single;
@@ -138,7 +138,7 @@ void turret_phaser_dinit()
 */
 void spawnfunc_turret_phaser()
 {
-    precache_sound ("turrets/phaser.ogg");
+    precache_sound ("turrets/phaser.wav");
     precache_model ("models/turrets/phaser.md3");
     precache_model ("models/turrets/phaser_beam.md3");
     precache_model ("models/turrets/base.md3");
