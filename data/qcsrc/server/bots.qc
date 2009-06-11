@@ -1318,6 +1318,14 @@ entity waypoint_spawnpersonal(vector position)
 {
 	entity w;
 
+	// drop the waypoint to a proper location:
+	//   first move it up by a player height
+	//   then move it down to hit the floor with player bbox size
+	traceline(position, position + '0 0 1' * (PL_MAX_z - PL_MIN_z), MOVE_NOMONSTERS, world);
+	tracebox(trace_endpos, PL_MIN, PL_MAX, trace_endpos + '0 0 -1024', MOVE_NOMONSTERS, world);
+	if(trace_fraction < 1)
+		position = trace_endpos;
+
 	w = waypoint_spawn(position, position, WAYPOINTFLAG_GENERATED | WAYPOINTFLAG_PERSONAL);
 	w.nearestwaypoint = world;
 	w.nearestwaypointtimeout = 0;
@@ -1506,7 +1514,7 @@ entity navigation_findnearestwaypoint(entity ent, float walkfromwp)
 					if (walkfromwp)
 					{
 						//print("^1can I reach ", vtos(org), " from ", vtos(v), "?\n");
-						if (tracewalk(ent, v, PL_MIN, PL_MAX, org, MOVE_NORMAL))
+						if (tracewalk(ent, v, PL_MIN, PL_MAX, org, MOVE_NOMONSTERS))
 						{
 							bestdist = dist;
 							best = w;
@@ -1514,7 +1522,7 @@ entity navigation_findnearestwaypoint(entity ent, float walkfromwp)
 					}
 					else
 					{
-						if (tracewalk(ent, org, PL_MIN, PL_MAX, v, MOVE_NORMAL))
+						if (tracewalk(ent, org, PL_MIN, PL_MAX, v, MOVE_NOMONSTERS))
 						{
 							bestdist = dist;
 							best = w;
@@ -1557,7 +1565,7 @@ float navigation_markroutes_nearestwaypoints(entity waylist, float maxdist)
 			if (vlen(diff) < maxdist)
 			{
 				head.wpconsidered = TRUE;
-				if (tracewalk(self, self.origin, self.mins, self.maxs, v, MOVE_NORMAL))
+				if (tracewalk(self, self.origin, self.mins, self.maxs, v, MOVE_NOMONSTERS))
 				{
 					head.wpnearestpoint = v;
 					head.wpcost = vlen(v - self.origin) + head.dmg;
@@ -1790,7 +1798,7 @@ float navigation_routetogoal(entity e, vector startposition)
 	navigation_pushroute(e);
 
 	// if it can reach the goal there is nothing more to do
-	if (tracewalk(self, startposition, PL_MIN, PL_MAX, e.origin, MOVE_NORMAL))
+	if (tracewalk(self, startposition, PL_MIN, PL_MAX, e.origin, MOVE_NOMONSTERS))
 		return TRUE;
 
 	// see if there are waypoints describing a path to the item
