@@ -959,12 +959,19 @@ void GameCommand(string command)
 			while((s = fgets(fh)))
 			{
 				argc = tokenize_console(s);
-				// let's start at token 2 so we can skip sv_cmd bot_cmd
-				bot = find_bot_by_name(argv(2));
-				if(bot == world)
-					bot = find_bot_by_number(stof(argv(2)));
-				if(bot)
-					bot_queuecommand(bot, strcat(argv(3), " ", argv(4)));
+
+				if(argc >= 3 && argv(0) == "sv_cmd" && argv(1) == "bot_cmd")
+				{
+					// let's start at token 2 so we can skip sv_cmd bot_cmd
+					bot = find_bot_by_name(argv(2));
+					if(bot == world)
+						bot = find_bot_by_number(stof(argv(2)));
+					if(bot)
+						bot_queuecommand(bot, strcat(argv(3), " ", argv(4)));
+				}
+				else
+					localcmd(s, "\n");
+
 				++i;
 			}
 

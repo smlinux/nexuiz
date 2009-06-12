@@ -63,6 +63,51 @@ float bot_havecommand(entity bot, float idx)
 	return 1;
 }
 
+#define MAX_BOT_PLACES 4
+.float bot_places_count;
+.entity bot_places[MAX_BOT_PLACES];
+.string bot_placenames[MAX_BOT_PLACES];
+entity bot_getplace(string placename)
+{
+	entity e;
+	if(substring(placename, 0, 1) == "$")
+	{
+		float i, p;
+		placename = substring(placename, 1, -1);
+		string s, s2;
+		for(i = 0; i < self.bot_places_count; ++i)
+			if(self.(bot_placenames[i]) == placename)
+				return self.(bot_places[i]);
+		// now: i == self.bot_places_count
+		s = s2 = cvar_string(placename);
+		p = strstrofs(s2, " ", 0);
+		if(p >= 0)
+		{
+			s = substring(s2, 0, p);
+			//print("places: ", placename, " -> ", cvar_string(placename), "\n");
+			cvar_set(placename, strcat(substring(s2, p+1, -1), " ", s));
+			//print("places: ", placename, " := ", cvar_string(placename), "\n");
+		}
+		e = find(world, targetname, s);
+		if(!e)
+			print("invalid place ", s, "\n");
+		if(i < MAX_BOT_PLACES)
+		{
+			self.(bot_placenames[i]) = strzone(placename);
+			self.(bot_places[i]) = e;
+			self.bot_places_count += 1;
+		}
+		return e;
+	}
+	else
+	{
+		e = find(world, targetname, placename);
+		if(!e)
+			print("invalid place ", s, "\n");
+		return e;
+	}
+}
+
 
 // NOTE: New commands should be added here. Do not forget to update BOT_CMD_COUNTER
 #define BOT_CMD_NULL			0
@@ -757,7 +802,7 @@ float bot_cmd_aimtarget()
 
 	tokens = tokenizebyseparator(parms, " ");
 
-	e = find(world, targetname, argv(0));
+	e = bot_getplace(argv(0));
 	if(!e)
 		return CMD_STATUS_ERROR;
 
@@ -983,7 +1028,7 @@ float bot_cmd_moveto()
 float bot_cmd_movetotarget()
 {
 	entity e;
-	e = find(world, targetname, bot_cmd.bot_cmd_parm_string);
+	e = bot_getplace(bot_cmd.bot_cmd_parm_string);
 	if(!e)
 		return CMD_STATUS_ERROR;
 	return self.cmd_moveto(e.origin + (e.mins + e.maxs) * 0.5);
@@ -1052,15 +1097,19 @@ void bot_setcurrentcommand()
 void bot_resetqueues()
 {
 	entity cl;
+	float i;
 
 	FOR_EACH_CLIENT(cl) if(cl.isbot)
 	{
 		bot_clearqueue(cl);
 		// also, cancel all barriers
-		FOR_EACH_CLIENT(cl) if(cl.isbot)
+		cl.bot_barrier = 0;
+		for(i = 0; i < cl.bot_places_count; ++i)
 		{
-			cl.bot_barrier = 0;
+			strunzone(cl.(bot_placenames[i]));
+			cl.(bot_placenames[i]) = string_null;
 		}
+		cl.bot_places_count = 0;
 	}
 
 	bot_barriertime = time;

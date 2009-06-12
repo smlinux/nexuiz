@@ -902,6 +902,7 @@ float client_hasweapon(entity cl, float wpn, float andammo, float complain)
 			if (!f)
 			{
 				if (complain)
+				if(clienttype(cl) == CLIENTTYPE_REAL)
 				{
 					play2(cl, "weapons/unavailable.wav");
 					sprint(cl, strcat("You don't have any ammo for the ^2", W_Name(wpn), "\n"));
