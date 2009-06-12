@@ -342,6 +342,9 @@ void bot_cmdhelp(string scmd)
 			case BOT_CMD_WAIT_UNTIL:
 				print("Pause command parsing and bot ai until time is N from the last barrier. Pressed key will remain pressed");
 				break;
+			case BOT_CMD_BARRIER:
+				print("Waits till all bots reach this command. Pressed key will remain pressed");
+				break;
 			case BOT_CMD_TURN:
 				print("Look to the right or left N degrees. For turning to the left use positive numbers.");
 				break;
@@ -502,7 +505,7 @@ float bot_cmd_barrier()
 	{
 		self.bot_barrier = 1;
 
-		self.colormod = '4 4 0';
+		//self.colormod = '4 4 0';
 	}
 
 	if(self.bot_barrier == 1) // find other bots
@@ -525,7 +528,7 @@ float bot_cmd_barrier()
 	// if we get here, the barrier is finished
 	// so end it...
 	self.bot_barrier = 0;
-	self.colormod = '0 0 0';
+	//self.colormod = '0 0 0';
 
 	return CMD_STATUS_FINISHED;
 }
