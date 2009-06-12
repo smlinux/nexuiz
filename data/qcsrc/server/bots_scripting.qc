@@ -9,6 +9,7 @@ void bot_clearqueue(entity bot)
 		error("readcommand but no queue allocated");
 	buf_del(bot.bot_cmdqueuebuf);
 	bot.bot_cmdqueuebuf_allocated = FALSE;
+	print("bot ", bot.netname, " queue cleared\n");
 }
 
 void bot_queuecommand(entity bot, string cmdstring)
@@ -85,11 +86,12 @@ float bot_havecommand(entity bot, float idx)
 #define BOT_CMD_MOVETOTARGET    18
 #define BOT_CMD_AIMTARGET       19
 #define BOT_CMD_BARRIER         20
-#define BOT_CMD_WHILE			21	// TODO: Not implemented yet
-#define BOT_CMD_WEND			22	// TODO: Not implemented yet
-#define BOT_CMD_CHASE			23	// TODO: Not implemented yet
+#define BOT_CMD_CONSOLE			21
+#define BOT_CMD_WHILE			22	// TODO: Not implemented yet
+#define BOT_CMD_WEND			23	// TODO: Not implemented yet
+#define BOT_CMD_CHASE			24	// TODO: Not implemented yet
 
-#define BOT_CMD_COUNTER			21	// Update this value if you add/remove a command
+#define BOT_CMD_COUNTER			22	// Update this value if you add/remove a command
 
 // NOTE: Following commands should be implemented on the bot ai
 //		 If a new command should be handled by the target ai(s) please declare it here
@@ -189,6 +191,9 @@ void bot_commands_init()
 	bot_cmd_string[BOT_CMD_BARRIER] = "barrier";
 	bot_cmd_parm_type[BOT_CMD_BARRIER] = BOT_CMD_PARAMETER_NONE;
 
+	bot_cmd_string[BOT_CMD_CONSOLE] = "console";
+	bot_cmd_parm_type[BOT_CMD_CONSOLE] = BOT_CMD_PARAMETER_STRING;
+
 	bot_cmds_initialized = TRUE;
 }
 
@@ -273,6 +278,8 @@ float bot_decodecommand(string cmdstring)
 				bot_cmd.bot_cmd_parm_float = stof(parm);
 				break;
 			case BOT_CMD_PARAMETER_STRING:
+				if(bot_cmd.bot_cmd_parm_string)
+					strunzone(bot_cmd.bot_cmd_parm_string);
 				bot_cmd.bot_cmd_parm_string = strzone(parm);
 				break;
 			case BOT_CMD_PARAMETER_VECTOR:
@@ -494,13 +501,15 @@ float bot_cmd_barrier()
 	if(self.bot_barrier == 0) // initialization
 	{
 		self.bot_barrier = 1;
+
+		self.colormod = '4 4 0';
 	}
 
 	if(self.bot_barrier == 1) // find other bots
 	{
 		FOR_EACH_CLIENT(cl) if(cl.isbot)
 		{
-			if(cl.bot_barrier == 0)
+			if(cl.bot_barrier != 1)
 				return CMD_STATUS_EXECUTING; // not all are at the barrier yet
 		}
 
@@ -516,6 +525,7 @@ float bot_cmd_barrier()
 	// if we get here, the barrier is finished
 	// so end it...
 	self.bot_barrier = 0;
+	self.colormod = '0 0 0';
 
 	return CMD_STATUS_FINISHED;
 }
@@ -1164,6 +1174,10 @@ float bot_execute_commands()
 				break;
 			case BOT_CMD_BARRIER:
 				status = bot_cmd_barrier();
+				break;
+			case BOT_CMD_CONSOLE:
+				localcmd(strcat(bot_cmd.bot_cmd_parm_string, "\n"));
+				status = CMD_STATUS_FINISHED;
 				break;
 			default:
 				print(strcat("ERROR: Invalid command on queue with id '",ftos(bot_cmd.bot_cmd_type),"'\n"));

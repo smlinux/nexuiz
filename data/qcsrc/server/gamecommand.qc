@@ -580,6 +580,7 @@ void GameCommand(string command)
 	entity client, e;
 	vector v;
 	float entno, i;
+	string s;
 	argc = tokenize_console(command);
 
 	if(argv(0) == "help" || argc == 0)
@@ -645,7 +646,6 @@ void GameCommand(string command)
 	if(argv(0) == "gametype") if(argc == 2)
 	{
 		float t, tsave;
-		string s;
 		s = argv(1);
 		t = MapInfo_Type_FromString(s);
 		tsave = MapInfo_CurrentGametype();
@@ -924,6 +924,8 @@ void GameCommand(string command)
 
 	if(argv(0) == "bot_cmd")
 	{
+		local entity bot;
+
 		if(argv(1) == "help")
 		{
 			if(argc==2)
@@ -943,6 +945,36 @@ void GameCommand(string command)
 			return;
 		}
 
+		if(argv(1) == "load" && argc == 3)
+		{
+			float fh;
+			fh = fopen(argv(2), FILE_READ);
+			if(fh < 0)
+			{
+				print("cannot open the file\n");
+				return;
+			}
+
+			i = 0;
+			while((s = fgets(fh)))
+			{
+				argc = tokenize_console(s);
+				// let's start at token 2 so we can skip sv_cmd bot_cmd
+				bot = find_bot_by_name(argv(2));
+				if(bot == world)
+					bot = find_bot_by_number(stof(argv(2)));
+				if(bot)
+					bot_queuecommand(bot, strcat(argv(3), " ", argv(4)));
+				++i;
+			}
+
+			print(ftos(i), " commands read\n");
+
+			fclose(fh);
+
+			return;
+		}
+
 		if(argc < 3)
 		{
 			print("Usage: sv_cmd bot_cmd <bot name or number> <command> [argument]\n");
@@ -952,7 +984,6 @@ void GameCommand(string command)
 			return;
 		}
 
-		local entity bot;
 		bot = find_bot_by_name(argv(1));
 		if(bot==world)
 			bot = find_bot_by_number(stof(argv(1)));
