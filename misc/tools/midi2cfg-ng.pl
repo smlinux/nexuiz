@@ -13,9 +13,9 @@ use Storable;
 use constant MIDI_FIRST_NONCHANNEL => 17;
 use constant MIDI_DRUMS_CHANNEL => 10;
 
-die "Usage: $0 filename.mid transpose timeoffset timeoffset2 timeoffset3 preallocatedbots..."
-	unless @ARGV >= 5;
-my ($filename, $transpose, $timeoffset, $timeoffset2, $timeoffset3, @preallocate) = @ARGV;
+die "Usage: $0 filename.mid transpose timeoffset timeoffset2 timeoffset3 timeoffset4 preallocatedbots..."
+	unless @ARGV >= 6;
+my ($filename, $transpose, $timeoffset, $timeoffset2, $timeoffset3, $timeoffset4, @preallocate) = @ARGV;
 
 my $opus = MIDI::Opus->new({from_file => $filename});
 #$opus->write_to_file("/tmp/y.mid");
@@ -82,7 +82,6 @@ sub unsort(@)
 
 
 
-my $inittime = undef;
 my $notetime = undef;
 sub botconfig_read($)
 {
@@ -186,27 +185,9 @@ sub botconfig_read($)
 		}
 	}
 
-	my $lowesttime = undef;
-	my $highesttime = undef;
-	my $highestbusytime = undef;
 	my $lowestnotestart = undef;
 	for(values %bots)
 	{
-		my $l = $_->{init};
-		next unless defined $l;
-		my $t = $l->[0]->[0] eq 'time' ? $l->[0]->[1] : 0;
-		$lowesttime = $t if not defined $lowesttime or $t < $lowesttime;
-		for(@$l)
-		{
-			if($_->[0] eq 'time')
-			{
-				$highesttime = $_->[1] if not defined $highesttime or $_->[1] > $highesttime;
-			}
-			if($_->[0] eq 'busy')
-			{
-				$highestbusytime = $_->[1] if not defined $highestbusytime or $_->[1] > $highestbusytime;
-			}
-		}
 		for(values %{$_->{notes_on}}, values %{$_->{percussion}})
 		{
 			my $t = $_->[0]->[0] eq 'time' ? $_->[0]->[1] : 0;
@@ -214,22 +195,7 @@ sub botconfig_read($)
 		}
 	}
 
-	my $initdelta = $highesttime - $lowesttime - $lowestnotestart;
-	if(defined $highestbusytime)
-	{
-		my $initdelta2 = $highestbusytime - $lowesttime;
-		$initdelta = $initdelta2
-			if $initdelta2 > $initdelta;
-	}
-
-	# init shall take place at $timeoffset
-	# note playing shall take place at $timeoffset + $initdelta + $timeoffset2
-
-	$inittime = $timeoffset - $lowesttime;
-	$notetime = $timeoffset + $initdelta + $timeoffset2;
-
-	print STDERR "Initialization offset: $inittime (start: @{[$inittime + $lowesttime]}, end: @{[$inittime + $highesttime]})\n";
-	print STDERR "Note offset: $notetime (start: @{[$notetime + $lowestnotestart]})\n";
+	$notetime = $timeoffset2 - $lowestnotestart;
 
 	return \%bots;
 }
@@ -294,7 +260,7 @@ sub busybot_cmd_bot_execute($$@)
 		}
 		elsif($_->[0] eq 'raw')
 		{
-			printf join " ", @{$_}[1..@$_-1];
+			printf "%s\n", join " ", @{$_}[1..@$_-1];
 		}
 	}
 
@@ -335,13 +301,16 @@ sub busybot_note_on_bot($$$$$)
 	}
 	return -1 # I won't play this note
 		if not defined $cmds;
-	if($init && $bot->{init})
+	if($init)
 	{
 		return 0
-			if not busybot_cmd_bot_test $bot, $inittime, @{$bot->{init}};
-		return 0
 			if not busybot_cmd_bot_test $bot, $time + $notetime, @$cmds; 
-		busybot_cmd_bot_execute $bot, $inittime, @{$bot->{init}};
+		busybot_cmd_bot_execute $bot, 0, ['wait', $timeoffset];
+		busybot_cmd_bot_execute $bot, 0, ['cmd', 'barrier'];
+		busybot_cmd_bot_execute $bot, 0, @{$bot->{init}}
+			if @{$bot->{init}};
+		busybot_cmd_bot_execute $bot, 0, ['cmd', 'barrier'];
+		$bot->{timer} = $bot->{busytimer} = 0;
 		busybot_cmd_bot_execute $bot, $time + $notetime, @$cmds; 
 	}
 	else
@@ -440,7 +409,12 @@ for(@preallocate)
 	my $bot = Storable::dclone $busybots->{$_};
 	$bot->{id} = @busybots_allocated + 1;
 	$bot->{classname} = $_;
-	busybot_cmd_bot_execute $bot, $inittime, @{$bot->{init}};
+	busybot_cmd_bot_execute $bot, 0, ['wait', $timeoffset];
+	busybot_cmd_bot_execute $bot, 0, ['cmd', 'barrier'];
+	busybot_cmd_bot_execute $bot, 0, @{$bot->{init}}
+		if @{$bot->{init}};
+	busybot_cmd_bot_execute $bot, 0, ['cmd', 'barrier'];
+	$bot->{timer} = $bot->{busytimer} = 0;
 	--$busybots->{$_}->{count};
 	push @busybots_allocated, $bot;
 }
@@ -484,10 +458,14 @@ for(@allmidievents)
 
 for(@busybots_allocated)
 {
+	busybot_cmd_bot_execute $_, 0, ['wait', $timeoffset3];
+	busybot_cmd_bot_execute $_, 0, ['cmd', 'barrier'];
 	if($_->{done})
 	{
-		busybot_cmd_bot_execute $_, $notetime + $t + $timeoffset3, @{$_->{done}};
+		busybot_cmd_bot_execute $_, @{$_->{done}};
 	}
+	busybot_cmd_bot_execute $_, 0, ['cmd', 'barrier'];
+	busybot_cmd_bot_execute $_, 0, ['wait', $timeoffset4];
 }
 
 print STDERR "Range of notes: $note_min .. $note_max\n";
