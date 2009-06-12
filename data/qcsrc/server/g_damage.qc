@@ -1065,7 +1065,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 	RadiusDamage_running = 0;
 
 	//Calculates stats for all RadiusDamage weapons
-	if not(self.isbot)
+	if(clienttype(attacker) == CLIENTTYPE_REAL)
 	{
 		float f;
 		f = min(RadiusDamage_EnemyMaxDamage, RadiusDamage_EnemyDamageDone);
