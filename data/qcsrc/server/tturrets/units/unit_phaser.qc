@@ -62,7 +62,7 @@ void beam_think()
     self = self.owner;
     //w_deathtypestring = "was phased out of existence";
     FireImoBeam (   self.tur_shotorg,
-                    self.tur_shotorg + self.tur_shotdir_updated * self.target_range_fire,
+                    self.tur_shotorg + self.tur_shotdir_updated * self.target_range,
                     '-1 -1 -1' * self.shot_radius,
                     '1 1 1' * self.shot_radius,
                     self.shot_force,
@@ -89,7 +89,7 @@ void turret_phaser_attack()
     beam.nextthink = time;
     beam.owner = self;
     beam.shot_dmg = self.shot_dmg / (self.shot_speed / beam.ticrate);
-    beam.scale = self.target_range_fire / 256;
+    beam.scale = self.target_range / 256;
     beam.movetype = MOVETYPE_NONE;
     beam.enemy = self.enemy;
     beam.bot_dodge = TRUE;
@@ -116,7 +116,7 @@ void turret_phaser_dinit()
     self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
     self.aim_flags = TFL_AIM_ZEASE | TFL_AIM_LEAD;
 
-    if (turret_stdproc_init("phaser_std") == 0)
+    if (turret_stdproc_init("phaser_std",0) == 0)
     {
         remove(self);
         return;

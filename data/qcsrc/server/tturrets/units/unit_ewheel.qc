@@ -439,7 +439,7 @@ void turret_ewheel_dinit()
     self.turret_respawnhook = ewheel_respawnhook;
     self.turret_diehook = ewheel_diehook;
 
-    if (turret_stdproc_init("ewheel_std") == 0)
+    if (turret_stdproc_init("ewheel_std",0) == 0)
     {
         remove(self);
         return;

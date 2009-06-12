@@ -256,7 +256,7 @@ void walker_animate()
     self.velocity_z = vz;
 
     if (self.flags & FL_ONGROUND)
-        movelib_groundalign4point(300,100);
+        movelib_groundalign4point(300,100,0.25);
 
 }
 
@@ -939,7 +939,7 @@ void turret_walker_dinit()
     self.turret_diehook = walker_diehook;
 
     self.ticrate = 0.05;
-    if (turret_stdproc_init("walker_std") == 0)
+    if (turret_stdproc_init("walker_std",0) == 0)
     {
         remove(self);
         return;

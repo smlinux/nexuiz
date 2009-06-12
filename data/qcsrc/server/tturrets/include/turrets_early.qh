@@ -264,7 +264,7 @@ vector real_origin(entity ent);
 // Aim from this point,
 //.vector     tur_aimorg;
 
-/// and shoot from here. (could be non constant, think MLRS)
+/// and shoot from here. (can be non constant, think MLRS)
 .vector     tur_shotorg;
 
 /// Aim at this spot
@@ -273,8 +273,8 @@ vector real_origin(entity ent);
 /// Predicted time the round will impact
 .float      tur_impacttime;
 
-/// Predicted place the round will impact
-.vector     tur_impactpoint;
+// Predicted place the round will impact
+//.vector     tur_impactpoint; // unused
 
 /// What entity the aimtrace hit, if any.
 .entity     tur_impactent;
@@ -318,8 +318,8 @@ vector real_origin(entity ent);
 .float target_range;
 /// Dont consider targets closer then
 .float target_range_min;
-/// Engage fire routine on targets within
-.float target_range_fire;
+// Engage fire routine on targets within
+//.float target_range_fire; // no practical use aymore, work with target_range insted.
 /// Targets closer to this are prefered
 .float target_range_optimal;
 
@@ -340,6 +340,8 @@ vector real_origin(entity ent);
 .float target_select_playerbias;
 /// Field of view
 //.float target_select_fov;
+/// Last thimestamp this surret aquierd a valid target
+.float target_select_time;
 
 /*
 * Aim refers to real aiming, not gun pos (thats done by track)

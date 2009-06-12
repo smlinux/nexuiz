@@ -433,7 +433,7 @@ void turret_hk_dinit()
 
     self.shoot_flags = TFL_SHOOT_CLEARTARGET;
 
-    if (turret_stdproc_init("hk_std") == 0)
+    if (turret_stdproc_init("hk_std",0) == 0)
     {
         remove(self);
         return;

@@ -36,11 +36,12 @@ float turret_stdproc_targetscore_generic(entity e_turret,entity e_target)
     float d_dist;       // Defendmode Distance
 
     float score;        // Total score
+
     float d_score;      // Distance score
-    //float da_score;   // Distance from aimpoint score
     float a_score;      // Angular score
     float m_score;      // missile score
     float p_score;      // player score
+    //float da_score;   // Distance from aimpoint score
 
     float ikr;          // ideal kill range
 
@@ -92,12 +93,15 @@ float turret_stdproc_targetscore_generic(entity e_turret,entity e_target)
             (m_score * e_turret.target_select_missilebias) +
             (p_score * e_turret.target_select_playerbias);
 
-    if(e_turret.target_range_fire < vlen(e_turret.tur_shotorg - real_origin(e_target)))
-        score *= 0.1;
+    if(e_turret.target_range < vlen(e_turret.tur_shotorg - real_origin(e_target)))
+    {
+        dprint("Wtf?\n");
+        score *= 0.001;
+    }
 
-#ifdef TURRET_DEBUG
-    string sd,sv,sa,sm,sp,ss;
-    string sdt,svt,sat,smt,spt;
+#ifndef TURRET_DEBUG
+    string sd,sa,sm,sp,ss;
+    string sdt,sat,smt,spt;
 
     sd = ftos(d_score);
     d_score *= e_turret.target_select_rangebias;
@@ -123,7 +127,6 @@ float turret_stdproc_targetscore_generic(entity e_turret,entity e_target)
     ss = ftos(score);
     bprint("^3Target scores^7 \[  ",e_turret.netname, "  \] ^3for^7 \[  ", e_target.netname,"  \]\n");
     bprint("^5Range:\[  ",sd,  "  \]^2+bias:\[  ",sdt,"  \]\n");
-    //bprint("^5Volly:\[  ",sv,  "  \]^2+bias:\[  ",svt,"  \]\n");
     bprint("^5Angle:\[  ",sa,  "  \]^2+bias:\[  ",sat,"  \]\n");
     bprint("^5Missile:\[  ",sm,"  \]^2+bias:\[  ",smt,"  \]\n");
     bprint("^5Player:\[  ",sp, "  \]^2+bias:\[  ",spt,"  \]\n");

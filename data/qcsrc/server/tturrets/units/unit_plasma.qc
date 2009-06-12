@@ -127,7 +127,7 @@ void turret_plasma_std_init()
     self.aim_flags      = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_GROUND2;
     self.turrcaps_flags = TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_MEDPROJ | TFL_TURRCAPS_PLAYERKILL | TFL_TURRCAPS_MISSILEKILL;
 
-    if (turret_stdproc_init("plasma_std") == 0)
+    if (turret_stdproc_init("plasma_std",FALSE) == 0)
     {
         remove(self);
         return;
@@ -143,6 +143,7 @@ void turret_plasma_std_init()
 
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/plasma.md3");
+    // self.tur_head.alpha = -1;
 
     if (!turret_tag_setup())
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
@@ -167,7 +168,7 @@ void turret_plasma_dual_init()
     self.aim_flags      = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE  | TFL_AIM_GROUND2 ;
     self.turrcaps_flags = TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_MEDPROJ | TFL_TURRCAPS_PLAYERKILL;
 
-    if (turret_stdproc_init("plasma_dual") == 0)
+    if (turret_stdproc_init("plasma_dual",0) == 0)
     {
         remove(self);
         return;

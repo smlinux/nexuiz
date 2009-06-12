@@ -103,7 +103,7 @@ void turret_mlrs_dinit()
     self.ammo_flags = TFL_AMMO_ROCKETS | TFL_AMMO_RECHARGE;
     self.aim_flags = TFL_AIM_LEAD | TFL_AIM_ZEASE | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_INFRONT;
 
-    if (turret_stdproc_init("mlrs_std") == 0)
+    if (turret_stdproc_init("mlrs_std",0) == 0)
     {
         remove(self);
         return;

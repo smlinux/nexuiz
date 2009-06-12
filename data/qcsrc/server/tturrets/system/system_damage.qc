@@ -144,6 +144,8 @@ void turret_stdproc_die()
 
     self.alpha             = -1;
     self.tur_head.alpha    = self.alpha;
+    self.customizeentityforclient = SUB_False;
+    self.tur_head.customizeentityforclient = SUB_False;
 
     self.event_damage           = SUB_Null;
     self.tur_head.event_damage  = SUB_Null;
@@ -247,6 +249,9 @@ void turret_stdproc_respawn()
 
     self.alpha = 1;
     self.tur_head.alpha     = self.alpha;
+    self.customizeentityforclient = SUB_True;
+    self.tur_head.customizeentityforclient = SUB_True;
+
 
     self.takedamage = DAMAGE_AIM;
     self.tur_head.takedamage    = self.takedamage;

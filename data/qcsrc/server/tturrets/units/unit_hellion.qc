@@ -188,7 +188,7 @@ void turret_hellion_dinit()
     self.firecheck_flags = TFL_FIRECHECK_WORLD | TFL_FIRECHECK_DEAD | TFL_FIRECHECK_DISTANCES | TFL_FIRECHECK_TEAMCECK | TFL_FIRECHECK_REFIRE | TFL_FIRECHECK_AFF | TFL_FIRECHECK_OWM_AMMO;
     self.ammo_flags = TFL_AMMO_ROCKETS | TFL_AMMO_RECHARGE;
 
-    if (turret_stdproc_init("hellion_std") == 0)
+    if (turret_stdproc_init("hellion_std",0) == 0)
     {
         remove(self);
         return;

@@ -42,7 +42,7 @@ void turret_machinegun_std_init()
     else
         self.aim_flags      |= TFL_AIM_SHOTTIMECOMPENSATE;
 
-    if (turret_stdproc_init("machinegun_std") == 0)
+    if (turret_stdproc_init("machinegun_std",0) == 0)
     {
         remove(self);
         return;

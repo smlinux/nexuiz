@@ -11,7 +11,7 @@ float turret_fusionreactor_firecheck()
 
     if (self.ammo < self.shot_dmg) return 0;
     if (self.enemy.ammo >= self.enemy.ammo_max) return 0;
-    if (self.tur_dist_aimpos > self.target_range_fire) return 0;
+    if (self.tur_dist_aimpos > self.target_range) return 0;
     if (self.tur_dist_aimpos < self.target_range_min) return 0;
 
     return 1;
@@ -49,7 +49,7 @@ void turret_fusionreactor_dinit()
     self.aim_flags = TFL_AIM_NO;
     self.track_flags = TFL_TRACK_NO;
     self.turret_respawnhook = turret_fusionreactor_respawnhook;
-    if (turret_stdproc_init("fusreac_std") == 0)
+    if (turret_stdproc_init("fusreac_std",0) == 0)
     {
         remove(self);
         return;

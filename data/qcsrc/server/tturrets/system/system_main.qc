@@ -1,8 +1,26 @@
 #define cvar_base "g_turrets_unit_"
 
-void load_unit_settings(entity ent,string unitname,float is_reload)
+/*
+float turret_customizeentityforclient()
+{
+}
+
+float Turret_SendEntity(entity to, float sf)
 {
 
+	WriteByte(MSG_ENTITY, ENT_CLIENT_TURRET);
+	WriteCoord(MSG_ENTITY, self.tur_head.angles_x);
+	WriteCoord(MSG_ENTITY, self.tur_head.angles_y);
+    WriteByte(MSG_ENTITY, self.tur_head.frame);
+
+	//WriteCoord(MSG_ENTITY, self.tur_head.angles_z);
+
+	return TRUE;
+}
+*/
+
+void load_unit_settings(entity ent,string unitname,float is_reload)
+{
     string sbase;
 
     // dprint("Reloading turret ",e_turret.netname,"\n");
@@ -44,7 +62,7 @@ void load_unit_settings(entity ent,string unitname,float is_reload)
 
     ent.target_range         = cvar(strcat(sbase,"_target_range")) * ent.turret_scale_range;
     ent.target_range_min     = cvar(strcat(sbase,"_target_range_min")) * ent.turret_scale_range;
-    ent.target_range_fire    = cvar(strcat(sbase,"_target_range_fire")) * ent.turret_scale_range;
+    //ent.target_range_fire    = cvar(strcat(sbase,"_target_range_fire")) * ent.turret_scale_range;
     ent.target_range_optimal = cvar(strcat(sbase,"_target_range_optimal")) * ent.turret_scale_range;
 
     ent.target_select_rangebias  = cvar(strcat(sbase,"_target_select_rangebias"));
@@ -96,7 +114,7 @@ void turret_stdproc_nothing()
 **/
 void turret_do_updates(entity t_turret)
 {
-    vector enemy_pos;
+    vector enemy_pos,oldpos;
     entity oldself;
 
     oldself = self;
@@ -106,7 +124,7 @@ void turret_do_updates(entity t_turret)
 
     turret_tag_fire_update();
 
-    self.tur_shotdir_updated = v_forward;
+    self.tur_shotdir_updated = normalize(v_forward);
 
     self.tur_dist_enemy  = vlen(self.tur_shotorg - enemy_pos);
     self.tur_dist_aimpos = vlen(self.tur_shotorg - self.tur_aimpos);
@@ -114,7 +132,7 @@ void turret_do_updates(entity t_turret)
     if(self.firecheck_flags & TFL_FIRECHECK_VERIFIED)
     if(self.enemy)
     {
-        enemy_pos = self.enemy.origin;
+        oldpos = self.enemy.origin;
         setorigin(self.enemy,self.tur_aimpos);
     }
 
@@ -124,11 +142,11 @@ void turret_do_updates(entity t_turret)
 
     if(self.firecheck_flags & TFL_FIRECHECK_VERIFIED)
         if(self.enemy)
-            setorigin(self.enemy,enemy_pos);
+            setorigin(self.enemy,oldpos);
 
-    self.tur_impactpoint           = trace_endpos;
+    //self.tur_impactpoint           = trace_endpos;
     self.tur_impactent             = trace_ent;
-    self.tur_dist_impact_to_aimpos = vlen(trace_endpos - self.tur_aimpos);
+    self.tur_dist_impact_to_aimpos = vlen(trace_endpos - self.tur_aimpos) - (vlen(self.enemy.maxs - self.enemy.mins)*0.5);
     self.tur_impacttime            = vlen(self.tur_shotorg - trace_endpos) / self.shot_speed;
 
     self = oldself;
@@ -388,7 +406,7 @@ float turret_stdproc_firecheck()
     if (self.firecheck_flags & TFL_FIRECHECK_DISTANCES)
     {
         // Not close enougth?
-        if (self.tur_dist_aimpos > self.target_range_fire) return 0;
+        //if (self.tur_dist_aimpos > self.target_range_fire) return 0;
 
         // To close?
         if (self.tur_dist_aimpos < self.target_range_min) return 0;
@@ -400,7 +418,9 @@ float turret_stdproc_firecheck()
 
     // aim<->predicted impact
     if (self.firecheck_flags & TFL_FIRECHECK_AIMDIST)
-        if (self.tur_dist_impact_to_aimpos  > self.aim_firetolerance_dist) return 0;
+        if (self.tur_dist_impact_to_aimpos  > self.aim_firetolerance_dist)
+            if (self.tur_impactent != self.enemy)
+                return 0;
 
     // Volly status
     if (self.shot_volly > 1)
@@ -702,7 +722,7 @@ void turret_think()
     }
     else if(self.shoot_flags & TFL_SHOOT_CUSTOM)
     {
-        // This one is doing something oddball. assume its handles what needs to be handled.
+        // This one is doing something.. oddball. assume its handles what needs to be handled.
 
         // Predict?
         if not((self.aim_flags & TFL_AIM_NO))
@@ -745,10 +765,14 @@ void turret_think()
             }
 
         // Check if we have a vailid enemy, and try to find one if we dont.
-        if ((turret_validate_target(self,self.enemy,self.target_validate_flags) <= 0) && (self.cnt < time))
+        if( ((self.target_select_time + cvar("g_turrets_targetscan_maxdelay")) < time)
+          || (turret_validate_target(self,self.enemy,self.target_validate_flags) <= 0) )
+        if not (self.target_select_time + cvar("g_turrets_targetscan_mindelay") > time)
         {
             self.enemy = turret_select_target();
-            self.cnt = time + cvar("g_turrets_targetscan_mindelay");
+            //if(self.enemy)
+                self.target_select_time = time;
+
         }
 
 
@@ -824,7 +848,7 @@ void turret_stdproc_fire()
 }
 
 /*
-    When .used a turret switched team to activator.team.
+    When .used a turret switch team to activator.team.
     If activator is world, the turrets goes inactive.
 */
 void turret_stdproc_use()
@@ -840,16 +864,27 @@ void turret_stdproc_use()
 
 }
 
+void turret_link()
+{
+    //Net_LinkEntity(self, FALSE, 0, Turret_SendEntity);
+    self.think      = turret_think;
+    self.nextthink  = time;
+}
+
 /*
 * Standard turret initialization. use this!
 * (unless you have a very good reason not to)
-* Any special stuff like multiple cannon models should be done
-* after this is proc called.
-* if the return value is 0, the turret _must_ be removed.
+* if the return value is 0, the turret should be removed.
 */
-float turret_stdproc_init (string cvar_base_name)
+float turret_stdproc_init (string cvar_base_name, float csqc_shared)
 {
 	entity e,ee;
+
+    if(csqc_shared)
+    {
+        dprint("turrets: csqc_shared requested but not implemented. expect strange things to happen.\n");
+        csqc_shared = 0;
+    }
 
     // Are turrets allowed atm?
     if (cvar("g_turrets") == 0)
@@ -975,12 +1010,12 @@ float turret_stdproc_init (string cvar_base_name)
         self.target_range_min = self.shot_radius * 2;
     self.target_range_min = bound(0,self.target_range_min,MAX_SHOT_DISTANCE);
 
-    if (!self.target_range_fire)
-        self.target_range_fire = self.target_range * 0.8;
-    self.target_range_fire = bound(0,self.target_range_fire,MAX_SHOT_DISTANCE);
+    //if (!self.target_range_fire)
+    //    self.target_range_fire = self.target_range * 0.8;
+    //self.target_range_fire = bound(0,self.target_range_fire,MAX_SHOT_DISTANCE);
 
     if (!self.target_range_optimal)
-        self.target_range_optimal = self.target_range_fire * 0.5;
+        self.target_range_optimal = self.target_range * 0.5;
     self.target_range_optimal = bound(0,self.target_range_optimal,MAX_SHOT_DISTANCE);
 
 
@@ -1185,7 +1220,11 @@ float turret_stdproc_init (string cvar_base_name)
     self.bot_attack = TRUE;
 
     // Initiate the main AI loop
-    self.think     = turret_think;
+    if(csqc_shared)
+        self.think     = turret_link;
+    else
+        self.think     = turret_think;
+
     self.nextthink = time + self.ticrate;
 
     self.tur_head.team = self.team;

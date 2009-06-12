@@ -169,14 +169,17 @@ void movelib_beak_simple(float force)
 {
     float mspeed;
     vector mdir;
+    float vz;
 
     mspeed = max(0,vlen(self.velocity) - force);
     mdir   = normalize(self.velocity);
+    vz = self.velocity_z;
     self.velocity = mdir * mspeed;
+    self.velocity_z = vz;
 }
 
 
-void movelib_groundalign4point(float spring_length,float spring_up)
+void movelib_groundalign4point(float spring_length,float spring_up,float blendrate)
 {
     vector a,b,c,d,e,r,push_angle, ahead,side;
 
@@ -219,9 +222,13 @@ void movelib_groundalign4point(float spring_length,float spring_up)
     push_angle_z = (b_z - a_z) * 45;
     push_angle_z += (d_z - c_z) * 45;
 
-    self.angles_x += push_angle_x * 0.95;
-    self.angles_z += push_angle_z * 0.95;
+    //self.angles_x += push_angle_x * 0.95;
+    //self.angles_z += push_angle_z * 0.95;
 
+    self.angles_x = ((1-blendrate) *  self.angles_x)  + (push_angle_x * blendrate);
+    self.angles_z = ((1-blendrate) *  self.angles_z)  + (push_angle_z * blendrate);
+
+    //a = self.origin;
     setorigin(self,r);
 }
 

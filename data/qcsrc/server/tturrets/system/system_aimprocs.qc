@@ -58,7 +58,7 @@ vector turret_stdproc_aim_generic()
         }
 
 
-        // tnx and all credit to Rudolf "div0" Polzer for this solution.
+        // tnx to Rudolf "div0" Polzer for this solution.
         // hmm tobad it dont work.
         /*
         vector q;
@@ -69,7 +69,7 @@ vector turret_stdproc_aim_generic()
             impact_time = q_y;
         */
 
-        prep = pre_pos + (self.enemy.velocity * (impact_time+mintime));
+        prep = pre_pos + (self.enemy.velocity * (impact_time + mintime));
 
         if(self.aim_flags & TFL_AIM_ZPREDICT)
         if not(self.enemy.flags & FL_ONGROUND)
