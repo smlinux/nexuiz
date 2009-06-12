@@ -78,6 +78,9 @@ const float ENT_CLIENT_MAPVOTE = 17;
 const float ENT_CLIENT_CLIENTDATA = 18;
 const float ENT_CLIENT_RANDOMSEED = 19;
 const float ENT_CLIENT_WALL = 20;
+const float ENT_CLIENT_SPIDERBOT = 21;
+
+const float ENT_CLIENT_TURRET = 40;
 
 const float SPRITERULE_DEFAULT = 0;
 const float SPRITERULE_TEAMPLAY = 1;
@@ -257,6 +260,24 @@ const float STAT_SHOTORG = 46; // compressShotOrigin
 const float CTF_STATE_ATTACK = 1;
 const float CTF_STATE_DEFEND = 2;
 const float CTF_STATE_COMMANDER = 3;
+
+const float STAT_HUD = 50;
+const float HUD_NORMAL = 0;
+const float HUD_SPIDEBOT = 10;
+
+const float STAT_SPIDERBOT_HEALTH  = 60;
+const float STAT_SPIDERBOT_ROCKETS = 61;
+const float STAT_SPIDERBOT_HEAT    = 62;
+const float STAT_SPIDERBOT_RELOAD  = 63;
+const float STAT_SPIDERBOT_ENERGY  = 64;
+const float STAT_SPIDERBOT_SHIELD  = 65;
+
+//const float STAT_SPIDERBOT_AIM     53 // compressShotOrigin
+
+//const float STAT_SPIDERBOT_TARGET  54 // compressShotOrigin
+
+
+
 
 // moved that here so the client knows the max.
 // # of maps, I'll use arrays for them :P

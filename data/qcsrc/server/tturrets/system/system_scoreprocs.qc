@@ -99,7 +99,7 @@ float turret_stdproc_targetscore_generic(entity e_turret,entity e_target)
         score *= 0.001;
     }
 
-#ifndef TURRET_DEBUG
+#ifdef TURRET_DEBUG
     string sd,sa,sm,sp,ss;
     string sdt,sat,smt,spt;
 

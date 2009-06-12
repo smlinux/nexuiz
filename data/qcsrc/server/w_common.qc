@@ -442,53 +442,32 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 		CSQCProjectile(proj, TRUE, PROJECTILE_BULLET, TRUE);
 }
 
-/*
- * not used any more
+
 void fireBullet (vector start, vector dir, float spread, float damage, float force, float dtype, float tracer)
 {
 	vector  end;
-	local entity e;
+	//local entity e;
 
-	if(cvar("g_ballistics_force"))
-	{
-		if (DEATH_ISWEAPON(dtype, WEP_SHOTGUN))
-			fireBallisticBullet(start, dir, spread, cvar("g_ballistics_force_shotgun_speed"), 5, damage, 0, force, dtype, 0, 1, cvar("g_ballistics_force_shotgun_bulletconstant"));
-		else
-			fireBallisticBullet(start, dir, spread, cvar("g_ballistics_force_uzi_speed"), 5, damage, 0, force, dtype, 0, 1, cvar("g_ballistics_force_shotgun_bulletconstant"));
-		return;
-	}
-
-	dir = dir + randomvec() * spread;
+	dir = normalize(dir + randomvec() * spread);
 	end = start + dir * MAX_SHOT_DISTANCE;
 	if(self.antilag_debug)
 		traceline_antilag (self, start, end, FALSE, self, self.antilag_debug);
 	else
 		traceline_antilag (self, start, end, FALSE, self, ANTILAG_LATENCY(self));
 
-	if (tracer)
-	{
-		e = spawn();
-		e.owner = self;
-		e.movetype = MOVETYPE_FLY;
-		e.solid = SOLID_NOT;
-		e.think = SUB_Remove;
-		e.nextthink = time + vlen(trace_endpos - start) / 6000;
-		e.velocity = dir * 6000;
-		e.angles = vectoangles(e.velocity);
-		setorigin (e, start);
-		e.flags = FL_PROJECTILE;
-
-		CSQCProjectile(e, TRUE, PROJECTILE_BULLET, TRUE);
-	}
+    end = trace_endpos;
 
 	if ((trace_fraction != 1.0) && (pointcontents (trace_endpos) != CONTENT_SKY))
 	{
+		pointparticles(particleeffectnum("TE_KNIGHTSPIKE"),end,trace_plane_normal * 2500,1);
 		if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
 			Damage_DamageInfo(trace_endpos, damage, 0, 0, dir * force, dtype);
 		Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * force);
+		//void(float effectnum, vector org, vector vel, float howmany) pointparticles = #337; // same as in CSQC
 	}
+	trace_endpos = end;
 }
-*/
+
 
 void W_PrepareExplosionByDamage(entity attacker, void() explode)
 {

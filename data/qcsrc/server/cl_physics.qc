@@ -62,10 +62,10 @@ void PlayerJump (void)
 	if(!sv_pogostick)
 		if (!(self.flags & FL_JUMPRELEASED))
 			return;
-			
+
 	if(self.health <= g_bloodloss)
 		return;
-	
+
 	if(sv_doublejump)
 		if(time < self.doublejump_nextjumptime)
 			return;
@@ -103,7 +103,7 @@ void PlayerJump (void)
 
 	if(g_jump_grunt)
 		PlayerSound(playersound_jump, CHAN_PLAYER, VOICETYPE_PLAYERSOUND);
-	
+
 	if(sv_doublejump)
 	{
 		// we're moving upwards at self.velocity_z
@@ -421,10 +421,10 @@ void PM_AirAccelerate(vector wishdir, float wishspeed)
 	vector curvel, wishvel, acceldir, curdir;
 	float addspeed, accelspeed, curspeed, f;
 	float dot;
-	
+
 	if(wishspeed == 0)
 		return;
-	
+
 	curvel = self.velocity;
 	curvel_z = 0;
 	curspeed = vlen(curvel);
@@ -462,12 +462,17 @@ void PM_AirAccelerate(vector wishdir, float wishspeed)
 .string lastclassname;
 
 void Nixnex_GiveCurrentWeapon();
+.float() PlayerPhysplug;
 void SV_PlayerPhysics()
 {
 	local vector wishvel, wishdir, v;
 	local float wishspeed, f, maxspd_mod, spd, maxairspd, airaccel, swampspd_mod, shtest_score, buttons;
 	string temps;
 	float buttons_prev;
+
+    if(self.PlayerPhysplug)
+        if(self.PlayerPhysplug())
+            return;
 
 	buttons = self.BUTTON_ATCK + 2 * self.BUTTON_JUMP + 4 * self.BUTTON_ATCK2 + 8 * self.BUTTON_ZOOM + 16 * self.BUTTON_CROUCH + 32 * self.BUTTON_HOOK + 64 * self.BUTTON_USE;
 	if(!sv_maxidle_spectatorsareidle || self.movetype == MOVETYPE_WALK)

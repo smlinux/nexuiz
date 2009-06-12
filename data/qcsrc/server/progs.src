@@ -74,7 +74,7 @@ cl_physics.qc
 verbstack.qc
 movelib.qc
 steerlib.qc
-pathlib.qc
+pathlib/pathlib.qh
 
 g_world.qc
 g_casings.qc
@@ -159,6 +159,7 @@ race.qc
 
 //// tZork Turrets ////
 tturrets/include/turrets.qh
+vehicles/vehicles.qh
 
 scores.qc
 

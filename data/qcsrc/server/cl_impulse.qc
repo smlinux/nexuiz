@@ -92,6 +92,9 @@ void printsurfaceinfo(entity e, vector v)
  * 220 to 229: next weapon shortcuts
  * 230 to 253: individual weapons (up to 24)
  */
+void spawnfunc_racer();
+//void spawnfunc_hov();
+//void spawnfunc_vehicle_hoover();
 
 void ImpulseCommands (void)
 {
@@ -109,6 +112,43 @@ void ImpulseCommands (void)
 
 	if (timeoutStatus == 2) //don't allow any impulses while the game is paused
 		return;
+
+
+
+    if(imp >= 21 && imp <= 29)
+    {
+                entity r,os;
+
+        switch(imp)
+        {
+            case 21:
+                os = self;
+                r = spawn();
+                self = r;
+                setorigin(r,os.origin + v_forward * 256);
+                spawnfunc_racer();
+                self = os;
+                return;
+            /*
+            case 22:
+                os = self;
+                r = spawn();
+                self = r;
+                setorigin(r,os.origin + v_forward * 256);
+                spawnfunc_hov();
+                self = os;
+                return;
+            case 23:
+                os = self;
+                r = spawn();
+                self = r;
+                setorigin(r,os.origin + v_forward * 256);
+                spawnfunc_vehicle_hoover();
+                self = os;
+                return;
+            */
+        }
+    }
 
 	if (imp >= 1 && imp <= 9)
 	{

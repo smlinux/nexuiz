@@ -23,7 +23,7 @@
 #include "../units/unit_tessla.qc"     /// Chain lightning capabale turret
 #include "../units/unit_walker.qc"     /// Moving minigun-rocket-meele err thing
 #include "../units/unit_ewheel.qc"     /// A evil wheel. with guns on.
-//#include "../units/unit_repulsor.qc"   /// Fires a wave that knocks foes back
-//#include "../units/unit_hive.qc"
+//#include "../units/unit_repulsor.qc" /// Fires a wave that knocks foes back
+//#include "../units/unit_hive.qc"     /// Swarm AI
 
 #endif // TTURRETS_ENABLED
