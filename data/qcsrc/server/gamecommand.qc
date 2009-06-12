@@ -937,6 +937,12 @@ void GameCommand(string command)
 			return;
 		}
 
+		if(argv(1) == "reset")
+		{
+			bot_resetqueues();
+			return;
+		}
+
 		if(argc < 3)
 		{
 			print("Usage: sv_cmd bot_cmd <bot name or number> <command> [argument]\n");
@@ -952,15 +958,11 @@ void GameCommand(string command)
 			bot = find_bot_by_number(stof(argv(1)));
 
 		if(bot)
-		{
-			if(argc==4)
-				bot_queuecommand(bot,argv(2),argv(3));
-			else
-				bot_queuecommand(bot,argv(2),"");
-		}
+			bot_queuecommand(bot, strcat(argv(2), " ", argv(3)));
 		else
 			print(strcat("Error: Unable to find a bot with the name or number '",argv(1),"'\n"));
-        	return;
+
+		return;
 	}
 
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");
