@@ -13,9 +13,9 @@ use Storable;
 use constant MIDI_FIRST_NONCHANNEL => 17;
 use constant MIDI_DRUMS_CHANNEL => 10;
 
-die "Usage: $0 filename.mid transpose timeoffset timeoffset2 timeoffset3 timeoffset4 preallocatedbots..."
-	unless @ARGV >= 6;
-my ($filename, $transpose, $timeoffset, $timeoffset2, $timeoffset3, $timeoffset4, @preallocate) = @ARGV;
+die "Usage: $0 filename.conf filename.mid transpose timeoffset timeoffset2 timeoffset3 timeoffset4 preallocatedbots..."
+	unless @ARGV >= 7;
+my ($config, $filename, $transpose, $timeoffset, $timeoffset2, $timeoffset3, $timeoffset4, @preallocate) = @ARGV;
 
 my $opus = MIDI::Opus->new({from_file => $filename});
 #$opus->write_to_file("/tmp/y.mid");
@@ -180,6 +180,10 @@ sub botconfig_read($)
 		{
 			$currentbot = ($bots{$1} ||= {count => 0, transpose => 0});
 		}
+		elsif(/^raw (.*)/)
+		{
+			printf "$1\n";
+		}
 		else
 		{
 			print "unknown command: $_\n";
@@ -306,7 +310,6 @@ sub busybot_note_on_bot($$$$$)
 	{
 		return 0
 			if not busybot_cmd_bot_test $bot, $time + $notetime, @$cmds; 
-		busybot_cmd_bot_execute $bot, 0, ['cmd', 'barrier_init'];
 		busybot_cmd_bot_execute $bot, 0, ['cmd', 'wait', $timeoffset];
 		busybot_cmd_bot_execute $bot, 0, ['cmd', 'barrier'];
 		busybot_cmd_bot_execute $bot, 0, @{$bot->{init}}
@@ -324,7 +327,7 @@ sub busybot_note_on_bot($$$$$)
 	return 1;
 }
 
-my $busybots = botconfig_read "midi2cfg-ng.conf";
+my $busybots = botconfig_read $config;
 my @busybots_allocated;
 my %notechannelbots;
 
@@ -406,7 +409,6 @@ for(@preallocate)
 	my $bot = Storable::dclone $busybots->{$_};
 	$bot->{id} = @busybots_allocated + 1;
 	$bot->{classname} = $_;
-	busybot_cmd_bot_execute $bot, 0, ['cmd', 'barrier_init'];
 	busybot_cmd_bot_execute $bot, 0, ['cmd', 'wait', $timeoffset];
 	busybot_cmd_bot_execute $bot, 0, ['cmd', 'barrier'];
 	busybot_cmd_bot_execute $bot, 0, @{$bot->{init}}
