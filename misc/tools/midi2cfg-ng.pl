@@ -66,6 +66,7 @@ for my $track(0..@$tracks-1)
 	for($tracks->[$track]->events())
 	{
 		my ($command, $delta, @data) = @$_;
+		$command = 'note_off' if $command eq 'note_on' and $data[2] == 0;
 		$tick += $delta;
 		push @allmidievents, [$command, $tick, $sequence++, $track, @data];
 	}
@@ -305,6 +306,7 @@ sub busybot_note_on_bot($$$$$)
 	{
 		return 0
 			if not busybot_cmd_bot_test $bot, $time + $notetime, @$cmds; 
+		busybot_cmd_bot_execute $bot, 0, ['cmd', 'barrier_init'];
 		busybot_cmd_bot_execute $bot, 0, ['cmd', 'wait', $timeoffset];
 		busybot_cmd_bot_execute $bot, 0, ['cmd', 'barrier'];
 		busybot_cmd_bot_execute $bot, 0, @{$bot->{init}}
@@ -404,6 +406,7 @@ for(@preallocate)
 	my $bot = Storable::dclone $busybots->{$_};
 	$bot->{id} = @busybots_allocated + 1;
 	$bot->{classname} = $_;
+	busybot_cmd_bot_execute $bot, 0, ['cmd', 'barrier_init'];
 	busybot_cmd_bot_execute $bot, 0, ['cmd', 'wait', $timeoffset];
 	busybot_cmd_bot_execute $bot, 0, ['cmd', 'barrier'];
 	busybot_cmd_bot_execute $bot, 0, @{$bot->{init}}

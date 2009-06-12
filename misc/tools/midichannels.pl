@@ -65,6 +65,7 @@ while(<STDIN>)
 				my $t = 0;
 				for($tracks->[$_]->events())
 				{
+					$_->[0] = 'note_off' if $_->[0] eq 'note_on' and $_->[4] == 0;
 					$t += $_->[1];
 					my $p = $chanpos{$_->[0]};
 					if(defined $p)
