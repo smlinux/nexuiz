@@ -1060,7 +1060,6 @@ void bot_resetqueues()
 		FOR_EACH_CLIENT(cl) if(cl.isbot)
 		{
 			cl.bot_barrier = 0;
-			cl.bot_barrier_allowed = FALSE;
 		}
 	}
 
