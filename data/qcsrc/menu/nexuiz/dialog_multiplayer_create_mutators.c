@@ -6,7 +6,7 @@ CLASS(NexuizMutatorsDialog) EXTENDS(NexuizDialog)
 	METHOD(NexuizMutatorsDialog, close, void(entity))
 	ATTRIB(NexuizMutatorsDialog, title, string, "Mutators")
 	ATTRIB(NexuizMutatorsDialog, color, vector, SKINCOLOR_DIALOG_MUTATORS)
-	ATTRIB(NexuizMutatorsDialog, intendedWidth, float, 0.8)
+	ATTRIB(NexuizMutatorsDialog, intendedWidth, float, 0.9)
 	ATTRIB(NexuizMutatorsDialog, rows, float, 17)
 	ATTRIB(NexuizMutatorsDialog, columns, float, 6)
 	ATTRIB(NexuizMutatorsDialog, refilterEntity, entity, NULL)
@@ -161,47 +161,59 @@ void fillNexuizMutatorsDialog(entity me)
 	me.TR(me);
 		me.TD(me, 1, 2, makeNexuizTextLabel(0, "Gameplay mutators:"));
 	me.TR(me);
+		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_cloaked", "Cloaked"));
 	me.TR(me);
+		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_footsteps", "Footsteps"));
 	me.TR(me);
+		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_midair", "Midair"));
 	me.TR(me);
+		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_vampire", "Vampire"));
 	me.TR(me);
+		me.TDempty(me, 0.2);
 		s = makeNexuizSlider(10, 50, 1, "g_bloodloss");
 		me.TD(me, 1, 2, e = makeNexuizSliderCheckBox(0, 1, s, "Blood loss"));
 	me.TR(me);
-		me.TDempty(me, 0.2);
+		me.TDempty(me, 0.4);
 		me.TD(me, 1, 1.8, s);
 	me.TR(me);
+		me.TDempty(me, 0.2);
 		s = makeNexuizSlider(80, 400, 8, "sv_gravity");
 			s.valueDigits = 0;
 			s.valueDisplayMultiplier = 0.125; // show gravity in percent
 		me.TD(me, 1, 2, e = makeNexuizSliderCheckBox(800, 1, s, "Low gravity"));
 			e.savedValue = 200; // good on silvercity
 	me.TR(me);
-		me.TDempty(me, 0.2);
+		me.TDempty(me, 0.4);
 		me.TD(me, 1, 1.8, s);
 	me.TR(me);
 	me.TR(me);
 		me.TD(me, 1, 2, makeNexuizTextLabel(0, "Weapon & item mutators:"));
 	me.TR(me);
+		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_grappling_hook", "Grappling hook"));
 	me.TR(me);
+		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_jetpack", "Jet pack"));
 	me.TR(me);
+		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_laserguided_missile", "Laser guided missiles"));
 	me.TR(me);
+		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_pinata", "Pinata"));
 	me.TR(me);
+		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2, e = makeNexuizCheckBoxEx(2, 0, "g_weapon_stay", "Weapons stay"));
 	me.TR(me);
 
 	me.gotoRC(me, 0, 2); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 4, makeNexuizTextLabel(0, "Weapon arenas:"));
 	me.TR(me);
-		me.TD(me, 1, 4, e = makeNexuizRadioButton(1, string_null, string_null, "Regular (no arena)"));
+		me.TDempty(me, 0.2);
+		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, string_null, string_null, "Regular (no arena)"));
 	for(i = WEP_FIRST, j = 0; i <= WEP_LAST; ++i)
 	{
 		w = get_weaponinfo(i);
@@ -211,6 +223,7 @@ void fillNexuizMutatorsDialog(entity me)
 			me.TR(me);
 		str = w.netname;
 		hstr = w.message;
+		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_weaponarena", strzone(str), strzone(hstr)));
 			e.cvarOffValue = "0";
 			// custom load/save logic that ignores a " laser" suffix, or adds it 
@@ -221,7 +234,7 @@ void fillNexuizMutatorsDialog(entity me)
 	}
 	me.TR(me);
 		me.TDempty(me, 0.2);
-		me.TD(me, 1, 3.8, e = makeNexuizCheckBox(0, "menu_weaponarena_with_laser", "with laser"));
+		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "menu_weaponarena_with_laser", "with laser"));
 			// hook the draw function to gray it out
 			e.draw_weaponarena = e.draw;
 			e.draw = preDrawLaserWeaponArenaLaserButton;
@@ -231,15 +244,18 @@ void fillNexuizMutatorsDialog(entity me)
 	me.TR(me);
 		me.TD(me, 1, 4, makeNexuizTextLabel(0, "Special arenas:"));
 	me.TR(me);
-		me.TD(me, 1, 4, e = makeNexuizRadioButton(1, "g_minstagib", string_null, "MinstaGib"));
-	me.TR(me);
-		me.TD(me, 1, 4, e = makeNexuizRadioButton(1, "g_nixnex", string_null, "NixNex"));
+		me.TDempty(me, 0.2);
+		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_minstagib", string_null, "MinstaGib"));
 	me.TR(me);
 		me.TDempty(me, 0.2);
-		me.TD(me, 1, 3.8, e = makeNexuizCheckBox(0, "g_nixnex_with_laser", "with laser"));
+		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_nixnex", string_null, "NixNex"));
+	me.TR(me);
+		me.TDempty(me, 0.4);
+		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "g_nixnex_with_laser", "with laser"));
 			setDependent(e, "g_nixnex", 1, 1);
 	me.TR(me);
-		me.TD(me, 1, 4, e = makeNexuizRadioButton(1, "g_weaponarena", "most", "Most weapons"));
+		me.TDempty(me, 0.2);
+		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_weaponarena", "most", "Most weapons"));
 			e.cvarOffValue = "0";
 
 	me.gotoRC(me, me.rows - 1, 0);

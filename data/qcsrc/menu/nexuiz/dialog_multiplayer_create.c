@@ -102,7 +102,7 @@ void fillNexuizServerCreateTab(entity me)
 		me.TD(me, 1, 2, makeNexuizSlider(1, 32, 1, "menu_maxplayers"));
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Number of bots:"));
-		me.TD(me, 1, 2, makeNexuizSlider(0, 7, 1, "bot_number"));
+		me.TD(me, 1, 2, makeNexuizSlider(0, 9, 1, "bot_number"));
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 0.8, e = makeNexuizTextLabel(0, "Bot skill:"));

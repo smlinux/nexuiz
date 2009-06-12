@@ -160,7 +160,8 @@ void fillNexuizEffectsSettingsTab(entity me)
 	me.TR(me);
 
 	me.TR(me);
-		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_coronas", "Coronas"));
+		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "r_coronas", "Coronas"));
+		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "r_coronas_occlusionquery", "Use occlusion queries"));
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "r_bloom", "Bloom"));
 			setDependent(e, "r_hdr", 0, 0);

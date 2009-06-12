@@ -29,16 +29,16 @@ void fillNexuizAdvancedDialog(entity me)
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 1.2, e = makeNexuizTextLabel(0, "Spawn shield:"));
-		me.TD(me, 1, 1.6, e = makeNexuizSlider(0, 15, 0.5, "g_spawnshieldtime"));
+		me.TD(me, 1, 1.7, e = makeNexuizSlider(0, 15, 0.5, "g_spawnshieldtime"));
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 1.2, e = makeNexuizTextLabel(0, "Start delay:"));
-		me.TD(me, 1, 1.6, e = makeNexuizSlider(0, 30, 0.5, "g_start_delay"));
+		me.TD(me, 1, 1.7, e = makeNexuizSlider(0, 30, 0.5, "g_start_delay"));
 	me.TR(me);
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 1.2, e = makeNexuizTextLabel(0, "Game speed:"));
-		me.TD(me, 1, 1.6, e = makeNexuizSlider(0.5, 2.0, 0.1, "slowmo"));
+		me.TD(me, 1, 1.7, e = makeNexuizSlider(0.5, 2.0, 0.1, "slowmo"));
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 1.2, e = makeNexuizCheckBoxEx(2, 0, "g_antilag", "AntiLag"));
@@ -48,11 +48,11 @@ void fillNexuizAdvancedDialog(entity me)
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 1.2, e = makeNexuizTextLabel(0, "Friendly fire scale:"));
-		me.TD(me, 1, 1.6, e = makeNexuizSlider(0, 1.0, 0.05, "g_friendlyfire"));
+		me.TD(me, 1, 1.7, e = makeNexuizSlider(0, 1.0, 0.05, "g_friendlyfire"));
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 1.2, e = makeNexuizTextLabel(0, "Mirror damage:"));
-		me.TD(me, 1, 1.6, e = makeNexuizSlider(0, 1.0, 0.05, "g_mirrordamage"));
+		me.TD(me, 1, 1.7, e = makeNexuizSlider(0, 1.0, 0.05, "g_mirrordamage"));
 
 	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("OK", '0 0 0'));

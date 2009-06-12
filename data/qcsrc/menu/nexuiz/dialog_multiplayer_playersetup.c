@@ -105,9 +105,8 @@ void fillNexuizPlayerSettingsTab(entity me)
 			e0.allowCut = 1;
 	me.TR(me);
 	me.TR(me);
-		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "crosshair_per_weapon", "Per weapon crosshairs"));
-	me.TR(me);
-		me.TD(me, 1, 3, e = makeNexuizCheckBox(1, "crosshair_color_override", "Per weapon crosshair colors"));
+		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "crosshair_per_weapon", "Per weapon crosshairs"));
+		me.TD(me, 1, 1.3, e = makeNexuizCheckBox(1, "crosshair_color_override", "& crosshair colors"));
 		setDependent(e, "crosshair_per_weapon", 1, 1);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Crosshair:"));
