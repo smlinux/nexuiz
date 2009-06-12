@@ -23,6 +23,52 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_enemyplay
 .float isgenneighbor_blue, iscpneighbor_blue;
 .float isgenneighbor_red, iscpneighbor_red;
 
+float havocbot_pickupevalfunc(entity item);
+
+void havocbot_goalrating_ons_offenseitems(float ratingscale, vector org, float sradius)
+{
+	local entity head;
+	local float t, i, c, needarmor, needweapons;
+
+	// Needs armor/health?
+	if(self.health<100)
+		needarmor = TRUE;
+
+	// Needs weapons?
+	for(i = WEP_FIRST; i < WEP_LAST ; ++i)
+	{
+		// Find weapon
+		if(power2of(i-1) & self.weapons)
+		if(++c>=4)
+			break;
+	}
+
+	if(c<4)
+		needweapons = TRUE;
+
+	if(!needweapons && !needarmor)
+		return;
+
+//	dprint(self.netname, " needs weapons ", ftos(needweapons) , "\n");
+//	dprint(self.netname, " needs armor ", ftos(needarmor) , "\n");
+
+	// See what is around
+	head = findchainfloat(bot_pickup, TRUE);
+	while (head)
+	{
+		// gather health and armor only
+		if (head.solid)
+		if ( ((head.health || head.armorvalue) && needarmor) || (head.weapons && needweapons ) )
+		if (vlen(head.origin - org) < sradius)
+		{
+			t = havocbot_pickupevalfunc(head);
+			if (t > 0)
+				navigation_routerating(head, t * ratingscale, 500);
+		}
+		head = head.chain;
+	}
+};
+
 void havocbot_role_ons_setrole(entity bot, float role)
 {
 	dprint(strcat(bot.netname," switched to "));
@@ -117,6 +163,7 @@ float havocbot_goalrating_ons_controlpoints_attack(float ratingscale)
 				navigation_routerating(bestwp, ratingscale, 10000);
 				bestwp.cnt += 1;
 
+				self.havocbot_attack_time = 0;
 				if(checkpvs(self.view_ofs,cp))
 				if(checkpvs(self.view_ofs,bestwp))
 					self.havocbot_attack_time = time + 2;
@@ -167,7 +214,7 @@ float havocbot_goalrating_ons_generator_attack(float ratingscale)
 		bestwp = world;
 		best = 99999999999;
 
-		for(wp=findradius(g.origin,350); wp; wp=wp.chain)
+		for(wp=findradius(g.origin,400); wp; wp=wp.chain)
 		{
 			if(wp.classname=="waypoint")
 			if(checkpvs(wp.origin,g))
@@ -187,6 +234,7 @@ float havocbot_goalrating_ons_generator_attack(float ratingscale)
 			navigation_routerating(bestwp, ratingscale, 10000);
 			bestwp.cnt += 1;
 
+			self.havocbot_attack_time = 0;
 			if(checkpvs(self.view_ofs,g))
 			if(checkpvs(self.view_ofs,bestwp))
 				self.havocbot_attack_time = time + 5;
@@ -231,15 +279,9 @@ void havocbot_role_ons_offense()
 	{
 		navigation_goalrating_start();
 		havocbot_goalrating_enemyplayers(20000, self.origin, 650);
-
-		if(havocbot_goalrating_ons_generator_attack(20000))
-			havocbot_goalrating_items(10000, self.origin, 300);
-		else
-		{
+		if(!havocbot_goalrating_ons_generator_attack(20000))
 			havocbot_goalrating_ons_controlpoints_attack(20000);
-			havocbot_goalrating_items(10000, self.origin, 500);
-		}
-		havocbot_goalrating_items(500, self.origin, 10000);
+		havocbot_goalrating_ons_offenseitems(10000, self.origin, 10000);
 		navigation_goalrating_end();
 
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
