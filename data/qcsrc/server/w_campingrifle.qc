@@ -149,6 +149,7 @@ float w_campingrifle(float req)
 	else if (req == WR_SETUP)
 	{
 		weapon_setup(WEP_CAMPINGRIFLE);
+		if(cvar("g_balance_campingrifle_auto_reload_after_changing_weapons"))
 		if(self.campingrifle_bulletcounter != 0)
 			self.campingrifle_bulletcounter = -1;
 	}
