@@ -1199,7 +1199,7 @@ effect TR_KNIGHTSPIKE // used for MF_TRACER2
 type alphastatic
 color 0x666666 0x000000
 tex 62 62
-size 1 1 
+size 1 1
 sizeincrease -0.1
 trailspacing 1
 alpha 256 256 720
@@ -2589,15 +2589,16 @@ airfriction 2
 
 
 // smoke
-// used nowhere in code
 effect EF_MGTURRETTRAIL
 notunderwater
-trailspacing 2
+trailspacing 5
 type smoke
-color 0xd0d0a0 0xfffff0
+color 0xd0d0a0 0xffffff
 tex 0 8
-size 6 2
-alpha 16 32 16
+size 5 4
+alpha 128 196 768
+sizeincrease -8
+gravity -0.01
 // bubbles
 effect EF_MGTURRETTRAIL
 underwater
@@ -2779,7 +2780,7 @@ airfriction -1
 
 //golden dust (create it once per second to cover large area in small yellow particles)
 // used nowhere in code
-effect goldendust  
+effect goldendust
 count 50
 type snow
 tex 38 38
@@ -2857,7 +2858,7 @@ originjitter 5 5 5
 velocityjitter 25 25 25
 airfriction 2
 
-// pieces of glass or ice falling on the floor 
+// pieces of glass or ice falling on the floor
 // used nowhere in code
 effect iceorglass
 count 30
@@ -2906,7 +2907,7 @@ originjitter 333 333 0
 velocityjitter 5 5 30
 airfriction 1
 effect icefield
-count 10 
+count 10
 type smoke
 tex 48 55
 size 1 1
@@ -2925,7 +2926,7 @@ count 200
 type smoke
 tex 48 55
 color 0x8f0d00 0xff5a00
-size 1 1 
+size 1 1
 sizeincrease 20
  gravity -0.06
 alpha 50 256 200
@@ -2939,7 +2940,7 @@ count 100
 type smoke
 tex 48 55
 color 0x8f0d00 0xff5a00
-size 1 1 
+size 1 1
 sizeincrease 40
 alpha 50 256 200
 originjitter 180 180 0
@@ -2963,7 +2964,7 @@ count 6
 type smoke
 tex 48 55
 color 0x8f0d00 0xff5a00
-size 5 5 
+size 5 5
 sizeincrease 20
  gravity -0.06
 alpha 50 256 250
@@ -2977,7 +2978,7 @@ count 5
 type smoke
 tex 48 55
 color 0x8f0d00 0xff5a00
-size 5 5 
+size 5 5
 sizeincrease 20
  gravity -0.06
 alpha 50 256 200
@@ -2991,7 +2992,7 @@ count 3
 type smoke
 tex 48 55
 color 0x8f0d00 0xff5a00
-size 5 5 
+size 5 5
 sizeincrease 10
  gravity -0.06
 alpha 50 256 200
