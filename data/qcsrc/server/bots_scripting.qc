@@ -343,7 +343,7 @@ void bot_cmdhelp(string scmd)
 				print("Pause command parsing and bot ai until time is N from the last barrier. Pressed key will remain pressed");
 				break;
 			case BOT_CMD_BARRIER:
-				print("Waits till all bots reach this command. Pressed key will remain pressed");
+				print("Waits till all bots that have a command queue reach this command. Pressed key will remain pressed");
 				break;
 			case BOT_CMD_TURN:
 				print("Look to the right or left N degrees. For turning to the left use positive numbers.");
@@ -512,8 +512,9 @@ float bot_cmd_barrier()
 	{
 		FOR_EACH_CLIENT(cl) if(cl.isbot)
 		{
-			if(cl.bot_barrier != 1)
-				return CMD_STATUS_EXECUTING; // not all are at the barrier yet
+			if(cl.bot_cmdqueuebuf_allocated)
+				if(cl.bot_barrier != 1)
+					return CMD_STATUS_EXECUTING; // not all are at the barrier yet
 		}
 
 		// all bots hit the barrier!
@@ -1059,6 +1060,7 @@ void bot_resetqueues()
 		FOR_EACH_CLIENT(cl) if(cl.isbot)
 		{
 			cl.bot_barrier = 0;
+			cl.bot_barrier_allowed = FALSE;
 		}
 	}
 
