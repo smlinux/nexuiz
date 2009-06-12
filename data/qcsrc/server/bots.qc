@@ -1514,7 +1514,7 @@ entity navigation_findnearestwaypoint(entity ent, float walkfromwp)
 					if (walkfromwp)
 					{
 						//print("^1can I reach ", vtos(org), " from ", vtos(v), "?\n");
-						if (tracewalk(ent, v, PL_MIN, PL_MAX, org, MOVE_NOMONSTERS))
+						if (tracewalk(ent, v, PL_MIN, PL_MAX, org, MOVE_NORMAL))
 						{
 							bestdist = dist;
 							best = w;
@@ -1522,7 +1522,7 @@ entity navigation_findnearestwaypoint(entity ent, float walkfromwp)
 					}
 					else
 					{
-						if (tracewalk(ent, org, PL_MIN, PL_MAX, v, MOVE_NOMONSTERS))
+						if (tracewalk(ent, org, PL_MIN, PL_MAX, v, MOVE_NORMAL))
 						{
 							bestdist = dist;
 							best = w;
@@ -1565,7 +1565,7 @@ float navigation_markroutes_nearestwaypoints(entity waylist, float maxdist)
 			if (vlen(diff) < maxdist)
 			{
 				head.wpconsidered = TRUE;
-				if (tracewalk(self, self.origin, self.mins, self.maxs, v, MOVE_NOMONSTERS))
+				if (tracewalk(self, self.origin, self.mins, self.maxs, v, MOVE_NORMAL))
 				{
 					head.wpnearestpoint = v;
 					head.wpcost = vlen(v - self.origin) + head.dmg;
@@ -1798,7 +1798,7 @@ float navigation_routetogoal(entity e, vector startposition)
 	navigation_pushroute(e);
 
 	// if it can reach the goal there is nothing more to do
-	if (tracewalk(self, startposition, PL_MIN, PL_MAX, e.origin, MOVE_NOMONSTERS))
+	if (tracewalk(self, startposition, PL_MIN, PL_MAX, e.origin, MOVE_NORMAL))
 		return TRUE;
 
 	// see if there are waypoints describing a path to the item
@@ -1926,11 +1926,14 @@ void navigation_goalrating_end()
 	{
 		dprint(self.netname, " can't walk to any goal, going to a near waypoint\n");
 		local entity head;
-		head = findradius(self.origin,500);
+		head = findradius(self.origin,1000);
 		while(head)
 		{
 			if(head.classname=="waypoint")
-			if(checkpvs(self.origin,head))
+			if(!(head.wpflags & WAYPOINTFLAG_GENERATED))
+			if(vlen(self.origin-head.origin)>100)
+			if(checkpvs(self.view_ofs,head))
+			if(random()<0.5)
 				navigation_routetogoal(head,self.origin);
 
 			head = head.chain;
