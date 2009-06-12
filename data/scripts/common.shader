@@ -197,6 +197,13 @@ textures/common/nodrop
 textures/common/noimpact
 {
 	qer_editorimage textures/common/nolightmap.tga
+	qer_nocarve
+	qer_trans 0.5
+	surfaceparm nodraw
+	surfaceparm nolightmap
+	surfaceparm nonsolid
+	surfaceparm trans
+	surfaceparm nomarks
 	surfaceparm noimpact
 }
 
