@@ -201,7 +201,6 @@ textures/common/noimpact
 	qer_trans 0.5
 	surfaceparm nodraw
 	surfaceparm nolightmap
-	surfaceparm nonsolid
 	surfaceparm trans
 	surfaceparm nomarks
 	surfaceparm noimpact
