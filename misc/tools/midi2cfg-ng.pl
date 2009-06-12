@@ -226,7 +226,7 @@ sub busybot_cmd_bot_execute($$@)
 	{
 		if($_->[0] eq 'time')
 		{
-			printf "w %d %f\n", $bot->{id}, $time + $_->[1];
+			printf "sv_cmd bot_cmd %d wait_until %f\n", $bot->{id}, $time + $_->[1];
 			$bot->{timer} = $time + $_->[1];
 		}
 		elsif($_->[0] eq 'busy')
@@ -243,14 +243,14 @@ sub busybot_cmd_bot_execute($$@)
 			}
 			for(keys %buttons_release)
 			{
-				printf "r %d %s\n", $bot->{id}, $_;
+				printf "sv_cmd bot_cmd %d releasekey %s\n", $bot->{id}, $_;
 				delete $bot->{buttons}->{$_};
 			}
 			for(@{$_}[1..@$_-1])
 			{
 				/(.*)(\?)?/ or next;
 				defined $2 and next;
-				printf "p %d %s\n", $bot->{id}, $_;
+				printf "sv_cmd bot_cmd %d presskey %s\n", $bot->{id}, $_;
 				$bot->{buttons}->{$_} = 1;
 			}
 		}
@@ -305,7 +305,7 @@ sub busybot_note_on_bot($$$$$)
 	{
 		return 0
 			if not busybot_cmd_bot_test $bot, $time + $notetime, @$cmds; 
-		busybot_cmd_bot_execute $bot, 0, ['wait', $timeoffset];
+		busybot_cmd_bot_execute $bot, 0, ['cmd', 'wait', $timeoffset];
 		busybot_cmd_bot_execute $bot, 0, ['cmd', 'barrier'];
 		busybot_cmd_bot_execute $bot, 0, @{$bot->{init}}
 			if @{$bot->{init}};
@@ -397,11 +397,6 @@ sub busybot_note_on($$$)
 	return 0;
 }
 
-print 'alias p "sv_cmd bot_cmd $1 presskey $2"' . "\n";
-print 'alias r "sv_cmd bot_cmd $1 releasekey $2"' . "\n";
-print 'alias w "sv_cmd bot_cmd $1 wait_until $2"' . "\n";
-print 'alias m "sv_cmd bot_cmd $1 moveto \"$2 $3 $4\""' . "\n";
-
 for(@preallocate)
 {
 	die "Cannot preallocate any more $_ bots"
@@ -409,7 +404,7 @@ for(@preallocate)
 	my $bot = Storable::dclone $busybots->{$_};
 	$bot->{id} = @busybots_allocated + 1;
 	$bot->{classname} = $_;
-	busybot_cmd_bot_execute $bot, 0, ['wait', $timeoffset];
+	busybot_cmd_bot_execute $bot, 0, ['cmd', 'wait', $timeoffset];
 	busybot_cmd_bot_execute $bot, 0, ['cmd', 'barrier'];
 	busybot_cmd_bot_execute $bot, 0, @{$bot->{init}}
 		if @{$bot->{init}};
@@ -458,14 +453,14 @@ for(@allmidievents)
 
 for(@busybots_allocated)
 {
-	busybot_cmd_bot_execute $_, 0, ['wait', $timeoffset3];
+	busybot_cmd_bot_execute $_, 0, ['cmd', 'wait', $timeoffset3];
 	busybot_cmd_bot_execute $_, 0, ['cmd', 'barrier'];
 	if($_->{done})
 	{
-		busybot_cmd_bot_execute $_, @{$_->{done}};
+		busybot_cmd_bot_execute $_, 0, @{$_->{done}};
 	}
 	busybot_cmd_bot_execute $_, 0, ['cmd', 'barrier'];
-	busybot_cmd_bot_execute $_, 0, ['wait', $timeoffset4];
+	busybot_cmd_bot_execute $_, 0, ['cmd', 'wait', $timeoffset4];
 }
 
 print STDERR "Range of notes: $note_min .. $note_max\n";
