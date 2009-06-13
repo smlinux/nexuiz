@@ -175,8 +175,16 @@ void fillNexuizServerCreateTab(entity me)
 
 void GameType_ConfigureSliders(entity e, entity l, string pLabel, float pMin, float pMax, float pStep, string pCvar)
 {
-	e.configureNexuizSlider(e, pMin, pMax, pStep, pCvar);
-	l.setText(l, pLabel);
+	if(pCvar == "")
+	{
+		e.disabled = TRUE;
+	}
+	else
+	{
+		e.configureNexuizSlider(e, pMin, pMax, pStep, pCvar);
+		l.setText(l, pLabel);
+		e.disabled = FALSE;
+	}
 }
 
 void gameTypeChangeNotifyNexuizServerCreateTab(entity me)
@@ -189,12 +197,16 @@ void gameTypeChangeNotifyNexuizServerCreateTab(entity me)
 	l = me.checkboxFraglimit;
 	switch(gt)
 	{
-		case MAPINFO_TYPE_CTF:        GameType_ConfigureSliders(e, l, "Point limit:",  50,  500, 10, "g_ctf_capture_limit");      break;
-		case MAPINFO_TYPE_DOMINATION: GameType_ConfigureSliders(e, l, "Point limit:",  50,  500, 10, "g_domination_point_limit"); break;
-		case MAPINFO_TYPE_KEYHUNT:    GameType_ConfigureSliders(e, l, "Point limit:", 200, 1500, 50, "g_keyhunt_point_limit");    break;
-		case MAPINFO_TYPE_RUNEMATCH:  GameType_ConfigureSliders(e, l, "Point limit:",  50,  500, 10, "g_runematch_point_limit");  break;
-		case MAPINFO_TYPE_LMS:        GameType_ConfigureSliders(e, l, "Lives:",         3,   50,  1, "g_lms_lives_override");     break;
-		default:                      GameType_ConfigureSliders(e, l, "Frag limit:",    5,  100,  5, "fraglimit_override");       break;
+		case MAPINFO_TYPE_CTF:        GameType_ConfigureSliders(e, l, "Capture limit:",   2,   20, 10, "capturelimit_override");    break;
+		case MAPINFO_TYPE_DOMINATION: GameType_ConfigureSliders(e, l, "Point limit:",    50,  500, 10, "g_domination_point_limit"); break;
+		case MAPINFO_TYPE_KEYHUNT:    GameType_ConfigureSliders(e, l, "Point limit:",   200, 1500, 50, "g_keyhunt_point_limit");    break;
+		case MAPINFO_TYPE_RUNEMATCH:  GameType_ConfigureSliders(e, l, "Point limit:",    50,  500, 10, "g_runematch_point_limit");  break;
+		case MAPINFO_TYPE_LMS:        GameType_ConfigureSliders(e, l, "Lives:",           3,   50,  1, "g_lms_lives_override");     break;
+		case MAPINFO_TYPE_RACE:       GameType_ConfigureSliders(e, l, "Laps:",            1,   25,  1, "g_race_laps_limit");        break;
+		case MAPINFO_TYPE_NEXBALL:    GameType_ConfigureSliders(e, l, "Goals:",           3,   50,  1, "g_nexball_goallimit");      break;
+		case MAPINFO_TYPE_ASSAULT:    GameType_ConfigureSliders(e, l, "Point limit:",    50,  500, 10, "");                         break;
+		case MAPINFO_TYPE_ONSLAUGHT:  GameType_ConfigureSliders(e, l, "Point limit:",    50,  500, 10, "");                         break;
+		default:                      GameType_ConfigureSliders(e, l, "Frag limit:",      5,  100,  5, "fraglimit_override");       break;
 	}
 	me.mapListBox.refilter(me.mapListBox);
 }
