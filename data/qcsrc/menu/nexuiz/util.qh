@@ -10,6 +10,7 @@ void setDependentOR(entity e, string theCvarName, float theCvarMin, float theCva
 void setDependentAND3(entity e, string theCvarName, float theCvarMin, float theCvarMax, string theCvar2Name, float theCvar2Min, float theCvar2Max, string theCvar3Name, float theCvar3Min, float theCvar3Max);
 void setDependentStringNotEqual(entity e, string theCvarName, string theCvarValue);
 
+float tooltipdb;
 void loadTooltips();
 void unloadTooltips();
 string getZonedTooltipForIdentifier(string s);
