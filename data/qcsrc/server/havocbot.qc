@@ -1132,6 +1132,7 @@ void havocbot_ai()
 };
 
 .entity havocbot_personal_waypoint;
+.float havocbot_personal_waypoint_searchtime;
 float havocbot_moveto_refresh_route()
 {
 	// Refresh path to goal if necessary
@@ -1140,19 +1141,7 @@ float havocbot_moveto_refresh_route()
 	navigation_goalrating_start();
 	navigation_routerating(wp, 10000, 10000);
 	navigation_goalrating_end();
-
-	if(self.navigation_hasgoals)
-	{
-		dprint(self.netname, " walking to its personal waypoint\n");
-		self.bot_strategytime = time + 10;
-		return TRUE;
-	}
-	else
-	{
-		dprint("(", self.netname, ") Warning: can't walk to the personal waypoint located at ", vtos(wp.origin),", trying again later\n");
-		self.bot_strategytime = time + 1;
-		return FALSE;
-	}
+	return self.navigation_hasgoals;
 }
 
 .float havocbot_personal_waypoint_failcounter;
@@ -1171,23 +1160,28 @@ float havocbot_moveto(vector pos)
 		}
 
 		if (!bot_strategytoken_taken)
-		if(self.bot_strategytime<time)
+		if(self.havocbot_personal_waypoint_searchtime<time)
 		{
 			bot_strategytoken_taken = TRUE;
 			if(havocbot_moveto_refresh_route())
 			{
+				dprint(self.netname, " walking to its personal waypoint (after ", ftos(self.havocbot_personal_waypoint_failcounter), " failed attempts)\n");
+				self.havocbot_personal_waypoint_searchtime = time + 10;
 				self.havocbot_personal_waypoint_failcounter = 0;
 			}
 			else
 			{
 				self.havocbot_personal_waypoint_failcounter += 1;
+				self.havocbot_personal_waypoint_searchtime = time + 2;
 				if(self.havocbot_personal_waypoint_failcounter >= 10)
 				{
-					dprint("Warning: can't walk to the personal waypoint located at ", vtos(wp.origin),"\n");
+					dprint("Warning: can't walk to the personal waypoint located at ", vtos(self.havocbot_personal_waypoint.origin),"\n");
 					self.aistatus &~= AI_STATUS_WAYPOINT_PERSONAL_LINKING;
 					remove(self.havocbot_personal_waypoint);
 					return CMD_STATUS_ERROR;
 				}
+				else
+					dprint(self.netname, " can't walk to its personal waypoint (after ", ftos(self.havocbot_personal_waypoint_failcounter), " failed attempts), trying later\n");
 			}
 		}
 
@@ -1225,7 +1219,7 @@ float havocbot_moveto(vector pos)
 			return CMD_STATUS_EXECUTING;
 		}
 
-		self.bot_strategytime = time; // so we set the route next frame
+		self.havocbot_personal_waypoint_searchtime = time; // so we set the route next frame
 		self.aistatus &~= AI_STATUS_WAYPOINT_PERSONAL_LINKING;
 		self.aistatus |= AI_STATUS_WAYPOINT_PERSONAL_GOING;
 

@@ -970,7 +970,7 @@ void GameCommand(string command)
 						bot_queuecommand(bot, strcat(argv(3), " ", argv(4)));
 				}
 				else
-					localcmd(s, "\n");
+					localcmd(strcat(s, "\n"));
 
 				++i;
 			}

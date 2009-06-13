@@ -1927,7 +1927,10 @@ void navigation_goalrating_end()
 	if not (self.navigation_hasgoals)
 	{
 		dprint(self.netname, " can't walk to any goal, going to a near waypoint\n");
-		local entity head;
+
+		entity head;
+
+		RandomSelection_Init();
 		head = findradius(self.origin,1000);
 		while(head)
 		{
@@ -1935,11 +1938,12 @@ void navigation_goalrating_end()
 			if(!(head.wpflags & WAYPOINTFLAG_GENERATED))
 			if(vlen(self.origin-head.origin)>100)
 			if(checkpvs(self.view_ofs,head))
-			if(random()<0.5)
-				navigation_routetogoal(head,self.origin);
-
+				RandomSelection_Add(head, 0, string_null, 1, 0);
 			head = head.chain;
 		}
+		if(RandomSelection_chosen_ent)
+			navigation_routetogoal(RandomSelection_chosen_ent, self.origin);
+
 		self.navigation_hasgoals = FALSE; // Reset this value
 	}
 };

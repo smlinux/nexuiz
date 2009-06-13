@@ -2161,17 +2161,21 @@ void Sbar_Draw (void)
 
 	if (intermission == 1)
 	{
-		Sbar_DrawCenterPrint();
 		if(sb_showaccuracy)
 			Sbar_DrawAccuracyStats();
 		else
 			Sbar_DrawScoreboard();
-		return;
+		Sbar_DrawCenterPrint();
 	}
 	else if (intermission == 2)
 	{
-		Sbar_FinaleOverlay();
-		Sbar_DrawCenterPrint();
+		if(sb_showaccuracy)
+			Sbar_DrawAccuracyStats();
+		else if (sb_showscores)
+			Sbar_DrawScoreboard();
+		else
+			Sbar_FinaleOverlay();
+		Sbar_DrawCenterPrint();	
 	}
 	else if(sb_showaccuracy)
  	{
