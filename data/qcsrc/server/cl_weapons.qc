@@ -187,7 +187,6 @@ string W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vecto
 	wep.classname = "droppedweapon";
 	wep.velocity = velo;
 	wep.owner = wep.enemy = own;
-	wep.classname = "droppedweapon";
 	wep.flags |= FL_TOSSED;
 	wep.colormap = own.colormap;
 

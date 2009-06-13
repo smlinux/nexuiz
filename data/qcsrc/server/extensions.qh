@@ -1151,7 +1151,7 @@ float(entity clent) clienttype = #455; // returns one of the CLIENTTYPE_* consta
 //darkplaces implementation: divVerent
 //field definitions:
 .float bouncefactor; // velocity multiplier after a bounce
-.float bouncestop; // bounce stops if velocity to bounce plane is < bouncestop * gravity
+.float bouncestop; // bounce stops if velocity to bounce plane is < bouncestop * gravity AFTER the bounce
 //description:
 //allows qc to customize MOVETYPE_BOUNCE a bit
 
