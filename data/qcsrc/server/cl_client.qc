@@ -1881,7 +1881,10 @@ float zoomstate_set;
 void SetZoomState(float z)
 {
 	if(z != self.zoomstate)
+	{
+		self.zoomstate = z;
 		ClientData_Touch(self);
+	}
 	zoomstate_set = 1;
 }
 
