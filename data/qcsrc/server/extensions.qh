@@ -1146,6 +1146,15 @@ float(entity clent) clienttype = #455; // returns one of the CLIENTTYPE_* consta
 //on level change ClientConnect and PutClientInServer are called by the engine to spawn in the bot (this is why clienttype() exists to tell you on the next level what type of client this is).
 //parms work the same on bot clients as they do on real clients, and do carry from level to level
 
+//DP_SV_BOUNCEFACTOR
+//idea: divVerent
+//darkplaces implementation: divVerent
+//field definitions:
+.float bouncefactor; // velocity multiplier after a bounce
+.float bouncestop; // bounce stops if velocity to bounce plane is < bouncestop * gravity
+//description:
+//allows qc to customize MOVETYPE_BOUNCE a bit
+
 //DP_SV_CLIENTCOLORS
 //idea: LordHavoc
 //darkplaces implementation: LordHavoc
