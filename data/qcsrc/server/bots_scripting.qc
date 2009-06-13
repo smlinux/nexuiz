@@ -70,7 +70,7 @@ float bot_havecommand(entity bot, float idx)
 entity bot_getplace(string placename)
 {
 	entity e;
-	if(substring(placename, 0, 1) == "$")
+	if(substring(placename, 0, 1) == "@")
 	{
 		float i, p;
 		placename = substring(placename, 1, -1);
