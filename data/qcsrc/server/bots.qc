@@ -66,6 +66,7 @@ void debugnodestatus(vector position, float status)
 // can be traveled, used for waypoint linking and havocbot
 
 vector stepheightvec;
+float bot_navigation_movemode;
 float navigation_testtracewalk;
 float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float movemode)
 {
@@ -574,6 +575,7 @@ void waypoint_think()
 	local vector sv, sm1, sm2, ev, em1, em2, dv;
 
 	stepheightvec = cvar("sv_stepheight") * '0 0 1';
+	bot_navigation_movemode = ((cvar("bot_navigation_ignoreplayers")) ? MOVE_NOMONSTERS : MOVE_NORMAL);
 
 	//dprint("waypoint_think wpisbox = ", ftos(self.wpisbox), "\n");
 	sm1 = self.origin + self.mins;
@@ -1514,7 +1516,7 @@ entity navigation_findnearestwaypoint(entity ent, float walkfromwp)
 					if (walkfromwp)
 					{
 						//print("^1can I reach ", vtos(org), " from ", vtos(v), "?\n");
-						if (tracewalk(ent, v, PL_MIN, PL_MAX, org, MOVE_NORMAL))
+						if (tracewalk(ent, v, PL_MIN, PL_MAX, org, bot_navigation_movemode))
 						{
 							bestdist = dist;
 							best = w;
@@ -1522,7 +1524,7 @@ entity navigation_findnearestwaypoint(entity ent, float walkfromwp)
 					}
 					else
 					{
-						if (tracewalk(ent, org, PL_MIN, PL_MAX, v, MOVE_NORMAL))
+						if (tracewalk(ent, org, PL_MIN, PL_MAX, v, bot_navigation_movemode))
 						{
 							bestdist = dist;
 							best = w;
@@ -1565,7 +1567,7 @@ float navigation_markroutes_nearestwaypoints(entity waylist, float maxdist)
 			if (vlen(diff) < maxdist)
 			{
 				head.wpconsidered = TRUE;
-				if (tracewalk(self, self.origin, self.mins, self.maxs, v, MOVE_NORMAL))
+				if (tracewalk(self, self.origin, self.mins, self.maxs, v, bot_navigation_movemode))
 				{
 					head.wpnearestpoint = v;
 					head.wpcost = vlen(v - self.origin) + head.dmg;
@@ -1798,7 +1800,7 @@ float navigation_routetogoal(entity e, vector startposition)
 	navigation_pushroute(e);
 
 	// if it can reach the goal there is nothing more to do
-	if (tracewalk(self, startposition, PL_MIN, PL_MAX, e.origin, MOVE_NORMAL))
+	if (tracewalk(self, startposition, PL_MIN, PL_MAX, e.origin, bot_navigation_movemode))
 		return TRUE;
 
 	// see if there are waypoints describing a path to the item
@@ -2843,6 +2845,7 @@ void bot_serverframe()
 		return;
 
 	stepheightvec = cvar("sv_stepheight") * '0 0 1';
+	bot_navigation_movemode = ((cvar("bot_navigation_ignoreplayers")) ? MOVE_NOMONSTERS : MOVE_NORMAL);
 
 	if(time > autoskill_nextthink)
 	{
@@ -2868,7 +2871,7 @@ void bot_serverframe()
 	// But don't remove bots immediately on level change, as the real players
 	// usually haven't rejoined yet
 	bots_would_leave = FALSE;
-	if (realplayers || cvar("bot_join_empty") || (currentbots > 0 && time < 5))
+	if ((realplayers || cvar("bot_join_empty") || (currentbots > 0 && time < 5)))
 	{
 		float realminplayers, minplayers;
 		realminplayers = cvar("minplayers");
