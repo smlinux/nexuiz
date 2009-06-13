@@ -242,6 +242,8 @@ void Ent_DamageInfo()
 				else if(r < 0.5)
 					sound(self, CHAN_PROJECTILE, "weapons/ric3.wav", VOL_BASE, ATTN_NORM);
 				break;
+			case WEP_TUBA:
+				break;
 			default:
 				dprint("Unhandled damage of weapon ", ftos(hitwep), "\n");
 				break;
