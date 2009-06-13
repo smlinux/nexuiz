@@ -1132,6 +1132,30 @@ void havocbot_ai()
 };
 
 .entity havocbot_personal_waypoint;
+float havocbot_moveto_refresh_route()
+{
+	// Refresh path to goal if necessary
+	entity wp;
+	wp = self.havocbot_personal_waypoint;
+	navigation_goalrating_start();
+	navigation_routerating(wp, 10000, 10000);
+	navigation_goalrating_end();
+
+	if(self.navigation_hasgoals)
+	{
+		dprint(self.netname, " walking to its personal waypoint\n");
+		self.bot_strategytime = time + 10;
+		return TRUE;
+	}
+	else
+	{
+		dprint("(", self.netname, ") Warning: can't walk to the personal waypoint located at ", vtos(wp.origin),", trying again later\n");
+		self.bot_strategytime = time + 1;
+		return FALSE;
+	}
+}
+
+.float havocbot_personal_waypoint_failcounter;
 float havocbot_moveto(vector pos)
 {
 	local entity wp;
@@ -1149,23 +1173,22 @@ float havocbot_moveto(vector pos)
 		if (!bot_strategytoken_taken)
 		if(self.bot_strategytime<time)
 		{
-			// Refresh path to goal if necessary
-			wp = self.havocbot_personal_waypoint;
-			navigation_goalrating_start();
-			navigation_routerating(wp, 10000, 10000);
-			navigation_goalrating_end();
-
-			if(self.navigation_hasgoals)
-				dprint(self.netname, " walking to its personal waypoint\n");
+			bot_strategytoken_taken = TRUE;
+			if(havocbot_moveto_refresh_route())
+			{
+				self.havocbot_personal_waypoint_failcounter = 0;
+			}
 			else
 			{
-				dprint("Warning: can't walk to the personal waypoint located at ", vtos(wp.origin),"\n");
-				self.aistatus &~= AI_STATUS_WAYPOINT_PERSONAL_GOING;
-				return CMD_STATUS_ERROR;
+				self.havocbot_personal_waypoint_failcounter += 1;
+				if(self.havocbot_personal_waypoint_failcounter >= 10)
+				{
+					dprint("Warning: can't walk to the personal waypoint located at ", vtos(wp.origin),"\n");
+					self.aistatus &~= AI_STATUS_WAYPOINT_PERSONAL_LINKING;
+					remove(self.havocbot_personal_waypoint);
+					return CMD_STATUS_ERROR;
+				}
 			}
-
-			bot_strategytoken_taken = TRUE;
-			self.bot_strategytime = time + 10;
 		}
 
 		#ifdef DEBUG_BOT_GOALSTACK
@@ -1202,26 +1225,11 @@ float havocbot_moveto(vector pos)
 			return CMD_STATUS_EXECUTING;
 		}
 
-		// Step 3: Route to waypoint
-		wp = self.havocbot_personal_waypoint;
-		navigation_goalrating_start();
-		navigation_routerating(wp, 10000, 10000);
-		navigation_goalrating_end();
-
-		if(!self.navigation_hasgoals)
-		{
-			dprint("Warning: can't walk to the personal waypoint located at ", vtos(wp.origin),"\n");
-			self.aistatus &~= AI_STATUS_WAYPOINT_PERSONAL_LINKING;
-			remove(wp);
-			return CMD_STATUS_ERROR;
-		}
-
-		bot_strategytoken_taken = TRUE;
-		self.bot_strategytime = time + 10;
-
+		self.bot_strategytime = time; // so we set the route next frame
 		self.aistatus &~= AI_STATUS_WAYPOINT_PERSONAL_LINKING;
 		self.aistatus |= AI_STATUS_WAYPOINT_PERSONAL_GOING;
 
+		// Step 3: Route to waypoint
 		dprint(self.netname, " walking to its personal waypoint\n");
 
 		return CMD_STATUS_EXECUTING;
@@ -1236,6 +1244,7 @@ float havocbot_moveto(vector pos)
 	}
 
 	self.havocbot_personal_waypoint = wp;
+	self.havocbot_personal_waypoint_failcounter = 0;
 	self.aistatus |= AI_STATUS_WAYPOINT_PERSONAL_LINKING;
 
 	return CMD_STATUS_EXECUTING;
