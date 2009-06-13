@@ -1173,7 +1173,7 @@ float havocbot_moveto(vector pos)
 			{
 				self.havocbot_personal_waypoint_failcounter += 1;
 				self.havocbot_personal_waypoint_searchtime = time + 2;
-				if(self.havocbot_personal_waypoint_failcounter >= 10)
+				if(self.havocbot_personal_waypoint_failcounter >= 30)
 				{
 					dprint("Warning: can't walk to the personal waypoint located at ", vtos(self.havocbot_personal_waypoint.origin),"\n");
 					self.aistatus &~= AI_STATUS_WAYPOINT_PERSONAL_LINKING;
