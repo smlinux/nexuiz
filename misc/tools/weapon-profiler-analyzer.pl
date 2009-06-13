@@ -136,6 +136,7 @@ sub Evaluate($)
 			++$allweps{$k2};
 		}
 	}
+	delete $allweps{0}; # ignore the tuba
 	my @allweps = keys %allweps;
 	my %values;
 

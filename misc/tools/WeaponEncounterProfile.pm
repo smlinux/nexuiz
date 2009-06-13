@@ -121,12 +121,14 @@ sub weaponid_valid($$)
 sub weaponid_to_name($$)
 {
 	my ($self, $id) = @_;
+	exists $WeaponMap{$id} or warn "weapon of id $id not found\n";
 	return $WeaponMap{$id}[0];
 }
 
 sub weaponid_to_model($$)
 {
 	my ($self, $id) = @_;
+	exists $WeaponMap{$id} or warn "weapon of id $id not found\n";
 	return $WeaponMap{$id}[1];
 }
 
