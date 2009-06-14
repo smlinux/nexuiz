@@ -102,55 +102,55 @@
 \NexuizSettingsDialog/Video\Video settings
 \vid_width\Screen resolution
 \vid_bitsperpixel\How many bits per pixel (BPP) to render at, 32 is recommended
-\vid_fullscreen\Enable fullscreen mode
+\vid_fullscreen\Enable fullscreen mode (default: enabled)
 \vid_vsync\Enable vertical synchronization to prevent tearing, will cap your fps to the screen refresh rate (default: disabled)
 \r_glsl\Enable OpenGL 2.0 pixel shaders for lightning (default: enabled)
-\r_coronas_occlusionquery\Fade coronas according to visibility (default: enabled)
 \gl_vbo\Make use of Vertex Buffer Objects to store static geometry in video memory for faster rendering (default: Vertex and Triangles)
 \r_depthfirst\Eliminate overdraw by rendering a depth-only version of the scene before the normal rendering starts (default: disabled)
 \gl_texturecompression\Compress the textures for video cards with small amounts of video memory available (default: None)
 \gl_finish\Make the CPU wait for the GPU to finish each frame, can help with some strange input or video lag on some machines (default: disabled)
-\v_brightness\Brightness of black
-\v_contrast\Brightness of white
-\v_gamma\Inverse gamma correction value, a brightness effect that does not affect white or black
-\v_contrastboost\By how much to multiply the contrast in dark areas
-\r_glsl_saturation\Saturation adjustment (0 = gray, 1 = normal, 2 = oversaturated), note that it might decrease performance by a lot to set this to anything other than 1
+\v_brightness\Brightness of black (default: 0)
+\v_contrast\Brightness of white (default: 1)
+\v_gamma\Inverse gamma correction value, a brightness effect that does not affect white or black (default: 1.125)
+\v_contrastboost\By how much to multiply the contrast in dark areas (default: 1)
+\r_glsl_saturation\Saturation adjustment (0 = grayscale, 1 = normal, 2 = oversaturated), requires GLSL color control (default: 1)
 \v_glslgamma\Enable use of GLSL to apply gamma correction, note that it might decrease performance by a lot (default: disabled)
 \r_ambient\Ambient lighting, if set too high it tends to make light on maps look dull and flat (default: 4)
 \r_hdr_scenebrightness\Global rendering brightness (default: 1)
 \vid_samples\Enable 4x antialiasing, which smooths the edges of 3D geometry. Note that it might decrease performance by quite a lot (default: off)
-\v_flipped\Poor man's left handed mode
+\v_flipped\Poor man's left handed mode (default: off)
 
 \NexuizSettingsDialog/Effects\Effect settings
-\r_subdivisions_tolerance\Change the smoothness of the curves on the map
-\gl_picmip\Change the sharpness of the textures. Lowering it will effectively reduce texture memory usage, but make the textures appear very blurry.
-\r_picmipworld\If set, only reduce the texture quality of models
+\r_subdivisions_tolerance\Change the smoothness of the curves on the map (default: normal)
+\gl_picmip\Change the sharpness of the textures. Lowering it will effectively reduce texture memory usage, but make the textures appear very blurry. (default: good)
+\r_picmipworld\If set, only reduce the texture quality of models (default: enabled)
 \mod_q3bsp_nolightmaps\Use high resolution lightmaps, which will look pretty but use up some extra video memory (default: enabled)
 \cl_particles_quality\Multiplier for amount of particles. Less means less particles, which in turn gives for better performance (default: 0.5)
-\r_drawparticles_drawdistance\Particles further away than this will not be drawn
-\cl_decals\Enable decals (bullet holes and blood)
-\r_drawdecals_drawdistance\Decals further away than this will not be drawn
-\cl_decals_time\Time in seconds before decals fade away
-\cl_gentle\Replace blood and gibs with content that does not have any gore effects
-\cl_nogibs\Reduce the amount of gibs or remove them completely
-\v_kicktime\How long a view kick from damage lasts
-\gl_texture_anisotropy\Anisotropic filtering quality
-\r_glsl_deluxemapping\Use per-pixel lighting effects
-\r_shadow_gloss\Enable the use of glossmaps on textures that support it
-\gl_flashblend\Enable faster but uglier dynamic lights by rendering bright coronas instead of real dynamic lights
-\r_shadow_realtime_dlight\Enable rendering of dynamic lights such as explosions and rocket lights
-\r_shadow_realtime_dlight_shadows\Enable rendering of shadows from dynamic lights
-\r_shadow_realtime_world\Enable rendering of full realtime world lighting on maps that support it. Note that this might have a big impact on performance.
-\r_shadow_realtime_world_shadows\Enable rendering of shadows from realtime world lights
-\r_shadow_usenormalmap\Enable use of directional shading on textures
-\r_showsurfaces\Disable textures completely for very slow hardware. This gives a huge performance boost, but looks very ugly.
-\r_glsl_offsetmapping\Offset mapping effect that will make textures with bumpmaps appear like they "pop out" of the in fact flat 2D surface
-\r_glsl_offsetmapping_reliefmapping\Higher quality offset mapping, which also has a huge impact on performance
-\r_water\Reflection and refraction quality, has a huge impact on performance on maps with reflecting surfaces
-\r_water_resolutionmultiplier\Multiplier for screen resolution when rendering refracted/reflected scenes
-\r_coronas\Enable corona flares around certain lights
-\r_bloom\Enable bloom effect, which brightens the neighboring pixels of very bright pixels. Has a big impact on performance.
-\r_hdr\Higher quality version of bloom, which has a huge impact on performance.
+\r_drawparticles_drawdistance\Particles further away than this will not be drawn (default: 1000)
+\cl_decals\Enable decals (bullet holes and blood) (default: enabled)
+\r_drawdecals_drawdistance\Decals further away than this will not be drawn (default: 300)
+\cl_decals_time\Time in seconds before decals fade away (default: 2)
+\cl_gentle\Replace blood and gibs with content that does not have any gore effects (default: disabled)
+\cl_nogibs\Reduce the amount of gibs or remove them completely (default: lots)
+\v_kicktime\How long a view kick from damage lasts (default: 0)
+\gl_texture_anisotropy\Anisotropic filtering quality (default: 1x)
+\r_glsl_deluxemapping\Use per-pixel lighting effects (default: enabled)
+\r_shadow_gloss\Enable the use of glossmaps on textures supporting it (default: enabled)
+\gl_flashblend\Enable faster but uglier dynamic lights by rendering bright coronas instead of real dynamic lights (default: disabled)
+\r_shadow_realtime_dlight\Enable rendering of dynamic lights such as explosions and rocket lights (default: enabled)
+\r_shadow_realtime_dlight_shadows\Enable rendering of shadows from dynamic lights (default: disabled)
+\r_shadow_realtime_world\Enable rendering of full realtime world lighting on maps that support it. Note that this might have a big impact on performance. (default: disabled)
+\r_shadow_realtime_world_shadows\Enable rendering of shadows from realtime world lights (default: disabled)
+\r_shadow_usenormalmap\Enable use of directional shading on textures (default: enabled)
+\r_showsurfaces\Disable textures completely for very slow hardware. This gives a huge performance boost, but looks very ugly. (default: disabled)
+\r_glsl_offsetmapping\Offset mapping effect that will make textures with bumpmaps appear like they "pop out" of the flat 2D surface (default: disabled)
+\r_glsl_offsetmapping_reliefmapping\Higher quality offset mapping, which also has a huge impact on performance (default: disabled)
+\r_water\Reflection and refraction quality, has a huge impact on performance on maps with reflecting surfaces (default: disabled)
+\r_water_resolutionmultiplier\Resolution of reflections/refractions (default: good)
+\r_coronas\Enable corona flares around certain lights (default: enabled)
+\r_coronas_occlusionquery\Fade coronas according to visibility (default: enabled)
+\r_bloom\Enable bloom effect, which brightens the neighboring pixels of very bright pixels. Has a big impact on performance. (default: disabled)
+\r_hdr\Higher quality version of bloom, which has a huge impact on performance. (default: disabled)
 
 \NexuizSettingsDialog/Audio\Audio settings
 \bgmvolume\-
@@ -168,10 +168,10 @@
 \snd_swapstereo\Swap left/right channels
 \snd_spatialization_control\Enable spatialization (blend the right and left channel slightly to decrease stereo separation a bit for headphones)
 \cl_voice_directional\Enable directional voices
-\cl_voice_directional_taunt_attenuation\Define the distance from which taunts can be heared
-\cl_autotaunt\Automatically taunt enemies when fragging them
+\cl_voice_directional_taunt_attenuation\Distance from which taunts can be heard
+\cl_autotaunt\Automatically taunt enemies after fragging them
 \cl_sound_maptime_warning\Announcer sound telling you the remaining minutes of the match
-\cl_hitsound\Play a hit notifier sound when you have hit an enemy
+\cl_hitsound\Play a hit indicator sound when your shot hits an enemy
 
 \NexuizSettingsDialog/Network\Network settings
 \cl_movement\Enable clientside movement prediction
