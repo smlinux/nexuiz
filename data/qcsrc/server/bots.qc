@@ -1938,7 +1938,7 @@ void navigation_goalrating_end()
 			if(!(head.wpflags & WAYPOINTFLAG_GENERATED))
 			if(vlen(self.origin-head.origin)>100)
 			if(checkpvs(self.view_ofs,head))
-				RandomSelection_Add(head, 0, string_null, 1, 0);
+				RandomSelection_Add(head, 0, string_null, 1 + (vlen(self.origin-head.origin)<500), 0);
 			head = head.chain;
 		}
 		if(RandomSelection_chosen_ent)
