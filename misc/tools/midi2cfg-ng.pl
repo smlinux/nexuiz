@@ -95,6 +95,11 @@ sub botconfig_read($)
 				$super = $currentbot->{init};
 				$currentbot->{init} = $appendref = [];
 			}
+			elsif(/^intermission$/)
+			{
+				$super = $currentbot->{intermission};
+				$currentbot->{intermission} = $appendref = [];
+			}
 			elsif(/^done$/)
 			{
 				$super = $currentbot->{done};
