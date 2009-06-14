@@ -374,7 +374,7 @@ sub busybot_note_on($$$)
 	}
 	else
 	{
-		warn "Note $channel:$note cannot be played by any bot"
+		warn "Note $channel:$note cannot be played by any bot";
 	}
 
 	return 0;
