@@ -3,6 +3,7 @@
 #define BALL_MINS '-16 -16 -16'  // The model is 24*24*24
 #define BALL_MAXS '16 16 16'
 #define BALL_ATTACHORG '3 0 16'
+#define BALL_SPRITECOLOR '.91 .85 .62'
 #define BALL_FOOT   1
 #define BALL_BASKET 2
 //spawnflags
@@ -114,11 +115,55 @@ void DropOwner (void)
 	ownr.flags &~= FL_ONGROUND;
 }
 
+void GiveBall (entity plyr, entity ball)
+{
+	local entity ownr;
+
+	if ((ownr = ball.owner))
+	{
+		ownr.effects &~= g_nexball_basketball_effects_default;
+		ownr.ballcarried = world;
+		if (ownr.metertime)
+		{
+			ownr.metertime = 0;
+			ownr.weaponentity.state = WS_READY;
+		}
+	}
+
+	setattachment(ball, plyr, "");
+	setorigin(ball, BALL_ATTACHORG);
+
+	if (ball.team != plyr.team)
+		ball.teamtime = time + g_nexball_basketball_delay_hold_forteam;
+
+	ball.owner = ball.pusher = plyr; //"owner" is set to the player carrying, "pusher" to the last player who touched it
+	ball.team = plyr.team;
+	plyr.ballcarried = ball;
+	ball.dropperid = plyr.playerid;
+
+	plyr.effects |= g_nexball_basketball_effects_default;
+	ball.effects &~= g_nexball_basketball_effects_default;
+
+	ball.velocity = '0 0 0';
+	ball.movetype = MOVETYPE_NONE;
+	ball.touch = SUB_Null;
+	ball.effects |= EF_NOSHADOW;
+	ball.scale = 1; // scale down.
+
+	ball.waypointsprite_attachedforcarrier.exteriormodeltoclient = plyr;
+
+	if (g_nexball_basketball_delay_hold)
+	{
+		ball.think = DropOwner;
+		ball.nextthink = time + g_nexball_basketball_delay_hold;
+	}
+}
+
 void DropBall (entity ball, vector org, vector vel)
 {
 	ball.effects |= g_nexball_basketball_effects_default;
 	ball.effects &~= EF_NOSHADOW;
-	ball.owner.effects &~= g_nexball_basketball_effects_default; // this may be problematic.
+	ball.owner.effects &~= g_nexball_basketball_effects_default;
 
 	setattachment(ball, world, "");
 	setorigin (ball, org);
@@ -136,6 +181,8 @@ void DropBall (entity ball, vector org, vector vel)
 		ball.owner.metertime = 0;
 		ball.owner.weaponentity.state = WS_READY;
 	}
+
+	ball.waypointsprite_attachedforcarrier.exteriormodeltoclient = world;
 
 	ball.owner.ballcarried = world;
 	ball.owner = world;
@@ -157,6 +204,7 @@ void InitBall (void)
 	self.pusher = world;
 	self.team = FALSE;
 	sound (self, CHAN_PROJECTILE, self.noise1, VOL_BASE, ATTN_NORM);
+	WaypointSprite_Ping(self.waypointsprite_attachedforcarrier);
 	LogNB("init", world);
 }
 
@@ -239,28 +287,7 @@ void basketball_touch (void)
 		if (other.health <= 0)
 			return;
 		LogNB("caught", other);
-
-		if (self.team != other.team)
-			self.teamtime = time + g_nexball_basketball_delay_hold_forteam;
-
-		self.owner = self.pusher = other; //"owner" is set to the player carrying, "pusher" to the last player who touched it
-		self.team = other.team;
-		other.ballcarried = self;
-		other.effects = other.effects | g_nexball_basketball_effects_default;
-		self.effects &~= g_nexball_basketball_effects_default;
-		self.effects |= EF_NOSHADOW;
-		self.scale = 1; // scale down.
-		self.dropperid = other.playerid;
-		setattachment(self, other, "");
-		setorigin(self, BALL_ATTACHORG);
-		self.velocity = '0 0 0';
-		self.movetype = MOVETYPE_NONE;
-		self.touch = SUB_Null;
-		if (g_nexball_basketball_delay_hold)
-		{
-			self.think = DropOwner;
-			self.nextthink = time + g_nexball_basketball_delay_hold;
-		}
+		GiveBall(other, self);
 	} else if (other.solid == SOLID_BSP) {
 		sound (self, CHAN_PROJECTILE, self.noise, VOL_BASE, ATTN_NORM);
 		if (vlen(self.velocity) && !self.cnt)
@@ -325,6 +352,9 @@ void GoalTouch (void)
 
 	if (ball.owner) // Happens on spawnflag GOAL_TOUCHPLAYER
 		DropBall(ball, ball.owner.origin, ball.owner.velocity);
+
+	WaypointSprite_Ping(ball.waypointsprite_attachedforcarrier);
+
 	ball.cnt = 1;
 	ball.think = ResetBall;
 	if (ball.classname == "nexball_basketball")
@@ -384,6 +414,8 @@ void SpawnBall (void)
 {
 	if(!g_nexball) { remove(self); return; }
 
+//	balls += 4; // using the remaining bits to count balls will leave more than the max edict count, so it's fine
+
 	if (!self.model) {
 		self.model = "models/nexball/ball.md3";
 		self.scale = 1.3;
@@ -422,6 +454,9 @@ void SpawnBall (void)
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
 
+	WaypointSprite_AttachCarrier("nb-ball", self); // the ball's team is not set yet, no rule update needed
+	WaypointSprite_UpdateTeamRadar(self.waypointsprite_attachedforcarrier, RADARICON_FLAGCARRIER, BALL_SPRITECOLOR);
+
 	self.reset = ball_restart;
 	self.think = InitBall;
 	self.nextthink = game_starttime + cvar("g_nexball_delay_start");
@@ -442,6 +477,8 @@ void spawnfunc_nexball_basketball (void)
 		self.effects = g_nexball_basketball_effects_default;
 	self.solid = SOLID_TRIGGER;
 	balls |= BALL_BASKET;
+	self.bouncefactor = cvar("g_nexball_basketball_bouncefactor");
+	self.bouncestop = cvar("g_nexball_basketball_bouncestop");
 	SpawnBall();
 }
 
@@ -450,6 +487,8 @@ void spawnfunc_nexball_football (void)
 	self.classname = "nexball_football";
 	self.solid = SOLID_TRIGGER;
 	balls |= BALL_FOOT;
+	self.bouncefactor = cvar("g_nexball_football_bouncefactor");
+	self.bouncestop = cvar("g_nexball_football_bouncestop");
 	SpawnBall();
 }
 
@@ -531,31 +570,6 @@ void W_Nexball_Touch (void)
 		other.flags &~= FL_ONGROUND;
 		if(!attacker.ballcarried)
 		{
-			other.effects &~= g_nexball_basketball_effects_default;
-			other.ballcarried = world;
-
-			if (g_nexball_basketball_delay_hold)
-			{
-				ball.think = DropOwner;
-				ball.nextthink = time + g_nexball_basketball_delay_hold;
-			}
-
-			attacker.effects = attacker.effects | g_nexball_basketball_effects_default;
-			attacker.ballcarried = ball;
-			if (other.metertime)
-			{
-				other.metertime = 0;
-				other.weaponentity.state = WS_READY;
-			}
-
-			setattachment(ball, attacker, "");
-			ball.owner = ball.pusher = attacker;
-			ball.team = attacker.team;
-			ball.dropperid = attacker.playerid;
-
-			if (other.team != attacker.team)
-				ball.teamtime = time + g_nexball_basketball_delay_hold_forteam;
-
 			LogNB("stole", attacker);
 			sound (other, CHAN_AUTO, ball.noise2, VOL_BASE, ATTN_NORM);
 
@@ -565,6 +579,8 @@ void W_Nexball_Touch (void)
 				attacker.teamkill_soundtime = time + 0.4;
 				attacker.teamkill_soundsource = other;
 			}
+
+			GiveBall(attacker, other.ballcarried);
 		}
 	}
 	remove(self);
