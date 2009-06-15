@@ -71,7 +71,7 @@ unsigned short CRC_Block(const unsigned char *data, size_t size)
 
 int main()
 {
-	unsigned char *buf;
+	unsigned char *buf = NULL;
 	size_t bufsize = 0;
 	size_t newbufsize;
 	size_t nread;
