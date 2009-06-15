@@ -223,6 +223,7 @@ float TrueAimCheck()
 
 	switch(activeweapon)
 	{
+		case WEP_TUBA: // no aim
 		case WEP_PORTO: // shoots from eye
 		case WEP_HOOK: // no trueaim
 		case WEP_GRENADE_LAUNCHER: // toss curve
