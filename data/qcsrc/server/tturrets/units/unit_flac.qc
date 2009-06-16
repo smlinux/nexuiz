@@ -28,6 +28,7 @@ void turret_flac_attack()
     proj.angles             = vectoangles(proj.velocity);
     proj.touch              = turret_flac_projectile_explode;
     proj.think              = turret_flac_projectile_explode;
+    //proj.nextthink          = time + vlen(self.tur_shotorg - self.enemy.origin) / self.shot_speed;
     proj.nextthink          = time + max(self.tur_impacttime,(self.shot_radius * 3) / self.shot_speed);
     proj.enemy              = self.enemy;
     proj.cnt                = time + 5;
@@ -47,13 +48,15 @@ void turret_flac_projectile_explode()
 
     //w_deathtypestring = "got caught in the flack.";
 
-    if(self.enemy != world)
-    if(self.cnt < time)
-    if(vlen(self.origin - self.enemy.origin) > self.owner.shot_radius * 0.25)
+
+
+    if( (self.enemy != world) &&
+        (vlen(self.origin - self.enemy.origin) < self.owner.shot_radius * 3) )
     {
-        self.nextthink = time; //vlen(self.origin - self.enemy.origin) / self.owner.shot_speed;
-        return;
+        // OMG HAXX!
+        setorigin(self,self.enemy.origin + randomvec() * self.owner.shot_radius);
     }
+
 
 
     te_explosion (self.origin);
