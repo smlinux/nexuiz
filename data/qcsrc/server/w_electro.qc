@@ -202,6 +202,7 @@ float w_electro(float req)
 		precache_sound ("weapons/electro_bounce.wav");
 		precache_sound ("weapons/electro_fire.wav");
 		precache_sound ("weapons/electro_fire2.wav");
+		precache_sound ("weapons/electro_impact.wav");
 		precache_sound ("weapons/electro_impact_combo.wav");
 	}
 	else if (req == WR_SETUP)
