@@ -311,7 +311,7 @@ void ImpulseCommands (void)
 	{
 		if(self.deadflag == DEAD_NO)
 		{
-			if(sv_cheats || (self.lip < sv_clones))
+			if(sv_cheats || self.maycheat || (self.lip < sv_clones))
 			{
 				switch(imp)
 				{
@@ -329,7 +329,7 @@ void ImpulseCommands (void)
 				 }
 			}
 
-			if(sv_cheats)
+			if(sv_cheats || self.maycheat)
 			{
 				switch(imp)
 				{

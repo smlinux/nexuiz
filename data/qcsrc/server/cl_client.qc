@@ -2741,7 +2741,7 @@ void PlayerPostThink (void)
 		self.idlekick_lasttimeleft = timeleft;
 	}
 
-	if(sv_cheats)
+	if(sv_cheats || self.maycheat)
 		if(Drag_CanDrag(self))
 			if(self.BUTTON_DRAG)
 				if(!self.dragentity)

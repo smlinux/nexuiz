@@ -313,7 +313,7 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "cvar_changes") {
 		sprint(self, cvar_changes);
 	} else if(argv(0) == "pointparticles") {
-		if(sv_cheats && tokens == 5)
+		if((sv_cheats || self.maycheat) && tokens == 5)
 		{
 			// arguments:
 			//   effectname
@@ -330,7 +330,7 @@ void SV_ParseClientCommand(string s) {
 		else
 			sprint(self, "Usage: sv_cheats 1; restart; cmd pointparticles effectname position(0..1) velocityvector multiplier\n");
 	} else if(argv(0) == "trailparticles") {
-		if(sv_cheats && tokens == 2)
+		if((sv_cheats || self.maycheat) && tokens == 2)
 		{
 			// arguments:
 			//   effectname
@@ -342,7 +342,7 @@ void SV_ParseClientCommand(string s) {
 		else
 			sprint(self, "Usage: sv_cheats 1; restart; cmd trailparticles effectname\n");
 	} else if(argv(0) == "make") {
-		if(sv_cheats && tokens == 3)
+		if((sv_cheats || self.maycheat) && tokens == 3)
 		{
 			// arguments:
 			//   modelname mode
