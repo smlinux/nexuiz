@@ -760,6 +760,11 @@ void readplayerstartcvars()
 			}
 		}
 	}
+	else if(s == "none")
+	{
+		g_weaponarena_list = "No Weapons";
+		g_weaponarena = WEPBIT_ALL + 1; // this supports no single weapon bit!
+	}
 	else
 	{
 		t = tokenize_console(s);
