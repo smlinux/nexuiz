@@ -71,9 +71,19 @@ float Tuba_GetNote(entity pl, float hittype)
 void W_Tuba_Attack(float hittype)
 {
 	vector o;
+	float c;
 	W_SetupShot(self, FALSE, 2, "", cvar("g_balance_tuba_damage"));
-	self.tuba_notecount = !self.tuba_notecount;
-	sound(self, ((self.tuba_notecount) ? CHAN_WEAPON : CHAN_WEAPON2), TUBA_NOTE(Tuba_GetNote(self, hittype)), bound(0, VOL_BASE * cvar("g_balance_tuba_volume"), 1), cvar("g_balance_tuba_attenuation"));
+	if(self.tuba_notecount)
+	{
+		self.tuba_notecount = FALSE;
+		c = CHAN_WEAPON;
+	}
+	else
+	{
+		self.tuba_notecount = TRUE;
+		c = CHAN_WEAPON2;
+	}
+	sound(self, c, TUBA_NOTE(Tuba_GetNote(self, hittype)), bound(0, VOL_BASE * cvar("g_balance_tuba_volume"), 1), cvar("g_balance_tuba_attenuation"));
 	RadiusDamage(self, self, cvar("g_balance_tuba_damage"), cvar("g_balance_tuba_edgedamage"), cvar("g_balance_tuba_radius"), world, cvar("g_balance_tuba_force"), hittype | WEP_TUBA, world);
 
 	o = gettaginfo(self.exteriorweaponentity, 0);
