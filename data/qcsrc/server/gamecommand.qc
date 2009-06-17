@@ -963,9 +963,9 @@ void GameCommand(string command)
 				if(argc >= 3 && argv(0) == "sv_cmd" && argv(1) == "bot_cmd")
 				{
 					// let's start at token 2 so we can skip sv_cmd bot_cmd
-					bot = find_bot_by_name(argv(2));
+					bot = find_bot_by_number(stof(argv(2)));
 					if(bot == world)
-						bot = find_bot_by_number(stof(argv(2)));
+						bot = find_bot_by_name(argv(2));
 					if(bot)
 						bot_queuecommand(bot, strcat(argv(3), " ", argv(4)));
 				}
@@ -991,9 +991,9 @@ void GameCommand(string command)
 			return;
 		}
 
-		bot = find_bot_by_name(argv(1));
-		if(bot==world)
-			bot = find_bot_by_number(stof(argv(1)));
+		bot = find_bot_by_number(stof(argv(2)));
+		if(bot == world)
+			bot = find_bot_by_name(argv(2));
 
 		if(bot)
 			bot_queuecommand(bot, strcat(argv(2), " ", argv(3)));

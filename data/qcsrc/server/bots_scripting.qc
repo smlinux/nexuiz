@@ -266,6 +266,9 @@ entity find_bot_by_number(float number)
 	local entity bot;
 	local float c;
 
+	if(!number)
+		return world;
+
 	bot = findchainflags(flags, FL_CLIENT);
 	while (bot)
 	{
