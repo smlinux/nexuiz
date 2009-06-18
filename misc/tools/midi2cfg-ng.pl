@@ -28,6 +28,7 @@ my %notechannelbots;
 my $transpose = 0;
 my $notetime = undef;
 my $lowestnotestart = undef;
+my $noalloc = 0;
 sub botconfig_read($)
 {
 	my ($fn) = @_;
@@ -359,6 +360,8 @@ sub busybot_note_on($$$)
 		my $canplay = busybot_note_on_bot $bot, $time, $channel, $note, 1;
 		if($canplay > 0)
 		{
+			die "noalloc\n"
+				if $noalloc;
 			--$busybots->{$_}->{count};
 			$notechannelbots{$channel}{$note} = $bot;
 			push @busybots_allocated, $bot;
@@ -540,21 +543,32 @@ sub Deallocate()
 }
 
 my @preallocate = ();
+$noalloc = 0;
 for(;;)
 {
 	$commands = "";
-	Preallocate(@preallocate);
-	my @l = @midilist;
-	while(@l)
+	eval
 	{
-		my $filename = shift @l;
-		my $transpose = shift @l;
-		ConvertMIDI($filename, $transpose);
-	}
-	Deallocate();
-	my @preallocate_new = map { $_->{classname} } @busybots_allocated;
-	last if @preallocate_new == @preallocate;
-	@preallocate = @preallocate_new;
+		Preallocate(@preallocate);
+		my @l = @midilist;
+		while(@l)
+		{
+			my $filename = shift @l;
+			my $transpose = shift @l;
+			ConvertMIDI($filename, $transpose);
+		}
+		Deallocate();
+		my @preallocate_new = map { $_->{classname} } @busybots_allocated;
+		if(@preallocate_new == @preallocate)
+		{
+			print "$precommands$commands";
+			exit 0;
+		}
+		@preallocate = @preallocate_new;
+		$noalloc = 1;
+		1;
+	} or do {
+		die "$@"
+			unless $@ eq "noalloc\n";
+	};
 }
-
-print "$precommands$commands";

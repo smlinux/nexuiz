@@ -46,9 +46,15 @@ while(<STDIN>)
 		{
 			my %taken = (0 => 1);
 			my @t = ($tracks->[0]);
+			my $force = 0;
 			for(@arg)
 			{
-				next if $taken{$_}++;
+				if($_ eq '--force')
+				{
+					$force = 1;
+					next;
+				}
+				next if $taken{$_}++ and not $force;
 				push @t, $tracks->[$_];
 			}
 			$opus->tracks_r(\@t);
