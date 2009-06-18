@@ -257,6 +257,7 @@ COMPAT_FILES="
 	textures/tuba_gloss.tga
 	textures/tuba_glow.tga
 	textures/tuba.tga
+	scripts/tuba.shader
 "
 
 rm -rf pack
