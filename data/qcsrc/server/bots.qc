@@ -1999,11 +1999,15 @@ vector shotdir;
 
 void bot_setnameandstuff()
 {
-	local string readfile, s;
-	local float file, tokens;
+	string readfile, s;
+	float file, tokens, prio;
+	entity p;
 
-	local string bot_name, bot_model, bot_skin, bot_shirt, bot_pants;
-	local string name, prefix, suffix;
+	string bot_name, bot_model, bot_skin, bot_shirt, bot_pants;
+	string name, prefix, suffix;
+
+	prefix = cvar_string("bot_prefix");
+	suffix = cvar_string("bot_suffix");
 
 	file = fopen(cvar_string("bot_config_file"), FILE_READ);
 
@@ -2014,16 +2018,27 @@ void bot_setnameandstuff()
 		RandomSelection_Init();
 		for(;;)
 		{
-			s = fgets(file);
-			if(!s)
+			readfile = fgets(file);
+			if(!readfile)
 				break;
-			if(substring(s, 0, 2) == "//")
+			if(substring(readfile, 0, 2) == "//")
 				continue;
-			if(substring(s, 0, 1) == "#")
+			if(substring(readfile, 0, 1) == "#")
 				continue;
-			RandomSelection_Add(world, 0, s, 1, 0);
-			readfile = RandomSelection_chosen_string;
+			tokens = tokenizebyseparator(readfile, "\t");
+			s = argv(0);
+			prio = 1;
+			FOR_EACH_CLIENT(p)
+			{
+				if(strcat(prefix, s, suffix) == p.netname)
+				{
+					prio = 0;
+					break;
+				}
+			}
+			RandomSelection_Add(world, 0, readfile, 1, prio);
 		}
+		readfile = RandomSelection_chosen_string;
 		fclose(file);
 	}
 
@@ -2045,8 +2060,6 @@ void bot_setnameandstuff()
 
 	self.bot_forced_team = stof(argv(5));
 	self.bot_config_loaded = TRUE;
-	prefix = cvar_string("bot_prefix");
-	suffix = cvar_string("bot_suffix");
 
 	// this is really only a default, JoinBestTeam is called later
 	setcolor(self, stof(bot_shirt) * 16 + stof(bot_pants));
@@ -2059,7 +2072,9 @@ void bot_setnameandstuff()
 		name = bot_name;
 
 	// pick the model and skin
-	self.playermodel = self.playermodel_freeme = strzone(strcat("models/player/", bot_model, ".zym"));
+	if(substring(bot_model, -4, 1) != ".")
+		bot_model = strcat(bot_model, ".zym");
+	self.playermodel = self.playermodel_freeme = strzone(strcat("models/player/", bot_model));
 	self.playerskin = self.playerskin_freeme = strzone(bot_skin);
 
  	if(!cvar("g_campaign"))
