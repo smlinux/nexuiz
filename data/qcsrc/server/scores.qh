@@ -88,10 +88,13 @@ void Score_NicePrint(entity to);
  * Sets the following results for the current scores entities.
  */
 void WinningConditionHelper();
-float WinningConditionHelper_topscore;   ///< highest score
-float WinningConditionHelper_equality;   ///< 1 if and only if the top two have equal scores
-float WinningConditionHelper_winnerteam; ///< the color of the winning team, or -1 if none
-entity WinningConditionHelper_winner;    ///< the winning player, or world if none
+float WinningConditionHelper_topscore;      ///< highest score
+float WinningConditionHelper_secondscore;   ///< second highest score
+float WinningConditionHelper_winnerteam;    ///< the color of the winning team, or -1 if none
+float WinningConditionHelper_secondteam;    ///< the color of the second team, or -1 if none
+float WinningConditionHelper_equality;      ///< we have no winner
+entity WinningConditionHelper_winner;       ///< the winning player, or world if none
+entity WinningConditionHelper_second;       ///< the second player, or world if none
 float WinningConditionHelper_lowerisbetter; ///< lower is better, duh
 float WinningConditionHelper_zeroisworst;   ///< zero is worst, duh
 #define WINNINGCONDITIONHELPER_LOWERISBETTER_WORST 999999999

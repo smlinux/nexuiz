@@ -612,6 +612,7 @@ void race_ReadyRestart()
 		g_race_qualifying = 0;
 		independent_players = 0;
 		cvar_set("fraglimit", ftos(race_fraglimit));
+		cvar_set("leadlimit", ftos(race_leadlimit));
 		ScoreRules_race();
 	}
 }

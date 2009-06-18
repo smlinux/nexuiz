@@ -163,7 +163,7 @@ void ActivateTeamplay()
 
 void InitGameplayMode()
 {
-	float fraglimit_override, timelimit_override;
+	float fraglimit_override, timelimit_override, leadlimit_override;
 
 	VoteReset();
 
@@ -201,6 +201,7 @@ void InitGameplayMode()
 	// set both here, gamemode can override it later
 	timelimit_override = cvar("timelimit_override");
 	fraglimit_override = cvar("fraglimit_override");
+	leadlimit_override = cvar("leadlimit_override");
 
 	if(g_dm)
 	{
@@ -222,6 +223,7 @@ void InitGameplayMode()
 		gamemode_name = "Domination";
 		ActivateTeamplay();
 		fraglimit_override = cvar("g_domination_point_limit");
+		leadlimit_override = cvar("g_domination_point_leadlimit");
 		dom_init();
 	}
 
@@ -236,9 +238,15 @@ void InitGameplayMode()
 			g_ctf_win_mode = cvar("g_ctf_win_mode");
 		g_ctf_ignore_frags = cvar("g_ctf_ignore_frags");
 		if(g_ctf_win_mode == 2)
+		{
 			fraglimit_override = cvar("g_ctf_capture_limit");
+			leadlimit_override = cvar("g_ctf_capture_leadlimit");
+		}
 		else
+		{
 			fraglimit_override = cvar("capturelimit_override");
+			leadlimit_override = cvar("captureleadlimit_override");
+		}
 		ctf_init();
 	}
 
@@ -249,6 +257,7 @@ void InitGameplayMode()
 		if(cvar("deathmatch_force_teamplay"))
 			ActivateTeamplay();
 		fraglimit_override = cvar("g_runematch_point_limit");
+		leadlimit_override = cvar("g_runematch_point_leadlimit");
 		runematch_init();
 	}
 
@@ -257,6 +266,7 @@ void InitGameplayMode()
 		game = GAME_LMS;
 		gamemode_name = "Last Man Standing";
 		fraglimit_override = cvar("g_lms_lives_override");
+		leadlimit_override = 0; // not supported by LMS
 		if(fraglimit_override == 0)
 			fraglimit_override = -1;
 		lms_lowest_lives = 9999;
@@ -269,6 +279,7 @@ void InitGameplayMode()
 		game = GAME_ARENA;
 		gamemode_name = "Arena";
 		fraglimit_override = cvar("g_arena_point_limit");
+		leadlimit_override = cvar("g_arena_point_leadlimit");
 		maxspawned = cvar("g_arena_maxspawned");
 		if(maxspawned < 2)
 			maxspawned = 2;
@@ -281,6 +292,7 @@ void InitGameplayMode()
 		gamemode_name = "Key Hunt";
 		ActivateTeamplay();
 		fraglimit_override = cvar("g_keyhunt_point_limit");
+		leadlimit_override = cvar("g_keyhunt_point_leadlimit");
 		kh_init();
 	}
 
@@ -319,6 +331,8 @@ void InitGameplayMode()
 		else
 			fraglimit_override = cvar("g_race_laps_limit");
 
+		leadlimit_override = 0; // currently not supported by race
+
 		if(g_race_qualifying)
 			independent_players = 1;
 
@@ -330,6 +344,7 @@ void InitGameplayMode()
 		game = GAME_NEXBALL;
 		gamemode_name = "Nexball";
 		fraglimit_override = cvar("g_nexball_goallimit");
+		leadlimit_override = cvar("g_nexball_goalleadlimit");
 		ActivateTeamplay();
 		nb_init();
 	}
@@ -350,12 +365,16 @@ void InitGameplayMode()
 			cvar_set("fraglimit", ftos(fraglimit_override));
 		if(timelimit_override >= 0)
 			cvar_set("timelimit", ftos(timelimit_override));
+		if(leadlimit_override >= 0)
+			cvar_set("leadlimit", ftos(leadlimit_override));
 	}
 
 	if(g_race && g_race_qualifying == 2)
 	{
 		race_fraglimit = cvar("fraglimit");
 		cvar_set("fraglimit", "0");
+		race_leadlimit = cvar("leadlimit");
+		cvar_set("leadlimit", "0");
 	}
 
 	InitializeEntity(world, default_delayedinit, INITPRIO_GAMETYPE_FALLBACK);

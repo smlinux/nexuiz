@@ -593,3 +593,4 @@ string matchid;
 
 .float damage_hits, maxdamage_fired;
 .float maycheat;
+.float stat_leadlimit;

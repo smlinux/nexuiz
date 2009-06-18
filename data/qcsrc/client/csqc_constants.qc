@@ -58,6 +58,7 @@ const float		STAT_SECRETS					= 13;
 const float		STAT_MONSTERS					= 14;
 const float		STAT_ITEMS						= 15;
 const float		STAT_VIEWHEIGHT					= 16;
+const float		STAT_MOVEVARS_TICRATE           = 240;
 const float		STAT_MOVEVARS_TIMESCALE         = 241;
 const float		STAT_FRAGLIMIT					= 235;
 const float		STAT_TIMELIMIT					= 236;

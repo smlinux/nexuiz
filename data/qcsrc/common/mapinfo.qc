@@ -446,6 +446,10 @@ void _MapInfo_Map_ApplyGametype(string s, float pWantedType, float pThisType)
 			cvar_set("fraglimit", sa);
 		s = cdr(s);
 	}
+
+	sa = car(s); if(sa == "") sa = "0";
+	cvar_set("leadlimit", sa);
+	s = cdr(s);
 }
 
 float MapInfo_Type_FromString(string t)

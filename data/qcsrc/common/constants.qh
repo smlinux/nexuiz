@@ -244,7 +244,6 @@ float CVAR_READONLY	= 4;
 
 const float STAT_KH_KEYS = 32;
 const float STAT_CTF_STATE = 33;
-const float STAT_SYS_TICRATE = 34;
 const float STAT_WEAPONS = 35;
 const float STAT_SWITCHWEAPON = 36;
 const float STAT_GAMESTARTTIME = 37;
@@ -257,6 +256,7 @@ const float STAT_ALLOW_OLDNEXBEAM = 43; // this stat could later contain some ot
 const float STAT_FUEL = 44;
 const float STAT_NB_METERSTART = 45;
 const float STAT_SHOTORG = 46; // compressShotOrigin
+const float STAT_LEADLIMIT = 47;
 const float CTF_STATE_ATTACK = 1;
 const float CTF_STATE_DEFEND = 2;
 const float CTF_STATE_COMMANDER = 3;

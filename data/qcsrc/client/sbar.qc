@@ -1033,10 +1033,11 @@ void Sbar_DrawScoreboard()
 	}
 
 	string str;
-	float tl, fl;
+	float tl, fl, ll;
 	str = strcat("playing on ^2", shortmapname, "^7");
 	tl = getstatf(STAT_TIMELIMIT);
 	fl = getstatf(STAT_FRAGLIMIT);
+	ll = getstatf(STAT_LEADLIMIT);
 	if(gametype == GAME_LMS)
 	{
 		if(tl > 0)
@@ -1063,6 +1064,31 @@ void Sbar_DrawScoreboard()
 			else
 			{
 				str = strcat(str, " until ^3", ScoreString(scores_flags[ps_primary], fl));
+				if(scores_label[ps_primary] == "score")
+					str = strcat(str, " points^7");
+				else if(scores_label[ps_primary] == "fastest")
+					str = strcat(str, " is beaten^7");
+				else
+					str = strcat(str, " ", scores_label[ps_primary]);
+			}
+		}
+		if(ll > 0)
+		{
+			if(tl > 0 || fl > 0)
+				str = strcat(str, " or");
+			if(teamplay)
+			{
+				str = strcat(str, " until a lead of ^3", ScoreString(teamscores_flags[ts_primary], ll));
+				if(teamscores_label[ts_primary] == "score")
+					str = strcat(str, " points^7");
+				else if(teamscores_label[ts_primary] == "fastest")
+					str = strcat(str, " is beaten^7");
+				else
+					str = strcat(str, " ", teamscores_label[ts_primary]);
+			}
+			else
+			{
+				str = strcat(str, " until a lead of ^3", ScoreString(scores_flags[ps_primary], ll));
 				if(scores_label[ps_primary] == "score")
 					str = strcat(str, " points^7");
 				else if(scores_label[ps_primary] == "fastest")

@@ -2218,9 +2218,9 @@ void() nexball_setstatus;
 .float items_added;
 void PlayerPreThink (void)
 {
-	self.stat_sys_ticrate = cvar("sys_ticrate");
 	self.stat_game_starttime = game_starttime;
 	self.stat_allow_oldnexbeam = cvar("g_allow_oldnexbeam");
+	self.stat_leadlimit = cvar("leadlimit");
 
 	if(blockSpectators && frametime)
 		// WORKAROUND: only use dropclient in server frames (frametime set). Never use it in cl_movement frames (frametime zero).

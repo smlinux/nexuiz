@@ -12,6 +12,7 @@ void race_AbandonRaceCheck(entity p);
 float race_highest_place_spawn; // number of places; a place higher gets spawned at 0
 float race_lowest_place_spawn; // where to spawn in qualifying
 float race_fraglimit;
+float race_leadlimit;
 .float race_place;
 .float race_completed;
 float race_completing;

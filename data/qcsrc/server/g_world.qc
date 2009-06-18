@@ -548,7 +548,6 @@ void spawnfunc_worldspawn (void)
 	Ban_LoadBans();
 
 	//initialise globals related to sv_timeout
-	sys_ticrate = cvar("sys_ticrate");
 	orig_slowmo = cvar("slowmo");
 
 	MapInfo_Enumerate();
@@ -589,7 +588,6 @@ void spawnfunc_worldspawn (void)
 		}
 	}
 
-	addstat(STAT_SYS_TICRATE, AS_FLOAT, stat_sys_ticrate);
 	addstat(STAT_WEAPONS, AS_INT, weapons);
 	addstat(STAT_SWITCHWEAPON, AS_INT, switchweapon);
 	addstat(STAT_GAMESTARTTIME, AS_FLOAT, stat_game_starttime);
@@ -603,6 +601,7 @@ void spawnfunc_worldspawn (void)
 	addstat(STAT_DAMAGE_HITS, AS_INT, damage_hits);
  	addstat(STAT_DAMAGE_FIRED, AS_INT, maxdamage_fired);
 	addstat(STAT_SHOTORG, AS_INT, stat_shotorg);
+	addstat(STAT_LEADLIMIT, AS_FLOAT, stat_leadlimit);
 
 	next_pingtime = time + 5;
 	InitializeEntity(self, cvar_changes_init, INITPRIO_CVARS);
@@ -1642,7 +1641,7 @@ float WinningCondition_LMS()
 	ClearWinners();
 	if(WinningConditionHelper_winner)
 		WinningConditionHelper_winner.winning = TRUE;
-	if(WinningConditionHelper_equality)
+	if(WinningConditionHelper_topscore == WinningConditionHelper_secondscore)
 		return WINNING_NEVER;
 
 	// Top two have different scores? Way to go for our beloved TIMELIMIT!
@@ -1655,7 +1654,7 @@ void ShuffleMaplist()
 }
 
 float leaderfrags;
-float WinningCondition_Scores(float limit)
+float WinningCondition_Scores(float limit, float leadlimit)
 {
 	// TODO make everything use THIS winning condition (except LMS)
 	WinningConditionHelper();
@@ -1677,8 +1676,12 @@ float WinningCondition_Scores(float limit)
 	if(WinningConditionHelper_lowerisbetter)
 	{
 		WinningConditionHelper_topscore = -WinningConditionHelper_topscore;
+		WinningConditionHelper_secondscore = -WinningConditionHelper_secondscore;
 		limit = -limit;
 	}
+
+	if(WinningConditionHelper_zeroisworst)
+		leadlimit = 0; // not supported in this mode
 
 	if(g_dm || g_tdm || g_arena || (g_race && !g_race_qualifying) || g_nexball)
 	// these modes always score in increments of 1, thus this makes sense
@@ -1697,14 +1700,22 @@ float WinningCondition_Scores(float limit)
 		}
 	}
 
-	return GetWinningCode(limit && WinningConditionHelper_topscore && (WinningConditionHelper_topscore >= limit), WinningConditionHelper_equality);
+	return GetWinningCode(
+		WinningConditionHelper_topscore &&
+		(
+			(limit && (WinningConditionHelper_topscore >= limit))
+			||
+			(leadlimit && (WinningConditionHelper_topscore - WinningConditionHelper_secondscore >= leadlimit))
+		),
+		WinningConditionHelper_equality
+	);
 }
 
 float WinningCondition_Race(float fraglimit)
 {
 	float wc;
 	entity p;
-	wc = WinningCondition_Scores(fraglimit);
+	wc = WinningCondition_Scores(fraglimit, 0);
 
 	// ALWAYS initiate overtime, unless EVERYONE has finished the race!
 	if(wc == WINNING_YES || wc == WINNING_STARTSUDDENDEATHOVERTIME)
@@ -1722,7 +1733,7 @@ void ReadyRestart();
 float WinningCondition_QualifyingThenRace(float limit)
 {
 	float wc;
-	wc = WinningCondition_Scores(limit);
+	wc = WinningCondition_Scores(limit, 0);
 
 	// NEVER initiate overtime
 	if(wc == WINNING_YES || wc == WINNING_STARTSUDDENDEATHOVERTIME)
@@ -1807,8 +1818,9 @@ Exit deathmatch games upon conditions
 */
 void CheckRules_World()
 {
-	local float timelimit;
-	local float fraglimit;
+	float timelimit;
+	float fraglimit;
+	float leadlimit;
 
 	VoteThink();
 	MapVote_Think();
@@ -1837,6 +1849,7 @@ void CheckRules_World()
 
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");
+	leadlimit = cvar("leadlimit");
 
 	if(inWarmupStage || time <= game_starttime) // NOTE: this is <= to prevent problems in the very tic where the game starts
 	{
@@ -1844,6 +1857,7 @@ void CheckRules_World()
 			timelimit = 0; // timelimit is not made for warmup
 		if(fraglimit > 0)
 			fraglimit = 0; // no fraglimit for now
+		leadlimit = 0; // no leadlimit for now
 	}
 
 	if(timelimit > 0)
@@ -1936,7 +1950,7 @@ void CheckRules_World()
 	}
 	else
 	{
-		checkrules_status = WinningCondition_Scores(fraglimit);
+		checkrules_status = WinningCondition_Scores(fraglimit, leadlimit);
 	}
 
 	if(checkrules_status == WINNING_STARTSUDDENDEATHOVERTIME)
