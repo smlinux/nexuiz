@@ -30,7 +30,7 @@ void W_Shotgun_Attack (void)
 	// casing code
 	if (cvar("g_casings") >= 1)
 		for (sc = 0;sc < ammoamount;sc = sc + 1)
-			SpawnCasing (((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
+			SpawnCasing (((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1, self);
 
 	// muzzle flash for 1st person view
 	flash = spawn();
@@ -73,7 +73,7 @@ void W_Shotgun_Attack2 (void)
 	// casing code
 	if (cvar("g_casings") >= 1)
 		for (sc = 0;sc < ammoamount;sc = sc + 1)
-			SpawnCasing (((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
+			SpawnCasing (((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1, self);
 
 	flash = spawn();
 	setmodel(flash, "models/uziflash.md3"); // precision set below

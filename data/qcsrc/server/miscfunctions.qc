@@ -1127,26 +1127,23 @@ float precache_sound_index (string s) = #19;
 float sound_allowed(float dest, entity e)
 {
 	// sounds from world may always pass
-	if(!e)
+	for(;;)
 	{
-		return TRUE;
+		if(e.owner)
+			e = e.owner;
+		else if(e.classname == "body")
+			e = e.enemy;
+		else
+			break;
 	}
 	// sounds to self may always pass
 	if(dest == MSG_ONE)
-	{
 		if(e == msg_entity)
 			return TRUE;
-		if(e.owner == msg_entity)
-			return TRUE;
-	}
 	// sounds by players can be removed
 	if(cvar("bot_sound_monopoly"))
-	{
 		if(clienttype(e) == CLIENTTYPE_REAL)
 			return FALSE;
-		if(clienttype(e.owner) == CLIENTTYPE_REAL)
-			return FALSE;
-	}
 	// anything else may pass
 	return TRUE;
 }
@@ -2242,6 +2239,7 @@ void SoundEntity_Attach(entity pl)
 {
 	pl.soundentity = spawn();
 	pl.soundentity.classname = "soundentity";
+	pl.soundentity.owner = pl;
 	setattachment(pl.soundentity, pl, "");
 	setmodel(pl.soundentity, "null");
 }

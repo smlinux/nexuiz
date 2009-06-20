@@ -1,5 +1,6 @@
 float  casecount;
 entity caselist;
+.float silent;
 
 void Casing_Delete()
 {
@@ -35,6 +36,7 @@ void Casing_Touch()
 		return;
 	}
 
+	if(!self.silent)
 	if(!trace_ent || trace_ent.solid == SOLID_BSP)
 	{
 		if(vlen(self.velocity) > 50)
@@ -84,6 +86,8 @@ void Ent_Casing()
         RubbleDrop(caselist,Casing_Delete);
 
 	casing.state = ReadByte();
+	casing.silent = (casing.state & 0x80);
+	casing.state = (casing.state & 0x7F);
 	casing.origin_x = ReadCoord();
 	casing.origin_y = ReadCoord();
 	casing.origin_z = ReadCoord();

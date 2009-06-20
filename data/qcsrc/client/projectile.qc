@@ -15,6 +15,7 @@ void SUB_Stop()
 .float cnt; // sound index
 .float gravity;
 .float snd_looping;
+.float silent;
 
 void Projectile_DrawTrail(vector to)
 {
@@ -166,6 +167,9 @@ void Projectile_Draw()
 
 void loopsound(entity e, float ch, string samp, float vol, float attn)
 {
+	if(self.silent)
+		return;
+
 	sound(e, ch, samp, vol, attn);
 	e.snd_looping = 1;
 }
@@ -249,6 +253,9 @@ void Ent_Projectile()
 	if(f & 2)
 	{
 		self.cnt = ReadByte();
+
+		self.silent = (self.cnt & 0x80);
+		self.cnt = (self.cnt & 0x7F);
 
 		self.scale = 1;
 		switch(self.cnt)

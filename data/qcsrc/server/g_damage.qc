@@ -17,12 +17,15 @@ float Damage_DamageInfo_SendEntity(entity to, float sf)
 	return TRUE;
 }
 
-void Damage_DamageInfo(vector org, float coredamage, float edgedamage, float rad, vector force, float deathtype)
+void Damage_DamageInfo(vector org, float coredamage, float edgedamage, float rad, vector force, float deathtype, entity dmgowner)
 {
 	// TODO maybe call this from non-edgedamage too?
 	// TODO maybe make the client do the particle effects for the weapons and the impact sounds using this info?
 
 	entity e;
+
+	if(!sound_allowed(MSG_BROADCAST, dmgowner))
+		deathtype |= 0x8000;
 
 	e = spawn();
 	setorigin(e, org);
@@ -972,9 +975,9 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 		else
 			force = normalize(force);
 		if(forceintensity >= 0)
-			Damage_DamageInfo(blastorigin, coredamage, edgedamage, rad, forceintensity * force, deathtype);
+			Damage_DamageInfo(blastorigin, coredamage, edgedamage, rad, forceintensity * force, deathtype, attacker);
 		else
-			Damage_DamageInfo(blastorigin, coredamage, edgedamage, -rad, (-forceintensity) * force, deathtype);
+			Damage_DamageInfo(blastorigin, coredamage, edgedamage, -rad, (-forceintensity) * force, deathtype, attacker);
 	}
 
 	RadiusDamage_EnemyDamageDone = 0;

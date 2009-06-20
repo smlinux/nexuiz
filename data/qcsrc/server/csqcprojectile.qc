@@ -59,6 +59,8 @@ void CSQCProjectile(entity e, float clientanimate, float type, float docull)
 		e.gravity = 0;
 
 	e.csqcprojectile_type = type;
+	if(!sound_allowed(MSG_BROADCAST, e))
+		type |= 0x80;
 }
 
 void UpdateCSQCProjectile(entity e)

@@ -11,7 +11,7 @@ float Violence_GibSplash_SendEntity(entity to, float sf)
 }
 
 // TODO maybe convert this to a TE?
-void Violence_GibSplash_At(vector org, vector dir, float type, float amount)
+void Violence_GibSplash_At(vector org, vector dir, float type, float amount, entity gibowner, entity attacker)
 {
 	entity e;
 
@@ -21,6 +21,8 @@ void Violence_GibSplash_At(vector org, vector dir, float type, float amount)
 	e.state = type; // should stay smaller than 15
 	if(sv_gentle)
 		e.state |= 0x80; // "force gentle" bit
+	if(!sound_allowed(MSG_BROADCAST, gibowner) || !sound_allowed(MSG_BROADCAST, attacker))
+		e.state |= 0x40; // "silence" bit
 	e.state |= 8 * self.species; // gib type, ranges from 0 to 15
 	setorigin(e, org);
 	e.velocity = dir;
@@ -30,7 +32,7 @@ void Violence_GibSplash_At(vector org, vector dir, float type, float amount)
 	Net_LinkEntity(e, FALSE, 0.2, Violence_GibSplash_SendEntity);
 }
 
-void Violence_GibSplash(entity source, float type, float amount)
+void Violence_GibSplash(entity source, float type, float amount, entity attacker)
 {
-	Violence_GibSplash_At(source.origin + source.view_ofs, source.velocity, type, amount);
+	Violence_GibSplash_At(source.origin + source.view_ofs, source.velocity, type, amount, source, attacker);
 }
