@@ -1104,7 +1104,8 @@ void bot_resetqueues()
 
 	FOR_EACH_CLIENT(cl) if(cl.isbot)
 	{
-		bot_clearqueue(cl);
+		if(cl.bot_cmdqueuebuf_allocated)
+			bot_clearqueue(cl);
 		// also, cancel all barriers
 		cl.bot_barrier = 0;
 		for(i = 0; i < cl.bot_places_count; ++i)
