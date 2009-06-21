@@ -405,9 +405,9 @@ float Client_customizeentityforclient()
 
 	modelsource = self;
 	if(!self.modelindex_lod0_from_nexuiz)
-		if(self.cvar_cl_forceplayermodelsfromnexuiz)
+		if(other.cvar_cl_forceplayermodelsfromnexuiz)
 			modelsource = other;
-	if(self.cvar_cl_forceplayermodels && sv_clforceplayermodels)
+	if(other.cvar_cl_forceplayermodels && sv_clforceplayermodels)
 		modelsource = other;
 
 	self.skin = modelsource.skinindex;
