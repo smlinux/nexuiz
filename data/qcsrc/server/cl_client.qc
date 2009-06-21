@@ -404,8 +404,8 @@ float Client_customizeentityforclient()
 		return TRUE;
 
 	modelsource = self;
-	if(!self.modelindex_lod0_from_nexuiz)
-		if(other.cvar_cl_forceplayermodelsfromnexuiz)
+	if(other.cvar_cl_forceplayermodelsfromnexuiz)
+		if not(self.modelindex_lod0_from_nexuiz)
 			modelsource = other;
 	if(other.cvar_cl_forceplayermodels && sv_clforceplayermodels)
 		modelsource = other;
@@ -638,7 +638,9 @@ float RestrictSkin(float s)
 	if(!teams_matter)
 		return s;
 	if(s == 6)
-		return 6;
+		if not(self.cvar_cl_forceplayermodels)
+			if not(self.cvar_cl_forceplayermodelsfromnexuiz)
+				return 6;
 	return mod(s, 3);
 }
 
