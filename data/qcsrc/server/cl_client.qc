@@ -398,6 +398,20 @@ LOD reduction
 */
 float Client_customizeentityforclient()
 {
+	entity modelsource;
+
+	if(self.modelindex == 0)
+		return TRUE;
+
+	modelsource = self;
+	if(!self.modelindex_lod0_from_nexuiz)
+		if(self.cvar_cl_forceplayermodelsfromnexuiz)
+			modelsource = other;
+	if(self.cvar_cl_forceplayermodels && sv_clforceplayermodels)
+		modelsource = other;
+
+	self.skin = modelsource.skinindex;
+
 #ifdef ALLOW_VARIABLE_LOD
 	// self: me
 	// other: the player viewing me
@@ -410,23 +424,25 @@ float Client_customizeentityforclient()
 	if(other.cvar_cl_playerdetailreduction <= 0)
 	{
 		if(other.cvar_cl_playerdetailreduction <= -2)
-			self.modelindex = self.modelindex_lod2;
+			self.modelindex = modelsource.modelindex_lod2;
 		else if(other.cvar_cl_playerdetailreduction <= -1)
-			self.modelindex = self.modelindex_lod1;
+			self.modelindex = modelsource.modelindex_lod1;
 		else
-			self.modelindex = self.modelindex_lod0;
+			self.modelindex = modelsource.modelindex_lod0;
 	}
 	else
 	{
 		distance = vlen(self.origin - other.origin);
 		f = (distance + 100.0) * other.cvar_cl_playerdetailreduction;
 		if(f > 10000)
-			self.modelindex = self.modelindex_lod2;
+			self.modelindex = modelsource.modelindex_lod2;
 		else if(f > 5000)
-			self.modelindex = self.modelindex_lod1;
+			self.modelindex = modelsource.modelindex_lod1;
 		else
-			self.modelindex = self.modelindex_lod0;
+			self.modelindex = modelsource.modelindex_lod0;
 	}
+#else
+	self.modelindex = modelsource.modelindex_lod0;
 #endif
 
 	return TRUE;
@@ -471,7 +487,14 @@ void setmodel_lod(entity e, string modelname)
 #else
 	precache_model(modelname);
 	setmodel(e, modelname); // players have high precision
+	self.modelindex_lod0 = self.modelindex;
+		// save it for possible player model forcing
 #endif
+
+	string s;
+	s = whichpack(self.model);
+	self.modelindex_lod0_from_nexuiz = ((s == "") || (substring(s, 0, 4) == "data"));
+
 	player_setupanimsformodel();
 	UpdatePlayerSounds();
 }
@@ -661,8 +684,8 @@ void FixPlayermodel()
 			chmdl = TRUE;
 		}
 
-		oldskin = self.skin;
-		self.skin = defaultskin;
+		oldskin = self.skinindex;
+		self.skinindex = defaultskin;
 	} else {
 		if (self.playermodel != self.model)
 		{
@@ -674,11 +697,11 @@ void FixPlayermodel()
 			chmdl = TRUE;
 		}
 
-		oldskin = self.skin;
-		self.skin = RestrictSkin(stof(self.playerskin));
+		oldskin = self.skinindex;
+		self.skinindex = RestrictSkin(stof(self.playerskin));
 	}
 	
-	if(chmdl || oldskin != self.skin)
+	if(chmdl || oldskin != self.skinindex)
 		self.species = player_getspecies(); // model or skin has changed
 
 	if(!teams_matter)

@@ -44,11 +44,15 @@ void CopyBody(float keepvelocity)
 	self.armorvalue = oldself.armorvalue;
 	self.armortype = oldself.armortype;
 	self.model = oldself.model;
-	self.modelindex = oldself.modelindex;
+	self.modelindex_lod0 = oldself.modelindex_lod0;
+#ifdef ALLOW_VARIABLE_LOD
+	self.modelindex_lod1 = oldself.modelindex_lod1;
+	self.modelindex_lod2 = oldself.modelindex_lod2;
+#endif
+	self.skinindex = oldself.skinindex;
 	self.species = oldself.species;
 	self.movetype = oldself.movetype;
 	self.nextthink = oldself.nextthink;
-	self.skin = oldself.skin;
 	self.solid = oldself.solid;
 	self.takedamage = oldself.takedamage;
 	self.think = oldself.think;
@@ -89,7 +93,7 @@ float player_getspecies()
 				continue;
 			fgets(fh); fgets(fh);
 			sk = stof(fgets(fh));
-			if(sk == (j ? 0 : self.skin)) // 2nd pass skips the skin test
+			if(sk == (j ? 0 : self.skinindex)) // 2nd pass skips the skin test
 			if(fgets(fh) == self.model)
 			{
 				l = fgets(fh);
