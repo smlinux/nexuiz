@@ -410,7 +410,10 @@ float Client_customizeentityforclient()
 	if(other.cvar_cl_forceplayermodels && sv_clforceplayermodels)
 		modelsource = other;
 
-	self.skin = modelsource.skinindex;
+	if(modelsource == self)
+		self.skin = modelsource.skinindex;
+	else
+		self.skin = mod(modelsource.skinindex, 3); // forbid the fbskins as forced skins
 
 #ifdef ALLOW_VARIABLE_LOD
 	// self: me
@@ -638,9 +641,7 @@ float RestrictSkin(float s)
 	if(!teams_matter)
 		return s;
 	if(s == 6)
-		if not(self.cvar_cl_forceplayermodels)
-			if not(self.cvar_cl_forceplayermodelsfromnexuiz)
-				return 6;
+		return 6;
 	return mod(s, 3);
 }
 
