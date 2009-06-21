@@ -56,7 +56,7 @@ vector animparseline(float animfile)
 		return '0 1 2';
 	line = fgets(animfile);
 	c = tokenize_console(line);
-	if (c != 3)
+	if (c < 3)
 	{
 		animparseerror = TRUE;
 		return '0 1 2';
