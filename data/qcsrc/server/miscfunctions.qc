@@ -1004,6 +1004,7 @@ void readlevelcvars(void)
 	g_touchexplode_edgedamage = cvar("g_touchexplode_edgedamage");
 	g_touchexplode_force = cvar("g_touchexplode_force");
 
+ 	sv_clforceplayermodels = cvar("sv_clforceplayermodels");
  	sv_clones = cvar("sv_clones");
 	sv_cheats = cvar("sv_cheats");
 	sv_gentle = cvar("sv_gentle");
