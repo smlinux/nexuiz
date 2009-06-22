@@ -1132,10 +1132,10 @@ float sound_allowed(float dest, entity e)
 	// sounds from world may always pass
 	for(;;)
 	{
-		if(e.owner)
-			e = e.owner;
-		else if(e.classname == "body")
+		if(e.classname == "body")
 			e = e.enemy;
+		if(e.owner && e.owner != e)
+			e = e.owner;
 		else
 			break;
 	}
