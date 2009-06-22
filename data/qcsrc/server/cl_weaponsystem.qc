@@ -1137,11 +1137,6 @@ void weapon_thinkf(float fr, float t, void() func)
 			a_z *= g_weaponspeedfactor;
 			setanim(self.weaponentity, a, restartanim == FALSE, restartanim, restartanim);
 		}
-
-		if(restartanim)
-		{
-			BITXOR_ASSIGN(self.weaponentity.effects, EF_TELEPORT_BIT);
-		}
 	}
 
 	v_forward = of;
