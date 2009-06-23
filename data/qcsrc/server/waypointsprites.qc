@@ -25,6 +25,24 @@ void WaypointSprite_UpdateSprites(entity e, string m1, string m2, string m3)
 	}
 }
 
+void WaypointSprite_UpdateHealth(entity e, float f)
+{
+	if(f != e.health)
+	{
+		e.health = f;
+		e.SendFlags |= 0x80;
+	}
+}
+
+void WaypointSprite_UpdateMaxHealth(entity e, float f)
+{
+	if(f != e.max_health)
+	{
+		e.max_health = f;
+		e.SendFlags |= 0x80;
+	}
+}
+
 void WaypointSprite_UpdateOrigin(entity e, vector o)
 {
 	if(o != e.origin)
@@ -175,7 +193,16 @@ float WaypointSprite_Customize()
 float WaypointSprite_SendEntity(entity to, float sendflags)
 {
 	WriteByte(MSG_ENTITY, ENT_CLIENT_WAYPOINT);
+
+	sendflags = sendflags & 0x7F;
+	
+	if(self.max_health)
+		sendflags |= 0x80;
+
 	WriteByte(MSG_ENTITY, sendflags);
+
+	if(self.max_health)
+		WriteByte(MSG_ENTITY, (self.health / self.max_health) * 255.0);
 
 	if(sendflags & 64)
 	{
