@@ -32,7 +32,7 @@ float entcs_customize()
 		return FALSE;
 	if(other.classname == "player")
 		if(o.team != other.team)
-			if not (sv_cheats || (g_nexball && cvar("g_nexball_radar_showallplayers")))
+			if not (sv_cheats || radar_showennemies)
 				return FALSE;
 	return TRUE;
 }

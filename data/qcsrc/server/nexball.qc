@@ -42,6 +42,8 @@ void nb_init() // Called early (worldspawn stage)
 	CVTOV(g_nexball_delay_idle);               //10
 	CVTOV(g_nexball_football_physics);         //0
 
+	radar_showennemies = cvar("g_nexball_radar_showallplayers");
+
 	InitializeEntity(world, nb_delayedinit, INITPRIO_GAMETYPE);
 }
 
