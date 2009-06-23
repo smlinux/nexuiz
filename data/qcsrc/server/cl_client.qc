@@ -582,6 +582,8 @@ void PutObserverInServer (void)
 	self.pain_finished = 0;
 	self.strength_finished = 0;
 	self.invincible_finished = 0;
+	self.damage_hits = 0;
+	self.maxdamage_fired = 0;
 	self.pushltime = 0;
 	self.think = SUB_Null;
 	self.nextthink = 0;
@@ -850,6 +852,8 @@ void PutClientInServer (void)
 		self.pain_finished = 0;
 		self.strength_finished = 0;
 		self.invincible_finished = 0;
+		self.maxdamage_fired = 0;
+		self.damage_hits = 0;
 		self.pushltime = 0;
 		//self.speed_finished = 0;
 		//self.slowmo_finished = 0;
@@ -1980,6 +1984,8 @@ void SpectateCopy(entity spectatee) {
 	self.metertime = spectatee.metertime;
 	self.strength_finished = spectatee.strength_finished;
 	self.invincible_finished = spectatee.invincible_finished;
+	self.maxdamage_fired = spectatee.maxdamage_fired;
+	self.damage_hits = spectatee.damage_hits;
 	self.pressedkeys = spectatee.pressedkeys;
 	self.weapons = spectatee.weapons;
 	self.switchweapon = spectatee.switchweapon;

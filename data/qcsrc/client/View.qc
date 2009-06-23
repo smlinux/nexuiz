@@ -497,12 +497,13 @@ void CSQC_UpdateView(float w, float h)
 		if(spectatee_status > 0 || cvar("cl_showpressedkeys") >= 2)
 			Sbar_DrawPressedKeys();
 	}
-
+	
+	if (cvar("cl_showspeed"))
+		Sbar_ShowSpeed();
+	
 	// draw sbar
- 	if(cvar("r_letterbox") == 0) {
+ 	if(cvar("r_letterbox") == 0)
  		Sbar_DrawCenterPrint(); // draw centerprint messages even if viewsize >= 120
-
- 	}
 
     float hud;
     hud = getstati(STAT_HUD);

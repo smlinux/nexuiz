@@ -170,40 +170,40 @@ void Sbar_DrawXNum (vector pos, float num, float digits, float lettersize, vecto
 	}
 }
 
-void Sbar_DrawXNum_Colored (vector pos, float x, float lettersize)
+void Sbar_DrawXNum_Colored (vector pos, float x, float lettersize, float alpha)
 {
 	if(x > 200) {
 		color_x = 0;
 		color_y = 1;
 		color_z = 0;
-		Sbar_DrawXNum(pos, x, 3, lettersize, color, 0, 1, 0);
+		Sbar_DrawXNum(pos, x, 3, lettersize, color, 0, alpha, 0);
 	}
 	else if(x > 150) {
 		color_x = 0.4 - ((x-150)*0.02 * 0.4); //red value between 0.4 -> 0
 		color_y = 0.9 + ((x-150)*0.02 * 0.1); // green value between 0.9 -> 1
 		color_z = 0;
-		Sbar_DrawXNum(pos, x, 3, lettersize, color, 0, 1, 0);
+		Sbar_DrawXNum(pos, x, 3, lettersize, color, 0, alpha, 0);
 	}
 	else if(x > 100) {
 		color_x = 0.6 - ((x-100)*0.02 * 0.2); //red value between 0.6 -> 0.4
 		color_y = 0.7 + ((x-100)*0.02 * 0.2); // green value between 0.7 -> 0.9
 		color_z = 0.8 - ((x-100)*0.02 * 0.8); // blue value between 0.8 -> 0
-		Sbar_DrawXNum(pos, x, 3, lettersize, color, 0, 1, 0);
+		Sbar_DrawXNum(pos, x, 3, lettersize, color, 0, alpha, 0);
 	}
 	else if(x > 50) {
 		color_x = 1 - ((x-50)*0.02 * 0.4); //red value between 1 -> 0.6
 		color_y = 1 - ((x-50)*0.02 * 0.3); // green value between 1 -> 0.7
 		color_z = 0.2 + ((x-50)*0.02 * 0.6); // blue value between 0.2 -> 0.8
-		Sbar_DrawXNum(pos, x, 3, lettersize, color, 0, 1, 0);
+		Sbar_DrawXNum(pos, x, 3, lettersize, color, 0, alpha, 0);
 	}
 	else if(x > 20) {
 		color_x = 1;
 		color_y = (x-20)*90/27/100; // green value between 0 -> 1
 		color_z = (x-20)*90/27/100 * 0.2; // blue value between 0 -> 0.2
-		Sbar_DrawXNum(pos, x, 3, lettersize, color, 0, 1, 0);
+		Sbar_DrawXNum(pos, x, 3, lettersize, color, 0, alpha, 0);
 	}
 	else
-		Sbar_DrawXNum(pos, x, 3, lettersize, '1 0 0', 0, 1, 0);
+		Sbar_DrawXNum(pos, x, 3, lettersize, '1 0 0', 0, alpha, 0);
 }
 
 void Cmd_Sbar_SetFields(float argc);
@@ -1785,11 +1785,30 @@ void Sbar_DrawPressedKeys(void)
 	drawpic(pos + ' 65   32   0', ((pressedkeys & KEY_RIGHT) ? "gfx/hud/keys/key_right_inv.tga" : "gfx/hud/keys/key_right.tga"),    ' 32 32 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 }
 
+void Sbar_ShowSpeed(void)
+{
+	vector numsize;
+	float pos;
+	string speed;
+	
+	if (cvar("cl_showspeed_z") == 1)
+		speed = ftos(floor(vlen(pmove_vel) + 0.5));
+	else
+		speed = ftos(floor(vlen(pmove_vel - pmove_vel_z * '0 0 1') + 0.5));
+		
+	pos = cvar("cl_showspeed_position");
+	numsize_x = numsize_y = cvar("cl_showspeed_size");
+	pos = (vid_conheight - numsize_y) * pos;
+	
+	drawstringcenter('1 0 0' + pos * '0 1 0', speed, numsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+}
+
 void Sbar_DrawAccuracyStats()
 {
 	float i, count_hitscan, count_splash, row;  // count is the number of 'colums'
 	float weapon_hit, weapon_damage, weapon_stats;
 	float left_border;  // position where the weapons start, the description is in the border
+	float border_thickness = 2;
 	vector fill_colour, fill_size;
 	vector pos;
 
@@ -1852,10 +1871,14 @@ void Sbar_DrawAccuracyStats()
 			pos_y = top_border + row * (fill_size_y + row_margin);
 
 			// background
-			drawfill(pos, fill_size , fill_colour, 0.4 * sbar_alpha_fg, DRAWFLAG_NORMAL);
+			drawpic(pos, "gfx/hud/sb_accuracy", fill_size , fill_colour, sbar_alpha_bg, DRAWFLAG_NORMAL);
+			drawline(border_thickness, pos, pos + '1 0 0' * fill_size_x, '0 0 0', sbar_alpha_bg, DRAWFLAG_NORMAL);
+			drawline(border_thickness, pos, pos + '0 1 0' * fill_size_y, '0 0 0', sbar_alpha_bg, DRAWFLAG_NORMAL);
+			drawline(border_thickness, pos + '1 0 0' * fill_size_x, pos + '1 0 0' * fill_size_x + '0 1 0' * fill_size_y, '0 0 0', sbar_alpha_bg, DRAWFLAG_NORMAL);
+			drawline(border_thickness, pos + '0 1 0' * fill_size_y, pos + '0 1 0' * fill_size_y + '1 0 0' * fill_size_x, '0 0 0', sbar_alpha_bg, DRAWFLAG_NORMAL);
 
 			// the weapon
-			drawpic(pos, strcat("gfx/inv_weapon", ftos(i-1)), '1 0.5 0' * fill_size_x , '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+			drawpic(pos, strcat("gfx/hud/inv_weapon", ftos(i-1)), '1 0.5 0' * fill_size_x , '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 			// the amount of shots fired or max damage
 			drawstringright(pos + '4.5 0 0' * sbar_fontsize_x + '0 3 0' * sbar_fontsize_y, ftos(weapon_damage), sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
@@ -1904,10 +1927,14 @@ void Sbar_DrawAccuracyStats()
 			pos_y = top_border + row * (fill_size_y + row_margin);
 
 			// background
-			drawfill(pos, fill_size , fill_colour, 0.4 * sbar_alpha_fg, DRAWFLAG_NORMAL);
+			drawpic(pos, "gfx/hud/sb_accuracy", fill_size , fill_colour, sbar_alpha_bg, DRAWFLAG_NORMAL);
+			drawline(border_thickness, pos, pos + '1 0 0' * fill_size_x, '0 0 0', sbar_alpha_bg, DRAWFLAG_NORMAL);
+			drawline(border_thickness, pos, pos + '0 1 0' * fill_size_y, '0 0 0', sbar_alpha_bg, DRAWFLAG_NORMAL);
+			drawline(border_thickness, pos + '1 0 0' * fill_size_x, pos + '1 0 0' * fill_size_x + '0 1 0' * fill_size_y, '0 0 0', sbar_alpha_bg, DRAWFLAG_NORMAL);
+			drawline(border_thickness, pos + '0 1 0' * fill_size_y, pos + '0 1 0' * fill_size_y + '1 0 0' * fill_size_x, '0 0 0', sbar_alpha_bg, DRAWFLAG_NORMAL);
 
 			// the weapon
-			drawpic(pos, strcat("gfx/inv_weapon", ftos(i-1)), '1 0.5 0' * fill_size_x , '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+			drawpic(pos, strcat("gfx/hud/inv_weapon", ftos(i-1)), '1 0.5 0' * fill_size_x , '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 			// the amount of shots fired or max damage
 			drawstringright(pos + '4.5 0 0' * sbar_fontsize_x + '0 3 0' * sbar_fontsize_y, ftos(weapon_damage), sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
@@ -2185,273 +2212,222 @@ void Sbar_Draw (void)
 
 	Sbar_UpdatePlayerTeams();
 
-	if (intermission == 1)
+	if (intermission == 2) // map voting screen
 	{
-		if(sb_showaccuracy)
-			Sbar_DrawAccuracyStats();
-		else
+		if(sb_showscores) {
 			Sbar_DrawScoreboard();
-		Sbar_DrawCenterPrint();
-	}
-	else if (intermission == 2)
-	{
-		if(sb_showaccuracy)
+			Sbar_Score(16);
+		}
+		else if(sb_showaccuracy) {
 			Sbar_DrawAccuracyStats();
-		else if (sb_showscores)
-			Sbar_DrawScoreboard();
-		else
+			Sbar_Score(16);
+		}
+  		else
 			Sbar_FinaleOverlay();
-		Sbar_DrawCenterPrint();	
 	}
-	else if(sb_showaccuracy)
- 	{
- 		Sbar_DrawAccuracyStats();
- 	}
+	else if (sb_showscores_force || getstati(STAT_HEALTH) <= 0 || intermission == 1)
+	{
+  		if(sb_showaccuracy)
+  			Sbar_DrawAccuracyStats();
+  		else
+			Sbar_DrawScoreboard();
+		Sbar_Score(16);
+  	}
 	else
 	{
-		if (sb_showscores_force || (getstati(STAT_HEALTH) <= 0 && cvar("cl_deathscoreboard")))
-		{
-			sbar_x = (vid_conwidth - 640.0)*0.5;
-			sbar_y = vid_conheight - 47;
-			//Sbar_DrawAlphaPic (sbar_x, sbar_y, sb_scorebar, sbar_alpha_bg.value);
-			//drawpic('0 0 0', "gfx/hud/scorebar", '0 0 0', '1 1 1', cvar("sbar_alpha_bg"), 0);
-			Sbar_DrawScoreboard ();
+		if (sb_showscores)
+			Sbar_DrawScoreboard();
+		else if(sb_showaccuracy)
+			Sbar_DrawAccuracyStats();
+
+		float armor, health;
+		armor = getstati(STAT_ARMOR);
+		health = getstati(STAT_HEALTH);
+
+		stat_items = getstati(STAT_ITEMS);
+		stat_weapons = getstati(STAT_WEAPONS);
+
+		fade = 3.2 - 2 * (time - weapontime);
+		fade = bound(0.7, fade, 1);
+
+		vector bg_size; // hud background size
+		bg_size_x = 800;
+		if (vid_conwidth > 800) // if conwidth > 800, resize the background image
+			bg_size_x = vid_conwidth;
+		bg_size_y = 58;
+		bg_size_z = 0;
+
+		vector bgoffset; // hud background offset
+		bgoffset_x = 0;
+		bgoffset_y = 0;
+		bgoffset_z = 0;
+		if (vid_conwidth < 800) // if conwidth < 800 we need to offset the background image to keep it centered, as it will be scaled up
+			bgoffset_x = (vid_conwidth - 800) / 2;
+
+		if (cvar("viewsize") <= 100) {
+			if (teamplay)
+				drawpic(bottomleft - '0 58 0' + bgoffset, "gfx/hud/sbar", bg_size, GetTeamRGB(myteam) * cvar("sbar_color_bg_team"), sbar_alpha_bg, 0); // hud color = myteam color
+			else {
+				// allow for custom HUD colors in non-teamgames
+				color_x = cvar("sbar_color_bg_r");
+				color_y = cvar("sbar_color_bg_g");
+				color_z = cvar("sbar_color_bg_b");
+
+				drawpic(bottomleft - '0 58 0' + bgoffset, "gfx/hud/sbar", bg_size, color, sbar_alpha_bg, 0);
+			}
 		}
+
+		if(sbar_hudselector == 2) // combined health and armor display
+		{
+			// NOTE: we'll always choose the SMALLER value...
+			float healthdamage, armordamage, armorideal;
+			healthdamage = (health - 1) / (1 - armorblockpercent); // damage we can take if we could use more health
+			armordamage = armor + (health - 1); // damage we can take if we could use more armor
+			armorideal = healthdamage * armorblockpercent;
+
+			vector num_pos;
+			num_pos = bottom - element_offset - '0 24 0' + '-96 0 0';
+
+			if(armordamage < healthdamage)
+			{
+				// here, armorideal > armor
+				x = floor(armordamage + 1);
+				drawpic(num_pos + '78 -3 0', "gfx/hud/sb_health", '32 32 0', '1 1 1', sbar_alpha_fg, 0);
+				drawpic(num_pos + '108 -3 0', "gfx/hud/sb_armor", '20 20 0', '1 1 1', sbar_alpha_fg * armor / armorideal, 0);
+			}
+			else
+			{
+				x = floor(healthdamage + 1);
+				drawpic(num_pos + '108 -3 0', "gfx/hud/sb_health", '20 20 0', '1 1 1', sbar_alpha_fg * armorideal / armor, 0);
+				drawpic(num_pos + '78 -3 0', "gfx/hud/sb_armor", '32 32 0', '1 1 1', sbar_alpha_fg, 0);
+			}
+			Sbar_DrawXNum_Colored(num_pos, x, 24, sbar_alpha_fg); // draw the combined health and armor
+		}
+
 		else
 		{
-			if (sb_showscores) // do not hide the hud if sb_showscores is shown
-			{
-				Sbar_DrawScoreboard();
-				Sbar_DrawCenterPrint();
+			vector health_pos, armor_pos;
+
+			if (sbar_hudselector == 0) { // old style layout with armor left of health
+				health_pos = bottom - element_offset - '0 24 0' + '14 0 0';
+				armor_pos = bottom - element_offset - '0 24 0' + '-96 0 0';
 			}
 
-			float armor, health;
-			armor = getstati(STAT_ARMOR);
-			health = getstati(STAT_HEALTH);
-
-			stat_items = getstati(STAT_ITEMS);
-			stat_weapons = getstati(STAT_WEAPONS);
-
-			fade = 3.2 - 2 * (time - weapontime);
-			fade = bound(0.7, fade, 1);
-
-			vector bg_size; // hud background size
-			bg_size_x = 800;
-			if (vid_conwidth > 800) // if conwidth > 800, resize the background image
-				bg_size_x = vid_conwidth;
-			bg_size_y = 58;
-			bg_size_z = 0;
-
-			vector bgoffset; // hud background offset
-			bgoffset_x = 0;
-			bgoffset_y = 0;
-			bgoffset_z = 0;
-			if (vid_conwidth < 800) // if conwidth < 800 we need to offset the background image to keep it centered, as it will be scaled up
-				bgoffset_x = (vid_conwidth - 800) / 2;
-
-			if (cvar("viewsize") <= 100) {
-				if (teamplay) {
-					//if (myteam == 13) // 13 = blue shirt color
-					//	drawpic(bottomleft - '0 58 0' + bgoffset, "gfx/hud/sbar", bg_size, '0 0.3 1', sbar_alpha_bg, 0); // blue hud is too dark at '0 0 1'
-					//else
-						drawpic(bottomleft - '0 58 0' + bgoffset, "gfx/hud/sbar", bg_size, GetTeamRGB(myteam) * cvar("sbar_color_bg_team"), sbar_alpha_bg, 0); // hud color = myteam color
-					}
-				else {
-					// allow for custom HUD colors in non-teamgames
-					color_x = cvar("sbar_color_bg_r");
-					color_y = cvar("sbar_color_bg_g");
-					color_z = cvar("sbar_color_bg_b");
-
-					drawpic(bottomleft - '0 58 0' + bgoffset, "gfx/hud/sbar", bg_size, color, sbar_alpha_bg, 0);
-				}
+			else {
+				health_pos = bottom - element_offset - '0 24 0' + '-96 0 0';
+				armor_pos = bottom - element_offset - '0 24 0' + '14 0 0';
 			}
 
-			if(health != 0)
+			// armor
+			x = armor;
+			if (x > 0)
 			{
-				if(sbar_hudselector == 2) // combined health and armor display
-				{
-					// NOTE: we'll always choose the SMALLER value...
-					float healthdamage, armordamage, armorideal;
-					healthdamage = (health - 1) / (1 - armorblockpercent); // damage we can take if we could use more health
-					armordamage = armor + (health - 1); // damage we can take if we could use more armor
-					armorideal = healthdamage * armorblockpercent;
-
-					vector num_pos;
-					num_pos = bottom - element_offset - '0 24 0' + '-96 0 0';
-
-					if(armordamage < healthdamage)
-					{
-						// here, armorideal > armor
-						x = floor(armordamage + 1);
-						drawpic(num_pos + '78 -3 0', "gfx/hud/sb_health", '32 32 0', '1 1 1', sbar_alpha_fg, 0);
-						drawpic(num_pos + '108 -3 0', "gfx/hud/sb_armor", '20 20 0', '1 1 1', sbar_alpha_fg * armor / armorideal, 0);
-					}
-					else
-					{
-						x = floor(healthdamage + 1);
-						drawpic(num_pos + '108 -3 0', "gfx/hud/sb_health", '20 20 0', '1 1 1', sbar_alpha_fg * armorideal / armor, 0);
-						drawpic(num_pos + '78 -3 0', "gfx/hud/sb_armor", '32 32 0', '1 1 1', sbar_alpha_fg, 0);
-					}
-					Sbar_DrawXNum_Colored(num_pos, x, 24); // draw the combined health and armor
-				}
-
+				drawpic(armor_pos + '78 -3 0', "gfx/hud/sb_armor", '32 32 0', '1 1 1', (x+10)/55 * sbar_alpha_fg, 0);
+				if (x > 45)
+					Sbar_DrawXNum_Colored(armor_pos, x, 24, sbar_alpha_fg);
 				else
-				{
-					vector health_pos, armor_pos;
-
-					if (sbar_hudselector == 0) { // old style layout with armor left of health
-						health_pos = bottom - element_offset - '0 24 0' + '14 0 0';
-						armor_pos = bottom - element_offset - '0 24 0' + '-96 0 0';
-					}
-
-					else {
-						health_pos = bottom - element_offset - '0 24 0' + '-96 0 0';
-						armor_pos = bottom - element_offset - '0 24 0' + '14 0 0';
-					}
-
-					// armor
-					x = armor;
-					if (x > 0)
-					{
-						drawpic(armor_pos + '78 -3 0', "gfx/hud/sb_armor", '32 32 0', '1 1 1', sbar_alpha_fg, 0);
-
-						Sbar_DrawXNum_Colored(armor_pos, x, 24);
-					}
-
-					// health
-					x = health;
-					drawpic(health_pos + '78 -3 0', "gfx/hud/sb_health", '32 32 0', '1 1 1', sbar_alpha_fg, 0);
-
-					Sbar_DrawXNum_Colored(health_pos, x, 24);
-				}
-
-				// weapon icons
-				x = 1.0;
-				Sbar_DrawWeapon_Clear();
-				for(i = 1; i <= 24; ++i)
-				{
-					if(weaponimpulse[i-1] >= 0)
-					if(stat_weapons & x)
-					{
-						Sbar_DrawWeapon(i-1, fade, (i == activeweapon), i);
-					}
-					x *= 2;
-				}
-
-				// ammo
-				float a; // i will be the ammo type (already declared), a will contain how much ammo there is of type i
-				vector pos;
-				pos_z = 0;
-
-				for (i = 0; i < 4; ++i) {
-					a = getstati(GetAmmoStat(i)); // how much ammo do we have of type i?
-					
-					if(sbar_currentammo)
-					{
-						pos = '0 0 0';
-						if (stat_items & GetAmmoItemCode(i))
-						{
-							if(cvar("vid_conwidth") >= 800)
-							{
-								pos_x = 170;
-								pos_y = -40;
-								drawpic(bottomleft + pos + '0 1.5 0', "gfx/hud/sb_ammobg", '107 29 0', '1 1 1', sbar_alpha_fg, 0);
-								drawpic(bottomleft + pos + '76 3 0', GetAmmoPicture(i), '24 24 0', '1 1 1', sbar_alpha_fg, 0);
-								if(a > 10)
-									Sbar_DrawXNum(bottomleft + pos + '5 4 0', a, 3, 24, '0.6 0.7 0.8', 0, 1, 0);
-								else
-									Sbar_DrawXNum(bottomleft + pos + '5 4 0', a, 3, 24, '0.7 0 0', 0, 1, 0);
-							}
-							else
-							{
-								pos_x = vid_conwidth - 110;
-								pos_y = -128;
-								drawpic(bottomleft + pos + '0 1.5 0', "gfx/hud/sb_ammobg", '107 29 0', '1 1 1', sbar_alpha_fg, 0);
-								drawpic(bottomleft + pos + '76 3 0', GetAmmoPicture(i), '24 24 0', '1 1 1', sbar_alpha_fg, 0);
-								if(a > 10)
-									Sbar_DrawXNum(bottomleft + pos + '5 4 0', a, 3, 24, '0.6 0.7 0.8', 0, 1, 0);
-								else
-									Sbar_DrawXNum(bottomleft + pos + '5 4 0', a, 3, 24, '0.7 0 0', 0, 1, 0);
-							}
-						}
-					}
-					else
-					{
-						if (a > 0) {
-							pos = '0 0 0';
-							if (cvar("vid_conwidth") >= 800)
-								switch (i) {
-									case 0: pos_x = 114; pos_y = -48; break; // shells
-									case 1: pos_x = 114; pos_y = -26; break; // bullets
-									case 2: pos_x = 200; pos_y = -48; break; // rockets
-									case 3: pos_x = 200; pos_y = -26; break; // cells
-								}
-							else // if vid_conwidth is lower than 800, ammo will overlap with weapon icons and health so we'll move it to the right
-								switch (i) {
-									case 0: pos_x = vid_conwidth - 158; pos_y = -150; break; // shells
-									case 1: pos_x = vid_conwidth - 158; pos_y = -128; break; // bullets
-									case 2: pos_x = vid_conwidth - 84; pos_y = -150; break; // rockets
-									case 3: pos_x = vid_conwidth - 84; pos_y = -128; break; // cells
-								}
-					
-							if (stat_items & GetAmmoItemCode(i))
-								drawpic(bottomleft + pos + '0 1.5 0', "gfx/hud/sb_ammobg", '80 22 0', '1 1 1', sbar_alpha_fg, 0);
-							drawpic(bottomleft + pos + '56 3 0', GetAmmoPicture(i), '18 18 0', '1 1 1', sbar_alpha_fg, 0);
-							if (a > 10)
-								Sbar_DrawXNum(bottomleft + pos + '6 4 0', a, 3, 16, '0.6 0.7 0.8', 0, 1, 0);
-							else
-								Sbar_DrawXNum(bottomleft + pos + '6 4 0', a, 3, 16, '0.7 0 0', 0, 1, 0);
-						}
-					}
-				}
-
-				// fuel ammo
-				a = getstati(GetAmmoStat(4)); // how much fuel do we have?
-
-				if (a > 0) { // if we have fuel, draw the amount
-					float invincibility_time, dt;
-					invincibility_time = getstatf(STAT_INVINCIBLE_FINISHED);
-					dt = invincibility_time - time;
-					if (dt > 0) { // if the invincibility timer is active, draw fuel ammo elsewhere
-						pos_x = bottom_x + 140;
-						pos_y = bottom_y - 72;
-					}
-					else { // if the invincibility timer is inactive, draw the fuel ammo there (it's rare to have invincibility + fuel anyway)
-						pos_x = bottom_x + 140;
-						pos_y = bottom_y - 22;
-					}
-					drawpic(pos - '0 2 0' + '52 0 0', GetAmmoPicture(4), '20 20 0', '1 1 1', sbar_alpha_fg, 0);
-					if (a > 10)
-						Sbar_DrawXNum(pos, a, 3, 16, '0.6 0.7 0.8', 0, 1, 0);
-					else
-						Sbar_DrawXNum(pos, a, 3, 16, '0.7 0 0', 0, 1, 0);
-				}
-
-				// draw scores and timer
-				Sbar_Score(16);
+					Sbar_DrawXNum_Colored(armor_pos, x, 24, (x+10)/55 * sbar_alpha_fg);
 			}
 
-			//show strength/invincibility ICON and timer:
-			CSQC_Strength_Timer();
+			// health
+			x = health;
+			drawpic(health_pos + '78 -3 0', "gfx/hud/sb_health", '32 32 0', '1 1 1', sbar_alpha_fg, 0);
+			Sbar_DrawXNum_Colored(health_pos, x, 24, sbar_alpha_fg);
+		}
 
-			if(gametype == GAME_KEYHUNT)
+		// weapon icons
+		x = 1.0;
+		Sbar_DrawWeapon_Clear();
+		for(i = 1; i <= 24; ++i)
+		{
+			if(weaponimpulse[i-1] >= 0)
+			if(stat_weapons & x)
 			{
-				CSQC_kh_hud();
-			} else if(gametype == GAME_CTF)
-			{
-				CSQC_ctf_hud();
-			} else if(gametype == GAME_NEXBALL)
-			{
-				CSQC_nb_hud();
+				Sbar_DrawWeapon(i-1, fade, (i == activeweapon), i);
+			}
+			x *= 2;
+		}
+
+		// ammo
+		float a; // i will be the ammo type (already declared), a will contain how much ammo there is of type i
+		vector pos;
+		pos_z = 0;
+
+		for (i = 0; i < 4; ++i) {
+			a = getstati(GetAmmoStat(i)); // how much ammo do we have of type i?
+
+			if (a > 0) {
+				pos = '0 0 0';
+				if (cvar("vid_conwidth") >= 800)
+					switch (i) {
+						case 0: pos_x = 114; pos_y = -48; break; // shells
+						case 1: pos_x = 114; pos_y = -26; break; // bullets
+						case 2: pos_x = 200; pos_y = -48; break; // rockets
+						case 3: pos_x = 200; pos_y = -26; break; // cells
+					}
+				else // if vid_conwidth is lower than 800, ammo will overlap with weapon icons and health so we'll move it to the right
+					switch (i) {
+						case 0: pos_x = vid_conwidth - 158; pos_y = -150; break; // shells
+						case 1: pos_x = vid_conwidth - 158; pos_y = -128; break; // bullets
+						case 2: pos_x = vid_conwidth - 84; pos_y = -150; break; // rockets
+						case 3: pos_x = vid_conwidth - 84; pos_y = -128; break; // cells
+					}
+
+				if (stat_items & GetAmmoItemCode(i))
+					drawpic(bottomleft + pos + '0 1.5 0', "gfx/hud/sb_ammobg", '80 22 0', '1 1 1', sbar_alpha_fg, 0);
+				drawpic(bottomleft + pos + '56 3 0', GetAmmoPicture(i), '18 18 0', '1 1 1', sbar_alpha_fg, 0);
+				if (a > 10)
+					Sbar_DrawXNum(bottomleft + pos + '6 4 0', a, 3, 16, '0.6 0.7 0.8', 0, 1, 0);
+				else
+					Sbar_DrawXNum(bottomleft + pos + '6 4 0', a, 3, 16, '0.7 0 0', 0, 1, 0);
 			}
 		}
+
+		// fuel ammo
+		a = getstati(GetAmmoStat(4)); // how much fuel do we have?
+
+		if (a > 0) { // if we have fuel, draw the amount
+			float invincibility_time, dt;
+			invincibility_time = getstatf(STAT_INVINCIBLE_FINISHED);
+			dt = invincibility_time - time;
+			if (dt > 0) { // if the invincibility timer is active, draw fuel ammo elsewhere
+				pos_x = bottom_x + 140;
+				pos_y = bottom_y - 72;
+			}
+			else { // if the invincibility timer is inactive, draw the fuel ammo there (it's rare to have invincibility + fuel anyway)
+				pos_x = bottom_x + 140;
+				pos_y = bottom_y - 22;
+			}
+			drawpic(pos - '0 2 0' + '52 0 0', GetAmmoPicture(4), '20 20 0', '1 1 1', sbar_alpha_fg, 0);
+			if (a > 10)
+				Sbar_DrawXNum(pos, a, 3, 16, '0.6 0.7 0.8', 0, 1, 0);
+			else
+				Sbar_DrawXNum(pos, a, 3, 16, '0.7 0 0', 0, 1, 0);
+		}
+
+		// draw scores and timer
+		Sbar_Score(16);
+
+		//show strength/invincibility ICON and timer:
+		CSQC_Strength_Timer();
+
+		if(gametype == GAME_KEYHUNT)
+		{
+			CSQC_kh_hud();
+		} else if(gametype == GAME_CTF)
+		{
+			CSQC_ctf_hud();
+		} else if(gametype == GAME_NEXBALL)
+		{
+			CSQC_nb_hud();
+  		}
 	}
 }
 
 // CTF HUD
 void CSQC_ctf_hud(void)
 {
-	vector bottomleft;
+	vector bottomleft, redflag_pos, blueflag_pos;
 	bottomleft_x = 0;
 	bottomleft_y = vid_conheight;
 	bottomleft_z = 0;
@@ -2464,51 +2440,35 @@ void CSQC_ctf_hud(void)
 	blueflag = (stat_items/IT_BLUE_FLAG_TAKEN) & 3;
 
 	if (myteam == COLOR_TEAM1) { // always draw own flag on left
-		switch(redflag)
-		{
-		case 1: drawpic(bottomleft - element_offset - '-4 36 0', "gfx/hud/sb_flag_red_taken", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
-		case 2: drawpic(bottomleft - element_offset - '-4 36 0', "gfx/hud/sb_flag_red_lost", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
-		case 3: drawpic(bottomleft - element_offset - '-4 36 0', "gfx/hud/sb_flag_red_carrying", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
-		default:
-			if(stat_items & IT_CTF_SHIELDED)
-				if(myteam == COLOR_TEAM2)
-					drawpic(bottomleft - element_offset - '-4 36 0', "gfx/hud/sb_flag_red_shielded", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
-		}
-
-		switch(blueflag)
-		{
-		case 1: drawpic(bottomleft - element_offset - '-72 36 0', "gfx/hud/sb_flag_blue_taken", '48 48 0', '1 1 1', sbar_alpha_fg, 0); break;
-		case 2: drawpic(bottomleft - element_offset - '-72 36 0', "gfx/hud/sb_flag_blue_lost", '48 48 0', '1 1 1', sbar_alpha_fg, 0); break;
-		case 3: drawpic(bottomleft - element_offset - '-72 36 0', "gfx/hud/sb_flag_blue_carrying", '48 48 0', '1 1 1', sbar_alpha_fg, 0); break;
-		default:
-			if(stat_items & IT_CTF_SHIELDED)
-				if(myteam == COLOR_TEAM1)
-					drawpic(bottomleft - element_offset - '-72 36 0', "gfx/hud/sb_flag_blue_shielded", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
-		}
+		redflag_pos = bottomleft - element_offset - '-4 36 0';
+		blueflag_pos = bottomleft - element_offset - '-72 36 0';
+	}
+	
+	else {
+		blueflag_pos = bottomleft - element_offset - '-4 36 0';
+		redflag_pos = bottomleft - element_offset - '-72 36 0';
+	}
+	
+	switch(redflag)
+	{
+	case 1: drawpic(redflag_pos, "gfx/hud/sb_flag_red_taken", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
+	case 2: drawpic(redflag_pos, "gfx/hud/sb_flag_red_lost", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
+	case 3: drawpic(redflag_pos, "gfx/hud/sb_flag_red_carrying", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
+	default:
+		if(stat_items & IT_CTF_SHIELDED)
+			if(myteam == COLOR_TEAM2)
+				drawpic(redflag_pos, "gfx/hud/sb_flag_red_shielded", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
 	}
 
-	else {
-		switch(blueflag)
-		{
-		case 1: drawpic(bottomleft - element_offset - '-4 36 0', "gfx/hud/sb_flag_blue_taken", '48 48 0', '1 1 1', sbar_alpha_fg, 0); break;
-		case 2: drawpic(bottomleft - element_offset - '-4 36 0', "gfx/hud/sb_flag_blue_lost", '48 48 0', '1 1 1', sbar_alpha_fg, 0); break;
-		case 3: drawpic(bottomleft - element_offset - '-4 36 0', "gfx/hud/sb_flag_blue_carrying", '48 48 0', '1 1 1', sbar_alpha_fg, 0); break;
-		default:
-			if(stat_items & IT_CTF_SHIELDED)
-				if(myteam == COLOR_TEAM1)
-					drawpic(bottomleft - element_offset - '-4 36 0', "gfx/hud/sb_flag_blue_shielded", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
-		}
-
-		switch(redflag)
-		{
-		case 1: drawpic(bottomleft - element_offset - '-72 36 0', "gfx/hud/sb_flag_red_taken", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
-		case 2: drawpic(bottomleft - element_offset - '-72 36 0', "gfx/hud/sb_flag_red_lost", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
-		case 3: drawpic(bottomleft - element_offset - '-72 36 0', "gfx/hud/sb_flag_red_carrying", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
-		default:
-			if(stat_items & IT_CTF_SHIELDED)
-				if(myteam == COLOR_TEAM2)
-					drawpic(bottomleft - element_offset - '-72 36 0', "gfx/hud/sb_flag_red_shielded", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
-		}
+	switch(blueflag)
+	{
+	case 1: drawpic(blueflag_pos, "gfx/hud/sb_flag_blue_taken", '48 48 0', '1 1 1', sbar_alpha_fg, 0); break;
+	case 2: drawpic(blueflag_pos, "gfx/hud/sb_flag_blue_lost", '48 48 0', '1 1 1', sbar_alpha_fg, 0); break;
+	case 3: drawpic(blueflag_pos, "gfx/hud/sb_flag_blue_carrying", '48 48 0', '1 1 1', sbar_alpha_fg, 0); break;
+	default:
+		if(stat_items & IT_CTF_SHIELDED)
+			if(myteam == COLOR_TEAM1)
+				drawpic(blueflag_pos, "gfx/hud/sb_flag_blue_shielded", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
 	}
 }
 
