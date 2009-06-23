@@ -1,6 +1,8 @@
+#define ITEM_RESPAWN_TICKS 10
+
 #define ITEM_RESPAWNTIME(i)         ((i).respawntime + crandom() * (i).respawntimejitter)
 	// range: respawntime - respawntimejitter .. respawntime + respawntimejitter
-#define ITEM_RESPAWNTIME_INITIAL(i) (10 + random() * ((i).respawntime + (i).respawntimejitter - 10))
+#define ITEM_RESPAWNTIME_INITIAL(i) (ITEM_RESPAWN_TICKS + random() * ((i).respawntime + (i).respawntimejitter - ITEM_RESPAWN_TICKS))
 	// range: 10 .. respawntime + respawntimejitter
 
 floatfield Item_CounterField(float it)
@@ -57,7 +59,7 @@ void Item_Respawn (void)
 
 void Item_RespawnCountdown (void)
 {
-	if(self.count >= 5)
+	if(self.count >= ITEM_RESPAWN_TICKS)
 	{
 		if(self.waypointsprite_attached)
 			WaypointSprite_Kill(self.waypointsprite_attached);
@@ -98,12 +100,18 @@ void Item_RespawnCountdown (void)
 			{
 				WaypointSprite_Spawn(name, 0, 0, self, '0 0 64', world, 0, self, waypointsprite_attached, FALSE);
 				if(self.waypointsprite_attached)
+				{
 					WaypointSprite_UpdateTeamRadar(self.waypointsprite_attached, RADARICON_POWERUP, rgb);
+					WaypointSprite_UpdateMaxHealth(self.waypointsprite_attached, ITEM_RESPAWN_TICKS + 1);
+				}
 			}
 		}
 		sound (self, CHAN_TRIGGER, "misc/itemrespawncountdown.wav", VOL_BASE, ATTN_NORM);	// play respawn sound
 		if(self.waypointsprite_attached)
+		{
 			WaypointSprite_Ping(self.waypointsprite_attached);
+			WaypointSprite_UpdateHealth(self.waypointsprite_attached, self.count);
+		}
 	}
 }
 
@@ -112,7 +120,7 @@ void Item_ScheduleRespawnIn(entity e, float t)
 	if(e.flags & FL_POWERUP)
 	{
 		e.think = Item_RespawnCountdown;
-		e.nextthink = time + max(0, t - 5);
+		e.nextthink = time + max(0, t - ITEM_RESPAWN_TICKS);
 		e.count = 0;
 	}
 	else
