@@ -501,26 +501,3 @@ textures/evil6_lights/e6v_light_s_2k
 	}
 }
 
-textures/eX/eX_floor_grate03
-{
-	qer_editorimage textures/eX/eX_floor_grate03.tga
-	surfaceparm alphashadow
-	surfaceparm trans
-	surfaceparm nomarks
-	surfaceparm metalsteps
-	cull disable
-	nopicmip
-	{
-		map textures/eX/eX_floor_grate03.tga
-		rgbGen identity
-		depthWrite
-		alphafunc GT0
-	}
-	{
-		map $lightmap
-		blendfunc blend
-		rgbGen identity
-		tcGen lightmap
-		depthFunc equal
-	}
-}

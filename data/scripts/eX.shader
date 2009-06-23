@@ -130,15 +130,28 @@ textures/eX/eX_floor_grate_03_128
 	}	
 }
 
-textures/eX/eX_floor_grate_03
+textures/eX/eX_floor_grate03
 {
-	qer_EditorImage		textures/eX/eX_floor_grate_03.tga
+	qer_editorimage textures/eX/eX_floor_grate03.tga
+	surfaceparm alphashadow
+	surfaceparm trans
+	surfaceparm nomarks
+	surfaceparm metalsteps
+	cull disable
+	nopicmip
 	{
-		map textures/eX/eX_floor_grate_03
+		map textures/eX/eX_floor_grate03.tga
+		rgbGen identity
+		depthWrite
+		alphafunc GT0
 	}
 	{
 		map $lightmap
-	}	
+		blendfunc blend
+		rgbGen identity
+		tcGen lightmap
+		depthFunc equal
+	}
 }
 
 textures/eX/eX_floor_mtl_grate_01
@@ -751,17 +764,6 @@ textures/eX/eX_cretefloor_01b
 	qer_EditorImage textures/eX/eX_cretefloor_01b.tga
 	{
 		map textures/eX/eX_cretefloor_01b
-	}
-	{
-		map $lightmap
-	}
-}
-
-textures/eX/eX_floor_grate03
-{
-	qer_EditorImage textures/eX/eX_floor_grate03.tga
-	{
-		map textures/eX/eX_floor_grate03
 	}
 	{
 		map $lightmap

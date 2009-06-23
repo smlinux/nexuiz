@@ -1,0 +1,7 @@
+title CyberParcour01
+description Have Fun
+author sev
+type race 5 20 15
+settemp_for_type race g_start_weapon_shotgun 0
+settemp_for_type race g_start_weapon_laser 0
+settemp_for_type race g_start_weapon_hook 0
