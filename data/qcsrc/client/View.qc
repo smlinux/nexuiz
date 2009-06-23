@@ -361,6 +361,7 @@ void CSQC_UpdateView(float w, float h)
 	}
 
 	sbar_alpha_fg = cvar("sbar_alpha_fg" );
+	sbar_currentammo = cvar("sbar_showcurrentammo");
 	sbar_hudselector = cvar("sbar_hudselector");
 	sbar_hud_accuracy = cvar("sbar_hud_accuracy");
 	ColorTranslateMode = cvar("cl_stripcolorcodes");

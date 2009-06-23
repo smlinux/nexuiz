@@ -2345,31 +2345,63 @@ void Sbar_Draw (void)
 
 				for (i = 0; i < 4; ++i) {
 					a = getstati(GetAmmoStat(i)); // how much ammo do we have of type i?
-
-					if (a > 0) {
+					
+					if(sbar_currentammo)
+					{
 						pos = '0 0 0';
-						if (cvar("vid_conwidth") >= 800)
-							switch (i) {
-								case 0: pos_x = 114; pos_y = -48; break; // shells
-								case 1: pos_x = 114; pos_y = -26; break; // bullets
-								case 2: pos_x = 200; pos_y = -48; break; // rockets
-								case 3: pos_x = 200; pos_y = -26; break; // cells
-							}
-						else // if vid_conwidth is lower than 800, ammo will overlap with weapon icons and health so we'll move it to the right
-							switch (i) {
-								case 0: pos_x = vid_conwidth - 158; pos_y = -150; break; // shells
-								case 1: pos_x = vid_conwidth - 158; pos_y = -128; break; // bullets
-								case 2: pos_x = vid_conwidth - 84; pos_y = -150; break; // rockets
-								case 3: pos_x = vid_conwidth - 84; pos_y = -128; break; // cells
-							}
-
 						if (stat_items & GetAmmoItemCode(i))
-							drawpic(bottomleft + pos + '0 1.5 0', "gfx/hud/sb_ammobg", '80 22 0', '1 1 1', sbar_alpha_fg, 0);
-						drawpic(bottomleft + pos + '56 3 0', GetAmmoPicture(i), '18 18 0', '1 1 1', sbar_alpha_fg, 0);
-						if (a > 10)
-							Sbar_DrawXNum(bottomleft + pos + '6 4 0', a, 3, 16, '0.6 0.7 0.8', 0, 1, 0);
-						else
-							Sbar_DrawXNum(bottomleft + pos + '6 4 0', a, 3, 16, '0.7 0 0', 0, 1, 0);
+						{
+							if(cvar("vid_conwidth") >= 800)
+							{
+								pos_x = 170;
+								pos_y = -40;
+								drawpic(bottomleft + pos + '0 1.5 0', "gfx/hud/sb_ammobg", '107 29 0', '1 1 1', sbar_alpha_fg, 0);
+								drawpic(bottomleft + pos + '76 3 0', GetAmmoPicture(i), '24 24 0', '1 1 1', sbar_alpha_fg, 0);
+								if(a > 10)
+									Sbar_DrawXNum(bottomleft + pos + '5 4 0', a, 3, 24, '0.6 0.7 0.8', 0, 1, 0);
+								else
+									Sbar_DrawXNum(bottomleft + pos + '5 4 0', a, 3, 24, '0.7 0 0', 0, 1, 0);
+							}
+							else
+							{
+								pos_x = vid_conwidth - 110;
+								pos_y = -128;
+								drawpic(bottomleft + pos + '0 1.5 0', "gfx/hud/sb_ammobg", '107 29 0', '1 1 1', sbar_alpha_fg, 0);
+								drawpic(bottomleft + pos + '76 3 0', GetAmmoPicture(i), '24 24 0', '1 1 1', sbar_alpha_fg, 0);
+								if(a > 10)
+									Sbar_DrawXNum(bottomleft + pos + '5 4 0', a, 3, 24, '0.6 0.7 0.8', 0, 1, 0);
+								else
+									Sbar_DrawXNum(bottomleft + pos + '5 4 0', a, 3, 24, '0.7 0 0', 0, 1, 0);
+							}
+						}
+					}
+					else
+					{
+						if (a > 0) {
+							pos = '0 0 0';
+							if (cvar("vid_conwidth") >= 800)
+								switch (i) {
+									case 0: pos_x = 114; pos_y = -48; break; // shells
+									case 1: pos_x = 114; pos_y = -26; break; // bullets
+									case 2: pos_x = 200; pos_y = -48; break; // rockets
+									case 3: pos_x = 200; pos_y = -26; break; // cells
+								}
+							else // if vid_conwidth is lower than 800, ammo will overlap with weapon icons and health so we'll move it to the right
+								switch (i) {
+									case 0: pos_x = vid_conwidth - 158; pos_y = -150; break; // shells
+									case 1: pos_x = vid_conwidth - 158; pos_y = -128; break; // bullets
+									case 2: pos_x = vid_conwidth - 84; pos_y = -150; break; // rockets
+									case 3: pos_x = vid_conwidth - 84; pos_y = -128; break; // cells
+								}
+					
+							if (stat_items & GetAmmoItemCode(i))
+								drawpic(bottomleft + pos + '0 1.5 0', "gfx/hud/sb_ammobg", '80 22 0', '1 1 1', sbar_alpha_fg, 0);
+							drawpic(bottomleft + pos + '56 3 0', GetAmmoPicture(i), '18 18 0', '1 1 1', sbar_alpha_fg, 0);
+							if (a > 10)
+								Sbar_DrawXNum(bottomleft + pos + '6 4 0', a, 3, 16, '0.6 0.7 0.8', 0, 1, 0);
+							else
+								Sbar_DrawXNum(bottomleft + pos + '6 4 0', a, 3, 16, '0.7 0 0', 0, 1, 0);
+						}
 					}
 				}
 

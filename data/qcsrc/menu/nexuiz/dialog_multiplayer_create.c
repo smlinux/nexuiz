@@ -200,13 +200,13 @@ void gameTypeChangeNotifyNexuizServerCreateTab(entity me)
 	l2 = me.checkboxFraglimitMapinfo;
 	switch(gt)
 	{
-		case MAPINFO_TYPE_CTF:        GameType_ConfigureSliders(e, l, l2, "Capture limit:",   2,   20, 10, "capturelimit_override");    break;
+		case MAPINFO_TYPE_CTF:        GameType_ConfigureSliders(e, l, l2, "Capture limit:",   1,   20, 1, "capturelimit_override");     break;
 		case MAPINFO_TYPE_DOMINATION: GameType_ConfigureSliders(e, l, l2, "Point limit:",    50,  500, 10, "g_domination_point_limit"); break;
 		case MAPINFO_TYPE_KEYHUNT:    GameType_ConfigureSliders(e, l, l2, "Point limit:",   200, 1500, 50, "g_keyhunt_point_limit");    break;
 		case MAPINFO_TYPE_RUNEMATCH:  GameType_ConfigureSliders(e, l, l2, "Point limit:",    50,  500, 10, "g_runematch_point_limit");  break;
 		case MAPINFO_TYPE_LMS:        GameType_ConfigureSliders(e, l, l2, "Lives:",           3,   50,  1, "g_lms_lives_override");     break;
 		case MAPINFO_TYPE_RACE:       GameType_ConfigureSliders(e, l, l2, "Laps:",            1,   25,  1, "g_race_laps_limit");        break;
-		case MAPINFO_TYPE_NEXBALL:    GameType_ConfigureSliders(e, l, l2, "Goals:",           3,   50,  1, "g_nexball_goallimit");      break;
+		case MAPINFO_TYPE_NEXBALL:    GameType_ConfigureSliders(e, l, l2, "Goals:",           1,   50,  1, "g_nexball_goallimit");      break;
 		case MAPINFO_TYPE_ASSAULT:    GameType_ConfigureSliders(e, l, l2, "Point limit:",    50,  500, 10, "");                         break;
 		case MAPINFO_TYPE_ONSLAUGHT:  GameType_ConfigureSliders(e, l, l2, "Point limit:",    50,  500, 10, "");                         break;
 		default:                      GameType_ConfigureSliders(e, l, l2, "Frag limit:",      5,  100,  5, "fraglimit_override");       break;
