@@ -1,9 +1,9 @@
 #!/bin/bash
 
-width=256
+width=512
 height=64
 
-sprwidth=256
+sprwidth=512
 sprheight=64
 
 pngsprite()
@@ -13,7 +13,7 @@ pngsprite()
 	color=$2
 	bgcolor=$3
 	text=$4
-	svgwidth=512
+	svgwidth=1024
 	svgheight=128
 
 	cat <<EOF >$name.svg
@@ -27,7 +27,7 @@ pngsprite()
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="512"
+   width="1024"
    height="128"
    id="svg2"
    sodipodi:version="0.32"
@@ -57,7 +57,7 @@ pngsprite()
      inkscape:cy="75.53288"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     width="512px"
+     width="1024px"
      height="128px"
      showgrid="true"
      gridspacingx="8px"
@@ -86,15 +86,15 @@ pngsprite()
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       style="opacity:1;fill:#$color;fill-opacity:1;stroke:#$bgcolor;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.75294119"
-       d="M 256,126 L 280,102 L 264,102 L 264,62 L 248,62 L 248,102 L 232,102 L 256,126 z "
+       style="opacity:1;fill:#$color;fill-opacity:1;stroke:#$bgcolor;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.75294119"
+       d="M 512,124 L 536,100 L 520,100 L 520,60 L 504,60 L 504,100 L 488,100 L 512,124 z "
        id="path1872"
        sodipodi:nodetypes="cccccccc" />
     <text
        xml:space="preserve"
-       style="font-size:56px;font-weight:bold;text-align:center;text-anchor:middle;opacity:1;fill:#$color;fill-opacity:1;stroke:#$bgcolor;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.75294118"
-       x="255.49414"
-       y="49.957031"
+       style="font-size:120px;font-weight:bold;text-align:center;text-anchor:middle;opacity:1;fill:#$color;fill-opacity:1;stroke:#$bgcolor;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.75294118;font-family:xscale"
+       x="512"
+       y="49"
        id="text1874"><tspan
          sodipodi:role="line"
          id="tspan1876"
@@ -131,72 +131,71 @@ sprite()
 		shift
 		pngsprite "${name}_frame$frame" "$color" "$bgcolor" "$text"
 		convert "${name}_frame$frame.png" "${name}_frame$frame.tga"
+		rm -f "${name}_frame$frame.png"
 		args="$args -sprite ${name}_frame$frame.png $(($sprwidth / 2)) $(($sprheight - 1)) $interval"
 		frame=$(($frame + 1))
 	done
-	./makespr32 -o "$name.sp2" -proj 5 -group $args
+	#./makespr32 -o "$name.sp2" -proj 5 -group $args
 }
 
-sprite as-push            "PUSH"          ff8000 000000 0.0
-sprite as-destroy         "DESTROY"       ff8000 000000 0.0
-sprite as-defend          "DEFEND"        0080ff 000000 0.0
-sprite bluebase           "BLUE BASE"     0000ff 000000 0.0
-sprite bluebase           "BLUE BASE"     0000ff 000000 0.0
-sprite bluebase           "BLUE BASE"     0000ff 000000 0.0
+sprite as-push            "Push"          ff8000 000000 0.0
+sprite as-destroy         "Destroy"       ff8000 000000 0.0
+sprite as-defend          "Defend"        0080ff 000000 0.0
+sprite bluebase           "Blue Base"     0000ff 000000 0.0
 sprite danger             "DANGER"        ff0000 ffff00 0.0
-sprite flagcarrier        "FLAG CARRIER"  ffff00 000000 0.0
-sprite helpme             "HELP ME"       ffff00 ff0000 0.0
-sprite here               "HERE"          00ff00 000000 0.0
-sprite key-dropped        "DROPPED KEY"   00ffff 000000 0.0
-sprite keycarrier-blue    "KEY CARRIER"   0000ff 000000 0.0
-sprite keycarrier-finish  "RUN HERE"      00ffff 000000 0.0
-sprite keycarrier-friend  "KEY CARRIER"   00ff00 000000 0.0
-sprite keycarrier-pink    "KEY CARRIER"   ff00ff 000000 0.0
-sprite keycarrier-red     "KEY CARRIER"   ff0000 000000 0.0
-sprite keycarrier-yellow  "KEY CARRIER"   ffff00 000000 0.0
-sprite redbase            "RED BASE"      ff0000 000000 0.0
-sprite waypoint           "WAYPOINT"      008080 000000 0.0
-sprite ons-gen-red        "GENERATOR"     ff0000 000000 0.0
-sprite ons-gen-blue       "GENERATOR"     0000ff 000000 0.0
-sprite ons-gen-shielded   "GENERATOR"     808080 000000 0.0
-sprite ons-cp-neut        "CONTROL POINT" ffff00 000000 0.0
-sprite ons-cp-red         "CONTROL POINT" ff0000 000000 0.0
-sprite ons-cp-blue        "CONTROL POINT" 0000ff 000000 0.0
-sprite ons-cp-atck-neut   "CONTROL POINT" ffff00 000000 0.5 000000 ffff00 0.5
-sprite ons-cp-atck-red    "CONTROL POINT" ff0000 000000 0.5 ff0000 ffff00 0.5
-sprite ons-cp-atck-blue   "CONTROL POINT" 0000ff 000000 0.5 0000ff ffff00 0.5
-sprite ons-cp-dfnd-red    "CONTROL POINT" ff0000 000000 0.5 ff0000 ffffff 0.5
-sprite ons-cp-dfnd-blue   "CONTROL POINT" 0000ff 000000 0.5 0000ff ffffff 0.5
-sprite race-checkpoint    "CHECKPOINT"    ff8000 000000 0.0
-sprite race-finish        "FINISH"        ff8000 000000 0.0
-sprite nb-ball            "BALL"          e8d8a0 000000 0.0
+sprite flagcarrier        "Flag carrier"  ffff00 000000 0.0
+sprite helpme             "Help me!"      ffff00 ff0000 0.0
+sprite here               "Here"          00ff00 000000 0.0
+sprite key-dropped        "Dropped key"   00ffff 000000 0.0
+sprite keycarrier-blue    "Key carrier"   0000ff 000000 0.0
+sprite keycarrier-finish  "Run here"      00ffff 000000 0.0
+sprite keycarrier-friend  "Key carrier"   00ff00 000000 0.0
+sprite keycarrier-pink    "Key carrier"   ff00ff 000000 0.0
+sprite keycarrier-red     "Key carrier"   ff0000 000000 0.0
+sprite keycarrier-yellow  "Key carrier"   ffff00 000000 0.0
+sprite redbase            "Red base"      ff0000 000000 0.0
+sprite waypoint           "Waypoint"      008080 000000 0.0
+sprite ons-gen-red        "Generator"     ff0000 000000 0.0
+sprite ons-gen-blue       "Generator"     0000ff 000000 0.0
+sprite ons-gen-shielded   "Generator"     808080 000000 0.0
+sprite ons-cp-neut        "Control point" ffff00 000000 0.0
+sprite ons-cp-red         "Control point" ff0000 000000 0.0
+sprite ons-cp-blue        "Control point" 0000ff 000000 0.0
+sprite ons-cp-atck-neut   "Control point" ffff00 000000 0.5 000000 ffff00 0.5
+sprite ons-cp-atck-red    "Control point" ff0000 000000 0.5 ff0000 ffff00 0.5
+sprite ons-cp-atck-blue   "Control point" 0000ff 000000 0.5 0000ff ffff00 0.5
+sprite ons-cp-dfnd-red    "Control point" ff0000 000000 0.5 ff0000 ffffff 0.5
+sprite ons-cp-dfnd-blue   "Control point" 0000ff 000000 0.5 0000ff ffffff 0.5
+sprite race-checkpoint    "Checkpoint"    ff8000 000000 0.0
+sprite race-finish        "Finish"        ff8000 000000 0.0
+sprite nb-ball            "Ball"          e8d8a0 000000 0.0
 
-sprite wpn-laser          "LASER"         ff8080 000000 0.0 # bright red
-sprite wpn-shotgun        "SG"            804000 000000 0.0 # brown
-sprite wpn-uzi            "MG"            ffff00 000000 0.0 # yellow
-sprite wpn-gl             "GL"            ff0000 000000 0.0 # red
-sprite wpn-electro        "ELECTRO"       0080ff 000000 0.0 # bluish cyan
-sprite wpn-crylink        "CRYLINK"       ff80ff 000000 0.0 # bright pink
-sprite wpn-nex            "NEX"           00ffff 000000 0.0 # cyan
-sprite wpn-hagar          "HAGAR"         ffff80 000000 0.0 # bright yellow
-sprite wpn-rl             "RL"            ffff00 000000 0.0 # yellow
-sprite wpn-porto          "PORTO"         808080 000000 0.0 # grey
-sprite wpn-minstanex      "MINSTANEX"     80ffff 000000 0.0 # bright cyan
-sprite wpn-hookgun        "HOOK"          008000 000000 0.0 # dark green
-sprite wpn-seeker         "SEEKER"        ff8000 000000 0.0 # orange
+sprite wpn-laser          "Laser"         ff8080 000000 0.0 # bright red
+sprite wpn-shotgun        "Shotgun"       804000 000000 0.0 # brown
+sprite wpn-uzi            "Machine Gun"   ffff00 000000 0.0 # yellow
+sprite wpn-gl             "Mortar"        ff0000 000000 0.0 # red
+sprite wpn-electro        "Electro"       0080ff 000000 0.0 # bluish cyan
+sprite wpn-crylink        "Crylink"       ff80ff 000000 0.0 # bright pink
+sprite wpn-nex            "Nex"           00ffff 000000 0.0 # cyan
+sprite wpn-hagar          "Hagar"         ffff80 000000 0.0 # bright yellow
+sprite wpn-rl             "Rocket Launcher" ffff00 000000 0.0 # yellow
+sprite wpn-porto          "Port-O-Launch" 808080 000000 0.0 # grey
+sprite wpn-minstanex      "Minstanex"     80ffff 000000 0.0 # bright cyan
+sprite wpn-hookgun        "Hook"          008000 000000 0.0 # dark green
+sprite wpn-seeker         "Seeker"        ff8000 000000 0.0 # orange
 sprite wpn-hlac           "HLAC"          00ff00 000000 0.0 # green
-sprite wpn-campingrifle   "RIFLE"         80ff00 000000 0.0 # orange
+sprite wpn-campingrifle   "Rifle"         80ff00 000000 0.0 # orange
 
-sprite dom-neut           "CONTROL POINT" 00ffff 000000 0.0
-sprite dom-red            "CONTROL POINT" ff0000 000000 0.0
-sprite dom-blue           "CONTROL POINT" 0000ff 000000 0.0
-sprite dom-yellow         "CONTROL POINT" ffff00 000000 0.0
-sprite dom-pink           "CONTROL POINT" ff00ff 000000 0.0
+sprite dom-neut           "Control point" 00ffff 000000 0.0
+sprite dom-red            "Control point" ff0000 000000 0.0
+sprite dom-blue           "Control point" 0000ff 000000 0.0
+sprite dom-yellow         "Control point" ffff00 000000 0.0
+sprite dom-pink           "Control point" ff00ff 000000 0.0
 
-sprite item-invis         "INVISIBILITY"  0000ff 000000 0.5 0000ff ffff00 0.5
-sprite item-extralife     "EXTRA LIFE"    ff0000 000000 0.5 ff0000 ffff00 0.5
-sprite item-speed         "SPEED"         ff00ff 000000 0.5 ff00ff ffff00 0.5
-sprite item-strength      "STRENGTH"      0000ff 000000 0.5 0000ff ffff00 0.5
-sprite item-shield        "SHIELD"        ff00ff 000000 0.5 ff00ff ffff00 0.5
-sprite item-fuelregen     "FUEL REGEN"    ff8000 000000 0.5 ff8000 ffff00 0.5
-sprite item-jetpack       "JET PACK"      808080 000000 0.5 808080 ffff00 0.5
+sprite item-invis         "Invisibility"  0000ff 000000 0.5 0000ff ffff00 0.5
+sprite item-extralife     "Extra life"    ff0000 000000 0.5 ff0000 ffff00 0.5
+sprite item-speed         "Speed"         ff00ff 000000 0.5 ff00ff ffff00 0.5
+sprite item-strength      "Strength"      0000ff 000000 0.5 0000ff ffff00 0.5
+sprite item-shield        "Shield"        ff00ff 000000 0.5 ff00ff ffff00 0.5
+sprite item-fuelregen     "Fuel regen"    ff8000 000000 0.5 ff8000 ffff00 0.5
+sprite item-jetpack       "Jet Pack"      808080 000000 0.5 808080 ffff00 0.5

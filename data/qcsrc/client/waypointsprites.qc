@@ -18,8 +18,8 @@ float waypointsprite_scale;
 .float hideflags;
 .float spawntime;
 
-vector SPRITE_SIZE = '128 32 0';
-vector SPRITE_HOTSPOT = '64 32 0';
+vector SPRITE_SIZE = '256 32 0';
+vector SPRITE_HOTSPOT = '128 32 0';
 
 void drawrotpic(vector org, float rot, string pic, vector sz, vector hotspot, vector rgb, float a, float f)
 {
