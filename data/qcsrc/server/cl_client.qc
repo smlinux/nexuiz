@@ -410,10 +410,13 @@ float Client_customizeentityforclient()
 	if(other.cvar_cl_forceplayermodels && sv_clforceplayermodels)
 		modelsource = other;
 
+	self.skin = modelsource.skinindex;
+#if 0
 	if(modelsource == self)
 		self.skin = modelsource.skinindex;
 	else
 		self.skin = mod(modelsource.skinindex, 3); // forbid the fbskins as forced skins
+#endif
 
 #ifdef ALLOW_VARIABLE_LOD
 	// self: me
