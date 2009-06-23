@@ -203,7 +203,7 @@ float WaypointSprite_SendEntity(entity to, float sendflags)
 	{
 		WriteCoord(MSG_ENTITY, self.fade_time);
 		WriteCoord(MSG_ENTITY, self.teleport_time);
-		WriteShort(MSG_ENTITY, self.max_health); // maxdist
+		WriteShort(MSG_ENTITY, self.fade_rate); // maxdist
 		float f;
 		f = 0;
 		if(self.currentammo)
@@ -265,7 +265,7 @@ entity WaypointSprite_Spawn(
 		own.ownfield = wp;
 		wp.owned_by_field = ownfield;
 	}
-	wp.max_health = maxdistance;
+	wp.fade_rate = maxdistance;
 	wp.think = WaypointSprite_Think;
 	wp.nextthink = time;
 	wp.model1 = spr;
