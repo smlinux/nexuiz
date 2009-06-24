@@ -56,12 +56,14 @@ surfaceparm trans
 	map models/teamfx/blobyellow.tga
 	blendfunc add
 }
+}
 teamfx/yellowring
 {
 surfaceparm trans
 {
 	map models/teamfx/blobpink.tga
 	blendfunc add
+}
 }
 teamfx/pinkring
 {
@@ -70,4 +72,13 @@ surfaceparm trans
 	map models/teamfx/blobpink.tga
 	blendfunc add
 }
-
+}
+teamfx/flare
+{
+surfaceparm trans
+deformVertexes autosprite
+{
+	map models/teamfx/flare.tga
+	blendfunc add
+}
+}
