@@ -282,13 +282,15 @@ void SpawnThrownWeapon (vector org, float w)
 void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	local float take, save;
+	vector v;
 	Violence_GibSplash_At(hitloc, force, 2, bound(0, damage, 200) / 16, self, attacker);
 
 	// damage resistance (ignore most of the damage from a bullet or similar)
 	damage = max(damage - 5, 1);
 
-	save = bound(0, damage * cvar("g_balance_armor_blockpercent"), self.armorvalue);
-	take = bound(0, damage - save, damage);
+	v = healtharmor_applydamage(self.armorvalue, cvar("g_balance_armor_blockpercent"), damage);
+	take = v_x;
+	save = v_y;
 
 	if(sound_allowed(MSG_BROADCAST, attacker))
 	{
@@ -335,6 +337,7 @@ void ClientKill_Now_TeamChange();
 void PlayerDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	local float take, save, waves, sdelay;
+	vector v;
 
 	if(!DEATH_ISSPECIAL(deathtype))
 	{
@@ -380,8 +383,9 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 
 	if (!g_minstagib)
 	{
-		save = bound(0, damage * cvar("g_balance_armor_blockpercent"), self.armorvalue);
-		take = bound(0, damage - save, damage);
+		v = healtharmor_applydamage(self.armorvalue, cvar("g_balance_armor_blockpercent"), damage);
+		take = v_x;
+		save = v_y;
 	}
 	else
 	{

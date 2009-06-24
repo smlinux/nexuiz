@@ -1564,3 +1564,33 @@ void RandomSelection_Add(entity e, float f, string s, float weight, float priori
 	}
 }
 
+vector healtharmor_maxdamage(float h, float a, float armorblock)
+{
+	// NOTE: we'll always choose the SMALLER value...
+	float healthdamage, armordamage, armorideal;
+	vector v;
+	healthdamage = (h - 1) / (1 - armorblock); // damage we can take if we could use more health
+	armordamage = a + (h - 1); // damage we can take if we could use more armor
+	armorideal = healthdamage * armorblock;
+	v_y = armorideal;
+	if(armordamage < healthdamage)
+	{
+		v_x = armordamage;
+		v_z = 1;
+	}
+	else
+	{
+		v_x = healthdamage;
+		v_z = 0;
+	}
+	return v;
+}
+
+vector healtharmor_applydamage(float a, float armorblock, float damage)
+{
+	vector v;
+	v_y = bound(0, damage * armorblock, a); // save
+	v_x = bound(0, damage - v_y, damage); // take
+	v_z = 0;
+	return v;
+}

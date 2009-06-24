@@ -2279,26 +2279,23 @@ void Sbar_Draw (void)
 
 		if(sbar_hudselector == 2) // combined health and armor display
 		{
-			// NOTE: we'll always choose the SMALLER value...
-			float healthdamage, armordamage, armorideal;
-			healthdamage = (health - 1) / (1 - armorblockpercent); // damage we can take if we could use more health
-			armordamage = armor + (health - 1); // damage we can take if we could use more armor
-			armorideal = healthdamage * armorblockpercent;
+			vector v;
+			v = healtharmor_maxdamage(health, armor, armorblockpercent);
 
 			vector num_pos;
 			num_pos = bottom - element_offset - '0 24 0' + '-96 0 0';
 
-			if(armordamage < healthdamage)
+			x = floor(v_x + 1);
+
+			if(v_z) // fully armored
 			{
 				// here, armorideal > armor
-				x = floor(armordamage + 1);
 				drawpic(num_pos + '78 -3 0', "gfx/hud/sb_health", '32 32 0', '1 1 1', sbar_alpha_fg, 0);
-				drawpic(num_pos + '108 -3 0', "gfx/hud/sb_armor", '20 20 0', '1 1 1', sbar_alpha_fg * armor / armorideal, 0);
+				drawpic(num_pos + '108 -3 0', "gfx/hud/sb_armor", '20 20 0', '1 1 1', sbar_alpha_fg * armor / v_y, 0);
 			}
 			else
 			{
-				x = floor(healthdamage + 1);
-				drawpic(num_pos + '108 -3 0', "gfx/hud/sb_health", '20 20 0', '1 1 1', sbar_alpha_fg * armorideal / armor, 0);
+				drawpic(num_pos + '108 -3 0', "gfx/hud/sb_health", '20 20 0', '1 1 1', sbar_alpha_fg * v_y / armor, 0);
 				drawpic(num_pos + '78 -3 0', "gfx/hud/sb_armor", '32 32 0', '1 1 1', sbar_alpha_fg, 0);
 			}
 			Sbar_DrawXNum_Colored(num_pos, x, 24, sbar_alpha_fg); // draw the combined health and armor

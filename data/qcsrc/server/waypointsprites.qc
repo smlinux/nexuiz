@@ -27,18 +27,31 @@ void WaypointSprite_UpdateSprites(entity e, string m1, string m2, string m3)
 
 void WaypointSprite_UpdateHealth(entity e, float f)
 {
-	if(f != e.health)
+	f = bound(0, f, e.max_health);
+	if(f != e.health || e.pain_finished)
 	{
 		e.health = f;
+		e.pain_finished = 0;
 		e.SendFlags |= 0x80;
 	}
 }
 
 void WaypointSprite_UpdateMaxHealth(entity e, float f)
 {
-	if(f != e.max_health)
+	if(f != e.max_health || e.pain_finished)
 	{
 		e.max_health = f;
+		e.pain_finished = 0;
+		e.SendFlags |= 0x80;
+	}
+}
+
+void WaypointSprite_UpdateBuildFinished(entity e, float f)
+{
+	if(f != e.pain_finished || e.max_health)
+	{
+		e.max_health = 0;
+		e.pain_finished = f;
 		e.SendFlags |= 0x80;
 	}
 }
@@ -192,17 +205,31 @@ float WaypointSprite_Customize()
 
 float WaypointSprite_SendEntity(entity to, float sendflags)
 {
+	float dt;
+
 	WriteByte(MSG_ENTITY, ENT_CLIENT_WAYPOINT);
 
 	sendflags = sendflags & 0x7F;
 	
-	if(self.max_health)
+	if(self.max_health || (self.pain_finished && (time < self.pain_finished + 0.25)))
 		sendflags |= 0x80;
 
 	WriteByte(MSG_ENTITY, sendflags);
 
-	if(self.max_health)
-		WriteByte(MSG_ENTITY, (self.health / self.max_health) * 255.0);
+	if(sendflags & 0x80)
+	{
+		if(self.max_health)
+		{
+			WriteByte(MSG_ENTITY, (self.health / self.max_health) * 191.0);
+		}
+		else
+		{
+			dt = self.pain_finished - time;
+			dt = bound(0, dt * 32, 16383);
+			WriteByte(MSG_ENTITY, (dt & 0xFF00) / 256 + 192);
+			WriteByte(MSG_ENTITY, (dt & 0x00FF));
+		}
+	}
 
 	if(sendflags & 64)
 	{
@@ -367,8 +394,15 @@ entity WaypointSprite_AttachCarrier(
 	entity carrier
 )
 {
+	entity e;
 	WaypointSprite_Kill(carrier.waypointsprite_attached); // FC overrides attached
-	return WaypointSprite_Spawn(spr, 0, 0, carrier, '0 0 64', world, carrier.team, carrier, waypointsprite_attachedforcarrier, FALSE);
+	e = WaypointSprite_Spawn(spr, 0, 0, carrier, '0 0 64', world, carrier.team, carrier, waypointsprite_attachedforcarrier, FALSE);
+	if(e)
+	{
+		WaypointSprite_UpdateMaxHealth(e, '1 0 0' * healtharmor_maxdamage(start_health, start_armorvalue, cvar("g_balance_armor_blockpercent")));
+		WaypointSprite_UpdateHealth(e, '1 0 0' * healtharmor_maxdamage(carrier.health, carrier.armorvalue, cvar("g_balance_armor_blockpercent")));
+	}
+	return e;
 }
 
 void WaypointSprite_DetachCarrier(entity carrier)

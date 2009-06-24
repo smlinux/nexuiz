@@ -102,7 +102,8 @@ void Item_RespawnCountdown (void)
 				if(self.waypointsprite_attached)
 				{
 					WaypointSprite_UpdateTeamRadar(self.waypointsprite_attached, RADARICON_POWERUP, rgb);
-					WaypointSprite_UpdateMaxHealth(self.waypointsprite_attached, ITEM_RESPAWN_TICKS + 1);
+					//WaypointSprite_UpdateMaxHealth(self.waypointsprite_attached, ITEM_RESPAWN_TICKS + 1);
+					WaypointSprite_UpdateBuildFinished(self.waypointsprite_attached, time + ITEM_RESPAWN_TICKS);
 				}
 			}
 		}
@@ -110,7 +111,7 @@ void Item_RespawnCountdown (void)
 		if(self.waypointsprite_attached)
 		{
 			WaypointSprite_Ping(self.waypointsprite_attached);
-			WaypointSprite_UpdateHealth(self.waypointsprite_attached, self.count);
+			//WaypointSprite_UpdateHealth(self.waypointsprite_attached, self.count);
 		}
 	}
 }

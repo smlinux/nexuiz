@@ -18,6 +18,9 @@ float waypointsprite_scale;
 .float hideflags;
 .float spawntime;
 .float health;
+.float build_started;
+.float build_starthealth;
+.float build_finished;
 
 vector SPRITE_SIZE = '256 32 0';
 vector SPRITE_HOTSPOT = '128 32 0';
@@ -236,6 +239,21 @@ void Draw_WaypointSprite()
 
 	drawrotpic(o, rot * 90 * DEG2RAD, spriteimage, SPRITE_SIZE * waypointsprite_scale * vidscale, SPRITE_HOTSPOT * waypointsprite_scale * vidscale, '1 1 1', a, DRAWFLAG_MIPMAP);
 
+	if(self.build_finished)
+	{
+		if(time < self.build_finished + 0.25)
+		{
+			if(time < self.build_started)
+				self.health = self.build_starthealth;
+			else if(time < self.build_finished)
+				self.health = (time - self.build_started) / (self.build_finished - self.build_started) * (1 - self.build_starthealth) + self.build_starthealth;
+			else
+				self.health = 1;
+		}
+		else
+			self.health = -1;
+	}
+
 	if(self.health >= 0)
 	{
 		drawhealthbar(o, rot * 90 * DEG2RAD, self.health, SPRITE_SIZE * waypointsprite_scale * vidscale, SPRITE_HOTSPOT * waypointsprite_scale * vidscale, SPRITE_HEALTHBAR_WIDTH, SPRITE_HEALTHBAR_HEIGHT, SPRITE_HEALTHBAR_MARGIN, SPRITE_HEALTHBAR_BORDER, self.teamradar_color, a * SPRITE_HEALTHBAR_BORDERALPHA, self.teamradar_color, a * SPRITE_HEALTHBAR_HEALTHALPHA, DRAWFLAG_NORMAL);
@@ -254,7 +272,7 @@ void Ent_RemoveWaypointSprite()
 
 void Ent_WaypointSprite()
 {
-	float sendflags, f;
+	float sendflags, f, t;
 	sendflags = ReadByte();
 
 	if(!self.spawntime)
@@ -265,7 +283,22 @@ void Ent_WaypointSprite()
 	InterpolateOrigin_Undo();
 
 	if(sendflags & 0x80)
-		self.health = ReadByte() / 255.0;
+	{
+		t = ReadByte();
+		if(t < 192)
+		{
+			self.health = t / 191.0;
+			self.build_finished = 0;
+		}
+		else
+		{
+			t = (t - 192) * 256 + ReadByte();
+			self.build_started = servertime;
+			self.build_starthealth = bound(0, self.health, 1);
+			self.build_finished = servertime + t / 32;
+			//print("build: ", ftos(self.build_finished - self.build_started), "\n");
+		}
+	}
 	else
 		self.health = -1;
 

@@ -2918,4 +2918,7 @@ void PlayerPostThink (void)
 	Arena_Warmup();
 
 	//pointparticles(particleeffectnum("machinegun_impact"), self.origin + self.view_ofs + '0 0 7', '0 0 0', 1);
+
+	if(self.waypointsprite_attachedforcarrier)
+		WaypointSprite_UpdateHealth(self.waypointsprite_attachedforcarrier, '1 0 0' * healtharmor_maxdamage(self.health, self.armorvalue, cvar("g_balance_armor_blockpercent")));
 }
