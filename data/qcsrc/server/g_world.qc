@@ -547,9 +547,6 @@ void spawnfunc_worldspawn (void)
 
 	Ban_LoadBans();
 
-	//initialise globals related to sv_timeout
-	orig_slowmo = cvar("slowmo");
-
 	MapInfo_Enumerate();
 	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0, (g_maplist_allow_hidden ? 0 : MAPINFO_FLAG_HIDDEN) | MAPINFO_FLAG_FORBIDDEN, 1);
 

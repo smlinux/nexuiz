@@ -287,6 +287,7 @@ float isJoinAllowed();
 
 //sv_timeout: pauses the game by setting the gamespeed to a really low value (see TIMEOUT_SLOWMO_VALUE)
 #define TIMEOUT_SLOWMO_VALUE 0.0001
+float sys_ticrate; // gets initialised in worlspawn, saves the value from cvar("sys_ticrate")
 float remainingTimeoutTime; // contains the time in seconds that the active timeout has left
 float remainingLeadTime; // contains the number of seconds left of the leadtime (before the timeout starts)
 float timeoutStatus; // (values: 0, 1, 2) contains whether a timeout is not active (0), was called but still at leadtime (1) or is active (2)

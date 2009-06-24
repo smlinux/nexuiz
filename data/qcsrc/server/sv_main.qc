@@ -169,6 +169,8 @@ void StartFrame (void)
 	sv_warsowbunny_turnaccel = cvar("sv_warsowbunny_turnaccel");
 	sv_warsowbunny_backtosideratio = cvar("sv_warsowbunny_backtosideratio");
 	teamplay = cvar ("teamplay");
+	sys_ticrate = cvar("sys_ticrate");
+	orig_slowmo = cvar("slowmo");
 
 	if(teams_matter && !teamplay)
 		teamplay = 3;
