@@ -69,7 +69,7 @@ void drawquad(vector o, vector ri, vector up, string pic, vector rgb, float a, f
 	R_EndPolygon();
 }
 
-void drawhealthbar(vector org, float rot, float h, vector sz, vector hotspot, float width, float height, float margin, float border, vector rgb, float a, vector hrgb, float ha, float f)
+void drawhealthbar(vector org, float rot, float h, vector sz, vector hotspot, float width, float height, float margin, float border, float align, vector rgb, float a, vector hrgb, float ha, float f)
 {
 	vector o, ri, up;
 	float owidth; // outer width
@@ -89,11 +89,11 @@ void drawhealthbar(vector org, float rot, float h, vector sz, vector hotspot, fl
 	owidth = width + 2 * border;
 	o = o - up * (margin + border + height) + ri * (sz_x - owidth) * 0.5;
 
-	drawquad(o - up * border,            ri * owidth,    up * border, "", rgb,  a,  f);
-	drawquad(o + up * height,            ri * owidth,    up * border, "", rgb,  a,  f);
-	drawquad(o,                          ri * border,    up * height, "", rgb,  a,  f);
-	drawquad(o + ri * (owidth - border), ri * border,    up * height, "", rgb,  a,  f);
-	drawquad(o + ri * border,            ri * width * h, up * height, "", hrgb, ha, f);
+	drawquad(o - up * border,                               ri * owidth,    up * border, "", rgb,  a,  f);
+	drawquad(o + up * height,                               ri * owidth,    up * border, "", rgb,  a,  f);
+	drawquad(o,                                             ri * border,    up * height, "", rgb,  a,  f);
+	drawquad(o + ri * (owidth - border),                    ri * border,    up * height, "", rgb,  a,  f);
+	drawquad(o + ri * (border + align * ((1 - h) * width)), ri * width * h, up * height, "", hrgb, ha, f);
 }
 
 void Draw_WaypointSprite()
@@ -256,7 +256,7 @@ void Draw_WaypointSprite()
 
 	if(self.health >= 0)
 	{
-		drawhealthbar(o, rot * 90 * DEG2RAD, self.health, SPRITE_SIZE * waypointsprite_scale * vidscale, SPRITE_HOTSPOT * waypointsprite_scale * vidscale, SPRITE_HEALTHBAR_WIDTH, SPRITE_HEALTHBAR_HEIGHT, SPRITE_HEALTHBAR_MARGIN, SPRITE_HEALTHBAR_BORDER, self.teamradar_color, a * SPRITE_HEALTHBAR_BORDERALPHA, self.teamradar_color, a * SPRITE_HEALTHBAR_HEALTHALPHA, DRAWFLAG_NORMAL);
+		drawhealthbar(o, rot * 90 * DEG2RAD, self.health, SPRITE_SIZE * waypointsprite_scale * vidscale, SPRITE_HOTSPOT * waypointsprite_scale * vidscale, SPRITE_HEALTHBAR_WIDTH, SPRITE_HEALTHBAR_HEIGHT, SPRITE_HEALTHBAR_MARGIN, SPRITE_HEALTHBAR_BORDER, (self.build_finished ? 0.5 : 0), self.teamradar_color, a * SPRITE_HEALTHBAR_BORDERALPHA, self.teamradar_color, a * SPRITE_HEALTHBAR_HEALTHALPHA, DRAWFLAG_NORMAL);
 	}
 }
 
@@ -294,7 +294,10 @@ void Ent_WaypointSprite()
 		{
 			t = (t - 192) * 256 + ReadByte();
 			self.build_started = servertime;
-			self.build_starthealth = bound(0, self.health, 1);
+			if(self.build_finished)
+				self.build_starthealth = bound(0, self.health, 1);
+			else
+				self.build_starthealth = 0;
 			self.build_finished = servertime + t / 32;
 			//print("build: ", ftos(self.build_finished - self.build_started), "\n");
 		}
