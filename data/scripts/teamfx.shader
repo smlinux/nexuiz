@@ -40,3 +40,34 @@ deformVertexes autosprite
 }
 
 }
+
+teamfx/bluering
+{
+surfaceparm trans
+{
+	map models/teamfx/blobblue.tga
+	blendfunc add
+}
+}
+teamfx/redring
+{
+surfaceparm trans
+{
+	map models/teamfx/blobyellow.tga
+	blendfunc add
+}
+teamfx/yellowring
+{
+surfaceparm trans
+{
+	map models/teamfx/blobpink.tga
+	blendfunc add
+}
+teamfx/pinkring
+{
+surfaceparm trans
+{
+	map models/teamfx/blobpink.tga
+	blendfunc add
+}
+
