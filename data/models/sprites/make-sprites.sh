@@ -141,13 +141,13 @@ sprite()
 sprite as-push            "Push"          ff8000 000000 0.0
 sprite as-destroy         "Destroy"       ff8000 000000 0.0
 sprite as-defend          "Defend"        0080ff 000000 0.0
-sprite bluebase           "Blue Base"     0000ff 000000 0.0
+sprite bluebase           "Blue Base"     0050ff 000000 0.0
 sprite danger             "DANGER"        ff0000 ffff00 0.0
 sprite flagcarrier        "Flag carrier"  ffff00 000000 0.0
 sprite helpme             "Help me!"      ffff00 ff0000 0.0
 sprite here               "Here"          00ff00 000000 0.0
 sprite key-dropped        "Dropped key"   00ffff 000000 0.0
-sprite keycarrier-blue    "Key carrier"   0000ff 000000 0.0
+sprite keycarrier-blue    "Key carrier"   0050ff 000000 0.0
 sprite keycarrier-finish  "Run here"      00ffff 000000 0.0
 sprite keycarrier-friend  "Key carrier"   00ff00 000000 0.0
 sprite keycarrier-pink    "Key carrier"   ff00ff 000000 0.0
@@ -156,16 +156,16 @@ sprite keycarrier-yellow  "Key carrier"   ffff00 000000 0.0
 sprite redbase            "Red base"      ff0000 000000 0.0
 sprite waypoint           "Waypoint"      008080 000000 0.0
 sprite ons-gen-red        "Generator"     ff0000 000000 0.0
-sprite ons-gen-blue       "Generator"     0000ff 000000 0.0
+sprite ons-gen-blue       "Generator"     0050ff 000000 0.0
 sprite ons-gen-shielded   "Generator"     808080 000000 0.0
 sprite ons-cp-neut        "Control point" ffff00 000000 0.0
 sprite ons-cp-red         "Control point" ff0000 000000 0.0
-sprite ons-cp-blue        "Control point" 0000ff 000000 0.0
+sprite ons-cp-blue        "Control point" 0050ff 000000 0.0
 sprite ons-cp-atck-neut   "Control point" ffff00 000000 0.5 000000 ffff00 0.5
 sprite ons-cp-atck-red    "Control point" ff0000 000000 0.5 ff0000 ffff00 0.5
-sprite ons-cp-atck-blue   "Control point" 0000ff 000000 0.5 0000ff ffff00 0.5
+sprite ons-cp-atck-blue   "Control point" 0050ff 000000 0.5 0050ff ffff00 0.5
 sprite ons-cp-dfnd-red    "Control point" ff0000 000000 0.5 ff0000 ffffff 0.5
-sprite ons-cp-dfnd-blue   "Control point" 0000ff 000000 0.5 0000ff ffffff 0.5
+sprite ons-cp-dfnd-blue   "Control point" 0050ff 000000 0.5 0050ff ffffff 0.5
 sprite race-checkpoint    "Checkpoint"    ff8000 000000 0.0
 sprite race-finish        "Finish"        ff8000 000000 0.0
 sprite nb-ball            "Ball"          e8d8a0 000000 0.0
@@ -188,7 +188,7 @@ sprite wpn-campingrifle   "Rifle"         80ff00 000000 0.0 # orange
 
 sprite dom-neut           "Control point" 00ffff 000000 0.0
 sprite dom-red            "Control point" ff0000 000000 0.0
-sprite dom-blue           "Control point" 0000ff 000000 0.0
+sprite dom-blue           "Control point" 0050ff 000000 0.0
 sprite dom-yellow         "Control point" ffff00 000000 0.0
 sprite dom-pink           "Control point" ff00ff 000000 0.0
 
