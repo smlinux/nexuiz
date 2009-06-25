@@ -87,7 +87,7 @@ teamfx/rayblue
 surfaceparm trans
 deformVertexes autosprite
 {
-	map models/teamfx/flare.tga
+	map models/teamfx/rayblue.tga
 	blendfunc add
 }
 }
@@ -96,7 +96,7 @@ teamfx/rayred
 surfaceparm trans
 deformVertexes autosprite
 {
-	map models/teamfx/flare.tga
+	map models/teamfx/rayred.tga
 	blendfunc add
 }
 }
@@ -105,7 +105,7 @@ teamfx/rayyellow
 surfaceparm trans
 deformVertexes autosprite
 {
-	map models/teamfx/flare.tga
+	map models/teamfx/rayyellow.tga
 	blendfunc add
 }
 }
@@ -114,7 +114,7 @@ teamfx/raypink
 surfaceparm trans
 deformVertexes autosprite
 {
-	map models/teamfx/flare.tga
+	map models/teamfx/raypink.tga
 	blendfunc add
 }
 }
