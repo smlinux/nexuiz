@@ -8,6 +8,7 @@
 entity porto;
 vector polyline[16];
 float trace_dphitcontents;
+float trace_networkentity;
 float Q3SURFACEFLAG_SLICK = 2; // low friction surface
 float DPCONTENTS_SOLID = 1; // blocks player movement
 float DPCONTENTS_BODY = 32; // blocks player movement
@@ -213,6 +214,23 @@ void TrueAim_Init()
 	trueaim.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE;
 }
 
+float EnemyHitCheck(vector start, vector mi, vector ma, vector end)
+{
+	float t;
+	tracebox(start, mi, ma, end, MOVE_NORMAL, trueaim);
+	if(trace_networkentity < 1)
+		return 0;
+	if(trace_networkentity > maxclients)
+		return 0;
+	t = GetPlayerColor(trace_networkentity - 1);
+	if(teamplay)
+	if(t == myteam)
+		return 0;
+	if(t == COLOR_SPECTATOR)
+		return 0;
+	return 1;
+}
+
 float TrueAimCheck()
 {
 	float nudge = 1; // added to traceline target and subtracted from result
@@ -230,7 +248,7 @@ float TrueAimCheck()
 			return 1;
 		case WEP_CAMPINGRIFLE:
 			if(zoomscript_caught)
-				return 1; // shoots from eye when zoomed
+				return 1 + EnemyHitCheck(view_origin, '0 0 0', '0 0 0', view_origin + view_forward * MAX_SHOT_DISTANCE);
 			break;
 		case WEP_ROCKET_LAUNCHER: // projectile has a size!
 			mi = '-3 -3 -3';
@@ -263,6 +281,9 @@ float TrueAimCheck()
 	tracebox(w_shotorg, mi, ma, w_shotorg + view_forward * (vecs_x + nudge), MOVE_NORMAL, trueaim); // FIXME this MOVE_NORMAL part will misbehave a little in csqc
 	w_shotorg = trace_endpos - view_forward * nudge;
 
+	if(EnemyHitCheck(w_shotorg, mi, ma, trueaimpoint))
+		return 2;
+
 	// now test whether we will actually hit the trueaimpoint...
 	tracebox(w_shotorg, mi, ma, trueaimpoint, MOVE_NOMONSTERS, trueaim);
 
@@ -289,6 +310,8 @@ void CSQC_UpdateView(float w, float h)
 
 	dprint_load();
 	WaypointSprite_Load();
+
+	myteam = GetPlayerColor(player_localentnum - 1);
 
 	ticrate = getstatf(STAT_MOVEVARS_TICRATE) * getstatf(STAT_MOVEVARS_TIMESCALE);
 
@@ -530,7 +553,7 @@ void CSQC_UpdateView(float w, float h)
             if(cvar("crosshair_hittest"))
                 goodshot = TrueAimCheck();
             else
-                goodshot = TRUE;
+                goodshot = 1;
 
             string wcross_style;
             wcross_style = cvar_string("crosshair");
@@ -567,6 +590,9 @@ void CSQC_UpdateView(float w, float h)
                 }
 
                 wcross_name = strcat("gfx/crosshair", wcross_style);
+
+				if(goodshot > 1)
+					wcross_sizefloat *= cvar("crosshair_hittest"); // is not queried if hittest is 0
 
                 wcross_size = drawgetimagesize(wcross_name);
                 wcross_size_x *= wcross_sizefloat;

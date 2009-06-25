@@ -1194,8 +1194,6 @@ void Sbar_Score(float margin)
 		}
 	}
 
-	myteam = GetPlayerColor(desiredPlayerId);
-
 	sbar_y = vid_conheight - (32+12);
 	sbar_x -= margin;
 

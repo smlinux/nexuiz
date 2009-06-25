@@ -201,3 +201,5 @@
 \cl_teamradar_background_alpha\-
 \cl_hidewaypoints\-
 \cl_shownames\-
+
+\crosshair_hittest\None: do not do hit tests for the crosshair; TrueAim: blur the crosshair when you would not hit the wall; Enemies: also enlarge the crosshair when you would hit an enemy
