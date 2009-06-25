@@ -86,15 +86,15 @@ pngsprite()
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       style="opacity:1;fill:#$color;fill-opacity:1;stroke:#$bgcolor;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.75294119"
+       style="opacity:1;fill:#$color;fill-opacity:1;stroke:#$bgcolor;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 512,124 L 536,100 L 520,100 L 520,60 L 504,60 L 504,100 L 488,100 L 512,124 z "
        id="path1872"
        sodipodi:nodetypes="cccccccc" />
     <text
        xml:space="preserve"
-       style="font-size:120px;font-weight:bold;text-align:center;text-anchor:middle;opacity:1;fill:#$color;fill-opacity:1;stroke:#$bgcolor;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.75294118;font-family:xscale"
+       style="font-size:120px;font-weight:bold;text-align:center;text-anchor:middle;opacity:1;fill:#$color;fill-opacity:1;stroke:#$bgcolor;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:xscale"
        x="512"
-       y="49"
+       y="50"
        id="text1874"><tspan
          sodipodi:role="line"
          id="tspan1876"

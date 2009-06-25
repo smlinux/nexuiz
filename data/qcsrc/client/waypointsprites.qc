@@ -22,8 +22,8 @@ float waypointsprite_scale;
 .float build_starthealth;
 .float build_finished;
 
-vector SPRITE_SIZE = '256 32 0';
-vector SPRITE_HOTSPOT = '128 32 0';
+vector SPRITE_SIZE = '288 36 0';
+vector SPRITE_HOTSPOT = '144 36 0';
 float SPRITE_HEALTHBAR_WIDTH = 96;
 float SPRITE_HEALTHBAR_HEIGHT = 6;
 float SPRITE_HEALTHBAR_MARGIN = 4;
