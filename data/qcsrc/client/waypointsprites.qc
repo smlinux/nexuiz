@@ -256,7 +256,12 @@ void Draw_WaypointSprite()
 
 	if(self.health >= 0)
 	{
-		drawhealthbar(o, rot * 90 * DEG2RAD, self.health, SPRITE_SIZE * waypointsprite_scale * vidscale, SPRITE_HOTSPOT * waypointsprite_scale * vidscale, SPRITE_HEALTHBAR_WIDTH, SPRITE_HEALTHBAR_HEIGHT, SPRITE_HEALTHBAR_MARGIN, SPRITE_HEALTHBAR_BORDER, (self.build_finished ? 0.5 : 0), self.teamradar_color, a * SPRITE_HEALTHBAR_BORDERALPHA, self.teamradar_color, a * SPRITE_HEALTHBAR_HEALTHALPHA, DRAWFLAG_NORMAL);
+		float align;
+		if(self.build_finished)
+			align = 0.5;
+		else
+			align = 0;
+		drawhealthbar(o, rot * 90 * DEG2RAD, self.health, SPRITE_SIZE * waypointsprite_scale * vidscale, SPRITE_HOTSPOT * waypointsprite_scale * vidscale, SPRITE_HEALTHBAR_WIDTH, SPRITE_HEALTHBAR_HEIGHT, SPRITE_HEALTHBAR_MARGIN, SPRITE_HEALTHBAR_BORDER, align, self.teamradar_color, a * SPRITE_HEALTHBAR_BORDERALPHA, self.teamradar_color, a * SPRITE_HEALTHBAR_HEALTHALPHA, DRAWFLAG_NORMAL);
 	}
 }
 
