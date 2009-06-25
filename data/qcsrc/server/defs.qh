@@ -333,6 +333,7 @@ float default_weapon_alpha;
 .float cvar_cl_forceplayermodels;
 .float cvar_cl_forceplayermodelsfromnexuiz;
 float sv_clforceplayermodels;
+.float cvar_cl_gunalign;
 
 .float version_nagtime;
 
