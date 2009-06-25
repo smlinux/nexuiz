@@ -849,7 +849,7 @@ void spawnfunc_item_flag_team1()
 	waypoint_spawnforitem(self);
 
 	WaypointSprite_SpawnFixed("redbase", self.origin + '0 0 37', self, sprite);
-	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_FLAG, '1 0 0');
+	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_FLAG, colormapPaletteColor(COLOR_TEAM1 - 1, FALSE));
 
 	precache_model("models/ctf/shield.md3");
 	precache_model("models/ctf/shockwavetransring.md3");
@@ -954,7 +954,7 @@ void spawnfunc_item_flag_team2()
 	waypoint_spawnforitem(self);
 
 	WaypointSprite_SpawnFixed("bluebase", self.origin + '0 0 37', self, sprite);
-	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_FLAG, '0 0 1');
+	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_FLAG, colormapPaletteColor(COLOR_TEAM2 - 1, FALSE));
 
 	precache_model("models/ctf/shield.md3");
 

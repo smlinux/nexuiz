@@ -766,19 +766,15 @@ void onslaught_generator_updatesprite(entity e)
 		e.lastshielded = e.isshielded;
 		if(e.lastshielded)
 		{
-			if(e.team == COLOR_TEAM1)
-				WaypointSprite_UpdateTeamRadar(e.sprite, RADARICON_GENERATOR, '0.5 0 0');
-			else if(e.team == COLOR_TEAM2)
-				WaypointSprite_UpdateTeamRadar(e.sprite, RADARICON_GENERATOR, '0 0 0.5');
+			if(e.team == COLOR_TEAM1 || e.team == COLOR_TEAM2)
+				WaypointSprite_UpdateTeamRadar(e.sprite, RADARICON_GENERATOR, 0.5 * colormapPaletteColor(e.team - 1, FALSE));
 			else
 				WaypointSprite_UpdateTeamRadar(e.sprite, RADARICON_GENERATOR, '0.5 0.5 0.5');
 		}
 		else
 		{
-			if(e.team == COLOR_TEAM1)
-				WaypointSprite_UpdateTeamRadar(e.sprite, RADARICON_GENERATOR, '1 0 0');
-			else if(e.team == COLOR_TEAM2)
-				WaypointSprite_UpdateTeamRadar(e.sprite, RADARICON_GENERATOR, '0 0 1');
+			if(e.team == COLOR_TEAM1 || e.team == COLOR_TEAM2)
+				WaypointSprite_UpdateTeamRadar(e.sprite, RADARICON_GENERATOR, colormapPaletteColor(e.team - 1, FALSE));
 			else
 				WaypointSprite_UpdateTeamRadar(e.sprite, RADARICON_GENERATOR, '0.75 0.75 0.75');
 		}
@@ -847,19 +843,15 @@ void onslaught_controlpoint_updatesprite(entity e)
 		e.lastshielded = sh;
 		if(e.lastshielded)
 		{
-			if(e.team == COLOR_TEAM1)
-				WaypointSprite_UpdateTeamRadar(e.sprite, RADARICON_CONTROLPOINT, '0.5 0 0');
-			else if(e.team == COLOR_TEAM2)
-				WaypointSprite_UpdateTeamRadar(e.sprite, RADARICON_CONTROLPOINT, '0 0 0.5');
+			if(e.team == COLOR_TEAM1 || e.team == COLOR_TEAM2)
+				WaypointSprite_UpdateTeamRadar(e.sprite, RADARICON_CONTROLPOINT, 0.5 * colormapPaletteColor(e.team - 1, FALSE));
 			else
 				WaypointSprite_UpdateTeamRadar(e.sprite, RADARICON_CONTROLPOINT, '0.5 0.5 0.5');
 		}
 		else
 		{
-			if(e.team == COLOR_TEAM1)
-				WaypointSprite_UpdateTeamRadar(e.sprite, RADARICON_CONTROLPOINT, '1 0 0');
-			else if(e.team == COLOR_TEAM2)
-				WaypointSprite_UpdateTeamRadar(e.sprite, RADARICON_CONTROLPOINT, '0 0 1');
+			if(e.team == COLOR_TEAM1 || e.team == COLOR_TEAM2)
+				WaypointSprite_UpdateTeamRadar(e.sprite, RADARICON_CONTROLPOINT, colormapPaletteColor(e.team - 1, FALSE));
 			else
 				WaypointSprite_UpdateTeamRadar(e.sprite, RADARICON_CONTROLPOINT, '0.75 0.75 0.75');
 		}
