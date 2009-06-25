@@ -192,10 +192,10 @@ sprite dom-blue           "Control point" 0050ff 000000 0.0
 sprite dom-yellow         "Control point" ffff00 000000 0.0
 sprite dom-pink           "Control point" ff00ff 000000 0.0
 
-sprite item-invis         "Invisibility"  0000ff 000000 0.5 0000ff ffff00 0.5
+sprite item-invis         "Invisibility"  0050ff 000000 0.5 0050ff ffff00 0.5
 sprite item-extralife     "Extra life"    ff0000 000000 0.5 ff0000 ffff00 0.5
 sprite item-speed         "Speed"         ff00ff 000000 0.5 ff00ff ffff00 0.5
-sprite item-strength      "Strength"      0000ff 000000 0.5 0000ff ffff00 0.5
+sprite item-strength      "Strength"      0050ff 000000 0.5 0050ff ffff00 0.5
 sprite item-shield        "Shield"        ff00ff 000000 0.5 ff00ff ffff00 0.5
 sprite item-fuelregen     "Fuel regen"    ff8000 000000 0.5 ff8000 ffff00 0.5
 sprite item-jetpack       "Jet Pack"      808080 000000 0.5 808080 ffff00 0.5
