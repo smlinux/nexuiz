@@ -2116,63 +2116,56 @@ void write_recordmarker(entity pl, float tstart, float dt)
 
 vector shotorg_adjust(vector vecs, float y_is_right, float visual)
 {
-    string s;
-    vector v;
+	string s;
+	vector v;
 
-    if (cvar("g_shootfromclient"))
-    {
-        switch(self.owner.cvar_cl_gunalign)
-        {
-            case 1: // right
-                vecs_y = -12;
-                vecs_z = -14;
-                break;
+	if (cvar("g_shootfromclient"))
+	{
+		switch(self.owner.cvar_cl_gunalign)
+		{
+			case 1: // right
+				break;
 
-            case 2: // right
-                vecs_y = 12;
-                vecs_z = -14    ;
-                break;
+			case 2: // left
+				vecs_y = -vecs_y;
+				break;
 
-            case 3: // center
-                vecs_y = 0;
-                vecs_z = -14;
-                break;
-
-            default:
-                vecs_y = -12;
-                vecs_z = -14;
-                break;
-        }
-    }
-    else if (cvar("g_shootfromeye"))
-    {
-        if (visual)
-        {
-            vecs_y = 0;
-            vecs_z -= 4;
-        }
-        else
-        {
-            vecs_y = 0;
-            vecs_z = 0;
-        }
-    }
-    else if (cvar("g_shootfromcenter"))
-    {
-        vecs_y = 0;
-        vecs_z -= 4;
-    }
-    else if ((s = cvar_string("g_shootfromfixedorigin")) != "")
-    {
-        v = stov(s);
-        if (y_is_right)
-            v_y = -v_y;
-        if (v_x != 0)
-            vecs_x = v_x;
-        vecs_y = v_y;
-        vecs_z = v_z;
-    }
-    return vecs;
+			default:
+			case 3: // center
+				vecs_y = 0;
+				vecs_z -= 4;
+				break;
+		}
+	}
+	else if (cvar("g_shootfromeye"))
+	{
+		if (visual)
+		{
+			vecs_y = 0;
+			vecs_z -= 4;
+		}
+		else
+		{
+			vecs_y = 0;
+			vecs_z = 0;
+		}
+	}
+	else if (cvar("g_shootfromcenter"))
+	{
+		vecs_y = 0;
+		vecs_z -= 4;
+	}
+	else if ((s = cvar_string("g_shootfromfixedorigin")) != "")
+	{
+		v = stov(s);
+		if (y_is_right)
+			v_y = -v_y;
+		if (v_x != 0)
+			vecs_x = v_x;
+		vecs_y = v_y;
+		vecs_z = v_z;
+	}
+	return vecs;
 }
 
 
