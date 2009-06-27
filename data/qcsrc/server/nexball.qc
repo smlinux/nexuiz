@@ -24,6 +24,7 @@ float g_nexball_basketball_effects_default;
 float g_nexball_basketball_teamsteal;
 float balls;
 float ball_scale;
+float nb_teams;
 
 .float teamtime;
 
@@ -45,6 +46,15 @@ void nb_init() // Called early (worldspawn stage)
 	radar_showennemies = cvar("g_nexball_radar_showallplayers");
 
 	InitializeEntity(world, nb_delayedinit, INITPRIO_GAMETYPE);
+}
+
+float OtherTeam(float t)  //works only if there are two teams on the map!
+{
+	entity e;
+	e = find(world, classname, "nexball_team");
+	if (e.team == t)
+		e = find(e, classname, "nexball_team");
+	return e.team;
 }
 
 void ResetBall();
@@ -130,6 +140,11 @@ void GiveBall (entity plyr, entity ball)
 			ownr.metertime = 0;
 			ownr.weaponentity.state = WS_READY;
 		}
+		WaypointSprite_Kill(ownr.waypointsprite_attachedforcarrier);
+	}
+	else
+	{
+		WaypointSprite_Kill(ball.waypointsprite_attachedforcarrier);
 	}
 
 	setattachment(ball, plyr, "");
@@ -152,7 +167,9 @@ void GiveBall (entity plyr, entity ball)
 	ball.effects |= EF_NOSHADOW;
 	ball.scale = 1; // scale down.
 
-	ball.waypointsprite_attachedforcarrier.exteriormodeltoclient = plyr;
+	WaypointSprite_AttachCarrier("nb-ball", plyr);
+	WaypointSprite_UpdateRule(plyr.waypointsprite_attachedforcarrier, 0, SPRITERULE_DEFAULT);
+	WaypointSprite_UpdateTeamRadar(plyr.waypointsprite_attachedforcarrier, RADARICON_FLAGCARRIER, BALL_SPRITECOLOR);
 
 	if (g_nexball_basketball_delay_hold)
 	{
@@ -184,7 +201,10 @@ void DropBall (entity ball, vector org, vector vel)
 		ball.owner.weaponentity.state = WS_READY;
 	}
 
-	ball.waypointsprite_attachedforcarrier.exteriormodeltoclient = world;
+	WaypointSprite_Kill(ball.owner.waypointsprite_attachedforcarrier);
+	WaypointSprite_AttachCarrier("nb-ball", ball);
+	WaypointSprite_UpdateRule(ball.waypointsprite_attachedforcarrier, 0, SPRITERULE_DEFAULT);
+	WaypointSprite_UpdateTeamRadar(ball.waypointsprite_attachedforcarrier, RADARICON_FLAGCARRIER, BALL_SPRITECOLOR);
 
 	ball.owner.ballcarried = world;
 	ball.owner = world;
@@ -300,7 +320,7 @@ void basketball_touch (void)
 void GoalTouch (void)
 {
 	entity ball;
-	float isclient, pscore;
+	float isclient, pscore, otherteam;
 	string pname;
 
 	if (gameover) return;
@@ -316,6 +336,9 @@ void GoalTouch (void)
 	EXACTTRIGGER_TOUCH;
 
 
+	if(nb_teams == 2)
+		otherteam = OtherTeam(ball.team);
+
 	if((isclient = ball.pusher.flags & FL_CLIENT))
 		pname = ball.pusher.netname;
 	else
@@ -328,7 +351,10 @@ void GoalTouch (void)
 		pscore = -1;
 	} else if (self.team == GOAL_FAULT) {
 		LogNB("fault", ball.pusher);
-		bprint(ColoredTeamName(ball.team), " loses a point due to ", pname, "^7's silliness.\n");
+		if (nb_teams == 2)
+			bprint(ColoredTeamName(otherteam), " gets a point due to ", pname, "^7's silliness.\n");
+		else
+			bprint(ColoredTeamName(ball.team), " loses a point due to ", pname, "^7's silliness.\n");
 		pscore = -1;
 	} else if (self.team == GOAL_OUT) {
 		LogNB("out", ball.pusher);
@@ -346,11 +372,19 @@ void GoalTouch (void)
 	sound (ball, CHAN_AUTO, self.noise, VOL_BASE, ATTN_NONE);
 
 	if(ball.team && pscore)
-		TeamScore_AddToTeam(ball.team, ST_NEXBALL_GOALS, pscore);
-	if (isclient && pscore > 0)
-		PlayerScore_Add(ball.pusher, SP_NEXBALL_GOALS, pscore);
-	else if (isclient && pscore < 0)
-		PlayerScore_Add(ball.pusher, SP_NEXBALL_FAULTS, pscore);
+	{
+		if (nb_teams == 2 && pscore < 0)
+			TeamScore_AddToTeam(otherteam, ST_NEXBALL_GOALS, -pscore);
+		else
+			TeamScore_AddToTeam(ball.team, ST_NEXBALL_GOALS, pscore);
+	}
+	if (isclient)
+	{
+		if (pscore > 0)
+			PlayerScore_Add(ball.pusher, SP_NEXBALL_GOALS, pscore);
+		else if (pscore < 0)
+			PlayerScore_Add(ball.pusher, SP_NEXBALL_FAULTS, -pscore);
+	}
 
 	if (ball.owner) // Happens on spawnflag GOAL_TOUCHPLAYER
 		DropBall(ball, ball.owner.origin, ball.owner.velocity);
@@ -382,6 +416,7 @@ void nb_spawnteam (string teamname, float teamcolor)
 	e.netname = teamname;
 	e.cnt = teamcolor;
 	e.team = e.cnt + 1;
+	nb_teams += 1;
 };
 
 void nb_spawnteams (void)
