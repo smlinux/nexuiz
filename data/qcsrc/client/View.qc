@@ -207,6 +207,12 @@ vector GetCurrentFov(float fov)
 // this function must match W_SetupShot!
 float zoomscript_caught;
 entity trueaim;
+
+#define SHOTTYPE_HITTEAM 1
+#define SHOTTYPE_HITOBSTRUCTION 2
+#define SHOTTYPE_HITWORLD 3
+#define SHOTTYPE_HITENEMY 4
+
 void TrueAim_Init()
 {
 	trueaim = spawn();
@@ -219,16 +225,16 @@ float EnemyHitCheck(vector start, vector mi, vector ma, vector end)
 	float t;
 	tracebox(start, mi, ma, end, MOVE_NORMAL, trueaim);
 	if(trace_networkentity < 1)
-		return 0;
+		return SHOTTYPE_HITWORLD;
 	if(trace_networkentity > maxclients)
-		return 0;
+		return SHOTTYPE_HITWORLD;
 	t = GetPlayerColor(trace_networkentity - 1);
 	if(teamplay)
 	if(t == myteam)
-		return 0;
+		return SHOTTYPE_HITTEAM;
 	if(t == COLOR_SPECTATOR)
-		return 0;
-	return 1;
+		return SHOTTYPE_HITWORLD;
+	return SHOTTYPE_HITENEMY;
 }
 
 float TrueAimCheck()
@@ -236,6 +242,7 @@ float TrueAimCheck()
 	float nudge = 1; // added to traceline target and subtracted from result
 	vector vecs, trueaimpoint, w_shotorg;
 	vector mi, ma, dv;
+	float shottype;
 
 	mi = ma = '0 0 0';
 
@@ -245,10 +252,10 @@ float TrueAimCheck()
 		case WEP_PORTO: // shoots from eye
 		case WEP_HOOK: // no trueaim
 		case WEP_GRENADE_LAUNCHER: // toss curve
-			return 1;
+			return SHOTTYPE_HITWORLD;
 		case WEP_CAMPINGRIFLE:
 			if(zoomscript_caught)
-				return 1 + EnemyHitCheck(view_origin, '0 0 0', '0 0 0', view_origin + view_forward * MAX_SHOT_DISTANCE);
+				return EnemyHitCheck(view_origin, '0 0 0', '0 0 0', view_origin + view_forward * MAX_SHOT_DISTANCE);
 			break;
 		case WEP_ROCKET_LAUNCHER: // projectile has a size!
 			mi = '-3 -3 -3';
@@ -281,14 +288,18 @@ float TrueAimCheck()
 	tracebox(w_shotorg, mi, ma, w_shotorg + view_forward * (vecs_x + nudge), MOVE_NORMAL, trueaim); // FIXME this MOVE_NORMAL part will misbehave a little in csqc
 	w_shotorg = trace_endpos - view_forward * nudge;
 
-	if(EnemyHitCheck(w_shotorg, mi, ma, trueaimpoint))
-		return 2;
+	shottype = EnemyHitCheck(w_shotorg, mi, ma, trueaimpoint);
+	if(shottype != SHOTTYPE_HITWORLD)
+		return shottype;
 
 	// now test whether we will actually hit the trueaimpoint...
 	tracebox(w_shotorg, mi, ma, trueaimpoint, MOVE_NOMONSTERS, trueaim);
 
-	return vlen(trace_endpos - trueaimpoint) <= vlen(ma - mi) + 1;
+	if(vlen(trace_endpos - trueaimpoint) > vlen(ma - mi) + 1)
 		// yes, this is an ugly hack... but it seems good enough to find out whether the test hits the same place as the initial trace
+		return SHOTTYPE_HITOBSTRUCTION;
+	
+	return SHOTTYPE_HITWORLD;
 }
 
 void CSQC_common_hud(void);
@@ -548,12 +559,12 @@ void CSQC_UpdateView(float w, float h)
         // crosshair goes VERY LAST
         if(!scoreboard_active && !ons_showmap && !camera_active) {
             // TrueAim check
-            float goodshot;
+            float shottype;
 
             if(cvar("crosshair_hittest"))
-                goodshot = TrueAimCheck();
+                shottype = TrueAimCheck();
             else
-                goodshot = 1;
+                shottype = SHOTTYPE_HITWORLD;
 
             string wcross_style;
             wcross_style = cvar_string("crosshair");
@@ -591,14 +602,16 @@ void CSQC_UpdateView(float w, float h)
 
                 wcross_name = strcat("gfx/crosshair", wcross_style);
 
-				if(goodshot > 1)
+				if(shottype == SHOTTYPE_HITENEMY)
 					wcross_sizefloat *= cvar("crosshair_hittest"); // is not queried if hittest is 0
+				if(shottype == SHOTTYPE_HITTEAM)
+					wcross_sizefloat /= cvar("crosshair_hittest"); // is not queried if hittest is 0
 
                 wcross_size = drawgetimagesize(wcross_name);
                 wcross_size_x *= wcross_sizefloat;
                 wcross_size_y *= wcross_sizefloat;
 
-                if(goodshot)
+                if(shottype == SHOTTYPE_HITENEMY || shottype == SHOTTYPE_HITWORLD)
                 {
                     drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x) + '0 0.5 0' * (vid_conheight - wcross_size_y), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
                 }
