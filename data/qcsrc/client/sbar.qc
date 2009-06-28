@@ -1280,7 +1280,7 @@ void Sbar_Score(float margin)
 		}
 		else { // move the scores if vid_conwidth < 800
 			place_x = 196;
-			place_y = 86;
+			place_y = 84;
 		}
 		score = me.(scores[ps_primary]);
 
@@ -1288,9 +1288,9 @@ void Sbar_Score(float margin)
 		{
 			if (distribution != 0) {
 				// draw a + sign in front of the score
-				if (distribution < 10) { drawpic(bottomright - element_offset - place + '132 -5 0' + '32 0 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
-				else if (distribution < 100) { drawpic(bottomright - element_offset - place + '132 -5 0' + '16 0 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
-				else if (distribution < 1000) { drawpic(bottomright - element_offset - place + '132 -5 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
+				if (distribution < 10) { drawpic(bottomright - element_offset - place + '132 -6 0' + '32 0 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
+				else if (distribution < 100) { drawpic(bottomright - element_offset - place + '132 -6 0' + '16 0 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
+				else if (distribution < 1000) { drawpic(bottomright - element_offset - place + '132 -6 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
 			}
 
 			Sbar_DrawXNum(bottomright - element_offset - place + '132 -6 0', distribution, 4, 16, ' 1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
