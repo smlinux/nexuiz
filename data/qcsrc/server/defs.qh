@@ -516,7 +516,6 @@ float independent_players;
 // we're using + here instead of , because fteqcc sucks
 
 string clientstuff;
-.float stat_sys_ticrate;
 .float phase;
 .float weapons;
 .float pressedkeys;
