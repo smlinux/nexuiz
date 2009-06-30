@@ -3,7 +3,7 @@ CyberParcour Project
 ================================================================================
 
 Map Title	: CyberParcour01
-Version		: 1.1
+Version		: 1.2
 Game		: Nexuiz <alientrap.org>
 Release Date	: June 2009
 Author		: Severin "sev" Meyer
