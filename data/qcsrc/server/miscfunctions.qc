@@ -1017,6 +1017,10 @@ void readlevelcvars(void)
     g_touchexplode_force = cvar("g_touchexplode_force");
 
     sv_clforceplayermodels = cvar("sv_clforceplayermodels");
+    sv_loddistance1 = cvar("sv_loddistance1");
+    sv_loddistance2 = cvar("sv_loddistance2");
+	if(sv_loddistance2 <= sv_loddistance1)
+		sv_loddistance2 = 1073741824; // enough to turn off LOD 2 reliably
     sv_clones = cvar("sv_clones");
     sv_cheats = cvar("sv_cheats");
     sv_gentle = cvar("sv_gentle");
@@ -1343,19 +1347,17 @@ void precache_all_models(string pattern)
     n = search_getsize(globhandle);
     for (i = 0; i < n; ++i)
     {
-        //print(search_getfilename(globhandle, i), "\n");
-        f = search_getfilename(globhandle, i);
-#ifdef ALLOW_VARIABLE_LOD
-        precache_model(f);
-#endif
-	if(substring(f, -9,5) == "_lod1")
-		continue;
-	if(substring(f, -9,5) == "_lod2")
-		continue;
-#ifndef ALLOW_VARIABLE_LOD
-        precache_model(f);
-#endif
-        PrecachePlayerSounds(strcat(f, ".sounds"));
+		//print(search_getfilename(globhandle, i), "\n");
+		f = search_getfilename(globhandle, i);
+		if(sv_loddistance1)
+			precache_model(f);
+		if(substring(f, -9,5) == "_lod1")
+			continue;
+		if(substring(f, -9,5) == "_lod2")
+			continue;
+		if(!sv_loddistance1)
+			precache_model(f);
+		PrecachePlayerSounds(strcat(f, ".sounds"));
     }
     search_end(globhandle);
 }

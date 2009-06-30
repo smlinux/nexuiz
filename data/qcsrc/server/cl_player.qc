@@ -47,10 +47,8 @@ void CopyBody(float keepvelocity)
 	self.modelindex = oldself.modelindex;
 	self.modelindex_lod0 = oldself.modelindex_lod0;
 	self.modelindex_lod0_from_nexuiz = oldself.modelindex_lod0_from_nexuiz;
-#ifdef ALLOW_VARIABLE_LOD
 	self.modelindex_lod1 = oldself.modelindex_lod1;
 	self.modelindex_lod2 = oldself.modelindex_lod2;
-#endif
 	self.skinindex = oldself.skinindex;
 	self.species = oldself.species;
 	self.movetype = oldself.movetype;

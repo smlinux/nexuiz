@@ -333,6 +333,8 @@ float default_weapon_alpha;
 .float cvar_cl_forceplayermodels;
 .float cvar_cl_forceplayermodelsfromnexuiz;
 float sv_clforceplayermodels;
+float sv_loddistance1;
+float sv_loddistance2;
 .float cvar_cl_gunalign;
 
 .float version_nagtime;
@@ -340,10 +342,8 @@ float sv_clforceplayermodels;
 .float modelindex_lod0;
 .float modelindex_lod0_from_nexuiz;
 .float skinindex;
-#ifdef ALLOW_VARIABLE_LOD
 .float modelindex_lod1;
 .float modelindex_lod2;
-#endif
 
 #define NUM_JUMPPADSUSED 3
 .float jumppadcount;
@@ -601,3 +601,8 @@ string matchid;
 .float stat_leadlimit;
 
 float radar_showennemies;
+
+#ifdef PROFILING
+float client_cefc_accumulator;
+float client_cefc_accumulatortime;
+#endif

@@ -138,6 +138,30 @@ void StartFrame (void)
 	servertime = time;
 	serverframetime = frametime;
 
+#ifdef PROFILING
+	if(time > client_cefc_accumulatortime + 1)
+	{
+		float t, pp, c_seeing, c_seen;
+		entity cl;
+		t = client_cefc_accumulator / (time - client_cefc_accumulatortime);
+		print("CEFC time: ", ftos(t * 1000), "ms; ");
+		c_seeing = 0;
+		c_seen = 0;
+		FOR_EACH_CLIENT(cl)
+		{
+			if(clienttype(cl) == CLIENTTYPE_REAL)
+				++c_seeing;
+			if(cl.classname == "player")
+				++c_seen;
+		}
+		print("CEFC calls per second: ", ftos(c_seeing * (c_seen - 1) / t), "; ");
+		print("CEFC 100% load at: ", ftos(solve_quadratic(t, -t, -1) * '0 1 0'), "\n");
+
+		client_cefc_accumulatortime = time;
+		client_cefc_accumulator = 0;
+	}
+#endif
+
 	dprint_load(); // load dprint status from cvar
 
 	entity e;

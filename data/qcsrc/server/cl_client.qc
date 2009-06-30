@@ -399,12 +399,20 @@ void Client_uncustomizeentityforclient()
 	self.modelindex = self.modelindex_lod0;
 	self.skin = self.skinindex;
 }
+
 float Client_customizeentityforclient()
 {
 	entity modelsource;
-
+	
 	if(self.modelindex == 0)
 		return TRUE;
+
+	// forcemodel stuff
+
+#ifdef PROFILING
+	float t0;
+	t0 = gettime(GETTIME_HIRES); // reference
+#endif
 
 	modelsource = self;
 	if(other.cvar_cl_forceplayermodelsfromnexuiz)
@@ -412,8 +420,8 @@ float Client_customizeentityforclient()
 			modelsource = other;
 	if(other.cvar_cl_forceplayermodels && sv_clforceplayermodels)
 		modelsource = other;
-
 	self.skin = modelsource.skinindex;
+
 #if 0
 	if(modelsource == self)
 		self.skin = modelsource.skinindex;
@@ -421,14 +429,10 @@ float Client_customizeentityforclient()
 		self.skin = mod(modelsource.skinindex, 3); // forbid the fbskins as forced skins
 #endif
 
-#ifdef ALLOW_VARIABLE_LOD
 	// self: me
 	// other: the player viewing me
 	float distance;
 	float f;
-
-	if(self.classname != "player")
-		return TRUE;
 
 	if(other.cvar_cl_playerdetailreduction <= 0)
 	{
@@ -443,15 +447,18 @@ float Client_customizeentityforclient()
 	{
 		distance = vlen(self.origin - other.origin);
 		f = (distance + 100.0) * other.cvar_cl_playerdetailreduction;
-		if(f > 10000)
+		if(f > sv_loddistance2)
 			self.modelindex = modelsource.modelindex_lod2;
-		else if(f > 5000)
+		else if(f > sv_loddistance1)
 			self.modelindex = modelsource.modelindex_lod1;
 		else
 			self.modelindex = modelsource.modelindex_lod0;
 	}
-#else
-	self.modelindex = modelsource.modelindex_lod0;
+
+#ifdef PROFILING
+	float t1;
+	t1 = gettime(GETTIME_HIRES); // reference
+	client_cefc_accumulator += (t1 - t0);
 #endif
 
 	return TRUE;
@@ -460,47 +467,47 @@ float Client_customizeentityforclient()
 void UpdatePlayerSounds();
 void setmodel_lod(entity e, string modelname)
 {
-#ifdef ALLOW_VARIABLE_LOD
 	string s;
 
-	// FIXME: this only supports 3-letter extensions
-	s = strcat(substring(modelname, 0, -4), "_lod1", substring(modelname, -4, 4));
-	if(fexists(s))
+	if(sv_loddistance1)
 	{
-		precache_model(s);
-		setmodel(e, s); // players have high precision
-		self.modelindex_lod1 = self.modelindex;
+		// FIXME: this only supports 3-letter extensions
+		s = strcat(substring(modelname, 0, strlen(modelname)-4), "_lod1", substring(modelname, -4, 4));
+		if(fexists(s))
+		{
+			setmodel(e, s); // players have high precision
+			self.modelindex_lod1 = self.modelindex;
+		}
+		else
+			self.modelindex_lod1 = -1;
+
+		s = strcat(substring(modelname, 0, strlen(modelname)-4), "_lod2", substring(modelname, -4, 4));
+		if(fexists(s))
+		{
+			setmodel(e, s); // players have high precision
+			self.modelindex_lod2 = self.modelindex;
+		}
+		else
+			self.modelindex_lod2 = -1;
+
+		precache_model(modelname);
+		setmodel(e, modelname); // players have high precision
+		self.modelindex_lod0 = self.modelindex;
+
+		if(self.modelindex_lod1 < 0)
+			self.modelindex_lod1 = self.modelindex;
+
+		if(self.modelindex_lod2 < 0)
+			self.modelindex_lod2 = self.modelindex;
 	}
 	else
-		self.modelindex_lod1 = -1;
-
-	s = strcat(substring(modelname, 0, -4), "_lod2", substring(modelname, -4, 4));
-	if(fexists(s))
 	{
-		precache_model(s);
-		setmodel(e, s); // players have high precision
-		self.modelindex_lod2 = self.modelindex;
+		precache_model(modelname);
+		setmodel(e, modelname); // players have high precision
+		self.modelindex_lod0 = self.modelindex;
+			// save it for possible player model forcing
 	}
-	else
-		self.modelindex_lod2 = -1;
 
-	precache_model(modelname);
-	setmodel(e, modelname); // players have high precision
-	self.modelindex_lod0 = self.modelindex;
-
-	if(self.modelindex_lod1 < 0)
-		self.modelindex_lod1 = self.modelindex;
-
-	if(self.modelindex_lod2 < 0)
-		self.modelindex_lod2 = self.modelindex;
-#else
-	precache_model(modelname);
-	setmodel(e, modelname); // players have high precision
-	self.modelindex_lod0 = self.modelindex;
-		// save it for possible player model forcing
-#endif
-
-	string s;
 	s = whichpack(self.model);
 	self.modelindex_lod0_from_nexuiz = ((s == "") || (substring(s, 0, 4) == "data"));
 
@@ -616,7 +623,9 @@ void PutObserverInServer (void)
 	self.punchangle = '0 0 0';
 	self.punchvector = '0 0 0';
 	self.oldvelocity = self.velocity;
-	SetCustomizer(self, Client_customizeentityforclient, Client_uncustomizeentityforclient);
+
+	if(sv_loddistance1)
+		SetCustomizer(self, Client_customizeentityforclient, Client_uncustomizeentityforclient);
 
 	self.team = -1;
 
@@ -888,7 +897,8 @@ void PutClientInServer (void)
 			WriteByte(MSG_ONE, TE_CSQC_SPAWN);
 		});
 
-		SetCustomizer(self, Client_customizeentityforclient, Client_uncustomizeentityforclient);
+		if(sv_loddistance1)
+			SetCustomizer(self, Client_customizeentityforclient, Client_uncustomizeentityforclient);
 
 		self.model = "";
 		FixPlayermodel();
