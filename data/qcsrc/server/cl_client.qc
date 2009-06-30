@@ -394,6 +394,11 @@ Client_customizeentityforclient
 LOD reduction
 =============
 */
+void Client_uncustomizeentityforclient()
+{
+	self.modelindex = self.modelindex_lod0;
+	self.skin = self.skinindex;
+}
 float Client_customizeentityforclient()
 {
 	entity modelsource;
@@ -611,7 +616,7 @@ void PutObserverInServer (void)
 	self.punchangle = '0 0 0';
 	self.punchvector = '0 0 0';
 	self.oldvelocity = self.velocity;
-	self.customizeentityforclient = Client_customizeentityforclient;
+	SetCustomizer(self, Client_customizeentityforclient, Client_uncustomizeentityforclient);
 
 	self.team = -1;
 
@@ -883,7 +888,7 @@ void PutClientInServer (void)
 			WriteByte(MSG_ONE, TE_CSQC_SPAWN);
 		});
 
-		self.customizeentityforclient = Client_customizeentityforclient;
+		SetCustomizer(self, Client_customizeentityforclient, Client_uncustomizeentityforclient);
 
 		self.model = "";
 		FixPlayermodel();

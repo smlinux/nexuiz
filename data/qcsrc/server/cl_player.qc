@@ -59,6 +59,8 @@ void CopyBody(float keepvelocity)
 	self.takedamage = oldself.takedamage;
 	self.think = oldself.think;
 	self.customizeentityforclient = oldself.customizeentityforclient;
+	self.uncustomizeentityforclient = oldself.uncustomizeentityforclient;
+	self.uncustomizeentityforclient_set = oldself.uncustomizeentityforclient_set;
 	if (keepvelocity == 1)
 		self.velocity = oldself.velocity;
 	self.oldvelocity = self.velocity;
