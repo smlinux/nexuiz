@@ -316,6 +316,48 @@ vector expandingbox_resize_centered_box_offset(float sz, vector boxsize, float b
 	return boxsize * (0.5 * (1 - sz));
 }
 
+void drawborderlines(float thickness, vector pos, vector dim, vector color, float alpha, float drawflag)
+{
+	vector line_dim;
+	
+	// left and right lines
+	pos_x -= thickness;
+	line_dim_x = thickness;
+	line_dim_y = dim_y;
+	drawfill(pos, line_dim, color, alpha, drawflag);
+	drawfill(pos + (dim_x + thickness) * '1 0 0', line_dim, color, alpha, drawflag);
+	
+	// upper and lower lines
+	pos_y -= thickness;
+	line_dim_x = dim_x + thickness * 2; // make upper and lower lines longer
+	line_dim_y = thickness;
+	drawfill(pos, line_dim, color, alpha, drawflag);
+	drawfill(pos + (dim_y + thickness) * '0 1 0', line_dim, color, alpha, drawflag);
+}
+
+void drawpic_tiled(vector pos, string pic, vector size, vector area, vector color, float alpha, float drawflag)
+{
+	vector current_pos;
+	vector end_pos;
+	end_pos = pos + area;
+	
+	drawsetcliparea(pos_x, pos_y, area_x, area_y);
+	
+	current_pos_y = pos_y;
+	while (current_pos_y < end_pos_y)
+	{
+		current_pos_x = pos_x;
+		while (current_pos_x < end_pos_x)
+		{
+			drawpic(current_pos, pic, size, color, alpha, drawflag);
+			current_pos_x += size_x;
+		}
+		current_pos_y += size_y;
+	}
+	
+	drawresetcliparea();
+}
+
 void drawpic_expanding(vector position, string pic, vector scale, vector rgb, float alpha, float flag, float fadelerp)
 {
 	float sz;
