@@ -369,15 +369,15 @@ string CheckPlayerModel(string plyermodel) {
 		return FallbackPlayerModel;
 	else if(cvar("sv_servermodelsonly"))
 	{
-		if(substring(plyermodel,strlen(plyermodel)-4,4) != ".zym")
-		if(substring(plyermodel,strlen(plyermodel)-4,4) != ".dpm")
-		if(substring(plyermodel,strlen(plyermodel)-4,4) != ".md3")
-		if(substring(plyermodel,strlen(plyermodel)-4,4) != ".psk")
+		if(substring(plyermodel,-4,4) != ".zym")
+		if(substring(plyermodel,-4,4) != ".dpm")
+		if(substring(plyermodel,-4,4) != ".md3")
+		if(substring(plyermodel,-4,4) != ".psk")
 			return FallbackPlayerModel;
 		// forbid the LOD models
-		if(substring(plyermodel, strlen(plyermodel)-6,2) == "_lod1")
+		if(substring(plyermodel, -9,5) == "_lod1")
 			return FallbackPlayerModel;
-		if(substring(plyermodel, strlen(plyermodel)-6,2) == "_lod2")
+		if(substring(plyermodel, -9,5) == "_lod2")
 			return FallbackPlayerModel;
 		if(plyermodel != strtolower(plyermodel))
 			return FallbackPlayerModel;
@@ -464,7 +464,7 @@ void setmodel_lod(entity e, string modelname)
 	string s;
 
 	// FIXME: this only supports 3-letter extensions
-	s = strcat(substring(modelname, 0, strlen(modelname) - 4), "_lod1", substring(modelname, 0, strlen(modelname) - 4));
+	s = strcat(substring(modelname, 0, -4), "_lod1", substring(modelname, -4, 4));
 	if(fexists(s))
 	{
 		precache_model(s);
@@ -474,7 +474,7 @@ void setmodel_lod(entity e, string modelname)
 	else
 		self.modelindex_lod1 = -1;
 
-	s = strcat(substring(modelname, 0, strlen(modelname) - 4), "_lod2", substring(modelname, 0, strlen(modelname) - 4));
+	s = strcat(substring(modelname, 0, -4), "_lod2", substring(modelname, -4, 4));
 	if(fexists(s))
 	{
 		precache_model(s);

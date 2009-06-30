@@ -1348,9 +1348,9 @@ void precache_all_models(string pattern)
 #ifdef ALLOW_VARIABLE_LOD
         precache_model(f);
 #endif
-	if(substring(f, strlen(f)-6,2) == "_lod1")
+	if(substring(f, -9,5) == "_lod1")
 		continue;
-	if(substring(f, strlen(f)-6,2) == "_lod2")
+	if(substring(f, -9,5) == "_lod2")
 		continue;
 #ifndef ALLOW_VARIABLE_LOD
         precache_model(f);
