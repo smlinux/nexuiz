@@ -35,18 +35,31 @@ COMPAT_FILES="
 	gfx/hud/keys/key_left.tga
 	gfx/hud/keys/key_right_inv.tga
 	gfx/hud/keys/key_right.tga
+	gfx/hud/num_0_stroke.tga
 	gfx/hud/num_0.tga
+	gfx/hud/num_1_stroke.tga
 	gfx/hud/num_1.tga
+	gfx/hud/num_2_stroke.tga
 	gfx/hud/num_2.tga
+	gfx/hud/num_3_stroke.tga
 	gfx/hud/num_3.tga
+	gfx/hud/num_4_stroke.tga
 	gfx/hud/num_4.tga
+	gfx/hud/num_5_stroke.tga
 	gfx/hud/num_5.tga
+	gfx/hud/num_6_stroke.tga
 	gfx/hud/num_6.tga
+	gfx/hud/num_7_stroke.tga
 	gfx/hud/num_7.tga
+	gfx/hud/num_8_stroke.tga
 	gfx/hud/num_8.tga
+	gfx/hud/num_9_stroke.tga
 	gfx/hud/num_9.tga
+	gfx/hud/num_colon_stroke.tga
 	gfx/hud/num_colon.tga
+	gfx/hud/num_minus_stroke.tga
 	gfx/hud/num_minus.tga
+	gfx/hud/num_plus_stroke.tga
 	gfx/hud/num_plus.tga
 	gfx/hud/sb_ammobg.tga
 	gfx/hud/sb_armor.tga
