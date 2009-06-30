@@ -1345,7 +1345,16 @@ void precache_all_models(string pattern)
     {
         //print(search_getfilename(globhandle, i), "\n");
         f = search_getfilename(globhandle, i);
+#ifdef ALLOW_VARIABLE_LOD
         precache_model(f);
+#endif
+	if(substring(f, strlen(f)-6,2) == "_lod1")
+		continue;
+	if(substring(f, strlen(f)-6,2) == "_lod2")
+		continue;
+#ifndef ALLOW_VARIABLE_LOD
+        precache_model(f);
+#endif
         PrecachePlayerSounds(strcat(f, ".sounds"));
     }
     search_end(globhandle);
