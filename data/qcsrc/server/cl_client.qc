@@ -396,6 +396,8 @@ LOD reduction
 */
 void Client_uncustomizeentityforclient()
 {
+	if(self.modelindex == 0) // no need to uncustomize then
+		return;
 	self.modelindex = self.modelindex_lod0;
 	self.skin = self.skinindex;
 }
