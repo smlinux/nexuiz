@@ -646,7 +646,36 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 				return;
 			}
 		}
-		else if ((!cvar("g_pickup_items") || g_nixnex) && itemid != IT_STRENGTH && itemid != IT_INVINCIBLE && itemid != IT_HEALTH)
+		else if (g_nixnex)
+		{
+			local float rm;
+
+			rm = 1;
+			switch (itemid)
+			{
+				case IT_HEALTH:
+				case IT_5HP:
+				case IT_25HP:
+				case IT_ARMOR:
+				case IT_ARMOR_SHARD:
+					if (cvar("g_nixnex_with_healtharmor"))
+						rm = 0;
+					break;
+				case IT_STRENGTH:
+				case IT_INVINCIBLE:
+					if (cvar("g_nixnex_with_powerups"))
+						rm = 0;
+					break;
+			}
+
+			if(rm)
+			{
+				startitem_failed = TRUE;
+				remove (self);
+				return;
+			}
+		}
+		else if (!cvar("g_pickup_items") && itemid != IT_STRENGTH && itemid != IT_INVINCIBLE && itemid != IT_HEALTH)
 		{
 			startitem_failed = TRUE;
 			remove (self);

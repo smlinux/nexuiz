@@ -808,6 +808,8 @@ void readplayerstartcvars()
         for (i = WEP_FIRST; i <= WEP_LAST; ++i)
             if (NixNex_CanChooseWeapon(i))
                 weapon_action(i, WR_PRECACHE);
+        if(!cvar("g_use_ammunition"))
+        	start_items |= IT_UNLIMITED_AMMO;
     }
     else if (g_weaponarena)
     {
