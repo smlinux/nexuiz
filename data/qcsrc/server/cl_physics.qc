@@ -955,7 +955,11 @@ void SV_PlayerPhysics()
 			if(self.movement_x == 0 && self.movement_y != 0)
 			{
 				if(sv_maxairstrafespeed)
+				{
 					wishspeed = min(wishspeed, sv_maxairstrafespeed*maxspd_mod);
+					if(sv_maxairstrafespeed < sv_maxairspeed)
+						airaccelqw = 1;
+				}
 				if(sv_airstrafeaccelerate)
 				{
 					airaccel = sv_airstrafeaccelerate*maxspd_mod;
