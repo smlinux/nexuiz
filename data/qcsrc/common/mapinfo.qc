@@ -354,7 +354,7 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 	}
 	diameter = vlen(mapMaxs - mapMins);
 
-	twoBaseModes = MapInfo_Map_supportedGametypes & (MAPINFO_TYPE_CTF | MAPINFO_TYPE_ASSAULT | MAPINFO_TYPE_RACE);
+	twoBaseModes = MapInfo_Map_supportedGametypes & (MAPINFO_TYPE_CTF | MAPINFO_TYPE_ASSAULT | MAPINFO_TYPE_RACE | MAPINFO_TYPE_NEXBALL);
 	if(twoBaseModes && (MapInfo_Map_supportedGametypes == twoBaseModes))
 	{
 		// we have a CTF-only or Assault-only map. Don't add other modes then,
