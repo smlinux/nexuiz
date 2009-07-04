@@ -17,7 +17,7 @@ void Casing_Draw()
 		self.flags &~= FL_ONGROUND;
 	}
 
-	Movetype_Physics(FALSE);
+	Movetype_Physics_NoMatchServer();
 
 	self.renderflags = 0;
 	self.alpha = bound(0, self.cnt - time, 1);

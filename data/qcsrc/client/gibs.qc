@@ -58,7 +58,7 @@ void Gib_Draw()
 	vector oldorg;
 	oldorg = self.origin;
 
-	Movetype_Physics(FALSE);
+	Movetype_Physics_NoMatchServer();
 	if(wasfreed(self))
 		return;
 

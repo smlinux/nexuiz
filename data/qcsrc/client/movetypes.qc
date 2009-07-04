@@ -321,75 +321,92 @@ void _Movetype_Physics_Toss(float dt) // SV_Physics_Toss
 	_Movetype_CheckWaterTransition();
 }
 
-void Movetype_Physics(float matchserver) // SV_Physics_Entity
+void _Movetype_Physics_Frame(float movedt)
+{
+	self.move_didgravity = FALSE;
+	switch(self.move_movetype)
+	{
+		case MOVETYPE_PUSH:
+		case MOVETYPE_FAKEPUSH:
+			error("SV_Physics_Pusher not implemented");
+			break;
+		case MOVETYPE_NONE:
+			break;
+		case MOVETYPE_FOLLOW:
+			error("SV_Physics_Follow not implemented");
+			break;
+		case MOVETYPE_NOCLIP:
+			_Movetype_CheckWater();
+			self.move_origin = self.move_origin + ticrate * self.move_velocity;
+			self.move_angles = self.move_angles + ticrate * self.move_avelocity;
+			_Movetype_LinkEdict(FALSE);
+			break;
+		case MOVETYPE_STEP:
+			error("SV_Physics_Step not implemented");
+			break;
+		case MOVETYPE_WALK:
+			error("SV_Physics_Walk not implemented");
+			break;
+		case MOVETYPE_TOSS:
+		case MOVETYPE_BOUNCE:
+		case MOVETYPE_BOUNCEMISSILE:
+		case MOVETYPE_FLYMISSILE:
+		case MOVETYPE_FLY:
+			_Movetype_Physics_Toss(movedt);
+			break;
+	}
+}
+
+void Movetype_Physics_NoMatchServer() // optimized
 {
 	float n, i, dt, movedt;
 
-	dt = time - self.move_time;
+	movedt = time - self.move_time;
+	self.move_time = time;
+
+	//self.move_didgravity = ((self.move_movetype == MOVETYPE_BOUNCE || self.move_movetype == MOVETYPE_TOSS) && !(self.move_flags & FL_ONGROUND));
+	// we use the field as set by the last run of this
+
+	_Movetype_Physics_Frame(movedt);
+	if(wasfreed(self))
+		return;
+
+	self.avelocity = self.move_avelocity;
+	self.velocity = self.move_velocity;
+	self.angles = self.move_angles;
+	setorigin(self, self.move_origin);
+}
+
+void Movetype_Physics_MatchServer() // SV_Physics_Entity
+{
+	float n, i, dt, movedt;
 
 	if(ticrate <= 0)
-		matchserver = 0;
+	{
+		Movetype_Physics_NoMatchServer();
+		return;
+	}
 
-	if(matchserver)
-	{
-		movedt = ticrate;
-		n = max(0, floor(dt / ticrate));
-		dt -= n * ticrate;
-		self.move_time += n * ticrate;
-	}
-	else
-	{
-		movedt = dt;
-		dt = 0;
-		n = 1;
-		self.move_time = time;
-	}
+	dt = time - self.move_time;
+
+	movedt = ticrate;
+	n = max(0, floor(dt / ticrate));
+	dt -= n * ticrate;
+	self.move_time += n * ticrate;
 
 	//self.move_didgravity = ((self.move_movetype == MOVETYPE_BOUNCE || self.move_movetype == MOVETYPE_TOSS) && !(self.move_flags & FL_ONGROUND));
 	// we use the field as set by the last run of this
 
 	for(i = 0; i < n; ++i)
 	{
-		self.move_didgravity = FALSE;
-		switch(self.move_movetype)
-		{
-			case MOVETYPE_PUSH:
-			case MOVETYPE_FAKEPUSH:
-				error("SV_Physics_Pusher not implemented");
-				break;
-			case MOVETYPE_NONE:
-				break;
-			case MOVETYPE_FOLLOW:
-				error("SV_Physics_Follow not implemented");
-				break;
-			case MOVETYPE_NOCLIP:
-				_Movetype_CheckWater();
-				self.move_origin = self.move_origin + ticrate * self.move_velocity;
-				self.move_angles = self.move_angles + ticrate * self.move_avelocity;
-				_Movetype_LinkEdict(FALSE);
-				break;
-			case MOVETYPE_STEP:
-				error("SV_Physics_Step not implemented");
-				break;
-			case MOVETYPE_WALK:
-				error("SV_Physics_Walk not implemented");
-				break;
-			case MOVETYPE_TOSS:
-			case MOVETYPE_BOUNCE:
-			case MOVETYPE_BOUNCEMISSILE:
-			case MOVETYPE_FLYMISSILE:
-			case MOVETYPE_FLY:
-				_Movetype_Physics_Toss(movedt);
-				break;
-		}
+		_Movetype_Physics_Frame(movedt);
+		if(wasfreed(self))
+			return;
 	}
-
-	if(wasfreed(self))
-		return;
 
 	self.avelocity = self.move_avelocity;
 
-	if(dt > 0 && self.move_movetype != MOVETYPE_NONE)
+	if(dt > 0 && self.move_movetype != MOVETYPE_NONE && !(self.move_flags & FL_ONGROUND))
 	{
 		// now continue the move from move_time to time
 		self.velocity = self.move_velocity;
