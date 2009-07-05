@@ -337,25 +337,24 @@ void drawborderlines(float thickness, vector pos, vector dim, vector color, floa
 
 void drawpic_tiled(vector pos, string pic, vector size, vector area, vector color, float alpha, float drawflag)
 {
-	vector current_pos;
-	vector end_pos;
+	vector current_pos, end_pos, new_size, ratio;
 	end_pos = pos + area;
-	
-	drawsetcliparea(pos_x, pos_y, area_x, area_y);
-	
+
 	current_pos_y = pos_y;
 	while (current_pos_y < end_pos_y)
 	{
 		current_pos_x = pos_x;
 		while (current_pos_x < end_pos_x)
 		{
-			drawpic(current_pos, pic, size, color, alpha, drawflag);
+			new_size_x = min(size_x, end_pos_x - current_pos_x);
+			new_size_y = min(size_y, end_pos_y - current_pos_y);
+			ratio_x = new_size_x / size_x;
+			ratio_y = new_size_y / size_y;
+			drawsubpic(current_pos, new_size, pic, '0 0 0', ratio, color, alpha, drawflag);
 			current_pos_x += size_x;
 		}
 		current_pos_y += size_y;
 	}
-	
-	drawresetcliparea();
 }
 
 void drawpic_expanding(vector position, string pic, vector scale, vector rgb, float alpha, float flag, float fadelerp)

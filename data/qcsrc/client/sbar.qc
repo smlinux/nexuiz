@@ -13,8 +13,9 @@ float weapontime;
 float sbar_alpha_fg;
 float sbar_alpha_bg;
 float sbar_color_bg_team;
-float sbar_border_tickness;
+float sbar_border_thickness;
 float sbar_scoreboard_alpha_bg;
+float sbar_scoreboard_highlight;
 float sbar_hudselector;
 float sbar_hud_accuracy;
 
@@ -808,9 +809,13 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float pl_num
 	// alternated rows highlighting
 	if (is_self)
 		drawfill(pos - '1 1 0', tmp + '2 0 0', '1 1 1', 0.25, DRAWFLAG_NORMAL);
-	else if(!mod(pl_number,2))
-		drawfill(pos - '1 1 0', tmp + '2 0 0', '1 1 1', 0.09, DRAWFLAG_NORMAL);
-
+	else
+	{
+		if (sbar_scoreboard_highlight)
+			if(!mod(pl_number,2))
+				drawfill(pos - '1 1 0', tmp + '2 0 0', '1 1 1', 0.09, DRAWFLAG_NORMAL);
+	}
+	
 	tmp_y = 0;
 
 	for(i = 0; i < sbar_num_fields; ++i)
@@ -886,106 +891,129 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float pl_num
 /*
  * Sbar_Scoreboard_MakeTable
  * 
- * Makes the table for the team:
- *   rows and columns alternatively highlighted
- *   header darker
- *   player brighter
+ * Makes a table for a team (for all playing players in DM) and fills it
  */
 
-vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, vector rgb, vector bg_size)
+vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, float teamplay, vector rgb, vector bg_size)
 {
-	float specs, i, pos_x_save;
-	vector tmp;
+	float body_table_height, i, pos_x_save;
+	vector tmp, column_dim;
+	entity pl;
 	
-	specs = tm.team_size;
+	body_table_height = 1.25 * sbar_fontsize_y * max(1, tm.team_size); // no player? show 1 empty line
 	
 	pos -= '1 1 0';
 
 	tmp_x = sbwidth + 2;
 	
-	// columns headers background
 	tmp_y = 1.25 * sbar_fontsize_y;
-	
-	// flat header
-	//drawfill(pos, tmp, '0.5 0.5 0.5', sbar_scoreboard_alpha_bg, DRAWFLAG_NORMAL);
 	
 	// rounded header
 	drawpic(pos, "gfx/hud/sb_scoreboard_tableheader", tmp, '0.5 0.5 0.5', sbar_scoreboard_alpha_bg, DRAWFLAG_NORMAL);
 	
-	tmp_y += 1.25 * sbar_fontsize_y * specs;
-	tmp_y += sbar_border_tickness;
-	drawborderlines(sbar_border_tickness, pos, tmp, '0 0 0', sbar_scoreboard_alpha_bg, DRAWFLAG_NORMAL); // more transparency for the scoreboard
+	// table border
+	tmp_y += sbar_border_thickness;
+	tmp_y += body_table_height;
+	drawborderlines(sbar_border_thickness, pos, tmp, '0 0 0', sbar_scoreboard_alpha_bg, DRAWFLAG_NORMAL); // more transparency for the scoreboard
 	
-	// separator
+	// separator header/table
 	pos_y += 1.25 * sbar_fontsize_y;
-	tmp_y = sbar_border_tickness;
+	tmp_y = sbar_border_thickness;
 	drawfill(pos, tmp, '0 0 0', sbar_scoreboard_alpha_bg, DRAWFLAG_NORMAL);
 	
-	pos_y += sbar_border_tickness;
+	pos_y += sbar_border_thickness;
 	
-	// team board (borders, background, some color)
-	tmp_x -= 2;
-	tmp_y = 1.25 * sbar_fontsize_y * specs;
-	drawpic_tiled(pos, "gfx/hud/sb_scoreboard_bg", bg_size, tmp + '3 1 0', rgb * sbar_color_bg_team, sbar_scoreboard_alpha_bg, DRAWFLAG_NORMAL);
+	// table background
+	tmp_y = body_table_height;
+	drawpic_tiled(pos, "gfx/hud/sb_scoreboard_bg", bg_size, tmp, rgb * sbar_color_bg_team, sbar_scoreboard_alpha_bg, DRAWFLAG_NORMAL);
 		
 	// anyway, apply some color
-	drawfill(pos, tmp + '2 0 0', rgb, 0.1, DRAWFLAG_NORMAL);
+	//drawfill(pos, tmp + '2 0 0', rgb, 0.1, DRAWFLAG_NORMAL);
 	
 	// go back to the top to make alternated columns highlighting and to print the strings
 	pos_y -= 1.25 * sbar_fontsize_y;
-	pos_y -= sbar_border_tickness;
+	pos_y -= sbar_border_thickness;
 	
 	pos += '1 1 0';
 	
-	pos_x_save = pos_x; // will be restored after the column headers are printed
+	pos_x_save = pos_x; // will be restored after the columns headers are printed
 
-	vector column_dim;
-	column_dim_y = specs * 1.25 * sbar_fontsize_y;
-	column_dim_y += sbar_border_tickness;
-	column_dim_y += 1.25 * sbar_fontsize_y; // header
+	if (sbar_scoreboard_highlight)
+	{
+		column_dim_y = 1.25 * sbar_fontsize_y; // header
+		column_dim_y += sbar_border_thickness;
+		column_dim_y += body_table_height;
+	}
 	
 	// print the strings of the columns headers
 	for(i = 0; i < sbar_num_fields; ++i)
 	{
-		column_dim_x = sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
 		if(sbar_field[i] == SP_SEPARATOR)
 			break;
-		if (mod(i,2)) // alternated columns highlighting
-			drawfill(pos - '1 1 0', column_dim, '0 0 0', sbar_scoreboard_alpha_bg * 0.6, DRAWFLAG_NORMAL);
-		drawstring(pos, sbar_title[i], sbar_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
+		column_dim_x = sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
+		if (sbar_scoreboard_highlight)
+		{
+			if (mod(i,2))
+				drawfill(pos - '0 1 0' - sbar_fontsize_x / 2 * '1 0 0', column_dim, '0 0 0', sbar_scoreboard_alpha_bg * 0.4, DRAWFLAG_NORMAL);
+		}
+		drawstring(pos, sbar_title[i], sbar_fontsize, rgb, 1, DRAWFLAG_NORMAL);
 		pos_x += column_dim_x;
 	}
 	if(sbar_field[i] == SP_SEPARATOR)
 	{
-		pos_x = xmax; // NO + sbar_fontsize_x
-		tmp_y = tmp_z = 0;
+		pos_x = xmax;
 		for(i = sbar_num_fields-1; i > 0; --i)
 		{
 			if(sbar_field[i] == SP_SEPARATOR)
 				break;
-
-			if (i == sbar_num_fields-1)
-				column_dim_x = sbar_fontsize_x*sbar_size[i];
-			else
-				column_dim_x = sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
-			
 			/**
 			 * FTEQCC BUG!
-			 * Using the following line will mess it all up:
-			 **
-			 * tmp_x = sbar_size[i] - strlen(sbar_title[i])*8;
+			 * Using strlen(sbar_title[i])*8 instead of
+			 * stringwidth(sbar_title[i], FALSE) will mess it all up
 			 */
 			pos_x -= stringwidth(sbar_title[i], FALSE)*sbar_fontsize_x;
-			if (!mod(i,2)) // alternated columns highlighting
-				drawfill(pos - '1 1 0', column_dim, '0 0 0', sbar_scoreboard_alpha_bg * 0.6, DRAWFLAG_NORMAL);
-			drawstring(pos, sbar_title[i], sbar_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
+
+			if (sbar_scoreboard_highlight)
+			{
+				if (i == sbar_num_fields-1)
+					column_dim_x = sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x / 2;
+				else
+					column_dim_x = sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
+				if (!mod(i,2))
+					drawfill(pos - '0 1 0' - sbar_fontsize_x / 2 * '1 0 0', column_dim, '0 0 0', sbar_scoreboard_alpha_bg * 0.2, DRAWFLAG_NORMAL);
+			}
+			drawstring(pos, sbar_title[i], sbar_fontsize, rgb, 1, DRAWFLAG_NORMAL);
 			pos_x -= sbar_fontsize_x;
 		}
 	}
 	
 	pos_x = pos_x_save;
 	pos_y += 1.25 * sbar_fontsize_y; // skip the header
-	pos_y += sbar_border_tickness;
+	pos_y += sbar_border_thickness;
+			
+	i = 0;
+	if (teamplay)
+		for(pl = players.sort_next; pl; pl = pl.sort_next)
+		{
+			if(pl.team != tm.team)
+				continue;
+			Sbar_PrintScoreboardItem(pos, pl, (pl.sv_entnum == player_localentnum - 1), i);
+			pos_y += 1.25 * sbar_fontsize_y;
+			++i;
+		}
+	else
+		for(pl = players.sort_next; pl; pl = pl.sort_next)
+		{
+			if(pl.team == COLOR_SPECTATOR)
+				continue;
+			Sbar_PrintScoreboardItem(pos, pl, (pl.sv_entnum == player_localentnum - 1), i);
+			pos_y += 1.25 * sbar_fontsize_y;
+			++i;
+		}
+
+	pos_y += 1.25 * sbar_fontsize_y;
+	pos_y += 1.25 * sbar_fontsize_y; // add an empty row
+	
 	return pos;
 }
 
@@ -993,7 +1021,6 @@ float lastpingstime;
 float scoreboard_bottom;
 void Sbar_DrawScoreboard()
 {
-	//float xmin, ymin, xmax, ymax;
 	vector rgb, pos, tmp, sbar_save;
 	entity pl, tm;
 	float specs, i;
@@ -1008,25 +1035,22 @@ void Sbar_DrawScoreboard()
 	sbwidth = Sbar_GetWidth(6.5 * sbar_fontsize_y);
 
 	xmin = 0.5 * (vid_conwidth - sbwidth);
-	ymin = 75;
+	ymin = 60;
 
 	xmax = vid_conwidth - xmin;
     ymax = vid_conheight - 0.2*vid_conheight;
 
 	center_x = xmin + 0.5*sbwidth;
 
-	//Sbar_UpdateFields();
-
 	// Initializes position
-	//pos_x = xmin;
+	pos_x = xmin;
 	pos_y = ymin;
 	pos_z = 0;
 
 	// Heading
 	drawfont = sbar_bigfont;
-	pos_x = center_x - stringwidth("Scoreboard", TRUE)*0.5*24;
-	drawstring(pos, "Scoreboard", '24 24 0', '1 1 1', 1, DRAWFLAG_NORMAL);
-	pos_x = xmin;
+	drawstringcenter('0 1 0' * ymin, "Scoreboard", '24 24 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+
 	pos_y += 24 + 4;
 	pos_y += sbar_fontsize_y;
 
@@ -1053,20 +1077,7 @@ void Sbar_DrawScoreboard()
 			if(ts_primary != ts_secondary)
 				Sbar_DrawXNum(sbar + pos - '4.5 0 0' * sbar_fontsize_y + '0 2.5 0' * sbar_fontsize_y, tm.(teamscores[ts_secondary]), 4, sbar_fontsize_y * 1, rgb, 0, 1, 1, DRAWFLAG_NORMAL);
 
-			pos = Sbar_Scoreboard_MakeTable(pos, tm, rgb, bg_size);
-			
-			// fill cells (could be integrated in Sbar_Scoreboard_MakeTable however...)
-			specs = 0;
-			for(pl = players.sort_next; pl; pl = pl.sort_next)
-			{
-				if(pl.team != tm.team)
-					continue;
-				Sbar_PrintScoreboardItem(pos, pl, (pl.sv_entnum == player_localentnum - 1), specs);
-				pos_y += 1.25 * sbar_fontsize_y;
-				++specs;
-			}
-			pos_y += 1.25 * sbar_fontsize_y;
-			pos_y += 1.25 * sbar_fontsize_y; // add an empty row
+			pos = Sbar_Scoreboard_MakeTable(pos, tm, teamplay, rgb, bg_size);
 		}
 	}
 	else
@@ -1077,20 +1088,7 @@ void Sbar_DrawScoreboard()
 
 		tm = teams.sort_next;
 		
-		pos = Sbar_Scoreboard_MakeTable(pos, tm, rgb, bg_size);
-		
-		// fill cells (could be integrated in Sbar_Scoreboard_MakeTable however...)
-		specs = 0;
-		for(pl = players.sort_next; pl; pl = pl.sort_next)
-		{
-			if(pl.team == COLOR_SPECTATOR)
-				continue;
-			Sbar_PrintScoreboardItem(pos, pl, (pl.sv_entnum == player_localentnum - 1), specs);
-			pos_y += 1.25 * sbar_fontsize_y;
-			++specs;
-		}
-		pos_y += 1.25 * sbar_fontsize_y;
-		pos_y += 1.25 * sbar_fontsize_y; // add an empty row
+		pos = Sbar_Scoreboard_MakeTable(pos, tm, teamplay, rgb, bg_size);
 	}
 
 	tmp = pos + '0 1.5 0' * sbar_fontsize_y;
@@ -1246,8 +1244,8 @@ string MakeRaceString(float cp, float mytime, float histime, float lapdelta, str
 
 void Sbar_Score(float margin)
 {
-	float timelimit, minutes, seconds, timeleft, minutesLeft, secondsLeft, distribution, myplace, score, desiredPlayerId;
-	vector sbar_save, place, timer_color, offset;
+	float timelimit, minutes, seconds, timeleft, minutesLeft, secondsLeft, distribution, score, desiredPlayerId;
+	vector sbar_save, score_offset, timer_color, offset;
 	entity tm, pl, me;
 	sbar_save = sbar;
 
@@ -1262,18 +1260,26 @@ void Sbar_Score(float margin)
  	topright_z = 0;
 
 	//get the ID (could be "me", or the player I'm spectating)
-	desiredPlayerId = player_localentnum - 1;
-	if (spectatee_status) {
-		if (spectatee_status != -1) {
-			desiredPlayerId = spectatee_status - 1;
-		}
-	}
+	if (spectatee_status)
+		desiredPlayerId = spectatee_status - 1;
+	else
+		desiredPlayerId = player_localentnum - 1;
 
 	sbar_y = vid_conheight - (32+12);
 	sbar_x -= margin;
 
 	offset = '0 0 0';
-	place_z = 0;
+	
+	if (vid_conwidth >= 800) {
+		score_offset_x = 196;
+		score_offset_y = 36;
+	}
+	else { // move the scores if vid_conwidth < 800
+		score_offset_x = 196;
+		score_offset_y = 84;
+	}
+	score_offset_z = 0;
+	
 	if(teamplay)
 	{
 		// Layout:
@@ -1282,14 +1288,6 @@ void Sbar_Score(float margin)
 		//
 		//         TEAM2
 		//for(i = 0; i < 4; ++i)
-		if (vid_conwidth >= 800) {
-			place_x = 196;
-			place_y = 36;
-		}
-		else {
-			place_x = 196;
-			place_y = 84;
-		}
 
 		float max_fragcount;
 		max_fragcount = -999;
@@ -1306,30 +1304,21 @@ void Sbar_Score(float margin)
 
 			if(tm.team == myteam) {
 				if (max_fragcount == score)
-					Sbar_DrawXNum(bottomright - element_offset - place, score, 4, 34, GetTeamRGB(tm.team) * 0.8, 1, 1, sbar_alpha_fg, DRAWFLAG_NORMAL);
+					Sbar_DrawXNum(bottomright - element_offset - score_offset, score, 4, 34, GetTeamRGB(tm.team) * 0.8, 1, 1, sbar_alpha_fg, DRAWFLAG_NORMAL);
 				else
-					Sbar_DrawXNum(bottomright - element_offset - place, score, 4, 34, GetTeamRGB(tm.team) * 0.8, 0, 1, sbar_alpha_fg, DRAWFLAG_NORMAL);
+					Sbar_DrawXNum(bottomright - element_offset - score_offset, score, 4, 34, GetTeamRGB(tm.team) * 0.8, 0, 1, sbar_alpha_fg, DRAWFLAG_NORMAL);
 			}
 			else
 			{
 				if (max_fragcount == score)
-					Sbar_DrawXNum(bottomright - element_offset - place + '132 -6 0' - offset, score, 4, 16, GetTeamRGB(tm.team) * 0.8, 1, 1, sbar_alpha_fg, DRAWFLAG_NORMAL);
+					Sbar_DrawXNum(bottomright - element_offset - score_offset + '132 -6 0' - offset, score, 4, 16, GetTeamRGB(tm.team) * 0.8, 1, 1, sbar_alpha_fg, DRAWFLAG_NORMAL);
 				else
-					Sbar_DrawXNum(bottomright - element_offset - place + '132 -6 0' - offset, score, 4, 16, GetTeamRGB(tm.team) * 0.8, 0, 1, sbar_alpha_fg, DRAWFLAG_NORMAL);
+					Sbar_DrawXNum(bottomright - element_offset - score_offset + '132 -6 0' - offset, score, 4, 16, GetTeamRGB(tm.team) * 0.8, 0, 1, sbar_alpha_fg, DRAWFLAG_NORMAL);
 				offset_y -= 16;
 			}
 		}
 	} else {
 		// me vector := [team/connected frags id]
-
-		myplace = 0;
-		for(me = players.sort_next; me; me = me.sort_next)
-		{
-			if(me.team != COLOR_SPECTATOR)
-				++myplace;
-			if(me.sv_entnum == desiredPlayerId)
-				break;
-		}
 
 		pl = players.sort_next;
 		if(pl == me)
@@ -1341,36 +1330,28 @@ void Sbar_Score(float margin)
 		} else
 			distribution = 0;
 
-		if (vid_conwidth >= 800) {
-			place_x = 196;
-			place_y = 36;
-		}
-		else { // move the scores if vid_conwidth < 800
-			place_x = 196;
-			place_y = 84;
-		}
 		score = me.(scores[ps_primary]);
 
 		if(distribution >= 0)
 		{
 			if (distribution != 0) {
 				// draw a + sign in front of the score
-				if (distribution < 10) { drawpic(bottomright - element_offset - place + '132 -6 0' + '32 0 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
-				else if (distribution < 100) { drawpic(bottomright - element_offset - place + '132 -6 0' + '16 0 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
-				else if (distribution < 1000) { drawpic(bottomright - element_offset - place + '132 -6 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
+				if (distribution < 10) { drawpic(bottomright - element_offset - score_offset + '132 -6 0' + '32 0 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
+				else if (distribution < 100) { drawpic(bottomright - element_offset - score_offset + '132 -6 0' + '16 0 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
+				else if (distribution < 1000) { drawpic(bottomright - element_offset - score_offset + '132 -6 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
 			}
 
-			Sbar_DrawXNum(bottomright - element_offset - place + '132 -6 0', distribution, 4, 16, ' 1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
-			Sbar_DrawXNum(bottomright - element_offset - place, score, 4, 34, '1 1 1', 1, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+			Sbar_DrawXNum(bottomright - element_offset - score_offset + '132 -6 0', distribution, 4, 16, ' 1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+			Sbar_DrawXNum(bottomright - element_offset - score_offset, score, 4, 34, '1 1 1', 1, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 		}
 		else if(distribution >= -5)
 		{
-			Sbar_DrawXNum(bottomright - element_offset - place + '132 -6 0', distribution, 4, 16, ' 1 1 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
-			Sbar_DrawXNum(bottomright - element_offset - place, score, 4, 34, '1 1 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+			Sbar_DrawXNum(bottomright - element_offset - score_offset + '132 -6 0', distribution, 4, 16, ' 1 1 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+			Sbar_DrawXNum(bottomright - element_offset - score_offset, score, 4, 34, '1 1 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 		}
 		else {
-			Sbar_DrawXNum(bottomright - element_offset - place + '132 -6 0', distribution, 4, 16, ' 1 0 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
-			Sbar_DrawXNum(bottomright - element_offset - place, score, 4, 34, '1 0 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+			Sbar_DrawXNum(bottomright - element_offset - score_offset + '132 -6 0', distribution, 4, 16, ' 1 0 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+			Sbar_DrawXNum(bottomright - element_offset - score_offset, score, 4, 34, '1 0 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 		}
 	}
 
@@ -1941,7 +1922,7 @@ void Sbar_DrawAccuracyStats()
 
 			// background
 			drawpic(pos, "gfx/hud/sb_accuracy", fill_size , fill_colour, sbar_alpha_bg, DRAWFLAG_NORMAL);
-			drawborderlines(sbar_border_tickness, pos, fill_size, '0 0 0', sbar_alpha_bg, DRAWFLAG_NORMAL);
+			drawborderlines(sbar_border_thickness, pos, fill_size, '0 0 0', sbar_alpha_bg, DRAWFLAG_NORMAL);
 
 			// the weapon
 			drawpic(pos, strcat("gfx/hud/inv_weapon", ftos(i-1)), '1 0.5 0' * fill_size_x , '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
@@ -1994,7 +1975,7 @@ void Sbar_DrawAccuracyStats()
 
 			// background
 			drawpic(pos, "gfx/hud/sb_accuracy", fill_size , fill_colour, sbar_alpha_bg, DRAWFLAG_NORMAL);
-			drawborderlines(sbar_border_tickness, pos, fill_size, '0 0 0', sbar_alpha_bg, DRAWFLAG_NORMAL);
+			drawborderlines(sbar_border_thickness, pos, fill_size, '0 0 0', sbar_alpha_bg, DRAWFLAG_NORMAL);
 
 			// the weapon
 			drawpic(pos, strcat("gfx/hud/inv_weapon", ftos(i-1)), '1 0.5 0' * fill_size_x , '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
@@ -2113,9 +2094,10 @@ void Sbar_Draw (void)
 	bottomleft_z = 0;
 
 	sbar_alpha_bg = cvar("sbar_alpha_bg");
-	sbar_scoreboard_alpha_bg = cvar("sbar_scoreboard_alpha_bg");
+	sbar_border_thickness = bound(0, cvar("sbar_border_thickness"), 5);
 	sbar_color_bg_team = cvar("sbar_color_bg_team");
-	sbar_border_tickness = 2;
+	sbar_scoreboard_alpha_bg = cvar("sbar_scoreboard_alpha_bg");
+	sbar_scoreboard_highlight = cvar("sbar_scoreboard_highlight");
 
 	float i;
 	float weapon_stats;
