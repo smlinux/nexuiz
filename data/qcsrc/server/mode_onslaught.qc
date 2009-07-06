@@ -640,16 +640,19 @@ void onslaught_generator_damage(entity inflictor, entity attacker, float damage,
 		}
 	}
 	self.health = self.health - damage;
+	WaypointSprite_UpdateHealth(self.sprite, self.health);
 	// choose an animation frame based on health
 	self.frame = 10 * bound(0, (1 - self.health / self.max_health), 1);
 	// see if the generator is still functional, or dying
 	if (self.health > 0)
 	{
+#ifdef ONSLAUGHT_SPAM
 		float h, lh;
 		lh = ceil(self.lasthealth / 100) * 100;
 		h = ceil(self.health / 100) * 100;
 		if(lh != h)
 			bprint(ColoredTeamName(self.team), " generator has less than ", ftos(h), " health remaining\n");
+#endif
 		self.lasthealth = self.health;
 	}
 	else
@@ -672,6 +675,8 @@ void onslaught_generator_damage(entity inflictor, entity attacker, float damage,
 		self.nextthink = time; // start exploding immediately
 		self.think(); // do the first explosion now
 		onslaught_updatelinks();
+
+		WaypointSprite_UpdateMaxHealth(self.sprite, 0);
 	}
 	if(self.health <= 0)
 		setmodel(self, "models/onslaught/generator_dead.md3");
@@ -872,6 +877,9 @@ void onslaught_generator_reset()
 	self.think = onslaught_generator_delayed;
 	self.nextthink = time + 0.2;
 	setmodel(self, "models/onslaught/generator.md3");
+
+	WaypointSprite_UpdateMaxHealth(self.sprite, self.max_health);
+	WaypointSprite_UpdateHealth(self.sprite, self.health);
 }
 
 /*QUAKED spawnfunc_onslaught_generator (0 .5 .8) (-32 -32 -24) (32 32 64)
@@ -953,6 +961,8 @@ void spawnfunc_onslaught_generator()
 
 	WaypointSprite_SpawnFixed(string_null, e.origin + '0 0 1' * e.maxs_z, self, sprite);
 	WaypointSprite_UpdateRule(self.sprite, COLOR_TEAM2, SPRITERULE_TEAMPLAY);
+	WaypointSprite_UpdateMaxHealth(self.sprite, self.max_health);
+	WaypointSprite_UpdateHealth(self.sprite, self.health);
 
 	waypoint_spawnforitem(self);
 
@@ -987,6 +997,10 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 			self.pain_finished = time + 10;
 		}
 	self.health = self.health - damage;
+	if(self.owner.iscaptured)
+		WaypointSprite_UpdateHealth(self.owner.sprite, self.health);
+	else
+		WaypointSprite_UpdateBuildFinished(self.owner.sprite, time + (self.max_health - self.health) / (self.count / 0.05));
 	self.pain_finished = time + 1;
 	self.punchangle = (2 * randomvec() - '1 1 1') * 45;
 	self.cp_bob_dmg_z = (2 * random() - 1) * 15;
@@ -1036,6 +1050,8 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 			setmodel(self.owner, "models/onslaught/controlpoint_pad.md3");
 		//setsize(self, '-32 -32 0', '32 32 8');
 
+		WaypointSprite_UpdateMaxHealth(self.owner.sprite, 0);
+
 		remove(self);
 	}
 };
@@ -1046,9 +1062,13 @@ void onslaught_controlpoint_icon_think()
 	self.nextthink = time + 0.05;
 	if (time > self.pain_finished + 5)
 	{
-		self.health = self.health + self.count;
-		if (self.health >= self.max_health)
-			self.health = self.max_health;
+		if(self.health < self.max_health)
+		{
+			self.health = self.health + self.count;
+			if (self.health >= self.max_health)
+				self.health = self.max_health;
+			WaypointSprite_UpdateHealth(self.owner.sprite, self.health);
+		}
 	}
 	if (self.health < self.max_health * 0.25)
 		setmodel(self, "models/onslaught/controlpoint_icon_dmg3.md3");
@@ -1155,6 +1175,9 @@ void onslaught_controlpoint_icon_buildthink()
 		self.cp_origin = self.origin;
 		self.cp_bob_origin = '0 0 0.1';
 		self.cp_bob_spd = 0;
+
+		WaypointSprite_UpdateMaxHealth(self.owner.sprite, self.max_health);
+		WaypointSprite_UpdateHealth(self.owner.sprite, self.health);
 	}
 	self.alpha = self.health / self.max_health;
 	// colormod flash when shot
@@ -1203,6 +1226,7 @@ void onslaught_controlpoint_touch()
 	sound(e, CHAN_TRIGGER, "onslaught/controlpoint_build.wav", VOL_BASE, ATTN_NORM);
 	self.team = e.team;
 	self.colormap = e.colormap;
+	WaypointSprite_UpdateBuildFinished(self.sprite, time + (e.max_health - e.health) / (e.count / 0.05));
 };
 
 void onslaught_controlpoint_reset()
@@ -1226,6 +1250,8 @@ void onslaught_controlpoint_reset()
 
 	activator = self;
 	SUB_UseTargets(); // to reset the structures, playerspawns etc.
+
+	WaypointSprite_UpdateMaxHealth(self.sprite, 0);
 }
 
 /*QUAKED spawnfunc_onslaught_controlpoint (0 .5 .8) (-32 -32 0) (32 32 128)
