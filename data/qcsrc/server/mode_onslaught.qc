@@ -674,9 +674,10 @@ void onslaught_generator_damage(entity inflictor, entity attacker, float damage,
 		self.think = onslaught_generator_deaththink; // explosion sequence
 		self.nextthink = time; // start exploding immediately
 		self.think(); // do the first explosion now
-		onslaught_updatelinks();
 
 		WaypointSprite_UpdateMaxHealth(self.sprite, 0);
+
+		onslaught_updatelinks();
 	}
 	if(self.health <= 0)
 		setmodel(self, "models/onslaught/generator_dead.md3");
@@ -861,6 +862,19 @@ void onslaught_controlpoint_updatesprite(entity e)
 				WaypointSprite_UpdateTeamRadar(e.sprite, RADARICON_CONTROLPOINT, '0.75 0.75 0.75');
 		}
 		WaypointSprite_Ping(e.sprite);
+
+		if(e.goalentity) // don't mess up build bars!
+		{
+			if(sh)
+			{
+				WaypointSprite_UpdateMaxHealth(e.sprite, 0);
+			}
+			else
+			{
+				WaypointSprite_UpdateMaxHealth(e.sprite, e.goalentity.max_health);
+				WaypointSprite_UpdateHealth(e.sprite, e.goalentity.health);
+			}
+		}
 	}
 }
 
@@ -1035,6 +1049,9 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 		self.owner.iscaptured = FALSE;
 		self.owner.team = 0;
 		self.owner.colormap = 1024;
+
+		WaypointSprite_UpdateMaxHealth(self.owner.sprite, 0);
+
 		onslaught_updatelinks();
 
 		// Use targets now (somebody make sure this is in the right place..)
@@ -1049,8 +1066,6 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 		if(self.owner.model != "models/onslaught/controlpoint_pad.md3")
 			setmodel(self.owner, "models/onslaught/controlpoint_pad.md3");
 		//setsize(self, '-32 -32 0', '32 32 8');
-
-		WaypointSprite_UpdateMaxHealth(self.owner.sprite, 0);
 
 		remove(self);
 	}
@@ -1164,6 +1179,10 @@ void onslaught_controlpoint_icon_buildthink()
 		sound(self, CHAN_TRIGGER, "onslaught/controlpoint_built.wav", VOL_BASE, ATTN_NORM);
 		bprint(ColoredTeamName(self.team), " captured ", self.owner.message, " control point\n");
 		self.owner.iscaptured = TRUE;
+
+		WaypointSprite_UpdateMaxHealth(self.owner.sprite, self.max_health);
+		WaypointSprite_UpdateHealth(self.owner.sprite, self.health);
+
 		onslaught_updatelinks();
 
 		// Use targets now (somebody make sure this is in the right place..)
@@ -1175,9 +1194,6 @@ void onslaught_controlpoint_icon_buildthink()
 		self.cp_origin = self.origin;
 		self.cp_bob_origin = '0 0 0.1';
 		self.cp_bob_spd = 0;
-
-		WaypointSprite_UpdateMaxHealth(self.owner.sprite, self.max_health);
-		WaypointSprite_UpdateHealth(self.owner.sprite, self.health);
 	}
 	self.alpha = self.health / self.max_health;
 	// colormod flash when shot
@@ -1246,12 +1262,12 @@ void onslaught_controlpoint_reset()
 	setmodel(self, "models/onslaught/controlpoint_pad.md3");
 	//setsize(self, '-32 -32 0', '32 32 8');
 
+	WaypointSprite_UpdateMaxHealth(self.sprite, 0);
+
 	onslaught_updatelinks();
 
 	activator = self;
 	SUB_UseTargets(); // to reset the structures, playerspawns etc.
-
-	WaypointSprite_UpdateMaxHealth(self.sprite, 0);
 }
 
 /*QUAKED spawnfunc_onslaught_controlpoint (0 .5 .8) (-32 -32 0) (32 32 128)
