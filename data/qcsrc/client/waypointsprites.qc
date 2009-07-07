@@ -308,7 +308,10 @@ void Ent_WaypointSprite()
 		}
 	}
 	else
+	{
 		self.health = -1;
+		self.build_finished = 0;
+	}
 
 	if(sendflags & 64)
 	{
