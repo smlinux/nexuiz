@@ -121,6 +121,7 @@ COMPAT_FILES="
 	models/gibs/smallchest.md3_0.skin
 	models/gibs/smallchest.md3_1.skin
 	models/gibs/smallchest.md3_2.skin
+	models/nexball/ball.md3
 	models/onslaught/boom.md3
 	models/onslaught/controlpoint_icon_dmg1.md3
 	models/onslaught/controlpoint_icon_dmg2.md3
@@ -265,6 +266,11 @@ COMPAT_FILES="
 	sound/misc/powerup.ogg
 	sound/misc/shield_respawn.wav
 	sound/misc/strength_respawn.wav
+	sound/nexball/bounce.ogg
+	sound/nexball/drop.ogg
+	sound/nexball/shoot1.wav
+	sound/nexball/shoot2.ogg
+	sound/nexball/steal.ogg
 	sound/onslaught/electricity_explode.ogg
 	sound/onslaught/ons_hit1.ogg
 	sound/onslaught/ons_hit2.ogg
@@ -320,6 +326,9 @@ COMPAT_FILES="
 	sound/weapons/tuba_note9.ogg
 	sound/weapons/unavailable.wav
 	sound/weapons/weaponpickup.ogg
+	textures/nexball/ball_gloss.tga
+	textures/nexball/ball_norm.tga
+	textures/nexball/ball.tga
 	textures/bloodyskull_alien_glow.tga
 	textures/bloodyskull_alien.tga
 	textures/bloodyskull.jpg
