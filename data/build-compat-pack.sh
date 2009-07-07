@@ -61,6 +61,7 @@ COMPAT_FILES="
 	gfx/hud/num_minus.tga
 	gfx/hud/num_plus_stroke.tga
 	gfx/hud/num_plus.tga
+	gfx/hud/sb_accuracy.tga
 	gfx/hud/sb_ammobg.tga
 	gfx/hud/sb_armor.tga
 	gfx/hud/sbar.tga
@@ -87,6 +88,8 @@ COMPAT_FILES="
 	gfx/hud/sb_kh_yellow.tga
 	gfx/hud/sb_nexball_carrying.tga
 	gfx/hud/sb_rocket.tga
+	gfx/hud/sb_scoreboard_bg.tga
+	gfx/hud/sb_scoreboard_tableheader.tga
 	gfx/hud/sb_shells.tga
 	gfx/hud/sb_str.tga
 	gfx/hud/sb_timerbg.tga
@@ -142,6 +145,26 @@ COMPAT_FILES="
 	models/onslaught/ons_ray.md3
 	models/onslaught/shockwave.md3
 	models/onslaught/shockwavetransring.md3
+	models/sprites/as-defend_frame0.tga
+	models/sprites/as-destroy_frame0.tga
+	models/sprites/as-push_frame0.tga
+	models/sprites/bluebase_frame0.tga
+	models/sprites/bluebase.tga
+	models/sprites/danger_frame0.tga
+	models/sprites/danger.tga
+	models/sprites/defend.tga
+	models/sprites/destroy.tga
+	models/sprites/dom-blue_frame0.tga
+	models/sprites/dom-neut_frame0.tga
+	models/sprites/dom-pink_frame0.tga
+	models/sprites/dom-red_frame0.tga
+	models/sprites/dom-yellow_frame0.tga
+	models/sprites/flagcarrier_frame0.tga
+	models/sprites/flagcarrier.tga
+	models/sprites/helpme_frame0.tga
+	models/sprites/helpme.tga
+	models/sprites/here_frame0.tga
+	models/sprites/here.tga
 	models/sprites/item-extralife_frame0.tga
 	models/sprites/item-extralife_frame1.tga
 	models/sprites/item-fuelregen_frame0.tga
@@ -156,6 +179,67 @@ COMPAT_FILES="
 	models/sprites/item-speed_frame1.tga
 	models/sprites/item-strength_frame0.tga
 	models/sprites/item-strength_frame1.tga
+	models/sprites/keycarrier-blue_frame0.tga
+	models/sprites/keycarrier-blue.tga
+	models/sprites/keycarrier-finish_frame0.tga
+	models/sprites/keycarrier-finish.tga
+	models/sprites/keycarrier-friend_frame0.tga
+	models/sprites/keycarrier-friend.tga
+	models/sprites/keycarrier-pink_frame0.tga
+	models/sprites/keycarrier-pink.tga
+	models/sprites/keycarrier-red_frame0.tga
+	models/sprites/keycarrier-red.tga
+	models/sprites/keycarrier-yellow_frame0.tga
+	models/sprites/keycarrier-yellow.tga
+	models/sprites/key-dropped_frame0.tga
+	models/sprites/key-dropped.tga
+	models/sprites/nb-ball_frame0.tga
+	models/sprites/ons-cp-atck-blue_frame0.tga
+	models/sprites/ons-cp-atck-blue_frame1.tga
+	models/sprites/ons-cp-atck-neut_frame0.tga
+	models/sprites/ons-cp-atck-neut_frame1.tga
+	models/sprites/ons-cp-atck-red_frame0.tga
+	models/sprites/ons-cp-atck-red_frame1.tga
+	models/sprites/ons-cp-blue_frame0.tga
+	models/sprites/ons-cp-blue.tga
+	models/sprites/ons-cp-dfnd-blue_frame0.tga
+	models/sprites/ons-cp-dfnd-blue_frame1.tga
+	models/sprites/ons-cp-dfnd-red_frame0.tga
+	models/sprites/ons-cp-dfnd-red_frame1.tga
+	models/sprites/ons-cp-neut_frame0.tga
+	models/sprites/ons-cp-neut.tga
+	models/sprites/ons-cp-red_frame0.tga
+	models/sprites/ons-cp-red.tga
+	models/sprites/ons-gen-blue_frame0.tga
+	models/sprites/ons-gen-blue.tga
+	models/sprites/ons-gen-red_frame0.tga
+	models/sprites/ons-gen-red.tga
+	models/sprites/ons-gen-shielded_frame0.tga
+	models/sprites/ons-gen-shielded.tga
+	models/sprites/push.tga
+	models/sprites/race-checkpoint_frame0.tga
+	models/sprites/race-checkpoint.tga
+	models/sprites/race-finish_frame0.tga
+	models/sprites/race-finish.tga
+	models/sprites/redbase_frame0.tga
+	models/sprites/redbase.tga
+	models/sprites/waypoint_frame0.tga
+	models/sprites/waypoint.tga
+	models/sprites/wpn-campingrifle_frame0.tga
+	models/sprites/wpn-crylink_frame0.tga
+	models/sprites/wpn-electro_frame0.tga
+	models/sprites/wpn-gl_frame0.tga
+	models/sprites/wpn-hagar_frame0.tga
+	models/sprites/wpn-hlac_frame0.tga
+	models/sprites/wpn-hookgun_frame0.tga
+	models/sprites/wpn-laser_frame0.tga
+	models/sprites/wpn-minstanex_frame0.tga
+	models/sprites/wpn-nex_frame0.tga
+	models/sprites/wpn-porto_frame0.tga
+	models/sprites/wpn-rl_frame0.tga
+	models/sprites/wpn-seeker_frame0.tga
+	models/sprites/wpn-shotgun_frame0.tga
+	models/sprites/wpn-uzi_frame0.tga
 	models/weapons/g_tuba.md3
 	models/weapons/h_tuba.dpm
 	models/weapons/v_tuba.md3
