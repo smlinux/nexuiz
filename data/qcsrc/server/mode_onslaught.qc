@@ -1014,7 +1014,7 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 	if(self.owner.iscaptured)
 		WaypointSprite_UpdateHealth(self.owner.sprite, self.health);
 	else
-		WaypointSprite_UpdateBuildFinished(self.owner.sprite, time + (self.max_health - self.health) / (self.count / 0.05));
+		WaypointSprite_UpdateBuildFinished(self.owner.sprite, time + (self.max_health - self.health) / (self.count / sys_ticrate));
 	self.pain_finished = time + 1;
 	self.punchangle = (2 * randomvec() - '1 1 1') * 45;
 	self.cp_bob_dmg_z = (2 * random() - 1) * 15;
@@ -1074,7 +1074,7 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 void onslaught_controlpoint_icon_think()
 {
 	entity oself;
-	self.nextthink = time + 0.05;
+	self.nextthink = time + sys_ticrate;
 	if (time > self.pain_finished + 5)
 	{
 		if(self.health < self.max_health)
@@ -1162,7 +1162,7 @@ void onslaught_controlpoint_icon_buildthink()
 	local entity oself;
 	float a;
 
-	self.nextthink = time + 0.05;
+	self.nextthink = time + sys_ticrate;
 
 	// only do this if there is power
 	a = onslaught_controlpoint_can_be_linked(self.owner, self.owner.team);
@@ -1174,7 +1174,7 @@ void onslaught_controlpoint_icon_buildthink()
 	if (self.health >= self.max_health)
 	{
 		self.health = self.max_health;
-		self.count = self.count * 0.1; // slow repair rate from now on
+		self.count = cvar("g_onslaught_cp_regen") * sys_ticrate; // slow repair rate from now on
 		self.think = onslaught_controlpoint_icon_think;
 		sound(self, CHAN_TRIGGER, "onslaught/controlpoint_built.wav", VOL_BASE, ATTN_NORM);
 		bprint(ColoredTeamName(self.team), " captured ", self.owner.message, " control point\n");
@@ -1225,7 +1225,7 @@ void onslaught_controlpoint_touch()
 	e.classname = "onslaught_controlpoint_icon";
 	e.owner = self;
 	e.max_health = cvar("g_onslaught_cp_health");
-	e.health = e.max_health * 0.1;
+	e.health = cvar("g_onslaught_cp_buildhealth");
 	e.solid = SOLID_BBOX;
 	e.movetype = MOVETYPE_NONE;
 	setmodel(e, "models/onslaught/controlpoint_icon.md3");
@@ -1237,12 +1237,12 @@ void onslaught_controlpoint_touch()
 	e.team = other.team;
 	e.colormap = 1024 + (e.team - 1) * 17;
 	e.think = onslaught_controlpoint_icon_buildthink;
-	e.nextthink = time + 0.1;
-	e.count = e.max_health / 100; // how long it takes to build
+	e.nextthink = time + sys_ticrate;
+	e.count = (e.max_health - e.health) * sys_ticrate / cvar("g_onslaught_cp_buildtime"); // how long it takes to build
 	sound(e, CHAN_TRIGGER, "onslaught/controlpoint_build.wav", VOL_BASE, ATTN_NORM);
 	self.team = e.team;
 	self.colormap = e.colormap;
-	WaypointSprite_UpdateBuildFinished(self.sprite, time + (e.max_health - e.health) / (e.count / 0.05));
+	WaypointSprite_UpdateBuildFinished(self.sprite, time + (e.max_health - e.health) / (e.count / sys_ticrate));
 };
 
 void onslaught_controlpoint_reset()
