@@ -1,4 +1,4 @@
-//Camping rifle Primary mode: manually operated bolt*, Secondary: full automatic** --MikeeUSA--
+//Camping rifle Primary mode: manually operated bolt*, Secondary: full automatic**
 //* Manually operating the bolt means that all the power of the gas is used to propell the bullet. In this mode the bolt is prevented from moving backwards in response to the firing of the bullet.
 //** In fully automatic mode some of the gas is used to extract and reload the next cartrige, thus there is less power and range.
 
@@ -35,6 +35,8 @@ void W_Campingrifle_Reload()
 	ATTACK_FINISHED(self) = t;
 
 	weapon_thinkf(WFRAME_RELOAD, cvar("g_balance_campingrifle_reloadtime"), W_Campingrifle_ReloadedAndReady);
+
+	self.campingrifle_bulletcounter = -1;
 }
 
 void W_Campingrifle_CheckReloadAndReady()
