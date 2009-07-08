@@ -67,12 +67,27 @@ void saveCvarsMulti(entity me)
 	for(i = 0; i < n; ++i)
 		cvar_set(argv(i), s);
 }
-
 void makeMulti(entity e, string otherCvars)
 {
 	e.cvarNames_Multi = otherCvars;
 	e.saveCvars_Multi = e.saveCvars;
 	e.saveCvars = saveCvarsMulti;
+}
+
+.void(entity me) saveCvars_Callback;
+.entity saveCvars_Callback_ent;
+.void(entity me, entity cb) saveCvars_Callback_func;
+void saveCvarsCallback(entity me)
+{
+	me.saveCvars_Callback(me);
+	me.saveCvars_Callback_func(me.saveCvars_Callback_ent, me);
+}
+void makeCallback(entity e, entity cbent, void(entity, entity) cbfunc)
+{
+	e.saveCvars_Callback = e.saveCvars;
+	e.saveCvars = saveCvarsCallback;
+	e.saveCvars_Callback_ent = cbent;
+	e.saveCvars_Callback_func = cbfunc;
 }
 
 .void(entity) draw_setDependent;

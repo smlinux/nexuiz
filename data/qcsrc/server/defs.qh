@@ -39,7 +39,6 @@ float g_pickup_respawntimejitter_short;
 float g_pickup_respawntimejitter_medium;
 float g_pickup_respawntimejitter_long;
 float g_pickup_respawntimejitter_powerup;
-float g_maplist_allow_hidden;
 float g_jetpack;
 
 float sv_clones;

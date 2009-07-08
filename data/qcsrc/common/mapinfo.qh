@@ -16,6 +16,7 @@ float MAPINFO_FEATURE_WEAPONS       = 1; // not defined for minstagib-only maps
 
 float MAPINFO_FLAG_HIDDEN           = 1; // not in lsmaps/menu/vcall/etc., can just be changed to manually
 float MAPINFO_FLAG_FORBIDDEN        = 2; // don't even allow the map by a cvar setting that allows hidden maps
+float MAPINFO_FLAG_FRUSTRATING      = 4; // this map is near impossible to play, enable at your own risk
 
 float MapInfo_count;
 
@@ -41,6 +42,8 @@ float MapInfo_progress;
 float MapInfo_FilterGametype(float gametype, float features, float pFlagsRequired, float pFlagsForbidden, float pAbortOnGenerate); // 1 on success, 0 on temporary failure (call it again next frame then; use MapInfo_progress as progress indicator)
 float MapInfo_CurrentFeatures(); // retrieves currently required features from cvars
 float MapInfo_CurrentGametype(); // retrieves current gametype from cvars
+float MapInfo_ForbiddenFlags(); // retrieves current flags from cvars
+float MapInfo_RequiredFlags(); // retrieves current flags from cvars
 
 // load info about the i-th map into the MapInfo_Map_* globals
 float MapInfo_Get_ByID(float i); // 1 on success, 0 on failure

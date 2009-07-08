@@ -3,6 +3,7 @@ void saveAllCvars(entity root);
 void loadAllCvars(entity root);
 
 void makeMulti(entity me, string otherCvars);
+void makeCallback(entity me, entity cbent, void(entity, entity) cbfunc);
 
 void setDependent(entity e, string theCvarName, float theCvarMin, float theCvarMax);
 void setDependentAND(entity e, string theCvarName, float theCvarMin, float theCvarMax, string theCvar2Name, float theCvar2Min, float theCvar2Max);

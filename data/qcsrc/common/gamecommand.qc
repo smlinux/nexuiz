@@ -250,11 +250,7 @@ float GameCommand_Generic(string command)
 		else if(argv(1) == "cleanup")
 		{
 			MapInfo_Enumerate();
-			if(cvar("g_maplist_allow_hidden"))
-				i = MAPINFO_FLAG_FORBIDDEN;
-			else
-				i = MAPINFO_FLAG_HIDDEN | MAPINFO_FLAG_FORBIDDEN;
-			MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0, i, 0);
+			MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), MapInfo_RequiredFlags(), MapInfo_ForbiddenFlags(), 0);
 			n = tokenizebyseparator(cvar_string("g_maplist"), " ");
 			s2 = "";
 			for(i = 0; i < n; ++i)
