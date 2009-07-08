@@ -319,8 +319,8 @@ Making a race map is not hard: you need some special spawnpoints, and some check
 Spawnpoints
 -----------
 classname  info_player_race
-target     targetname of the controlpoint
-race_place for finish line control points, the place of the point
+target     targetname of the checkpoint
+race_place for finish line checkpoints, the place of the point, or -1 to make it qualifying-only, or unset to let all the other players spawn
 
 Checkpoints
 -----------
