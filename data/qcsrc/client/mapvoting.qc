@@ -66,6 +66,8 @@ void MapVote_DrawMapItem(vector pos, float isize, float tsize, string map, strin
 	pos_x = pos_x + text_size*0.5 - img_size_x*0.5;
 	pos_y = pos_y - img_size_y;
 
+	pos += sbar_border_thickness * '1 1 0';
+	img_size -= (sbar_border_thickness * 2) * '1 1 0';
 	if(pic == "")
 	{
 		drawfill(pos, img_size, '.5 .5 .5', .7, DRAWFLAG_NORMAL);
@@ -74,13 +76,18 @@ void MapVote_DrawMapItem(vector pos, float isize, float tsize, string map, strin
 	{
 		drawpic(pos, pic, img_size, '1 1 1', 1, DRAWFLAG_NORMAL);
 	}
+	
+	drawpic(pos + '1 0 0', strcat("gfx/hud/num_", ftos(id+1)), (img_size_y / 5) * '1 1 0', '1 1 1', 0.6, DRAWFLAG_NORMAL);
 
 	if(id == mv_ownvote || pic == "")
 	{
-		drawfill(pos,                                   '1 0 0' * img_size_x + '0  2 0', rgb, 1, DRAWFLAG_NORMAL);
-		drawfill(pos + '0 2 0',                         '0 1 0' * img_size_y + '2 -4 0', rgb, 1, DRAWFLAG_NORMAL);
-		drawfill(pos + '1 0 0' * img_size_x + '-2 2 0', '0 1 0' * img_size_y + '2 -4 0', rgb, 1, DRAWFLAG_NORMAL);
-		drawfill(pos + '0 1 0' * img_size_y + '0 -2 0', '1 0 0' * img_size_x + '0  2 0', rgb, 1, DRAWFLAG_NORMAL);
+		drawborderlines(sbar_border_thickness, pos, img_size, rgb, 1, DRAWFLAG_NORMAL);
+		drawpic(pos + '1 0 0', strcat("gfx/hud/num_", ftos(id+1)), (img_size_y / 5) * '1 1 0', rgb, 0.6, DRAWFLAG_NORMAL);
+	}
+	else
+	{
+		drawborderlines(sbar_border_thickness, pos, img_size, '0 0 0', 1, DRAWFLAG_NORMAL);
+		drawpic(pos + '1 0 0', strcat("gfx/hud/num_", ftos(id+1)), (img_size_y / 5) * '1 1 0', '1 1 1', 0.6, DRAWFLAG_NORMAL);
 	}
 }
 
