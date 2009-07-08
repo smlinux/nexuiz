@@ -868,7 +868,7 @@ void onslaught_controlpoint_updatesprite(entity e)
 		}
 		WaypointSprite_Ping(e.sprite);
 
-		if(e.goalentity) // don't mess up build bars!
+		if(e.iscaptured) // don't mess up build bars!
 		{
 			if(sh)
 			{
