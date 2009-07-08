@@ -3453,7 +3453,6 @@ time 15 25
 alpha 200 356 512
 gravity -0.5
 color 0x9E6A64 0x91302D
-origin 0 0 -20
 bounce 6
 sizeincrease 5
 originjitter 33 33 33
@@ -3516,7 +3515,6 @@ time 15 25
 alpha 200 356 512
 gravity -0.5
 color 0x64679E 0x2D4C91
-origin 0 0 -20
 bounce 6
 sizeincrease 5
 originjitter 33 33 33
