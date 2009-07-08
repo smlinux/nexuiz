@@ -14,6 +14,7 @@ void onslaught_link_checkupdate();
 .float lasthealth;
 .float lastteam;
 .float lastshielded;
+.float lastcaptured;
 
 .string model1, model2, model3;
 
@@ -169,45 +170,48 @@ void onslaught_updatelinks()
 	l = links;
 	while (l)
 	{
-		if (l.goalentity.team != l.enemy.team)
+		if (l.goalentity.islinked)
 		{
-			if (l.goalentity.islinked)
+			if (l.goalentity.team != l.enemy.team)
 			{
 				dprint(etos(l), " (link) is unshielding ", etos(l.enemy), " (point) because its team does not match ", etos(l.goalentity), " (point)\n");
 				l.enemy.isshielded = FALSE;
-				if(l.goalentity.classname == "onslaught_generator")
-				{
-					if(l.goalentity.team == COLOR_TEAM1)
-						l.enemy.isgenneighbor_red = TRUE;
-					else if(l.goalentity.team == COLOR_TEAM2)
-						l.enemy.isgenneighbor_blue = TRUE;
-				}
-				else
-				{
-					if(l.goalentity.team == COLOR_TEAM1)
-						l.enemy.iscpneighbor_red = TRUE;
-					else if(l.goalentity.team == COLOR_TEAM2)
-						l.enemy.iscpneighbor_blue = TRUE;
-				}
 			}
-			if (l.enemy.islinked)
+			if(l.goalentity.classname == "onslaught_generator")
+			{
+				if(l.goalentity.team == COLOR_TEAM1)
+					l.enemy.isgenneighbor_red = TRUE;
+				else if(l.goalentity.team == COLOR_TEAM2)
+					l.enemy.isgenneighbor_blue = TRUE;
+			}
+			else
+			{
+				if(l.goalentity.team == COLOR_TEAM1)
+					l.enemy.iscpneighbor_red = TRUE;
+				else if(l.goalentity.team == COLOR_TEAM2)
+					l.enemy.iscpneighbor_blue = TRUE;
+			}
+		}
+		if (l.enemy.islinked)
+		{
+			if (l.goalentity.team != l.enemy.team)
 			{
 				dprint(etos(l), " (link) is unshielding ", etos(l.goalentity), " (point) because its team does not match ", etos(l.enemy), " (point)\n");
 				l.goalentity.isshielded = FALSE;
-				if(l.enemy.classname == "onslaught_generator")
-				{
-					if(l.enemy.team == COLOR_TEAM1)
-						l.goalentity.isgenneighbor_red = TRUE;
-					else if(l.enemy.team == COLOR_TEAM2)
-						l.goalentity.isgenneighbor_blue = TRUE;
-				}
-				else
-				{
-					if(l.enemy.team == COLOR_TEAM1)
-						l.goalentity.iscpneighbor_red = TRUE;
-					else if(l.enemy.team == COLOR_TEAM2)
-						l.goalentity.iscpneighbor_blue = TRUE;
-				}
+			}
+			if(l.enemy.classname == "onslaught_generator")
+			{
+				if(l.enemy.team == COLOR_TEAM1)
+					l.goalentity.isgenneighbor_red = TRUE;
+				else if(l.enemy.team == COLOR_TEAM2)
+					l.goalentity.isgenneighbor_blue = TRUE;
+			}
+			else
+			{
+				if(l.enemy.team == COLOR_TEAM1)
+					l.goalentity.iscpneighbor_red = TRUE;
+				else if(l.enemy.team == COLOR_TEAM2)
+					l.goalentity.iscpneighbor_blue = TRUE;
 			}
 		}
 		l = l.chain;
@@ -843,10 +847,11 @@ void onslaught_controlpoint_updatesprite(entity e)
 	float sh;
 	sh = !(onslaught_controlpoint_can_be_linked(e, COLOR_TEAM1) || onslaught_controlpoint_can_be_linked(e, COLOR_TEAM2));
 
-	if(e.lastteam != e.team + 2 || e.lastshielded != sh)
+	if(e.lastteam != e.team + 2 || e.lastshielded != sh || e.iscaptured != e.lastcaptured)
 	{
 		e.lastteam = e.team + 2;
 		e.lastshielded = sh;
+		e.lastcaptured = e.iscaptured;
 		if(e.lastshielded)
 		{
 			if(e.team == COLOR_TEAM1 || e.team == COLOR_TEAM2)
@@ -1194,6 +1199,8 @@ void onslaught_controlpoint_icon_buildthink()
 		self.cp_origin = self.origin;
 		self.cp_bob_origin = '0 0 0.1';
 		self.cp_bob_spd = 0;
+
+		print("after build complete: ", etos(self), "'s owner ", etos(self.owner), " is ", ftos(self.owner.iscaptured), "\n");
 	}
 	self.alpha = self.health / self.max_health;
 	// colormod flash when shot
@@ -1392,6 +1399,9 @@ void onslaught_link_checkupdate()
 		cc = (COLOR_TEAM2 - 1) * 0x11;
 	else
 		cc = 0;
+	
+	//print(etos(self), " rp=", ftos(redpower), " bp=", ftos(bluepower), " ");
+	//print("cc=", ftos(cc), "\n");
 
 	if(cc != self.clientcolors)
 	{
