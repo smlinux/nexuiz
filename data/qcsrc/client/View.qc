@@ -322,7 +322,10 @@ void CSQC_UpdateView(float w, float h)
 	dprint_load();
 	WaypointSprite_Load();
 
-	myteam = GetPlayerColor(player_localentnum - 1);
+	if(spectatee_status)
+		myteam = GetPlayerColor(spectatee_status - 1);
+	else
+		myteam = GetPlayerColor(player_localentnum - 1);
 
 	ticrate = getstatf(STAT_MOVEVARS_TICRATE) * getstatf(STAT_MOVEVARS_TIMESCALE);
 

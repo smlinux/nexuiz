@@ -2235,7 +2235,7 @@ void Sbar_Draw (void)
 			o = Sbar_DrawNoteLine(o, s);
 		}
 	}
-	if(teamplay && !intermission)
+	if(teamplay && !intermission && !spectatee_status)
 	{
 		entity tm;
 		float ts_min, ts_max;
