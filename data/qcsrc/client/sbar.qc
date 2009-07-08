@@ -549,7 +549,7 @@ void Cmd_Sbar_SetFields(float argc)
 		have_secondary = 1;
 	if(ps_primary == ps_secondary)
 		have_secondary = 1;
-	missing = !have_primary + !have_secondary + !have_separator + !have_name;
+	missing = (!have_primary) + (!have_secondary) + (!have_separator) + (!have_name);
 
 	if(sbar_num_fields+missing < MAX_SBAR_FIELDS)
 	{

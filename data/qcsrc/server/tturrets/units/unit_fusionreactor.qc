@@ -6,8 +6,8 @@ float turret_fusionreactor_firecheck()
 {
     if (self.enemy == world) return 0;
 
-    if (!self.enemy.ammo_flags & TFL_AMMO_RECIVE) return 0;
-    if (!self.enemy.ammo_flags & TFL_AMMO_ENERGY) return 0;
+    if (!(self.enemy.ammo_flags & TFL_AMMO_RECIVE)) return 0;
+    if (!(self.enemy.ammo_flags & TFL_AMMO_ENERGY)) return 0;
 
     if (self.ammo < self.shot_dmg) return 0;
     if (self.enemy.ammo >= self.enemy.ammo_max) return 0;

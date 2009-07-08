@@ -502,7 +502,7 @@ void SpawnBall (void)
 void spawnfunc_nexball_basketball (void)
 {
 	self.classname = "nexball_basketball";
-	if(!balls & BALL_BASKET)
+	if not(balls & BALL_BASKET)
 	{
 		CVTOV(g_nexball_basketball_effects_default);
 		CVTOV(g_nexball_basketball_delay_hold);

@@ -122,7 +122,7 @@ void Teleport_Touch (void)
 
 	if (other.health < 1)
 		return;
-	if (!other.flags & FL_CLIENT)	// FIXME: Make missiles firable through the teleport too
+	if not(other.flags & FL_CLIENT)	// FIXME: Make missiles firable through the teleport too
 		return;
 
 	if(self.team)

@@ -725,11 +725,11 @@ void turret_think()
         // This one is doing something.. oddball. assume its handles what needs to be handled.
 
         // Predict?
-        if not((self.aim_flags & TFL_AIM_NO))
+        if not(self.aim_flags & TFL_AIM_NO)
             self.tur_aimpos = turret_stdproc_aim_generic();
 
         // Turn & pitch?
-        if (!self.track_flags & TFL_TRACK_NO)
+        if not(self.track_flags & TFL_TRACK_NO)
             turret_stdproc_track();
 
         turret_do_updates(self);
@@ -745,11 +745,11 @@ void turret_think()
             if(self.volly_counter != self.shot_volly)
             {
                 // Predict or whatnot
-                if not((self.aim_flags & TFL_AIM_NO))
+                if not(self.aim_flags & TFL_AIM_NO)
                     self.tur_aimpos = turret_stdproc_aim_generic();
 
                 // Turn & pitch
-                if (!self.track_flags & TFL_TRACK_NO)
+                if not(self.track_flags & TFL_TRACK_NO)
                     turret_stdproc_track();
 
                 turret_do_updates(self);
@@ -780,7 +780,7 @@ void turret_think()
         if (self.enemy == world)
         {
             // Turn & pitch
-            if (!self.track_flags & TFL_TRACK_NO)
+            if not(self.track_flags & TFL_TRACK_NO)
                 turret_stdproc_track();
 
             // do any per-turret stuff
@@ -794,11 +794,11 @@ void turret_think()
             self.lip = time + cvar("g_turrets_aimidle_delay"); // Keep track of the last time we had a target.
 
         // Predict?
-        if not((self.aim_flags & TFL_AIM_NO))
+        if not(self.aim_flags & TFL_AIM_NO)
             self.tur_aimpos = turret_stdproc_aim_generic();
 
         // Turn & pitch?
-        if (!self.track_flags & TFL_TRACK_NO)
+        if not(self.track_flags & TFL_TRACK_NO)
             turret_stdproc_track();
 
         turret_do_updates(self);
