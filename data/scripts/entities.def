@@ -839,6 +839,7 @@ target: target to activate when a teleporter targeting this is used
 angle: direction in which player will look when teleported, OR use
 angles: pitch and yaw when coming out of the teleporter (also specifies the direction the player will aim when coming out)
 cnt: weight for random selection, in case a teleporter points at multiple misc_teleporter_dest
+speed: maximum speed cap for the teleported player (if -1, teleported players will have no speed)
 */
 
 /*QUAKED onslaught_controlpoint (0 .5 .8) (-32 -32 0) (32 32 128) 
