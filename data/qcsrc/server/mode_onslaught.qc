@@ -849,9 +849,18 @@ void onslaught_controlpoint_updatesprite(entity e)
 
 	if(e.lastteam != e.team + 2 || e.lastshielded != sh || e.iscaptured != e.lastcaptured)
 	{
-		e.lastteam = e.team + 2;
-		e.lastshielded = sh;
-		e.lastcaptured = e.iscaptured;
+		if(e.iscaptured) // don't mess up build bars!
+		{
+			if(sh)
+			{
+				WaypointSprite_UpdateMaxHealth(e.sprite, 0);
+			}
+			else
+			{
+				WaypointSprite_UpdateMaxHealth(e.sprite, e.goalentity.max_health);
+				WaypointSprite_UpdateHealth(e.sprite, e.goalentity.health);
+			}
+		}
 		if(e.lastshielded)
 		{
 			if(e.team == COLOR_TEAM1 || e.team == COLOR_TEAM2)
@@ -868,18 +877,9 @@ void onslaught_controlpoint_updatesprite(entity e)
 		}
 		WaypointSprite_Ping(e.sprite);
 
-		if(e.iscaptured) // don't mess up build bars!
-		{
-			if(sh)
-			{
-				WaypointSprite_UpdateMaxHealth(e.sprite, 0);
-			}
-			else
-			{
-				WaypointSprite_UpdateMaxHealth(e.sprite, e.goalentity.max_health);
-				WaypointSprite_UpdateHealth(e.sprite, e.goalentity.health);
-			}
-		}
+		e.lastteam = e.team + 2;
+		e.lastshielded = sh;
+		e.lastcaptured = e.iscaptured;
 	}
 }
 
@@ -1199,8 +1199,6 @@ void onslaught_controlpoint_icon_buildthink()
 		self.cp_origin = self.origin;
 		self.cp_bob_origin = '0 0 0.1';
 		self.cp_bob_spd = 0;
-
-		print("after build complete: ", etos(self), "'s owner ", etos(self.owner), " is ", ftos(self.owner.iscaptured), "\n");
 	}
 	self.alpha = self.health / self.max_health;
 	// colormod flash when shot
@@ -1250,6 +1248,7 @@ void onslaught_controlpoint_touch()
 	self.team = e.team;
 	self.colormap = e.colormap;
 	WaypointSprite_UpdateBuildFinished(self.sprite, time + (e.max_health - e.health) / (e.count / sys_ticrate));
+	onslaught_updatelinks();
 };
 
 void onslaught_controlpoint_reset()
