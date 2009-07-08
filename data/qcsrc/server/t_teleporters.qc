@@ -159,7 +159,7 @@ void Teleport_Touch (void)
 	}
 
 	if(e.speed)
-		if(vlen(other.velocity > e.speed)
+		if(vlen(other.velocity) > e.speed)
 			other.velocity = normalize(other.velocity) * max(0, e.speed);
 
 	TeleportPlayer(self, other, e.origin + '0 0 1' * (1 - other.mins_z - 24), e.mangle, v_forward * vlen(other.velocity), '0 0 0', '0 0 0');

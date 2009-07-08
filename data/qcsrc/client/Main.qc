@@ -918,7 +918,7 @@ void Net_ReadRace()
 
 			race_checkpointtime = time;
 
-			if(race_checkpoint == 0)
+			if(race_checkpoint == 0 || race_checkpoint == 254)
 				race_laptime = time; // valid
 
 			break;

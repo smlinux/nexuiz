@@ -1220,10 +1220,10 @@ _receiveshadows: Allows per-entity control over shadow reception. Defaults to 1 
 _celshader: Sets the cel shader used for this geometry. Note: omit the "textures/" prefix.
 */
 
-/*QUAKED trigger_race_checkpoint (0 1 0) ? NOTOUCH STRICTTRIGGER CRUSH
+/*QUAKED trigger_race_checkpoint (0 1 0) ? NOTOUCH STRICTTRIGGER CRUSH FINISH
 A checkpoint, for the race game mode. Be sure to make them quite long, so they actually catch a player reliably!
 -------- KEYS --------
-cnt: Number of the checkpoint. 0 for finish line, and at least two other checkpoints have to exist. They MUST be touched in sequential order!
+cnt: Number of the checkpoint. 0 for start/finish line, and at least two other checkpoints have to exist. They MUST be touched in sequential order!
 message: Death message, when touching checkpoints in the wrong order.
 message2: Death message when someone gets pushed into this (default: "was thrown into a world of hurt by"). The # character is replaced by the attacker name if present (and it instead does not get appended to the end)
 targetname: Name of the checkpoint. info_player_race can target this to assign a spawn to a checkpoint. Also used for triggering a checkpoint by an event.
@@ -1232,6 +1232,7 @@ target: when the checkpoint is passed, these entities are triggered. Useful for 
 NOTOUCH: the checkpoint will not become active when touched, it HAS to be targeted
 STRICTTRIGGER: only trigger the targets when the checkpoint actually was reached in a valid way (that is, not when going back)
 CRUSH: the checkpoint kills when used at the wrong time
+FINISH: when set on the last checkpoint (i.e. the one with highest cnt), it is marked as finish line and the CP with cnt=0 is the start line
 */
 
 /*QUAKED info_player_race (1 0.5 0) (-16 -16 -24) (16 16 45) 

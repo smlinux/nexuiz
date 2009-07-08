@@ -1229,7 +1229,11 @@ string MakeRaceString(float cp, float mytime, float histime, float lapdelta, str
 	else
 		col = "^7";
 
-	if(cp)
+	if(cp == 254)
+		cpname = "Start line";
+	else if(cp == 255)
+		cpname = "Finish line";
+	else if(cp)
 		cpname = strcat("Intermediate ", ftos(cp));
 	else
 		cpname = "Finish line";
@@ -1469,16 +1473,19 @@ void Sbar_Score(float margin)
 			forcetime = "";
 			if(a > 0) // just hit a checkpoint?
 			{
-				if(race_time && race_previousbesttime)
-					s = MakeRaceString(race_checkpoint, race_time / 10 - race_previousbesttime / 10, 0, 0, race_previousbestname);
-				else
-					s = MakeRaceString(race_checkpoint, 0, -1, 0, race_previousbestname);
-				if(race_time)
-					forcetime = mmsss(race_time);
+				if(race_checkpoint != 254)
+				{
+					if(race_time && race_previousbesttime)
+						s = MakeRaceString(race_checkpoint, race_time / 10 - race_previousbesttime / 10, 0, 0, race_previousbestname);
+					else
+						s = MakeRaceString(race_checkpoint, 0, -1, 0, race_previousbestname);
+					if(race_time)
+						forcetime = mmsss(race_time);
+				}
 			}
 			else
 			{
-				if(race_laptime && race_nextbesttime)
+				if(race_laptime && race_nextbesttime && race_nextcheckpoint != 254)
 				{
 					a = bound(0, 2 - ((race_laptime + race_nextbesttime/10) - time), 1);
 					if(a > 0) // next one?
@@ -1502,7 +1509,7 @@ void Sbar_Score(float margin)
 			else
 				a = 1;
 
-			if(race_laptime)
+			if(race_laptime && race_checkpoint != 255)
 			{
 				s = mmsss(10*(time - race_laptime));
 				drawstring(m - '16 0 0' * stringwidth(s, FALSE), s, '32 32 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);

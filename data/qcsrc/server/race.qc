@@ -12,6 +12,7 @@ float race_checkpoint_lastlaps[MAX_CHECKPOINTS];
 entity race_checkpoint_lastplayers[MAX_CHECKPOINTS];
 
 float race_highest_checkpoint;
+float race_timed_checkpoint;
 
 float race_NextCheckpoint(float f)
 {
@@ -29,6 +30,22 @@ float race_PreviousCheckpoint(float f)
 		return race_highest_checkpoint;
 	else
 		return f - 1;
+}
+
+// encode as:
+//   0 = common start/finish
+// 254 = start
+// 255 = finish
+float race_CheckpointNetworkID(float f)
+{
+	if(race_timed_checkpoint)
+	{
+		if(f == 0)
+			return 254; // start
+		else if(f == race_timed_checkpoint)
+			return 255; // finish
+	}
+	return f;
 }
 
 void race_SendNextCheckpoint(entity e, float spec)
@@ -62,7 +79,7 @@ void race_SendNextCheckpoint(entity e, float spec)
 		}
 		else
 			WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_NEXT_QUALIFYING);
-		WriteByte(MSG_ONE, cp); // checkpoint the player will be at next
+		WriteByte(MSG_ONE, race_CheckpointNetworkID(cp)); // checkpoint the player will be at next
 		WriteShort(MSG_ONE, recordtime);
 		WriteString(MSG_ONE, recordholder);
 	});
@@ -84,7 +101,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 	// adding just 0.4 so it rounds down in the .5 case (matching the timer display)
 
 	if(tvalid)
-	if(cp == 0) // finish line
+	if(cp == race_timed_checkpoint) // finish line
 	if not(e.race_completed)
 	{
 		float s;
@@ -139,7 +156,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 				if(race_checkpoint_recordholders[cp])
 					strunzone(race_checkpoint_recordholders[cp]);
 				race_checkpoint_recordholders[cp] = strzone(e.netname);
-				if(cp == 0)
+				if(cp == race_timed_checkpoint)
 				{
 					float grecordtime;
 					string grecordholder;
@@ -196,7 +213,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 				WriteByte(MSG_ONE, SVC_TEMPENTITY);
 				WriteByte(MSG_ONE, TE_CSQC_RACE);
 				WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT_QUALIFYING);
-				WriteByte(MSG_ONE, cp); // checkpoint the player now is at
+				WriteByte(MSG_ONE, race_CheckpointNetworkID(cp)); // checkpoint the player now is at
 				WriteShort(MSG_ONE, t); // time to that intermediate
 				WriteShort(MSG_ONE, recordtime); // previously best time
 				WriteString(MSG_ONE, recordholder); // record holder
@@ -222,7 +239,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 			WriteByte(MSG_ONE, SVC_TEMPENTITY);
 			WriteByte(MSG_ONE, TE_CSQC_RACE);
 			WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT_RACE);
-			WriteByte(MSG_ONE, cp); // checkpoint the player now is at
+			WriteByte(MSG_ONE, race_CheckpointNetworkID(cp)); // checkpoint the player now is at
 			if(e == oth)
 			{
 				WriteShort(MSG_ONE, 0);
@@ -246,7 +263,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 			WriteByte(MSG_ONE, SVC_TEMPENTITY);
 			WriteByte(MSG_ONE, TE_CSQC_RACE);
 			WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT_RACE_BY_OPPONENT);
-			WriteByte(MSG_ONE, cp); // checkpoint the player now is at
+			WriteByte(MSG_ONE, race_CheckpointNetworkID(cp)); // checkpoint the player now is at
 			if(e == oth)
 			{
 				WriteShort(MSG_ONE, 0);
@@ -353,7 +370,7 @@ void checkpoint_passed()
 
 		race_SendTime(other, self.race_checkpoint, time - other.race_laptime, !!other.race_laptime);
 
-		if(!self.race_checkpoint) // finish line
+		if(!self.race_checkpoint) // start line
 			other.race_laptime = time;
 
 		if(g_race_qualifying)
@@ -398,7 +415,7 @@ float race_waypointsprite_visible_for_player(entity e)
 float have_verified;
 void trigger_race_checkpoint_verify()
 {
-	entity oldself;
+	entity oldself, cp;
 	float i, p;
 	float qual;
 
@@ -443,6 +460,13 @@ void trigger_race_checkpoint_verify()
 
 	g_race_qualifying = qual;
 
+	if(race_timed_checkpoint)
+		for(cp = world; (cp = find(cp, classname, "trigger_race_checkpoint")); )
+			if(cp.race_checkpoint == 0)
+				WaypointSprite_UpdateSprites(cp.sprite, "race-start", "", "");
+			else if(cp.race_checkpoint == race_timed_checkpoint)
+				WaypointSprite_UpdateSprites(cp.sprite, "race-finish", "", "");
+
 	remove(self);
 	self = oldself;
 }
@@ -475,16 +499,19 @@ void spawnfunc_trigger_race_checkpoint()
 	self.race_checkpoint = self.cnt;
 
 	if(self.race_checkpoint > race_highest_checkpoint)
+	{
 		race_highest_checkpoint = self.race_checkpoint;
+		if(self.spawnflags & 8)
+			race_timed_checkpoint = self.race_checkpoint;
+		else
+			race_timed_checkpoint = 0;
+	}
 
 	if(self.race_checkpoint)
-	{
 		WaypointSprite_SpawnFixed("race-checkpoint", o, self, sprite);
-	}
 	else
-	{
 		WaypointSprite_SpawnFixed("race-finish", o, self, sprite);
-	}
+
 	self.sprite.waypointsprite_visible_for_player = race_waypointsprite_visible_for_player;
 
 	InitializeEntity(self, trigger_race_checkpoint_verify, INITPRIO_FINDTARGET);

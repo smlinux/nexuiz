@@ -168,6 +168,7 @@ sprite ons-cp-dfnd-red    "Control point" ff0000 000000 0.5 ff0000 ffffff 0.5
 sprite ons-cp-dfnd-blue   "Control point" 0050ff 000000 0.5 0050ff ffffff 0.5
 sprite race-checkpoint    "Checkpoint"    ff8000 000000 0.0
 sprite race-finish        "Finish"        ff8000 000000 0.0
+sprite race-start         "Start"         ff8000 000000 0.0
 sprite nb-ball            "Ball"          e8d8a0 000000 0.0
 
 sprite wpn-laser          "Laser"         ff8080 000000 0.0 # bright red
