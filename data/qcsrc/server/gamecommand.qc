@@ -919,6 +919,14 @@ void GameCommand(string command)
 			print("can walk\n");
 		else
 			print("cannot walk\n");
+		return;
+	}
+
+	if(argv(0) == "onslaught_updatelinks")
+	{
+		onslaught_updatelinks();
+		print("ONS links updated\n");
+		return;
 	}
 
 	if(argv(0) == "bot_cmd")
