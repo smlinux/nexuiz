@@ -894,7 +894,7 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float pl_num
  * Makes a table for a team (for all playing players in DM) and fills it
  */
 
-vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, float teamplay, vector rgb, vector bg_size)
+vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, vector rgb, vector bg_size)
 {
 	float body_table_height, i, pos_x_save;
 	vector tmp, column_dim;
@@ -1023,7 +1023,7 @@ void Sbar_DrawScoreboard()
 {
 	vector rgb, pos, tmp, sbar_save;
 	entity pl, tm;
-	float specs, i;
+	float specs;
 	float center_x;
 
 	if(time > lastpingstime + 10)
@@ -1077,7 +1077,7 @@ void Sbar_DrawScoreboard()
 			if(ts_primary != ts_secondary)
 				Sbar_DrawXNum(sbar + pos - '4.5 0 0' * sbar_fontsize_y + '0 2.5 0' * sbar_fontsize_y, tm.(teamscores[ts_secondary]), 4, sbar_fontsize_y * 1, rgb, 0, 1, 1, DRAWFLAG_NORMAL);
 
-			pos = Sbar_Scoreboard_MakeTable(pos, tm, teamplay, rgb, bg_size);
+			pos = Sbar_Scoreboard_MakeTable(pos, tm, rgb, bg_size);
 		}
 	}
 	else
@@ -1088,7 +1088,7 @@ void Sbar_DrawScoreboard()
 
 		tm = teams.sort_next;
 		
-		pos = Sbar_Scoreboard_MakeTable(pos, tm, teamplay, rgb, bg_size);
+		pos = Sbar_Scoreboard_MakeTable(pos, tm, rgb, bg_size);
 	}
 
 	tmp = pos + '0 1.5 0' * sbar_fontsize_y;

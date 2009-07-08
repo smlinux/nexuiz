@@ -365,6 +365,15 @@ void FireImoBeam (vector start,vector end,vector smin,vector smax,
     trace_endpos = endpoint;
 }
 
+void turrets_precache_debug_models()
+{
+    precache_model ("models/turrets/c512.md3");
+    precache_model ("models/pathlib/goodsquare.md3");
+    precache_model ("models/pathlib/badsquare.md3");
+    precache_model ("models/pathlib/square.md3");
+    precache_model ("models/pathlib/edge.md3");
+}
+
 void turrets_precash()
 {
     precache_model ("models/turrets/base-gib1.md3");
@@ -395,12 +404,5 @@ void turrets_precash()
     //precache_model ("models/turrets/plasma.md3");
     //precache_model ("models/turrets/tesla_head.md3");
     //precache_model ("models/turrets/tesla_base.md3");
-
-#if 0
-    precache_model ("models/turrets/c512.md3");
-    precache_model ("models/pathlib/goodsquare.md3");
-    precache_model ("models/pathlib/badsquare.md3");
-    precache_model ("models/pathlib/square.md3");
-    precache_model ("models/pathlib/edge.md3");
-#endif
+	//turrets_precache_debug_models();
 }

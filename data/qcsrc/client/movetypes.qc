@@ -359,7 +359,7 @@ void _Movetype_Physics_Frame(float movedt)
 
 void Movetype_Physics_NoMatchServer() // optimized
 {
-	float n, i, dt, movedt;
+	float movedt;
 
 	movedt = time - self.move_time;
 	self.move_time = time;
