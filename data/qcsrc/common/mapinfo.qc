@@ -493,6 +493,10 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 	string s, t;
 	float fh, fh2;
 	float r, f, n, i;
+	string allow, deny;
+
+	allow = cvar_string("g_mapinfo_settemp_allow");
+	deny = cvar_string("g_mapinfo_settemp_deny");
 
 	if(strstrofs(pFilename, "/", 0) >= 0)
 	{
@@ -680,6 +684,12 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
 					else if not (cvar_value_issafe(s))
 						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
+					else if(substring(t, 0, 10) == "g_mapinfo_")
+						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
+					else if(allow != "" && strstrofs(strcat(" ", allow, " "), strcat(" ", t, " "), 0) < 0)
+						print("Map ", pFilename, " contains a denied setting, ignored\n");
+					else if(deny != "" && strstrofs(strcat(" ", deny, " "), strcat(" ", t, " "), 0) >= 0)
+						print("Map ", pFilename, " contains a denied setting, ignored\n");
 					else
 					{
 						dprint("Applying temporary setting ", t, " := ", s, "\n");
