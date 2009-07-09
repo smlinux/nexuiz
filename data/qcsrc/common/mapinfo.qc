@@ -29,6 +29,37 @@ string cdr(string s)
 		return string_null;
 	return substring(s, o + 1, strlen(s) - (o + 1));
 }
+float matchacl(string acl, string str)
+{
+	string t, s;
+	float r, d;
+	r = 0;
+	while(acl)
+	{
+		t = car(acl); acl = cdr(acl);
+		d = 1;
+		if(substring(t, 0, 1) == "-")
+		{
+			d = -1;
+			t = substring(t, 1, strlen(t) - 1);
+		}
+		else if(substring(t, 0, 1) == "+")
+			t = substring(t, 1, strlen(t) - 1);
+		if(substring(t, -1, 1) == "*")
+		{
+			t = substring(t, 0, strlen(t) - 1);
+			s = substring(s, 0, strlen(t));
+		}
+		else
+			s = str;
+
+		if(s == t)
+		{
+			r = d;
+		}
+	}
+	return r;
+}
 
 float _MapInfo_Cache_Active;
 float _MapInfo_Cache_DB_NameToIndex;
@@ -493,10 +524,9 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 	string s, t;
 	float fh, fh2;
 	float r, f, n, i;
-	string allow, deny;
+	string acl;
 
-	allow = cvar_string("g_mapinfo_settemp_allow");
-	deny = cvar_string("g_mapinfo_settemp_deny");
+	acl = cvar_string("g_mapinfo_settemp_acl");
 
 	if(strstrofs(pFilename, "/", 0) >= 0)
 	{
@@ -686,9 +716,7 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
 					else if(substring(t, 0, 10) == "g_mapinfo_")
 						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
-					else if(allow != "" && strstrofs(strcat(" ", allow, " "), strcat(" ", t, " "), 0) < 0)
-						print("Map ", pFilename, " contains a denied setting, ignored\n");
-					else if(deny != "" && strstrofs(strcat(" ", deny, " "), strcat(" ", t, " "), 0) >= 0)
+					else if(matchacl(acl, t) <= 0)
 						print("Map ", pFilename, " contains a denied setting, ignored\n");
 					else
 					{
