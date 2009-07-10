@@ -67,8 +67,7 @@ void fillNexuizServerCreateTab(entity me)
 	me.TR(me);
 	me.TR(me);
 		me.mapListBox = makeNexuizMapList();
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Map list:"));
-		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_maplist_allow_frustrating", "Show frustrating maps"));
+		me.TD(me, 1, 3, e = makeNexuizTextLabel(0, "Map list:"));
 			makeCallback(e, me.mapListBox, me.mapListBox.refilterCallback);
 	me.TR(me);
 		me.TD(me, me.rows - 7, 3, me.mapListBox);

@@ -1,7 +1,0 @@
-title CyberParcour01
-description A really frustrating race map
-author sev
-type race 5 20 15
-frustrating
-settemp_for_type race g_start_weapon_shotgun 0
-settemp_for_type race g_start_weapon_laser 0
