@@ -524,6 +524,7 @@ PutObserverInServer
 putting a client as observer in the server
 =============
 */
+void FixPlayermodel();
 void PutObserverInServer (void)
 {
 	entity	spot;
@@ -613,6 +614,8 @@ void PutObserverInServer (void)
 	self.prevorigin = self.origin;
 	self.items = 0;
 	self.weapons = 0;
+	self.model = "";
+	FixPlayermodel();
 	self.model = "";
 	self.modelindex = 0;
 	self.weapon = 0;
