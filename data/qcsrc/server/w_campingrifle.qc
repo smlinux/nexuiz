@@ -29,6 +29,12 @@ void W_Campingrifle_Reload()
 
 	if (self.campingrifle_bulletcounter >= cvar("g_balance_campingrifle_magazinecapacity"))
 		return;
+
+	if(self.ammo_nails < min(cvar("g_balance_campingrifle_primary_ammo"), cvar("g_balance_campingrifle_secondary_ammo")))
+	{
+		self.campingrifle_bulletcounter = -1; // reload later
+		return;
+	}
 	
 	if (self.weaponentity)
 	{
