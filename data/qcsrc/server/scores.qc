@@ -92,10 +92,18 @@ float TeamScore_AddToTeam(float t, float scorefield, float score)
 
 	if(!scores_initialized) return 0; // FIXME remove this when everything uses this system
 	if(t <= 0 || t >= 16)
+	{
+		if(gameover)
+			return 0;
 		error("Adding score to invalid team!");
+	}
 	s = teamscorekeepers[t - 1];
 	if(!s)
+	{
+		if(gameover)
+			return 0;
 		error("Adding score to unknown team!");
+	}
 	if(score)
 		if(teamscores_label[scorefield] != "")
 			s.SendFlags |= pow(2, scorefield);
@@ -299,7 +307,11 @@ float PlayerScore_Add(entity player, float scorefield, float score)
 	if(!scores_initialized) return 0; // FIXME remove this when everything uses this system
 	s = player.scorekeeper;
 	if(!s)
+	{
+		if(gameover)
+			return 0;
 		error("Adding score to unknown player!");
+	}
 	if(score)
 		if(scores_label[scorefield] != "")
 			s.SendFlags |= pow(2, scorefield);
@@ -688,7 +700,11 @@ float TeamScore_GetCompareValue(float t)
 	entity sk;
 
 	if(t <= 0 || t >= 16)
+	{
+		if(gameover)
+			return 0;
 		error("Reading score of invalid team!");
+	}
 
 	sk = teamscorekeepers[t - 1];
 	if not(sk)
