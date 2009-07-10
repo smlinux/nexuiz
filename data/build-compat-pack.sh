@@ -61,6 +61,14 @@ COMPAT_FILES="
 	gfx/hud/num_minus.tga
 	gfx/hud/num_plus_stroke.tga
 	gfx/hud/num_plus.tga
+	gfx/hud/rifle_ring_1.tga
+	gfx/hud/rifle_ring_2.tga
+	gfx/hud/rifle_ring_3.tga
+	gfx/hud/rifle_ring_4.tga
+	gfx/hud/rifle_ring_5.tga
+	gfx/hud/rifle_ring_6.tga
+	gfx/hud/rifle_ring_7.tga
+	gfx/hud/rifle_ring_8.tga
 	gfx/hud/sb_accuracy.tga
 	gfx/hud/sb_ammobg.tga
 	gfx/hud/sb_armor.tga
@@ -246,6 +254,7 @@ COMPAT_FILES="
 	models/weapons/v_tuba.md3
 	particles/particlefont.tga
 	scripts/onslaught.shader
+	scripts/tuba.shader
 	sound/announcer/male/amazing.ogg
 	sound/announcer/male/awesome.ogg
 	sound/ctf/blue_capture.wav
@@ -326,9 +335,6 @@ COMPAT_FILES="
 	sound/weapons/tuba_note9.ogg
 	sound/weapons/unavailable.wav
 	sound/weapons/weaponpickup.ogg
-	textures/nexball/ball_gloss.tga
-	textures/nexball/ball_norm.tga
-	textures/nexball/ball.tga
 	textures/bloodyskull_alien_glow.tga
 	textures/bloodyskull_alien.tga
 	textures/bloodyskull.jpg
@@ -350,6 +356,9 @@ COMPAT_FILES="
 	textures/meat_robot_norm.tga
 	textures/meat_robot.tga
 	textures/meat.tga
+	textures/nexball/ball_gloss.tga
+	textures/nexball/ball_norm.tga
+	textures/nexball/ball.tga
 	textures/ons_boom1.tga
 	textures/ons_gengib.tga
 	textures/ons_icon.tga
@@ -363,7 +372,6 @@ COMPAT_FILES="
 	textures/tuba_gloss.tga
 	textures/tuba_glow.tga
 	textures/tuba.tga
-	scripts/tuba.shader
 "
 
 rm -rf pack
