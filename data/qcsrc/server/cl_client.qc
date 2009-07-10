@@ -796,7 +796,7 @@ void PutClientInServer (void)
 		}
 
 		RemoveGrapplingHook(self); // Wazat's Grappling Hook
-		self.campingrifle_bulletcounter = 0;
+		self.campingrifle_bulletcounter = cvar("g_balance_campingrifle_magazinecapacity");
 
 		self.classname = "player";
 		self.wasplayer = TRUE;

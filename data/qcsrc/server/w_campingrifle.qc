@@ -7,7 +7,7 @@
 void W_Campingrifle_ReloadedAndReady()
 {
 	float t;
-	self.campingrifle_bulletcounter = 0;
+	self.campingrifle_bulletcounter = cvar("g_balance_campingrifle_magazinecapacity");
 	t = ATTACK_FINISHED(self) - cvar("g_balance_campingrifle_reloadtime") - 1;
 	ATTACK_FINISHED(self) = t;
 	w_ready();
@@ -17,7 +17,7 @@ void W_Campingrifle_Reload()
 {
 	float t;
 
-	if (self.campingrifle_bulletcounter == 0)
+	if (self.campingrifle_bulletcounter >= cvar("g_balance_campingrifle_magazinecapacity"))
 		return;
 	
 	if (self.weaponentity)
@@ -42,7 +42,7 @@ void W_Campingrifle_Reload()
 void W_Campingrifle_CheckReloadAndReady()
 {
 	w_ready();
-	if (self.campingrifle_bulletcounter >= cvar("g_balance_campingrifle_magazinecapacity"))
+	if (self.campingrifle_bulletcounter <= 0)
 		W_Campingrifle_Reload();
 	else
 		w_ready();
@@ -71,7 +71,7 @@ void W_CampingRifle_FireBullet(float pSpread, float pDamage, float pHeadshotAdde
 	if (cvar("g_casings") >= 2)
 		SpawnCasing (((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 70) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 3, self);
 	
-	self.campingrifle_bulletcounter = self.campingrifle_bulletcounter + 1;
+	self.campingrifle_bulletcounter = self.campingrifle_bulletcounter - 1;
 }
 
 void W_Campingrifle_Attack()
@@ -117,7 +117,7 @@ float w_campingrifle(float req)
 	}
 	else if (req == WR_THINK)
 	{
-		if(self.campingrifle_bulletcounter < 0)
+		if(self.campingrifle_bulletcounter < 0) // forced reload (e.g. because interrupted)
 		{
 			if(self.switchweapon == self.weapon)
 			if(self.weaponentity.state == WS_READY)
@@ -151,9 +151,12 @@ float w_campingrifle(float req)
 	else if (req == WR_SETUP)
 	{
 		weapon_setup(WEP_CAMPINGRIFLE);
+
 		if(cvar("g_balance_campingrifle_auto_reload_after_changing_weapons"))
-		if(self.campingrifle_bulletcounter != 0)
-			self.campingrifle_bulletcounter = -1;
+		{
+			if(self.campingrifle_bulletcounter < cvar("g_balance_campingrifle_magazinecapacity"))
+				self.campingrifle_bulletcounter = -1;
+		}
 	}
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_nails >= cvar("g_balance_campingrifle_primary_ammo");
