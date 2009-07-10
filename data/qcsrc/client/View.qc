@@ -563,6 +563,7 @@ void CSQC_UpdateView(float w, float h)
         if(!scoreboard_active && !ons_showmap && !camera_active) {
             // TrueAim check
             float shottype;
+			float bullets, ring_scale;
 
             if(cvar("crosshair_hittest"))
                 shottype = TrueAimCheck();
@@ -613,9 +614,20 @@ void CSQC_UpdateView(float w, float h)
                 wcross_size = drawgetimagesize(wcross_name);
                 wcross_size_x *= wcross_sizefloat;
                 wcross_size_y *= wcross_sizefloat;
-
+				
+				// ring around crosshair representing bullets left in camping rifle clip
+				if (activeweapon == WEP_CAMPINGRIFLE)
+				{
+					ring_scale = cvar("crosshair_campingrifle_ring_size");
+					bullets = bound(0, getstati(STAT_BULLETS_LOADED), 8);
+				}
+				else
+					bullets = 0;
+				
                 if(shottype == SHOTTYPE_HITENEMY || shottype == SHOTTYPE_HITWORLD)
                 {
+					if (bullets)
+						drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x * ring_scale) + '0 0.5 0' * (vid_conheight - wcross_size_y * ring_scale), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
                     drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x) + '0 0.5 0' * (vid_conheight - wcross_size_y), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
                 }
                 else
@@ -623,7 +635,11 @@ void CSQC_UpdateView(float w, float h)
                     wcross_alpha *= 0.04 * 0.75;
                     for(i = -2; i <= 2; ++i)
                         for(j = -2; j <= 2; ++j)
+						{
+							if (bullets)
+								drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x * ring_scale + i) + '0 0.5 0' * (vid_conheight - wcross_size_y * ring_scale + j), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
                             drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x + i) + '0 0.5 0' * (vid_conheight - wcross_size_y + j), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
+						}
                 }
             }
         }

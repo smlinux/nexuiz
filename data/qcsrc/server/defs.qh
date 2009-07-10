@@ -605,3 +605,5 @@ float radar_showennemies;
 float client_cefc_accumulator;
 float client_cefc_accumulatortime;
 #endif
+
+.float campingrifle_bulletcounter;

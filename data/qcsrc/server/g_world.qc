@@ -598,6 +598,7 @@ void spawnfunc_worldspawn (void)
  	addstat(STAT_DAMAGE_FIRED, AS_INT, maxdamage_fired);
 	addstat(STAT_SHOTORG, AS_INT, stat_shotorg);
 	addstat(STAT_LEADLIMIT, AS_FLOAT, stat_leadlimit);
+	addstat(STAT_BULLETS_LOADED, AS_INT, campingrifle_bulletcounter);
 
 	next_pingtime = time + 5;
 	InitializeEntity(self, cvar_changes_init, INITPRIO_CVARS);

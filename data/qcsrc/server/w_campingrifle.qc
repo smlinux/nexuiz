@@ -2,8 +2,6 @@
 //* Manually operating the bolt means that all the power of the gas is used to propell the bullet. In this mode the bolt is prevented from moving backwards in response to the firing of the bullet.
 //** In fully automatic mode some of the gas is used to extract and reload the next cartrige, thus there is less power and range.
 
-.float campingrifle_bulletcounter;
-
 void W_Campingrifle_ReloadedAndReady()
 {
 	float t;
