@@ -2,10 +2,22 @@
 //* Manually operating the bolt means that all the power of the gas is used to propell the bullet. In this mode the bolt is prevented from moving backwards in response to the firing of the bullet.
 //** In fully automatic mode some of the gas is used to extract and reload the next cartrige, thus there is less power and range.
 
+float W_CampingRifle_CheckMaxBullets()
+{
+	float maxbulls;
+	maxbulls = cvar("g_balance_campingrifle_magazinecapacity");
+	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
+		maxbulls = min(maxbulls, floor(self.ammo_nails / min(cvar("g_balance_campingrifle_primary_ammo"), cvar("g_balance_campingrifle_secondary_ammo"))));
+	if(self.campingrifle_bulletcounter > maxbulls)
+		self.campingrifle_bulletcounter = maxbulls;
+	return (self.campingrifle_bulletcounter == maxbulls);
+}
+
 void W_Campingrifle_ReloadedAndReady()
 {
 	float t;
 	self.campingrifle_bulletcounter = cvar("g_balance_campingrifle_magazinecapacity");
+	W_CampingRifle_CheckMaxBullets();
 	t = ATTACK_FINISHED(self) - cvar("g_balance_campingrifle_reloadtime") - 1;
 	ATTACK_FINISHED(self) = t;
 	w_ready();
@@ -90,6 +102,7 @@ void spawnfunc_weapon_campingrifle (void)
 .float bot_secondary_campingriflemooth;
 float w_campingrifle(float req)
 {
+	float full;
 	if (req == WR_AIM)
 	{
 		self.BUTTON_ATCK=FALSE;
@@ -150,11 +163,10 @@ float w_campingrifle(float req)
 	{
 		weapon_setup(WEP_CAMPINGRIFLE);
 
+		full = W_CampingRifle_CheckMaxBullets();
 		if(cvar("g_balance_campingrifle_auto_reload_after_changing_weapons"))
-		{
-			if(self.campingrifle_bulletcounter < cvar("g_balance_campingrifle_magazinecapacity"))
+			if(!full)
 				self.campingrifle_bulletcounter = -1;
-		}
 	}
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_nails >= cvar("g_balance_campingrifle_primary_ammo");
