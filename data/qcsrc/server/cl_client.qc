@@ -2837,23 +2837,6 @@ void PlayerPostThink (void)
 
 		//if (TetrisPostFrame()) return;
 
-		// restart countdown
-		if (!cvar("sv_ready_restart_after_countdown"))
-		{
-			if(time < game_starttime)
-			{
-				self.movetype = MOVETYPE_NONE;		
-				self.velocity = '0 0 0';
-				self.avelocity = '0 0 0';
-				self.movement = '0 0 0';
-			}
-			else
-			{
-				//allow the player to move again if sv_ready_restart_after_countdown is not used and countdown is over
-				if(self.movetype == MOVETYPE_NONE)
-					self.movetype = MOVETYPE_WALK;
-			}
-		}
 		GetPressedKeys();
 	} else if (self.classname == "observer") {
 		//do nothing

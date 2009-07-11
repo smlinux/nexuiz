@@ -471,6 +471,7 @@ void SV_PlayerPhysics()
 	local float wishspeed, f, maxspd_mod, spd, maxairspd, airaccel, swampspd_mod, shtest_score, buttons;
 	string temps;
 	float buttons_prev;
+	float not_allowed_to_move;
 
     if(self.PlayerPhysplug)
         if(self.PlayerPhysplug())
@@ -527,23 +528,27 @@ void SV_PlayerPhysics()
 	self.items &~= IT_USING_JETPACK;
 
 	if(self.race_penalty)
-	{
 		if(time > self.race_penalty)
-		{
-			if(self.disableclientprediction == 2)
-			{
-				self.movetype = MOVETYPE_WALK;
-				self.disableclientprediction = 0;
-			}
 			self.race_penalty = 0;
-		}
-	}
 
+	not_allowed_to_move = 0;
 	if(self.race_penalty)
+		not_allowed_to_move = 1;
+	if(!cvar("sv_ready_restart_after_countdown"))
+	if(time < game_starttime)
+		not_allowed_to_move = 1;
+
+	if(not_allowed_to_move)
 	{
 		self.velocity = '0 0 0';
 		self.movetype = MOVETYPE_NONE;
 		self.disableclientprediction = 2;
+	}
+	else if(self.disableclientprediction == 2)
+	{
+		if(self.movetype == MOVETYPE_NONE)
+			self.movetype = MOVETYPE_WALK;
+		self.disableclientprediction = 0;
 	}
 
 	if (self.movetype == MOVETYPE_NONE)
