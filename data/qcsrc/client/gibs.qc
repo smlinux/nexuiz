@@ -124,6 +124,7 @@ void Ent_GibSplash()
 	vector org, vel;
 	string specstr;
 	float issilent;
+	string gentle_prefix;
 
 	float c, gibfactor, randomvalue;
 
@@ -135,7 +136,13 @@ void Ent_GibSplash()
 	vel = decompressShortVector(ReadShort());
 
 	if(cvar("cl_gentle"))
+	{
 		type |= 0x80; // set gentle bit
+		if(cvar("cl_gentle") > 1)
+			gentle_prefix = "";
+		else
+			gentle_prefix = "morphed_";
+	}
 
 	gibfactor = 1 - cvar("cl_nogibs");
 	if(gibfactor <= 0)
@@ -201,10 +208,10 @@ void Ent_GibSplash()
 				TossGib ("models/gibs/chunk.mdl", org, vel, prandomvec() * (prandom() * 30 + 20), specnum, 1, issilent); // TODO maybe adjust to more randomization?
 			break;
 		case 0x81:
-			pointparticles(particleeffectnum("damage_dissolve"), org, vel, amount);
+			pointparticles(particleeffectnum(strcat(gentle_prefix, "damage_dissolve")), org, vel, amount);
 			break;
 		case 0x82:
-			pointparticles(particleeffectnum("damage_hit"), org, vel, amount * 16);
+			pointparticles(particleeffectnum(strcat(gentle_prefix, "damage_hit")), org, vel, amount * 16);
 			break;
 		case 0x83:
 			// no gibs in gentle mode, sorry

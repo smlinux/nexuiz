@@ -2362,92 +2362,92 @@ velocityjitter 256 256 256
 
 // Zero-violence effects
 
-// cl_gentle impact effect indicating damage
+// impact effect indicating damage
 // used in qcsrc/client/gibs.qc:			pointparticles(particleeffectnum("damage_hit"), org, vel, amount * 16)
 effect damage_hit
-tex 43 43
+tex 48 55
 count 1
-type spark
-color 0xffffff 0x9271fb
-size 14 24
+type alphastatic
+color 0x00FFFF 0xFF00FF
+size 16 16
 sizeincrease -24
-alpha 128 128 292
+alpha 128 128 192
 gravity -0.4
+bounce 1.5
 airfriction 5
 liquidfriction 10
-velocityjitter 356 356 456
-
+velocityjitter 256 256 256
 effect damage_hit
-tex 0 8
+tex 48 55
 count 1
-type smoke
-color 0xffffff 0x9271fb
-size 24 24
+type alphastatic
+color 0xFF00FF 0xFFFF00
+size 16 16
 sizeincrease -24
-alpha 128 128 292
+alpha 128 128 192
+gravity -0.4
+bounce 1.5
 airfriction 5
 liquidfriction 10
-originjitter 10 10 10
-
+velocityjitter 256 256 256
+effect damage_hit
+tex 48 55
+count 1
+type alphastatic
+color 0xFFFF00 0x00FFFF
+size 16 16
+sizeincrease -24
+alpha 128 128 192
+gravity -0.4
+bounce 1.5
+airfriction 5
+liquidfriction 10
+velocityjitter 256 256 256
 
 // effect for removing player model
 // "teleport"
-
-// cl_gentle deathfx
+// NOTE: maintained by div0, make your own new effect instead of changing this one without asking!
+// large sparks
 // used in qcsrc/client/gibs.qc:			pointparticles(particleeffectnum("damage_dissolve"), org, vel, amount)
 effect damage_dissolve
-tex 43 43
-count 20
-type spark
-color 0xffffff 0x9271fb
-size 62 62
-sizeincrease -16
-alpha 256 256 328
-gravity -0.4
-airfriction 3
-liquidfriction 6
-velocityjitter 256 256 512
-
-effect damage_dissolve
-tex 43 43
-count 5
-type spark
-color 0x7bdbff 0xbed2ff
-size 62 62
-sizeincrease -16
-alpha 256 256 328
-gravity -0.8
-airfriction 5
-liquidfriction 6
-velocityjitter 256 256 512
-
-effect damage_dissolve
-tex 0 8
-count 10
-type smoke
-color 0xffffff 0x9271fb
-size 44 44
-sizeincrease -16
-alpha 256 256 228
-airfriction 3
-liquidfriction 6
-originjitter 32 32 96
-
-
-effect damage_dissolve
-tex 46 46
+tex 48 55
 count 30
-type smoke
-color 0xffffff 0x9271fb
+type alphastatic
+color 0x00FFFF 0xFF00FF
 size 32 32
 sizeincrease -16
-alpha 256 256 228
-gravity 1
+alpha 256 256 128
+gravity -0.4
 bounce 1.5
 airfriction 3
 liquidfriction 6
-velocityjitter 400 400 0
-
+velocityjitter 512 512 512
+effect damage_dissolve
+tex 48 55
+count 30
+type alphastatic
+color 0xFF00FF 0xFFFF00
+size 32 32
+sizeincrease -16
+alpha 256 256 128
+gravity -0.4
+bounce 1.5
+airfriction 3
+liquidfriction 6
+velocityjitter 512 512 512
+effect damage_dissolve
+tex 48 55
+count 30
+type alphastatic
+color 0xFFFF00 0x00FFFF
+size 32 32
+sizeincrease -16
+alpha 256 256 128
+gravity -0.4
+bounce 1.5
+airfriction 3
+liquidfriction 6
+velocityjitter 512 512 512
 
 // decal
 // used in qcsrc/server/g_triggers.qc:					self.cnt = particleeffectnum("laser_deadly")
@@ -3533,3 +3533,92 @@ gravity -0.3
 originjitter 44 44 44
 velocityjitter 11 11 50
 bounce 2
+
+
+
+// cl_gentle impact effect indicating damage
+// maintained by morphed
+// used in qcsrc/client/gibs.qc:			pointparticles(particleeffectnum("damage_hit"), org, vel, amount * 16)
+effect morphed_damage_hit
+tex 43 43
+count 1
+type spark
+color 0xffffff 0x9271fb
+size 14 24
+sizeincrease -24
+alpha 128 128 292
+gravity -0.4
+airfriction 5
+liquidfriction 10
+velocityjitter 356 356 456
+
+effect morphed_damage_hit
+tex 0 8
+count 1
+type smoke
+color 0xffffff 0x9271fb
+size 24 24
+sizeincrease -24
+alpha 128 128 292
+airfriction 5
+liquidfriction 10
+originjitter 10 10 10
+
+
+// effect for removing player model
+// "teleport"
+
+// cl_gentle deathfx
+// used in qcsrc/client/gibs.qc:			pointparticles(particleeffectnum("damage_dissolve"), org, vel, amount)
+effect morphed_damage_dissolve
+tex 43 43
+count 20
+type spark
+color 0xffffff 0x9271fb
+size 62 62
+sizeincrease -16
+alpha 256 256 328
+gravity -0.4
+airfriction 3
+liquidfriction 6
+velocityjitter 256 256 512
+
+effect morphed_damage_dissolve
+tex 43 43
+count 5
+type spark
+color 0x7bdbff 0xbed2ff
+size 62 62
+sizeincrease -16
+alpha 256 256 328
+gravity -0.8
+airfriction 5
+liquidfriction 6
+velocityjitter 256 256 512
+
+effect morphed_damage_dissolve
+tex 0 8
+count 10
+type smoke
+color 0xffffff 0x9271fb
+size 44 44
+sizeincrease -16
+alpha 256 256 228
+airfriction 3
+liquidfriction 6
+originjitter 32 32 96
+
+
+effect morphed_damage_dissolve
+tex 46 46
+count 30
+type smoke
+color 0xffffff 0x9271fb
+size 32 32
+sizeincrease -16
+alpha 256 256 228
+gravity 1
+bounce 1.5
+airfriction 3
+liquidfriction 6
+velocityjitter 400 400 0
