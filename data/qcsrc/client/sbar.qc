@@ -1264,10 +1264,11 @@ void Sbar_Score(float margin)
  	topright_z = 0;
 
 	//get the ID (could be "me", or the player I'm spectating)
-	if (spectatee_status)
+	if (spectatee_status > 0)
 		desiredPlayerId = spectatee_status - 1;
 	else
 		desiredPlayerId = player_localentnum - 1;
+	me = playerslots[desiredPlayerId];
 
 	sbar_y = vid_conheight - (32+12);
 	sbar_x -= margin;
