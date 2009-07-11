@@ -920,7 +920,6 @@ void Net_ReadRace()
 
 			if(race_checkpoint == 0 || race_checkpoint == 254)
 			{
-				race_penaltytime = 0;
 				race_penaltyaccumulator = 0;
 				race_laptime = time; // valid
 			}

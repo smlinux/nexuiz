@@ -363,6 +363,18 @@ void checkpoint_passed()
 
 	if(other.race_checkpoint == -1 || other.race_checkpoint == self.race_checkpoint)
 	{
+		if(self.race_penalty)
+		{
+			if(other.race_lastpenalty != self)
+			{
+				other.race_lastpenalty = self;
+				race_ImposePenaltyTime(other, self.race_penalty, self.race_penalty_reason);
+			}
+		}
+
+		if(other.race_penalty)
+			return;
+
 		/*
 		 * Trigger targets
 		 */
@@ -374,8 +386,6 @@ void checkpoint_passed()
 			SUB_UseTargets();
 			self.message = oldmsg;
 		}
-
-		race_ImposePenaltyTime(other, self.race_penalty, self.race_penalty_reason);
 
 		other.race_checkpoint = race_NextCheckpoint(self.race_checkpoint);
 
