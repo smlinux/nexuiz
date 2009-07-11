@@ -136,8 +136,10 @@ void Ent_GibSplash()
 	vel = decompressShortVector(ReadShort());
 
 	if(cvar("cl_gentle"))
-	{
 		type |= 0x80; // set gentle bit
+
+	if(type & 0x80)
+	{
 		if(cvar("cl_gentle") > 1)
 			gentle_prefix = "";
 		else
