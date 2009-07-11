@@ -919,7 +919,11 @@ void Net_ReadRace()
 			race_checkpointtime = time;
 
 			if(race_checkpoint == 0 || race_checkpoint == 254)
+			{
+				race_penaltytime = 0;
+				race_penaltyaccumulator = 0;
 				race_laptime = time; // valid
+			}
 
 			break;
 
@@ -963,6 +967,24 @@ void Net_ReadRace()
 			if(race_othercheckpointenemy)
 				strunzone(race_othercheckpointenemy);
 			race_othercheckpointenemy = strzone(ColorTranslateRGB(ReadString()));
+			break;
+
+		case RACE_NET_PENALTY_RACE:
+			race_penaltyeventtime = time;
+			race_penaltytime = ReadByte();
+			//race_penaltyaccumulator += race_penaltytime;
+			if(race_penaltyreason)
+				strunzone(race_penaltyreason);
+			race_penaltyreason = strzone(ReadString());
+			break;
+
+		case RACE_NET_PENALTY_QUALIFYING:
+			race_penaltyeventtime = time;
+			race_penaltytime = ReadByte();
+			race_penaltyaccumulator += race_penaltytime;
+			if(race_penaltyreason)
+				strunzone(race_penaltyreason);
+			race_penaltyreason = strzone(ReadString());
 			break;
 	}
 }

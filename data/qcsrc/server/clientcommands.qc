@@ -383,6 +383,11 @@ void SV_ParseClientCommand(string s) {
 		}
 		else
 			sprint(self, "Usage: sv_cheats 1; restart; cmd make models/... 0/1/2\n");
+	} else if(argv(0) == "penalty") {
+		if((sv_cheats || self.maycheat) && tokens == 3)
+			race_ImposePenaltyTime(self, stof(argv(1)), argv(2));
+		else
+			sprint(self, "Usage: sv_cheats 1; restart; cmd penalty 5.0 AHAHAHAHAHAHAH))\n");
 	} else {
 		//if(ctf_clientcommand())
 		//	return;

@@ -56,6 +56,8 @@ const float RACE_NET_CHECKPOINT_NEXT_QUALIFYING = 2; // byte nextcheckpoint, sho
 const float RACE_NET_CHECKPOINT_HIT_RACE = 3; // byte checkpoint, short delta, byte lapsdelta, string opponent
 const float RACE_NET_CHECKPOINT_HIT_RACE_BY_OPPONENT = 4; // byte checkpoint, short delta, byte lapsdelta, string opponent
 const float RACE_NET_CHECKPOINT_NEXT_SPEC_QUALIFYING = 5; // byte nextcheckpoint, float laptime, short recordtime, string recordholder
+const float RACE_NET_PENALTY_RACE = 6; // byte penaltytime, string reason
+const float RACE_NET_PENALTY_QUALIFYING = 7; // byte penaltytime, string reason
 
 const float ENT_CLIENT = 0;
 const float ENT_CLIENT_DEAD = 1;

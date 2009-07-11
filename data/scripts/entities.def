@@ -1228,11 +1228,22 @@ message: Death message, when touching checkpoints in the wrong order.
 message2: Death message when someone gets pushed into this (default: "was thrown into a world of hurt by"). The # character is replaced by the attacker name if present (and it instead does not get appended to the end)
 targetname: Name of the checkpoint. info_player_race can target this to assign a spawn to a checkpoint. Also used for triggering a checkpoint by an event.
 target: when the checkpoint is passed, these entities are triggered. Useful for forcing items in certain areas using trigger_items
+race_penalty: when set, this penalty time is given if passing this checkpoint, and the checkpoint does not show up with a sprite. Useful for invisible checkpoints to detect driving around the intended checkpoint
+race_penalty_reason: reason to display when the penalty time is imposed. Default: "missing a checkpoint"
 -------- SPAWNFLAGS --------
 NOTOUCH: the checkpoint will not become active when touched, it HAS to be targeted
 STRICTTRIGGER: only trigger the targets when the checkpoint actually was reached in a valid way (that is, not when going back)
 CRUSH: the checkpoint kills when used at the wrong time
 FINISH: when set on the last checkpoint (i.e. the one with highest cnt), it is marked as finish line and the CP with cnt=0 is the start line
+*/
+
+/*QUAKED trigger_race_penalty (0 1 0) ? NOTOUCH
+A penalty trigger.
+-------- KEYS --------
+race_penalty: this penalty time is given if passing this trigger
+race_penalty_reason: reason to display when the penalty time is imposed. Default: "leaving the track"
+-------- SPAWNFLAGS --------
+NOTOUCH: the trigger will not become active when touched, it HAS to be targeted
 */
 
 /*QUAKED info_player_race (1 0.5 0) (-16 -16 -24) (16 16 45) 

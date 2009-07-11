@@ -1,3 +1,5 @@
+.float race_penalty;
+
 float sv_accelerate;
 float sv_friction;
 float sv_maxspeed;
@@ -524,7 +526,27 @@ void SV_PlayerPhysics()
 
 	self.items &~= IT_USING_JETPACK;
 
-	if (self.movetype == MOVETYPE_NONE && self.disableclientprediction != 2)
+	if(self.race_penalty)
+	{
+		if(time > self.race_penalty)
+		{
+			if(self.disableclientprediction == 2)
+			{
+				self.movetype = MOVETYPE_WALK;
+				self.disableclientprediction = 0;
+			}
+			self.race_penalty = 0;
+		}
+	}
+
+	if(self.race_penalty)
+	{
+		self.velocity = '0 0 0';
+		self.movetype = MOVETYPE_NONE;
+		self.disableclientprediction = 2;
+	}
+
+	if (self.movetype == MOVETYPE_NONE)
 		return;
 
 	if (self.punchangle != '0 0 0')

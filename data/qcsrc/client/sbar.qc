@@ -1460,7 +1460,7 @@ void Sbar_Score(float margin)
 	if(gametype == GAME_RACE)
 	{
 		drawfont = sbar_bigfont;
-		float a;
+		float a, t;
 		vector m;
 		string s, forcetime;
 
@@ -1487,10 +1487,10 @@ void Sbar_Score(float margin)
 			{
 				if(race_laptime && race_nextbesttime && race_nextcheckpoint != 254)
 				{
-					a = bound(0, 2 - ((race_laptime + race_nextbesttime/10) - time), 1);
+					a = bound(0, 2 - ((race_laptime + race_nextbesttime/10) - (time + race_penaltyaccumulator/10)), 1);
 					if(a > 0) // next one?
 					{
-						s = MakeRaceString(race_nextcheckpoint, time - race_laptime, race_nextbesttime / 10, 0, race_nextbestname);
+						s = MakeRaceString(race_nextcheckpoint, (time + race_penaltyaccumulator/10) - race_laptime, race_nextbesttime / 10, 0, race_nextbestname);
 					}
 				}
 			}
@@ -1499,6 +1499,17 @@ void Sbar_Score(float margin)
 			{
 				dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
 				drawcolorcodedstring(m - '0 16 0' - '8 0 0' * stringwidth(s, TRUE), s, '16 16 0', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+			}
+
+			if(race_penaltytime)
+			{
+				a = bound(0, 2 - (time - race_penaltyeventtime), 1);
+				if(a > 0)
+				{
+					s = strcat("^1PENALTY: ", ftos_decimals(race_penaltytime * 0.1, 1), " (", race_penaltyreason, ")");
+					dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
+					drawcolorcodedstring(m - '0 32 0' - '8 0 0' * stringwidth(s, TRUE), s, '16 16 0', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+				}
 			}
 
 			if(forcetime != "")
@@ -1511,7 +1522,7 @@ void Sbar_Score(float margin)
 
 			if(race_laptime && race_checkpoint != 255)
 			{
-				s = mmsss(10*(time - race_laptime));
+				s = mmsss(10*(time + race_penaltyaccumulator/10 - race_laptime));
 				drawstring(m - '16 0 0' * stringwidth(s, FALSE), s, '32 32 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
 			}
 		}
@@ -1530,6 +1541,21 @@ void Sbar_Score(float margin)
 				s = MakeRaceString(race_othercheckpoint, -race_othercheckpointdelta / 10, -!race_othercheckpointenemy, race_othercheckpointlapsdelta, race_othercheckpointenemy);
 				dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
 				drawcolorcodedstring(m - '0 0 0' - '8 0 0' * stringwidth(s, TRUE), s, '16 16 0', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+			}
+
+			if(race_penaltytime && !race_penaltyaccumulator)
+			{
+				t = race_penaltytime * 0.1 + race_penaltyeventtime;
+				a = bound(0, (1 + t - time), 1);
+				if(a > 0)
+				{
+					if(time < t)
+						s = strcat("^1PENALTY: ", ftos_decimals(t - time, 1), " (", race_penaltyreason, ")");
+					else
+						s = strcat("^2PENALTY: 0.0 (", race_penaltyreason, ")");
+					dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
+					drawcolorcodedstring(m - '0 32 0' - '8 0 0' * stringwidth(s, TRUE), s, '16 16 0', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+				}
 			}
 		}
 

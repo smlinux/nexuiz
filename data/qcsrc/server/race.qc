@@ -1,7 +1,11 @@
 #define MAX_CHECKPOINTS 255
 
+.float race_penalty;
+.float race_penalty_accumulator;
+.string race_penalty_reason;
 .float race_checkpoint; // player: next checkpoint that has to be reached
 .float race_laptime;
+.entity race_lastpenalty;
 
 .entity sprite;
 
@@ -75,7 +79,7 @@ void race_SendNextCheckpoint(entity e, float spec)
 		if(spec)
 		{
 			WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_NEXT_SPEC_QUALIFYING);
-			WriteCoord(MSG_ONE, e.race_laptime);
+			WriteCoord(MSG_ONE, e.race_laptime - e.race_penalty_accumulator);
 		}
 		else
 			WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_NEXT_QUALIFYING);
@@ -97,6 +101,9 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 	float snew, l;
 	entity p;
 
+	if(g_race_qualifying)
+		t += e.race_penalty_accumulator;
+
 	t = floor(0.4 + 10 * t); // make integer
 	// adding just 0.4 so it rounds down in the .5 case (matching the timer display)
 
@@ -114,7 +121,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 		else
 		{
 			s = PlayerScore_Add(e, SP_RACE_TIME, 0);
-			snew = floor(0.5 + 10 * (time - game_starttime));
+			snew = floor(0.4 + 10 * (time - game_starttime));
 			PlayerScore_Add(e, SP_RACE_TIME, snew - s);
 			l = PlayerTeamScore_Add(e, SP_RACE_LAPS, ST_RACE_LAPS, 1);
 
@@ -284,6 +291,8 @@ void race_ClearTime(entity e)
 {
 	e.race_checkpoint = -1;
 	e.race_laptime = 0;
+	e.race_penalty_accumulator = 0;
+	e.race_lastpenalty = world;
 
 	msg_entity = e;
 	WRITESPECTATABLE_MSG_ONE({
@@ -366,12 +375,18 @@ void checkpoint_passed()
 			self.message = oldmsg;
 		}
 
+		race_ImposePenaltyTime(other, self.race_penalty, self.race_penalty_reason);
+
 		other.race_checkpoint = race_NextCheckpoint(self.race_checkpoint);
 
 		race_SendTime(other, self.race_checkpoint, time - other.race_laptime, !!other.race_laptime);
 
 		if(!self.race_checkpoint) // start line
+		{
 			other.race_laptime = time;
+			other.race_penalty_accumulator = 0;
+			other.race_lastpenalty = world;
+		}
 
 		if(g_race_qualifying)
 			race_SendNextCheckpoint(other, 0);
@@ -462,10 +477,13 @@ void trigger_race_checkpoint_verify()
 
 	if(race_timed_checkpoint)
 		for(cp = world; (cp = find(cp, classname, "trigger_race_checkpoint")); )
-			if(cp.race_checkpoint == 0)
-				WaypointSprite_UpdateSprites(cp.sprite, "race-start", "", "");
-			else if(cp.race_checkpoint == race_timed_checkpoint)
-				WaypointSprite_UpdateSprites(cp.sprite, "race-finish", "", "");
+			if(cp.sprite)
+			{
+				if(cp.race_checkpoint == 0)
+					WaypointSprite_UpdateSprites(cp.sprite, "race-start", "", "");
+				else if(cp.race_checkpoint == race_timed_checkpoint)
+					WaypointSprite_UpdateSprites(cp.sprite, "race-finish", "", "");
+			}
 
 	remove(self);
 	self = oldself;
@@ -495,6 +513,8 @@ void spawnfunc_trigger_race_checkpoint()
 		self.message = "went backwards";
 	if (!self.message2)
 		self.message2 = "was pushed backwards by";
+	if (!self.race_penalty_reason)
+		self.race_penalty_reason = "missing a checkpoint";
 	
 	self.race_checkpoint = self.cnt;
 
@@ -507,10 +527,13 @@ void spawnfunc_trigger_race_checkpoint()
 			race_timed_checkpoint = 0;
 	}
 
-	if(self.race_checkpoint)
-		WaypointSprite_SpawnFixed("race-checkpoint", o, self, sprite);
-	else
-		WaypointSprite_SpawnFixed("race-finish", o, self, sprite);
+	if(!self.race_penalty)
+	{
+		if(self.race_checkpoint)
+			WaypointSprite_SpawnFixed("race-checkpoint", o, self, sprite);
+		else
+			WaypointSprite_SpawnFixed("race-finish", o, self, sprite);
+	}
 
 	self.sprite.waypointsprite_visible_for_player = race_waypointsprite_visible_for_player;
 
@@ -642,4 +665,62 @@ void race_ReadyRestart()
 		cvar_set("leadlimit", ftos(race_leadlimit));
 		ScoreRules_race();
 	}
+}
+
+void race_ImposePenaltyTime(entity pl, float penalty, string reason)
+{
+	if(g_race_qualifying)
+	{
+		pl.race_penalty_accumulator += penalty;
+		msg_entity = pl;
+		WRITESPECTATABLE_MSG_ONE({
+			WriteByte(MSG_ONE, SVC_TEMPENTITY);
+			WriteByte(MSG_ONE, TE_CSQC_RACE);
+			WriteByte(MSG_ONE, RACE_NET_PENALTY_QUALIFYING);
+			WriteByte(MSG_ONE, floor(0.4 + 10 * penalty));
+			WriteString(MSG_ONE, reason);
+		});
+	}
+	else
+	{
+		pl.race_penalty = time + penalty;
+		msg_entity = pl;
+		WRITESPECTATABLE_MSG_ONE_VARNAME(dummy, {
+			WriteByte(MSG_ONE, SVC_TEMPENTITY);
+			WriteByte(MSG_ONE, TE_CSQC_RACE);
+			WriteByte(MSG_ONE, RACE_NET_PENALTY_RACE);
+			WriteByte(MSG_ONE, floor(0.4 + 10 * penalty));
+			WriteString(MSG_ONE, reason);
+		});
+	}
+}
+
+void penalty_touch()
+{
+	EXACTTRIGGER_TOUCH;
+	race_ImposePenaltyTime(other, self.race_penalty, self.race_penalty_reason);
+}
+
+void penalty_use()
+{
+	other = activator;
+	if(other.race_lastpenalty != self)
+	{
+		other.race_lastpenalty = self;
+		race_ImposePenaltyTime(other, self.race_penalty, self.race_penalty_reason);
+	}
+}
+
+void spawnfunc_trigger_race_penalty()
+{
+	EXACTTRIGGER_INIT;
+
+	self.use = penalty_use;
+	if not(self.spawnflags & 1)
+		self.touch = penalty_touch;
+
+	if (!self.race_penalty_reason)
+		self.race_penalty_reason = "missing a checkpoint";
+	if (!self.race_penalty)
+		self.race_penalty = 5;
 }

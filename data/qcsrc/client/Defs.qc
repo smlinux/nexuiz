@@ -188,6 +188,10 @@ string race_previousbestname;
 float race_nextcheckpoint;
 float race_nextbesttime;
 string race_nextbestname;
+float race_penaltyaccumulator; // qualifying: total penalty time in tenths
+float race_penaltyeventtime; // time when the player got the penalty
+float race_penaltytime; // duration of penalty time, in tenths
+string race_penaltyreason; // reason for penalty
 
 // RACE
 float race_mycheckpoint;

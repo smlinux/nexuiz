@@ -2745,9 +2745,6 @@ Called every frame for each client after the physics are run
 =============
 */
 .float idlekick_lasttimeleft;
-.float race_penalty;
-.float race_penalty_nagged;
-.float race_penalty_nagtime;
 void PlayerPostThink (void)
 {
 	// Savage: Check for nameless players
@@ -2841,45 +2838,9 @@ void PlayerPostThink (void)
 		//if (TetrisPostFrame()) return;
 
 		// restart countdown
-			if(time < game_starttime) {
-				if (!cvar("sv_ready_restart_after_countdown"))
-				{
-					if(self.movement != '0 0 0' && g_race && !g_race_qualifying)
-					{
-						if(time < game_starttime - 2)
-						{
-							if(!self.race_penalty_nagged)
-							{
-								// TODO better notification for this!
-								self.race_penalty_nagtime = 0;
-								self.race_penalty_nagged = 1;
-							}
-						}
-						else if(!self.race_penalty)
-						{
-							self.race_penalty_nagtime = 0;
-							self.race_penalty = time + 5;
-						}
-					}
-					if(time > self.race_penalty_nagtime)
-					{
-						if(self.race_penalty > time)
-						{
-							centerprint_atprio(self, CENTERPRIO_IDLEKICK, "^1FIVE SECONDS PENALTY.");
-						}
-						else if(self.race_penalty_nagged && time < game_starttime - 2)
-						{
-							centerprint_atprio(self, CENTERPRIO_IDLEKICK, "^1DO NOT MOVE DURING THE COUNTDOWN.");
-						}
-						self.race_penalty_nagtime = time + self.cvar_scr_centertime * 0.6;
-					}
-					self.movetype = MOVETYPE_NONE;		
-					self.velocity = '0 0 0';
-					self.avelocity = '0 0 0';
-					self.movement = '0 0 0';
-				}
-			}
-			else if (time < self.race_penalty)
+		if (!cvar("sv_ready_restart_after_countdown"))
+		{
+			if(time < game_starttime)
 			{
 				self.movetype = MOVETYPE_NONE;		
 				self.velocity = '0 0 0';
@@ -2889,16 +2850,10 @@ void PlayerPostThink (void)
 			else
 			{
 				//allow the player to move again if sv_ready_restart_after_countdown is not used and countdown is over
-				if (!cvar("sv_ready_restart_after_countdown"))
-				{
-					if(self.movetype == MOVETYPE_NONE)
-					{
-						self.movetype = MOVETYPE_WALK;
-					}
-					self.race_penalty = 0;
-					self.race_penalty_nagged = 0;
-				}
+				if(self.movetype == MOVETYPE_NONE)
+					self.movetype = MOVETYPE_WALK;
 			}
+		}
 		GetPressedKeys();
 	} else if (self.classname == "observer") {
 		//do nothing

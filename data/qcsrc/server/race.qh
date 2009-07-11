@@ -16,3 +16,4 @@ float race_leadlimit;
 .float race_place;
 .float race_completed;
 float race_completing;
+void race_ImposePenaltyTime(entity pl, float penalty, string reason);
