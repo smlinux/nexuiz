@@ -19,7 +19,7 @@ use File::Temp;
 	our $Q3MAP2FLAGS = '';
 
 	# Default flags for the -bsp stage
-	our $BSPFLAGS    = '-samplesize 8 -minsamplesize 4 -mv 1000000 -mi 6000000';
+	our $BSPFLAGS    = '-meta -samplesize 8 -minsamplesize 4 -mv 1000000 -mi 6000000';
 
 	# Default flags for the -vis stage
 	our $VISFLAGS    = '';
@@ -63,7 +63,7 @@ while(@ARGV)
 {
 	$_ = shift @ARGV;
 	my $enterflags = undef;
-	if($_ eq '-bsp' or $_ eq '-meta')
+	if($_ eq '-bsp')
 	{
 		$enterflags = 'bsp';
 	}
@@ -243,7 +243,7 @@ for my $m(@{$options->{maps}})
 		}
 
 		unlink <$m/lm_*>; # delete old external lightmaps
-		q3map2 '-bsp', '-meta', @{$options->{bsp}},   "$m.map"
+		q3map2 '-bsp', @{$options->{bsp}},   "$m.map"
 			or die "-bsp: $?";
 		if($prescale != 1)
 		{
