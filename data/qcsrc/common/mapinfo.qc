@@ -535,6 +535,58 @@ float MapInfo_Type_FromString(string t)
 	else                    return 0;
 }
 
+void _MapInfo_Parse_Settemp(string pFilename, string acl, string s, float recurse)
+{
+	string t;
+	float fh;
+	t = car(s); s = cdr(s);
+	if(t == "#include")
+	{
+		if(recurse > 0)
+		{
+			fh = fopen(s, FILE_READ);
+			if(fh < 0)
+				print("Map ", pFilename, " references not existing config file ", s, "\n");
+			else
+			{
+				for(;;)
+				{
+					if not((s = fgets(fh)))
+						break;
+
+					// catch different sorts of comments
+					if(s == "")                    // empty lines
+						continue;
+					if(substring(s, 0, 1) == "#")  // UNIX style
+						continue;
+					if(substring(s, 0, 2) == "//") // C++ style
+						continue;
+					if(substring(s, 0, 1) == "_")  // q3map style
+						continue;
+
+					_MapInfo_Parse_Settemp(pFilename, acl, s, recurse - 1);
+				}
+				fclose(fh);
+			}
+		}
+		else
+			print("Map ", pFilename, " uses too many levels of inclusion\n");
+	}
+	else if not(cvar_value_issafe(t))
+		print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
+	else if not (cvar_value_issafe(s))
+		print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
+	else if(substring(t, 0, 10) == "g_mapinfo_")
+		print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
+	else if(matchacl(acl, t) <= 0)
+		print("Map ", pFilename, " contains a denied setting, ignored\n");
+	else
+	{
+		dprint("Applying temporary setting ", t, " := ", s, "\n");
+		cvar_settemp(t, s);
+	}
+}
+
 // load info about a map by name into the MapInfo_Map_* globals
 float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametypeToSet)
 {
@@ -728,20 +780,7 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 			{
 				if(f & pGametypeToSet)
 				{
-					t = car(s); s = cdr(s);
-					if not(cvar_value_issafe(t))
-						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
-					else if not (cvar_value_issafe(s))
-						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
-					else if(substring(t, 0, 10) == "g_mapinfo_")
-						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
-					else if(matchacl(acl, t) <= 0)
-						print("Map ", pFilename, " contains a denied setting, ignored\n");
-					else
-					{
-						dprint("Applying temporary setting ", t, " := ", s, "\n");
-						cvar_settemp(t, s);
-					}
+					_MapInfo_Parse_Settemp(pFilename, acl, s, 1);
 				}
 			}
 			else

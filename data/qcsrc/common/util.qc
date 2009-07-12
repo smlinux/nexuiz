@@ -871,6 +871,8 @@ void cvar_settemp_restore()
 #else
 void cvar_settemp(string pKey, string pValue)
 {
+	if(cvar_string(pKey) == pValue)
+		return;
 	cvar_set("settemp_list", strcat("1 ", pKey, " ", cvar_string("settemp_var"), " ", cvar_string("settemp_list")));
 #ifdef MENUQC
 	registercvar(cvar_string("settemp_var"), "", 0);
