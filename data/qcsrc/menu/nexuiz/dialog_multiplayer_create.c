@@ -32,7 +32,7 @@ void fillNexuizServerCreateTab(entity me)
 	float n;
 
 	me.TR(me);
-		n = 5;
+		n = 6;
 		me.TD(me, 1, me.columns / n, e = makeNexuizGametypeButton(1, "g_dm", "DM"));
 			e0 = e;
 		me.TD(me, 1, me.columns / n, e = makeNexuizGametypeButton(1, "g_lms", "LMS"));
@@ -42,6 +42,8 @@ void fillNexuizServerCreateTab(entity me)
 		me.TD(me, 1, me.columns / n, e = makeNexuizGametypeButton(1, "g_runematch", "Runematch"));
 			if(e.checked) e0 = NULL;
 		me.TD(me, 1, me.columns / n, e = makeNexuizGametypeButton(1, "g_race", "Race"));
+			if(e.checked) e0 = NULL;
+		me.TD(me, 1, me.columns / n, e = makeNexuizGametypeButton(1, "g_cts", "Race CTS"));
 			if(e.checked) e0 = NULL;
 	me.TR(me);
 		n = 7;
@@ -210,6 +212,7 @@ void gameTypeChangeNotifyNexuizServerCreateTab(entity me)
 		case MAPINFO_TYPE_NEXBALL:    GameType_ConfigureSliders(e, l, l2, "Goals:",           1,   50,  1, "g_nexball_goallimit");      break;
 		case MAPINFO_TYPE_ASSAULT:    GameType_ConfigureSliders(e, l, l2, "Point limit:",    50,  500, 10, "");                         break;
 		case MAPINFO_TYPE_ONSLAUGHT:  GameType_ConfigureSliders(e, l, l2, "Point limit:",    50,  500, 10, "");                         break;
+		case MAPINFO_TYPE_CTS:        GameType_ConfigureSliders(e, l, l2, "Point limit:",    50,  500, 10, "");                         break;
 		default:                      GameType_ConfigureSliders(e, l, l2, "Frag limit:",      5,  100,  5, "fraglimit_override");       break;
 	}
 	me.mapListBox.refilter(me.mapListBox);
