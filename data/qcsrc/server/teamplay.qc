@@ -380,7 +380,7 @@ void InitGameplayMode()
 	if(g_race)
 	{
 		// we need to find out the correct value for g_race_qualifying
-		if(cvar("g_race_qualifying_timelimit") > 0)
+		if(!g_campaign && cvar("g_race_qualifying_timelimit") > 0)
 		{
 			g_race_qualifying = 2;
 			race_fraglimit = cvar("fraglimit");
