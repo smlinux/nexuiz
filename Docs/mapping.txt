@@ -21,7 +21,7 @@ IV       CTF
 
 V        Rune Match
 
-VI       Race
+VI       Race/CTS
 
 VII      Nexball
 
@@ -107,19 +107,20 @@ have weapon entities placed.
 
 There's much more power in a mapinfo file. See Appendix A for more details.
 
-Gametype        | Syntax                                             | Notes
-----------------+----------------------------------------------------+-------------------------------------------------------
-Deathmatch      | type dm    <fraglimit>  <timelimit>                |
-Team Deathmatch | type tdm   <fraglimit>  <timelimit> <teams>        | 2, 3, or 4 teams
-Domination      | type dom   <pointlimit> <timelimit>                | teams are set by the map's entities
-CTF             | type ctf   <pointlimit> <timelimit> <caplimit>     | pointlimit if g_ctf_win_mode is 2, otherwise caplimit
-Runematch       | type rune  <pointlimit> <timelimit>                |
-LMS             | type lms   <lives>      <timelimit>                |
-Arena           | type arena <fraglimit>  <timelimit>                |
-Key Hunt        | type kh    <pointlimit> <timelimit> <teams>        | 2, 3, or 4 teams
-Assault         | type as                 <timelimit>                | never uses points
-Onslaught       | type ons                <timelimit>                | never uses points
-Race            | type race  <laplimit>   <timelimit> <teamlaplimit> | g_race_teams: teamlaplimit is used instead of laplimit
+Gametype        | Syntax                                                                              | Notes
+----------------+-------------------------------------------------------------------------------------+-------------------------------------------------------
+Deathmatch      | type dm    <fraglimit>  <timelimit>                                                 |
+Team Deathmatch | type tdm   <fraglimit>  <timelimit> <teams>                                         | 2, 3, or 4 teams
+Domination      | type dom   <pointlimit> <timelimit>                                                 | teams are set by the map's entities
+CTF             | type ctf   <pointlimit> <timelimit> <caplimit>                                      | pointlimit if g_ctf_win_mode is 2, otherwise caplimit
+Runematch       | type rune  <pointlimit> <timelimit>                                                 |
+LMS             | type lms   <lives>      <timelimit>                                                 |
+Arena           | type arena <fraglimit>  <timelimit>                                                 |
+Key Hunt        | type kh    <pointlimit> <timelimit> <teams>                                         | 2, 3, or 4 teams
+Assault         | type as                 <timelimit>                                                 | never uses points
+Onslaught       | type ons                <timelimit>                                                 | never uses points
+Race            | type race               <timelimit> <qualifyingtimelimit> <laplimit> <teamlaplimit> | g_race_teams: teamlaplimit is used instead of laplimit
+CTS             | type cts                <timelimit> <skill>                                         | never uses points
 
 
 ===============
@@ -310,9 +311,9 @@ detect it for supporting Runematch. To force the map to get re-detected after yo
 such entities, delete the data/data/mapname.mapinfo file - or simply edit it to
 add the "type rune" line.
 
-==========
-=VI. Race=
-==========
+==============
+=VI. Race/CTS=
+==============
 
 Making a race map is not hard: you need some special spawnpoints, and some checkpoints.
 
@@ -320,7 +321,7 @@ Spawnpoints
 -----------
 classname  info_player_race
 target     targetname of the checkpoint
-race_place for finish line checkpoints, the place of the point, or -1 to make it qualifying-only, or unset to let all the other players spawn
+race_place for finish line checkpoints, the place of the point, or -1 to make it qualifying/CTS-only, or unset to let all the other players spawn
 
 Checkpoints
 -----------
@@ -360,7 +361,12 @@ $$$:  classname = trigger_race_checkpoint, cnt = 1, targetname = cp1
 If your map contains the required entities for Race, the menu will automatically
 detect it for supporting Race. To force the map to get re-detected after you add
 such entities, delete the data/data/mapname.mapinfo file - or simply edit it to
-add the "type race" line.
+add the "type rc" line.
+
+CTS maps do not use checkpoints with race_place set, so you can leave them out
+for CTS maps.
+
+The skill parameter in the mapinfo entry for CTS shall be in the range from 0 (easy) to 10 (impossible).
 
 =============
 =VI. Nexball=
