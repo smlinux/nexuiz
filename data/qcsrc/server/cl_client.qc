@@ -1125,6 +1125,9 @@ void ClientKill_TeamChange (float targetteam) // 0 = don't change, -1 = auto
 	float killtime;
 	entity e;
 	killtime = cvar("g_balance_kill_delay");
+	
+	if(g_race_qualifying)
+		killtime = 0;
 
 	self.killindicator_teamchange = targetteam;
 
