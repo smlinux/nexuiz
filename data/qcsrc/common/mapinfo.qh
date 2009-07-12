@@ -10,6 +10,7 @@ float MAPINFO_TYPE_LMS				= 256;
 float MAPINFO_TYPE_ARENA			= 512;
 float MAPINFO_TYPE_KEYHUNT			= 1024;
 float MAPINFO_TYPE_NEXBALL          = 2048;
+float MAPINFO_TYPE_CTS              = 4096;
 float MAPINFO_TYPE_ALL              = 65535; // this has to include all above bits
 
 float MAPINFO_FEATURE_WEAPONS       = 1; // not defined for minstagib-only maps

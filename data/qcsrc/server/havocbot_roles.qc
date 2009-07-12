@@ -637,7 +637,7 @@ void havocbot_chooserole()
 		havocbot_chooserole_dom();
 	else if (g_keyhunt)
 		havocbot_chooserole_kh();
-	else if (g_race)
+	else if (g_race || g_cts)
 		havocbot_chooserole_race();
 	else if (g_onslaught)
 		havocbot_chooserole_ons();

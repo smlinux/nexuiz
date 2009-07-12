@@ -37,6 +37,7 @@ const float GAME_ASSAULT		= 9;
 const float GAME_ONSLAUGHT	= 10;
 const float GAME_RACE	= 11;
 const float GAME_NEXBALL = 12;
+const float GAME_CTS = 13;
 
 const float AS_STRING		= 1;
 const float AS_INT		= 2;

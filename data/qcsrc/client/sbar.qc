@@ -1458,7 +1458,7 @@ void Sbar_Score(float margin)
 		Sbar_DrawXNum(topright - '36 0 0' - '3 0 0' + '0 2 0', seconds, -2, 18, timer_color, 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 	}
 
-	if(gametype == GAME_RACE)
+	if(gametype == GAME_RACE || gametype == GAME_CTS)
 	{
 		drawfont = sbar_bigfont;
 		float a, t;

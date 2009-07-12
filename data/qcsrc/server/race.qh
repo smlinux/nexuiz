@@ -13,6 +13,7 @@ float race_highest_place_spawn; // number of places; a place higher gets spawned
 float race_lowest_place_spawn; // where to spawn in qualifying
 float race_fraglimit;
 float race_leadlimit;
+float race_timelimit;
 .float race_place;
 .float race_completed;
 float race_completing;

@@ -2533,7 +2533,7 @@ void PlayerPreThink (void)
 	if(self.spectatee_status != oldspectatee_status)
 	{
 		ClientData_Touch(self);
-		if(g_race)
+		if(g_race || g_cts)
 			race_InitSpectator();
 	}
 

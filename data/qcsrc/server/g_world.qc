@@ -251,6 +251,7 @@ void cvar_changes_init()
 		BADCVAR("g_keyhunt_teams");
 		BADCVAR("g_onslaught");
 		BADCVAR("g_race");
+		BADCVAR("g_cts");
 		BADCVAR("g_runematch");
 		BADCVAR("g_tdm");
 		BADCVAR("teamplay");
@@ -1899,9 +1900,9 @@ void CheckRules_World()
 						++readyplayers;
 				}
 
-				// at least 2/3 of the players have completed a lap: start the RACE
+				// at least 2 of the players have completed a lap: start the RACE
 				// otherwise, the players should end the qualifying on their own
-				if(readyplayers || ((totalplayers >= 3) && (playerswithlaps * 3 >= totalplayers * 2)))
+				if(readyplayers || playerswithlaps >= 2)
 				{
 					checkrules_suddendeathend = 0;
 					ReadyRestart(); // go to race

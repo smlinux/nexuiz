@@ -4,5 +4,5 @@ author Morphed
 _diameter 9083.417969
 _spawnpoints 0
 has weapons
-type race 5 20 15
+type rc 20 5 7 15
 cdtrack 7

@@ -502,7 +502,7 @@ void trigger_race_checkpoint_verify()
 void spawnfunc_trigger_race_checkpoint()
 {
 	vector o;
-	if(!g_race)
+	if(!g_race && !g_cts)
 	{
 		remove(self);
 		return;
@@ -569,7 +569,7 @@ void race_PreparePlayer()
 
 void race_RetractPlayer()
 {
-	if(!g_race)
+	if(!g_race && !g_cts)
 		return;
 	self.race_checkpoint = race_PreviousCheckpoint(self.race_checkpoint);
 	if(self.race_checkpoint == 0)
@@ -581,7 +581,7 @@ void race_RetractPlayer()
 
 void race_PreDie()
 {
-	if(!g_race)
+	if(!g_race && !g_cts)
 		return;
 
 	race_AbandonRaceCheck(self);
@@ -589,7 +589,7 @@ void race_PreDie()
 
 void race_PreSpawn()
 {
-	if(!g_race)
+	if(!g_race && !g_cts)
 		return;
 	if(self.killcount == -666 || g_race_qualifying)
 		race_PreparePlayer();
@@ -599,7 +599,7 @@ void race_PreSpawn()
 
 void race_PostSpawn(entity spot)
 {
-	if(!g_race)
+	if(!g_race && !g_cts)
 		return;
 	if(self.killcount != -666 && !g_race_qualifying)
 	{
@@ -618,14 +618,14 @@ void race_PostSpawn(entity spot)
 
 void race_PreSpawnObserver()
 {
-	if(!g_race)
+	if(!g_race && !g_cts)
 		return;
 	race_PreparePlayer();
 }
 
 void spawnfunc_info_player_race (void)
 {
-	if(!g_race)
+	if(!g_race && !g_cts)
 	{
 		remove(self);
 		return;
@@ -673,6 +673,7 @@ void race_ReadyRestart()
 		independent_players = 0;
 		cvar_set("fraglimit", ftos(race_fraglimit));
 		cvar_set("leadlimit", ftos(race_leadlimit));
+		cvar_set("timelimit", ftos(race_timelimit));
 		ScoreRules_race();
 	}
 }

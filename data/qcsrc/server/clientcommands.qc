@@ -233,7 +233,7 @@ void SV_ParseClientCommand(string s) {
 			return;
 
 		if((inWarmupStage && 0 >= g_warmup_limit) // with unlimited warmup players have to be able to restart
-		   || cvar("sv_ready_restart"))
+		   || cvar("sv_ready_restart") || g_race_qualifying == 2)
 		{
 			if(!readyrestart_happened || cvar("sv_ready_restart_repeatable"))
 			{
@@ -454,7 +454,7 @@ void ReadyRestartForce()
 	VoteReset();
 
 	// clear overtime
-	if (checkrules_overtimesadded > 0) {
+	if (checkrules_overtimesadded > 0 && g_race_qualifying != 2) {
 		//we have to decrease timelimit to its original value again!!
 		float newTL;
 		newTL = cvar("timelimit");
@@ -511,13 +511,13 @@ void ReadyRestart()
 	if(g_arena | g_assault | gameover | intermission_running | race_completing)
 		localcmd("restart\n");
 
+	ReadyRestartForce();
+
 	// reset ALL scores, but only do that at the beginning
 	//of the countdown if sv_ready_restart_after_countdown is off!
 	//Otherwise scores could be manipulated during the countdown!
 	if (!cvar("sv_ready_restart_after_countdown"))
 		Score_ClearAll();
-
-	ReadyRestartForce();
 }
 
 /**
@@ -558,8 +558,8 @@ void ReadyCount()
  */
 void restartTimer_Think() {
 	restart_mapalreadyrestarted = 1;
-	Score_ClearAll();
 	reset_map(TRUE);
+	Score_ClearAll();
 	remove(self);
 	return;
 }
