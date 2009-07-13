@@ -5,7 +5,7 @@ case "$2" in
 		PATTERN='all-time fastest lap record with (.*)\n'
 		;;
 	new|*)
-		PATTERN='//RACE RECORD SET (.*)\n'
+		PATTERN='//RA?CE? RECORD SET (.*)\n'
 		;;
 esac
 
