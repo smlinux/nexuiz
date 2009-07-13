@@ -658,6 +658,8 @@ void race_ClearRecords()
 
 void race_ReadyRestart()
 {
+	float s;
+
 	Score_NicePrint(world);
 
 	race_ClearRecords();
@@ -665,7 +667,15 @@ void race_ReadyRestart()
 
 	entity e;
 	FOR_EACH_CLIENT(e)
+	{
+		if(e.race_place)
+		{
+			s = PlayerScore_Add(e, SP_RACE_FASTEST, 0);
+			if(!s)
+				e.race_place = 0;
+		}
 		print(e.netname, " = ", ftos(e.race_place), "\n");
+	}
 
 	if(g_race_qualifying == 2)
 	{
