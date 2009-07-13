@@ -1732,6 +1732,8 @@ void centerprint(string strMessage)
 	havail = vid_conheight;
 	if(cvar("con_chatpos") < 0)
 		havail -= (-cvar("con_chatpos") + cvar("con_chat")) * cvar("con_chatsize"); // avoid overlapping chat
+	if(havail > vid_conheight - 70)
+		havail = vid_conheight - 70; // avoid overlapping HUD
 
 	centerprint_start_x = 0;
 
