@@ -417,11 +417,15 @@ float Client_customizeentityforclient()
 #endif
 
 	modelsource = self;
+
+#ifdef ALLOW_FORCEMODELS
 	if(other.cvar_cl_forceplayermodelsfromnexuiz)
 		if not(self.modelindex_lod0_from_nexuiz)
 			modelsource = other;
 	if(other.cvar_cl_forceplayermodels && sv_clforceplayermodels)
 		modelsource = other;
+#endif
+
 	self.skin = modelsource.skinindex;
 
 #if 0

@@ -329,9 +329,11 @@ float default_weapon_alpha;
 .string cvar_g_nexuizversion;
 .string cvar_cl_weaponpriority;
 .string cvar_cl_weaponpriorities[10];
+#ifdef ALLOW_FORCEMODELS
 .float cvar_cl_forceplayermodels;
 .float cvar_cl_forceplayermodelsfromnexuiz;
 float sv_clforceplayermodels;
+#endif
 float sv_loddistance1;
 float sv_loddistance2;
 .float cvar_cl_gunalign;

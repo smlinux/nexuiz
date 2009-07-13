@@ -532,8 +532,10 @@ void GetCvars(float f)
     GetCvars_handleFloat(s, f, cvar_cl_voice_directional, "cl_voice_directional");
     GetCvars_handleFloat(s, f, cvar_cl_voice_directional_taunt_attenuation, "cl_voice_directional_taunt_attenuation");
     GetCvars_handleFloat(s, f, cvar_cl_hitsound, "cl_hitsound");
+#ifdef ALLOW_FORCEMODELS
     GetCvars_handleFloat(s, f, cvar_cl_forceplayermodels, "cl_forceplayermodels");
     GetCvars_handleFloat(s, f, cvar_cl_forceplayermodelsfromnexuiz, "cl_forceplayermodelsfromnexuiz");
+#endif
     GetCvars_handleFloat(s, f, cvar_cl_gunalign, "cl_gunalign");
 
 
@@ -1018,7 +1020,9 @@ void readlevelcvars(void)
     g_touchexplode_edgedamage = cvar("g_touchexplode_edgedamage");
     g_touchexplode_force = cvar("g_touchexplode_force");
 
+#ifdef ALLOW_FORCEMODELS
     sv_clforceplayermodels = cvar("sv_clforceplayermodels");
+#endif
     sv_loddistance1 = cvar("sv_loddistance1");
     sv_loddistance2 = cvar("sv_loddistance2");
 	if(sv_loddistance2 <= sv_loddistance1)
