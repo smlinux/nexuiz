@@ -1249,7 +1249,9 @@ string MakeRaceString(float cp, float mytime, float histime, float lapdelta, str
 void Sbar_Score(float margin)
 {
 	float timelimit, minutes, seconds, timeleft, minutesLeft, secondsLeft, distribution, score, desiredPlayerId;
-	vector sbar_save, score_offset, timer_color, offset;
+	float racemin, racesec, racemsec;
+	float distsec, distmsec;
+	vector sbar_save, score_offset, timer_color, offset, distribution_color, minuspos;
 	entity tm, pl, me;
 	sbar_save = sbar;
 
@@ -1285,78 +1287,151 @@ void Sbar_Score(float margin)
 	}
 	score_offset_z = 0;
 	
-	if(teamplay)
+	if((scores_flags[ps_primary] & SFL_TIME) && !teamplay)
 	{
-		// Layout:
-		//
-		//   team1 team3 team4
-		//
-		//         TEAM2
-		//for(i = 0; i < 4; ++i)
-
-		float max_fragcount;
-		max_fragcount = -999;
-
-		for(tm = teams.sort_next; tm; tm = tm.sort_next)
-		{
-			if(tm.team == COLOR_SPECTATOR || !tm.team_size) // no players? don't display
-				continue;
-			// -32*4 = -128
-			score = tm.(teamscores[ts_primary]);
-
-			if (score > max_fragcount)
-				max_fragcount = score;
-
-			if(tm.team == myteam) {
-				if (max_fragcount == score)
-					Sbar_DrawXNum(bottomright - element_offset - score_offset, score, 4, 34, GetTeamRGB(tm.team) * 0.8, 1, 1, sbar_alpha_fg, DRAWFLAG_NORMAL);
-				else
-					Sbar_DrawXNum(bottomright - element_offset - score_offset, score, 4, 34, GetTeamRGB(tm.team) * 0.8, 0, 1, sbar_alpha_fg, DRAWFLAG_NORMAL);
-			}
-			else
-			{
-				if (max_fragcount == score)
-					Sbar_DrawXNum(bottomright - element_offset - score_offset + '132 -6 0' - offset, score, 4, 16, GetTeamRGB(tm.team) * 0.8, 1, 1, sbar_alpha_fg, DRAWFLAG_NORMAL);
-				else
-					Sbar_DrawXNum(bottomright - element_offset - score_offset + '132 -6 0' - offset, score, 4, 16, GetTeamRGB(tm.team) * 0.8, 0, 1, sbar_alpha_fg, DRAWFLAG_NORMAL);
-				offset_y -= 16;
-			}
-		}
-	} else {
 		// me vector := [team/connected frags id]
 
 		pl = players.sort_next;
 		if(pl == me)
 			pl = pl.sort_next;
-
-		if(pl) {
-			distribution = me.(scores[ps_primary]);
-			distribution -= pl.(scores[ps_primary]);
-		} else
-			distribution = 0;
+		if(scores_flags[ps_primary] & SFL_ZERO_IS_WORST)
+			if(pl.scores[ps_primary] == 0)
+				pl = world;
 
 		score = me.(scores[ps_primary]);
-
-		if(distribution >= 0)
-		{
-			if (distribution != 0) {
-				// draw a + sign in front of the score
-				if (distribution < 10) { drawpic(bottomright - element_offset - score_offset + '132 -6 0' + '32 0 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
-				else if (distribution < 100) { drawpic(bottomright - element_offset - score_offset + '132 -6 0' + '16 0 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
-				else if (distribution < 1000) { drawpic(bottomright - element_offset - score_offset + '132 -6 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
+		
+		racemin = floor(score/600);
+		racesec = floor((score - racemin*600)/10);
+		racemsec = score - racemin*600 - racesec*10;
+		
+		if (pl && ((!(scores_flags[ps_primary] & SFL_ZERO_IS_WORST)) || score)) {
+			
+			// distribution display
+			distribution = me.(scores[ps_primary]);
+			distribution -= pl.(scores[ps_primary]);
+			
+			if (distribution < 10 && distribution > -10)
+				distmsec = fabs(distribution);
+			else {
+				distsec = floor(fabs(distribution)/10);
+				distmsec = fabs(distribution) - distsec*10;
 			}
-
-			Sbar_DrawXNum(bottomright - element_offset - score_offset + '132 -6 0', distribution, 4, 16, ' 1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
-			Sbar_DrawXNum(bottomright - element_offset - score_offset, score, 4, 34, '1 1 1', 1, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+			
+			if (distribution < 100 && distribution > -100) 
+				minuspos = bottomright - element_offset - score_offset + '130 -6 0' + '16 0 0';
+			else if (distribution < 1000 && distribution > -1000)
+				minuspos = bottomright - element_offset - score_offset + '130 -6 0';
+			else if (distribution < 10000 && distribution > -10000)
+				minuspos = bottomright - element_offset - score_offset + '130 -6 0' - '16 0 0';
+			else
+				minuspos = bottomright - element_offset - score_offset + '130 -6 0' - '32 0 0';
+				
+			if (distribution <= 0) {
+				distribution_color = '0 1 0';
+				drawpic(minuspos, "gfx/hud/num_minus", '16 16 0', distribution_color, sbar_alpha_fg, DRAWFLAG_ADDITIVE);
+			}
+			else {
+				distribution_color = '1 0 0';
+				drawpic(minuspos, "gfx/hud/num_plus", '16 16 0', distribution_color, sbar_alpha_fg, DRAWFLAG_ADDITIVE);
+			}
+			
+			Sbar_DrawXNum(bottomright - element_offset - score_offset + '132 -6 0', distmsec, 4, 16, distribution_color, 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+			Sbar_DrawXNum(bottomright - element_offset - score_offset + '112 -6 0', distsec, 4, 16, distribution_color, 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+			drawpic(bottomright - element_offset - score_offset + '170 -6 0', "gfx/hud/num_dot", '16 16 0', distribution_color, sbar_alpha_fg, DRAWFLAG_ADDITIVE);
 		}
-		else if(distribution >= -5)
-		{
-			Sbar_DrawXNum(bottomright - element_offset - score_offset + '132 -6 0', distribution, 4, 16, ' 1 1 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
-			Sbar_DrawXNum(bottomright - element_offset - score_offset, score, 4, 34, '1 1 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+		if (distribution <= 0 || distribution == score) // draw the highlight background behind the timer if we have the lead
+			drawpic(bottomright - element_offset - score_offset + '20 10 0', "gfx/hud/sb_highlight_4", '178 28 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+		
+		// big timer
+		Sbar_DrawXNum(bottomright - element_offset - score_offset + '76 10 0', racemsec, 4, 30, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+		Sbar_DrawXNum(bottomright - element_offset - score_offset + '36 10 0', racesec, 4, 30, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+		if (racesec < 10)
+			Sbar_DrawXNum(bottomright - element_offset - score_offset + '8 10 0', 0, 4, 30, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+		drawpic(bottomright - element_offset - score_offset + '145 10 0', "gfx/hud/num_dot", '30 30 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE);
+		
+		if (racemin < 10) {
+			Sbar_DrawXNum(bottomright - element_offset - score_offset + '-36 10 0', racemin, 4, 30, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+			Sbar_DrawXNum(bottomright - element_offset - score_offset + '-66 10 0', 0, 4, 30, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 		}
 		else {
-			Sbar_DrawXNum(bottomright - element_offset - score_offset + '132 -6 0', distribution, 4, 16, ' 1 0 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
-			Sbar_DrawXNum(bottomright - element_offset - score_offset, score, 4, 34, '1 0 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+			Sbar_DrawXNum(bottomright - element_offset - score_offset + '-36 10 0', racemin, 4, 30, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+		}
+		drawpic(bottomright - element_offset - score_offset + '76 8 0', "gfx/hud/num_colon", '30 30 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE);
+	}
+	else {
+		if(teamplay)
+		{
+			// Layout:
+			//
+			//   team1 team3 team4
+			//
+			//         TEAM2
+			//for(i = 0; i < 4; ++i)
+
+			float max_fragcount;
+			max_fragcount = -999;
+
+			for(tm = teams.sort_next; tm; tm = tm.sort_next)
+			{
+				if(tm.team == COLOR_SPECTATOR || !tm.team_size) // no players? don't display
+					continue;
+				// -32*4 = -128
+				score = tm.(teamscores[ts_primary]);
+
+				if (score > max_fragcount)
+					max_fragcount = score;
+
+				if(tm.team == myteam) {
+					if (max_fragcount == score)
+						Sbar_DrawXNum(bottomright - element_offset - score_offset, score, 4, 34, GetTeamRGB(tm.team) * 0.8, 1, 1, sbar_alpha_fg, DRAWFLAG_NORMAL);
+					else
+						Sbar_DrawXNum(bottomright - element_offset - score_offset, score, 4, 34, GetTeamRGB(tm.team) * 0.8, 0, 1, sbar_alpha_fg, DRAWFLAG_NORMAL);
+				}
+				else
+				{
+					if (max_fragcount == score)
+						Sbar_DrawXNum(bottomright - element_offset - score_offset + '132 -6 0' - offset, score, 4, 16, GetTeamRGB(tm.team) * 0.8, 1, 1, sbar_alpha_fg, DRAWFLAG_NORMAL);
+					else
+						Sbar_DrawXNum(bottomright - element_offset - score_offset + '132 -6 0' - offset, score, 4, 16, GetTeamRGB(tm.team) * 0.8, 0, 1, sbar_alpha_fg, DRAWFLAG_NORMAL);
+					offset_y -= 16;
+				}
+			}
+		} else {
+			// me vector := [team/connected frags id]
+
+			pl = players.sort_next;
+			if(pl == me)
+				pl = pl.sort_next;
+
+			if(pl) {
+				distribution = me.(scores[ps_primary]);
+				distribution -= pl.(scores[ps_primary]);
+			} else
+				distribution = 0;
+
+			score = me.(scores[ps_primary]);
+
+			if(distribution >= 0)
+			{
+				if (distribution != 0) {
+					// draw a + sign in front of the score
+					if (distribution < 10) { drawpic(bottomright - element_offset - score_offset + '132 -6 0' + '32 0 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
+					else if (distribution < 100) { drawpic(bottomright - element_offset - score_offset + '132 -6 0' + '16 0 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
+					else if (distribution < 1000) { drawpic(bottomright - element_offset - score_offset + '132 -6 0', "gfx/hud/num_plus", '16 16 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE); }
+				}
+
+				Sbar_DrawXNum(bottomright - element_offset - score_offset + '132 -6 0', distribution, 4, 16, ' 1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+				Sbar_DrawXNum(bottomright - element_offset - score_offset, score, 4, 34, '1 1 1', 1, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+			}
+			else if(distribution >= -5)
+			{
+				Sbar_DrawXNum(bottomright - element_offset - score_offset + '132 -6 0', distribution, 4, 16, ' 1 1 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+				Sbar_DrawXNum(bottomright - element_offset - score_offset, score, 4, 34, '1 1 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+			}
+			else {
+				Sbar_DrawXNum(bottomright - element_offset - score_offset + '132 -6 0', distribution, 4, 16, ' 1 0 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+				Sbar_DrawXNum(bottomright - element_offset - score_offset, score, 4, 34, '1 0 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+			}
 		}
 	}
 

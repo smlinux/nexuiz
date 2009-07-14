@@ -57,6 +57,7 @@ COMPAT_FILES="
 	gfx/hud/num_9.tga
 	gfx/hud/num_colon_stroke.tga
 	gfx/hud/num_colon.tga
+	gfx/hud/num_dot.tga
 	gfx/hud/num_minus_stroke.tga
 	gfx/hud/num_minus.tga
 	gfx/hud/num_plus_stroke.tga
