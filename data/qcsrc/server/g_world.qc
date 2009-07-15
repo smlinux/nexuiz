@@ -1379,7 +1379,6 @@ float checkrules_equality;
 float checkrules_suddendeathwarning;
 float checkrules_suddendeathend;
 float checkrules_overtimesadded; //how many overtimes have been already added
-float checkrules_status;
 
 float WINNING_NO = 0; // no winner, but time limits may terminate the game
 float WINNING_YES = 1; // winner found
@@ -1392,7 +1391,7 @@ void InitiateOvertime()
 	// - for this timelimit_overtime needs to be >0 of course
 	// - also check the winning condition calculated in the previous frame and only add normal overtime
 	//   again, if at the point at which timelimit would be extended again, still no winner was found
-	if ((checkrules_overtimesadded < cvar("timelimit_overtimes")) && cvar("timelimit_overtime") && (checkrules_status == WINNING_NEVER)) 
+	if ((checkrules_overtimesadded >= 0) && (checkrules_overtimesadded < cvar("timelimit_overtimes")) && cvar("timelimit_overtime") && !(g_race && !g_race_qualifying))
 	{
 		++checkrules_overtimesadded;
 		//add one more overtime by simply extending the timelimit
@@ -1418,7 +1417,11 @@ void InitiateOvertime()
 	else 
 	{
 		if(!checkrules_suddendeathend)
+		{
 			checkrules_suddendeathend = time + 60 * cvar("timelimit_suddendeath");
+			if(g_race && !g_race_qualifying)
+				race_StartCompleting();
+		}
 	}
 }
 
@@ -1713,17 +1716,26 @@ float WinningCondition_Race(float fraglimit)
 {
 	float wc;
 	entity p;
+	float n, c;
+
+	n = 0;
+	c = 0;
+	FOR_EACH_PLAYER(p)
+	{
+		++n;
+		if not(p.race_completed)
+			++c;
+	}
+	if(n && (n == c))
+		return WINNING_YES;
 	wc = WinningCondition_Scores(fraglimit, 0);
 
 	// ALWAYS initiate overtime, unless EVERYONE has finished the race!
 	if(wc == WINNING_YES || wc == WINNING_STARTSUDDENDEATHOVERTIME)
 	// do NOT support equality when the laps are all raced!
-	{
-		FOR_EACH_PLAYER(p)
-			if not(p.race_completed)
-				return WINNING_STARTSUDDENDEATHOVERTIME;
-		return WINNING_YES;
-	}
+		return WINNING_STARTSUDDENDEATHOVERTIME;
+	else
+		return WINNING_NEVER;
 	return wc;
 }
 
@@ -1921,6 +1933,7 @@ void CheckRules_World()
 		return;
 	}
 
+	float checkrules_status;
 	checkrules_status = WinningCondition_RanOutOfSpawns();
 	if(checkrules_status == WINNING_YES)
 	{
@@ -1953,7 +1966,7 @@ void CheckRules_World()
 
 	if(checkrules_status == WINNING_STARTSUDDENDEATHOVERTIME)
 	{
-		checkrules_status = WINNING_NEVER;
+		checkrules_overtimesadded = -1;
 		InitiateOvertime();
 	}
 

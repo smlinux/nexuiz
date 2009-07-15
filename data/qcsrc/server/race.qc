@@ -127,12 +127,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 
 			if(cvar("fraglimit"))
 				if(l >= cvar("fraglimit"))
-				{
-					race_completing = 1;
-					FOR_EACH_PLAYER(p)
-						if(p.deadflag != DEAD_NO)
-							race_AbandonRaceCheck(p);
-				}
+					race_StartCompleting();
 
 			if(race_completing)
 			{
@@ -559,6 +554,15 @@ void race_AbandonRaceCheck(entity p)
 		bprint(p.netname, "^7 has abandoned the race.\n");
 		ClientData_Touch(p);
 	}
+}
+
+void race_StartCompleting()
+{
+	entity p;
+	race_completing = 1;
+	FOR_EACH_PLAYER(p)
+		if(p.deadflag != DEAD_NO)
+			race_AbandonRaceCheck(p);
 }
 
 void race_PreparePlayer()
