@@ -723,17 +723,16 @@ void race_ImposePenaltyTime(entity pl, float penalty, string reason)
 void penalty_touch()
 {
 	EXACTTRIGGER_TOUCH;
-	race_ImposePenaltyTime(other, self.race_penalty, self.race_penalty_reason);
-}
-
-void penalty_use()
-{
-	other = activator;
 	if(other.race_lastpenalty != self)
 	{
 		other.race_lastpenalty = self;
 		race_ImposePenaltyTime(other, self.race_penalty, self.race_penalty_reason);
 	}
+}
+
+void penalty_use()
+{
+	race_ImposePenaltyTime(activator, self.race_penalty, self.race_penalty_reason);
 }
 
 void spawnfunc_trigger_race_penalty()
