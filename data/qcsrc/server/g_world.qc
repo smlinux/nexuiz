@@ -1724,7 +1724,7 @@ float WinningCondition_Race(float fraglimit)
 	FOR_EACH_PLAYER(p)
 	{
 		++n;
-		if not(p.race_completed)
+		if(p.race_completed)
 			++c;
 	}
 	if(n && (n == c))
@@ -1915,7 +1915,7 @@ void CheckRules_World()
 
 				// at least 2 of the players have completed a lap: start the RACE
 				// otherwise, the players should end the qualifying on their own
-				if(readyplayers || playerswithlaps >= 2)
+				if(readyplayers || playerswithlaps >= 1)
 				{
 					checkrules_suddendeathend = 0;
 					ReadyRestart(); // go to race
@@ -1944,10 +1944,12 @@ void CheckRules_World()
 	else if(g_race && !g_race_qualifying && timelimit >= 0)
 	{
 		checkrules_status = WinningCondition_Race(fraglimit);
+		//print("WC_RACE yields ", ftos(checkrules_status), "\n");
 	}
 	else if(g_race && g_race_qualifying == 2 && timelimit >= 0)
 	{
 		checkrules_status = WinningCondition_QualifyingThenRace(fraglimit);
+		//print("WC_QUALIFYING_THEN_RACE yields ", ftos(checkrules_status), "\n");
 	}
 	else if(g_assault)
 	{
@@ -1964,6 +1966,7 @@ void CheckRules_World()
 	else
 	{
 		checkrules_status = WinningCondition_Scores(fraglimit, leadlimit);
+		//print("WC_SCORES yields ", ftos(checkrules_status), "\n");
 	}
 
 	if(checkrules_status == WINNING_STARTSUDDENDEATHOVERTIME)
@@ -1981,7 +1984,10 @@ void CheckRules_World()
 			checkrules_status = WINNING_YES;
 
 	if(checkrules_status == WINNING_YES)
+	{
+		//print("WINNING\n");
 		NextLevel();
+	}
 };
 
 float mapvote_nextthink;
