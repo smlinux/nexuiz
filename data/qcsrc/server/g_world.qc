@@ -1971,6 +1971,7 @@ void CheckRules_World()
 
 	if(checkrules_status == WINNING_STARTSUDDENDEATHOVERTIME)
 	{
+		checkrules_status = WINNING_NEVER;
 		checkrules_overtimesadded = -1;
 		InitiateOvertime();
 	}
