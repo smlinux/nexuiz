@@ -1964,7 +1964,7 @@ string getrecords()
         }
     }
 
-    if (g_race || g_cts)
+    if (g_race)
     {
         for (i = 0; i < MapInfo_count; ++i)
         {
@@ -1974,6 +1974,22 @@ string getrecords()
                 if (r == 0)
                     continue;
                 h = db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, "/racerecord/netname"));
+                s = strcat(s, strpad(32, MapInfo_Map_bspname), " ", strpad(-8, mmsss(r)), " ", h, "\n");
+                ++rec;
+            }
+        }
+    }
+
+    if (g_cts)
+    {
+        for (i = 0; i < MapInfo_count; ++i)
+        {
+            if (MapInfo_Get_ByID(i))
+            {
+                r = stof(db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, "/ctsrecord/time")));
+                if (r == 0)
+                    continue;
+                h = db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, "/ctsrecord/netname"));
                 s = strcat(s, strpad(32, MapInfo_Map_bspname), " ", strpad(-8, mmsss(r)), " ", h, "\n");
                 ++rec;
             }

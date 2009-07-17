@@ -64,10 +64,6 @@ void race_SendNextCheckpoint(entity e, float spec)
 	cp = e.race_checkpoint;
 	recordtime = race_checkpoint_records[cp];
 	recordholder = race_checkpoint_recordholders[cp];
-	/*
-	recordtime = stof(db_get(ServerProgsDB, strcat(GetMapname(), "/racerecord/", ftos(cp), "/time")));
-	recordholder = db_get(ServerProgsDB, strcat(GetMapname(), "/racerecord/", ftos(cp), "/netname"));
-	*/
 	if(recordholder == e.netname)
 		recordholder = "";
 
@@ -162,15 +158,20 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 				{
 					float grecordtime;
 					string grecordholder;
-					grecordtime = stof(db_get(ServerProgsDB, strcat(GetMapname(), "/racerecord/time")));
-					grecordholder = db_get(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"));
+					string rr;
+					if(g_cts)
+						rr = "/ctsrecord/";
+					else
+						rr = "/racerecord/";
+					grecordtime = stof(db_get(ServerProgsDB, strcat(GetMapname(), rr, "time")));
+					grecordholder = db_get(ServerProgsDB, strcat(GetMapname(), rr, "netname"));
 					if(grecordholder == e.netname)
 						grecordholder = "";
 					if(grecordtime == 0)
 					{
 						bprint(e.netname, "^7 set the all-time fastest lap record with ", mmsss(t), "\n");
-						db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/time"), ftos(t));
-						db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"), e.netname);
+						db_put(ServerProgsDB, strcat(GetMapname(), rr, "time"), ftos(t));
+						db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname"), e.netname);
 						write_recordmarker(e, time - t/10, t/10);
 					}
 					else if(t < grecordtime)
@@ -179,8 +180,8 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 							bprint(e.netname, "^7 broke his all-time fastest lap record with ", mmsss(t), "\n");
 						else
 							bprint(e.netname, "^7 broke ", grecordholder, "^7's all-time fastest lap record with ", mmsss(t), "\n");
-						db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/time"), ftos(t));
-						db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"), e.netname);
+						db_put(ServerProgsDB, strcat(GetMapname(), rr, "time"), ftos(t));
+						db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname"), e.netname);
 						write_recordmarker(e, time - t/10, t/10);
 					}
 					else
