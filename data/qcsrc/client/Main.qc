@@ -125,25 +125,23 @@ void CSQC_Init(void)
 
 
 
-	cs_project_is_b0rked = TRUE;
 	string w0, h0;
 	w0 = cvar_string("vid_conwidth");
 	h0 = cvar_string("vid_conheight");
-	cvar_set("vid_conwidth", "800");
-	cvar_set("vid_conheight", "600");
-	R_SetView(VF_VIEWPORT, '0 0 0', '640 480 0');
-	R_SetView(VF_FOV, '90 90 0');
+	//R_SetView(VF_VIEWPORT, '0 0 0', '640 480 0');
+	//R_SetView(VF_FOV, '90 90 0');
 	R_SetView(VF_ORIGIN, '0 0 0');
 	R_SetView(VF_ANGLES, '0 0 0');
 	R_SetView(VF_PERSPECTIVE, 1);
 	makevectors('0 0 0');
-	vector v;
-	v = cs_project(v_forward);
-	if(v_x - 400 < +1)
-	if(v_x - 400 > -1)
-	if(v_y - 300 < +1)
-	if(v_y - 300 > -1)
-		cs_project_is_b0rked = FALSE;
+	vector v1, v2;
+	cvar_set("vid_conwidth", "800");
+	cvar_set("vid_conheight", "600");
+	v1 = cs_project(v_forward);
+	cvar_set("vid_conwidth", "640");
+	cvar_set("vid_conheight", "480");
+	v2 = cs_project(v_forward);
+	cs_project_is_b0rked = (v1 == v2);
 	cvar_set("vid_conwidth", w0);
 	cvar_set("vid_conheight", h0);
 
