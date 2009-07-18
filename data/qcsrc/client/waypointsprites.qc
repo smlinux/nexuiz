@@ -195,7 +195,7 @@ void Draw_WaypointSprite()
 
 		if(max(f1, -f1) > max(f2, -f2))
 		{
-			if(f1 > 0)
+			if(d_z * f1 > 0)
 			{
 				// RIGHT edge
 				d = d * (0.5 / f1);
@@ -210,7 +210,7 @@ void Draw_WaypointSprite()
 		}
 		else
 		{
-			if(f2 > 0)
+			if(d_z * f2 > 0)
 			{
 				// BOTTOM edge
 				d = d * (0.5 / f2);
