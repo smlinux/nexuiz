@@ -954,7 +954,7 @@ vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, vector rgb, vector bg_si
 		if (sbar_scoreboard_highlight)
 		{
 			if (mod(i,2))
-				drawfill(pos - '0 1 0' - sbar_fontsize_x / 2 * '1 0 0', column_dim, '0 0 0', sbar_scoreboard_alpha_bg * 0.4, DRAWFLAG_NORMAL);
+				drawfill(pos - '0 1 0' - sbar_fontsize_x / 2 * '1 0 0', column_dim, '0 0 0', sbar_scoreboard_alpha_bg * 0.2, DRAWFLAG_NORMAL);
 		}
 		drawstring(pos, sbar_title[i], sbar_fontsize, rgb, 1, DRAWFLAG_NORMAL);
 		pos_x += column_dim_x;
@@ -976,7 +976,7 @@ vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, vector rgb, vector bg_si
 			if (sbar_scoreboard_highlight)
 			{
 				if (i == sbar_num_fields-1)
-					column_dim_x = sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x / 2;
+					column_dim_x = sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x / 2 + 1;
 				else
 					column_dim_x = sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
 				if (!mod(i,2))
@@ -1067,7 +1067,7 @@ void Sbar_DrawScoreboard()
 		//for(tm = sortedTeams.sort_next; tm; tm = tm.sort_next)
 		for(tm = teams.sort_next; tm; tm = tm.sort_next)
 		{
-			if(!tm.team_size || tm.team == COLOR_SPECTATOR)
+			if(tm.team == COLOR_SPECTATOR)
 				continue;
 
 			rgb = GetTeamRGB(tm.team);
