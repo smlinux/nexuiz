@@ -5,7 +5,7 @@ void W_HLAC_Touch (void)
 
 	self.event_damage = SUB_Null;
 
-    RadiusDamage (self, self.owner, cvar("g_balance_hlac_primary_damage"), cvar("g_balance_hlac_primary_edgedamage"), cvar("g_balance_hlac_primary_radius"), world, cvar("g_balance_hlac_primary_force"), self.projectiledeathtype, other);
+    RadiusDamage (self, self.owner, cvar("g_balance_hlac_primary_damage"), cvar("g_balance_hlac_primary_edgedamage"), cvar("g_balance_hlac_primary_radius"), world, cvar("g_balance_hlac_primary_force"), self.projectiledeathtype, other, WEP_HLAC);
 
 	remove (self);
 }
@@ -16,7 +16,7 @@ void W_HLAC_Touch2 (void)
 
 	self.event_damage = SUB_Null;
 
-    RadiusDamage (self, self.owner, cvar("g_balance_hlac_secondary_damage"), cvar("g_balance_hlac_secondary_edgedamage"), cvar("g_balance_hlac_secondary_radius"), world, cvar("g_balance_hlac_secondary_force"), self.projectiledeathtype, other);
+    RadiusDamage (self, self.owner, cvar("g_balance_hlac_secondary_damage"), cvar("g_balance_hlac_secondary_edgedamage"), cvar("g_balance_hlac_secondary_radius"), world, cvar("g_balance_hlac_secondary_force"), self.projectiledeathtype, other, WEP_HLAC);
 
 	remove (self);
 }

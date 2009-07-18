@@ -86,7 +86,7 @@ void func_breakable_colormod()
 void func_breakable_look_destroyed()
 {
 	local float floor_z;
-	
+
 	if(self.mdl_dead == "")
 		self.model = "";
 	else {
@@ -97,7 +97,7 @@ void func_breakable_look_destroyed()
 			self.origin_z = floor_z;
 		}
 	}
-		
+
 	self.solid = SOLID_NOT;
 }
 
@@ -157,7 +157,7 @@ void func_breakable_destroy() {
 		sound (self, CHAN_AUTO, self.noise, VOL_BASE, ATTN_NORM);
 
 	if(self.dmg)
-		RadiusDamage(self, activator, self.dmg, self.dmg_edge, self.dmg_radius, self, self.dmg_force, DEATH_HURTTRIGGER, world);
+		RadiusDamage(self, activator, self.dmg, self.dmg_edge, self.dmg_radius, self, self.dmg_force, DEATH_HURTTRIGGER, world, 0);
 
 	if(self.cnt)
 		pointparticles(self.cnt, self.absmin * 0.5 + self.absmax * 0.5, '0 0 0', self.count);

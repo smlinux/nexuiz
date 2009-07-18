@@ -19,7 +19,7 @@ void W_Hook_ExplodeThink (void)
 	f = self.dmg_last - dmg_remaining_next;
 	self.dmg_last = dmg_remaining_next;
 
-	RadiusDamage (self, self.owner, self.dmg * f, self.dmg_edge * f, self.dmg_radius, self.owner, self.dmg_force * f, self.projectiledeathtype, world);
+	RadiusDamage (self, self.owner, self.dmg * f, self.dmg_edge * f, self.dmg_radius, self.owner, self.dmg_force * f, self.projectiledeathtype, world, WEP_HOOK);
 	self.projectiledeathtype |= HITTYPE_BOUNCE;
 	//RadiusDamage (self, world, self.dmg * f, self.dmg_edge * f, self.dmg_radius, world, self.dmg_force * f, self.projectiledeathtype, world);
 
@@ -105,7 +105,7 @@ void spawnfunc_weapon_hook (void)
 float w_hook(float req)
 {
 	float hooked_time_max, hooked_fuel;
-		
+
 	if (req == WR_AIM)
 	{
 		// ... sorry ...
@@ -123,7 +123,7 @@ float w_hook(float req)
 				if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 					self.ammo_fuel = self.ammo_fuel - cvar("g_balance_hook_primary_fuel");
 				self.hook_state |= HOOK_FIRING;
-				weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_hook_primary_animtime"), w_ready);				
+				weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_hook_primary_animtime"), w_ready);
 			}
 		}
 
@@ -148,13 +148,13 @@ float w_hook(float req)
 
 		if(self.hook && self.hook.state == 1)
 		{
-			hooked_time_max = cvar("g_balance_hook_primary_hooked_time_max");			
+			hooked_time_max = cvar("g_balance_hook_primary_hooked_time_max");
 			if (hooked_time_max > 0)
 			{
 				if ( time > self.hook_time_hooked + hooked_time_max )
 					self.hook_state |= HOOK_REMOVING;
 			}
-			
+
 			hooked_fuel = cvar("g_balance_hook_primary_hooked_fuel");
 			if (hooked_fuel > 0)
 			{
@@ -180,7 +180,7 @@ float w_hook(float req)
 		}
 		else
 		{
-			self.hook_time_hooked = time;				
+			self.hook_time_hooked = time;
 			self.hook_time_fueldecrease = time + cvar("g_balance_hook_primary_hooked_time_free");
 		}
 

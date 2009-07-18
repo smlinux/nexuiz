@@ -452,7 +452,7 @@ void ImpulseCommands (void)
 							setorigin(e2, org);
 							pointparticles(particleeffectnum("rocket_explode"), org, '0 0 0', 1);
 							sound(e2, CHAN_PROJECTILE, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
-							RadiusDamage(e2, e, 1000, 0, 128, e, 500, DEATH_CHEAT, world);
+							RadiusDamage(e2, e, 1000, 0, 128, e, 500, DEATH_CHEAT, world, 0);
 							remove(e2);
 						}
 						print("404 Sportsmanship not found.\n");

@@ -5,7 +5,7 @@
 void Seeker_Missile_Explode ()
 {
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, cvar("g_balance_seeker_missile_damage"), cvar("g_balance_seeker_missile_edgedamage"), cvar("g_balance_seeker_missile_radius"), world, cvar("g_balance_seeker_missile_force"), self.projectiledeathtype, other);
+	RadiusDamage (self, self.owner, cvar("g_balance_seeker_missile_damage"), cvar("g_balance_seeker_missile_edgedamage"), cvar("g_balance_seeker_missile_radius"), world, cvar("g_balance_seeker_missile_force"), self.projectiledeathtype, other, WEP_SEEKER);
 
 	remove (self);
 }
@@ -354,7 +354,7 @@ void Seeker_Flac_Explode ()
 {
 	self.event_damage = SUB_Null;
 
-	RadiusDamage (self, self.owner, cvar("g_balance_seeker_flac_damage"), cvar("g_balance_seeker_flac_edgedamage"), cvar("g_balance_seeker_flac_radius"), world, cvar("g_balance_seeker_flac_force"), self.projectiledeathtype, other);
+	RadiusDamage (self, self.owner, cvar("g_balance_seeker_flac_damage"), cvar("g_balance_seeker_flac_edgedamage"), cvar("g_balance_seeker_flac_radius"), world, cvar("g_balance_seeker_flac_force"), self.projectiledeathtype, other, WEP_SEEKER);
 
 	remove (self);
 }

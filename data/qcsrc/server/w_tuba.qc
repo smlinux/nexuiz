@@ -37,7 +37,7 @@ float Tuba_GetNote(entity pl, float hittype)
 		note += 12;
 	if(hittype & HITTYPE_SECONDARY)
 		note += 7;
-	
+
 	// we support two kinds of tubas, those tuned in Eb and those tuned in C
 	// kind of tuba currently is player slot number, or team number if in
 	// teamplay
@@ -52,7 +52,7 @@ float Tuba_GetNote(entity pl, float hittype)
 		if(pl.clientcolors & 1)
 			note += 3;
 	}
-	
+
 	// total range of notes:
 	//                       0
 	//                 ***  ** ****
@@ -84,7 +84,7 @@ void W_Tuba_Attack(float hittype)
 		c = CHAN_WEAPON2;
 	}
 	sound(self, c, TUBA_NOTE(Tuba_GetNote(self, hittype)), bound(0, VOL_BASE * cvar("g_balance_tuba_volume"), 1), cvar("g_balance_tuba_attenuation"));
-	RadiusDamage(self, self, cvar("g_balance_tuba_damage"), cvar("g_balance_tuba_edgedamage"), cvar("g_balance_tuba_radius"), world, cvar("g_balance_tuba_force"), hittype | WEP_TUBA, world);
+	RadiusDamage(self, self, cvar("g_balance_tuba_damage"), cvar("g_balance_tuba_edgedamage"), cvar("g_balance_tuba_radius"), world, cvar("g_balance_tuba_force"), hittype | WEP_TUBA, world, WEP_TUBA);
 
 	o = gettaginfo(self.exteriorweaponentity, 0);
 	pointparticles(particleeffectnum("smoke_ring"), o + v_up * 45 + v_right * -6 + v_forward * 8, v_up * 100, 1);

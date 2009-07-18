@@ -934,7 +934,8 @@ FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(max_damage);
 float RadiusDamage_EnemyDamageDone;
 float RadiusDamage_EnemyMaxDamage;
 float RadiusDamage_running;
-float RadiusDamage (entity inflictor, entity attacker, float coredamage, float edgedamage, float rad, entity ignore, float forceintensity, float deathtype, entity directhitentity)
+float RadiusDamage (entity inflictor, entity attacker, float coredamage, float edgedamage, float rad, entity ignore,
+					float forceintensity, float deathtype, entity directhitentity, float weaponid)
 // Returns total damage applies to creatures
 {
 	entity	targ;
@@ -1068,15 +1069,16 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 	RadiusDamage_running = 0;
 
 	//Calculates stats for all RadiusDamage weapons
+	if(weaponid)
 	if(clienttype(attacker) == CLIENTTYPE_REAL)
 	{
 		float f;
 		f = min(RadiusDamage_EnemyMaxDamage, RadiusDamage_EnemyDamageDone);
-		attacker.actual_damage[attacker.weapon] += f;  // actual damage done
+		attacker.actual_damage[weaponid] += f;  // actual damage done
 		//attacker.max_damage[attacker.weapon] += coredamage;  // max damage, potential damage
 		// update the client and store into addstat() in g_world
-		attacker.damage_hits = attacker.weapon + 64 * rint(attacker.actual_damage[attacker.weapon]);
-		attacker.maxdamage_fired = attacker.weapon + 64 * rint(attacker.max_damage[attacker.weapon]);
+		attacker.damage_hits = weaponid + 64 * rint(attacker.actual_damage[weaponid]);
+		attacker.maxdamage_fired = weaponid + 64 * rint(attacker.max_damage[weaponid]);
 	}
 
 	return total_damage_to_creatures;

@@ -278,7 +278,7 @@ void walker_rocket_explode()
 
     pointparticles(particleeffectnum("rocket_explode"), org2, '0 0 0', 1);
     //w_deathtypestring = "got blasted to oblivion";
-    RadiusDamage (self, self.owner, cvar("g_turrets_unit_walker_std_rocket_dmg"), 0, cvar("g_turrets_unit_walker_std_rocket_radius"), world, cvar("g_turrets_unit_walker_std_rocket_force"), DEATH_TURRET, world);
+    RadiusDamage (self, self.owner, cvar("g_turrets_unit_walker_std_rocket_dmg"), 0, cvar("g_turrets_unit_walker_std_rocket_radius"), world, cvar("g_turrets_unit_walker_std_rocket_force"), DEATH_TURRET, world, 0);
 
     remove (self);
 }
