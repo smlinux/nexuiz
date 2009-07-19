@@ -147,6 +147,10 @@ game: turrets
 game: vote call is now possible for server admins too
 game: weapons rebalanced according to frag statistics
 game: zoom unlagged, detect zoom scripts (for spectating/demos)
+game: bots ai: added support for onslaught, complete rewrite of ctf ai, basic jetpack support, other minor fixes and improvements
+game: file based bots configuration
+game: bot scripting engine
+game: weapon accuracy stats (enable with +showaccuracy)
 map: aggressor supports keyhunt
 map: all maps recompiled, now with external lightmaps which look way better
 map: new maps accident, desertfactory, racetrack
