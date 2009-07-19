@@ -1915,7 +1915,7 @@ void CheckRules_World()
 
 				// at least 2 of the players have completed a lap: start the RACE
 				// otherwise, the players should end the qualifying on their own
-				if(readyplayers || playerswithlaps >= 1)
+				if(readyplayers || playerswithlaps >= 2)
 				{
 					checkrules_suddendeathend = 0;
 					ReadyRestart(); // go to race
