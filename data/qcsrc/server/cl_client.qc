@@ -306,25 +306,32 @@ entity SelectSpawnPoint (float anypoint)
 	firstspot = findchain(classname, "info_player_deathmatch");
 	// filter out the bad ones
 	// (note this returns the original list if none survived)
-	firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, 100, teamcheck);
-	if(!firstspot_new)
-		firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, -1, teamcheck);
-	firstspot = firstspot_new;
-
-	// there is 50/50 chance of choosing a random spot or the furthest spot
-	// (this means that roughly every other spawn will be furthest, so you
-	// usually won't get fragged at spawn twice in a row)
-	if (arena_roundbased)
+	if(anypoint)
 	{
-		firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, 800, teamcheck);
-		if(firstspot_new)
-			firstspot = firstspot_new;
 		spot = Spawn_WeightedPoint(firstspot, 1, 1, 1);
 	}
-	else if (random() > cvar("g_spawn_furthest"))
-		spot = Spawn_WeightedPoint(firstspot, 1, 1, 1);
 	else
-		spot = Spawn_WeightedPoint(firstspot, 1, 5000, 5); // chooses a far far away spawnpoint
+	{
+		firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, 100, teamcheck);
+		if(!firstspot_new)
+			firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, -1, teamcheck);
+		firstspot = firstspot_new;
+
+		// there is 50/50 chance of choosing a random spot or the furthest spot
+		// (this means that roughly every other spawn will be furthest, so you
+		// usually won't get fragged at spawn twice in a row)
+		if (arena_roundbased)
+		{
+			firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, 800, teamcheck);
+			if(firstspot_new)
+				firstspot = firstspot_new;
+			spot = Spawn_WeightedPoint(firstspot, 1, 1, 1);
+		}
+		else if (random() > cvar("g_spawn_furthest"))
+			spot = Spawn_WeightedPoint(firstspot, 1, 1, 1);
+		else
+			spot = Spawn_WeightedPoint(firstspot, 1, 5000, 5); // chooses a far far away spawnpoint
+	}
 
 	if(cvar("spawn_debugview"))
 	{
