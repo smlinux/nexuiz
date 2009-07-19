@@ -122,29 +122,6 @@ void CSQC_Init(void)
 
 	cvar_clientsettemp("_supports_weaponpriority", "1");
 
-
-
-
-	string w0, h0;
-	w0 = cvar_string("vid_conwidth");
-	h0 = cvar_string("vid_conheight");
-	//R_SetView(VF_VIEWPORT, '0 0 0', '640 480 0');
-	//R_SetView(VF_FOV, '90 90 0');
-	R_SetView(VF_ORIGIN, '0 0 0');
-	R_SetView(VF_ANGLES, '0 0 0');
-	R_SetView(VF_PERSPECTIVE, 1);
-	makevectors('0 0 0');
-	vector v1, v2;
-	cvar_set("vid_conwidth", "800");
-	cvar_set("vid_conheight", "600");
-	v1 = cs_project(v_forward);
-	cvar_set("vid_conwidth", "640");
-	cvar_set("vid_conheight", "480");
-	v2 = cs_project(v_forward);
-	cs_project_is_b0rked = (v1 == v2);
-	cvar_set("vid_conwidth", w0);
-	cvar_set("vid_conheight", h0);
-
 	RegisterWeapons();
 
 	WaypointSprite_Load();
