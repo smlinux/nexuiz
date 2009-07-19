@@ -966,12 +966,7 @@ vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, vector rgb, vector bg_si
 		{
 			if(sbar_field[i] == SP_SEPARATOR)
 				break;
-			/**
-			 * FTEQCC BUG!
-			 * Using strlen(sbar_title[i])*8 instead of
-			 * stringwidth(sbar_title[i], FALSE) will mess it all up
-			 */
-			pos_x -= stringwidth(sbar_title[i], FALSE)*sbar_fontsize_x;
+			pos_x -= sbar_size[i]*sbar_fontsize_x;
 
 			if (sbar_scoreboard_highlight)
 			{
