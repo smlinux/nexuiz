@@ -8,15 +8,28 @@ float bot_ignore_bots;
 float havocbot_pickupevalfunc(entity item)
 {
 	float i, j, rating, base, position, need_shells, need_nails, need_rockets, need_cells;
-	rating = 0;
+	entity wi;
 
 	base = item.bot_pickupbasevalue;
+	rating = 0;
 
-#warning do not do this! This SUCKS! Use the weapon info data!
-	need_shells = self.weapons & WEPBIT_SHOTGUN;
-	need_nails = self.weapons & WEPBIT_UZI;
-	need_cells = self.weapons & ( WEPBIT_HOOK | WEPBIT_HLAC | WEPBIT_MINSTANEX | WEPBIT_NEX | WEPBIT_ELECTRO | WEPBIT_CRYLINK );
-	need_rockets = self.weapons & ( WEPBIT_ROCKET_LAUNCHER | WEPBIT_GRENADE_LAUNCHER | WEPBIT_HAGAR );
+	// Detect needed ammo
+	for(i = WEP_FIRST; i < WEP_LAST ; ++i)
+	{
+		wi = get_weaponinfo(i);
+
+		if not(wi.weapons & self.weapons)
+			continue;
+
+		if(wi.items & IT_SHELLS)
+			need_shells = TRUE;
+		else if(wi.items & IT_NAILS)
+			need_nails = TRUE;
+		else if(wi.items & IT_ROCKETS)
+			need_rockets = TRUE;
+		else if(wi.items & IT_CELLS)
+			need_cells = TRUE;
+	}
 
 	// Rate ammo items
 	if (item.ammo_shells)
