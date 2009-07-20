@@ -331,9 +331,6 @@ void InitGameplayMode()
 		qualifying_override = cvar("g_race_qualifying_timelimit_override");
 		fraglimit_override = cvar("g_race_laps_limit");
 		leadlimit_override = 0; // currently not supported by race
-
-		if(g_race_qualifying)
-			independent_players = 1;
 	}
 
 	if(g_cts)
@@ -380,7 +377,11 @@ void InitGameplayMode()
 	if(g_race)
 	{
 		// we need to find out the correct value for g_race_qualifying
-		if(!cvar("g_campaign") && cvar("g_race_qualifying_timelimit") > 0)
+		if(cvar("g_campaign"))
+		{
+			g_race_qualifying = 1;
+		}
+		else if(!cvar("g_campaign") && cvar("g_race_qualifying_timelimit") > 0)
 		{
 			g_race_qualifying = 2;
 			race_fraglimit = cvar("fraglimit");
