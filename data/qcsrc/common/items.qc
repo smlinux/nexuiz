@@ -37,8 +37,8 @@ void register_weapons_done()
 
 	dummy_weapon_info = spawn();
 	dummy_weapon_info.classname = "weapon_info";
-	dummy_weapon_info.weapon = 0;
-	dummy_weapon_info.weapons = 0;
+	dummy_weapon_info.weapon = 0; // you can recognize dummies by this
+	dummy_weapon_info.weapons = 0; // you can recognize dummies by this too
 	dummy_weapon_info.netname = "@!#%'n Tuba";
 	dummy_weapon_info.items = 0;
 	dummy_weapon_info.weapon_func = w_null;
@@ -114,10 +114,9 @@ void RegisterWeapons()
 	register_weapon(WEP_PORTO,            w_porto,        0,                0,  0, 0, WEP_TYPE_OTHER, 0,                      "porto" ,       "porto",           "Port-O-Launch");
 	register_weapon(WEP_MINSTANEX,        w_minstanex,    IT_CELLS,         7, -1, 1, WEP_TYPE_HITSCAN, BOT_PICKUP_RATING_HIGH, "minstanex",    "minstanex",       "MinstaNex");
 	register_weapon(WEP_HOOK,             w_hook,         IT_CELLS|IT_FUEL, 0,  0, 1, WEP_TYPE_SPLASH, 0,                      "hookgun",      "hook",            "Grappling Hook");
-	register_weapon(WEP_SEEKER,           w_seeker,       IT_ROCKETS,       8,  0, 0, WEP_TYPE_SPLASH, BOT_PICKUP_RATING_HIGH, "seeker",       "seeker",          "T.A.G. Seeker");
 	register_weapon(WEP_HLAC,             w_hlac,         IT_CELLS,         6,  1, 0, WEP_TYPE_SPLASH, BOT_PICKUP_RATING_MID,  "hlac",         "hlac",            "Heavy Laser Assault Cannon");
-	register_weapon(WEP_CAMPINGRIFLE,     w_campingrifle, IT_NAILS,         3,  1, 0, WEP_TYPE_HITSCAN, BOT_PICKUP_RATING_MID,  "campingrifle", "campingrifle",    "Rifle");
 	register_weapon(WEP_TUBA,             w_tuba,         0,                1, -1, 0, WEP_TYPE_SPLASH, BOT_PICKUP_RATING_MID,  "tuba",         "tuba",            "@!#%'n Tuba");
+	register_weapon(WEP_CAMPINGRIFLE,     w_campingrifle, IT_NAILS,         3,  1, 0, WEP_TYPE_HITSCAN, BOT_PICKUP_RATING_MID,  "campingrifle", "campingrifle",    "Rifle");
 
 	register_weapons_done();
 }

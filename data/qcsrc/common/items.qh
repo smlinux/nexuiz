@@ -14,11 +14,10 @@ float WEP_PORTO				= 10; float WEPBIT_PORTO			= 512;
 float WEP_MINSTANEX			= 11; float WEPBIT_MINSTANEX		= 1024;
 float WEP_HOOK     			= 12; float WEPBIT_HOOK     		= 2048;
 float WEP_HLAC			    = 13; float WEPBIT_HLAC		        = 4096;
-float WEP_SEEKER			= 14; float WEPBIT_SEEKER		    = 8192;
+float WEP_TUBA        	    = 14; float WEPBIT_TUBA             = 8192;
 float WEP_CAMPINGRIFLE	    = 15; float WEPBIT_CAMPINGRIFLE     = 16384;
-float WEP_TUBA        	    = 16; float WEPBIT_TUBA             = 32768;
-float WEP_LAST				= 16; float WEPBIT_ALL              = 65535;
-float WEP_COUNT             = 17;
+float WEP_LAST				= 15; float WEPBIT_ALL              = 32767;
+float WEP_COUNT             = 16;
 
 float BOT_PICKUP_RATING_LOW	= 2500;
 float BOT_PICKUP_RATING_MID	= 5000;

@@ -12,10 +12,11 @@ float havocbot_pickupevalfunc(entity item)
 
 	base = item.bot_pickupbasevalue;
 
+#warning do not do this! This SUCKS! Use the weapon info data!
 	need_shells = self.weapons & WEPBIT_SHOTGUN;
 	need_nails = self.weapons & WEPBIT_UZI;
 	need_cells = self.weapons & ( WEPBIT_HOOK | WEPBIT_HLAC | WEPBIT_MINSTANEX | WEPBIT_NEX | WEPBIT_ELECTRO | WEPBIT_CRYLINK );
-	need_rockets = self.weapons & ( WEPBIT_ROCKET_LAUNCHER | WEPBIT_GRENADE_LAUNCHER | WEPBIT_HAGAR | WEPBIT_SEEKER );
+	need_rockets = self.weapons & ( WEPBIT_ROCKET_LAUNCHER | WEPBIT_GRENADE_LAUNCHER | WEPBIT_HAGAR );
 
 	// Rate ammo items
 	if (item.ammo_shells)
@@ -69,7 +70,7 @@ float havocbot_pickupevalfunc(entity item)
 			for(i = WEP_FIRST; i < WEP_LAST ; ++i)
 			{
 				// Find weapon
-				if( power2of(i-1) & item.weapons  != item.weapons )
+				if( (get_weaponinfo(i)).weapons & item.weapons  != item.weapons )
 					continue;
 
 				// Find the highest position on any range

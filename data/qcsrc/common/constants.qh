@@ -390,7 +390,6 @@ float	ATTN_MAX   				= 3.984375;
 // this sets sounds and other properties of the projectiles in csqc
 float PROJECTILE_ELECTRO = 1;
 float PROJECTILE_ROCKET = 2;
-float PROJECTILE_TAG = 3;
 float PROJECTILE_BULLET = 4;
 float PROJECTILE_CRYLINK = 5;
 float PROJECTILE_ELECTRO_BEAM = 6;
@@ -398,8 +397,6 @@ float PROJECTILE_GRENADE = 7;
 float PROJECTILE_GRENADE_BOUNCING = 8;
 float PROJECTILE_LASER = 9;
 float PROJECTILE_HLAC = 10;
-float PROJECTILE_SEEKER = 11;
-float PROJECTILE_FLAC = 12;
 float PROJECTILE_PORTO_RED = 13;
 float PROJECTILE_PORTO_BLUE = 14;
 float PROJECTILE_HOOKBOMB = 15;

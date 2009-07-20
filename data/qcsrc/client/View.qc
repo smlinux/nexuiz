@@ -261,10 +261,6 @@ float TrueAimCheck()
 			mi = '-3 -3 -3';
 			ma = '3 3 3';
 			break;
-		case WEP_SEEKER: // projectile has a size!
-			mi = '-2 -2 -2';
-			ma = '2 2 2';
-			break;
 		case WEP_ELECTRO: // projectile has a size!
 			mi = '0 0 -3';
 			ma = '0 0 -3';
