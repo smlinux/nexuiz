@@ -222,12 +222,11 @@ void TrueAim_Init()
 	trueaim.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE;
 }
 
-float EnemyHitCheck(vector start, vector mi, vector ma, vector end)
+float EnemyHitCheck()
 {
 	float t;
-	tracebox(start, mi, ma, end, MOVE_NORMAL, trueaim);
-	if(cvar("crosshair_hittest_showimpact"))
-		wcross_origin = project_3d_to_2d(trace_endpos);
+	wcross_origin = project_3d_to_2d(trace_endpos);
+	wcross_origin_z = 0;
 	if(trace_networkentity < 1)
 		return SHOTTYPE_HITWORLD;
 	if(trace_networkentity > maxclients)
@@ -259,7 +258,10 @@ float TrueAimCheck()
 			return SHOTTYPE_HITWORLD;
 		case WEP_CAMPINGRIFLE:
 			if(zoomscript_caught)
-				return EnemyHitCheck(view_origin, '0 0 0', '0 0 0', view_origin + view_forward * MAX_SHOT_DISTANCE);
+			{
+				tracebox(view_origin, '0 0 0', '0 0 0', view_origin + view_forward * MAX_SHOT_DISTANCE, MOVE_NORMAL, trueaim);
+				return EnemyHitCheck();
+			}
 			break;
 		case WEP_ROCKET_LAUNCHER: // projectile has a size!
 			mi = '-3 -3 -3';
@@ -288,16 +290,18 @@ float TrueAimCheck()
 	tracebox(w_shotorg, mi, ma, w_shotorg + view_forward * (vecs_x + nudge), MOVE_NORMAL, trueaim); // FIXME this MOVE_NORMAL part will misbehave a little in csqc
 	w_shotorg = trace_endpos - view_forward * nudge;
 
-	shottype = EnemyHitCheck(w_shotorg, mi, ma, trueaimpoint);
+	tracebox(w_shotorg, mi, ma, trueaimpoint, MOVE_NORMAL, trueaim);
+	shottype = EnemyHitCheck();
 	if(shottype != SHOTTYPE_HITWORLD)
 		return shottype;
-
-	// now test whether we will actually hit the trueaimpoint...
-	tracebox(w_shotorg, mi, ma, trueaimpoint, MOVE_NOMONSTERS, trueaim);
-
-	if(vlen(trace_endpos - trueaimpoint) > vlen(ma - mi) + 1)
+	
+#if 0
+	// FIXME WHY DOES THIS NOT WORK FOR THE ROCKET LAUNCHER?
+	// or rather, I know why, but see no fix
+	if(vlen(trace_endpos - trueaimpoint) > vlen(ma) + vlen(mi) + 1)
 		// yes, this is an ugly hack... but it seems good enough to find out whether the test hits the same place as the initial trace
 		return SHOTTYPE_HITOBSTRUCTION;
+#endif
 	
 	return SHOTTYPE_HITWORLD;
 }
@@ -318,6 +322,7 @@ void CSQC_UpdateView(float w, float h)
 	entity e;
 	float fov;
 	float f, i, j;
+	vector v;
 
 	dprint_load();
 	WaypointSprite_Load();
@@ -566,11 +571,25 @@ void CSQC_UpdateView(float w, float h)
 			float bullets, ring_scale;
 			// wcross_origin = '0.5 0 0' * vid_conwidth + '0 0.5 0' * vid_conheight;
 			wcross_origin = project_3d_to_2d(view_origin + MAX_SHOT_DISTANCE * view_forward);
+			wcross_origin_z = 0;
             if(cvar("crosshair_hittest"))
+			{
+				vector wcross_oldorigin;
+				wcross_oldorigin = wcross_origin;
                 shottype = TrueAimCheck();
+				if(shottype == SHOTTYPE_HITWORLD)
+				{
+					v = wcross_origin - wcross_oldorigin;
+					v_x /= vid_conwidth;
+					v_y /= vid_conheight;
+					if(vlen(v) > 0.01)
+						shottype = SHOTTYPE_HITOBSTRUCTION;
+				}
+				if(!cvar("crosshair_hittest_showimpact"))
+					wcross_origin = wcross_oldorigin;
+			}
             else
                 shottype = SHOTTYPE_HITWORLD;
-			wcross_origin_z = 0;
 
             string wcross_style;
             wcross_style = cvar_string("crosshair");
@@ -626,13 +645,7 @@ void CSQC_UpdateView(float w, float h)
 				else
 					bullets = 0;
 				
-                if(shottype == SHOTTYPE_HITENEMY || shottype == SHOTTYPE_HITWORLD)
-                {
-					if (bullets)
-						drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x * ring_scale) - '0 0.5 0' * (wcross_size_y * ring_scale), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
-                    drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x) - '0 0.5 0' * ( wcross_size_y), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
-                }
-                else
+                if(shottype == SHOTTYPE_HITTEAM || (shottype == SHOTTYPE_HITOBSTRUCTION && cvar("crosshair_hittest_blur")))
                 {
                     wcross_alpha *= 0.04 * 0.75;
                     for(i = -2; i <= 2; ++i)
@@ -642,6 +655,12 @@ void CSQC_UpdateView(float w, float h)
 								drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x * ring_scale + i) - '0 0.5 0' * (wcross_size_y * ring_scale + j), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
                             drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x + i) - '0 0.5 0' * (wcross_size_y + j), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
 						}
+                }
+                else
+                {
+					if (bullets)
+						drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x * ring_scale) - '0 0.5 0' * (wcross_size_y * ring_scale), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
+                    drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x) - '0 0.5 0' * ( wcross_size_y), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
                 }
             }
         }
