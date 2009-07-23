@@ -95,7 +95,7 @@ vector W_HitPlotNormalizedUntransform(vector org, entity targ, vector screenforw
 
 void W_HitPlotAnalysis(entity player, vector screenforward, vector screenright, vector screenup)
 {
-	vector hitplot; 
+	vector hitplot;
 	vector org;
 	float lag;
 
@@ -136,9 +136,13 @@ void W_SetupShot_ProjectileSize(entity ent, vector mi, vector ma, float antilag,
 	ent.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE;
 	traceline(ent.origin + ent.view_ofs, ent.origin + ent.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, ent); // no antilag needed
 	trueaimpoint = trace_endpos;
-	
-	self.max_damage[self.weapon] += maxdamage;
-	self.maxdamage_fired = self.weapon + 64 * rint(self.max_damage[self.weapon]);
+
+	// Track max damage and set the stat to be sent later in g_world.qc
+	if not(inWarmupStage)
+	{
+		self.max_damage[self.weapon] += maxdamage;
+		self.maxdamage_fired = self.weapon + 64 * rint(self.max_damage[self.weapon]);
+	}
 
 	W_HitPlotAnalysis(ent, v_forward, v_right, v_up);
 
@@ -152,7 +156,7 @@ void W_SetupShot_ProjectileSize(entity ent, vector mi, vector ma, float antilag,
 
 	if(debug_shotorg != '0 0 0')
 		vecs = debug_shotorg;
-	
+
 	dv = v_right * vecs_y + v_up * vecs_z;
 	w_shotorg = ent.origin + ent.view_ofs + dv;
 
@@ -622,7 +626,7 @@ void CL_Weaponentity_Think()
 		self.alpha = self.owner.alpha;
 	else
 		self.alpha = 1;
-	
+
 	self.colormap = self.owner.colormap;
 	if (self.weaponentity)
 	{
@@ -833,7 +837,7 @@ void CL_ExteriorWeaponentity_Think()
 		self.alpha = self.owner.alpha;
 	else
 		self.alpha = 1;
-	
+
 	self.colormap = self.owner.colormap;
 };
 
@@ -996,7 +1000,7 @@ float weapon_prepareattack(float secondary, float attacktime)
 	if(time < game_starttime || time < self.race_penalty) {
 		return FALSE;
 	}
-	
+
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 	if (!weapon_action(self.weapon, WR_CHECKAMMO1 + secondary))
 	{
@@ -1115,7 +1119,7 @@ void weapon_thinkf(float fr, float t, void() func)
 					self.weapon_morph2angles = '-10 40 5';
 					makevectors(self.weapon_morph2angles_x * '-1 0 0' + self.weapon_morph2angles_y * '0 1 0' + self.weapon_morph2angles_z * '0 0 1');
 					self.weapon_morph2origin = QCWEAPONANIMATION_ORIGIN(self.weaponentity);
-		
+
 					self.weapon_morph3time = time + t * 0.25;
 					self.weapon_morph3angles = '-10 40 0';
 					makevectors(self.weapon_morph3angles_x * '-1 0 0' + self.weapon_morph3angles_y * '0 1 0' + self.weapon_morph3angles_z * '0 0 1');

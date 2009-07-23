@@ -119,10 +119,13 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 		// advance to the next entity
 		ent = findfloat(ent, railgunhit, TRUE);
 	}
+
 	//calculate hits and fired shots for hitscan
+	if not(inWarmupStage)
 	if not(self.isbot)
 	{
 		self.bullets_fired[self.weapon] += 1;
+
 		if(did_hit)
 			self.bullets_hit[self.weapon] += 1;
 
