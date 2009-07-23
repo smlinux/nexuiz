@@ -161,7 +161,7 @@ void turret_hellion_missile_explode()
 
     //w_deathtypestring = "could not dodge the twin missiles.";
     self.event_damage = SUB_Null;
-    d = RadiusDamage (self, self.owner, self.owner.shot_dmg, 0, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET, world, 0);
+    d = RadiusDamage (self, self.owner, self.owner.shot_dmg, 0, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET, world);
 
 #ifdef TURRET_DEBUG
     self.owner.tur_dbg_dmg_t_h = self.owner.tur_dbg_dmg_t_h + d; //self.owner.shot_dmg;

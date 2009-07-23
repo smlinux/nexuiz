@@ -932,8 +932,7 @@ FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(max_damage);
 
 
 float RadiusDamage_running;
-float RadiusDamage (entity inflictor, entity attacker, float coredamage, float edgedamage, float rad, entity ignore,
-					float forceintensity, float deathtype, entity directhitentity, float weaponid)
+float RadiusDamage (entity inflictor, entity attacker, float coredamage, float edgedamage, float rad, entity ignore, float forceintensity, float deathtype, entity directhitentity)
 // Returns total damage applies to creatures
 {
 	entity	targ;
@@ -946,6 +945,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 	vector  nearest;
 	float   total_damage_to_creatures;
 	entity  next;
+	float weaponid;
 
 	float stat_damagedone;
 	float stat_maxdamage;
@@ -1057,6 +1057,8 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 	}
 
 	RadiusDamage_running = 0;
+
+	weaponid = DEATH_WEAPONOF(deathtype);
 
 	// Calculates stats for all RadiusDamage weapons
 	if not(inWarmupStage)

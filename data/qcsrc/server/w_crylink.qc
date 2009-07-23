@@ -15,7 +15,7 @@ void W_Crylink_Touch (void)
 		f = cvar("g_balance_crylink_primary_bouncedamagefactor");
 	if(self.alpha)
 		f *= self.alpha;
-	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_primary_damage") * f, cvar("g_balance_crylink_primary_edgedamage") * f, cvar("g_balance_crylink_primary_radius"), world, cvar("g_balance_crylink_primary_force") * f, self.projectiledeathtype, other, WEP_CRYLINK);
+	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_primary_damage") * f, cvar("g_balance_crylink_primary_edgedamage") * f, cvar("g_balance_crylink_primary_radius"), world, cvar("g_balance_crylink_primary_force") * f, self.projectiledeathtype, other);
 	if (finalhit)
 	{
 		remove (self);
@@ -42,7 +42,7 @@ void W_Crylink_Touch2 (void)
 		f = cvar("g_balance_crylink_secondary_bouncedamagefactor");
 	if(self.alpha)
 		f *= self.alpha;
-	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_secondary_damage") * f, cvar("g_balance_crylink_secondary_edgedamage") * f, cvar("g_balance_crylink_secondary_radius"), world, cvar("g_balance_crylink_secondary_force") * f, self.projectiledeathtype, other, WEP_CRYLINK);
+	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_secondary_damage") * f, cvar("g_balance_crylink_secondary_edgedamage") * f, cvar("g_balance_crylink_secondary_radius"), world, cvar("g_balance_crylink_secondary_force") * f, self.projectiledeathtype, other);
 	if (finalhit)
 	{
 		remove (self);
