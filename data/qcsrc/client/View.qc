@@ -564,7 +564,7 @@ void CSQC_UpdateView(float w, float h)
 			// TrueAim check
 			float shottype;
 			float bullets, ring_scale;
-			wcrosss_origin = '0.5 0 0' * vid_conwidth + '0 0.5 0' * vid_conheight;
+			wcross_origin = '0.5 0 0' * vid_conwidth + '0 0.5 0' * vid_conheight;
             if(cvar("crosshair_hittest"))
                 shottype = TrueAimCheck();
             else
