@@ -206,6 +206,8 @@ vector GetCurrentFov(float fov)
 
 // this function must match W_SetupShot!
 float zoomscript_caught;
+
+vector wcross_origin;
 entity trueaim;
 
 #define SHOTTYPE_HITTEAM 1
@@ -224,6 +226,8 @@ float EnemyHitCheck(vector start, vector mi, vector ma, vector end)
 {
 	float t;
 	tracebox(start, mi, ma, end, MOVE_NORMAL, trueaim);
+	if(cvar("crosshair_hittest_showimpact"))
+		wcross_origin = project_3d_to_2d(trace_endpos);
 	if(trace_networkentity < 1)
 		return SHOTTYPE_HITWORLD;
 	if(trace_networkentity > maxclients)
@@ -557,10 +561,10 @@ void CSQC_UpdateView(float w, float h)
 
         // crosshair goes VERY LAST
         if(!scoreboard_active && !ons_showmap && !camera_active) {
-            // TrueAim check
-            float shottype;
+			// TrueAim check
+			float shottype;
 			float bullets, ring_scale;
-
+			wcrosss_origin = '0.5 0 0' * vid_conwidth + '0 0.5 0' * vid_conheight;
             if(cvar("crosshair_hittest"))
                 shottype = TrueAimCheck();
             else
@@ -623,8 +627,8 @@ void CSQC_UpdateView(float w, float h)
                 if(shottype == SHOTTYPE_HITENEMY || shottype == SHOTTYPE_HITWORLD)
                 {
 					if (bullets)
-						drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x * ring_scale) + '0 0.5 0' * (vid_conheight - wcross_size_y * ring_scale), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
-                    drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x) + '0 0.5 0' * (vid_conheight - wcross_size_y), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
+						drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x * ring_scale) - '0 0.5 0' * (wcross_size_y * ring_scale), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
+                    drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x) - '0 0.5 0' * ( wcross_size_y), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
                 }
                 else
                 {
@@ -633,8 +637,8 @@ void CSQC_UpdateView(float w, float h)
                         for(j = -2; j <= 2; ++j)
 						{
 							if (bullets)
-								drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x * ring_scale + i) + '0 0.5 0' * (vid_conheight - wcross_size_y * ring_scale + j), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
-                            drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x + i) + '0 0.5 0' * (vid_conheight - wcross_size_y + j), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
+								drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x * ring_scale + i) - '0 0.5 0' * (wcross_size_y * ring_scale + j), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
+                            drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x + i) - '0 0.5 0' * (wcross_size_y + j), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
 						}
                 }
             }
