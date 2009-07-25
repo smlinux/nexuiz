@@ -638,12 +638,12 @@ void havocbot_movetogoal()
 		if(self.goalcurrent.origin_z + self.goalcurrent.mins_z > self.origin_z + self.mins_z)
 		{
 			if(self.origin_z + self.mins_z  < self.ladder_entity.origin_z + self.ladder_entity.maxs_z)
-				dir = '0 0 1';
+				dir_z = 1;
 		}
 		else
 		{
 			if(self.origin_z + self.mins_z  > self.ladder_entity.origin_z + self.ladder_entity.mins_z)
-				dir = '0 0 -1';
+				dir_z = -1;
 		}
 	}
 
