@@ -1000,10 +1000,14 @@ void havocbot_aim()
 		lag_additem(time + self.ping, 0, 0, world, self.origin, selfvel, self.goalcurrent.origin, '0 0 0');
 };
 
+.entity draggedby;
 void havocbot_ai()
 {
-    if(bot_execute_commands())
-        return;
+	if(self.draggedby)
+		return;
+
+	if(bot_execute_commands())
+		return;
 
 	if (bot_strategytoken == self)
 	if (!bot_strategytoken_taken)
