@@ -938,7 +938,9 @@ void GameCommand(string command)
 			if(argc==2)
 			{
 				bot_list_commands();
-				print("\nUse sv_cmd bot_cmd help <command> for more\n");
+				print("\nsv_cmd bot_cmd reset          #Clear the cmd queues of all bots\n");
+				print("sv_cmd bot_cmd load <file>    #Load script file\n");
+				print("\nUse sv_cmd bot_cmd help <command> for more\n\n");
 				return;
 			}
 
@@ -946,12 +948,14 @@ void GameCommand(string command)
 			return;
 		}
 
+		// Clear all bot queues
 		if(argv(1) == "reset")
 		{
 			bot_resetqueues();
 			return;
 		}
 
+		// Load cmds from file
 		if(argv(1) == "load" && argc == 3)
 		{
 			float fh;
@@ -998,9 +1002,9 @@ void GameCommand(string command)
 			return;
 		}
 
-		bot = find_bot_by_number(stof(argv(2)));
+		bot = find_bot_by_number(stof(argv(1)));
 		if(bot == world)
-			bot = find_bot_by_name(argv(2));
+			bot = find_bot_by_name(argv(1));
 
 		if(bot)
 			bot_queuecommand(bot, strcat(argv(2), " ", argv(3)));
