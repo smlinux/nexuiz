@@ -7,114 +7,11 @@ float bot_ignore_bots;
 .float max_armorvalue;
 float havocbot_pickupevalfunc(entity item)
 {
-	float i, j, rating, base, position, need_shells, need_nails, need_rockets, need_cells;
-	entity wi;
-
-	base = item.bot_pickupbasevalue;
-	rating = 0;
-
-	// Detect needed ammo
-	for(i = WEP_FIRST; i < WEP_LAST ; ++i)
-	{
-		wi = get_weaponinfo(i);
-
-		if not(wi.weapons & self.weapons)
-			continue;
-
-		if(wi.items & IT_SHELLS)
-			need_shells = TRUE;
-		else if(wi.items & IT_NAILS)
-			need_nails = TRUE;
-		else if(wi.items & IT_ROCKETS)
-			need_rockets = TRUE;
-		else if(wi.items & IT_CELLS)
-			need_cells = TRUE;
-	}
-
-	// Rate ammo items
-	if (item.ammo_shells)
-	if (self.ammo_shells < g_pickup_shells_max && need_cells )
-		rating = rating + max(0, 1 - self.ammo_shells / g_pickup_shells_max);
-
-	if (item.ammo_nails)
-	if (self.ammo_nails < g_pickup_nails_max && need_nails )
-		rating = rating + max(0, 1 - self.ammo_nails / g_pickup_nails_max);
-
-	if (item.ammo_rockets)
-	if (self.ammo_rockets < g_pickup_rockets_max && need_rockets)
-		rating = rating + max(0, 1 - self.ammo_rockets / g_pickup_rockets_max);
-
-	if (item.ammo_cells)
-	if (self.ammo_cells < g_pickup_cells_max && need_cells)
-		rating = rating + max(0, 1 - self.ammo_cells / g_pickup_cells_max);
-
-	// Rate health items (aim to grab half the max capacity)
-	if (item.armorvalue)
-	if (self.armorvalue < item.max_armorvalue * 0.5)
-		rating = rating + max(0, 1 - self.armorvalue / (item.max_armorvalue * 0.5));
-
-	if (item.health)
-	if (self.health < item.max_health * 0.5)
-	{
-		rating = rating + max(0, 1 - self.health / (item.max_health * 0.5));
-	}
-
-	// Rate weapons
-	if( item.weapons )
-	{
-		// See if I have it already
-		if( self.weapons & item.weapons == item.weapons )
-		{
-			// If I can pick it up
-			if(rating)
-			if not(cvar("g_weapon_stay"))
-			{
-				// Skilled bots will grab more
-				local float divisor = 2;
-				rating += bound(0, skill / (10*divisor), 1/divisor);
-			}
-		}
-		else
-			rating += 1;
-
-		// If custom weapon priorities for bots is enabled rate most wanted weapons higher
-		if( bot_custom_weapon && rating )
-		{
-			for(i = WEP_FIRST; i < WEP_LAST ; ++i)
-			{
-				// Find weapon
-				if( (get_weaponinfo(i)).weapons & item.weapons  != item.weapons )
-					continue;
-
-				// Find the highest position on any range
-				position = -1;
-				for(j = 0; j < WEP_LAST ; ++j){
-					if(
-						bot_weapons_far[j] == i ||
-						bot_weapons_mid[j] == i ||
-						bot_weapons_close[j] == i
-					)
-					{
-						position = j;
-						break;
-					}
-				}
-
-				// Rate it
-				if (position >= 0 )
-				{
-					position = WEP_LAST - position;
-					// item.bot_pickupbasevalue is overwritten here
-					base = BOT_PICKUP_RATING_LOW + ( (BOT_PICKUP_RATING_HIGH - BOT_PICKUP_RATING_LOW) * (position / WEP_LAST ));
-					break;
-				}
-			}
-		}
-	}
-
-	// TODO: if the item is not recognized then default to item.bot_pickupevalfunc(self, item);
-	return base * rating;
-};
+	float r;
+	r = item.bot_pickupevalfunc(self, item);
+	// print(item.classname, " ", ftos(r), "\n");
+	return r;
+}
 
 void havocbot_goalrating_items(float ratingscale, vector org, float sradius)
 {

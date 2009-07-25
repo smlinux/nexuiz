@@ -1486,6 +1486,7 @@ entity navigation_findnearestwaypoint(entity ent, float walkfromwp)
 		org = org + ent.tag_entity.origin;
 	if (navigation_testtracewalk)
 		te_plasmaburn(org);
+
 	best = world;
 	bestdist = 1050;
 

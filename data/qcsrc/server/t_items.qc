@@ -477,37 +477,111 @@ float generic_pickupevalfunc(entity player, entity item) {return item.bot_pickup
 
 float weapon_pickupevalfunc(entity player, entity item)
 {
-	// if we already have the weapon, rate it 1/5th normal value
-	if ((player.weapons & item.weapons) == item.weapons)
-		return item.bot_pickupbasevalue * 0.2;
-	return item.bot_pickupbasevalue;
+	float c, i, j, position;
+
+	// See if I have it already
+	if(player.weapons & item.weapons == item.weapons)
+	{
+		// If I can pick it up
+		if(g_weapon_stay == 1)
+			c = 0;
+		else if(player.ammo_cells || player.ammo_shells || player.ammo_nails || player.ammo_rockets)
+		{
+			// Skilled bots will grab more
+			c = bound(0, skill / 10, 1) * 0.5;
+		}
+		else
+			c = 0;
+	}
+	else
+		c = 1;
+
+	// If custom weapon priorities for bots is enabled rate most wanted weapons higher
+	if( bot_custom_weapon && c )
+	{
+		for(i = WEP_FIRST; i < WEP_LAST ; ++i)
+		{
+			// Find weapon
+			if( (get_weaponinfo(i)).weapons & item.weapons  != item.weapons )
+				continue;
+
+			// Find the highest position on any range
+			position = -1;
+			for(j = 0; j < WEP_LAST ; ++j){
+				if(
+						bot_weapons_far[j] == i ||
+						bot_weapons_mid[j] == i ||
+						bot_weapons_close[j] == i
+				  )
+				{
+					position = j;
+					break;
+				}
+			}
+
+			// Rate it
+			if (position >= 0 )
+			{
+				position = WEP_LAST - position;
+				// item.bot_pickupbasevalue is overwritten here
+				return (BOT_PICKUP_RATING_LOW + ( (BOT_PICKUP_RATING_HIGH - BOT_PICKUP_RATING_LOW) * (position / WEP_LAST ))) * c;
+				break;
+			}
+		}
+	}
+
+	return item.bot_pickupbasevalue * c;
 };
 
 float commodity_pickupevalfunc(entity player, entity item)
 {
-	float c;
+	float c, i, need_shells, need_nails, need_rockets, need_cells;
+	entity wi;
 	c = 0;
+
+	// Detect needed ammo
+	for(i = WEP_FIRST; i < WEP_LAST ; ++i)
+	{
+		wi = get_weaponinfo(i);
+
+		if not(wi.weapons & player.weapons)
+			continue;
+
+		if(wi.items & IT_SHELLS)
+			need_shells = TRUE;
+		else if(wi.items & IT_NAILS)
+			need_nails = TRUE;
+		else if(wi.items & IT_ROCKETS)
+			need_rockets = TRUE;
+		else if(wi.items & IT_CELLS)
+			need_cells = TRUE;
+	}
+
 	// TODO: figure out if the player even has the weapon this ammo is for?
 	// may not affect strategy much though...
 	// find out how much more ammo/armor/health the player can hold
+	if (need_shells)
 	if (item.ammo_shells)
 	if (player.ammo_shells < g_pickup_shells_max)
 		c = c + max(0, 1 - player.ammo_shells / g_pickup_shells_max);
+	if (need_nails)
 	if (item.ammo_nails)
 	if (player.ammo_nails < g_pickup_nails_max)
 		c = c + max(0, 1 - player.ammo_nails / g_pickup_nails_max);
+	if (need_rockets)
 	if (item.ammo_rockets)
 	if (player.ammo_rockets < g_pickup_rockets_max)
 		c = c + max(0, 1 - player.ammo_rockets / g_pickup_rockets_max);
+	if (need_cells)
 	if (item.ammo_cells)
 	if (player.ammo_cells < g_pickup_cells_max)
 		c = c + max(0, 1 - player.ammo_cells / g_pickup_cells_max);
 	if (item.armorvalue)
-	if (player.armorvalue < item.max_armorvalue)
-		c = c + max(0, 1 - player.armorvalue / item.max_armorvalue);
+	if (player.armorvalue < item.max_armorvalue*0.5)
+		c = c + max(0, 1 - player.armorvalue / (item.max_armorvalue*0.5));
 	if (item.health)
-	if (player.health < item.max_health)
-		c = c + max(0, 1 - player.health / item.max_health);
+	if (player.health < item.max_health*0.5)
+		c = c + max(0, 1 - player.health / (item.max_health*0.5));
 
 	return item.bot_pickupbasevalue * c;
 };
