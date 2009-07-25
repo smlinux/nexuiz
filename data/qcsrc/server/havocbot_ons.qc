@@ -23,8 +23,6 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_enemyplay
 .float isgenneighbor_blue, iscpneighbor_blue;
 .float isgenneighbor_red, iscpneighbor_red;
 
-float havocbot_pickupevalfunc(entity item);
-
 void havocbot_goalrating_ons_offenseitems(float ratingscale, vector org, float sradius)
 {
 	local entity head;
@@ -61,7 +59,7 @@ void havocbot_goalrating_ons_offenseitems(float ratingscale, vector org, float s
 		if ( ((head.health || head.armorvalue) && needarmor) || (head.weapons && needweapons ) )
 		if (vlen(head.origin - org) < sradius)
 		{
-			t = havocbot_pickupevalfunc(head);
+			t = head.bot_pickupevalfunc(self, head);
 			if (t > 0)
 				navigation_routerating(head, t * ratingscale, 500);
 		}

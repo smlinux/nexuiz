@@ -5,13 +5,6 @@
 float bot_ignore_bots;
 
 .float max_armorvalue;
-float havocbot_pickupevalfunc(entity item)
-{
-	float r;
-	r = item.bot_pickupevalfunc(self, item);
-	// print(item.classname, " ", ftos(r), "\n");
-	return r;
-}
 
 void havocbot_goalrating_items(float ratingscale, vector org, float sradius)
 {
@@ -119,18 +112,13 @@ void havocbot_goalrating_items(float ratingscale, vector org, float sradius)
 			}
 
 			// Rate the item only if no one needs it, or if an enemy is closer to it
-			if (	(enemy_distance < friend_distance && distance < enemy_distance) ||
+			if ( (enemy_distance < friend_distance && distance < enemy_distance) ||
 				(friend_distance > cvar("bot_ai_friends_aware_pickup_radius") ) || !discard )
-			{
-			//	rating = head.bot_pickupevalfunc(self, head);
-				rating = havocbot_pickupevalfunc(head);
-			}
+				rating = head.bot_pickupevalfunc(self, head);
+
 		}
 		else
-		{
-		//	rating = head.bot_pickupevalfunc(self, head);
-			rating = havocbot_pickupevalfunc(head);
-		}
+			rating = head.bot_pickupevalfunc(self, head);
 
 		if(rating > 0)
 			navigation_routerating(head, rating * ratingscale, 2000);
