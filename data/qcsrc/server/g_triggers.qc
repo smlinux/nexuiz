@@ -1530,23 +1530,23 @@ void target_voicescript_next(entity pl)
 			{
 				play2(pl, strcat(vs.netname, "/", argv(i), ".wav"));
 				dt = stof(argv(i + 1));
-				if(dt > 0)
+				if(dt >= 0)
+				{
 					pl.voicescript_voiceend = time + dt;
+					pl.voicescript_nextthink = pl.voicescript_voiceend + vs.wait * (0.5 + random());
+				}
 				else
+				{
 					pl.voicescript_voiceend = time - dt;
+					pl.voicescript_nextthink = pl.voicescript_voiceend;
+				}
+
+				pl.voicescript_index += 1;
 			}
 			else
 			{
-				pl.voicescript = world;
-				dt = 0;
+				pl.voicescript = world; // stop trying then
 			}
-
-			pl.voicescript_index += 1;
-
-			if(dt > 0)
-				pl.voicescript_nextthink = pl.voicescript_voiceend + vs.wait * (0.5 + random());
-			else
-				pl.voicescript_nextthink = pl.voicescript_voiceend;
 		}
 	}
 }
