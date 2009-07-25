@@ -1500,7 +1500,7 @@ void target_voicescript_use()
 void target_voicescript_next(entity pl)
 {
 	entity vs;
-	float i, n;
+	float i, n, dt;
 
 	vs = pl.voicescript;
 	if(!vs)
@@ -1529,13 +1529,24 @@ void target_voicescript_next(entity pl)
 			if(i >= 0)
 			{
 				play2(pl, strcat(vs.netname, "/", argv(i), ".wav"));
-				pl.voicescript_voiceend = time + stof(argv(i + 1));
+				dt = stof(argv(i + 1));
+				if(dt > 0)
+					pl.voicescript_voiceend = dt;
+				else
+					pl.voicescript_voiceend = -dt;
 			}
 			else
+			{
 				pl.voicescript = world;
+				dt = 0;
+			}
 
 			pl.voicescript_index += 1;
-			pl.voicescript_nextthink = pl.voicescript_voiceend + vs.wait * (0.5 + random());
+
+			if(dt > 0)
+				pl.voicescript_nextthink = pl.voicescript_voiceend + vs.wait * (0.5 + random());
+			else
+				pl.voicescript_nextthink = pl.voicescript_voiceend;
 		}
 	}
 }
@@ -1544,7 +1555,9 @@ void spawnfunc_target_voicescript()
 {
 	// netname: directory of the sound files
 	// message: list of "sound file" duration "sound file" duration, a *, and again a list
-	//          foo1 4.1 foo2 4.0 foo3 3.1 * fool1 1.1 fool2 7.1 fool3 9.1 fool4 3.7
+	//          foo1 4.1 foo2 4.0 foo3 -3.1 * fool1 1.1 fool2 7.1 fool3 9.1 fool4 3.7
+	//          Here, a - in front of the duration means that no delay is to be
+	//          added after this message
 	// wait: average time between messages
 	// delay: initial delay before the first message
 	
