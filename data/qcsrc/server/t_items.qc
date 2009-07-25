@@ -525,7 +525,6 @@ float weapon_pickupevalfunc(entity player, entity item)
 				position = WEP_LAST - position;
 				// item.bot_pickupbasevalue is overwritten here
 				return (BOT_PICKUP_RATING_LOW + ( (BOT_PICKUP_RATING_HIGH - BOT_PICKUP_RATING_LOW) * (position / WEP_LAST ))) * c;
-				break;
 			}
 		}
 	}
