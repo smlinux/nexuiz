@@ -1531,9 +1531,9 @@ void target_voicescript_next(entity pl)
 				play2(pl, strcat(vs.netname, "/", argv(i), ".wav"));
 				dt = stof(argv(i + 1));
 				if(dt > 0)
-					pl.voicescript_voiceend = dt;
+					pl.voicescript_voiceend = time + dt;
 				else
-					pl.voicescript_voiceend = -dt;
+					pl.voicescript_voiceend = time - dt;
 			}
 			else
 			{
