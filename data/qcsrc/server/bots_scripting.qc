@@ -9,7 +9,7 @@ void bot_clearqueue(entity bot)
 		error("readcommand but no queue allocated");
 	buf_del(bot.bot_cmdqueuebuf);
 	bot.bot_cmdqueuebuf_allocated = FALSE;
-	print("bot ", bot.netname, " queue cleared\n");
+	dprint("bot ", bot.netname, " queue cleared\n");
 }
 
 void bot_queuecommand(entity bot, string cmdstring)
@@ -17,8 +17,6 @@ void bot_queuecommand(entity bot, string cmdstring)
 	if(!bot.bot_cmdqueuebuf_allocated)
 	{
 		bot.bot_cmdqueuebuf = buf_create();
-		bot.bot_cmdqueuebuf_start = 0;
-		bot.bot_cmdqueuebuf_end = 0;
 		bot.bot_cmdqueuebuf_allocated = TRUE;
 	}
 
@@ -115,7 +113,7 @@ entity bot_getplace(string placename)
 #define BOT_CMD_CONTINUE		2
 #define BOT_CMD_WAIT			3
 #define BOT_CMD_TURN			4
-#define BOT_CMD_MOVETO			5	// Not implemented yet
+#define BOT_CMD_MOVETO			5
 #define BOT_CMD_RESETGOAL		6	// Not implemented yet
 #define BOT_CMD_CC			7
 #define BOT_CMD_IF      		8
@@ -548,7 +546,7 @@ float bot_cmd_barrier()
 	entity cl;
 
 	// 0 = no barrier, 1 = waiting, 2 = waiting finished
-	
+
 	if(self.bot_barrier == 0) // initialization
 	{
 		self.bot_barrier = 1;
@@ -1042,13 +1040,7 @@ float bot_cmd_resetgoal()
 	return self.cmd_resetgoal();
 }
 
-
-
-
-
-
-
-
+//
 
 void bot_command_executed(float rm)
 {
@@ -1066,15 +1058,12 @@ void bot_setcurrentcommand()
 {
 	bot_cmd = world;
 
-	if(self.bot_cmd_execution_index == 0)
-		self.bot_cmd_execution_index = 1;
-	
 	if(!self.bot_cmd_current)
 	{
 		self.bot_cmd_current = spawn();
 		self.bot_cmd_current.classname = "bot_cmd";
 		self.bot_cmd_current.is_bot_cmd = 1;
-		self.bot_cmd_current.bot_cmd_index = 0;
+		self.bot_cmd_current.bot_cmd_index = 1;
 	}
 
 	bot_cmd = self.bot_cmd_current;
@@ -1119,6 +1108,8 @@ void bot_resetqueues()
 	bot_barriertime = time;
 }
 
+// Here we map commands to functions and deal with complex interactions between commands and execution states
+// NOTE: Of course you need to include your commands here too :)
 float bot_execute_commands_once()
 {
 	local float status, ispressingkey;
@@ -1277,8 +1268,6 @@ float bot_execute_commands_once()
 }
 
 // This function should be (the only) called directly from the bot ai loop
-// It maps commands to functions and deal with complex interactions between commands and execution states
-// NOTE: Of course you need to include your commands here too :)
 float bot_execute_commands()
 {
 	float f;
