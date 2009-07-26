@@ -150,6 +150,11 @@ void havocbot_bunnyhop(vector dir)
 	if(cvar("g_midair"))
 		return;
 
+	// Don't jump when using some weapons
+	if(self.aistatus & AI_STATUS_ATTACKING)
+	if(self.weapon & WEP_CAMPINGRIFLE)
+		return;
+
 	if(self.goalcurrent.classname == "player")
 		return;
 
@@ -734,6 +739,7 @@ void havocbot_chooseenemy()
 		}
 		head = head.chain;
 	}
+
 	self.enemy = best;
 	self.havocbot_stickenemy = TRUE;
 };
