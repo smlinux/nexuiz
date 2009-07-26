@@ -1,0 +1,37 @@
+================================================================================
+CyberParcour Project
+================================================================================
+
+Map Title	: CyberParcour01
+Version		: 1.4
+Game		: Nexuiz <alientrap.org>
+Release Date	: July 2009
+Author		: Severin "sev" Meyer
+Email Address	: sev.ch(at)web.de
+
+Final compile:
+-meta -skyfix -samplesize 8
+(no vis stage)
+-light -fast -deluxe -filter -samples 3 -lightmapsize 512
+
+Have fun
+sev
+
+================================================================================
+License
+================================================================================
+
+I release all the files that are part of the CyberParcour map project
+under the terms of the
+
+GNU General Public License
+
+as published by the Free Software Foundation,
+either version 2 of the License, or any later version.
+
+You can redistribute them and/or modify them under the terms of the
+GNU General Public License. <http://www.gnu.org/licenses/>.
+
+All the files that are part of the CyberParcour project are distributed
+in the hope that they will be useful, but WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.

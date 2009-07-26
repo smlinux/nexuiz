@@ -1,0 +1,12 @@
+The rocket.ogg sound file is based on the sounds
+
+  Big_Machine.wav
+  steam_loop.wav
+
+from Tenshihan's GPL Soundbank
+
+and
+
+  sparks1.ogg
+
+from the Nexuiz data pk3
