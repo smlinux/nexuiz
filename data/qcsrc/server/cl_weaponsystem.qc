@@ -401,7 +401,7 @@ vector weapon_adjust = '10 0 -15';
  * supported formats:
  *
  * 1. simple animated model, muzzlr flash handling on h_ model:
- *    h_tuba.dpm, h_tuba.dpm.animinfo - invisible model controlling the animation
+ *    h_tuba.dpm, h_tuba.dpm.framegroups - invisible model controlling the animation
  *      tags:
  *        shot = muzzle end (shot origin, also used for muzzle flashes)
  *        shell = casings ejection point (must be on the right hand side of the gun)
@@ -410,7 +410,7 @@ vector weapon_adjust = '10 0 -15';
  *    g_tuba.md3 - pickup model
  *
  * 2. fully animated model, muzzle flash handling on h_ model:
- *    h_tuba.dpm, h_tuba.dpm.animinfo - animated first person model
+ *    h_tuba.dpm, h_tuba.dpm.framegroups - animated first person model
  *      tags:
  *        shot = muzzle end (shot origin, also used for muzzle flashes)
  *        shell = casings ejection point (must be on the right hand side of the gun)
@@ -419,7 +419,7 @@ vector weapon_adjust = '10 0 -15';
  *    g_tuba.md3 - pickup model
  *
  * 3. fully animated model, muzzle flash handling on v_ model:
- *    h_tuba.dpm, h_tuba.dpm.animinfo - animated first person model
+ *    h_tuba.dpm, h_tuba.dpm.framegroups - animated first person model
  *      tags:
  *        shot = muzzle end (shot origin)
  *        shell = casings ejection point (must be on the right hand side of the gun)
