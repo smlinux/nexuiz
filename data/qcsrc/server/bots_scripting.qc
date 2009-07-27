@@ -1063,11 +1063,10 @@ void bot_setcurrentcommand()
 		self.bot_cmd_current = spawn();
 		self.bot_cmd_current.classname = "bot_cmd";
 		self.bot_cmd_current.is_bot_cmd = 1;
-		self.bot_cmd_current.bot_cmd_index = 1;
 	}
 
 	bot_cmd = self.bot_cmd_current;
-	if(bot_cmd.bot_cmd_index != self.bot_cmd_execution_index)
+	if(bot_cmd.bot_cmd_index != self.bot_cmd_execution_index || self.bot_cmd_execution_index == 0)
 	{
 		if(bot_havecommand(self, self.bot_cmd_execution_index))
 		{
@@ -1079,7 +1078,12 @@ void bot_setcurrentcommand()
 				bot_cmd.bot_cmd_index = self.bot_cmd_execution_index;
 			}
 			else
+			{
+				// Invalid command, remove from queue
 				bot_cmd = world;
+				bot_dequeuecommand(self, self.bot_cmd_execution_index);
+				self.bot_cmd_execution_index++;
+			}
 		}
 		else
 			bot_cmd = world;
