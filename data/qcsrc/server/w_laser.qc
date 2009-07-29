@@ -5,7 +5,7 @@ void W_Laser_Touch (void)
 	PROJECTILE_TOUCH;
 
 	if(other.classname == "spectator")
-		checkclient();
+		checkclient(); // TODO put a breakpoint on this, and wait till it hits!
 
 	self.event_damage = SUB_Null;
 	if (self.dmg)
