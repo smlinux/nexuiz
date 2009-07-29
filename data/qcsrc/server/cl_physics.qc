@@ -527,28 +527,31 @@ void SV_PlayerPhysics()
 
 	self.items &~= IT_USING_JETPACK;
 
-	if(self.race_penalty)
-		if(time > self.race_penalty)
-			self.race_penalty = 0;
-
-	not_allowed_to_move = 0;
-	if(self.race_penalty)
-		not_allowed_to_move = 1;
-	if(!cvar("sv_ready_restart_after_countdown"))
-	if(time < game_starttime)
-		not_allowed_to_move = 1;
-
-	if(not_allowed_to_move)
+	if(self.classname == "player")
 	{
-		self.velocity = '0 0 0';
-		self.movetype = MOVETYPE_NONE;
-		self.disableclientprediction = 2;
-	}
-	else if(self.disableclientprediction == 2)
-	{
-		if(self.movetype == MOVETYPE_NONE)
-			self.movetype = MOVETYPE_WALK;
-		self.disableclientprediction = 0;
+		if(self.race_penalty)
+			if(time > self.race_penalty)
+				self.race_penalty = 0;
+
+		not_allowed_to_move = 0;
+		if(self.race_penalty)
+			not_allowed_to_move = 1;
+		if(!cvar("sv_ready_restart_after_countdown"))
+		if(time < game_starttime)
+			not_allowed_to_move = 1;
+
+		if(not_allowed_to_move)
+		{
+			self.velocity = '0 0 0';
+			self.movetype = MOVETYPE_NONE;
+			self.disableclientprediction = 2;
+		}
+		else if(self.disableclientprediction == 2)
+		{
+			if(self.movetype == MOVETYPE_NONE)
+				self.movetype = MOVETYPE_WALK;
+			self.disableclientprediction = 0;
+		}
 	}
 
 	if (self.movetype == MOVETYPE_NONE)
