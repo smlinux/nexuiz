@@ -2047,6 +2047,7 @@ float SpectateNext() {
 		WriteByte(MSG_ONE, SVC_SETVIEW);
 		WriteEntity(MSG_ONE, self.enemy);
 	 	//stuffcmd(self, "set viewsize $tmpviewsize \n");
+		self.movetype = MOVETYPE_NONE;
 		if(!SpectateUpdate())
 			PutObserverInServer();
 		return 1;

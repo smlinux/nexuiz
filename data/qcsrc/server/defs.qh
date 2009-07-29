@@ -610,5 +610,6 @@ float client_cefc_accumulatortime;
 
 .float campingrifle_bulletcounter;
 
-#define PROJECTILE_MAKETRIGGER(e) (e).solid = SOLID_TRIGGER; (e).dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE
-// once was: SOLID_BBOX and default dphitcontentsmask, but then stuff can be blocked by them, and they are impacted by spectators
+// #define PROJECTILE_MAKETRIGGER(e) (e).solid = SOLID_TRIGGER; (e).dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE
+// when doing this, hagar can go through clones
+#define PROJECTILE_MAKETRIGGER(e) (e).solid = SOLID_BBOX
