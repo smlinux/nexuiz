@@ -83,7 +83,7 @@ void W_Crylink_Attack (void)
 		proj.bot_dodgerating = cvar("g_balance_crylink_primary_damage");
 
 		proj.movetype = MOVETYPE_BOUNCEMISSILE;
-		proj.solid = SOLID_BBOX;
+		PROJECTILE_MAKETRIGGER(proj);
 		proj.projectiledeathtype = WEP_CRYLINK;
 		//proj.gravity = 0.001;
 
@@ -147,7 +147,7 @@ void W_Crylink_Attack2 (void)
 		proj.bot_dodgerating = cvar("g_balance_crylink_secondary_damage");
 
 		proj.movetype = MOVETYPE_BOUNCEMISSILE;
-		proj.solid = SOLID_BBOX;
+		PROJECTILE_MAKETRIGGER(proj);
 		proj.projectiledeathtype = WEP_CRYLINK | HITTYPE_SECONDARY;
 		//proj.gravity = 0.001;
 

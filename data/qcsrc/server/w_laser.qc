@@ -4,6 +4,9 @@ void W_Laser_Touch (void)
 {
 	PROJECTILE_TOUCH;
 
+	if(other.classname == "spectator")
+		checkclient();
+
 	self.event_damage = SUB_Null;
 	if (self.dmg)
 		RadiusDamage (self, self.owner, cvar("g_balance_laser_secondary_damage"), cvar("g_balance_laser_secondary_edgedamage"), cvar("g_balance_laser_secondary_radius"), world, cvar("g_balance_laser_secondary_force"), self.projectiledeathtype, other);
@@ -31,7 +34,7 @@ void W_Laser_Attack (float issecondary)
 		missile.bot_dodgerating = cvar("g_balance_laser_primary_damage");
 
 	missile.movetype = MOVETYPE_FLY;
-	missile.solid = SOLID_BBOX;
+	PROJECTILE_MAKETRIGGER(missile);
 	missile.projectiledeathtype = WEP_LASER;
 	if(issecondary)
 		missile.projectiledeathtype |= HITTYPE_SECONDARY;

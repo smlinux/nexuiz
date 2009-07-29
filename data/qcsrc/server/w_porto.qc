@@ -170,7 +170,7 @@ void W_Porto_Attack (void)
 	gren.bot_dodge = TRUE;
 	gren.bot_dodgerating = 200;
 	gren.movetype = MOVETYPE_BOUNCEMISSILE;
-	gren.solid = SOLID_BBOX;
+	PROJECTILE_MAKETRIGGER(gren);
 	gren.effects = EF_RED;
 	gren.scale = 4;
 	setorigin(gren, w_shotorg);

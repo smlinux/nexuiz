@@ -68,7 +68,7 @@ void W_Hook_Attack2()
 	gren.bot_dodge = TRUE;
 	gren.bot_dodgerating = cvar("g_balance_hook_secondary_damage");
 	gren.movetype = MOVETYPE_TOSS;
-	gren.solid = SOLID_BBOX;
+	PROJECTILE_MAKETRIGGER(gren);
 	gren.projectiledeathtype = WEP_HOOK | HITTYPE_SECONDARY;
 	setorigin(gren, w_shotorg);
 	setsize(gren, '0 0 0', '0 0 0');

@@ -82,7 +82,7 @@ void W_Electro_Attack()
 	proj.use = W_Plasma_Explode;
 	proj.think = adaptor_think2use;
 	proj.nextthink = time + cvar("g_balance_electro_primary_lifetime");
-	proj.solid = SOLID_BBOX;
+	PROJECTILE_MAKETRIGGER(proj);
 	proj.projectiledeathtype = WEP_ELECTRO;
 	setorigin(proj, w_shotorg);
 
@@ -119,7 +119,7 @@ void W_Electro_Attack2()
 	proj.bot_dodge = TRUE;
 	proj.bot_dodgerating = cvar("g_balance_electro_secondary_damage");
 	proj.nextthink = time + cvar("g_balance_electro_secondary_lifetime");
-	proj.solid = SOLID_BBOX;
+	PROJECTILE_MAKETRIGGER(proj);
 	proj.projectiledeathtype = WEP_ELECTRO | HITTYPE_SECONDARY;
 	setorigin(proj, w_shotorg);
 

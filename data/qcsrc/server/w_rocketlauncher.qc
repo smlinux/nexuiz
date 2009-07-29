@@ -276,7 +276,7 @@ void W_Rocket_Attack (void)
 	missile.event_damage = W_Rocket_Damage;
 
 	missile.movetype = MOVETYPE_FLY;
-	missile.solid = SOLID_BBOX;
+	PROJECTILE_MAKETRIGGER(missile);
 	missile.projectiledeathtype = WEP_ROCKET_LAUNCHER;
 	setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
 

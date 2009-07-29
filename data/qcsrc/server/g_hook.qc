@@ -63,7 +63,7 @@ void SetMovetypeFollow(entity ent, entity e)
 void UnsetMovetypeFollow(entity ent)
 {
 	ent.movetype = MOVETYPE_FLY;
-	ent.solid = SOLID_BBOX;
+	PROJECTILE_MAKETRIGGER(ent);
 	ent.aiment = world;
 }
 float LostMovetypeFollow(entity ent)
@@ -332,7 +332,7 @@ void FireGrapplingHook (void)
 	missile.classname = "grapplinghook";
 
 	missile.movetype = MOVETYPE_FLY;
-	missile.solid = SOLID_BBOX;
+	PROJECTILE_MAKETRIGGER(missile);
 
 	setmodel (missile, "models/hook.md3"); // precision set below
 	setsize (missile, '-3 -3 -3', '3 3 3');

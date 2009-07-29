@@ -512,7 +512,7 @@ void spawn_flocker()
     flocker.owner      = self;
     flocker.think      = flocker_think;
     flocker.nextthink  = time + random() * 5;
-    flocker.solid      = SOLID_BBOX;
+    PROJECTILE_MAKETRIGGER(flocker);
     flocker.movetype   = MOVETYPE_BOUNCEMISSILE;
     flocker.effects    = EF_LOWPRECISION;
     flocker.velocity   = randomvec() * 300;
@@ -612,7 +612,7 @@ void spawnfunc_flockerspawn()
     self.enemy.scale     = 3;
     self.enemy.effects   = EF_LOWPRECISION;
     self.enemy.movetype  = MOVETYPE_BOUNCEMISSILE;
-    self.enemy.solid     = SOLID_BBOX;
+    PROJECTILE_MAKETRIGGER(self.enemy);
     self.enemy.think     = flocker_hunter_think;
     self.enemy.nextthink = time + 10;
     self.enemy.flock_id  = self.flock_id;

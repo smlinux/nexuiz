@@ -609,3 +609,6 @@ float client_cefc_accumulatortime;
 #endif
 
 .float campingrifle_bulletcounter;
+
+#define PROJECTILE_MAKETRIGGER(e) (e).solid = SOLID_TRIGGER; (e).dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE
+// once was: SOLID_BBOX and default dphitcontentsmask, but then stuff can be blocked by them, and they are impacted by spectators

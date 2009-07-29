@@ -88,7 +88,7 @@ void W_Grenade_Attack (void)
 	gren.bot_dodge = TRUE;
 	gren.bot_dodgerating = cvar("g_balance_grenadelauncher_primary_damage");
 	gren.movetype = MOVETYPE_BOUNCE;
-	gren.solid = SOLID_BBOX;
+	PROJECTILE_MAKETRIGGER(gren);
 	gren.projectiledeathtype = WEP_GRENADE_LAUNCHER;
 	setorigin(gren, w_shotorg);
 	setsize(gren, '0 0 -3', '0 0 -3');
@@ -123,7 +123,7 @@ void W_Grenade_Attack2 (void)
 	gren.bot_dodge = TRUE;
 	gren.bot_dodgerating = cvar("g_balance_grenadelauncher_secondary_damage");
 	gren.movetype = MOVETYPE_BOUNCE;
-	gren.solid = SOLID_BBOX;
+	PROJECTILE_MAKETRIGGER(gren);
 	gren.projectiledeathtype = WEP_GRENADE_LAUNCHER | HITTYPE_SECONDARY;
 	setsize(gren, '0 0 -3', '0 0 -3');
 	setorigin(gren, w_shotorg);

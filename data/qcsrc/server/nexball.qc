@@ -669,7 +669,7 @@ void W_Nexball_Attack2 (void)
 	missile.classname = "ballstealer";
 
 	missile.movetype = MOVETYPE_FLY;
-	missile.solid = SOLID_BBOX;
+	PROJECTILE_MAKETRIGGER(missile);
 
 	setmodel (missile, "models/elaser.mdl"); // precision set below
 	setsize (missile, '0 0 0', '0 0 0');

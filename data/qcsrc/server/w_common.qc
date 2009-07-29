@@ -322,7 +322,7 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 	proj = spawn();
 	proj.classname = "bullet";
 	proj.owner = self;
-	proj.solid = SOLID_BBOX;
+	PROJECTILE_MAKETRIGGER(proj);
 	if(gravityfactor > 0)
 	{
 		proj.movetype = MOVETYPE_TOSS;
