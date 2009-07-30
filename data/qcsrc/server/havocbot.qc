@@ -677,8 +677,8 @@ void havocbot_movetogoal()
 .float havocbot_stickenemy;
 void havocbot_chooseenemy()
 {
-	local entity head, best;
-	local float rating, bestrating;
+	local entity head, best, target;
+	local float rating, bestrating, i, f;
 	local vector eye, v;
 	if (cvar("bot_nofire") || IS_INDEPENDENT_PLAYER(self))
 	{
@@ -721,24 +721,47 @@ void havocbot_chooseenemy()
 	eye = self.origin + self.view_ofs;
 	best = world;
 	bestrating = 100000000;
-	head = findchainfloat(bot_attack, TRUE);
-	while (head)
+	head = target = findchainfloat(bot_attack, TRUE);
+
+	// Search for enemies, if no enemy can be seen directly try to look through transparent objects
+	for(;;)
 	{
-		v = (head.absmin + head.absmax) * 0.5;
-		rating = vlen(v - eye);
-		if (rating<cvar("bot_ai_enemydetectionradius"))
-		if (bestrating > rating)
-		if (bot_shouldattack(head))
+		while (head)
 		{
-			traceline(eye, v, TRUE, self);
-			if (trace_ent == head || trace_fraction >= 1)
+			v = (head.absmin + head.absmax) * 0.5;
+			rating = vlen(v - eye);
+			if (rating<cvar("bot_ai_enemydetectionradius"))
+			if (bestrating > rating)
+			if (bot_shouldattack(head))
 			{
-				best = head;
-				bestrating = rating;
+				traceline(eye, v, TRUE, self);
+				if (trace_ent == head || trace_fraction >= 1)
+				{
+					best = head;
+					bestrating = rating;
+				}
 			}
+			head = head.chain;
 		}
-		head = head.chain;
+
+		// I want to do a second scan if no enemy was found or I don't have weapons
+		// TODO: Perform the scan when using the rifle (requires changes on the rifle code)
+		if(best || self.weapons) // || self.weapon == WEP_CAMPINGRIFLE
+			break;
+		if(i)
+			break;
+
+		// Set flags to see through transparent objects
+		f = self.dphitcontentsmask;
+		self.dphitcontentsmask = DPCONTENTS_OPAQUE;
+
+		head = target;
+		++i;
 	}
+
+	// Restore hit flags if needed
+	if(i)
+		self.dphitcontentsmask = f;
 
 	self.enemy = best;
 	self.havocbot_stickenemy = TRUE;
@@ -1093,16 +1116,24 @@ void havocbot_ai()
 		self.aistatus |= AI_STATUS_ATTACKING;
 		self.aistatus &~= AI_STATUS_ROAMING;
 
-		weapon_action(self.weapon, WR_AIM);
-		if (cvar("bot_nofire") || IS_INDEPENDENT_PLAYER(self))
+		if(self.weapons)
 		{
-			self.BUTTON_ATCK = FALSE;
-			self.BUTTON_ATCK2 = FALSE;
+			weapon_action(self.weapon, WR_AIM);
+			if (cvar("bot_nofire") || IS_INDEPENDENT_PLAYER(self))
+			{
+				self.BUTTON_ATCK = FALSE;
+				self.BUTTON_ATCK2 = FALSE;
+			}
+			else
+			{
+				if(self.BUTTON_ATCK||self.BUTTON_ATCK2)
+					self.lastfiredweapon = self.weapon;
+			}
 		}
 		else
 		{
-			if(self.BUTTON_ATCK||self.BUTTON_ATCK2)
-				self.lastfiredweapon = self.weapon;
+			if(self.bot_aimtarg.classname=="player")
+				bot_aimdir(self.bot_aimtarg.origin + self.bot_aimtarg.view_ofs - self.origin - self.view_ofs , -1);
 		}
 	}
 	else if (self.goalcurrent)
