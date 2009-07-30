@@ -42,7 +42,6 @@ float	SOLID_TRIGGER				= 1;
 float	SOLID_BBOX				= 2;
 float	SOLID_SLIDEBOX				= 3;
 float	SOLID_BSP				= 4;
-//float	SOLID_CORPSE				= 5;	// Unobstructed by CORPSE or SLIDEBOX
 
 float	DEAD_NO					= 0;
 float	DEAD_DYING				= 1;

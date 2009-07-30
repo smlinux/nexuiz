@@ -4,9 +4,6 @@ void W_Laser_Touch (void)
 {
 	PROJECTILE_TOUCH;
 
-	if(other.classname == "spectator")
-		checkclient(); // TODO put a breakpoint on this, and wait till it hits!
-
 	self.event_damage = SUB_Null;
 	if (self.dmg)
 		RadiusDamage (self, self.owner, cvar("g_balance_laser_secondary_damage"), cvar("g_balance_laser_secondary_edgedamage"), cvar("g_balance_laser_secondary_radius"), world, cvar("g_balance_laser_secondary_force"), self.projectiledeathtype, other);
