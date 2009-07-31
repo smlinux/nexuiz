@@ -52,4 +52,4 @@ void fillNexuizTeamSelectDialog(entity me)
 }
 #endif
 
-// click. The C-word so you can grep for it.
+/* Click. The c-word is here so you can grep for it :-) */
