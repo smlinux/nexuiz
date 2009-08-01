@@ -30,3 +30,39 @@ portals_inactive_vortex
 		blendfunc blend
 	}
 }
+
+textures/portals/portals_red
+{
+	surfaceparm nonsolid
+	{
+		map textures/portals/portals_red.tga
+	}
+	{
+		map $lightmap
+		blendfunc filter
+	}
+}
+
+textures/portals/portals_blue
+{
+	surfaceparm nonsolid
+	{
+		map textures/portals/portals_blue.tga
+	}
+	{
+		map $lightmap
+		blendfunc filter
+	}
+}
+
+textures/portals/portals_inactive
+{
+	surfaceparm nonsolid
+	{
+		map textures/portals/portals_inactive.tga
+	}
+	{
+		map $lightmap
+		blendfunc filter
+	}
+}
