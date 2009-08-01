@@ -677,7 +677,7 @@ void havocbot_movetogoal()
 .float havocbot_stickenemy;
 void havocbot_chooseenemy()
 {
-	local entity head, best, target;
+	local entity head, best, head2;
 	local float rating, bestrating, i, f;
 	local vector eye, v;
 	if (cvar("bot_nofire") || IS_INDEPENDENT_PLAYER(self))
@@ -721,7 +721,7 @@ void havocbot_chooseenemy()
 	eye = self.origin + self.view_ofs;
 	best = world;
 	bestrating = 100000000;
-	head = target = findchainfloat(bot_attack, TRUE);
+	head = head2 = findchainfloat(bot_attack, TRUE);
 
 	// Search for enemies, if no enemy can be seen directly try to look through transparent objects
 	for(;;)
@@ -755,7 +755,7 @@ void havocbot_chooseenemy()
 		f = self.dphitcontentsmask;
 		self.dphitcontentsmask = DPCONTENTS_OPAQUE;
 
-		head = target;
+		head = head2;
 		++i;
 	}
 
