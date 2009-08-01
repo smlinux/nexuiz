@@ -319,11 +319,7 @@ void Portal_MakeWaitingPortal(entity portal)
 void Portal_MakeInPortal(entity portal)
 {
 	portal.skin = 0;
-#ifdef PORTALS_ARE_NOT_SOLID
-	portal.solid = SOLID_TRIGGER;
-#else
-	portal.solid = SOLID_BSP;
-#endif
+	portal.solid = SOLID_NOT; // this is done when connecting them!
 	portal.touch = Portal_Touch;
 	portal.think = Portal_Think;
 	portal.effects = EF_RED;
@@ -363,6 +359,11 @@ void Portal_Connect(entity teleporter, entity destination)
 	teleporter.portal_wants_to_vanish = 0;
 	destination.portal_wants_to_vanish = 0;
 	teleporter.teleport_time = time;
+#ifdef PORTALS_ARE_NOT_SOLID
+	teleporter.solid = SOLID_TRIGGER;
+#else
+	teleporter.solid = SOLID_BSP;
+#endif
 }
 
 void Portal_Remove(entity portal, float killed)
