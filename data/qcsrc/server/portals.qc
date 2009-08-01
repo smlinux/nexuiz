@@ -1,3 +1,5 @@
+#define PORTALS_ARE_NOT_SOLID
+
 #define SAFENUDGE '1 1 1'
 #define SAFERNUDGE '8 8 8'
 
@@ -219,12 +221,14 @@ void Portal_Touch()
 {
 	vector g;
 
+#ifdef PORTALS_ARE_NOT_SOLID
 	// portal is being removed?
 	if(self.solid != SOLID_TRIGGER)
 		return; // possibly engine bug
 
 	if(other.classname == "player")
 		return; // handled by think
+#endif
 
 	if(other.classname == "item_flag_team")
 		return; // never portal these
@@ -235,9 +239,13 @@ void Portal_Touch()
 	if(!self.enemy)
 		error("Portal_Touch called for a broken portal\n");
 
+#ifdef PORTALS_ARE_NOT_SOLID
 	if(trace_fraction < 1)
 		return; // only handle TouchAreaGrid ones (only these can teleport)
-		// for some unknown reason, this also gets collisions from SV_Impact sometimes
+#else
+	if(trace_fraction >= 1)
+		return; // only handle impacts
+#endif
 
 	if(other.classname == "porto")
 	{
@@ -245,18 +253,18 @@ void Portal_Touch()
 			return;
 	}
 	if(time < self.portal_activatetime)
-		if(other == self.owner)
+		if(other == self.aiment)
 		{
 			self.portal_activatetime = time + 0.1;
 			return;
 		}
-	if(other != self.owner)
+	if(other != self.aiment)
 		if(other.classname == "player")
-			if(IS_INDEPENDENT_PLAYER(other) || IS_INDEPENDENT_PLAYER(self.owner))
+			if(IS_INDEPENDENT_PLAYER(other) || IS_INDEPENDENT_PLAYER(self.aiment))
 				return; // cannot go through someone else's portal
-	if(other.owner != self.owner)
-		if(other.owner.classname == "player")
-			if(IS_INDEPENDENT_PLAYER(other.owner) || IS_INDEPENDENT_PLAYER(self.owner))
+	if(other.aiment != self.aiment)
+		if(other.aiment.classname == "player")
+			if(IS_INDEPENDENT_PLAYER(other.aiment) || IS_INDEPENDENT_PLAYER(self.aiment))
 				return; // cannot go through someone else's portal
 	fixedmakevectors(self.angles);
 	g = frametime * '0 0 -1' * cvar("sv_gravity");
@@ -304,7 +312,11 @@ void Portal_MakeWaitingPortal(entity portal)
 void Portal_MakeInPortal(entity portal)
 {
 	portal.skin = 0;
+#ifdef PORTALS_ARE_NOT_SOLID
 	portal.solid = SOLID_TRIGGER;
+#else
+	portal.solid = SOLID_BSP;
+#endif
 	portal.touch = Portal_Touch;
 	portal.think = Portal_Think;
 	portal.effects = EF_RED;
@@ -339,8 +351,8 @@ void Portal_Connect(entity teleporter, entity destination)
 	destination.enemy = teleporter;
 	Portal_MakeInPortal(teleporter);
 	Portal_MakeOutPortal(destination);
-	teleporter.fade_time = time + 15;
-	destination.fade_time = time + 15;
+	teleporter.fade_time = time + cvar("g_balance_portal_lifetime");
+	destination.fade_time = teleporter.fade_time;
 	teleporter.portal_wants_to_vanish = 0;
 	destination.portal_wants_to_vanish = 0;
 	teleporter.teleport_time = time;
@@ -357,11 +369,11 @@ void Portal_Remove(entity portal, float killed)
 		Portal_Remove(e, killed);
 	}
 
-	if(portal == portal.owner.portal_in)
-		portal.owner.portal_in = world;
-	if(portal == portal.owner.portal_out)
-		portal.owner.portal_out = world;
-	//portal.owner = world;
+	if(portal == portal.aiment.portal_in)
+		portal.aiment.portal_in = world;
+	if(portal == portal.aiment.portal_out)
+		portal.aiment.portal_out = world;
+	//portal.aiment = world;
 
 	// makes the portal vanish
 	if(killed)
@@ -383,8 +395,8 @@ void Portal_Damage(entity inflictor, entity attacker, float damage, float deatht
 {
 	if(deathtype == DEATH_TELEFRAG)
 		return;
-	if(attacker != self.owner)
-		if(IS_INDEPENDENT_PLAYER(attacker) || IS_INDEPENDENT_PLAYER(self.owner))
+	if(attacker != self.aiment)
+		if(IS_INDEPENDENT_PLAYER(attacker) || IS_INDEPENDENT_PLAYER(self.aiment))
 			return;
 	self.health -= damage;
 	if(self.health < 0)
@@ -408,6 +420,7 @@ void Portal_Think()
 	entity e, o;
 	vector g;
 
+#ifdef PORTALS_ARE_NOT_SOLID
 	// portal is being removed?
 	if(self.solid != SOLID_TRIGGER)
 		return; // possibly engine bug
@@ -415,9 +428,9 @@ void Portal_Think()
 	if(!self.enemy)
 		error("Portal_Think called for a broken portal\n");
 
-	o = self.owner;
+	o = self.aiment;
 	self.solid = SOLID_BBOX;
-	self.owner = world;
+	self.aiment = world;
 
 	g = frametime * '0 0 -1' * cvar("sv_gravity");
 
@@ -436,7 +449,8 @@ void Portal_Think()
 			Portal_Think_TryTeleportPlayer(e.hook, g);
 	}
 	self.solid = SOLID_TRIGGER;
-	self.owner = o;
+	self.aiment = o;
+#endif
 
 	self.nextthink = time;
 
@@ -448,11 +462,11 @@ float Portal_Customize()
 {
 	if(other.classname == "spectator")
 		other = other.enemy;
-	if(other == self.owner)
+	if(other == self.aiment)
 	{
 		self.modelindex = self.modelindex_lod0;
 	}
-	else if(IS_INDEPENDENT_PLAYER(other) || IS_INDEPENDENT_PLAYER(self.owner))
+	else if(IS_INDEPENDENT_PLAYER(other) || IS_INDEPENDENT_PLAYER(self.aiment))
 	{
 		self.modelindex = 0;
 	}
@@ -575,14 +589,13 @@ entity Portal_Spawn(entity own, vector org, vector ang)
 
 	portal = spawn();
 	portal.classname = "portal";
-	portal.owner = own;
+	portal.aiment = own;
 	portal.origin = org;
 	portal.angles = ang;
 	portal.think = Portal_Think;
 	portal.nextthink = 0;
 	portal.portal_activatetime = time + 0.1;
 	portal.event_damage = Portal_Damage;
-	portal.health = 200;
 	portal.fade_time = time + cvar("g_balance_portal_lifetime");
 	portal.health = cvar("g_balance_portal_health");
 	setmodel(portal, "models/portal.md3");
