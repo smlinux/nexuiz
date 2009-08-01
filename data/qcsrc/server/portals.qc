@@ -48,11 +48,13 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 
 	// first shift it ON the plane if needed
 	planeshift = ((teleporter.enemy.origin - to) * v_forward) + PlayerEdgeDistance(player, v_forward) + 1;
+	/*
 	if(planeshift > 0 && (newvel * v_forward) > vlen(newvel) * 0.01)
 		// if we can't, let us not do the planeshift and do somewhat incorrect transformation in the end
 		to += newvel * (planeshift / (newvel * v_forward));
 	else
-		to += trace_plane_normal * planeshift;
+	*/
+		to += v_forward * planeshift;
 	
 	s = (to - teleporter.enemy.origin) * v_right;
 	t = (to - teleporter.enemy.origin) * v_up;
@@ -208,13 +210,18 @@ float Portal_WillHitPlane(vector eorg, vector emins, vector emaxs, vector evel, 
 	dist += min(emins_z * pnorm_z, emaxs_z * pnorm_z);
 	if(dist < -1) // other side?
 		return 0;
+#ifdef PORTALS_ARE_NOT_SOLID
 	distpersec = evel * pnorm;
 	if(distpersec >= 0) // going away from the portal?
 		return 0;
+	// we don't need this check with solid portals, them being SOLID_BSP should suffice
 	delta = dist / distpersec;
 	v = eorg - evel * delta - porg;
 	v = v - pnorm * (pnorm * v);
 	return vlen(v) < psize;
+#else
+	return 1;
+#endif
 }
 
 void Portal_Touch()
