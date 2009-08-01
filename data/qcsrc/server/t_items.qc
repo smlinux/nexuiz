@@ -1476,6 +1476,14 @@ void spawnfunc_target_items (void)
 {
 	float n, i, j;
 	entity e;
+
+	if(g_nixnex)
+	{
+		// items triggers cannot work in nixnex (as they change weapons/ammo)
+		remove(self);
+		return;
+	}
+
 	self.use = target_items_use;
 	if(!self.strength_finished)
 		self.strength_finished = cvar("g_balance_powerup_strength_time");
