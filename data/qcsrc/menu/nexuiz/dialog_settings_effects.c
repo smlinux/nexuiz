@@ -26,13 +26,13 @@ void fillNexuizEffectsSettingsTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Quality preset:"));
 		n = 6 + !!cvar("developer");
 		if(cvar("developer"))
-			me.TD(me, 1, 5.5 / n, e = makeNexuizCommandButton("OMG!", '1 0 1', "exec omg.cfg", 0));
-		me.TD(me, 1, 5.5 / n, e = makeNexuizCommandButton("Low", '0 0 0', "exec low.cfg", 0));
-		me.TD(me, 1, 5.5 / n, e = makeNexuizCommandButton("Medium", '0 0 0', "exec med.cfg", 0));
-		me.TD(me, 1, 5.5 / n, e = makeNexuizCommandButton("Normal", '0 0 0', "exec normal.cfg", 0));
-		me.TD(me, 1, 5.5 / n, e = makeNexuizCommandButton("High", '0 0 0', "exec high.cfg", 0));
-		me.TD(me, 1, 5.5 / n, e = makeNexuizCommandButton("Ultra", '0 0 0', "exec ultra.cfg", 0));
-		me.TD(me, 1, 5.5 / n, e = makeNexuizCommandButton("Ultimate", '0 0 0', "exec ultimate.cfg", 0));
+			me.TD(me, 1, 5.5 / n, e = makeNexuizCommandButton("OMG!", '1 0 1', "exec effects-omg.cfg", 0));
+		me.TD(me, 1, 5.5 / n, e = makeNexuizCommandButton("Low", '0 0 0', "exec effects-low.cfg", 0));
+		me.TD(me, 1, 5.5 / n, e = makeNexuizCommandButton("Medium", '0 0 0', "exec effects-med.cfg", 0));
+		me.TD(me, 1, 5.5 / n, e = makeNexuizCommandButton("Normal", '0 0 0', "exec effects-normal.cfg", 0));
+		me.TD(me, 1, 5.5 / n, e = makeNexuizCommandButton("High", '0 0 0', "exec effects-high.cfg", 0));
+		me.TD(me, 1, 5.5 / n, e = makeNexuizCommandButton("Ultra", '0 0 0', "exec effects-ultra.cfg", 0));
+		me.TD(me, 1, 5.5 / n, e = makeNexuizCommandButton("Ultimate", '0 0 0', "exec effects-ultimate.cfg", 0));
 
 	me.TR(me);
 	me.TR(me);
