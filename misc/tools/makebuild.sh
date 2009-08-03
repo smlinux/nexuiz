@@ -45,7 +45,7 @@ echo "date stamp: $date"
 
 case "$version" in
 	'')
-		version=2-svntest-$date
+		version=2.5s
 		versiontag=test
 		defaultcfg=
 		ext=
@@ -243,7 +243,13 @@ if [ -z "$versiontag" ]; then
 fi
 echo >> defaultNexuiz.cfg
 echo "$defaultcfg" >> defaultNexuiz.cfg
+
+cd "$nexdir/misc/mediasource/menuskins/wickedz/background_builder"
+sh append.sh "$version" "$tmpdir/data/gfx/menu/wickedz/"
+cd "$tmpdir/data"
+
 mk7z ../data.pk3 .
+
 cd "$tmpdir/havoc"
 mk7z ../havoc.pk3 .
 
