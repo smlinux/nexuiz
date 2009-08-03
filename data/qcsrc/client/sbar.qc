@@ -1438,7 +1438,7 @@ void Sbar_Score(float margin)
 	else
 		timer_color = '1 0 0'; //red
 
-	if (cvar("sbar_increment_maptime") || timelimit == 0) {
+	if (cvar("sbar_increment_maptime") || timelimit == 0 || warmup_stage) {
 		if (time < getstatf(STAT_GAMESTARTTIME)) {
 			//while restart is still active, show 00:00
 			minutes = seconds = 0;
