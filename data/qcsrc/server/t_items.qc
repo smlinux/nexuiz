@@ -483,7 +483,7 @@ float weapon_pickupevalfunc(entity player, entity item)
 	if(player.weapons & item.weapons == item.weapons)
 	{
 		// If I can pick it up
-		if(g_weapon_stay == 1)
+		if(g_weapon_stay)
 			c = 0;
 		else if(player.ammo_cells || player.ammo_shells || player.ammo_nails || player.ammo_rockets)
 		{
