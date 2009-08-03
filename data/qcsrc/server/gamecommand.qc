@@ -875,7 +875,8 @@ void GameCommand(string command)
 		print("TEST CASE. If this returns the runaway loop counter error, possibly everything is oaky.\n");
 		for(;;)
 		{
-			vector org, delta, start, end, p;
+			vector org, delta, start, end, p, pos;
+			float safe, unsafe;
 
 			org = world.mins;
 			delta = world.maxs - world.mins;
@@ -902,11 +903,36 @@ void GameCommand(string command)
 					tracebox(start, PL_MIN, PL_MAX, end, MOVE_NOMONSTERS, world);
 					tracebox(p, PL_MIN, PL_MAX, p, MOVE_NOMONSTERS, world);
 
+					// how much do we need to back off?
+					safe = 1;
+					unsafe = 0;
+					for(;;)
+					{
+						pos = p * (1 - (safe + unsafe) * 0.5) + start * ((safe + unsafe) * 0.5);
+						tracebox(pos, PL_MIN, PL_MAX, pos, MOVE_NOMONSTERS, world);
+						if(trace_startsolid)
+						{
+							if((safe + unsafe) * 0.5 == unsafe)
+								break;
+							unsafe = (safe + unsafe) * 0.5;
+						}
+						else
+						{
+							if((safe + unsafe) * 0.5 == safe)
+								break;
+							safe = (safe + unsafe) * 0.5;
+						}
+					}
+
+					print("safe distance to back off: ", ftos(safe * vlen(p - start)), "qu\n");
+					print("unsafe distance to back off: ", ftos(unsafe * vlen(p - start)), "qu\n");
+
 					tracebox(p, PL_MIN + '0.1 0.1 0.1', PL_MAX - '0.1 0.1 0.1', p, MOVE_NOMONSTERS, world);
 					if(trace_startsolid)
-						error(strcat("trace_endpos much in solid when tracing from ", vtos(start), " to ", vtos(end), " endpos ", vtos(trace_endpos), "\n"));
+						print("trace_endpos much in solid when tracing from ", vtos(start), " to ", vtos(end), " endpos ", vtos(trace_endpos), "\n");
 					else
-						error(strcat("trace_endpos just in solid when tracing from ", vtos(start), " to ", vtos(end), " endpos ", vtos(trace_endpos), "\n"));
+						print("trace_endpos just in solid when tracing from ", vtos(start), " to ", vtos(end), " endpos ", vtos(trace_endpos), "\n");
+					break;
 				}
 			}
 		}

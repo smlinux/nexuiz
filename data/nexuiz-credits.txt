@@ -22,25 +22,28 @@ SavageX
 Andreas "Black" Kirsch
 *Programmer
 
-Stephan "esteel" Stahl
-*Programmer
-
-Peter "Morphed" Pielak
-*Artist
+Michael "Tenshihan" Quinn
+*Sound FX and Player-Voices
 
 Paul "Strahlemann" Evers
 *Level Designer
 
-Wolfgang "Blub\0" Bumiller
+Peter "Morphed" Pielak
+*Artist
+
+Samual Lenks
+*Programmer
+
+Saulo "mand1nga" Gil
+*Programmer
+
+Stephan "esteel" Stahl
 *Programmer
 
 Tyler "-z-" Mulligan
 *Web Developer and Interaction Designer
 
-Michael "Tenshihan" Quinn
-*Sound FX and Player-Voices
-
-Saulo "mand1nga" Gil
+Wolfgang "Blub\0" Bumiller
 *Programmer
 
 
