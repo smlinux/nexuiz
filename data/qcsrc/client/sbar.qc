@@ -417,9 +417,6 @@ void Cmd_Sbar_Help(float argc)
 	}
 }
 
-#define MIN_NAMELEN 24
-#define MAX_NAMELEN 24
-
 string Sbar_DefaultColumnLayout()
 {
 	return strcat( // fteqcc sucks
@@ -511,7 +508,6 @@ void Cmd_Sbar_SetFields(float argc)
 			sbar_field[sbar_num_fields] = SP_KDRATIO;
 		} else if(str == "name" || str == "nick") {
 			sbar_field[sbar_num_fields] = SP_NAME;
-			sbar_size[sbar_num_fields] = MIN_NAMELEN; // minimum size? any use?
 			have_name = 1;
 		} else if(str == "|") {
 			sbar_field[sbar_num_fields] = SP_SEPARATOR;
@@ -564,7 +560,6 @@ void Cmd_Sbar_SetFields(float argc)
 			}
 			sbar_title[0] = strzone("name");
 			sbar_field[0] = SP_NAME;
-			sbar_size[0] = MIN_NAMELEN; // minimum size? any use?
 			++sbar_num_fields;
 			print("fixed missing field 'name'\n");
 
@@ -593,7 +588,6 @@ void Cmd_Sbar_SetFields(float argc)
 			++sbar_num_fields;
 			print("fixed missing field '|'\n");
 		}
-
 		if(!have_secondary)
 		{
 			strunzone(sbar_title[sbar_num_fields]);
@@ -603,7 +597,6 @@ void Cmd_Sbar_SetFields(float argc)
 			++sbar_num_fields;
 			print("fixed missing field '", scores_label[ps_secondary], "'\n");
 		}
-
 		if(!have_primary)
 		{
 			strunzone(sbar_title[sbar_num_fields]);
@@ -737,21 +730,9 @@ float stringwidth_nocolors(string s)
 
 string Sbar_FixScoreboardColumnWidth(float i, string str)
 {
-	float field, maxsize, j, f;
+	float field, f;
 	vector sz;
 	field = sbar_field[i];
-
-	if(field == SP_NAME) // name gets all remaining space
-	{
-		maxsize = (xmax - xmin) / sbar_fontsize_x;
-		for(j = 0; j < sbar_num_fields; ++j) if(j != i) if(sbar_field[j] != SP_SEPARATOR)
-			maxsize -= sbar_size[j] + 1;
-		maxsize += 1;
-		str = textShortenToWidth(str, maxsize, stringwidth_colors);
-		sbar_fixscoreboardcolumnwidth_len = stringwidth(str, TRUE);
-	}
-	else
-		sbar_fixscoreboardcolumnwidth_len = stringwidth(str, FALSE);
 
 	sbar_fixscoreboardcolumnwidth_iconlen = 0;
 
@@ -781,11 +762,30 @@ string Sbar_FixScoreboardColumnWidth(float i, string str)
 
 	sbar_fixscoreboardcolumnwidth_iconlen *= sbar_fontsize_y / sbar_fontsize_x; // fix icon aspect
 
-	if(sbar_fixscoreboardcolumnwidth_iconlen != 0 && sbar_fixscoreboardcolumnwidth_len != 0)
+	if(sbar_fixscoreboardcolumnwidth_iconlen != 0)
 		sbar_fixscoreboardcolumnwidth_marginlen = stringwidth(" ", FALSE);
 	else
 		sbar_fixscoreboardcolumnwidth_marginlen = 0;
 
+	if(field == SP_NAME) // name gets all remaining space
+	{
+		float size, j;
+		size = sbwidth / sbar_fontsize_x;
+		for(j = 0; j < sbar_num_fields; ++j)
+			if(j != i)
+				if (sbar_field[i] != SP_SEPARATOR)
+					size -= sbar_size[j] + 1;
+		size += 1;
+		sbar_size[i] = size;
+		
+		if (sbar_fixscoreboardcolumnwidth_iconlen != 0)
+			size -= sbar_fixscoreboardcolumnwidth_marginlen + sbar_fixscoreboardcolumnwidth_iconlen;
+		str = textShortenToWidth(str, size, stringwidth_colors);
+		sbar_fixscoreboardcolumnwidth_len = stringwidth(str, TRUE);
+	}
+	else
+		sbar_fixscoreboardcolumnwidth_len = stringwidth(str, FALSE);
+	
 	f = sbar_fixscoreboardcolumnwidth_len + sbar_fixscoreboardcolumnwidth_marginlen + sbar_fixscoreboardcolumnwidth_iconlen;
 	if(sbar_size[i] < f)
 		sbar_size[i] = f;
@@ -871,7 +871,7 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float pl_num
 				tmp_x = sbar_fontsize_x*sbar_fixscoreboardcolumnwidth_len; // left or right aligned? let's put it right...
 				drawcolorcodedstring(pos - tmp, str, sbar_fontsize, 1, DRAWFLAG_NORMAL);
 			} else {
-				tmp_x = sbar_fontsize_x*sbar_fixscoreboardcolumnwidth_len; //strlen(str);
+				tmp_x = sbar_fontsize_x*sbar_fixscoreboardcolumnwidth_len;
 				drawstring(pos - tmp, str, sbar_fontsize, sbar_field_rgb, 1, DRAWFLAG_NORMAL);
 			}
 
@@ -896,7 +896,7 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float pl_num
 
 vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, vector rgb, vector bg_size)
 {
-	float body_table_height, i, pos_x_save;
+	float body_table_height, i;
 	vector tmp, column_dim;
 	entity pl;
 
@@ -905,7 +905,6 @@ vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, vector rgb, vector bg_si
 	pos -= '1 1 0';
 
 	tmp_x = sbwidth + 2;
-
 	tmp_y = 1.25 * sbar_fontsize_y;
 
 	// rounded header
@@ -936,8 +935,6 @@ vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, vector rgb, vector bg_si
 
 	pos += '1 1 0';
 
-	pos_x_save = pos_x; // will be restored after the columns headers are printed
-
 	if (sbar_scoreboard_highlight)
 	{
 		column_dim_y = 1.25 * sbar_fontsize_y; // header
@@ -945,7 +942,7 @@ vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, vector rgb, vector bg_si
 		column_dim_y += body_table_height;
 	}
 
-	// print the strings of the columns headers
+	// print the strings of the columns headers and draw the columns
 	for(i = 0; i < sbar_num_fields; ++i)
 	{
 		if(sbar_field[i] == SP_SEPARATOR)
@@ -962,30 +959,37 @@ vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, vector rgb, vector bg_si
 	if(sbar_field[i] == SP_SEPARATOR)
 	{
 		pos_x = xmax;
+		tmp_y = 0;
 		for(i = sbar_num_fields-1; i > 0; --i)
 		{
 			if(sbar_field[i] == SP_SEPARATOR)
 				break;
+
 			pos_x -= sbar_size[i]*sbar_fontsize_x;
 
 			if (sbar_scoreboard_highlight)
 			{
-				if (i == sbar_num_fields-1)
-					column_dim_x = sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x / 2 + 1;
-				else
-					column_dim_x = sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
 				if (!mod(i,2))
+				{
+					if (i == sbar_num_fields-1)
+						column_dim_x = sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x / 2 + 1;
+					else
+						column_dim_x = sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
 					drawfill(pos - '0 1 0' - sbar_fontsize_x / 2 * '1 0 0', column_dim, '0 0 0', sbar_scoreboard_alpha_bg * 0.2, DRAWFLAG_NORMAL);
+				}
 			}
-			drawstring(pos, sbar_title[i], sbar_fontsize, rgb, 1, DRAWFLAG_NORMAL);
+
+			tmp_x = (sbar_size[i] - stringwidth(sbar_title[i], FALSE)) * sbar_fontsize_x;
+			drawstring(pos + tmp, sbar_title[i], sbar_fontsize, rgb, 1, DRAWFLAG_NORMAL);
 			pos_x -= sbar_fontsize_x;
 		}
 	}
-
-	pos_x = pos_x_save;
+	
+	pos_x = xmin;
 	pos_y += 1.25 * sbar_fontsize_y; // skip the header
 	pos_y += sbar_border_thickness;
 
+	// fill the table and draw the rows
 	i = 0;
 	if (teamplay)
 		for(pl = players.sort_next; pl; pl = pl.sort_next)
@@ -1006,8 +1010,8 @@ vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, vector rgb, vector bg_si
 			++i;
 		}
 
-	pos_y += 1.25 * sbar_fontsize_y;
-	pos_y += 1.25 * sbar_fontsize_y; // add an empty row
+	pos_y += 1.25 * sbar_fontsize_y; // move to the end of the table
+	pos_y += 1.25 * sbar_fontsize_y; // move empty row (out of the table)
 
 	return pos;
 }
