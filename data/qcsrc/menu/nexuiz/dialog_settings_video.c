@@ -94,9 +94,6 @@ void fillNexuizVideoSettingsTab(entity me)
 		me.TD(me, 1, 2, e = makeNexuizSlider(0.5, 2.0, 0.05, "r_hdr_scenebrightness"));
 	me.TR(me);
 	me.TR(me);
-		me.TD(me, 1, 3, e = makeNexuizCheckBoxEx(4, 1, "vid_samples", "Use 4x multisampling"));
-	me.TR(me);
-	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "v_flipped", "Left handed mode"));
 	me.TR(me);
 
