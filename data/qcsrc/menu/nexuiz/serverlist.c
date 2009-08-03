@@ -46,6 +46,8 @@ CLASS(NexuizServerList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizServerList, currentSortField, float, -1)
 	ATTRIB(NexuizServerList, lastClickedServer, float, -1)
 	ATTRIB(NexuizServerList, lastClickedTime, float, 0)
+
+	ATTRIB(NexuizServerList, ipAddressBoxFocused, float, -1)
 ENDCLASS(NexuizServerList)
 entity makeNexuizServerList();
 void ServerList_Connect_Click(entity btn, entity me);
@@ -298,10 +300,17 @@ void drawNexuizServerList(entity me)
 		me.ipAddressBox.cursorPos = strlen(me.selectedServer);
 	}
 
-	if(IsFavorite(me.ipAddressBox.text))
-		me.favoriteButton.setText(me.favoriteButton, "Remove");
-	else
-		me.favoriteButton.setText(me.favoriteButton, "Bookmark");
+	if(me.ipAddressBoxFocused != me.ipAddressBox.focused)
+	{
+		me.ipAddressBoxFocused = me.ipAddressBox.focused;
+		if(me.ipAddressBoxFocused)
+		{
+			if(IsFavorite(me.ipAddressBox.text))
+				me.favoriteButton.setText(me.favoriteButton, "Remove");
+			else
+				me.favoriteButton.setText(me.favoriteButton, "Bookmark");
+		}
+	}
 
 	drawListBox(me);
 }
@@ -475,7 +484,10 @@ void ServerList_Favorite_Click(entity btn, entity me)
 	string ipstr;
 	ipstr = netaddress_resolve(me.ipAddressBox.text, 26000);
 	if(ipstr != "")
+	{
 		ToggleFavorite(me.ipAddressBox.text);
+		me.ipAddressBoxFocused = -1;
+	}
 }
 void ServerList_Info_Click(entity btn, entity me)
 {
@@ -576,7 +588,10 @@ float keyDownNexuizServerList(entity me, float scan, float ascii, float shift)
 	{
 		i = me.selectedItem;
 		if(i < me.nItems)
+		{
 			ToggleFavorite(me.selectedServer);
+			me.ipAddressBoxFocused = -1;
+		}
 	}
 	else if(keyDownListBox(me, scan, ascii, shift))
 		return 1;
