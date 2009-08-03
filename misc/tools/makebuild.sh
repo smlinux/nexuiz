@@ -10,7 +10,7 @@ set -e
 base=`pwd`
 
 # customizable specific stuff
-netradiant_release=1.5.0-svn358
+netradiant_release=1.5.0-svn389
 basepk3=$base/data20090403.pk3 # 2.5
 hotbasepk3= # hotfix
 nexdir=$base/nexuiz
@@ -109,7 +109,8 @@ buildon()
 
 build()
 {
-	buildon nexmacbuild                           nexuiz-osx          fteqcc-osx          /tmp/Darkplaces.build 'CC="gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4"' strip
+#	buildon nexmacbuild                           nexuiz-osx          fteqcc-osx          /tmp/Darkplaces.build 'CC="gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4"' strip
+	buildon nexmacbuild                           nexuiz-osx          fteqcc-osx          /tmp/Darkplaces.build 'CC="gcc -g -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4"' strip
 	buildon eos.thruhere.net                      nexuiz-linux-686    fteqcc-linux-686    /tmp/Darkplaces.build 'CC="gcc -g" DP_MODPLUG_STATIC_LIBDIR=/home/divverent/modplug-i386/lib' strip
 	buildon alientrap.org                         nexuiz-linux-x86_64 fteqcc-linux-x86_64 /tmp/Darkplaces.build 'CC="gcc -g -Wl,--hash-style=sysv" DP_MODPLUG_STATIC_LIBDIR=/home/divverent/modplug-x86_64/lib' strip
 	buildon alientrap.org                         nexuiz              fteqcc.exe          /tmp/Darkplaces.build 'DP_MAKE_TARGET=mingw CC="/chroot/debian-etch/usr/bin/i586-mingw32msvc-gcc -g -DSUPPORTDIRECTX -I/home/divverent/dxheaders" WINDRES=/chroot/debian-etch/usr/bin/i586-mingw32msvc-windres SDL_CONFIG=/home/divverent/sdl-win32/SDL-1.2.13/bin/sdl-config' /chroot/debian-etch/usr/bin/i586-mingw32msvc-strip
@@ -161,12 +162,14 @@ mkdir "$tmpdir/debuginfo"
 mkdir "$tmpdir/fteqcc"
 
 # prepare fteqcc build
-svn export "$fteqccdir" "$tmpdir/fteqcc/source"
-svn info "$fteqccdir" > "$tmpdir/fteqcc/source/fteqcc-base-revision.txt"
-fteqccrev=$((`grep "Last Changed Rev:" "$tmpdir/fteqcc/source/fteqcc-base-revision.txt" | cut -d : -f 2`))
+cd "$fteqccdir"
+git checkout-index -a -f --prefix="$tmpdir/fteqcc/source/"
+git log -1 > "$tmpdir/fteqcc/source/fteqcc-base-revision.txt"
+fteqccrev=`git show --pretty=%ct-%H | head -n 1`
 echo "fteqcc rev $fteqccrev"
 
 # build all executables
+cd "$dpdir"
 rm -f *.exe nexuiz-* *-withdebug* *.o
 make clean
 build
