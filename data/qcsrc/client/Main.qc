@@ -183,11 +183,13 @@ float SetTeam(entity o, float Team)
 		case COLOR_TEAM2:
 		case COLOR_TEAM3:
 		case COLOR_TEAM4:
-		case COLOR_SPECTATOR:
 			break;
 		default:
-			print("trying to switch to unsupported team ", ftos(Team), "\n");
-			Team = COLOR_SPECTATOR;
+			if(GetTeam(Team, false) == NULL)
+			{
+				print("trying to switch to unsupported team ", ftos(Team), "\n");
+				Team = COLOR_SPECTATOR;
+			}
 			break;
 	}
 	if(Team == -1) // leave
