@@ -439,7 +439,7 @@ void nb_delayedinit (void)
 {
 	if (find(world, classname, "nexball_team") == world)
 		nb_spawnteams();
-	ScoreRules_nexball();
+	ScoreRules_nexball(nb_teams);
 }
 
 
