@@ -25,6 +25,8 @@ CLASS(NexuizMapInfoDialog) EXTENDS(NexuizDialog)
 	ATTRIB(NexuizMapInfoDialog, typeAssaultLabel, entity, NULL)
 	ATTRIB(NexuizMapInfoDialog, typeOnslaughtLabel, entity, NULL)
 	ATTRIB(NexuizMapInfoDialog, typeRaceLabel, entity, NULL)
+	ATTRIB(NexuizMapInfoDialog, typeCTSLabel, entity, NULL)
+	ATTRIB(NexuizMapInfoDialog, typeNexballLabel, entity, NULL)
 
 	ATTRIB(NexuizMapInfoDialog, currentMapIndex, float, 0)
 	ATTRIB(NexuizMapInfoDialog, currentMapBSPName, string, string_null)
@@ -77,6 +79,8 @@ void loadMapInfoNexuizMapInfoDialog(entity me, float i, entity mlb)
 	me.typeAssaultLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ASSAULT);
 	me.typeOnslaughtLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ONSLAUGHT);
 	me.typeRaceLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_RACE);
+	me.typeCTSLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_CTS);
+	me.typeNexballLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_NEXBALL);
 
 	MapInfo_ClearTemps();
 }
@@ -85,6 +89,7 @@ void fillNexuizMapInfoDialog(entity me)
 	entity e;
 	float w, wgt;
 	me.TR(me);
+		me.TDempty(me, 0.2);
 		me.TD(me, me.rows - 2, 3, e = makeNexuizImage(string_null, 4.0/3.0));
 		me.previewImage = e;
 	me.gotoRC(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
@@ -107,9 +112,9 @@ void fillNexuizMapInfoDialog(entity me)
 			me.featuresLabel = e;
 	me.TR(me);
 		me.TD(me, 1, w, e = makeNexuizTextLabel(0, "Game types:"));
-	me.TR(me); wgt = (w-0.4)/4;
-		me.TD(me, 1, 0.4, e = makeNexuizTextLabel(0, ""));
-		me.TD(me, 1, wgt, e = makeNexuizTextLabel(0, "Deathmatch"));
+	me.TR(me); wgt = (w-0.2)/5;
+		me.TDempty(me, 0.2);
+		me.TD(me, 1, wgt, e = makeNexuizTextLabel(0, "DM"));
 			me.typeDeathmatchLabel = e;
 		me.TD(me, 1, wgt, e = makeNexuizTextLabel(0, "TDM"));
 			me.typeTDMLabel = e;
@@ -117,24 +122,28 @@ void fillNexuizMapInfoDialog(entity me)
 			me.typeLMSLabel = e;
 		me.TD(me, 1, wgt, e = makeNexuizTextLabel(0, "Arena"));
 			me.typeArenaLabel = e;
-	me.TR(me);
-		me.TD(me, 1, 0.4, e = makeNexuizTextLabel(0, ""));
 		me.TD(me, 1, wgt, e = makeNexuizTextLabel(0, "Rune"));
 			me.typeRuneLabel = e;
+	me.TR(me);
+		me.TDempty(me, 0.2);
 		me.TD(me, 1, wgt, e = makeNexuizTextLabel(0, "Domination"));
 			me.typeDominationLabel = e;
 		me.TD(me, 1, wgt, e = makeNexuizTextLabel(0, "Key Hunt"));
 			me.typeKeyHuntLabel = e;
 		me.TD(me, 1, wgt, e = makeNexuizTextLabel(0, "CTF"));
 			me.typeCTFLabel = e;
-	me.TR(me);
-		me.TD(me, 1, 0.4, e = makeNexuizTextLabel(0, ""));
 		me.TD(me, 1, wgt, e = makeNexuizTextLabel(0, "Assault"));
 			me.typeAssaultLabel = e;
 		me.TD(me, 1, wgt, e = makeNexuizTextLabel(0, "Onslaught"));
 			me.typeOnslaughtLabel = e;
+	me.TR(me);
+		me.TDempty(me, 0.2);
 		me.TD(me, 1, wgt, e = makeNexuizTextLabel(0, "Race"));
 			me.typeRaceLabel = e;
+		me.TD(me, 1, wgt, e = makeNexuizTextLabel(0, "CTS"));
+			me.typeCTSLabel = e;
+		me.TD(me, 1, wgt, e = makeNexuizTextLabel(0, "Nexball"));
+			me.typeNexballLabel = e;
 
 	me.gotoRC(me, me.rows - 2, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizTextLabel(0.5, ""));
