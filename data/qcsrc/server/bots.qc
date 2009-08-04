@@ -2007,8 +2007,16 @@ void bot_setnameandstuff()
 	string bot_name, bot_model, bot_skin, bot_shirt, bot_pants;
 	string name, prefix, suffix;
 
-	prefix = cvar_string("bot_prefix");
-	suffix = cvar_string("bot_suffix");
+ 	if(cvar("g_campaign"))
+	{
+		prefix = "";
+		suffix = "";
+	}
+	else
+	{
+		prefix = cvar_string("bot_prefix");
+		suffix = cvar_string("bot_suffix");
+	}
 
 	file = fopen(cvar_string("bot_config_file"), FILE_READ);
 
@@ -2078,10 +2086,7 @@ void bot_setnameandstuff()
 	self.playermodel = self.playermodel_freeme = strzone(strcat("models/player/", bot_model));
 	self.playerskin = self.playerskin_freeme = strzone(bot_skin);
 
- 	if(!cvar("g_campaign"))
- 		self.netname = self.netname_freeme = strzone(strcat(prefix, name, suffix));
- 	else
- 		self.netname = self.netname_freeme = strzone(name);
+	self.netname = self.netname_freeme = strzone(strcat(prefix, name, suffix));
 };
 
 float bot_custom_weapon;
