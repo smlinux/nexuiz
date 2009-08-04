@@ -479,13 +479,13 @@ void CSQC_UpdateView(float w, float h)
 	mousepos = mousepos*0.5 + getmousepos();
 	*/
 
-	R_AddEntities(MASK_NORMAL | MASK_ENGINE | MASK_ENGINEVIEWMODELS);
-
 	e = self;
 	for(self = world; (self = nextent(self)); )
 		if(self.draw)
 			self.draw();
 	self = e;
+
+	R_AddEntities(MASK_NORMAL | MASK_ENGINE | MASK_ENGINEVIEWMODELS);
 	R_RenderScene();
 
 	// now switch to 2D drawing mode by calling a 2D drawing function
