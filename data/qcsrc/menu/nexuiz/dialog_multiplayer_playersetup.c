@@ -84,9 +84,13 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Field of View:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(60, 130, 1, "fov"));
 	me.TR(me);
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Damage kick:"));
+		me.TD(me, 1, 2, e = makeNexuizSlider(0, 0.5, 0.05, "v_kicktime"));
+	me.TR(me);
 		sl = makeNexuizSlider(0.45, 0.75, 0.01, "cl_bobcycle");
 		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(0, 1, sl, "View bobbing:"));
 		me.TD(me, 1, 2, sl);
+	
 	me.TR(me);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Zoom Factor:"));
@@ -95,7 +99,6 @@ void fillNexuizPlayerSettingsTab(entity me)
 		sl = makeNexuizSlider(1, 8, 0.5, "cl_zoomspeed");
 		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(-1, 1, sl, "Zoom speed:"));
 		me.TD(me, 1, 2, sl);
-	me.TR(me);
 	me.TR(me);
 		me.TD(me, 1, 1.5, e = makeNexuizButton("Weapon settings...", '0 0 0'));
 			e.onClick = DialogOpenButton_Click;
@@ -144,20 +147,30 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TD(me, 1, 2/3, e = makeNexuizRadioButton(1, "crosshair_hittest", "1",    "TrueAim"));
 		me.TD(me, 1, 2/3, e = makeNexuizRadioButton(1, "crosshair_hittest", "1.25", "Enemies"));
 	me.TR(me);
-	me.TR(me);
 		me.TDempty(me, 0.4);
 		me.TD(me, 1, 2.2, e = makeNexuizButton("Radar, HUD & Waypoints...", '0 0 0'));
 			e.onClick = DialogOpenButton_Click;
 			e.onClickEntity = main.radarDialog;
 		me.TDempty(me, 0.5);
 	me.TR(me);
-	me.TR(me);
-#ifdef ALLOW_FORCEMODELS
+	#ifdef ALLOW_FORCEMODELS
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Force Models:"));
 		me.TD(me, 1, 2/3, e = makeNexuizRadioButton(2, string_null, string_null, "None"));
 		me.TD(me, 1, 2/3, e = makeNexuizRadioButton(2, "cl_forceplayermodelsfromnexuiz", string_null, "Custom"));
 		me.TD(me, 1, 2/3, e = makeNexuizRadioButton(2, "cl_forceplayermodels", string_null, "All"));
-#endif
+	#endif
+	me.TR(me);
+		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_gentle", "Disable gore effects"));
+	me.TR(me);
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Gibs:"));
+		me.TD(me, 1, 2, e = makeNexuizTextSlider("cl_nogibs"));
+			e.addValue(e, "None", "1");
+			e.addValue(e, "Few", "0.75");
+			e.addValue(e, "Many", "0.5");
+			e.addValue(e, "Lots", "0");
+			e.configureNexuizTextSliderValues(e);
+			setDependent(e, "cl_gentle", 0, 0);
+	me.TR(me);
 
 	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "color -1 -1;name \"$_cl_name\";sendcvar cl_weaponpriority;sendcvar cl_zoomfactor;sendcvar cl_zoomspeed;sendcvar cl_autoswitch;sendcvar cl_shownames;sendcvar cl_forceplayermodelsfromnexuiz;sendcvar cl_forceplayermodels", COMMANDBUTTON_APPLY));

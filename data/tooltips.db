@@ -117,7 +117,7 @@
 \v_glslgamma\Enable use of GLSL to apply gamma correction, note that it might decrease performance by a lot (default: disabled)
 \r_ambient\Ambient lighting, if set too high it tends to make light on maps look dull and flat (default: 4)
 \r_hdr_scenebrightness\Global rendering brightness (default: 1)
-\vid_samples\Enable 4x antialiasing, which smooths the edges of 3D geometry. Note that it might decrease performance by quite a lot (default: off)
+\vid_samples\Enable antialiasing, which smooths the edges of 3D geometry. Note that it might decrease performance by quite a lot (default: disabled)
 \v_flipped\Poor man's left handed mode (default: off)
 
 \NexuizSettingsDialog/Effects\Effect settings

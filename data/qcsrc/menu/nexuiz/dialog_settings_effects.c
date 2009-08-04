@@ -53,6 +53,7 @@ void fillNexuizEffectsSettingsTab(entity me)
 			e.addValue(e, "4x", "4");
 			e.configureNexuizTextSliderValues(e);
 	me.TR(me);
+	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Texture quality:"));
 		me.TD(me, 1, 2, e = makeNexuizTextSlider("gl_picmip"));
 			if(cvar("developer"))
@@ -84,6 +85,7 @@ void fillNexuizEffectsSettingsTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Particle dist.:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(500, 2000, 100, "r_drawparticles_drawdistance"));
 	me.TR(me);
+	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_decals", "Decals"));
 	me.TR(me);
 		me.TDempty(me, 0.2);
@@ -97,21 +99,6 @@ void fillNexuizEffectsSettingsTab(entity me)
 	        setDependent(e, "cl_decals", 1, 1);
 	    me.TD(me, 1, 2, e = makeNexuizSlider(1, 20, 1, "cl_decals_time"));
 	        setDependent(e, "cl_decals", 1, 1);
-	me.TR(me);
-		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_gentle", "Disable gore effects")); // TODO move this away, this is user preference, and preset .cfg files do not change this
-
-	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Gibs:"));
-		me.TD(me, 1, 2, e = makeNexuizTextSlider("cl_nogibs"));
-			e.addValue(e, "None", "1");
-			e.addValue(e, "Few", "0.75");
-			e.addValue(e, "Many", "0.5");
-			e.addValue(e, "Lots", "0");
-			e.configureNexuizTextSliderValues(e);
-
-	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Damage kick:"));
-		me.TD(me, 1, 2, e = makeNexuizSlider(0, 0.5, 0.05, "v_kicktime")); // TODO move this away, this is user preference, and preset .cfg files do not change this
 
 	me.gotoRC(me, 2, 3.5); me.setFirstColumn(me, me.currentColumn);
 	me.TD(me, 1, 2, e = makeNexuizCheckBox(1, "mod_q3bsp_nolightmaps", "Use lightmaps"));
@@ -154,7 +141,6 @@ void fillNexuizEffectsSettingsTab(entity me)
 			setDependentOR(e, "r_shadow_realtime_dlight", 1, 1, "r_shadow_realtime_world", 1, 1);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "r_coronas", "Coronas"));
-		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "r_coronas_occlusionquery", "Use occlusion queries")); // TODO move this away, this is user preference, and preset .cfg files do not change this
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "r_bloom", "Bloom"));
 			setDependent(e, "r_hdr", 0, 0);
