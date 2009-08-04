@@ -126,7 +126,7 @@ void Ent_GibSplash()
 	float issilent;
 	string gentle_prefix;
 
-	float c, gibfactor, randomvalue;
+	float c, randomvalue;
 
 	type = ReadByte(); // gibbage type
 	amount = ReadByte() / 16.0; // gibbage amount
@@ -146,14 +146,14 @@ void Ent_GibSplash()
 			gentle_prefix = "morphed_";
 	}
 
-	gibfactor = 1 - cvar("cl_nogibs");
-	if(gibfactor <= 0)
-		return;
-
-	amount *= gibfactor;
+	if(cvar("cl_gentle"))
+		amount *= 1 - cvar("cl_nogibs");
 
 	if(cvar("ekg"))
 		amount *= 5;
+
+	if(amount <= 0)
+		return;
 
 	self.origin = org; // for the sounds
 
