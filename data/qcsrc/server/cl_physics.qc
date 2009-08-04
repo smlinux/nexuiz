@@ -685,7 +685,7 @@ void SV_PlayerPhysics()
 		if(sv_doublejump)
 		{
 			self.flags &~= FL_ONGROUND;
-			tracebox(self.origin + '0 0 1', self.mins, self.maxs, self.origin - '0 0 2', MOVE_NORMAL, self);
+			tracebox(self.origin + '0 0 1', self.mins, self.maxs, self.origin - '0 0 1', MOVE_NORMAL, self);
 			if(trace_fraction < 1 && trace_plane_normal_z > 0.7)
 				self.flags |= FL_ONGROUND;
 		}
