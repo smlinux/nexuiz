@@ -2,7 +2,6 @@ title CyberParcour01
 description
 author sev
 type cts 20 5
-type race 5 20 15
-settemp_for_type race g_start_weapon_shotgun 0
-settemp_for_type race g_start_weapon_laser 0
-settemp_for_type race g_start_weapon_hook 0
+settemp_for_type cts g_start_weapon_shotgun 0
+settemp_for_type cts g_start_weapon_laser 0
+settemp_for_type cts g_start_weapon_hook 0
