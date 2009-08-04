@@ -176,21 +176,40 @@ void CSQC_Shutdown(void)
 float SetTeam(entity o, float Team)
 {
 	entity tm;
-	switch(Team)
+	if(teamplay)
 	{
-		case -1:
-		case COLOR_TEAM1:
-		case COLOR_TEAM2:
-		case COLOR_TEAM3:
-		case COLOR_TEAM4:
-			break;
-		default:
-			if(GetTeam(Team, false) == NULL)
-			{
-				print("trying to switch to unsupported team ", ftos(Team), "\n");
-				Team = COLOR_SPECTATOR;
-			}
-			break;
+		switch(Team)
+		{
+			case -1:
+			case COLOR_TEAM1:
+			case COLOR_TEAM2:
+			case COLOR_TEAM3:
+			case COLOR_TEAM4:
+				break;
+			default:
+				if(GetTeam(Team, false) == NULL)
+				{
+					print("trying to switch to unsupported team ", ftos(Team), "\n");
+					Team = COLOR_SPECTATOR;
+				}
+				break;
+		}
+	}
+	else
+	{
+		switch(Team)
+		{
+			case -1:
+			case 0:
+				break;
+			default:
+				if(GetTeam(Team, false) == NULL)
+				{
+					print("trying to switch to unsupported team ", ftos(Team), "\n");
+					Team = COLOR_SPECTATOR;
+				}
+				break;
+		}
 	}
 	if(Team == -1) // leave
 	{
