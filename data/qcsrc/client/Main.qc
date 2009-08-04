@@ -176,6 +176,20 @@ void CSQC_Shutdown(void)
 float SetTeam(entity o, float Team)
 {
 	entity tm;
+	switch(Team)
+	{
+		case -1:
+		case COLOR_TEAM1:
+		case COLOR_TEAM2:
+		case COLOR_TEAM3:
+		case COLOR_TEAM4:
+		case COLOR_SPECTATOR:
+			break;
+		default:
+			print("trying to switch to unsupported team ", ftos(Team), "\n");
+			Team = COLOR_SPECTATOR;
+			break;
+	}
 	if(Team == -1) // leave
 	{
 		if(o.has_team)
@@ -610,7 +624,7 @@ void Ent_ReadTeamScore()
 	entity o;
 
 	self.team = ReadByte();
-	o = self.owner = GetTeam(self.team, true);
+	o = self.owner = GetTeam(self.team, true); // these team numbers can always be trusted
 
 #if MAX_TEAMSCORE <= 3
 	for(i = 0; i < MAX_TEAMSCORE; ++i)

@@ -424,7 +424,7 @@ string Sbar_DefaultColumnLayout()
 		"-teams,race,lms/kills -teams,lms/deaths -teams,lms,race/suicides -race,dm,tdm/frags ", // tdm already has this in "score"
 		"+ctf/caps +ctf/pickups +ctf/fckills +ctf/returns ",
 		"+lms/lives +lms/rank ",
-		"+/caps +kh/pushes +kh/destroyed ",
+		"+kh/caps +kh/pushes +kh/destroyed ",
 		"?+race/laps ?+race/time ?+race/fastest ",
 		"+as/objectives +nexball/faults +nexball/goals ",
 		"-lms,race,nexball/score");
@@ -1088,7 +1088,13 @@ void Sbar_DrawScoreboard()
 
 		tm = teams.sort_next;
 
-		pos = Sbar_Scoreboard_MakeTable(pos, tm, rgb, bg_size);
+		for(tm = teams.sort_next; tm; tm = tm.sort_next)
+		{
+			if(tm.team == COLOR_SPECTATOR)
+				continue;
+
+			pos = Sbar_Scoreboard_MakeTable(pos, tm, rgb, bg_size);
+		}
 	}
 
 	tmp = pos + '0 1.5 0' * sbar_fontsize_y;
