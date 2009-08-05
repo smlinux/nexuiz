@@ -614,6 +614,7 @@ void spawnfunc_func_button()
 
 	self.pos1 = self.origin;
 	self.pos2 = self.pos1 + self.movedir*(fabs(self.movedir*self.size) - self.lip);
+    self.flags |= FL_NOTARGET;
 
 	button_reset();
 };
@@ -667,7 +668,7 @@ void door_blocked()
 			if (self.classname == "door")
 			{
 				door_go_up ();
-			} else 
+			} else
 			{
 				door_rotating_go_up ();
 			}
@@ -675,7 +676,7 @@ void door_blocked()
 			if (self.classname == "door")
 			{
 				door_go_down ();
-			} else 
+			} else
 			{
 				door_rotating_go_down ();
 			}
@@ -711,7 +712,7 @@ void door_hit_top()
 	if (self.classname == "door")
 	{
 		self.think = door_go_down;
-	} else 
+	} else
 	{
 		self.think = door_rotating_go_down;
 	}
@@ -788,7 +789,7 @@ void door_fire()
 			starte = self;
 			do
 			{
-				if (self.classname == "door") 
+				if (self.classname == "door")
 				{
 					door_go_down ();
 				}
@@ -810,13 +811,13 @@ void door_fire()
 		if (self.classname == "door")
 		{
 			door_go_up ();
-		} else 
+		} else
 		{
 			// if the BIDIR spawnflag (==2) is set and the trigger has set trigger_reverse, reverse the opening direction
-			if ((self.spawnflags & 2) && other.trigger_reverse!=0 && self.lip!=666 && self.state == STATE_BOTTOM) 
-			{ 
+			if ((self.spawnflags & 2) && other.trigger_reverse!=0 && self.lip!=666 && self.state == STATE_BOTTOM)
+			{
 				self.lip = 666; // self.lip is used to remember reverse opening direction for door_rotating
-			  	self.pos2 = '0 0 0' - self.pos2; 
+			  	self.pos2 = '0 0 0' - self.pos2;
 			}
 			// if BIDIR_IN_DOWN (==8) is set, prevent the door from reoping during closing if it is triggered from the wrong side
 			if (!((self.spawnflags & 2) &&  (self.spawnflags & 8) && self.state == STATE_DOWN
@@ -960,8 +961,8 @@ void door_rotating_hit_bottom()
 	if (self.noise1 != "")
 		sound (self, CHAN_TRIGGER, self.noise1, VOL_BASE, ATTN_NORM);
 	if (self.lip==666) // self.lip is used to remember reverse opening direction for door_rotating
-	{ 
-		self.pos2 = '0 0 0' - self.pos2; 
+	{
+		self.pos2 = '0 0 0' - self.pos2;
 		self.lip = 0;
 	}
 	self.state = STATE_BOTTOM;
@@ -1081,7 +1082,7 @@ void LinkDoors()
 		return;		// don't want to link this door
 	}
 
-	cmins = self.absmin;			  
+	cmins = self.absmin;
 	cmaxs = self.absmax;
 
 	starte = self;
@@ -1298,7 +1299,7 @@ void door_rotating_init_startopen()
 
 void spawnfunc_func_door_rotating()
 {
-	
+
 	//if (!self.deathtype) // map makers can override this
 	//	self.deathtype = " got in the way";
 

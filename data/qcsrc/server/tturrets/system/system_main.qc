@@ -580,8 +580,10 @@ float turret_validate_target(entity e_turret,entity e_target,float validate_flag
     if (e_target.classname == "grapplinghook")
         return -20;
 
+    /*
     if (e_target.classname == "func_button")
         return -21;
+    */
 
 #ifdef TURRET_DEBUG_TARGETSELECT
     dprint("Target:",e_target.netname," is a valid target for ",e_turret.netname,"\n");
