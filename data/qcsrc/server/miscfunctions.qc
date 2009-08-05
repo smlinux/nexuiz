@@ -1504,6 +1504,7 @@ void precache()
         precache_sound ("announcer/robotic/narrowly.wav");
     }
 
+    precache_model ("models/sprites/0.spr32");
     precache_model ("models/sprites/1.spr32");
     precache_model ("models/sprites/2.spr32");
     precache_model ("models/sprites/3.spr32");
