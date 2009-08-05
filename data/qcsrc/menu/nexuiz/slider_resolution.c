@@ -44,7 +44,7 @@ void configureNexuizResolutionSliderNexuizResolutionSlider(entity me)
 }
 void loadCvarsNexuizResolutionSlider(entity me)
 {
-	me.setValueFromIdentifier(me, strcat(cvar_string("vid_width"), " ", cvar_string("vid_height"), " ", cvar_string("vid_conwidth"), " ", cvar_string("vid_conheight")));
+	me.setValueFromIdentifier(me, strcat(cvar_string("vid_width"), " ", cvar_string("vid_height"), " ", cvar_string("menu_vid_conwidth"), " ", cvar_string("menu_vid_conheight")));
 }
 void saveCvarsNexuizResolutionSlider(entity me)
 {
@@ -53,8 +53,8 @@ void saveCvarsNexuizResolutionSlider(entity me)
 		tokenize_console(me.getIdentifier(me));
 		cvar_set("vid_width", argv(0));
 		cvar_set("vid_height", argv(1));
-		cvar_set("vid_conwidth", argv(2));
-		cvar_set("vid_conheight", argv(3));
+		cvar_set("menu_vid_conwidth", argv(2));
+		cvar_set("menu_vid_conheight", argv(3));
 	}
 }
 #endif
