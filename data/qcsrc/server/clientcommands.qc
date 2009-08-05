@@ -577,10 +577,10 @@ void SV_ParseClientCommand(string s) {
 			{
 				fputs(f, "{\n");
 				fputs(f, "\"classname\" \"trigger_race_checkpoint\"\n");
-				fputs(f, strcat("\"origin\" \"", substring(vtos(e.absmin), 1, -2), "\"\n"));
-				fputs(f, strcat("\"maxs\" \"", substring(vtos(e.absmax - e.absmin), 1, -2), "\"\n"));
+				fputs(f, strcat("\"absmin\" \"", ftos(e.absmin_x), " ", ftos(e.absmin_y), " ", ftos(e.absmin_z), "\"\n"));
+				fputs(f, strcat("\"maxs\" \"", ftos(e.absmax_x - e.absmin_x), " ", ftos(e.absmax_y - e.absmin_y), " ", ftos(e.absmax_z - e.absmin_z), "\"\n"));
 				fputs(f, strcat("\"cnt\" \"", ftos(e.cnt), "\"\n"));
-				fputs(f, strcat("\"targetname\" \"cp", ftos(e.cnt), "\"\n"));
+				fputs(f, strcat("\"targetname\" \"checkpoint", ftos(e.cnt), "\"\n"));
 				fputs(f, "}\n");
 			}
 			for(e = world; (e = find(e, classname, "dragpoint")); )
@@ -599,20 +599,20 @@ void SV_ParseClientCommand(string s) {
 				fputs(f, "{\n");
 				fputs(f, "\"classname\" \"info_player_race\"\n");
 				fputs(f, strcat("\"angle\" \"", ftos(vectoyaw(start - e.origin)), "\"\n"));
-				fputs(f, strcat("\"origin\" \"", substring(vtos(e.origin), 1, -2), "\"\n"));
+				fputs(f, strcat("\"origin\" \"", ftos(e.origin_x), " ", ftos(e.origin_y), " ", ftos(e.origin_z), "\"\n"));
 				if(e.cnt == -2)
 				{
-					fputs(f, "\"target\" \"cp0\"\n");
+					fputs(f, "\"target\" \"checkpoint0\"\n");
 					fputs(f, "\"race_place\" \"0\"\n");
 				}
 				else if(e.cnt == -1)
 				{
-					fputs(f, "\"target\" \"cp0\"\n");
+					fputs(f, "\"target\" \"checkpoint0\"\n");
 					fputs(f, "\"race_place\" \"-1\"\n");
 				}
 				else
 				{
-					fputs(f, strcat("\"target\" \"cp", ftos(e.cnt), "\"\n"));
+					fputs(f, strcat("\"target\" \"checkpoint", ftos(e.cnt), "\"\n"));
 					if(e.cnt == 0)
 					{
 						// these need race_place
