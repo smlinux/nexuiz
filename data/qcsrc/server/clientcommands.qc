@@ -577,7 +577,7 @@ void SV_ParseClientCommand(string s) {
 			{
 				fputs(f, "{\n");
 				fputs(f, "\"classname\" \"trigger_race_checkpoint\"\n");
-				fputs(f, strcat("\"absmin\" \"", ftos(e.absmin_x), " ", ftos(e.absmin_y), " ", ftos(e.absmin_z), "\"\n"));
+				fputs(f, strcat("\"origin\" \"", ftos(e.absmin_x), " ", ftos(e.absmin_y), " ", ftos(e.absmin_z), "\"\n"));
 				fputs(f, strcat("\"maxs\" \"", ftos(e.absmax_x - e.absmin_x), " ", ftos(e.absmax_y - e.absmin_y), " ", ftos(e.absmax_z - e.absmin_z), "\"\n"));
 				fputs(f, strcat("\"cnt\" \"", ftos(e.cnt), "\"\n"));
 				fputs(f, strcat("\"targetname\" \"checkpoint", ftos(e.cnt), "\"\n"));
