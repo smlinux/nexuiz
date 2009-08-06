@@ -58,7 +58,7 @@ void fillNexuizServerListTab(entity me)
 			e.onEnter = ServerList_Connect_Click;
 			e.onEnterEntity = slist;
 			slist.ipAddressBox = e;
-		me.TD(me, 1, 1.5, e = makeNexuizButton("", '0 0 0'));
+		me.TD(me, 1, 1.5, e = makeNexuizButton("Bookmark", '0 0 0'));
 			e.onClick = ServerList_Favorite_Click;
 			e.onClickEntity = slist;
 			slist.favoriteButton = e;
