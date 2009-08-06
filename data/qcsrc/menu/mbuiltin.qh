@@ -345,3 +345,5 @@ float(float i) argv_start_index = #515;
 float(float i) argv_end_index = #516;
 
 string(float, float) getgamedirinfo = #626;
+#define GETGAMEDIRINFO_NAME 0
+#define GETGAMEDIRINFO_DESCRIPTION 1

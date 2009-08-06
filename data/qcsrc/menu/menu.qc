@@ -30,10 +30,10 @@ void() m_init =
 		string s;
 		for(i = 0; ; ++i)
 		{
-			s = getgamedirinfo(i, 0);
+			s = getgamedirinfo(i, GETGAMEDIRINFO_NAME);
 			if not(s)
 				break;
-			print(s, ": ", getgamedirinfo(i, 1));
+			print(s, ": ", getgamedirinfo(i, GETGAMEDIRINFO_DESCRIPTION));
 		}
 	}
 }
