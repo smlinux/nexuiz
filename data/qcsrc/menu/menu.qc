@@ -22,6 +22,20 @@ void() m_init =
 {
 	dprint_load();
 	check_unacceptable_compiler_bugs();
+
+	// list all game dirs (TEST)
+	if(cvar("developer"))
+	{
+		float i;
+		string s;
+		for(i = 0; ; ++i)
+		{
+			s = getgamedirinfo(i, 0);
+			if not(s)
+				break;
+			print(s, ": ", getgamedirinfo(i, 1));
+		}
+	}
 }
 
 void UpdateConWidthHeight()
