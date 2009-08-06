@@ -315,8 +315,8 @@ tex 8 16
 size 48 48
 alpha 256 256 0
 originjitter 40 40 40
-lightradius 350
-lightradiusfade 700
+lightradius 150
+lightradiusfade 300
 lightcolor 4 2 0.5
 // flare effect
 effect TE_EXPLOSION
