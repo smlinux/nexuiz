@@ -169,6 +169,7 @@ void setSelectedNexuizServerList(entity me, float i)
 
 	me.ipAddressBox.setText(me.ipAddressBox, me.selectedServer);
 	me.ipAddressBox.cursorPos = strlen(me.selectedServer);
+	me.ipAddressBoxFocused = -1;
 }
 void refreshServerListNexuizServerList(entity me, float mode)
 {
@@ -296,20 +297,24 @@ void drawNexuizServerList(entity me)
 
 	if(owned)
 	{
-		me.ipAddressBox.setText(me.ipAddressBox, me.selectedServer);
-		me.ipAddressBox.cursorPos = strlen(me.selectedServer);
+		if(me.selectedServer != me.ipAddressBox.text)
+		{
+			me.ipAddressBox.setText(me.ipAddressBox, me.selectedServer);
+			me.ipAddressBox.cursorPos = strlen(me.selectedServer);
+			me.ipAddressBoxFocused = -1;
+		}
 	}
 
 	if(me.ipAddressBoxFocused != me.ipAddressBox.focused)
 	{
-		me.ipAddressBoxFocused = me.ipAddressBox.focused;
-		if(me.ipAddressBoxFocused)
+		if(me.ipAddressBox.focused || me.ipAddressBoxFocused < 0)
 		{
 			if(IsFavorite(me.ipAddressBox.text))
 				me.favoriteButton.setText(me.favoriteButton, "Remove");
 			else
 				me.favoriteButton.setText(me.favoriteButton, "Bookmark");
 		}
+		me.ipAddressBoxFocused = me.ipAddressBox.focused;
 	}
 
 	drawListBox(me);
@@ -388,6 +393,7 @@ void ServerList_Filter_Change(entity box, entity me)
 
 	me.ipAddressBox.setText(me.ipAddressBox, "");
 	me.ipAddressBox.cursorPos = 0;
+	me.ipAddressBoxFocused = -1;
 }
 void ServerList_ShowEmpty_Click(entity box, entity me)
 {
@@ -396,6 +402,7 @@ void ServerList_ShowEmpty_Click(entity box, entity me)
 
 	me.ipAddressBox.setText(me.ipAddressBox, "");
 	me.ipAddressBox.cursorPos = 0;
+	me.ipAddressBoxFocused = -1;
 }
 void ServerList_ShowFull_Click(entity box, entity me)
 {
@@ -404,6 +411,7 @@ void ServerList_ShowFull_Click(entity box, entity me)
 
 	me.ipAddressBox.setText(me.ipAddressBox, "");
 	me.ipAddressBox.cursorPos = 0;
+	me.ipAddressBoxFocused = -1;
 }
 void setSortOrderNexuizServerList(entity me, float field, float direction)
 {
