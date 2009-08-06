@@ -1,5 +1,6 @@
 "//campaign:Nexuiz 2.5 Campaign"
 "//game","mapname","bots","skill","frag","mutator-sets","description","long description"
+"dm","tutorial",1,1,1,,"Basic tutorial","Welcome to Nexuiz!\n\nYou'll start off with this simple guided tutorial, which will teach you some very basic things about Nexuiz which might not seem obvious at first.\n"
 "dm","runningman_1on1remix",1,1,10,,"DM: Running Man (1on1)","Welcome to the Nexuiz Campaign!\n\nFirst of all, you're going to learn the controls of the game by playing an easy 1on1 deathmatch against a single unskilled bot.\n\nFirst one to kill the other 10 times wins."
 "dm","darkzone",2,2,15,,"DM: Q1DM6 Remake","On this remake of a beloved level from the original Quake(r) from id Software, you'll face two bots on a somewhat higher skill level.\n\n15 frags will make you a winner here."
 "dm","desertfactory",3,3,20,,"DM: Desert Factory","You're fighting three enemies in a deserted factory. Watch out for the hot pipes, as they can kill you.\n\nThe game ends once someone, hopefully you, will have 20 frags."

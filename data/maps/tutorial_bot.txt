@@ -1,0 +1,4 @@
+//bot configuration: name model skin shirt-color pants-color team-override
+//default team values (team-override): 1 = red, 2 = blue, 3 = yellow, 4 = pink
+//use -1 for shirt-color or pants-color to get random colors
+Tutor	grunt	0	1	0	0
