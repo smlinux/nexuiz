@@ -95,6 +95,7 @@ buildon()
 	for P in -dedicated -sdl -glx -wgl -agl -dedicated.exe -sdl.exe .exe; do
 		[ -f nexuiz$P ] && mv nexuiz$P "$tmpdir/$prefix$P"
 		[ -f nexuiz$P-withdebug ] && mv nexuiz$P-withdebug "$tmpdir/debuginfo/$prefix$P"
+		[ -f nexuiz$P.dSYM ] && mv nexuiz$P.dSYM "$tmpdir/debuginfo/$prefix$P.dSYM"
 	done
 	case "$fteqccname" in
 		*.exe)
@@ -109,8 +110,8 @@ buildon()
 
 build()
 {
-#	buildon nexmacbuild                           nexuiz-osx          fteqcc-osx          /tmp/Darkplaces.build 'CC="gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4"' strip
-	buildon nexmacbuild                           nexuiz-osx          fteqcc-osx          /tmp/Darkplaces.build 'CC="gcc -g -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4"' strip
+	buildon nexmacbuild                           nexuiz-osx          fteqcc-osx          /tmp/Darkplaces.build 'CC="gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4"' strip
+#	buildon nexmacbuild                           nexuiz-osx          fteqcc-osx          /tmp/Darkplaces.build 'CC="gcc -g -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4"' strip
 	buildon eos.thruhere.net                      nexuiz-linux-686    fteqcc-linux-686    /tmp/Darkplaces.build 'CC="gcc -g" DP_MODPLUG_STATIC_LIBDIR=/home/divverent/modplug-i386/lib' strip
 	buildon alientrap.org                         nexuiz-linux-x86_64 fteqcc-linux-x86_64 /tmp/Darkplaces.build 'CC="gcc -g -Wl,--hash-style=sysv" DP_MODPLUG_STATIC_LIBDIR=/home/divverent/modplug-x86_64/lib' strip
 	buildon alientrap.org                         nexuiz              fteqcc.exe          /tmp/Darkplaces.build 'DP_MAKE_TARGET=mingw CC="/chroot/debian-etch/usr/bin/i586-mingw32msvc-gcc -g -DSUPPORTDIRECTX -I/home/divverent/dxheaders" WINDRES=/chroot/debian-etch/usr/bin/i586-mingw32msvc-windres SDL_CONFIG=/home/divverent/sdl-win32/SDL-1.2.13/bin/sdl-config' /chroot/debian-etch/usr/bin/i586-mingw32msvc-strip
@@ -170,10 +171,10 @@ echo "fteqcc rev $fteqccrev"
 
 # build all executables
 cd "$dpdir"
-rm -f *.exe nexuiz-* *-withdebug* *.o
+rm -rf nexuiz-* *.o
 make clean
 build
-rm -f *.exe nexuiz-* *-withdebug '.#'* *.o
+rm -rf nexuiz-* *.o
 rm -rf fteqcc copystrip
 make clean
 
@@ -245,7 +246,7 @@ echo >> defaultNexuiz.cfg
 echo "$defaultcfg" >> defaultNexuiz.cfg
 
 cd "$nexdir/misc/mediasource/menuskins/wickedz/background_builder"
-sh append.sh "$version" "$tmpdir/data/gfx/menu/wickedz/"
+sh append.sh "`echo "$version" | sed 's/svn/s/g'`" "$tmpdir/data/gfx/menu/wickedz/"
 cd "$tmpdir/data"
 
 mk7z ../data.pk3 .
