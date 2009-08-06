@@ -153,7 +153,7 @@ $postscale = 1 if not defined $postscale;
 for my $m(@{$options->{maps}})
 {
 	$m =~ s/\.(?:map|bsp)$//;
-	if($prescale != 1 or $postscale != 1)
+	if($prescale != 1)
 	{
 		open my $checkfh, "<", "$m.map"
 			or die "open $m.map: $!";
@@ -294,6 +294,7 @@ for my $m(@{$options->{maps}})
 		}
 
 		unlink "$m.srf";
+		unlink "$m.prt";
 
 		$restore_shaderlist->();
 		1;
