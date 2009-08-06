@@ -145,7 +145,7 @@ void player_setupanimsformodel()
 	self.anim_pain1 = '9 1 2'; // 0.5 seconds
 	self.anim_pain2 = '10 1 2'; // 0.5 seconds
 	self.anim_shoot = '11 1 5'; // TODO: analyze models and set framerate
-	self.anim_taunt = '12 1 1'; // FIXME?  there is no code using this anim
+	self.anim_taunt = '12 1 0.33'; // FIXME?  there is no code using this anim
 	self.anim_run = '13 1 1';
 	self.anim_runbackwards = '14 1 1';
 	self.anim_strafeleft = '15 1 1';
@@ -1193,6 +1193,9 @@ void GlobalSound(string sample, float chan, float voicetype)
 				}
 			break;
 		case VOICETYPE_TAUNT:
+			if(self.classname == "player")
+				if(self.deadflag == DEAD_NO)
+					setanim(self, self.anim_taunt, FALSE, TRUE, TRUE);
 			FOR_EACH_REALCLIENT(msg_entity)
 			{
 				if (msg_entity.cvar_cl_voice_directional >= 1)
