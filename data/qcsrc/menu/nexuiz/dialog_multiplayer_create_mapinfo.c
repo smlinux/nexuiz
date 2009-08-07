@@ -153,7 +153,7 @@ void fillNexuizMapInfoDialog(entity me)
 	me.gotoRC(me, me.rows - 1, 0);
 		me.TDempty(me, 0.5);
 
-		me.TD(me, 1, me.columns - 5.5, e = makeNexuizButton("OK", '0 0 0'));
+		me.TD(me, 1, me.columns - 5.5, e = makeNexuizButton("Close", '0 0 0'));
 			e.onClick = Dialog_Close;
 			e.onClickEntity = me;
 		me.TD(me, 1, me.columns - 5.5, me.startButton = e = makeNexuizButton("Play", '0 0 0'));
