@@ -168,7 +168,7 @@ void fillNexuizServerInfoDialog(entity me)
 
 	me.gotoRC(me, me.rows - 1, 0);
 
-		me.TD(me, 1, me.columns - 6, e = makeNexuizButton("OK", '0 0 0'));
+		me.TD(me, 1, me.columns - 6, e = makeNexuizButton("Close", '0 0 0'));
 			e.onClick = Dialog_Close;
 			e.onClickEntity = me;
 		me.TD(me, 1, me.columns - 6, e = makeNexuizButton("Join!", '0 0 0'));
