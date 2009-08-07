@@ -26,7 +26,7 @@ void W_Rocket_Explode (void)
 			self.owner.switchweapon = w_getbestweapon(self.owner);
 		}
 		if(g_laserguided_missile)
-			ATTACK_FINISHED(self.owner) = time + cvar("g_balance_rocketlauncher_refire") * W_WeaponSpeedFactor();
+			ATTACK_FINISHED(self.owner) = time + cvar("g_balance_rocketlauncher_refire") * W_WeaponRateFactor();
 	}
 	remove (self);
 }
@@ -143,7 +143,7 @@ void W_Rocket_Think (void)
 	{
 		// accelerate
 		makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0');
-		velspeed = cvar("g_balance_rocketlauncher_laserguided_speed") - (self.velocity * v_forward);
+		velspeed = cvar("g_balance_rocketlauncher_laserguided_speed") * g_weaponspeedfactor - (self.velocity * v_forward);
 		if (velspeed > 0)
 			self.velocity = self.velocity + v_forward * min(cvar("g_balance_rocketlauncher_laserguided_speedaccel") * frametime, velspeed);
 	}
@@ -151,9 +151,9 @@ void W_Rocket_Think (void)
 	{
 		// accelerate
 		makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0');
-		velspeed = cvar("g_balance_rocketlauncher_speed") - (self.velocity * v_forward);
+		velspeed = cvar("g_balance_rocketlauncher_speed") * g_weaponspeedfactor - (self.velocity * v_forward);
 		if (velspeed > 0)
-			self.velocity = self.velocity + v_forward * min(cvar("g_balance_rocketlauncher_speedaccel") * frametime, velspeed);
+			self.velocity = self.velocity + v_forward * min(cvar("g_balance_rocketlauncher_speedaccel") * g_weaponspeedfactor * frametime, velspeed);
 	}
 
 	// laser guided, or remote detonation
@@ -194,7 +194,7 @@ void W_Rocket_Think (void)
 				self.velocity = newdir * velspeed;					// make me fly in the new direction at my flight speed
 				self.angles = vectoangles(self.velocity);			// turn model in the new flight direction
 
-				ATTACK_FINISHED(self.owner) = time + 0.2 * W_WeaponSpeedFactor();
+				ATTACK_FINISHED(self.owner) = time + 0.2 * W_WeaponRateFactor();
 			}
 		}
 		else
@@ -282,9 +282,9 @@ void W_Rocket_Attack (void)
 
 	setorigin (missile, w_shotorg - v_forward * 3); // move it back so it hits the wall at the right point
 	if(g_laserguided_missile && self.laser_on)
-		missile.velocity = w_shotdir * cvar("g_balance_rocketlauncher_laserguided_speedstart");
+		missile.velocity = w_shotdir * cvar("g_balance_rocketlauncher_laserguided_speedstart") * g_weaponspeedfactor;
 	else
-		missile.velocity = w_shotdir * cvar("g_balance_rocketlauncher_speedstart");
+		missile.velocity = w_shotdir * cvar("g_balance_rocketlauncher_speedstart") * g_weaponspeedfactor;
 	W_SetupProjectileVelocity(missile);
 	missile.angles = vectoangles (missile.velocity);
 

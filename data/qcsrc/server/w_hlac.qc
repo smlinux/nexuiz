@@ -156,7 +156,7 @@ void HLAC_fire1_02()
 			return;
 		}
 
-		ATTACK_FINISHED(self) = time + cvar("g_balance_hlac_primary_refire") * W_WeaponSpeedFactor();
+		ATTACK_FINISHED(self) = time + cvar("g_balance_hlac_primary_refire") * W_WeaponRateFactor();
 		W_HLAC_Attack();
 		self.HLAC_bulletcounter = self.HLAC_bulletcounter + 1;
         weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_hlac_primary_refire"), HLAC_fire1_02);

@@ -151,7 +151,7 @@ float w_minstanex(float req)
 		{
 			if (self.jump_interval <= time)
 			{
-				self.jump_interval = time + 0.9;
+				self.jump_interval = time + 0.9 * W_WeaponRateFactor();
 				W_Laser_Attack(FALSE);
 			}
 		}

@@ -30,7 +30,7 @@ void W_Uzi_Attack (float deathtype)
 	}
 
 	// this attack_finished just enforces a cooldown at the end of a burst
-	ATTACK_FINISHED(self) = time + cvar("g_balance_uzi_first_refire") * W_WeaponSpeedFactor();
+	ATTACK_FINISHED(self) = time + cvar("g_balance_uzi_first_refire") * W_WeaponRateFactor();
 
 	if (self.uzi_bulletcounter == 1)
 		fireBallisticBullet(w_shotorg, w_shotdir, cvar("g_balance_uzi_first_spread"), cvar("g_balance_uzi_speed"), 5, cvar("g_balance_uzi_first_damage"), 0, cvar("g_balance_uzi_first_force"), deathtype, 0, 1, cvar("g_balance_uzi_bulletconstant"));

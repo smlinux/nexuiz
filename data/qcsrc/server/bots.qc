@@ -2415,6 +2415,8 @@ float bot_aim(float shotspeed, float shotspeedupward, float maxshottime, float a
 	dprint(", ", ftos(applygravity));
 	dprint(");\n");
 	*/
+	shotspeed *= g_weaponspeedfactor;
+	shotspeedupward *= g_weaponspeedfactor;
 	if (!shotspeed)
 	{
 		dprint("bot_aim: WARNING: weapon ", W_Name(self.weapon), " shotspeed is zero!\n");

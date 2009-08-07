@@ -7,10 +7,10 @@
 ===========================================================================
 */
 
-float W_WeaponSpeedFactor()
+float W_WeaponRateFactor()
 {
 	float t;
-	t = 1.0 / g_weaponspeedfactor;
+	t = 1.0 / g_weaponratefactor;
 
 	if(g_runematch)
 	{
@@ -640,7 +640,7 @@ void CL_Weaponentity_Think()
 	f = 0;
 	if (self.state == WS_RAISE)
 	{
-		f = (self.owner.weapon_nextthink - time) * g_weaponspeedfactor / cvar("g_balance_weaponswitchdelay");
+		f = (self.owner.weapon_nextthink - time) * g_weaponratefactor / cvar("g_balance_weaponswitchdelay");
 		self.angles_x = -90 * f * f;
 		if (qcweaponanimation)
 		{
@@ -650,7 +650,7 @@ void CL_Weaponentity_Think()
 	}
 	else if (self.state == WS_DROP)
 	{
-		f = 1 - (self.owner.weapon_nextthink - time) * g_weaponspeedfactor / cvar("g_balance_weaponswitchdelay");
+		f = 1 - (self.owner.weapon_nextthink - time) * g_weaponratefactor / cvar("g_balance_weaponswitchdelay");
 		self.angles_x = -90 * f * f;
 		if (qcweaponanimation)
 		{
@@ -1034,7 +1034,7 @@ float weapon_prepareattack(float secondary, float attacktime)
 			ATTACK_FINISHED(self) = time;
 			//dprint("resetting attack finished to ", ftos(time), "\n");
 		}
-		ATTACK_FINISHED(self) = ATTACK_FINISHED(self) + attacktime * W_WeaponSpeedFactor();
+		ATTACK_FINISHED(self) = ATTACK_FINISHED(self) + attacktime * W_WeaponRateFactor();
 	}
 	self.bulletcounter += 1;
 	//dprint("attack finished ", ftos(ATTACK_FINISHED(self)), "\n");
@@ -1137,7 +1137,7 @@ void weapon_thinkf(float fr, float t, void() func)
 				a = self.weaponentity.anim_fire2;
 			else if (fr == WFRAME_RELOAD)
 				a = self.weaponentity.anim_reload;
-			a_z *= g_weaponspeedfactor;
+			a_z *= g_weaponratefactor;
 			setanim(self.weaponentity, a, restartanim == FALSE, restartanim, restartanim);
 		}
 	}
@@ -1151,7 +1151,7 @@ void weapon_thinkf(float fr, float t, void() func)
 		backtrace("Tried to override initial weapon think function - should this really happen?");
 	}
 
-	t *= W_WeaponSpeedFactor();
+	t *= W_WeaponRateFactor();
 
 	// VorteX: haste can be added here
 	if (self.weapon_think == w_ready)
@@ -1191,6 +1191,8 @@ vector W_CalculateProjectileVelocity(vector pvelocity, vector mvelocity)
 	float outspeed;
 	float nstyle;
 	vector outvelocity;
+
+	mvelocity = mvelocity * g_weaponspeedfactor;
 
 	mdirection = normalize(mvelocity);
 	mspeed = vlen(mvelocity);
