@@ -333,12 +333,14 @@ void havocbot_goalrating_kh(float ratingscale_team, float ratingscale_dropped, f
 			}
 		}
 		if(!head.owner)
-			navigation_routerating(head, ratingscale_dropped, 100000);
+			navigation_routerating(head, ratingscale_dropped * BOT_PICKUP_RATING_HIGH, 100000);
 		else if(head.team == self.team)
-			navigation_routerating(head, ratingscale_team, 100000);
+			navigation_routerating(head.owner, ratingscale_team * BOT_PICKUP_RATING_HIGH, 100000);
 		else
-			navigation_routerating(head, ratingscale_enemy, 100000);
+			navigation_routerating(head.owner, ratingscale_enemy * BOT_PICKUP_RATING_HIGH, 100000);
 	}
+
+	havocbot_goalrating_items(1, self.origin, 10000);
 };
 
 void() havocbot_role_kh_carrier;
@@ -350,7 +352,7 @@ void havocbot_role_kh_carrier()
 	if(self.deadflag != DEAD_NO)
 		return;
 
-	if (!(self.items & IT_KEY1))
+	if (!(self.kh_next))
 	{
 		dprint("changing role to freelancer\n");
 		self.havocbot_role = havocbot_role_kh_freelancer;
@@ -364,11 +366,10 @@ void havocbot_role_kh_carrier()
 		navigation_goalrating_start();
 
 		if(kh_Key_AllOwnedByWhichTeam() == self.team)
-			havocbot_goalrating_kh(100000, 1, 1); // bring home
+			havocbot_goalrating_kh(10, 0.1, 0.1); // bring home
 		else
-			havocbot_goalrating_kh(40000, 40000, 1000); // play defensively
+			havocbot_goalrating_kh(4, 4, 1); // play defensively
 
-		havocbot_goalrating_items(10000, self.origin, 10000);
 		navigation_goalrating_end();
 	}
 }
@@ -378,7 +379,7 @@ void havocbot_role_kh_defense()
 	if(self.deadflag != DEAD_NO)
 		return;
 
-	if (self.items & IT_KEY1)
+	if (self.kh_next)
 	{
 		dprint("changing role to carrier\n");
 		self.havocbot_role = havocbot_role_kh_carrier;
@@ -404,13 +405,12 @@ void havocbot_role_kh_defense()
 
 		key_owner_team = kh_Key_AllOwnedByWhichTeam();
 		if(key_owner_team == self.team)
-			havocbot_goalrating_kh(100000, 1, 1); // defend key carriers
+			havocbot_goalrating_kh(10, 0.1, 0.1); // defend key carriers
 		else if(key_owner_team == -1)
-			havocbot_goalrating_kh(40000, 10000, 1); // play defensively
+			havocbot_goalrating_kh(4, 1, 0.1); // play defensively
 		else
-			havocbot_goalrating_kh(1, 1, 100000); // ATTACK ANYWAY
+			havocbot_goalrating_kh(0.1, 0.1, 10); // ATTACK ANYWAY
 
-		havocbot_goalrating_items(10000, self.origin, 10000);
 		navigation_goalrating_end();
 	}
 };
@@ -420,7 +420,7 @@ void havocbot_role_kh_offense()
 	if(self.deadflag != DEAD_NO)
 		return;
 
-	if (self.items & IT_KEY1)
+	if (self.kh_next)
 	{
 		dprint("changing role to carrier\n");
 		self.havocbot_role = havocbot_role_kh_carrier;
@@ -447,13 +447,12 @@ void havocbot_role_kh_offense()
 
 		key_owner_team = kh_Key_AllOwnedByWhichTeam();
 		if(key_owner_team == self.team)
-			havocbot_goalrating_kh(100000, 1, 1); // defend anyway
+			havocbot_goalrating_kh(10, 0.1, 0.1); // defend anyway
 		else if(key_owner_team == -1)
-			havocbot_goalrating_kh(1, 10000, 40000); // play offensively
+			havocbot_goalrating_kh(0.1, 1, 4); // play offensively
 		else
-			havocbot_goalrating_kh(1, 1, 100000); // ATTACK! EMERGENCY!
+			havocbot_goalrating_kh(0.1, 0.1, 10); // ATTACK! EMERGENCY!
 
-		havocbot_goalrating_items(10000, self.origin, 10000);
 		navigation_goalrating_end();
 	}
 };
@@ -463,7 +462,7 @@ void havocbot_role_kh_freelancer()
 	if(self.deadflag != DEAD_NO)
 		return;
 
-	if (self.items & IT_KEY1)
+	if (self.kh_next)
 	{
 		dprint("changing role to carrier\n");
 		self.havocbot_role = havocbot_role_kh_carrier;
@@ -498,13 +497,12 @@ void havocbot_role_kh_freelancer()
 
 		key_owner_team = kh_Key_AllOwnedByWhichTeam();
 		if(key_owner_team == self.team)
-			havocbot_goalrating_kh(100000, 1, 1); // defend anyway
+			havocbot_goalrating_kh(10, 0.1, 0.1); // defend anyway
 		else if(key_owner_team == -1)
-			havocbot_goalrating_kh(10000, 40000, 10000); // prefer dropped keys
+			havocbot_goalrating_kh(1, 10, 4); // prefer dropped keys
 		else
-			havocbot_goalrating_kh(1, 1, 100000); // ATTACK ANYWAY
+			havocbot_goalrating_kh(0.1, 0.1, 10); // ATTACK ANYWAY
 
-		havocbot_goalrating_items(10000, self.origin, 10000);
 		navigation_goalrating_end();
 	}
 };
