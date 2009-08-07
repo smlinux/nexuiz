@@ -15,3 +15,5 @@ float tooltipdb;
 void loadTooltips();
 void unloadTooltips();
 string getZonedTooltipForIdentifier(string s);
+
+string resolvemod(string m);

@@ -16,4 +16,5 @@ settemp_for_type all g_balance_selfdamagepercent 0
 settemp_for_type all g_balance_falldamage_minspeed 9999
 settemp_for_type all g_balance_kill_delay 1337
 settemp_for_type all g_use_ammunition 0
+settemp_for_type all sv_spectate 0
 clientsettemp_for_type all snd_mutewhenidle 0

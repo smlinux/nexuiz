@@ -1604,3 +1604,15 @@ vector healtharmor_applydamage(float a, float armorblock, float damage)
 	v_z = 0;
 	return v;
 }
+
+string getcurrentmod()
+{
+	float n;
+	string m;
+	m = cvar_string("fs_gamedir");
+	n = tokenize_console(m);
+	if(n == 0)
+		return "data";
+	else
+		return argv(n - 1);
+}

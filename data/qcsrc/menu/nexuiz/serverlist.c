@@ -213,9 +213,9 @@ void refreshServerListNexuizServerList(entity me, float mode)
 		if(modstr != "")
 		{
 			if(substring(modstr, 0, 1) == "!")
-				sethostcachemaskstring(++m, SLIST_FIELD_MOD, substring(modstr, 1, strlen(modstr) - 1), SLIST_TEST_NOTEQUAL);
+				sethostcachemaskstring(++m, SLIST_FIELD_MOD, resolvemod(substring(modstr, 1, strlen(modstr) - 1)), SLIST_TEST_NOTEQUAL);
 			else
-				sethostcachemaskstring(++m, SLIST_FIELD_MOD, modstr, SLIST_TEST_EQUAL);
+				sethostcachemaskstring(++m, SLIST_FIELD_MOD, resolvemod(modstr), SLIST_TEST_EQUAL);
 		}
 		m = SLIST_MASK_OR - 1;
 		if(s != "")

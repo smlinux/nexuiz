@@ -705,6 +705,7 @@ float g_weaponarena;
 string g_weaponarena_list;
 float g_weaponspeedfactor;
 float g_weapondamagefactor;
+float g_weaponforcefactor;
 
 float start_weapons;
 float start_items;
@@ -1077,6 +1078,7 @@ void readlevelcvars(void)
 
     g_weaponspeedfactor = cvar("g_weaponspeedfactor");
     g_weapondamagefactor = cvar("g_weapondamagefactor");
+    g_weaponforcefactor = cvar("g_weaponforcefactor");
 
     g_pickup_shells                    = cvar("g_pickup_shells");
     g_pickup_shells_max                = cvar("g_pickup_shells_max");

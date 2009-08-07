@@ -358,3 +358,11 @@ void preMenuDraw()
 		campaign_won_previous = cvar(strcat("g_campaign", campaign_name, "_won"));
 	}
 }
+
+string resolvemod(string m)
+{
+	if(m == "=")
+		return getcurrentmod();
+	else
+		return m;
+}
