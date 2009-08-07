@@ -308,6 +308,70 @@ void havocbot_movetogoal()
 	self.movement = '0 0 0';
 	maxspeed = cvar("sv_maxspeed");
 
+#ifdef BOT_JETPACK_NAVIGATION
+	// Jetpack navigation
+	if(self.navigation_jetpack_goal)
+	if(self.goalcurrent==self.navigation_jetpack_goal)
+	if(self.ammo_fuel)
+	{
+		#ifdef DEBUG_BOT_GOALSTACK
+			debuggoalstack();
+			te_wizspike(self.navigation_jetpack_point);
+		#endif
+
+		// Take off
+		if not(self.aistatus & AI_STATUS_JETPACK_FLYING)
+		{
+			// Brake almost completely so it can get a good direction
+			if(vlen(self.velocity)>10)
+				return;
+			self.aistatus |= AI_STATUS_JETPACK_FLYING;
+		}
+
+		makevectors(self.v_angle_y * '0 1 0');
+		dir = normalize(self.navigation_jetpack_point - self.origin);
+
+		// Landing
+		if(self.aistatus & AI_STATUS_JETPACK_LANDING)
+		{
+			// TODO: more accurate landing (with optimum fuel usage)
+			vector p = self.origin - self.goalcurrent.origin; p_z = 0;
+			if( vlen(p) < max(cvar("g_jetpack_maxspeed_side"), vlen(self.velocity)))
+			{
+				// Brake
+				if(fabs(self.velocity_x)>maxspeed)
+				{
+					self.BUTTON_HOOK = TRUE;
+					self.movement_x = dir * v_forward * -maxspeed;
+					return;
+				}
+				// Switch to normal mode
+				self.navigation_jetpack_goal = world;
+				self.aistatus &~= AI_STATUS_JETPACK_LANDING;
+				self.aistatus &~= AI_STATUS_JETPACK_FLYING;
+				return;
+			}
+		}
+		else if(checkpvs(self.origin,self.goalcurrent))
+		{
+			// If I can see the goal switch to landing code
+			self.aistatus &~= AI_STATUS_JETPACK_FLYING;
+			self.aistatus |= AI_STATUS_JETPACK_LANDING;
+			return;
+		}
+
+		// Flying
+		self.BUTTON_HOOK = TRUE;
+		if(self.navigation_jetpack_point_z - PL_MAX_z + PL_MIN_z < self.origin_z)
+		{
+			self.movement_x = dir * v_forward * maxspeed;
+			self.movement_y = dir * v_right * maxspeed;
+		}
+		return;
+	}
+#endif
+
+	// Handling of jump pads
 	if(self.jumppadcount)
 	{
 		if(self.flags & FL_ONGROUND)

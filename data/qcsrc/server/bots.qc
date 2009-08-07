@@ -8,6 +8,10 @@ float AI_STATUS_OUT_WATER			= 32;	// Trying to get out of water
 float AI_STATUS_WAYPOINT_PERSONAL_LINKING	= 64;	// Waiting for the personal waypoint to be linked
 float AI_STATUS_WAYPOINT_PERSONAL_GOING		= 128;	// Going to a personal waypoint
 float AI_STATUS_WAYPOINT_PERSONAL_REACHED	= 256;	// Personal waypoint reached
+#ifdef BOT_JETPACK_NAVIGATION
+float AI_STATUS_JETPACK_FLYING			= 512;
+float AI_STATUS_JETPACK_LANDING			= 1024;
+#endif
 
 // utilities for path debugging
 #ifdef DEBUG_TRACEWALK
@@ -1745,6 +1749,12 @@ entity navigation_get_bestgoal()
 	return ent;
 }
 
+#ifdef BOT_JETPACK_NAVIGATION
+// fields required for jetpack navigation
+.entity navigation_jetpack_goal;
+.vector navigation_jetpack_point;
+#endif
+
 // updates the best goal according to a weighted calculation of travel cost and item value of a new proposed item
 .void() havocbot_role;
 void() havocbot_role_ctf_offense;
@@ -1752,6 +1762,98 @@ void navigation_routerating(entity e, float f, float rangebias)
 {
 	if (!e)
 		return;
+
+#ifdef BOT_JETPACK_NAVIGATION
+	// Evaluate path using jetpack
+	if(g_jetpack)
+	if(self.items & IT_JETPACK)
+	if(cvar("bot_ai_navigation_jetpack"))
+	if(vlen(self.origin - e.origin) > cvar("bot_ai_navigation_jetpack_mindistance"))
+	{
+		vector pointa, pointb;
+
+	//	dprint("jetpack ai: evaluating path for ", e.classname,"\n");
+
+		// Point A
+		traceline(self.origin, self.origin + '0 0 65535', MOVE_NORMAL, self);
+		pointa = trace_endpos - '0 0 1';
+
+		// Point B
+		traceline(e.origin, e.origin + '0 0 65535', MOVE_NORMAL, e);
+		pointb = trace_endpos - '0 0 1';
+
+		// Can I see these two points from the sky?
+		traceline(pointa, pointb, MOVE_NORMAL, self);
+
+		if(trace_fraction==1)
+		{
+		//	dprint("jetpack ai: can bridge these two points\n");
+
+			// Lower the altitude of these points as much as possible
+			local float zdistance, xydistance, cost, t, fuel;
+			local vector down, npa, npb;
+
+			down = '0 0 -1' * (PL_MAX_z - PL_MIN_z) * 10;
+
+			do{
+				npa = pointa + down;
+				npb = pointb + down;
+
+				if(npa_z<=self.absmax_z)
+					break;
+
+				if(npb_z<=e.absmax_z)
+					break;
+
+				traceline(npa, npb, MOVE_NORMAL, self);
+				if(trace_fraction==1)
+				{
+					pointa = npa;
+					pointb = npb;
+				}
+			}
+			while(trace_fraction == 1);
+
+
+			// Rough estimation of fuel consumption
+			// (ignores acceleration and current xyz velocity)
+			xydistance = vlen(pointa - pointb);
+			zdistance = fabs(pointa_z - self.origin_z);
+
+			t = zdistance / cvar("g_jetpack_maxspeed_up");
+			t += xydistance / cvar("g_jetpack_maxspeed_side");
+			fuel = t * cvar("g_jetpack_fuel") * 0.8;
+
+		//	dprint("jetpack ai: required fuel ", ftos(fuel), " self.ammo_fuel ", ftos(self.ammo_fuel),"\n");
+
+			// enough fuel ?
+			if(self.ammo_fuel>fuel)
+			{
+				// Estimate cost
+				// (as onground costs calculation is mostly based on distances, here we do the same establishing some relationship
+				//  - between air and ground speeds)
+
+				cost = xydistance / (cvar("g_jetpack_maxspeed_side")/cvar("sv_maxspeed"));
+				cost += zdistance / (cvar("g_jetpack_maxspeed_up")/cvar("sv_maxspeed"));
+				cost *= 1.5;
+
+				// Compare against other goals
+				f = f * rangebias / (rangebias + cost);
+
+				if (navigation_bestrating < f)
+				{
+			//		dprint("jetpack path: added goal", e.classname, " (with rating ", ftos(f), ")\n");
+					navigation_bestrating = f;
+					navigation_add_bestgoal(e);
+					self.navigation_jetpack_goal = e;
+					self.navigation_jetpack_point = pointb;
+				}
+				return;
+			}
+		}
+	}
+	#endif
+
 	//te_wizspike(e.origin);
 	//bprint(etos(e));
 	//bprint("\n");
@@ -1772,13 +1874,14 @@ void navigation_routerating(entity e, float f, float rangebias)
 	if (e.nearestwaypoint.wpcost < 10000000)
 	{
 		//te_wizspike(e.nearestwaypoint.wpnearestpoint);
-		//dprint(e.classname, " ", ftos(f), "/(1+", ftos((e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint))), "/", ftos(rangebias), ") = ");
+	//	dprint(e.classname, " ", ftos(f), "/(1+", ftos((e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint))), "/", ftos(rangebias), ") = ");
 		f = f * rangebias / (rangebias + (e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint)));
 		//if (self.havocbot_role == havocbot_role_ctf_offense)
 		//dprint("considering ", e.classname, " (with rating ", ftos(f), ")\n");
 		//dprint(ftos(f));
 		if (navigation_bestrating < f)
 		{
+		//	dprint("ground path: added goal ", e.classname, " (with rating ", ftos(f), ")\n");
 			navigation_bestrating = f;
 			navigation_add_bestgoal(e);
 		}
@@ -1799,6 +1902,12 @@ float navigation_routetogoal(entity e, vector startposition)
 
 	// put the entity on the goal stack
 	navigation_pushroute(e);
+
+#ifdef BOT_JETPACK_NAVIGATION
+	if(g_jetpack)
+	if(e==self.navigation_jetpack_goal)
+		return TRUE;
+#endif
 
 	// if it can reach the goal there is nothing more to do
 	if (tracewalk(self, startposition, PL_MIN, PL_MAX, e.origin, bot_navigation_movemode))
@@ -1913,6 +2022,9 @@ void navigation_poptouchedgoals()
 // begin a goal selection session (queries spawnfunc_waypoint network)
 void navigation_goalrating_start()
 {
+#ifdef BOT_JETPACK_NAVIGATION
+	self.navigation_jetpack_goal = world;
+#endif
 	navigation_bestrating = -1;
 	self.navigation_hasgoals = FALSE;
 	navigation_bestgoals_reset();
@@ -1923,6 +2035,7 @@ void navigation_goalrating_start()
 void navigation_goalrating_end()
 {
 	navigation_routetogoals();
+//	dprint("best goal ", self.goalcurrent.classname , "\n");
 
 	// Hack: if it can't walk to any goal just move blindly to the first visible waypoint
 	if not (self.navigation_hasgoals)
