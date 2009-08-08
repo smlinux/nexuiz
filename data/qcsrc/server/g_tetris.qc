@@ -10,7 +10,6 @@ compile with -DTETRIS
 
 .vector tet_org;
 
-.float tet_old_keys;
 .float tetris_on, tet_gameovertime, tet_drawtime, tet_autodown;
 .vector piece_pos;
 .float piece_type, next_piece, tet_score, tet_lines;
@@ -800,6 +799,34 @@ float angcompa(float y1, float y2)
 	return answer;
 };
 
+.float tetkey_down, tetkey_rotright, tetkey_left, tetkey_right, tetkey_rotleft, tetkey_drop;
+
+float TetrisKeyRepeat(.float fld, float f)
+{
+	if(f)
+	{
+		if(self.fld == 0) // initial key press
+		{
+			self.fld = time + 0.3;
+			return 1;
+		}
+		else if(time > self.fld)
+		{
+			self.fld = time + 0.1;
+			return 1;
+		}
+		else
+		{
+			// repeating too fast
+			return 0;
+		}
+	}
+	else
+	{
+		self.fld = 0;
+		return 0;
+	}
+}
 
 float TetrisPostFrame()
 {
@@ -817,25 +844,29 @@ float TetrisPostFrame()
 	
 	self.origin = self.tet_org;
 
-	if(self.movement_x < 0)
-		keysa |= TETKEY_DOWN;
-	else if(self.movement_x > 0)
-		keysa |= TETKEY_ROTRIGHT;
-	if(self.movement_y < 0)
-		keysa |= TETKEY_LEFT;
-	else if(self.movement_y > 0)
-		keysa |= TETKEY_RIGHT;
-	if (self.BUTTON_CROUCH)
-		keysa = keysa | TETKEY_ROTLEFT;
-	if (self.BUTTON_JUMP)
-		keysa = keysa | TETKEY_DROP;
-
-	keysb = keysa;
-	keysa &~= self.tet_old_keys;
-	self.tet_old_keys = keysb;
-
 	if(self.tetris_on == 1)
+	{
+		if(TetrisKeyRepeat(tetkey_down, self.movement_x < 0))
+			keysa |= TETKEY_DOWN;
+
+		if(TetrisKeyRepeat(tetkey_rotright, self.movement_x > 0))
+			keysa |= TETKEY_ROTRIGHT;
+
+		if(TetrisKeyRepeat(tetkey_left, self.movement_y < 0))
+			keysa |= TETKEY_LEFT;
+
+		if(TetrisKeyRepeat(tetkey_right, self.movement_y > 0))
+			keysa |= TETKEY_RIGHT;
+		
+		if(TetrisKeyRepeat(tetkey_rotleft, self.BUTTON_CROUCH))
+			keysa = keysa | TETKEY_ROTLEFT;
+
+		if(TetrisKeyRepeat(tetkey_drop, self.BUTTON_JUMP))
+			keysa = keysa | TETKEY_DROP;
+
 		HandleGame(keysa);
+	}
+
 	return 1;
 };
 
