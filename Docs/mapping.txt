@@ -119,7 +119,7 @@ Arena           | type arena <fraglimit>  <timelimit>                           
 Key Hunt        | type kh    <pointlimit> <timelimit> <teams>                                         | 2, 3, or 4 teams
 Assault         | type as                 <timelimit>                                                 | never uses points
 Onslaught       | type ons                <timelimit>                                                 | never uses points
-Race            | type race               <timelimit> <qualifyingtimelimit> <laplimit> <teamlaplimit> | g_race_teams: teamlaplimit is used instead of laplimit
+Race            | type rc                 <timelimit> <qualifyingtimelimit> <laplimit> <teamlaplimit> | g_race_teams: teamlaplimit is used instead of laplimit
 CTS             | type cts                <timelimit> <skill>                                         | never uses points
 
 
