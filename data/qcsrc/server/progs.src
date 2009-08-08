@@ -59,6 +59,7 @@ havocbot_roles.qc
 
 g_subs.qc
 
+g_tetris.qc
 
 runematch.qc
 arena.qc
@@ -109,7 +110,6 @@ w_tuba.qc
 
 t_items.qc
 cl_weapons.qc
-g_tetris.qc
 cl_impulse.qc
 
 ent_cs.qc

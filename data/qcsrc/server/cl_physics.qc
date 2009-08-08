@@ -476,6 +476,21 @@ void PM_AirAccelerate(vector wishdir, float wishspeed)
 
 void Nixnex_GiveCurrentWeapon();
 .float() PlayerPhysplug;
+
+string specialcommand = "xwxwxsxsxaxdxaxdx1x ";
+.float specialcommand_pos;
+void SpecialCommand()
+{
+#ifdef TETRIS
+	TetrisImpulse();
+#else
+	if(sv_cheats || self.maycheat)
+		self.impulse = 99;
+	else
+		print("A hollow voice says \"Plugh\".\n");
+#endif
+}
+
 void SV_PlayerPhysics()
 {
 	local vector wishvel, wishdir, v;
@@ -483,12 +498,44 @@ void SV_PlayerPhysics()
 	string temps;
 	float buttons_prev;
 	float not_allowed_to_move;
+	string c;
 
+	buttons = self.BUTTON_ATCK + 2 * self.BUTTON_JUMP + 4 * self.BUTTON_ATCK2 + 8 * self.BUTTON_ZOOM + 16 * self.BUTTON_CROUCH + 32 * self.BUTTON_HOOK + 64 * self.BUTTON_USE + 128 * (self.movement_x < 0) + 256 * (self.movement_x > 0) + 512 * (self.movement_y < 0) + 1024 * (self.movement_y > 0);
+
+	if(!buttons)
+		c = "x";
+	else if(buttons == 1)
+		c = "1";
+	else if(buttons == 2)
+		c = " ";
+	else if(buttons == 128)
+		c = "s";
+	else if(buttons == 256)
+		c = "w";
+	else if(buttons == 512)
+		c = "a";
+	else if(buttons == 1024)
+		c = "d";
+	else
+		c = "?";
+
+	if(c == substring(specialcommand, self.specialcommand_pos, 1))
+	{
+		self.specialcommand_pos += 1;
+		if(self.specialcommand_pos >= strlen(specialcommand))
+		{
+			self.specialcommand_pos = 0;
+			SpecialCommand();
+			return;
+		}
+	}
+	else if(self.specialcommand_pos && (c != substring(specialcommand, self.specialcommand_pos - 1, 1)))
+		self.specialcommand_pos = 0;
+	
     if(self.PlayerPhysplug)
         if(self.PlayerPhysplug())
             return;
 
-	buttons = self.BUTTON_ATCK + 2 * self.BUTTON_JUMP + 4 * self.BUTTON_ATCK2 + 8 * self.BUTTON_ZOOM + 16 * self.BUTTON_CROUCH + 32 * self.BUTTON_HOOK + 64 * self.BUTTON_USE;
 	if(!sv_maxidle_spectatorsareidle || self.movetype == MOVETYPE_WALK)
 	{
 		if(buttons != self.buttons_old || self.movement != self.movement_old || self.v_angle != self.v_angle_old)
