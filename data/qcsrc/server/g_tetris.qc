@@ -2,17 +2,16 @@
 
 Installation:
 
-in cl_impulse.qc add TetrisImpulses(); to ImpulseCommands
-
-in progs.src add g_tetris.qc after g_subs.qc
-in cl_client.qc add if (TetrisPreFrame()) return; to  PlayerPreThink
-in cl_client.qc add if (TetrisPostFrame()) return; to PlayerPostThink
+compile with -DTETRIS
 
 */
 
+#ifdef TETRIS
+
 .vector tet_org;
 
-.float tetris_on, tet_time, tet_autodown;
+.float tet_old_keys;
+.float tetris_on, tet_gameovertime, tet_drawtime, tet_autodown;
 .vector piece_pos;
 .float piece_type, next_piece, tet_score, tet_lines;
 
@@ -33,6 +32,7 @@ float TETKEY_LEFT = 4;
 float TETKEY_RIGHT = 8;
 float TETKEY_ROTLEFT = 16;
 float TETKEY_ROTRIGHT = 32;
+float TETKEY_DROP = 64;
 
 float PIECES = 7;
 
@@ -43,6 +43,15 @@ line16, line17, line18, line19, line20;
 
 float	SVC_CENTERPRINTa		= 26;
 
+float Tetris_Level()
+{ 
+	return ((floor((self.tet_lines / 20)) + 1)); 
+}; 
+
+void tetsnd(string snd)
+{
+	play2(self, strcat("sounds/tetris/", snd));
+}
 
 /*
 *********************************
@@ -219,14 +228,14 @@ vector PieceShape(float pc)
  ##
 */
 	if (pc == 1)
-		return '20 20 0'; // 1 * 4 + 1 * 16
+		return '5 5 2'; // 1 * 4 + 1 * 16
 /*
 2 =
 
 ####
 */
 	else if (pc == 2)
-		return '85 0 0';
+		return '85 0 4';
 
 /*
 3 =
@@ -235,7 +244,7 @@ vector PieceShape(float pc)
 #
 */
 	else if (pc == 3)
-		return '21 1 0';
+		return '21 1 3';
 /*
 4 =
 
@@ -243,14 +252,14 @@ vector PieceShape(float pc)
 ###
 */
 	else if (pc == 4)
-		return '1 21 0';
+		return '1 21 3';
 /*
 5 =
 ##
  ##
 */
 	else if (pc == 5)
-		return '5 20 0';
+		return '5 20 3';
 
 /*
 6 =
@@ -258,7 +267,7 @@ vector PieceShape(float pc)
 ##
 */
 	else if (pc == 6)
-		return '20 5 0';
+		return '20 5 3';
 
 /*
 7 =
@@ -266,7 +275,7 @@ vector PieceShape(float pc)
 ###
 */
 	else if (pc == 7)
-		return '4 21 0';
+		return '4 21 3';
 
 
 	else
@@ -279,28 +288,30 @@ float PieceMetric(float x, float y, float rot, float pc)
 {
 	float t;
 	vector piece_dat;
+	float wid;
 
 	// return bits of a piece
+	piece_dat = PieceShape(pc);
+	wid = piece_dat_z + 1;
 	if (rot == 1) // 90 degrees
 	{
 		t = y;
 		y = x;
-		x = 5 - t;
+		x = wid - t;
 	}
 	else if (rot == 2)//180
 	{
-		x = 5 - x;
+		x = wid - x;
 		y = 3 - y;
 	}
 	else if (rot == 3) // 270
 	{
 		t = y;
-		y = 5 - x;
+		y = wid - x;
 		x = t;
 	}
 	if (x < 1 || y < 1 || x > 4 || y > 2)
 		return 0;
-	piece_dat = PieceShape(pc);
 	if (y == 1)
 		return GetXBlock(x, piece_dat_x); // first row
 	else if (y == 2)
@@ -411,6 +422,14 @@ void Draw_Tetris()
 	WriteChar(MSG_ONE, 10);
 	for (i = 1; i <= TET_LINES; i = i + 1)
 	{
+		if(self.tetris_on == 2 && i == 11)
+		{
+			p6(' ', ' ', ' ', ' ', ' ', ' ');
+			p6(' ', 'G', 'A', 'M', 'E', ' ');
+			p6(' ', 'O', 'V', 'E', 'R', ' ');
+			WriteChar(MSG_ONE, 10);
+			continue;
+		}
 		DrawLine(i);
 		if (i == 1)
 			p6(' ', 'N', 'E', 'X', 'T', ' ');
@@ -435,7 +454,7 @@ void Draw_Tetris()
 		else if (i == 16)
 			p6(' ', 'L', 'E', 'V', 'E', 'L');
 		else if (i == 17)
-			pnum(floor(self.tet_lines / 20)+ 1, 0);
+			pnum(Tetris_Level(), 0);
 		else
 			p6(' ', ' ', ' ', ' ', ' ', ' ');
 		WriteChar(MSG_ONE, 10);
@@ -469,12 +488,13 @@ void ResetTetris()
 
 };
 
-void Tet_GameOver()
+void Tet_GameExit()
 {
-	centerprint(self, "Game Over");
+	centerprint(self, "");
 	self.tetris_on = 0;
 	ResetTetris();
 	self.movetype = MOVETYPE_WALK;
+	stuffcmd(self, "loadfont user1 gfx/vera-sans\n");
 };
 
 
@@ -493,7 +513,7 @@ float RandomPiece()
 
 void TetAddScore(float n)
 {
-	self.tet_score = self.tet_score + n;
+	self.tet_score = self.tet_score + n * Tetris_Level();
 	if (self.tet_score > tet_high_score)
 		tet_high_score = self.tet_score;
 };
@@ -584,6 +604,12 @@ void CompletedLines()
 		ln = GetLine(y - cleared);
 		SetLine(y, ln);
 	}
+	if(cleared == 4)
+		tetsnd("tetris");
+	else if(cleared)
+		tetsnd("tetline");
+	else
+		tetsnd("tetland");
 	self.tet_lines = self.tet_lines + cleared;
 	TetAddScore(cleared * cleared * 10);
 };
@@ -592,12 +618,12 @@ void HandleGame(float keyss)
 {
 
 	// first off, we need to see if we need a new piece
+	vector piece_data;
 	vector check_pos;
+	vector old_pos;
 	float brand_new;
+	float i;
 	brand_new = 0;
-	if (self.tet_time > time)
-		return;
-	self.tet_time = time + 0.1;
 
 
 	if (self.piece_type == 0)
@@ -618,16 +644,34 @@ void HandleGame(float keyss)
 	// next we need to check the piece metrics against what's on the level
 	// based on the key order
 
-	check_pos = self.piece_pos;
+	old_pos = check_pos = self.piece_pos;
 
+	float nudge;
+	nudge = 0;
 	if (keyss & TETKEY_RIGHT)
+	{
 		check_pos_x = check_pos_x + 1;
+		tetsnd("tetmove");
+	}
 	else if (keyss & TETKEY_LEFT)
+	{
 		check_pos_x = check_pos_x - 1;
+		tetsnd("tetmove");
+	}
 	else if (keyss & TETKEY_ROTRIGHT)
+	{
 		check_pos_z = check_pos_z + 1;
+		piece_data = PieceShape(self.piece_type);
+		nudge = piece_data_z - 2;
+		tetsnd("tetrot");
+	}
 	else if (keyss & TETKEY_ROTLEFT)
+	{
 		check_pos_z = check_pos_z - 1;
+		piece_data = PieceShape(self.piece_type);
+		nudge = piece_data_z - 2;
+		tetsnd("tetrot");
+	}
 	// bounds check
 	if (check_pos_z > 3)
 		check_pos_z = 0;
@@ -638,23 +682,60 @@ void HandleGame(float keyss)
 	if (CheckMetrics(self.piece_type, check_pos_x, check_pos_y, check_pos_z))
 		self.piece_pos = check_pos;
 	else if (brand_new)
-		Tet_GameOver();
+	{
+		self.tetris_on = 2;
+		self.tet_gameovertime = time + 2;
+		return;
+	}
+	else
+	{
+		for(i = 1; i <= nudge; ++i)
+		{
+			if(CheckMetrics(self.piece_type, check_pos_x + i, check_pos_y, check_pos_z))
+			{
+				self.piece_pos = check_pos + '1 0 0' * i;
+				break;
+			}
+			else if(CheckMetrics(self.piece_type, check_pos_x - i, check_pos_y, check_pos_z))
+			{
+				self.piece_pos = check_pos - '1 0 0' * i;
+				break;
+			}
+		}
+	}
 	check_pos = self.piece_pos;
-	if (keyss & TETKEY_DOWN)
+	if(keyss & TETKEY_DROP)
+	{
+		// drop to bottom, but do NOT cement it yet
+		// this allows sliding it
+		++check_pos_y;
+		while(CheckMetrics(self.piece_type, check_pos_x, check_pos_y + 1, check_pos_z))
+			++check_pos_y;
+		self.tet_autodown = time + 1 / Tetris_Level();
+	}
+	else if (keyss & TETKEY_DOWN)
+	{
 		check_pos_y = check_pos_y + 1;
+		self.tet_autodown = time + 1 / Tetris_Level();
+	}
 	else if (self.tet_autodown < time)
 	{
 		check_pos_y = check_pos_y + 1;
-		self.tet_autodown = time + 1 / (floor(self.tet_lines / 20) + 1);
+		self.tet_autodown = time + 1 / Tetris_Level();
 	}
 	if (CheckMetrics(self.piece_type, check_pos_x, check_pos_y, check_pos_z))
+	{
+		if(old_pos != check_pos)
+			self.tet_drawtime = 0;
 		self.piece_pos = check_pos;
+	}
 	else
 	{
 		CementPiece(self.piece_type, self.piece_pos_x, self.piece_pos_y, self.piece_pos_z);
 		TetAddScore(1);
 		CompletedLines();
 		self.piece_type = 0;
+		self.tet_drawtime = 0;
 		return;
 	}
 	CementPiece(self.piece_type, self.piece_pos_x, self.piece_pos_y, self.piece_pos_z);
@@ -671,13 +752,20 @@ Important Linking Into Quake stuff
 
 void TetrisImpulses(float imp)
 {
-	if (imp == 200)
+	if (imp != 100)
+		return;
+	if(self.tetris_on != 1)
 	{
 		self.tetris_on = 1;
 		ResetTetris();
 		self.tet_org = self.origin;
 		self.movetype = MOVETYPE_NOCLIP;
-		stuffcmd(self, "cl_bob 0\ncl_rollangle 0\n");
+		stuffcmd(self, "loadfont user1 gfx/conchars\n");
+	}
+	else
+	{
+		Tet_GameExit();
+		self.impulse = 0;
 	}
 };
 
@@ -688,11 +776,11 @@ float TetrisPreFrame()
 		return 0;
 
 	self.tet_org = self.origin;
-	if (self.tet_time > time)
+	if (self.tet_drawtime > time)
 		return 1;
 	Draw_Tetris();
+	self.tet_drawtime = time + 0.5;
 	return 1;
-
 };
 float frik_anglemoda(float v)
 {
@@ -715,31 +803,40 @@ float angcompa(float y1, float y2)
 
 float TetrisPostFrame()
 {
-	vector mov;
-	float keysa, norm;
+	float keysa, keysb;
 
 	keysa = 0;
 
 	if (!self.tetris_on)
 		return 0;
-	
-	if (self.origin != self.tet_org)
+	if(self.tetris_on == 2 && time > self.tet_gameovertime)
 	{
-		self.origin = self.tet_org;
-		if(self.movement_x < 0)
-			keysa |= TETKEY_DOWN;
-		else if(self.movement_x > 0)
-			keysa |= TETKEY_UP;
-		if(self.movement_y < 0)
-			keysa |= TETKEY_LEFT;
-		else if(self.movement_y > 0)
-			keysa |= TETKEY_RIGHT;
+		Tet_GameExit();
+		return 0;
 	}
-	if (self.BUTTON_ATCK)
-		keysa = keysa | TETKEY_ROTRIGHT;
-	if (self.BUTTON_JUMP)
+	
+	self.origin = self.tet_org;
+
+	if(self.movement_x < 0)
+		keysa |= TETKEY_DOWN;
+	else if(self.movement_x > 0)
+		keysa |= TETKEY_ROTRIGHT;
+	if(self.movement_y < 0)
+		keysa |= TETKEY_LEFT;
+	else if(self.movement_y > 0)
+		keysa |= TETKEY_RIGHT;
+	if (self.BUTTON_CROUCH)
 		keysa = keysa | TETKEY_ROTLEFT;
-	HandleGame(keysa);
+	if (self.BUTTON_JUMP)
+		keysa = keysa | TETKEY_DROP;
+
+	keysb = keysa;
+	keysa &~= self.tet_old_keys;
+	self.tet_old_keys = keysb;
+
+	if(self.tetris_on == 1)
+		HandleGame(keysa);
 	return 1;
 };
 
+#endif

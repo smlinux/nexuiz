@@ -2519,8 +2519,6 @@ void PlayerPreThink (void)
 		self.dmg_team = max(0, self.dmg_team - cvar("g_teamdamage_resetspeed") * frametime);
 
 		//self.angles_y=self.v_angle_y + 90;   // temp
-
-		//if (TetrisPreFrame()) return;
 	} else if(gameover) {
 		if (intermission_running)
 			IntermissionThink ();	// otherwise a button could be missed between
@@ -2573,6 +2571,11 @@ void PlayerPreThink (void)
 	}
 
 	target_voicescript_next(self);
+
+#ifdef TETRIS
+	if (TetrisPreFrame())
+		return;
+#endif
 }
 
 // on dragger:
@@ -2847,8 +2850,6 @@ void PlayerPostThink (void)
 		if (intermission_running)
 			return;		// intermission or finale
 
-		//if (TetrisPostFrame()) return;
-
 		GetPressedKeys();
 	} else if (self.classname == "observer") {
 		//do nothing
@@ -2878,4 +2879,9 @@ void PlayerPostThink (void)
 
 	if(self.waypointsprite_attachedforcarrier)
 		WaypointSprite_UpdateHealth(self.waypointsprite_attachedforcarrier, '1 0 0' * healtharmor_maxdamage(self.health, self.armorvalue, cvar("g_balance_armor_blockpercent")));
+
+#ifdef TETRIS
+	if (TetrisPostFrame())
+		return;
+#endif
 }

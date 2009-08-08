@@ -109,7 +109,7 @@ w_tuba.qc
 
 t_items.qc
 cl_weapons.qc
-//g_tetris.qc
+g_tetris.qc
 cl_impulse.qc
 
 ent_cs.qc

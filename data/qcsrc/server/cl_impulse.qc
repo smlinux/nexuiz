@@ -490,5 +490,7 @@ void ImpulseCommands (void)
 		}
 	}
 
-	//TetrisImpulses(imp);
+#ifdef TETRIS
+	TetrisImpulses(imp);
+#endif
 }
