@@ -749,10 +749,8 @@ Important Linking Into Quake stuff
 */
 
 
-void TetrisImpulses(float imp)
+void TetrisImpulse()
 {
-	if (imp != 100)
-		return;
 	if(self.tetris_on != 1)
 	{
 		self.tetris_on = 1;
@@ -830,7 +828,7 @@ float TetrisKeyRepeat(.float fld, float f)
 
 float TetrisPostFrame()
 {
-	float keysa, keysb;
+	float keysa;
 
 	keysa = 0;
 
