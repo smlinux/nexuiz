@@ -100,7 +100,7 @@ void GameCommand_MarkupInit()
 
 string GameCommand_Markup(string s2)
 {
-	float red, ccase, i, j, x;
+	float red, ccase, i, j;
 	string s, s3;
 
 	GameCommand_MarkupInit();
