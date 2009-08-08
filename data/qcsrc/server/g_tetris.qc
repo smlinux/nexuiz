@@ -859,10 +859,10 @@ float TetrisPostFrame()
 			keysa |= TETKEY_RIGHT;
 		
 		if(TetrisKeyRepeat(tetkey_rotleft, self.BUTTON_CROUCH))
-			keysa = keysa | TETKEY_ROTLEFT;
+			keysa |= TETKEY_ROTLEFT;
 
 		if(TetrisKeyRepeat(tetkey_drop, self.BUTTON_JUMP))
-			keysa = keysa | TETKEY_DROP;
+			keysa |= TETKEY_DROP;
 
 		HandleGame(keysa);
 	}
