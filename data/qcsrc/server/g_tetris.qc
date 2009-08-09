@@ -54,7 +54,7 @@ float	SVC_CENTERPRINTa		= 26;
 
 float Tetris_Level()
 { 
-	return ((floor((self.tet_lines / 20)) + 1)); 
+	return ((floor((self.tet_lines / 10)) + 1)); 
 }; 
 
 void tetsnd(string snd)
@@ -788,17 +788,17 @@ void HandleGame(float keyss)
 		++check_pos_y;
 		while(CheckMetrics(self.piece_type, check_pos_x, check_pos_y + 1, check_pos_z))
 			++check_pos_y;
-		self.tet_autodown = time + 1 / Tetris_Level();
+		self.tet_autodown = time + 2 / (1 + Tetris_Level());
 	}
 	else if (keyss & TETKEY_DOWN)
 	{
 		check_pos_y = check_pos_y + 1;
-		self.tet_autodown = time + 1 / Tetris_Level();
+		self.tet_autodown = time + 2 / (1 + Tetris_Level());
 	}
 	else if (self.tet_autodown < time)
 	{
 		check_pos_y = check_pos_y + 1;
-		self.tet_autodown = time + 1 / Tetris_Level();
+		self.tet_autodown = time + 2 / (1 + Tetris_Level());
 	}
 	if (CheckMetrics(self.piece_type, check_pos_x, check_pos_y, check_pos_z))
 	{
