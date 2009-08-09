@@ -491,7 +491,7 @@ void ResetTetris()
 
 void Tet_GameExit()
 {
-	centerprint(self, "");
+	centerprint(self, " ");
 	self.tetris_on = 0;
 	ResetTetris();
 	self.movetype = MOVETYPE_WALK;
