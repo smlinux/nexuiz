@@ -17,6 +17,7 @@ float tet_vs_current_timeout;
 .float tetris_on, tet_gameovertime, tet_drawtime, tet_autodown;
 .vector piece_pos;
 .float piece_type, next_piece, tet_score, tet_lines;
+.float tet_piece_bucket;
 
 // tetris_on states:
 //   1 = running
@@ -505,7 +506,7 @@ void ResetTetris()
 	self.piece_pos = '0 0 0';
 	self.piece_type = 0;
 	self.next_piece = self.tet_lines = self.tet_score = 0;
-
+	self.tet_piece_bucket = 0;
 };
 
 void Tet_GameExit()
@@ -526,9 +527,40 @@ Game Mechanics
 
 *********************************
 */
+.float tet_piece_bucket;
 float RandomPiece()
 {
-	return floor(random() * PIECES) + 1;
+	float i, j;
+	float p, q;
+	float b;
+	float seen;
+	if(self.tet_piece_bucket > 1)
+	{
+		p = mod(self.tet_piece_bucket, 7);
+		self.tet_piece_bucket = floor(self.tet_piece_bucket / 7);
+		return p + 1;
+	}
+	else
+	{
+		p = floor(random() * 7);
+		seen = pow(2, p);
+		b = 1;
+		for(i = 6; i > 0; --i)
+		{
+			q = floor(random() * i);
+			for(j = 0; j <= q; ++j)
+				if(seen & pow(2, j))
+					++q;
+			if(seen & pow(2, q))
+				error("foo 1");
+			if(q >= 7)
+				error("foo 2");
+			seen |= pow(2, q);
+			b += q;
+			b *= 7;
+		}
+		return p + 1;
+	}
 };
 
 void TetAddScore(float n)
