@@ -226,70 +226,44 @@ void SetSquare(float x, float y, float val)
 	SetLine(y, dat);
 };
 
-
-
 vector PieceShape(float pc)
 {
-
-/*
-1 =
- ##
- ##
-*/
 	if (pc == 1)
-		return '5 5 2'; // 1 * 4 + 1 * 16
-/*
-2 =
-####
-
-*/
+		return '5 5 0'; // O
 	else if (pc == 2)
-		return '85 0 4';
-
-/*
-3 =
-
-###
-#
-*/
+		return '85 0 0'; // I
 	else if (pc == 3)
-		return '21 1 3';
-/*
-4 =
-
-#
-###
-*/
+		return '21 1 0'; // L
 	else if (pc == 4)
-		return '1 21 3';
-/*
-5 =
-##
- ##
-*/
+		return '1 21 0'; // J
 	else if (pc == 5)
-		return '5 20 3';
-
-/*
-6 =
- ##
-##
-*/
+		return '5 20 0'; // Z
 	else if (pc == 6)
-		return '20 5 3';
-
-/*
-7 =
- #
-###
-*/
+		return '20 5 0'; // S
 	else if (pc == 7)
-		return '4 21 3';
-
-
+		return '4 21 0'; // T
 	else
 		return '0 0 0';
+}
 
+vector PieceCenter(float pc)
+{
+	if(pc == 1)
+		return '1.5 1.5 0'; // O
+	else if (pc == 2)
+		return '2.5 1.5 0'; // I
+	else if (pc == 3)
+		return '2 1 0'; // L
+	else if (pc == 4)
+		return '2 2 0'; // J
+	else if (pc == 5)
+		return '2 2 0'; // Z
+	else if (pc == 6)
+		return '2 2 0'; // S
+	else if (pc == 7)
+		return '2 2 0'; // T
+	else
+		return '0 0 0';
 }
 
 // do x 1..4 and y 1..4 in case of rotation
@@ -300,33 +274,40 @@ float PieceMetric(float x, float y, float rot, float pc)
 	float wid;
 
 	// return bits of a piece
-	piece_dat = PieceShape(pc);
 	wid = piece_dat_z + 1;
+	piece_dat = PieceCenter(pc);
 	if (rot == 1) // 90 degrees
 	{
+		// x+cx, y+cy -> -y+cx, x+cy
+		// X, Y       -> -Y+cy+cx, X-cx+cy
+		//   x = X-cx
+		//   y = Y-cy
 		t = y;
-		y = x;
-		x = wid - t;
+		y = x - piece_dat_x + piece_dat_y;
+		x = -t + piece_dat_x + piece_dat_y;
 	}
 	else if (rot == 2)//180
 	{
-		x = wid - x;
-		y = 3 - y;
+		x = 2 * piece_dat_x - x;
+		y = 2 * piece_dat_y - y;
 	}
 	else if (rot == 3) // 270
 	{
+		// x+cx, y+cy -> y+cx, -x+cy
+		// X, Y       -> Y-cy+cx, -X+cx+cy
+		//   x = X-cx
+		//   y = Y-cy
 		t = y;
-		y = wid - x;
-		x = t;
+		y = -x + piece_dat_y + piece_dat_x;
+		x =  t - piece_dat_y + piece_dat_x;
 	}
 	if (x < 1 || y < 1 || x > 4 || y > 2)
 		return 0;
+	piece_dat = PieceShape(pc);
 	if (y == 1)
 		return GetXBlock(x, piece_dat_x); // first row
 	else if (y == 2)
 		return GetXBlock(x, piece_dat_y); // second row
-	else if (y == 3)
-		return GetXBlock(x, piece_dat_z); // third row (doesn't exist)
 	else
 		return 0; // illegal parms
 };
@@ -565,9 +546,9 @@ float CheckMetrics(float piece, float orgx, float orgy, float rot) /*FIXDECL*/
 	orgx = orgx - 1;
 	orgy = orgy - 1;
 
-	for (y = 1; y < 5; y = y + 1)
+	for (y = 0; y < 5; y = y + 1)
 	{
-		for (x = 1; x < 5; x = x + 1)
+		for (x = 0; x < 5; x = x + 1)
 		{
 			if (PieceMetric(x, y, rot, piece))
 			{
@@ -589,9 +570,9 @@ void ClearPiece(float piece, float orgx, float orgy, float rot) /*FIXDECL*/
 	orgx = orgx - 1;
 	orgy = orgy - 1;
 
-	for (y = 1; y < 5; y = y + 1)
+	for (y = 0; y < 5; y = y + 1)
 	{
-		for (x = 1; x < 5; x = x + 1)
+		for (x = 0; x < 5; x = x + 1)
 		{
 			if (PieceMetric(x, y, rot, piece))
 			{
@@ -610,9 +591,9 @@ void CementPiece(float piece, float orgx, float orgy, float rot) /*FIXDECL*/
 
 	pcolor = mod(piece, 3) + 1;
 
-	for (y = 1; y < 5; y = y + 1)
+	for (y = 0; y < 5; y = y + 1)
 	{
-		for (x = 1; x < 5; x = x + 1)
+		for (x = 0; x < 5; x = x + 1)
 		{
 			if (PieceMetric(x, y, rot, piece))
 			{
@@ -745,14 +726,14 @@ void HandleGame(float keyss)
 	{
 		check_pos_z = check_pos_z + 1;
 		piece_data = PieceShape(self.piece_type);
-		nudge = piece_data_z - 2;
+		nudge = 1;
 		tetsnd("tetrot");
 	}
 	else if (keyss & TETKEY_ROTLEFT)
 	{
 		check_pos_z = check_pos_z - 1;
 		piece_data = PieceShape(self.piece_type);
-		nudge = piece_data_z - 2;
+		nudge = 1;
 		tetsnd("tetrot");
 	}
 	// bounds check
