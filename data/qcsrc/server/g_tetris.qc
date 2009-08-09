@@ -492,8 +492,8 @@ void Draw_Tetris()
 				pnum(head.tet_highest_line, 0);
 			WriteUnterminatedString(MSG_ONE, " ");
 			WriteUnterminatedString(MSG_ONE, head.netname);
+			WriteChar(MSG_ONE, 10);
 		}
-		WriteChar(MSG_ONE, 10);
 	}
 
 	WriteChar(MSG_ONE, 0);
@@ -761,7 +761,7 @@ void HandleGame(float keyss)
 	else if (brand_new)
 	{
 		self.tetris_on = 2;
-		self.tet_gameovertime = time + 2;
+		self.tet_gameovertime = time + 5;
 		return;
 	}
 	else
