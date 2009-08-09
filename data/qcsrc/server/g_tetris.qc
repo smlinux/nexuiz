@@ -28,9 +28,9 @@ var float tet_high_score = 0;
 float TET_LINES = 20;
 float TET_WIDTH = 10;
 //character values
-float TET_BORDER = 132;
+float TET_BORDER = 139;
 float TET_BLOCKS = 132; // +1 = first color, +2, +3;
-float TET_SPACE = 32; // blankness
+float TET_SPACE = 160; // blankness
 
 
 
@@ -41,6 +41,7 @@ float TETKEY_RIGHT = 8;
 float TETKEY_ROTLEFT = 16;
 float TETKEY_ROTRIGHT = 32;
 float TETKEY_DROP = 64;
+string TET_PADDING_RIGHT = "\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0"; // get away from crosshair
 
 float PIECES = 7;
 
@@ -344,24 +345,17 @@ somewhat modified because we don't need all the fanciness Prydon Gate is capable
 
 */
 
-// remove warnings by adding underscores, i hate warnings, warnings suck
-// --blub
-void p6(float _c1, float _c2, float _c3, float _c4, float c5, float c6)
+void WriteTetrisString(string s)
 {
-	WriteChar(MSG_ONE, _c1);
-	WriteChar(MSG_ONE, _c2);
-	WriteChar(MSG_ONE, _c3);
-	WriteChar(MSG_ONE, _c4);
-	WriteChar(MSG_ONE, c5);
-	WriteChar(MSG_ONE, c6);
-};
+	WriteUnterminatedString(MSG_ONE, strconv(0, 2, 2, s));
+}
 
 float pnum(float num, float dig)
 {
 	local float f, i;
 	if (num < 0)
 	{
-		WriteChar(MSG_ONE, 45);
+		WriteChar(MSG_ONE, 173);
 		num = 0 - num;
 	}
 	f = floor(num / 10);
@@ -374,7 +368,7 @@ float pnum(float num, float dig)
 		for (i = 0; i < (5 - dig); i = i + 1)
 			WriteChar(MSG_ONE, TET_SPACE);
 	}
-	WriteChar(MSG_ONE, 48 + num);
+	WriteChar(MSG_ONE, 176 + num);
 	return dig;
 };
 
@@ -427,49 +421,52 @@ void Draw_Tetris()
 	// decoration
 	for (i = 1; i <= (TET_WIDTH + 2); i = i + 1)
 		WriteChar(MSG_ONE, TET_BORDER);
-	p6(' ', ' ', ' ', ' ', ' ', ' ');
+	WriteTetrisString("      ");
+	WriteUnterminatedString(MSG_ONE, TET_PADDING_RIGHT);
 	WriteChar(MSG_ONE, 10);
 	for (i = 1; i <= TET_LINES; i = i + 1)
 	{
 		if(self.tetris_on == 2)
-			WriteUnterminatedString(MSG_ONE, " GAME  OVER ");
+			WriteTetrisString(" GAME  OVER ");
 		else if(self.tetris_on == 3)
-			WriteUnterminatedString(MSG_ONE, "PLEASE  WAIT");
+			WriteTetrisString("PLEASE  WAIT");
 		else
 			DrawLine(i);
 		if (i == 1)
-			p6(' ', 'N', 'E', 'X', 'T', ' ');
+			WriteTetrisString(" NEXT ");
 		else if (i == 3)
 			DrawPiece(self.next_piece, 1);
 		else if (i == 4)
 			DrawPiece(self.next_piece, 2);
 		else if (i == 6)
-			p6(' ', 'L', 'I', 'N', 'E', 'S');
+			WriteTetrisString(" LINES");
 		else if (i == 7)
 			pnum(self.tet_lines, 0);
 		else if (i == 9)
-			p6(' ', 'S', 'C', 'O', 'R', 'E');
+			WriteTetrisString(" SCORE");
 		else if (i == 10)
 			pnum(self.tet_score, 0);
 		else if (i == 12)
-			p6(' ', 'H', 'I', 'G', 'H', ' ');
+			WriteTetrisString(" HIGH ");
 		else if (i == 13)
-			p6(' ', 'S', 'C', 'O', 'R', 'E');
+			WriteTetrisString(" SCORE");
 		else if (i == 14)
 			pnum(tet_high_score, 0);
 		else if (i == 16)
-			p6(' ', 'L', 'E', 'V', 'E', 'L');
+			WriteTetrisString(" LEVEL");
 		else if (i == 17)
 			pnum(Tetris_Level(), 0);
 		else
-			p6(' ', ' ', ' ', ' ', ' ', ' ');
+			WriteTetrisString("      ");
+		WriteUnterminatedString(MSG_ONE, TET_PADDING_RIGHT);
 		WriteChar(MSG_ONE, 10);
 	}
 	// decoration
 
 	for (i = 1; i <= (TET_WIDTH + 2); i = i + 1)
 		WriteChar(MSG_ONE, TET_BORDER);
-	p6(' ', ' ', ' ', ' ', ' ', ' ');
+	WriteTetrisString("      ");
+	WriteUnterminatedString(MSG_ONE, TET_PADDING_RIGHT);
 	WriteChar(MSG_ONE, 10);
 
 	// VS game status
@@ -486,14 +483,14 @@ void Draw_Tetris()
 		FOR_EACH_REALCLIENT(head) if(head.tetris_on) if(head.tet_vs_id == self.tet_vs_id)
 		{
 			if(head == self)
-				WriteChar(MSG_ONE, '>');
+				WriteUnterminatedString(MSG_ONE, ">");
 			else
-				WriteChar(MSG_ONE, ' ');
+				WriteUnterminatedString(MSG_ONE, " ");
 			if(head.tetris_on == 2)
 				WriteUnterminatedString(MSG_ONE, "   X_X");
 			else
 				pnum(head.tet_highest_line, 0);
-			WriteChar(MSG_ONE, 32);
+			WriteUnterminatedString(MSG_ONE, " ");
 			WriteUnterminatedString(MSG_ONE, head.netname);
 		}
 		WriteChar(MSG_ONE, 10);
@@ -526,9 +523,9 @@ void Tet_GameExit()
 {
 	centerprint(self, " ");
 	self.tetris_on = 0;
+	self.tet_vs_id = 0;
 	ResetTetris();
 	self.movetype = MOVETYPE_WALK;
-	stuffcmd(self, "loadfont user1 gfx/vera-sans\n");
 };
 
 
@@ -832,7 +829,7 @@ Important Linking Into Quake stuff
 
 void TetrisImpulse()
 {
-	if(self.tetris_on != 1)
+	if(self.tetris_on != 1 && self.tetris_on != 3)
 	{
 		self.tetris_on = 3;
 
@@ -853,7 +850,6 @@ void TetrisImpulse()
 		ResetTetris();
 		self.tet_org = self.origin;
 		self.movetype = MOVETYPE_NOCLIP;
-		stuffcmd(self, "loadfont user1 gfx/conchars\n");
 	}
 	else
 	{
@@ -945,6 +941,7 @@ float TetrisPostFrame()
 	}
 	
 	self.origin = self.tet_org;
+	self.movetype = MOVETYPE_NONE;
 
 	if(self.tetris_on == 1)
 	{

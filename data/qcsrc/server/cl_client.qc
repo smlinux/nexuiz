@@ -1553,7 +1553,11 @@ void ChatBubbleThink()
 		remove(self);
 		return;
 	}
-	if (self.owner.BUTTON_CHAT && !self.owner.deadflag)
+	if ((self.owner.BUTTON_CHAT && !self.owner.deadflag)
+#ifdef TETRIS
+		|| self.owner.tetris_on
+#endif
+	)
 		self.model = self.mdl;
 	else
 		self.model = "";
@@ -2796,9 +2800,8 @@ void PlayerPostThink (void)
 	}
 
 #ifdef TETRIS
-	if(self.classname != "player")
-		if(self.impulse == 100)
-			ImpulseCommands();
+	if(self.impulse == 100)
+		ImpulseCommands();
 	if (TetrisPostFrame())
 		return;
 #endif
