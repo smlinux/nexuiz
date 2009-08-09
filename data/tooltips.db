@@ -96,7 +96,7 @@
 \m_pitch\Invert mouse movement on the Y-axis
 \vid_dgamouse\Make use of DGA mouse input
 \con_closeontoggleconsole\Allow the console toggling bind to also close the console
-\sbar_showbinds\Enable display of keybinds, short for a shorter string and long to display longer strings
+\sbar_showbinds\Display actions / bound keys in the strings shown during the game
 \cl_showpressedkeys\Show which movement keys the player is pressing
 
 \NexuizSettingsDialog/Video\Video settings
