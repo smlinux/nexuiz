@@ -844,7 +844,7 @@ void TetrisImpulse()
 			++tet_vs_current_id;
 			tet_vs_current_timeout = time + 15;
 			self.tet_vs_id = tet_vs_current_id;
-			bprint("^2TET^4R^2IS: ", self.netname, "^2 started a new game. Do 'impulse 100' to join.\n");
+			bprint("^1TET^7R^1IS: ", self.netname, "^1 started a new game. Do ^7impulse 100^1 to join.\n");
 		}
 		self.tet_highest_line = 0;
 		ResetTetris();
