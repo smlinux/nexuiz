@@ -10,6 +10,8 @@ compile with -DTETRIS
 
 .vector tet_org;
 
+float tet_vshighest_id;
+.float tet_vsid, tet_vs_addlines;
 .float tetris_on, tet_gameovertime, tet_drawtime, tet_autodown;
 .vector piece_pos;
 .float piece_type, next_piece, tet_score, tet_lines;
@@ -587,9 +589,18 @@ void CementPiece(float piece, float orgx, float orgy, float rot) /*FIXDECL*/
 float LINE_LOW = 349525;
 float LINE_HIGH = 699050; // above number times 2
 
+void AddLines(float n)
+{
+	entity head;
+	if(!self.tet_vsid)
+		return;
+	FOR_EACH_REALCLIENT(head) if(head != self) if(head.tetris_on) if(head.tet_vsid == self.tet_vsid)
+		head.tet_vs_addlines += n;
+}
+
 void CompletedLines()
 {
-	float y, cleared, ln;
+	float y, cleared, ln, added, pos, i, f;
 
 	cleared = 0;
 	y = TET_LINES;
@@ -603,14 +614,43 @@ void CompletedLines()
 		ln = GetLine(y - cleared);
 		SetLine(y, ln);
 	}
-	if(cleared == 4)
+
+	if(cleared >= 4)
+		AddLines(cleared);
+	else if(cleared >= 1)
+		AddLines(cleared - 1);
+
+	self.tet_lines = self.tet_lines + cleared;
+	TetAddScore(cleared * cleared * 10);
+
+	added = self.tet_vs_addlines;
+	self.tet_vs_addlines = 0;
+
+	if(added)
+	{
+		for(y = 1; y <= TET_LINES - added; ++y)
+		{
+			SetLine(y, GetLine(y + added));
+		}
+		for(y = max(1, TET_LINES - added + 1); y <= TET_LINES; ++y)
+		{
+			pos = floor(random() * TET_WIDTH);
+			ln = 0;
+			for(i = 1; i <= TET_WIDTH; ++i)
+				if(i != pos)
+					ln = SetXBlock(i, ln, floor(random() * 3 + 1));
+			SetLine(y, ln);
+		}
+	}
+
+	if(added)
+		tetsnd("tetadd");
+	else if(cleared >= 4)
 		tetsnd("tetris");
 	else if(cleared)
 		tetsnd("tetline");
 	else
 		tetsnd("tetland");
-	self.tet_lines = self.tet_lines + cleared;
-	TetAddScore(cleared * cleared * 10);
 };
 
 void HandleGame(float keyss)
