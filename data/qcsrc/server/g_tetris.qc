@@ -29,7 +29,7 @@ float TET_LINES = 20;
 float TET_WIDTH = 10;
 //character values
 float TET_BORDER = 139;
-float TET_BLOCKS = 132; // +1 = first color, +2, +3;
+float TET_BLOCK = 133;
 float TET_SPACE = 160; // blankness
 
 
@@ -381,10 +381,16 @@ void DrawLine(float ln)
 	{
 		d = GetSquare(x, ln);
 		if (d)
-			WriteChar(MSG_ONE, TET_BLOCKS + d);
+		{
+			WriteChar(MSG_ONE, '^');
+			WriteChar(MSG_ONE, d * d - 2 * d + 50); // 1, 2, 5
+			WriteChar(MSG_ONE, TET_BLOCK);
+		}
 		else
 			WriteChar(MSG_ONE, TET_SPACE);
 	}
+	WriteChar(MSG_ONE, '^');
+	WriteChar(MSG_ONE, '7');
 	WriteChar(MSG_ONE, TET_BORDER);
 }
 
@@ -392,9 +398,7 @@ void DrawPiece(float pc, float ln)
 {
 	float x, d, piece_ln, pcolor;
 	vector piece_dat;
-	pcolor = pc & 3;
-	if (pcolor == 0) // 4
-		pcolor = 1;
+	pcolor = mod(pc, 3) + 1;
 	WriteChar(MSG_ONE, TET_SPACE); // pad to 6
 
 	piece_dat = PieceShape(pc);
@@ -406,7 +410,11 @@ void DrawPiece(float pc, float ln)
 	{
 		d = GetXBlock(x, piece_ln) * pcolor;
 		if (d)
-			WriteChar(MSG_ONE, TET_BLOCKS + d);
+		{
+			WriteChar(MSG_ONE, '^');
+			WriteChar(MSG_ONE, d * d - 2 * d + 50); // 1, 2, 5
+			WriteChar(MSG_ONE, TET_BLOCK);
+		}
 		else
 			WriteChar(MSG_ONE, TET_SPACE);
 	}
@@ -600,9 +608,7 @@ void CementPiece(float piece, float orgx, float orgy, float rot) /*FIXDECL*/
 	orgx = orgx - 1;
 	orgy = orgy - 1;
 
-	pcolor = piece & 3;
-	if (pcolor == 0) // 4
-		pcolor = 1;
+	pcolor = mod(piece, 3) + 1;
 
 	for (y = 1; y < 5; y = y + 1)
 	{
@@ -829,7 +835,7 @@ Important Linking Into Quake stuff
 
 void TetrisImpulse()
 {
-	if(self.tetris_on != 1 && self.tetris_on != 3)
+	if(self.tetris_on == 0 || self.tetris_on == 2) // from "off" or "game over"
 	{
 		self.tetris_on = 3;
 
@@ -851,7 +857,7 @@ void TetrisImpulse()
 		self.tet_org = self.origin;
 		self.movetype = MOVETYPE_NOCLIP;
 	}
-	else
+	else if(self.tetris_on == 1) // from "on"
 	{
 		Tet_GameExit();
 		self.impulse = 0;
