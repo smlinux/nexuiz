@@ -556,8 +556,8 @@ float RandomPiece()
 			if(q >= 7)
 				error("foo 2");
 			seen |= pow(2, q);
-			b += q;
 			b *= 7;
+			b += q;
 		}
 		self.tet_piece_bucket = b;
 		return p + 1;
