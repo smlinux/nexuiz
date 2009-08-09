@@ -240,8 +240,8 @@ vector PieceShape(float pc)
 		return '5 5 2'; // 1 * 4 + 1 * 16
 /*
 2 =
-
 ####
+
 */
 	else if (pc == 2)
 		return '85 0 4';
