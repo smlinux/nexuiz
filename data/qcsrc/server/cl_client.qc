@@ -2329,6 +2329,11 @@ void PlayerPreThink (void)
 		self.max_armorvalue = 0;
 	}
 
+#ifdef TETRIS
+	if (TetrisPreFrame())
+		return;
+#endif
+
 	if(frametime)
 		antilag_record(self);
 
@@ -2571,11 +2576,6 @@ void PlayerPreThink (void)
 	}
 
 	target_voicescript_next(self);
-
-#ifdef TETRIS
-	if (TetrisPreFrame())
-		return;
-#endif
 }
 
 // on dragger:
@@ -2795,6 +2795,14 @@ void PlayerPostThink (void)
 		self.idlekick_lasttimeleft = timeleft;
 	}
 
+#ifdef TETRIS
+	if(self.classname != "player")
+		if(self.impulse == 100)
+			ImpulseCommands();
+	if (TetrisPostFrame())
+		return;
+#endif
+
 	if(sv_cheats || self.maycheat)
 		if(Drag_CanDrag(self))
 			if(self.BUTTON_DRAG)
@@ -2879,9 +2887,4 @@ void PlayerPostThink (void)
 
 	if(self.waypointsprite_attachedforcarrier)
 		WaypointSprite_UpdateHealth(self.waypointsprite_attachedforcarrier, '1 0 0' * healtharmor_maxdamage(self.health, self.armorvalue, cvar("g_balance_armor_blockpercent")));
-
-#ifdef TETRIS
-	if (TetrisPostFrame())
-		return;
-#endif
 }
