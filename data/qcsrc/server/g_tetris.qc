@@ -10,11 +10,18 @@ compile with -DTETRIS
 
 .vector tet_org;
 
-float tet_vshighest_id;
-.float tet_vsid, tet_vs_addlines;
+float tet_vs_current_id;
+float tet_vs_current_timeout;
+.float tet_vs_id, tet_vs_addlines;
+.float tet_highest_line;
 .float tetris_on, tet_gameovertime, tet_drawtime, tet_autodown;
 .vector piece_pos;
 .float piece_type, next_piece, tet_score, tet_lines;
+
+// tetris_on states:
+//   1 = running
+//   2 = game over
+//   3 = waiting for VS players
 
 var float tet_high_score = 0;
 
@@ -414,6 +421,7 @@ void DrawPiece(float pc, float ln)
 void Draw_Tetris()
 {
 	float i;
+	entity head;
 	msg_entity = self;
 	WriteChar(MSG_ONE, SVC_CENTERPRINTa);
 	// decoration
@@ -423,15 +431,12 @@ void Draw_Tetris()
 	WriteChar(MSG_ONE, 10);
 	for (i = 1; i <= TET_LINES; i = i + 1)
 	{
-		if(self.tetris_on == 2 && i == 11)
-		{
-			p6(' ', ' ', ' ', ' ', ' ', ' ');
-			p6(' ', 'G', 'A', 'M', 'E', ' ');
-			p6(' ', 'O', 'V', 'E', 'R', ' ');
-			WriteChar(MSG_ONE, 10);
-			continue;
-		}
-		DrawLine(i);
+		if(self.tetris_on == 2)
+			WriteUnterminatedString(MSG_ONE, " GAME  OVER ");
+		else if(self.tetris_on == 3)
+			WriteUnterminatedString(MSG_ONE, "PLEASE  WAIT");
+		else
+			DrawLine(i);
 		if (i == 1)
 			p6(' ', 'N', 'E', 'X', 'T', ' ');
 		else if (i == 3)
@@ -466,6 +471,34 @@ void Draw_Tetris()
 		WriteChar(MSG_ONE, TET_BORDER);
 	p6(' ', ' ', ' ', ' ', ' ', ' ');
 	WriteChar(MSG_ONE, 10);
+
+	// VS game status
+	if(self.tet_vs_id)
+	{
+		WriteChar(MSG_ONE, 10);
+		WriteChar(MSG_ONE, 10);
+		if(self.tetris_on == 3)
+		{
+			WriteUnterminatedString(MSG_ONE, strcat("WAITING FOR OTHERS (", ftos(ceil(tet_vs_current_timeout - time)), " SEC)\n"));
+		}
+
+		WriteChar(MSG_ONE, 10);
+		FOR_EACH_REALCLIENT(head) if(head.tetris_on) if(head.tet_vs_id == self.tet_vs_id)
+		{
+			if(head == self)
+				WriteChar(MSG_ONE, '>');
+			else
+				WriteChar(MSG_ONE, ' ');
+			if(head.tetris_on == 2)
+				WriteUnterminatedString(MSG_ONE, "   X_X");
+			else
+				pnum(head.tet_highest_line, 0);
+			WriteChar(MSG_ONE, 32);
+			WriteUnterminatedString(MSG_ONE, head.netname);
+		}
+		WriteChar(MSG_ONE, 10);
+	}
+
 	WriteChar(MSG_ONE, 0);
 }
 /*
@@ -592,15 +625,15 @@ float LINE_HIGH = 699050; // above number times 2
 void AddLines(float n)
 {
 	entity head;
-	if(!self.tet_vsid)
+	if(!self.tet_vs_id)
 		return;
-	FOR_EACH_REALCLIENT(head) if(head != self) if(head.tetris_on) if(head.tet_vsid == self.tet_vsid)
+	FOR_EACH_REALCLIENT(head) if(head != self) if(head.tetris_on) if(head.tet_vs_id == self.tet_vs_id)
 		head.tet_vs_addlines += n;
 }
 
 void CompletedLines()
 {
-	float y, cleared, ln, added, pos, i, f;
+	float y, cleared, ln, added, pos, i;
 
 	cleared = 0;
 	y = TET_LINES;
@@ -642,6 +675,14 @@ void CompletedLines()
 			SetLine(y, ln);
 		}
 	}
+
+	self.tet_highest_line = 0;
+	for(y = 1; y <= TET_LINES; ++y)
+		if(GetLine(y) != 0)
+		{
+			self.tet_highest_line = TET_LINES + 1 - y;
+			break;
+		}
 
 	if(added)
 		tetsnd("tetadd");
@@ -793,7 +834,22 @@ void TetrisImpulse()
 {
 	if(self.tetris_on != 1)
 	{
-		self.tetris_on = 1;
+		self.tetris_on = 3;
+
+		if(time < tet_vs_current_timeout)
+		{
+			// join VS game
+			self.tet_vs_id = tet_vs_current_id;
+		}
+		else
+		{
+			// start new VS game
+			++tet_vs_current_id;
+			tet_vs_current_timeout = time + 15;
+			self.tet_vs_id = tet_vs_current_id;
+			bprint("^2TET^4R^2IS: ", self.netname, "^2 started a new game. Do 'impulse 100' to join.\n");
+		}
+		self.tet_highest_line = 0;
 		ResetTetris();
 		self.tet_org = self.origin;
 		self.movetype = MOVETYPE_NOCLIP;
@@ -816,7 +872,10 @@ float TetrisPreFrame()
 	if (self.tet_drawtime > time)
 		return 1;
 	Draw_Tetris();
-	self.tet_drawtime = time + 0.5;
+	if(self.tetris_on == 3)
+		self.tet_drawtime = ceil(time - tet_vs_current_timeout + 0.1) + tet_vs_current_timeout;
+	else
+		self.tet_drawtime = time + 0.5;
 	return 1;
 };
 float frik_anglemoda(float v)
@@ -878,6 +937,11 @@ float TetrisPostFrame()
 	{
 		Tet_GameExit();
 		return 0;
+	}
+	if(self.tetris_on == 3 && time > tet_vs_current_timeout)
+	{
+		self.tetris_on = 1; // start VS game
+		self.tet_drawtime = 0;
 	}
 	
 	self.origin = self.tet_org;
