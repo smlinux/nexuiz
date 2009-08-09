@@ -559,6 +559,7 @@ float RandomPiece()
 			b += q;
 			b *= 7;
 		}
+		self.tet_piece_bucket = b;
 		return p + 1;
 	}
 };
