@@ -232,11 +232,11 @@ vector PieceShape(float pc)
 	if (pc == 1)
 		return '5 5 0'; // O
 	else if (pc == 2)
-		return '85 0 0'; // I
+		return '1 21 0'; // J
 	else if (pc == 3)
 		return '21 1 0'; // L
 	else if (pc == 4)
-		return '1 21 0'; // J
+		return '85 0 0'; // I
 	else if (pc == 5)
 		return '5 20 0'; // Z
 	else if (pc == 6)
@@ -252,11 +252,11 @@ vector PieceCenter(float pc)
 	if(pc == 1)
 		return '1.5 1.5 0'; // O
 	else if (pc == 2)
-		return '2.5 1.5 0'; // I
+		return '2 2 0'; // J
 	else if (pc == 3)
 		return '2 1 0'; // L
 	else if (pc == 4)
-		return '2 2 0'; // J
+		return '2.5 1.5 0'; // I
 	else if (pc == 5)
 		return '2 2 0'; // Z
 	else if (pc == 6)
