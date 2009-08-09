@@ -7,3 +7,4 @@ has weapons
 type ons 20
 cdtrack 8
 size -8224.0 -8224.0 -96.0 8224.0 8224.0 6496.0
+settemp_for_type ons g_jetpack 1
