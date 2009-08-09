@@ -929,11 +929,13 @@ float TetrisPostFrame()
 
 	if (!self.tetris_on)
 		return 0;
+
 	if(self.tetris_on == 2 && time > self.tet_gameovertime)
 	{
 		Tet_GameExit();
 		return 0;
 	}
+
 	if(self.tetris_on == 3 && time > tet_vs_current_timeout)
 	{
 		self.tetris_on = 1; // start VS game
