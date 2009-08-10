@@ -211,6 +211,7 @@ void RegenFlag(entity e)
 	e.movetype = MOVETYPE_NONE;
 	if(!e.noalign)
 		e.movetype = MOVETYPE_TOSS;
+	e.velocity = '0 0 0';
 	e.solid = SOLID_TRIGGER;
 	// TODO: play a sound here
 	setorigin(e, e.dropped_origin);
