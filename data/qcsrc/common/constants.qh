@@ -267,7 +267,7 @@ const float CTF_STATE_COMMANDER = 3;
 
 const float STAT_HUD = 50;
 const float HUD_NORMAL = 0;
-const float HUD_SPIDEBOT = 10;
+const float HUD_SPIDERBOT = 10;
 
 const float STAT_SPIDERBOT_HEALTH  = 60;
 const float STAT_SPIDERBOT_ROCKETS = 61;

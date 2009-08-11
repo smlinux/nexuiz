@@ -1,0 +1,6 @@
+1   30  20 1 // forward
+32  30  20 1 // backward
+63  30  20 1 // left
+94  30 20 1 // right
+125 30 20 0 // jump
+0   1   20 0 // idle
