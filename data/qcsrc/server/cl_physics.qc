@@ -975,12 +975,11 @@ void SV_PlayerPhysics()
 			self.jumppadcount = 0;
 		}
 
-		if (self.velocity_x || self.velocity_y)
-		if (!(self.flags & FL_JUMPRELEASED) || !self.BUTTON_JUMP)
+		v = self.velocity;
+		v_z = 0;
+		f = vlen(v);
+		if(f > 0)
 		{
-			v = self.velocity;
-			v_z = 0;
-			f = vlen(v);
 			if (f < sv_stopspeed)
 				f = 1 - frametime * (sv_stopspeed / f) * sv_friction;
 			else
@@ -990,6 +989,7 @@ void SV_PlayerPhysics()
 			else
 				self.velocity = '0 0 0';
 		}
+
 		// acceleration
 		wishdir = normalize(wishvel);
 		wishspeed = vlen(wishvel);
