@@ -236,6 +236,8 @@ void SV_ParseClientCommand(string s) {
 				PlayerScore_Clear(self);
 				bprint ("^4", self.netname, "^4 is playing now\n");
 				PutClientInServer();
+				if(cvar("g_campaign"))
+					campaign_bots_may_start = 1;
 			}
 			else {
 				//player may not join because of g_maxplayers is set
