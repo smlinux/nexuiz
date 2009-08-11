@@ -549,7 +549,7 @@ void CSQC_UpdateView(float w, float h)
 
     float hud;
     hud = getstati(STAT_HUD);
-    if(hud == HUD_SPIDEBOT)
+    if(hud == HUD_SPIDERBOT)
     {
         vector sz;
         CSQC_spider_HUD();
@@ -776,7 +776,7 @@ void CSQC_common_hud(void)
             Sbar_Draw();
             break;
 
-        case HUD_SPIDEBOT:
+        case HUD_SPIDERBOT:
             CSQC_spider_HUD();
             break;
     }

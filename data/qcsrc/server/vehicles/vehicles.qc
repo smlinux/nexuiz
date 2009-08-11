@@ -1,69 +1,9 @@
 void vehicle_stdproc_enter()
 {
-    self.owner = other;
-
-    msg_entity = other;
-    WriteByte (MSG_ONE, SVC_SETVIEWPORT);
-    WriteEntity( MSG_ONE, self.vehicle_viewport);
-
-    WriteByte (MSG_ONE, SVC_SETVIEWANGLES);
-    WriteAngle(MSG_ONE, self.vehicle_viewport.angles_x + self.angles_x);    // tilt
-    WriteAngle(MSG_ONE, self.vehicle_viewport.angles_y + self.angles_y);    // yaw
-    WriteAngle(MSG_ONE, self.vehicle_viewport.angles_z + self.angles_z);    // flip
-
-    //setattachment(other,self,"");
-    self.nextthink = 0;
-    self.owner.takedamage     = DAMAGE_NO;
-    self.owner.solid          = SOLID_NOT;
-    self.owner.alpha          = -1;
-    //self.owner.PlayerPhysplug = spiderbot_pplug;
-    self.owner.vehicle           = self;
-    self.owner.event_damage   = SUB_Null;
-    self.owner.vehicle_health             = (self.health / cvar("g_vehicle_spiderbot_health"));
-    self.owner.hud            = HUD_SPIDEBOT;
-    self.colormap             = self.owner.colormap;
-    self.tur_head.colormap    = self.owner.colormap;
-    self.vehicle_hudmodel.viewmodelforclient   = self.owner;
-    //self.tur_head.nodrawtoclient = self.owner;
-
-
 }
 
 void vehicle_stdproc_exit(float eject)
 {
-    self.velocity = '0 0 0';
-
-    msg_entity = self.owner;
-    WriteByte (MSG_ONE, SVC_SETVIEWPORT);
-    WriteEntity( MSG_ONE, self.owner);
-
-    //setattachment(self.owner,world,"");
-    //self.think = spiderbot_think;
-    //self.nextthink = time;
-
-    self.owner.takedamage     = DAMAGE_AIM;
-    self.owner.solid          = SOLID_SLIDEBOX;
-    self.owner.alpha          = 1;
-    self.owner.PlayerPhysplug = SUB_Null;
-    self.owner.vehicle        = world;
-	self.owner.view_ofs       = PL_VIEW_OFS;
-	self.owner.hud            = HUD_NORMAL;
-	self.owner.event_damage   = PlayerDamage;
-	self.colormap = 1024;
-	self.tur_head.colormap = 1024;
-	self.vehicle_hudmodel.viewmodelforclient   = self;
-	//self.tur_head.nodrawtoclient = self;
-
-	if(eject)
-	{
-	    makevectors(self.angles);
-	    setorigin(self.owner,self.origin + v_forward * 100);
-	    self.owner.velocity = (v_up + v_forward * 0.25) * 750;
-	}
-	else
-        setorigin(self.owner,self.origin - v_forward * 200);
-
-    self.owner = world;
 }
 
 void vehicle_stdproc_regen()
