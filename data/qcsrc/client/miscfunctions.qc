@@ -208,7 +208,7 @@ vector Sbar_GetFontsize(string cvarname)
 float Sbar_GetWidth(float teamcolumnwidth)
 {
 	float f;
-	f = stof(cvar_string("sbar_width"));
+	f = cvar("sbar_width");
 	if(f == 0)
 		f = 640;
 	if(f < 320)
