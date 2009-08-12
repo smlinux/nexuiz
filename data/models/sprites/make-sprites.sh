@@ -132,7 +132,7 @@ sprite()
 		pngsprite "${name}_frame$frame" "$color" "$bgcolor" "$text"
 		convert "${name}_frame$frame.png" "${name}_frame$frame.tga"
 		rm -f "${name}_frame$frame.png"
-		args="$args -sprite ${name}_frame$frame.png $(($sprwidth / 2)) $(($sprheight - 1)) $interval"
+		args="$args -sprite ${name}_frame$frame.tga $(($sprwidth / 2)) $(($sprheight - 1)) $interval"
 		frame=$(($frame + 1))
 	done
 	#./makespr32 -o "$name.sp2" -proj 5 -group $args
