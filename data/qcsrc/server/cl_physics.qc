@@ -975,6 +975,20 @@ void SV_PlayerPhysics()
 			self.jumppadcount = 0;
 		}
 
+#ifdef LETS_TEST_FTEQCC
+		if(self.velocity_x || self.velocity_y)
+		{
+			// good
+		}
+		else
+		{
+			if(self.velocity_x)
+				checkclient();
+			if(self.velocity_y)
+				checkclient();
+		}
+#endif
+
 		v = self.velocity;
 		v_z = 0;
 		f = vlen(v);
