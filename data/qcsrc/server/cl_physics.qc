@@ -509,37 +509,40 @@ void SV_PlayerPhysics()
 		// TODO implement this for engine cl_movement code too (basically, clipping to the four axes)
 		wishvel_x = fabs(self.movement_x);
 		wishvel_y = fabs(self.movement_y);
-		wishvel_z = 0;
-		wishspeed = vlen(wishvel);
-		if(wishvel_x >= 2 * wishvel_y)
+		if(wishvel_x != 0 && wishvel_y != 0 && wishvel_x != wishvel_y)
 		{
-			// pure X motion
-			if(self.movement_x > 0)
-				self.movement_x = wishspeed;
+			wishvel_z = 0;
+			wishspeed = vlen(wishvel);
+			if(wishvel_x >= 2 * wishvel_y)
+			{
+				// pure X motion
+				if(self.movement_x > 0)
+					self.movement_x = wishspeed;
+				else
+					self.movement_x = -wishspeed;
+				self.movement_y = 0;
+			}
+			else if(wishvel_y >= 2 * wishvel_x)
+			{
+				// pure Y motion
+				self.movement_x = 0;
+				if(self.movement_y > 0)
+					self.movement_y = wishspeed;
+				else
+					self.movement_y = -wishspeed;
+			}
 			else
-				self.movement_x = -wishspeed;
-			self.movement_y = 0;
-		}
-		else if(wishvel_y >= 2 * wishvel_x)
-		{
-			// pure Y motion
-			self.movement_x = 0;
-			if(self.movement_y > 0)
-				self.movement_y = wishspeed;
-			else
-				self.movement_y = -wishspeed;
-		}
-		else
-		{
-			// diagonal
-			if(self.movement_x > 0)
-				self.movement_x = 0.70710678118654752440 * wishspeed;
-			else
-				self.movement_x = -0.70710678118654752440 * wishspeed;
-			if(self.movement_y > 0)
-				self.movement_y = 0.70710678118654752440 * wishspeed;
-			else
-				self.movement_y = -0.70710678118654752440 * wishspeed;
+			{
+				// diagonal
+				if(self.movement_x > 0)
+					self.movement_x = 0.70710678118654752440 * wishspeed;
+				else
+					self.movement_x = -0.70710678118654752440 * wishspeed;
+				if(self.movement_y > 0)
+					self.movement_y = 0.70710678118654752440 * wishspeed;
+				else
+					self.movement_y = -0.70710678118654752440 * wishspeed;
+			}
 		}
 	}
 
