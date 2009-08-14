@@ -109,13 +109,13 @@ void Sbar_DrawWeapon(float nr, float fade, float active, float wc)
  	}
 }
 
-void Sbar_DrawXNum (vector pos, float num, float digits, float lettersize, vector rgb, float highlighted, float stroke, float a, float dflags)
+void Sbar_DrawXNum (vector pos, float num, float digits, float lettersize, vector rgb, float highlighted, float stroke, float alpha, float dflags)
 {
 	float l, i;
 	string str, tmp, l_length;
 	float minus;
 	vector vsize, num_color;
-	num_color = rgb;
+	alpha = alpha * sbar_alpha_fg;
 
 	vsize_x = vsize_y = lettersize;
 	vsize_z = 0;
@@ -164,20 +164,23 @@ void Sbar_DrawXNum (vector pos, float num, float digits, float lettersize, vecto
 
 	if (stroke == 1)
 		num_color = '1 1 1';
+	else
+		num_color = rgb;
 
 	if(minus)
 	{
-		drawpic(pos, "gfx/hud/num_minus", vsize, num_color, a * sbar_alpha_fg, dflags);
 		if (stroke == 1)
-			drawpic(pos, "gfx/hud/num_minus_stroke", vsize, rgb, a * sbar_alpha_fg, dflags);
+			drawpic(pos, "gfx/hud/num_minus_stroke", vsize, rgb, alpha, dflags);
+		drawpic(pos, "gfx/hud/num_minus", vsize, num_color, alpha, dflags);
 		pos_x += lettersize;
 	}
 
 	for(i = 0; i < l; ++i)
 	{
-		drawpic(pos, strcat("gfx/hud/num_", substring(str, i, 1)), vsize, num_color, a * sbar_alpha_fg, dflags);
+		tmp = substring(str, i, 1);
 		if (stroke == 1)
-			drawpic(pos, strcat("gfx/hud/num_", substring(str, i, 1), "_stroke"), vsize, rgb, a * sbar_alpha_fg, dflags);
+			drawpic(pos, strcat("gfx/hud/num_", tmp, "_stroke"), vsize, rgb, alpha, dflags);
+		drawpic(pos, strcat("gfx/hud/num_", tmp), vsize, num_color, alpha, dflags);
 		pos_x += lettersize;
 	}
 }
