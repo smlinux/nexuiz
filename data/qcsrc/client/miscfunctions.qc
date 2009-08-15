@@ -14,7 +14,7 @@ void restartAnnouncer_Think() {
 		sound(self, CHAN_VOICE, "announcer/robotic/begin.wav", VOL_BASEVOICE, ATTN_NONE);
 		//reset maptime announcers now as well
 		announcer_5min = announcer_1min = FALSE;
-		
+
 		remove(self);
 		return;
 	}
@@ -38,25 +38,34 @@ void maptimeAnnouncer() {
     timelimit = getstatf(STAT_TIMELIMIT);
     float timeleft;
     timeleft = max(0, timelimit * 60 + getstatf(STAT_GAMESTARTTIME) - time);
-    
+
     //5 minute check
     if (cvar("cl_sound_maptime_warning") >= 2) {
         //make sure that after connect (and e.g. 4 minutes left) we will not get a wrong sound
-        if (!announcer_5min && timelimit > 0 && timeleft < 300 && timeleft > 299) {
-            announcer_5min = TRUE;
-            //dprint("i will play the sound, I promise!\n");
-            sound(self, CHAN_VOICE, "announcer/robotic/5minutesremain.wav", VOL_BASEVOICE, ATTN_NONE);
+        if(announcer_5min)
+        {
+			if(timeleft > 300)
+				announcer_5min = FALSE;
         }
-        
+        else if (timelimit > 0 && timeleft < 300 && timeleft > 299) {
+			announcer_5min = TRUE;
+			//dprint("i will play the sound, I promise!\n");
+			sound(self, CHAN_VOICE, "announcer/robotic/5minutesremain.wav", VOL_BASEVOICE, ATTN_NONE);
+		}
     }
-    
+
     //1 minute check
     if (cvar("cl_sound_maptime_warning") == 1 || cvar("cl_sound_maptime_warning") == 3) {
-        if (!announcer_1min && timelimit > 0 && timeleft < 60) {
-            announcer_1min = TRUE;
-            sound(self, CHAN_VOICE, "announcer/robotic/1minuteremains.wav", VOL_BASEVOICE, ATTN_NONE);
-        }
-    }
+    	if (announcer_1min)
+    	{
+			if(timeleft > 60)
+				announcer_1min = FALSE;
+    	}
+    	else if (timelimit > 0 && timeleft < 60) {
+			announcer_1min = TRUE;
+			sound(self, CHAN_VOICE, "announcer/robotic/1minuteremains.wav", VOL_BASEVOICE, ATTN_NONE);
+    	}
+	}
 }
 
 /**
@@ -289,7 +298,7 @@ float cvar_or(string cv, float v)
 }
 
 vector project_3d_to_2d(vector vec)
-{ 
+{
 	vec = cs_project(vec);
 	if(cs_project_is_b0rked > 0)
 	{
@@ -317,14 +326,14 @@ vector expandingbox_resize_centered_box_offset(float sz, vector boxsize, float b
 void drawborderlines(float thickness, vector pos, vector dim, vector color, float alpha, float drawflag)
 {
 	vector line_dim;
-	
+
 	// left and right lines
 	pos_x -= thickness;
 	line_dim_x = thickness;
 	line_dim_y = dim_y;
 	drawfill(pos, line_dim, color, alpha, drawflag);
 	drawfill(pos + (dim_x + thickness) * '1 0 0', line_dim, color, alpha, drawflag);
-	
+
 	// upper and lower lines
 	pos_y -= thickness;
 	line_dim_x = dim_x + thickness * 2; // make upper and lower lines longer
