@@ -122,7 +122,7 @@ void timeoutHandler_Think() {
 			remove(self);
 			return;
 		}
-		
+
 	}
 	else if (timeoutStatus == 0) { //if a player called the resumegame command (which set timeoutStatus to 0 already)
 		FOR_EACH_REALCLIENT(plr) {
@@ -301,7 +301,7 @@ void detect_maptype()
 		tracebox(o, PL_MIN, PL_MAX, o - '0 0 32768', MOVE_WORLDONLY, world);
 		if(trace_fraction == 1)
 			continue;
-		
+
 		v = trace_endpos;
 
 		for(i = 0; i < 64; i += 4)
@@ -591,7 +591,7 @@ void spawnfunc_worldspawn (void)
 	addstat(STAT_GAMESTARTTIME, AS_FLOAT, stat_game_starttime);
 	addstat(STAT_ALLOW_OLDNEXBEAM, AS_INT, stat_allow_oldnexbeam);
 	Nagger_Init();
-	
+
 	addstat(STAT_STRENGTH_FINISHED, AS_FLOAT, strength_finished);
 	addstat(STAT_INVINCIBLE_FINISHED, AS_FLOAT, invincible_finished);
 	addstat(STAT_PRESSED_KEYS, AS_FLOAT, pressedkeys);
@@ -1222,7 +1222,7 @@ void DumpStats(float final)
 			GameLogEcho(s);
 		if(to_file)
 			fputs(file, strcat(s, "\n"));
-	
+
 		for(i = 1; i < 16; ++i)
 		{
 			s = strcat(":teamscores:see-labels:", GetTeamScoreString(i, 0));
@@ -1405,7 +1405,7 @@ void InitiateOvertime()
 			minutesPlural = " ^3minute";
 		else
 			minutesPlural = " ^3minutes";
-		
+
 		bcenterprint(
 			strcat(
 				"^3Now playing ^1OVERTIME^3!\n\n^3Added ^1",
@@ -1415,7 +1415,7 @@ void InitiateOvertime()
 			)
 		);
 	}
-	else 
+	else
 	{
 		if(!checkrules_suddendeathend)
 		{
@@ -1473,6 +1473,9 @@ float WinningCondition_Onslaught()
 	local float t1, t2, t3, t4;
 
 	WinningConditionHelper(); // set worldstatus
+
+	if(inWarmupStage)
+		return WINNING_NO;
 
 	// first check if the game has ended
 	t1 = t2 = t3 = t4 = 0;
@@ -1660,7 +1663,7 @@ float WinningCondition_Scores(float limit, float leadlimit)
 {
 	// TODO make everything use THIS winning condition (except LMS)
 	WinningConditionHelper();
-	
+
 	if(teams_matter)
 	{
 		team1_score = TeamScore_GetCompareValue(COLOR_TEAM1);
@@ -1668,7 +1671,7 @@ float WinningCondition_Scores(float limit, float leadlimit)
 		team3_score = TeamScore_GetCompareValue(COLOR_TEAM3);
 		team4_score = TeamScore_GetCompareValue(COLOR_TEAM4);
 	}
-	
+
 	ClearWinners();
 	if(WinningConditionHelper_winner)
 		WinningConditionHelper_winner.winning = 1;
