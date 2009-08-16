@@ -146,7 +146,7 @@ void Ent_GibSplash()
 			gentle_prefix = "morphed_";
 	}
 
-	if(cvar("cl_gentle"))
+	if not(cvar("cl_gentle"))
 		amount *= 1 - cvar("cl_nogibs");
 
 	if(cvar("ekg"))
