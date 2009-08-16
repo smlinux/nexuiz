@@ -2454,11 +2454,14 @@ void Sbar_Draw (void)
 			x = armor;
 			if (x > 0)
 			{
-				drawpic(armor_pos + '78 -4.5 0', "gfx/hud/sb_armor", '32 32 0', '1 1 1', (x+10)/55 * sbar_alpha_fg, DRAWFLAG_NORMAL);
-				if (x > 45)
+				if (x > 45) {
+					drawpic(armor_pos + '78 -4.5 0', "gfx/hud/sb_armor", '32 32 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 					Sbar_DrawXNum_Colored(armor_pos, x, 24, sbar_alpha_fg);
-				else
+				}
+				else {
+					drawpic(armor_pos + '78 -4.5 0', "gfx/hud/sb_armor", '32 32 0', '1 1 1', (x+10)/55 * sbar_alpha_fg, DRAWFLAG_NORMAL);
 					Sbar_DrawXNum_Colored(armor_pos, x, 24, (x+10)/55 * sbar_alpha_fg);
+				}
 			}
 
 			// health
