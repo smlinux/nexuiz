@@ -1444,9 +1444,9 @@ void ClientConnect (void)
 
 	SoundEntity_Attach(self);
 
-	if(cvar("g_hitplots"))
+	if(cvar("g_hitplots") || strstrofs(strcat(" ", cvar_string("g_hitplots_individuals"), " "), strcat(" ", self.netaddress, " "), 0) >= 0)
 	{
-		self.hitplotfh = fopen(strcat("hits-", matchid, "-", ftos(self.playerid), ".plot"), FILE_WRITE);
+		self.hitplotfh = fopen(strcat("hits-", matchid, "-", self.netaddress, "-", ftos(self.playerid), ".plot"), FILE_WRITE);
 		fputs(self.hitplotfh, strcat("#name ", self.netname, "\n"));
 	}
 	else
