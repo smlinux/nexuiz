@@ -115,7 +115,6 @@ void Sbar_DrawXNum (vector pos, float num, float digits, float lettersize, vecto
 	string str, tmp, l_length;
 	float minus;
 	vector vsize, num_color;
-	alpha = alpha * sbar_alpha_fg;
 
 	vsize_x = vsize_y = lettersize;
 	vsize_z = 0;
@@ -159,7 +158,7 @@ void Sbar_DrawXNum (vector pos, float num, float digits, float lettersize, vecto
 		hl_pos_y = pos_y - lettersize/20;
 		hl_pos_z = 0;
 
-		drawpic(hl_pos, strcat("gfx/hud/sb_highlight_", l_length), hl_size, '1 1 1', sbar_alpha_fg, dflags);
+		drawpic(hl_pos, strcat("gfx/hud/sb_highlight_", l_length), hl_size, '1 1 1', alpha, dflags);
 	}
 
 	if (stroke == 1)
@@ -1690,7 +1689,7 @@ void CSQC_Strength_Timer() {
 			{
 				drawpic(bottom + '192 -24 0', "gfx/hud/sb_invinc", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE);
 			}
-			Sbar_DrawXNum(bottom + '152 -22 0', ceil(dt), 2, countdown_fontsize, '1 1 1', 0, 0, 1, DRAWFLAG_NORMAL);
+			Sbar_DrawXNum(bottom + '152 -22 0', ceil(dt), 2, countdown_fontsize, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 		}
 		else if(dt > -1)
 		{
@@ -2565,9 +2564,9 @@ void Sbar_Draw (void)
 			}
 			drawpic(pos - '0 2 0' + '52 0 0', GetAmmoPicture(4), '20 20 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 			if (a > 10)
-				Sbar_DrawXNum(pos, a, 3, 16, '1 1 1', 0, 0, 1, DRAWFLAG_NORMAL);
+				Sbar_DrawXNum(pos, a, 3, 16, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 			else
-				Sbar_DrawXNum(pos, a, 3, 16, '0.7 0 0', 0, 0, 1, DRAWFLAG_NORMAL);
+				Sbar_DrawXNum(pos, a, 3, 16, '0.7 0 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 		}
 
 		// draw scores and timer
