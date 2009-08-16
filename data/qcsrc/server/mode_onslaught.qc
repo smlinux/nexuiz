@@ -402,23 +402,26 @@ void onslaught_generator_think()
 	local float d;
 	local entity e;
 	self.nextthink = ceil(time + 1);
-	if (cvar("timelimit") && !gameover)
-	if (time > cvar("timelimit") * 60 - 60)
+	if (!gameover)
 	{
-		// self.max_health / 300 gives 5 minutes of overtime.
-		// control points reduce the overtime duration.
-		sound(self, CHAN_TRIGGER, "onslaught/generator_decay.wav", VOL_BASE, ATTN_NORM);
-		d = 1;
-		e = findchain(classname, "onslaught_controlpoint");
-		while (e)
+		if (cvar("timelimit"))
+		if (time > game_starttime + cvar("timelimit") * 60)
 		{
-			if (e.team != self.team)
-				if (e.islinked)
-					d = d + 1;
-			e = e.chain;
+			// self.max_health / 300 gives 5 minutes of overtime.
+			// control points reduce the overtime duration.
+			sound(self, CHAN_TRIGGER, "onslaught/generator_decay.wav", VOL_BASE, ATTN_NORM);
+			d = 1;
+			e = findchain(classname, "onslaught_controlpoint");
+			while (e)
+			{
+				if (e.team != self.team)
+					if (e.islinked)
+						d = d + 1;
+				e = e.chain;
+			}
+			d = d * self.max_health / 300;
+			Damage(self, self, self, d, DEATH_HURTTRIGGER, self.origin, '0 0 0');
 		}
-		d = d * self.max_health / 300;
-		Damage(self, self, self, d, DEATH_HURTTRIGGER, self.origin, '0 0 0');
 	}
 };
 
@@ -621,6 +624,8 @@ void onslaught_generator_damage(entity inflictor, entity attacker, float damage,
 {
 	local float i;
 	if (damage <= 0)
+		return;
+	if(inWarmupStage)
 		return;
 	if (attacker != self)
 	{
