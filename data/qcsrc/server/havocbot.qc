@@ -334,14 +334,20 @@ void havocbot_movetogoal()
 		// Landing
 		if(self.aistatus & AI_STATUS_JETPACK_LANDING)
 		{
-			// TODO: more accurate landing (with optimum fuel usage)
-			vector p = self.origin - self.goalcurrent.origin; p_z = 0;
-			if( vlen(p) < max(cvar("g_jetpack_maxspeed_side"), vlen(self.velocity)))
+			// Calculate brake distance in xy
+			float db, v, d;
+			vector dxy;
+
+			dxy = self.origin - self.goalcurrent.origin; dxy_z = 0;
+			d = vlen(dxy);
+			v = vlen(self.velocity -  self.velocity_z * '0 0 1');
+			db = (pow(v,2) / (cvar("g_jetpack_acceleration_side") * 2)) + 100;
+		//	dprint("distance ", ftos(ceil(d)), " velocity ", ftos(ceil(v)), " brake at ", ftos(ceil(db)), "\n");
+			if(d < db || d < 500)
 			{
 				// Brake
-				if(fabs(self.velocity_x)>maxspeed)
+				if(fabs(self.velocity_x)>maxspeed*0.3)
 				{
-					self.BUTTON_HOOK = TRUE;
 					self.movement_x = dir * v_forward * -maxspeed;
 					return;
 				}
