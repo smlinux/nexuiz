@@ -65,5 +65,6 @@ trak5
 tree
 tuba
 turrets
+tutorial
 tznex01
 water
