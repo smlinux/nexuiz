@@ -70,7 +70,7 @@
 \crosshair_color_green\Green color component of the crosshair color
 \crosshair_color_blue\Blue color component of the crosshair color
 \sbar_hudselector\Use the old HUD layout
-\NexuizMultiplayerDialog/Radar, HUD & Waypoints...\Adjust the radar and waypoint settings
+\NexuizMultiplayerDialog/Radar, HUD & Waypoints...\Adjust the radar, HUD and waypoints
 \_cl_name\Name under which you will appear in the game
 
 \NexuizSettingsDialog\Change the game settings
@@ -201,12 +201,14 @@
 \cl_teamradar_scale\-
 \cl_teamradar_foreground_alpha\-
 \cl_teamradar_background_alpha\Opacity value of the radar background
+\viewsize\Enable/disable the HUD background
 \sbar_alpha_bg\Opacity value of the HUD background
 \sbar_color_bg_r\Red color component of the HUD background
 \sbar_color_bg_g\Green color component of the HUD background
 \sbar_color_bg_b\Blue color component of the HUD background
 \sbar_color_bg_team\Team color saturation of the HUD background
 \cl_hidewaypoints\Show various gametype specific waypoints
+\g_waypointsprite_scale\Scale multiplier of the waypoints
 \cl_shownames\Show the name of the player you are aiming at
 
 \crosshair_hittest\None: do not do hit tests for the crosshair; TrueAim: blur the crosshair when you would not hit the wall; Enemies: also enlarge the crosshair when you would hit an enemy
