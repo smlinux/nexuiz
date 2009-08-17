@@ -2212,9 +2212,15 @@ void Sbar_Draw (void)
 		if(spectatee_status == -1)
 			s = "^1Observing";
 		else
-			s = strcat("^1Spectating ^7", GetPlayerName(spectatee_status - 1));
-		o = Sbar_DrawNoteLine(o, s);
+			s = GetPlayerName(spectatee_status - 1);
+		// spectated player name between HUD and chat area, aligned to the left
+		vector pos;
+		pos_x = bottomleft_x;
+		pos_y = bottom_y - 61;
+		s = textShortenToWidth(s, vid_conwidth/2.5/sbar_fontsize_x, stringwidth_colors);
+		drawcolorcodedstring(pos, s, sbar_fontsize, 1, DRAWFLAG_NORMAL);
 
+		// spectator text in the upper right corner
 		if(spectatee_status == -1)
 			s = strcat("^1Press ^3", getcommandkey("primary fire", "+attack"), "^1 to spectate");
 		else
@@ -2491,19 +2497,16 @@ void Sbar_Draw (void)
 		for (i = 0; i < 4; ++i) {
 			a = getstati(GetAmmoStat(i)); // how much ammo do we have of type i?
 
-			if(sbar_currentammo)
+			if(sbar_currentammo || vid_conwidth < 800) // force showing current ammo only with conwidths < 800
 			{
 				pos = '0 0 0';
 				if (stat_items & GetAmmoItemCode(i))
 				{
-					if(vid_conwidth >= 800) {
+					if (vid_conwidth < 800)
+					pos_x = 105;
+					else
 						pos_x = 170;
-						pos_y = -40;
-					}
-					else {
-						pos_x = vid_conwidth - 110;
-						pos_y = -128;
-					}
+					pos_y = -40;
 
 					drawpic(bottomleft + pos + '0 1.5 0', "gfx/hud/sb_ammobg", '107 29 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 					drawpic(bottomleft + pos + '76 3 0', GetAmmoPicture(i), '24 24 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
@@ -2516,21 +2519,12 @@ void Sbar_Draw (void)
 			else
 			{
 				if (a > 0) {
-					pos = '0 0 0';
-					if (vid_conwidth >= 800)
-						switch (i) {
-							case 0: pos_x = 114; pos_y = -48; break; // shells
-							case 1: pos_x = 114; pos_y = -26; break; // bullets
-							case 2: pos_x = 200; pos_y = -48; break; // rockets
-							case 3: pos_x = 200; pos_y = -26; break; // cells
-						}
-					else // if vid_conwidth is lower than 800, ammo will overlap with weapon icons and health so we'll move it to the right
-						switch (i) {
-							case 0: pos_x = vid_conwidth - 158; pos_y = -150; break; // shells
-							case 1: pos_x = vid_conwidth - 158; pos_y = -128; break; // bullets
-							case 2: pos_x = vid_conwidth - 84; pos_y = -150; break; // rockets
-							case 3: pos_x = vid_conwidth - 84; pos_y = -128; break; // cells
-						}
+					switch (i) {
+						case 0: pos_x = 114; pos_y = -48; break; // shells
+						case 1: pos_x = 114; pos_y = -26; break; // bullets
+						case 2: pos_x = 200; pos_y = -48; break; // rockets
+						case 3: pos_x = 200; pos_y = -26; break; // cells
+					}
 
 					if (stat_items & GetAmmoItemCode(i))
 						drawpic(bottomleft + pos + '0 1.5 0', "gfx/hud/sb_ammobg", '80 22 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
