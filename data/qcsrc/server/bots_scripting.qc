@@ -1017,7 +1017,7 @@ float bot_cmd_pause()
 	self.movement = '0 0 0';
 	self.bot_cmd_keys = BOT_CMD_KEY_NONE;
 
-	self.bot_exec_status = self.bot_exec_status | BOT_EXEC_STATUS_PAUSED;
+	self.bot_exec_status |= BOT_EXEC_STATUS_PAUSED;
 	return CMD_STATUS_FINISHED;
 }
 
@@ -1124,12 +1124,6 @@ float bot_execute_commands_once()
 	// Find command
 	bot_setcurrentcommand();
 
-	// Keep pressing keys raised by the "presskey" command
-	ispressingkey = !!bot_presskeys();
-
-	if(bot_cmd==world)
-		return ispressingkey;
-
 	// Ignore all commands except continue when the bot is paused
 	if(self.bot_exec_status & BOT_EXEC_STATUS_PAUSED)
 	if(bot_cmd.bot_cmd_type!=BOT_CMD_CONTINUE)
@@ -1141,6 +1135,12 @@ float bot_execute_commands_once()
 		}
 		return 1;
 	}
+
+	// Keep pressing keys raised by the "presskey" command
+	ispressingkey = !!bot_presskeys();
+
+	if(bot_cmd==world)
+		return ispressingkey;
 
 	// Handle conditions
 	if not(bot_cmd.bot_cmd_type==BOT_CMD_FI||bot_cmd.bot_cmd_type==BOT_CMD_ELSE)
