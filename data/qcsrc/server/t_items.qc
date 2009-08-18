@@ -98,7 +98,7 @@ void Item_RespawnCountdown (void)
 			}
 			if(name)
 			{
-				WaypointSprite_Spawn(name, 0, 0, self, '0 0 64', world, 0, self, waypointsprite_attached, FALSE);
+				WaypointSprite_Spawn(name, 0, 0, self, '0 0 64', world, 0, self, waypointsprite_attached, TRUE);
 				if(self.waypointsprite_attached)
 				{
 					WaypointSprite_UpdateTeamRadar(self.waypointsprite_attached, RADARICON_POWERUP, rgb);
