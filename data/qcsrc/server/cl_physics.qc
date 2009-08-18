@@ -1,4 +1,5 @@
 .float race_penalty;
+.float restart_jump;
 
 float sv_accelerate;
 float sv_friction;
@@ -127,6 +128,8 @@ void PlayerJump (void)
 		// for 4 units, and constant velocity
 		self.doublejump_nextjumptime = time + 4 / max(40, self.velocity_z); // max 0.1s blocking of jumps
 	}
+
+	self.restart_jump = TRUE; // restart jump anim next time
 }
 
 void CheckWaterJump()

@@ -222,9 +222,10 @@ void player_anim (void)
 		if (!(self.flags & FL_ONGROUND))
 		{
 			if (self.crouch)
-				setanim(self, self.anim_duckjump, FALSE, TRUE, FALSE);
+				setanim(self, self.anim_duckjump, FALSE, TRUE, self.restart_jump);
 			else
-				setanim(self, self.anim_jump, FALSE, TRUE, FALSE);
+				setanim(self, self.anim_jump, FALSE, TRUE, self.restart_jump);
+			self.restart_jump = FALSE;
 		}
 		else if (self.crouch)
 		{
