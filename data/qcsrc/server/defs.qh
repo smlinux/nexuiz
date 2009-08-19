@@ -613,3 +613,10 @@ float client_cefc_accumulatortime;
 #define PROJECTILE_MAKETRIGGER(e) (e).solid = SOLID_CORPSE; (e).dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE
 // when doing this, hagar can go through clones
 // #define PROJECTILE_MAKETRIGGER(e) (e).solid = SOLID_BBOX
+
+.float spectatee_status;
+.float zoomstate;
+.float bloodloss_timer;
+.float restriction;
+
+.entity clientdata;

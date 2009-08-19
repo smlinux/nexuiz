@@ -1,9 +1,3 @@
-.float spectatee_status;
-.float zoomstate;
-.float bloodloss_timer;
-.float restriction;
-
-.entity clientdata;
 float ClientData_Send(entity to, float sf)
 {
 	if(to != self.owner)
