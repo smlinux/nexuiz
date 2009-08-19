@@ -2184,6 +2184,34 @@ void write_recordmarker(entity pl, float tstart, float dt)
                  " ", ftos(tstart), " ", ftos(dt), "\n"));
 }
 
+vector shotorg_adjustfromclient(vector vecs, float y_is_right, float allowcenter)
+{
+	switch(self.owner.cvar_cl_gunalign)
+	{
+		case 1: // right
+			break;
+
+		case 2: // left
+			vecs_y = -vecs_y;
+			break;
+
+		default:
+		case 3:
+			if(allowcenter) // 2: allow center handedness
+			{
+				// center
+				vecs_y = 0;
+				vecs_z -= 4;
+			}
+			else
+			{
+				// right
+			}
+			break;
+	}
+	return vecs;
+}
+
 vector shotorg_adjust(vector vecs, float y_is_right, float visual)
 {
 	string s;
@@ -2191,36 +2219,13 @@ vector shotorg_adjust(vector vecs, float y_is_right, float visual)
 
 	if (cvar("g_shootfromclient"))
 	{
-		switch(self.owner.cvar_cl_gunalign)
-		{
-			case 1: // right
-				break;
-
-			case 2: // left
-				vecs_y = -vecs_y;
-				break;
-
-			default:
-			case 3:
-				if(cvar("g_shootfromclient") >= 2) // 2: allow center handedness
-				{
-					// center
-					vecs_y = 0;
-					vecs_z -= 4;
-				}
-				else
-				{
-					// right
-				}
-				break;
-		}
+		return shotorg_adjustfromclient(vecs, y_is_right, (cvar("g_shootfromclient") >= 2));
 	}
 	else if (cvar("g_shootfromeye"))
 	{
 		if (visual)
 		{
-			vecs_y = 0;
-			vecs_z -= 4;
+			vecs = return shotorg_adjustfromclient(vecs, y_is_right, TRUE);
 		}
 		else
 		{
@@ -2230,8 +2235,15 @@ vector shotorg_adjust(vector vecs, float y_is_right, float visual)
 	}
 	else if (cvar("g_shootfromcenter"))
 	{
-		vecs_y = 0;
-		vecs_z -= 4;
+		if (visual)
+		{
+			vecs = return shotorg_adjustfromclient(vecs, y_is_right, TRUE);
+		}
+		else
+		{
+			vecs_y = 0;
+			vecs_z -= 4;
+		}
 	}
 	else if ((s = cvar_string("g_shootfromfixedorigin")) != "")
 	{
