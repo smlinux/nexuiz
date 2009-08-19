@@ -2201,9 +2201,17 @@ vector shotorg_adjust(vector vecs, float y_is_right, float visual)
 				break;
 
 			default:
-			case 3: // center
-				vecs_y = 0;
-				vecs_z -= 4;
+			case 3:
+				if(cvar("g_shootfromclient") >= 2) // 2: allow center handedness
+				{
+					// center
+					vecs_y = 0;
+					vecs_z -= 4;
+				}
+				else
+				{
+					// right
+				}
 				break;
 		}
 	}
