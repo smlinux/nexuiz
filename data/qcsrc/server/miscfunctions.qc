@@ -457,94 +457,117 @@ Called with:
 */
 void GetCvars_handleString(string thisname, float f, .string field, string name)
 {
-    if (f < 0)
-    {
-        if (self.field)
-            strunzone(self.field);
-        self.field = string_null;
-    }
-    else if (f > 0)
-    {
-        if (thisname == name)
-        {
-            if (self.field)
-                strunzone(self.field);
-            self.field = strzone(argv(f + 1));
-        }
-    }
-    else
-        stuffcmd(self, strcat("sendcvar ", name, "\n"));
+	if (f < 0)
+	{
+		if (self.field)
+			strunzone(self.field);
+		self.field = string_null;
+	}
+	else if (f > 0)
+	{
+		if (thisname == name)
+		{
+			if (self.field)
+				strunzone(self.field);
+			self.field = strzone(argv(f + 1));
+		}
+	}
+	else
+		stuffcmd(self, strcat("sendcvar ", name, "\n"));
 }
 void GetCvars_handleString_Fixup(string thisname, float f, .string field, string name, string(string) func)
 {
-    GetCvars_handleString(thisname, f, field, name);
-    if (f >= 0) // also initialize to the fitting value for "" when sending cvars out
-        if (thisname == name)
-        {
-            string s;
-            s = func(strcat1(self.field));
-            if (s != self.field)
-            {
-                strunzone(self.field);
-                self.field = strzone(s);
-            }
-        }
+	GetCvars_handleString(thisname, f, field, name);
+	if (f >= 0) // also initialize to the fitting value for "" when sending cvars out
+		if (thisname == name)
+		{
+			string s;
+			s = func(strcat1(self.field));
+			if (s != self.field)
+			{
+				strunzone(self.field);
+				self.field = strzone(s);
+			}
+		}
 }
 void GetCvars_handleFloat(string thisname, float f, .float field, string name)
 {
-    if (f < 0)
-    {
-    }
-    else if (f > 0)
-    {
-        if (thisname == name)
-            self.field = stof(argv(f + 1));
-    }
-    else
-        stuffcmd(self, strcat("sendcvar ", name, "\n"));
+	if (f < 0)
+	{
+	}
+	else if (f > 0)
+	{
+		if (thisname == name)
+			self.field = stof(argv(f + 1));
+	}
+	else
+		stuffcmd(self, strcat("sendcvar ", name, "\n"));
+}
+void GetCvars_handleFloatOnce(string thisname, float f, .float field, string name)
+{
+	if (f < 0)
+	{
+	}
+	else if (f > 0)
+	{
+		if (thisname == name)
+		{
+			if(!self.field)
+			{
+				self.field = stof(argv(f + 1));
+				if(!self.field)
+					self.field = -1;
+			}
+		}
+	}
+	else
+	{
+		if(!self.field)
+			stuffcmd(self, strcat("sendcvar ", name, "\n"));
+	}
 }
 string W_FixWeaponOrder_ForceComplete(string s);
 string W_FixWeaponOrder_AllowIncomplete(string s);
 float w_getbestweapon(entity e);
 void GetCvars(float f)
 {
-    string s;
-    if (f > 0)
-        s = strcat1(argv(f));
-    GetCvars_handleFloat(s, f, autoswitch, "cl_autoswitch");
-    GetCvars_handleFloat(s, f, cvar_cl_playerdetailreduction, "cl_playerdetailreduction");
-    GetCvars_handleFloat(s, f, cvar_scr_centertime, "scr_centertime");
-    GetCvars_handleFloat(s, f, cvar_cl_shownames, "cl_shownames");
-    GetCvars_handleString(s, f, cvar_g_nexuizversion, "g_nexuizversion");
-    GetCvars_handleFloat(s, f, cvar_cl_handicap, "cl_handicap");
-    GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriority, "cl_weaponpriority", W_FixWeaponOrder_ForceComplete);
-    GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[0], "cl_weaponpriority0", W_FixWeaponOrder_AllowIncomplete);
-    GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[1], "cl_weaponpriority1", W_FixWeaponOrder_AllowIncomplete);
-    GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[2], "cl_weaponpriority2", W_FixWeaponOrder_AllowIncomplete);
-    GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[3], "cl_weaponpriority3", W_FixWeaponOrder_AllowIncomplete);
-    GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[4], "cl_weaponpriority4", W_FixWeaponOrder_AllowIncomplete);
-    GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[5], "cl_weaponpriority5", W_FixWeaponOrder_AllowIncomplete);
-    GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[6], "cl_weaponpriority6", W_FixWeaponOrder_AllowIncomplete);
-    GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[7], "cl_weaponpriority7", W_FixWeaponOrder_AllowIncomplete);
-    GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[8], "cl_weaponpriority8", W_FixWeaponOrder_AllowIncomplete);
-    GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[9], "cl_weaponpriority9", W_FixWeaponOrder_AllowIncomplete);
-    GetCvars_handleFloat(s, f, cvar_cl_autotaunt, "cl_autotaunt");
-    GetCvars_handleFloat(s, f, cvar_cl_voice_directional, "cl_voice_directional");
-    GetCvars_handleFloat(s, f, cvar_cl_voice_directional_taunt_attenuation, "cl_voice_directional_taunt_attenuation");
-    GetCvars_handleFloat(s, f, cvar_cl_hitsound, "cl_hitsound");
+	string s;
+	if (f > 0)
+		s = strcat1(argv(f));
+	GetCvars_handleFloat(s, f, autoswitch, "cl_autoswitch");
+	GetCvars_handleFloat(s, f, cvar_cl_playerdetailreduction, "cl_playerdetailreduction");
+	GetCvars_handleFloat(s, f, cvar_scr_centertime, "scr_centertime");
+	GetCvars_handleFloat(s, f, cvar_cl_shownames, "cl_shownames");
+	GetCvars_handleString(s, f, cvar_g_nexuizversion, "g_nexuizversion");
+	GetCvars_handleFloat(s, f, cvar_cl_handicap, "cl_handicap");
+	GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriority, "cl_weaponpriority", W_FixWeaponOrder_ForceComplete);
+	GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[0], "cl_weaponpriority0", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[1], "cl_weaponpriority1", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[2], "cl_weaponpriority2", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[3], "cl_weaponpriority3", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[4], "cl_weaponpriority4", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[5], "cl_weaponpriority5", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[6], "cl_weaponpriority6", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[7], "cl_weaponpriority7", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[8], "cl_weaponpriority8", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[9], "cl_weaponpriority9", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleFloat(s, f, cvar_cl_autotaunt, "cl_autotaunt");
+	GetCvars_handleFloat(s, f, cvar_cl_voice_directional, "cl_voice_directional");
+	GetCvars_handleFloat(s, f, cvar_cl_voice_directional_taunt_attenuation, "cl_voice_directional_taunt_attenuation");
+	GetCvars_handleFloat(s, f, cvar_cl_hitsound, "cl_hitsound");
 #ifdef ALLOW_FORCEMODELS
-    GetCvars_handleFloat(s, f, cvar_cl_forceplayermodels, "cl_forceplayermodels");
-    GetCvars_handleFloat(s, f, cvar_cl_forceplayermodelsfromnexuiz, "cl_forceplayermodelsfromnexuiz");
+	GetCvars_handleFloat(s, f, cvar_cl_forceplayermodels, "cl_forceplayermodels");
+	GetCvars_handleFloat(s, f, cvar_cl_forceplayermodelsfromnexuiz, "cl_forceplayermodelsfromnexuiz");
 #endif
-    GetCvars_handleFloat(s, f, cvar_cl_gunalign, "cl_gunalign");
+	GetCvars_handleFloatOnce(s, f, cvar_cl_gunalign, "cl_gunalign");
 
 
-    // fixup of switchweapon (needed for LMS or when spectating is disabled, as PutClientInServer comes too early)
-    if (f > 0)
-    {
-        if (s == "cl_weaponpriority")
-            self.switchweapon = w_getbestweapon(self);
-    }
+	// fixup of switchweapon (needed for LMS or when spectating is disabled, as PutClientInServer comes too early)
+	if (f > 0)
+	{
+		if (s == "cl_weaponpriority")
+			self.switchweapon = w_getbestweapon(self);
+	}
 }
 
 float fexists(string f)
