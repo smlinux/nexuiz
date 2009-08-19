@@ -2217,15 +2217,11 @@ vector shotorg_adjust(vector vecs, float y_is_right, float visual)
 	string s;
 	vector v;
 
-	if (cvar("g_shootfromclient"))
-	{
-		return shotorg_adjustfromclient(vecs, y_is_right, (cvar("g_shootfromclient") >= 2));
-	}
-	else if (cvar("g_shootfromeye"))
+	if (cvar("g_shootfromeye"))
 	{
 		if (visual)
 		{
-			vecs = return shotorg_adjustfromclient(vecs, y_is_right, TRUE);
+			vecs = shotorg_adjustfromclient(vecs, y_is_right, TRUE);
 		}
 		else
 		{
@@ -2237,13 +2233,17 @@ vector shotorg_adjust(vector vecs, float y_is_right, float visual)
 	{
 		if (visual)
 		{
-			vecs = return shotorg_adjustfromclient(vecs, y_is_right, TRUE);
+			vecs = shotorg_adjustfromclient(vecs, y_is_right, TRUE);
 		}
 		else
 		{
 			vecs_y = 0;
 			vecs_z -= 4;
 		}
+	}
+	else if (cvar("g_shootfromclient"))
+	{
+		vecs = shotorg_adjustfromclient(vecs, y_is_right, (cvar("g_shootfromclient") >= 2));
 	}
 	else if ((s = cvar_string("g_shootfromfixedorigin")) != "")
 	{
