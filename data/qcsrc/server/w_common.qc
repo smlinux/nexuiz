@@ -88,8 +88,9 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
         {
             if(clienttype(ent) == CLIENTTYPE_REAL)
 
-            if(ent != self)
-                ent.ticrate = 1;
+            if(ent.health != -666)
+                if(ent != self)
+                    ent.ticrate = 1;
 
             ent = ent.chain;
         }
