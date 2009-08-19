@@ -2208,6 +2208,20 @@ vector shotorg_adjustfromclient(vector vecs, float y_is_right, float allowcenter
 				// right
 			}
 			break;
+
+		case 4:
+			if(allowcenter) // 2: allow center handedness
+			{
+				// center
+				vecs_y = 0;
+				vecs_z -= 4;
+			}
+			else
+			{
+				// left
+				vecs_y = -vecs_y;
+			}
+			break;
 	}
 	return vecs;
 }
