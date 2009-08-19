@@ -37,8 +37,40 @@ void W_MinstaNex_Attack (void)
 
 	pointparticles(particleeffectnum("nex_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
-	// beam effect
-	trailparticles(world, particleeffectnum("TE_TEI_G3"), w_shotorg, trace_endpos);
+	// teamcolor / hit beam effect
+	if(teamplay)
+	{
+	    switch(self.team)
+	    {
+            case COLOR_TEAM1:   // Red
+                if(damage_goodhits)
+                    trailparticles(world, particleeffectnum("TE_TEI_G3RED_HIT"), w_shotorg, trace_endpos);
+                else
+                    trailparticles(world, particleeffectnum("TE_TEI_G3RED"), w_shotorg, trace_endpos);
+                break;
+            case COLOR_TEAM2:   // Blue
+                if(damage_goodhits)
+                    trailparticles(world, particleeffectnum("TE_TEI_G3BLUE_HIT"), w_shotorg, trace_endpos);
+                else
+                    trailparticles(world, particleeffectnum("TE_TEI_G3BLUE"), w_shotorg, trace_endpos);
+                break;
+            case COLOR_TEAM3:   // Yellow
+                if(damage_goodhits)
+                    trailparticles(world, particleeffectnum("TE_TEI_G3YELLOW_HIT"), w_shotorg, trace_endpos);
+                else
+                    trailparticles(world, particleeffectnum("TE_TEI_G3YELLOW"), w_shotorg, trace_endpos);
+                break;
+            case COLOR_TEAM4:   // Pink
+                if(damage_goodhits)
+                    trailparticles(world, particleeffectnum("TE_TEI_G3PINK_HIT"), w_shotorg, trace_endpos);
+                else
+                    trailparticles(world, particleeffectnum("TE_TEI_G3PINK"), w_shotorg, trace_endpos);
+                break;
+	    }
+	}
+	else
+        trailparticles(world, particleeffectnum("TE_TEI_G3"), w_shotorg, trace_endpos);
+
 	// flash and burn the wall
 	if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
 		Damage_DamageInfo(trace_endpos, 10000, 0, 0, 800 * w_shotdir, WEP_MINSTANEX, self);
@@ -163,6 +195,9 @@ float w_minstanex(float req)
 		precache_model ("models/weapons/v_minstanex.md3");
 		precache_model ("models/weapons/h_minstanex.dpm");
 		precache_sound ("weapons/minstanexfire.wav");
+		precache_sound ("weapons/nexwhoosh1.ogg");
+		precache_sound ("weapons/nexwhoosh2.ogg");
+		precache_sound ("weapons/nexwhoosh3.ogg");
 		w_laser(WR_PRECACHE);
 	}
 	else if (req == WR_SETUP)

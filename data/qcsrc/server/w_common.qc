@@ -34,6 +34,8 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 	local float endq3surfaceflags;
 	//local entity explosion;
 	float did_hit;
+	float length,step;
+	string snd;
 
 	did_hit = 0;
 
@@ -76,6 +78,34 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 	endpoint = trace_endpos;
 	endent = trace_ent;
 	endq3surfaceflags = trace_dphitq3surfaceflags;
+
+	// Find all players the beam passed close by
+	length = vlen(start - endpoint);
+	for(step = 0; step < length; step += 16)
+	{
+        ent = findradius(start + dir * step,128);
+        while(ent)
+        {
+            if(clienttype(ent) == CLIENTTYPE_REAL)
+
+            if(ent != self)
+                ent.ticrate = 1;
+
+            ent = ent.chain;
+        }
+    }
+
+    // And play a flyby sound to them
+    ent = findchainfloat(ticrate,1);
+    while(ent)
+    {
+        snd = "weapons/nexwhoosh";
+        snd = strcat(snd,ftos(rint(random() * 2) +1));
+        snd = strcat(snd,".ogg");
+        play2(ent, snd);
+        ent.ticrate = 0;
+        ent = ent.chain;
+    }
 
 	// find all the entities the railgun hit and restore their solid state
 	ent = findfloat(world, railgunhit, TRUE);
