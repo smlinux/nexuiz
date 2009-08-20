@@ -24,6 +24,7 @@ float ts_primary, ts_secondary;
 
 vector sbar, color;
 vector element_offset = '0 6 0'; // global item offset from the bottom edge
+float SCOREBOARD_OFFSET = 50;
 
 void CSQC_kh_hud();
 void CSQC_ctf_hud();
@@ -1012,8 +1013,9 @@ vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, vector rgb, vector bg_si
 			pos_y += 1.25 * sbar_fontsize_y;
 			++i;
 		}
-
-	pos_y += 1.25 * sbar_fontsize_y; // move to the end of the table
+	
+	if (i == 0)
+		pos_y += 1.25 * sbar_fontsize_y; // move to the end of the table
 	pos_y += 1.25 * sbar_fontsize_y; // move empty row (out of the table)
 
 	return pos;
@@ -1037,10 +1039,10 @@ void Sbar_DrawScoreboard()
 	sbwidth = Sbar_GetWidth(6.5 * sbar_fontsize_y);
 
 	xmin = 0.5 * (vid_conwidth - sbwidth);
-	ymin = 60;
+	ymin = SCOREBOARD_OFFSET;
 
 	xmax = vid_conwidth - xmin;
-    ymax = vid_conheight - 0.2*vid_conheight;
+	ymax = vid_conheight - 0.2*vid_conheight;
 
 	center_x = xmin + 0.5*sbwidth;
 
@@ -1944,30 +1946,32 @@ void Sbar_DrawAccuracyStats()
 
 	float col_margin = 20;  // pixels between the columns
 	float row_margin = 20;  // pixels between the rows
-	float top_border;  // position where the first row starts: pixels down the screen
 
 	fill_size_x = 5 * sbar_fontsize_x;  // width of the background
 	fill_size_y = 10 * sbar_fontsize_y;  // height of the background
 
-	// 45 pixels is the same as the 'Scoreboard' heading
 	drawfont = sbar_bigfont;
-	drawstringcenter('0 45 0', "Weapon Accuracy", 2 * sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+
+	pos_x = 0;
+	pos_y = SCOREBOARD_OFFSET;
+	pos_z = 0;
+	drawstringcenter(pos, "Weapon Accuracy", 2 * sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 	left_border = col_margin + 11 * sbar_fontsize_x;
 
 	if(warmup_stage)
 	{
+		pos_y += 40;
 		if(mod(time, 1) >= 0.4)
-			drawstringcenter('0 85 0', "Stats are not tracked during warmup stage", sbar_fontsize, '1 1 0', sbar_alpha_fg, DRAWFLAG_NORMAL);
+			drawstringcenter(pos, "Stats are not tracked during warmup stage", sbar_fontsize, '1 1 0', sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 		return;
 	}
 
-	top_border = 80;
-	Sbar_DrawAccuracyStats_Description_Hitscan('1 0 0' * col_margin + '0 1 0' * top_border);
+	float top_border_hitscan = SCOREBOARD_OFFSET + 55;  // position where the hitscan row starts: pixels down the screen
+	Sbar_DrawAccuracyStats_Description_Hitscan('1 0 0' * col_margin + '0 1 0' * top_border_hitscan);
 
-	top_border = 220;
-	Sbar_DrawAccuracyStats_Description_Splash('1 0 0' * col_margin + '0 1 0' * top_border);
-
+	float top_border_splash = SCOREBOARD_OFFSET + 175;  // position where the splash row starts: pixels down the screen
+	Sbar_DrawAccuracyStats_Description_Splash('1 0 0' * col_margin + '0 1 0' * top_border_splash);
 
 	for(i = WEP_FIRST; i <= WEP_LAST; ++i)
 	{
@@ -1978,7 +1982,6 @@ void Sbar_DrawAccuracyStats()
 		//if ((weapon_number != 42))  // print them all :)
  		if ((self.weapon_type == WEP_TYPE_SPLASH) && (weapon_damage))
 		{
-			top_border = 220;
 			weapon_stats = rint(100 * weapon_hit / weapon_damage);
 
 			fill_colour_x = 1 - 0.015 * weapon_stats;
@@ -2002,11 +2005,11 @@ void Sbar_DrawAccuracyStats()
 			{
 				count_splash = 0;
 				++row;
-				Sbar_DrawAccuracyStats_Description_Splash('1 0 0' * col_margin + '0 1 0' * (top_border + row * (fill_size_y + row_margin)));
+				Sbar_DrawAccuracyStats_Description_Splash('1 0 0' * col_margin + '0 1 0' * (top_border_splash + row * (fill_size_y + row_margin)));
 			}
 
 			pos_x = left_border + count_splash * (fill_size_x + col_margin);
-			pos_y = top_border + row * (fill_size_y + row_margin);
+			pos_y = top_border_splash + row * (fill_size_y + row_margin);
 
 			// background
 			drawpic(pos, "gfx/hud/sb_accuracy", fill_size , fill_colour, sbar_alpha_bg, DRAWFLAG_NORMAL);
@@ -2031,7 +2034,6 @@ void Sbar_DrawAccuracyStats()
 		}
 		else if ((self.weapon_type == WEP_TYPE_HITSCAN) && (weapon_damage))
 		{
-			top_border = 80;
 			weapon_stats = rint(100 * weapon_hit / weapon_damage);
 
 			fill_colour_x = 1 - 0.015 * weapon_stats;
@@ -2055,11 +2057,11 @@ void Sbar_DrawAccuracyStats()
 			{
 				count_hitscan = 0;
 				++row;
-				Sbar_DrawAccuracyStats_Description_Hitscan('1 0 0' * col_margin + '0 1 0' * (top_border + row * (fill_size_y + row_margin)));
+				Sbar_DrawAccuracyStats_Description_Hitscan('1 0 0' * col_margin + '0 1 0' * (top_border_hitscan + row * (fill_size_y + row_margin)));
 			}
 
 			pos_x = left_border + count_hitscan * (fill_size_x + col_margin);
-			pos_y = top_border + row * (fill_size_y + row_margin);
+			pos_y = top_border_hitscan + row * (fill_size_y + row_margin);
 
 			// background
 			drawpic(pos, "gfx/hud/sb_accuracy", fill_size , fill_colour, sbar_alpha_bg, DRAWFLAG_NORMAL);
@@ -2204,6 +2206,8 @@ void Sbar_Draw (void)
 	o_y = 28; // move spectator text slightly down to prevent overlapping the timer
 
 	string s;
+	vector pos;
+	pos = '0 0 0';
 
 	sbar_fontsize = Sbar_GetFontsize("sbar_fontsize");
 
@@ -2214,7 +2218,6 @@ void Sbar_Draw (void)
 		else
 			s = GetPlayerName(spectatee_status - 1);
 		// spectated player name between HUD and chat area, aligned to the left
-		vector pos;
 		pos_x = bottomleft_x;
 		pos_y = bottom_y - 61;
 		s = textShortenToWidth(s, vid_conwidth/2.5/sbar_fontsize_x, stringwidth_colors);
@@ -2491,19 +2494,16 @@ void Sbar_Draw (void)
 
 		// ammo
 		float a; // i will be the ammo type (already declared), a will contain how much ammo there is of type i
-		vector pos;
-		pos_z = 0;
 
 		for (i = 0; i < 4; ++i) {
 			a = getstati(GetAmmoStat(i)); // how much ammo do we have of type i?
 
 			if(sbar_currentammo || vid_conwidth < 800) // force showing current ammo only with conwidths < 800
 			{
-				pos = '0 0 0';
 				if (stat_items & GetAmmoItemCode(i))
 				{
 					if (vid_conwidth < 800)
-					pos_x = 105;
+						pos_x = 105;
 					else
 						pos_x = 170;
 					pos_y = -40;
