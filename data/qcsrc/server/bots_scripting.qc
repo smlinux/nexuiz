@@ -1179,7 +1179,7 @@ float bot_execute_commands_once()
 	{
 		case BOT_CMD_NULL:
 			return ispressingkey;
-			break;
+			//break;
 		case BOT_CMD_PAUSE:
 			status = bot_cmd_pause();
 			break;
