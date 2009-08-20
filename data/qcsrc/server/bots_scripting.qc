@@ -6,7 +6,7 @@
 void bot_clearqueue(entity bot)
 {
 	if(!bot.bot_cmdqueuebuf_allocated)
-		error("readcommand but no queue allocated");
+		error("clearqueue but no queue allocated");
 	buf_del(bot.bot_cmdqueuebuf);
 	bot.bot_cmdqueuebuf_allocated = FALSE;
 	dprint("bot ", bot.netname, " queue cleared\n");
@@ -130,11 +130,12 @@ entity bot_getplace(string placename)
 #define BOT_CMD_AIMTARGET       19
 #define BOT_CMD_BARRIER         20
 #define BOT_CMD_CONSOLE			21
-#define BOT_CMD_WHILE			22	// TODO: Not implemented yet
-#define BOT_CMD_WEND			23	// TODO: Not implemented yet
-#define BOT_CMD_CHASE			24	// TODO: Not implemented yet
+#define BOT_CMD_SOUND			22
+#define BOT_CMD_WHILE			23	// TODO: Not implemented yet
+#define BOT_CMD_WEND			24	// TODO: Not implemented yet
+#define BOT_CMD_CHASE			25	// TODO: Not implemented yet
 
-#define BOT_CMD_COUNTER			22	// Update this value if you add/remove a command
+#define BOT_CMD_COUNTER			23	// Update this value if you add/remove a command
 
 // NOTE: Following commands should be implemented on the bot ai
 //		 If a new command should be handled by the target ai(s) please declare it here
@@ -236,6 +237,9 @@ void bot_commands_init()
 
 	bot_cmd_string[BOT_CMD_CONSOLE] = "console";
 	bot_cmd_parm_type[BOT_CMD_CONSOLE] = BOT_CMD_PARAMETER_STRING;
+
+	bot_cmd_string[BOT_CMD_SOUND] = "sound";
+	bot_cmd_parm_type[BOT_CMD_SOUND] = BOT_CMD_PARAMETER_STRING;
 
 	bot_cmds_initialized = TRUE;
 }
@@ -440,6 +444,9 @@ void bot_cmdhelp(string scmd)
 				break;
 			case BOT_CMD_RELEASEKEY:
 				print("Release previoulsy used keys. Use the parameter \"all\" to release all keys");
+				break;
+			case BOT_CMD_SOUND:
+				print("play sound file at bot location");
 				break;
 			default:
 				print("This command has no description yet.");
@@ -1040,6 +1047,18 @@ float bot_cmd_resetgoal()
 	return self.cmd_resetgoal();
 }
 
+
+float bot_cmd_sound()
+{
+	string f;
+	f = bot_cmd.bot_cmd_parm_string;
+
+	precache_sound(f);
+	sound(self, CHAN_WEAPON2, f, VOL_BASE, ATTN_MIN);
+
+	return CMD_STATUS_FINISHED;
+}
+
 //
 
 void bot_command_executed(float rm)
@@ -1224,6 +1243,9 @@ float bot_execute_commands_once()
 		case BOT_CMD_CONSOLE:
 			localcmd(strcat(bot_cmd.bot_cmd_parm_string, "\n"));
 			status = CMD_STATUS_FINISHED;
+			break;
+		case BOT_CMD_SOUND:
+			status = bot_cmd_sound();
 			break;
 		default:
 			print(strcat("ERROR: Invalid command on queue with id '",ftos(bot_cmd.bot_cmd_type),"'\n"));
