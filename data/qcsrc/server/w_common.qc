@@ -34,8 +34,11 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 	local float endq3surfaceflags;
 	//local entity explosion;
 	float did_hit;
-	float length,step;
+	float length;
+	vector beampos;
 	string snd;
+	entity pseudoprojectile;
+	float f;
 
 	did_hit = 0;
 
@@ -43,6 +46,7 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 	railgun_end = end;
 
 	dir = normalize(end - start);
+	length = vlen(end - start);
 	force = dir * bforce;
 
 	// go a little bit into the wall because we need to hit this wall later
@@ -79,35 +83,6 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 	endent = trace_ent;
 	endq3surfaceflags = trace_dphitq3surfaceflags;
 
-	// Find all players the beam passed close by
-	length = vlen(start - endpoint);
-	for(step = 0; step < length; step += 16)
-	{
-        ent = findradius(start + dir * step,128);
-        while(ent)
-        {
-            if(clienttype(ent) == CLIENTTYPE_REAL)
-
-            if not (ent.spectatee_status)
-                if(ent != self)
-                    ent.ticrate = 1;
-
-            ent = ent.chain;
-        }
-    }
-
-    // And play a flyby sound to them
-    ent = findchainfloat(ticrate,1);
-    while(ent)
-    {
-        snd = "weapons/nexwhoosh";
-        snd = strcat(snd,ftos(rint(random() * 2) +1));
-        snd = strcat(snd,".ogg");
-        play2(ent, snd);
-        ent.ticrate = 0;
-        ent = ent.chain;
-    }
-
 	// find all the entities the railgun hit and restore their solid state
 	ent = findfloat(world, railgunhit, TRUE);
 	while (ent)
@@ -119,6 +94,26 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 
 	// spawn a temporary explosion entity for RadiusDamage calls
 	//explosion = spawn();
+
+	// Find all non-hit players the beam passed close by
+	FOR_EACH_REALCLIENT(msg_entity) if(msg_entity != self) if(!msg_entity.railgunhit) // we use realclient, so spectators can hear the whoosh too
+	{
+		// nearest point on the beam
+		beampos = start + dir * bound(0, (msg_entity.origin - start) * dir, length);
+
+		f = bound(0, 1 - vlen(beampos - msg_entity.origin) / 512, 1);
+		if(f <= 0)
+			continue;
+
+        snd = strcat("weapons/nexwhoosh", ftos(floor(random() * 3) + 1), ".wav");
+
+		if(!pseudoprojectile)
+			pseudoprojectile = spawn(); // we need this so the sound uses the "entchannel4" volume
+		soundtoat(MSG_ONE, pseudoprojectile, beampos, CHAN_PROJECTILE, snd, VOL_BASE * f, ATTN_NONE);
+    }
+
+	if(pseudoprojectile)
+		remove(pseudoprojectile);
 
 	// find all the entities the railgun hit and hurt them
 	ent = findfloat(world, railgunhit, TRUE);
