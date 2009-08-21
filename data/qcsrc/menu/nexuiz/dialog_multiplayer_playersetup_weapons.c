@@ -6,7 +6,7 @@ CLASS(NexuizWeaponsDialog) EXTENDS(NexuizDialog)
 	ATTRIB(NexuizWeaponsDialog, title, string, "Weapon settings")
 	ATTRIB(NexuizWeaponsDialog, color, vector, SKINCOLOR_DIALOG_WEAPONS)
 	ATTRIB(NexuizWeaponsDialog, intendedWidth, float, 0.35)
-	ATTRIB(NexuizWeaponsDialog, rows, float, 15)
+	ATTRIB(NexuizWeaponsDialog, rows, float, 16)
 	ATTRIB(NexuizWeaponsDialog, columns, float, 4)
 	ATTRIB(NexuizWeaponsDialog, weaponsList, entity, NULL)
 ENDCLASS(NexuizWeaponsDialog)
@@ -26,7 +26,7 @@ void fillNexuizWeaponsDialog(entity me)
 	entity e;
 	float h0, h;
 
-	h = me.rows - 6;
+	h = me.rows - 7;
 	
 	me.TR(me);
 		me.TD(me, 1, 4, makeNexuizTextLabel(0, "Weapon priority list:"));
@@ -46,8 +46,15 @@ void fillNexuizWeaponsDialog(entity me)
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_autoswitch", "Auto switch weapons on pickup"));
 	me.TR(me);
-	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_drawviewmodel", "Draw 1st person weapon model"));
+	me.TR(me);
+		me.TDempty(me, 0.5);
+		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "cl_gunalign", "4", "Left align"));
+			setDependent(e, "r_drawviewmodel", 1, 1);
+		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "cl_gunalign", "3", "Right align"));
+			setDependent(e, "r_drawviewmodel", 1, 1);
+	me.TR(me);
+		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "v_flipped", "Flip view horizontally"));
 	me.TR(me);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("OK", '0 0 0'));
 			e.onClick = Dialog_Close;

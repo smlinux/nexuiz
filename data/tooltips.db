@@ -61,6 +61,7 @@
 \cl_weaponpriority_useforcycling\Make use of the list above when cycling through weapons with the mouse wheel
 \cl_autoswitch\Automatically switch to newly picked up weapons if they are better than what you are carrying
 \r_drawviewmodel\Draw the weapon model
+\cl_gunalign\Position of the weapon model; requires reconnect
 
 \crosshair_per_weapon\Set a different crosshair for each weapon, good if you play without weapon models
 \crosshair_color_override\Also set the color of the crosshair depending on the weapon you are currently holding
