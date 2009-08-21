@@ -3830,3 +3830,133 @@ alpha 256 256 512
 airfriction -4
 //liquidfriction -4
 type smoke
+
+
+
+
+// cl_gentle impact effect indicating damage
+// maintained by particlegibs
+// used in qcsrc/client/gibs.qc:                        pointparticles(particleeffectnum("damage_hit"), org, vel, amount * 16)
+// core decal
+effect particlegibs_damage_hit
+type blood
+count 1
+tex 0 8
+size 5 10
+color 0xA8FFFF 0xA8FFFFF
+alpha 256 256 428
+gravity 1
+bounce -1
+airfriction 3
+liquidfriction 6
+velocityjitter 156 156 212
+// front blood
+effect particlegibs_damage_hit
+type blood
+count 0.2
+tex 24 32
+size 10 20
+color 0xA8FFFF 0xA8FFFFF
+sizeincrease -15
+alpha 256 256 328
+bounce -1
+gravity 0.5
+airfriction 1
+liquidfriction 3
+velocityjitter 6 6 30
+velocitymultiplier -1
+// back blood
+effect particlegibs_damage_hit
+type blood
+count 0.2
+tex 24 32
+size 5 15
+color 0xA8FFFF 0xA8FFFFF
+sizeincrease 10
+alpha 256 256 328
+bounce -1
+gravity 1
+airfriction 1
+liquidfriction 3
+velocityjitter 26 26 112
+originjitter 3 3 3
+velocitymultiplier 2
+ 
+// effect for removing player model
+// "teleport"
+ 
+// cl_gentle deathfx
+// used in qcsrc/client/gibs.qc:                        pointparticles(particleeffectnum("damage_dissolve"), org, vel, amount)
+// small core blood no decals
+effect particlegibs_damage_dissolve
+type blood
+count 64
+tex 0 8
+size 15 20
+color 0x00ffff 0x82ffff
+alpha 256 256 328
+gravity 1
+airfriction 3
+liquidfriction 6
+originjitter 10 10 25
+velocityjitter 256 256 312
+// core decal
+effect particlegibs_damage_dissolve
+type blood
+count 24
+tex 0 8
+size 20 40
+color 0xA8FFFF 0xA8FFFFF
+alpha 256 256 528
+gravity 2
+bounce -1
+airfriction 2
+liquidfriction 6
+originjitter 10 10 25
+velocityjitter 356 356 412
+// front blood
+effect particlegibs_damage_dissolve
+type blood
+count 64
+tex 24 32
+size 10 20
+color 0xA8FFFF 0xA8FFFFF
+sizeincrease -15
+alpha 256 256 328
+bounce -1
+gravity 0.5
+airfriction 1
+liquidfriction 3
+velocityjitter 56 56 212
+originjitter 5 5 10
+velocitymultiplier -0.3
+// back blood
+effect particlegibs_damage_dissolve
+type blood
+count 64
+tex 24 32
+size 5 15
+color 0xA8FFFF 0xA8FFFFF
+sizeincrease 10
+alpha 256 256 328
+bounce -1
+gravity 1
+airfriction 1
+liquidfriction 3
+velocityjitter 56 56 212
+originjitter 5 5 10
+velocitymultiplier 0.5
+// small bits
+effect particlegibs_damage_dissolve
+type blood
+count 150
+tex 24 32
+size 1 1
+color 0xA8FFFF 0xA8FFFFF
+sizeincrease 10
+alpha 256 256 328
+gravity 1
+airfriction 1.5
+liquidfriction 3
+originjitter 10 10 25
+velocityjitter 656 656 912
