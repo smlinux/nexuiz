@@ -175,10 +175,13 @@ float Item_GiveTo(entity item, entity player)
 			pickedup = TRUE;
 			// play some cool sounds ;)
 			centerprint(player, "\n");
-			if(player.health <= 5)
-				announce(player, "announcer/robotic/lastsecond.wav");
-			else if(player.health < 50)
-				announce(player, "announcer/robotic/narrowly.wav");
+			if (clienttype(player) == CLIENTTYPE_REAL)
+			{
+				if(player.health <= 5)
+					play2(player, "announcer/robotic/lastsecond.wav");
+				else if(player.health < 50)
+					play2(player, "announcer/robotic/narrowly.wav");
+			}
 			// sound not available
 			// else if(item.items == IT_CELLS)
 			//	play2(player, "announce/robotic/ammo.wav");

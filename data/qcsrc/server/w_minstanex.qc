@@ -99,65 +99,66 @@ void minstagib_ammocheck (void)
 			Damage(self, self, self, 5, DEATH_NOAMMO, self.origin, '0 0 0');
 			announce(self, "announcer/robotic/terminated.wav");
 		}
-		if (self.health == 10)
+		else if (self.health == 10)
 		{
 			centerprint(self, "^11^7 second left to find some ammo\n");
 			Damage(self, self, self, 5, DEATH_NOAMMO, self.origin, '0 0 0');
 			announce(self, "announcer/robotic/1.wav");
 		}
-		if (self.health == 20)
+		else if (self.health == 20)
 		{
 			centerprint(self, "^12^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			announce(self, "announcer/robotic/2.wav");
 		}
-		if (self.health == 30)
+		else if (self.health == 30)
 		{
 			centerprint(self, "^13^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			announce(self, "announcer/robotic/3.wav");
 		}
-		if (self.health == 40)
+		else if (self.health == 40)
 		{
 			centerprint(self, "^14^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			announce(self, "announcer/robotic/4.wav");
 		}
-		if (self.health == 50)
+		else if (self.health == 50)
 		{
 			centerprint(self, "^15^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			announce(self, "announcer/robotic/5.wav");
 		}
-		if (self.health == 60)
+		else if (self.health == 60)
 		{
 			centerprint(self, "^36^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			announce(self, "announcer/robotic/6.wav");
 		}
-		if (self.health == 70)
+		else if (self.health == 70)
 		{
 			centerprint(self, "^37^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			announce(self, "announcer/robotic/7.wav");
 		}
-		if (self.health == 80)
+		else if (self.health == 80)
 		{
 			centerprint(self, "^38^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			announce(self, "announcer/robotic/8.wav");
 		}
-		if (self.health == 90)
+		else if (self.health == 90)
 		{
 			centerprint(self, "^39^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			announce(self, "announcer/robotic/9.wav");
 		}
-		if (self.health == 100)
+		else if (self.health == 100)
 		{
 			centerprint(self, "get some ammo or\nyou'll be dead in ^310^7 seconds...");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			announce(self, "announcer/robotic/10.wav");
+			if not(self.flags & FL_GODMODE)
+				announce(self, "announcer/robotic/10.wav");
 		}
 	}
 	self.minstagib_nextthink = time + 1;
