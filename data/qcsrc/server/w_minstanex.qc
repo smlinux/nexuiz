@@ -196,9 +196,9 @@ float w_minstanex(float req)
 		precache_model ("models/weapons/v_minstanex.md3");
 		precache_model ("models/weapons/h_minstanex.dpm");
 		precache_sound ("weapons/minstanexfire.wav");
-		precache_sound ("weapons/nexwhoosh1.ogg");
-		precache_sound ("weapons/nexwhoosh2.ogg");
-		precache_sound ("weapons/nexwhoosh3.ogg");
+		precache_sound ("weapons/nexwhoosh1.wav");
+		precache_sound ("weapons/nexwhoosh2.wav");
+		precache_sound ("weapons/nexwhoosh3.wav");
 		w_laser(WR_PRECACHE);
 	}
 	else if (req == WR_SETUP)
