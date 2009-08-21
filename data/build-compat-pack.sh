@@ -11,7 +11,6 @@ COMPAT_FILES="
 	gfx/hud/inv_weapon12.tga
 	gfx/hud/inv_weapon13.tga
 	gfx/hud/inv_weapon14.tga
-	gfx/hud/inv_weapon15.tga
 	gfx/hud/inv_weapon1.tga
 	gfx/hud/inv_weapon2.tga
 	gfx/hud/inv_weapon3.tga
@@ -57,6 +56,7 @@ COMPAT_FILES="
 	gfx/hud/num_9.tga
 	gfx/hud/num_colon_stroke.tga
 	gfx/hud/num_colon.tga
+	gfx/hud/num_dot_stroke.tga
 	gfx/hud/num_dot.tga
 	gfx/hud/num_minus_stroke.tga
 	gfx/hud/num_minus.tga
@@ -231,6 +231,7 @@ COMPAT_FILES="
 	models/sprites/race-checkpoint.tga
 	models/sprites/race-finish_frame0.tga
 	models/sprites/race-finish.tga
+	models/sprites/race-start_frame0.tga
 	models/sprites/redbase_frame0.tga
 	models/sprites/redbase.tga
 	models/sprites/waypoint_frame0.tga
@@ -247,7 +248,6 @@ COMPAT_FILES="
 	models/sprites/wpn-nex_frame0.tga
 	models/sprites/wpn-porto_frame0.tga
 	models/sprites/wpn-rl_frame0.tga
-	models/sprites/wpn-seeker_frame0.tga
 	models/sprites/wpn-shotgun_frame0.tga
 	models/sprites/wpn-uzi_frame0.tga
 	models/weapons/g_tuba.md3
@@ -288,6 +288,9 @@ COMPAT_FILES="
 	sound/onslaught/ons_spark2.ogg
 	sound/onslaught/shockwave.ogg
 	sound/player/pyria-skadi/coms/needhelp2.ogg
+	sound/weapons/nexwhoosh1.ogg
+	sound/weapons/nexwhoosh2.ogg
+	sound/weapons/nexwhoosh3.ogg
 	sound/weapons/tuba_note0.ogg
 	sound/weapons/tuba_note-10.ogg
 	sound/weapons/tuba_note10.ogg
