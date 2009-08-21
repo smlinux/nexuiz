@@ -145,6 +145,11 @@ void Ent_GibSplash()
 		else
 			gentle_prefix = "morphed_";
 	}
+	else if(cvar("cl_particlegibs"))
+	{
+		type |= 0x80;
+		gentle_prefix = "particlegibs_";
+	}
 
 	if not(cvar("cl_gentle"))
 		amount *= 1 - cvar("cl_nogibs");
