@@ -772,18 +772,18 @@ string Sbar_FixScoreboardColumnWidth(float i, string str)
 
 	if(field == SP_NAME) // name gets all remaining space
 	{
-		float sz, j;
-		sz = sbwidth / sbar_fontsize_x;
+		float namesize, j;
+		namesize = sbwidth / sbar_fontsize_x;
 		for(j = 0; j < sbar_num_fields; ++j)
 			if(j != i)
 				if (sbar_field[i] != SP_SEPARATOR)
-					sz -= sbar_size[j] + 1;
-		sz += 1;
-		sbar_size[i] = sz;
+					namesize -= sbar_size[j] + 1;
+		namesize += 1;
+		sbar_size[i] = namesize;
 		
 		if (sbar_fixscoreboardcolumnwidth_iconlen != 0)
-			sz -= sbar_fixscoreboardcolumnwidth_marginlen + sbar_fixscoreboardcolumnwidth_iconlen;
-		str = textShortenToWidth(str, sz, stringwidth_colors);
+			namesize -= sbar_fixscoreboardcolumnwidth_marginlen + sbar_fixscoreboardcolumnwidth_iconlen;
+		str = textShortenToWidth(str, namesize, stringwidth_colors);
 		sbar_fixscoreboardcolumnwidth_len = stringwidth(str, TRUE);
 	}
 	else
