@@ -3018,7 +3018,7 @@ void bot_serverframe()
 		minplayers = max(0, floor(realminplayers));
 
 		float realminbots, minbots;
-		if(cvar("bot_vs_human"))
+		if(teamplay && cvar("bot_vs_human"))
 			realminbots = ceil(fabs(cvar("bot_vs_human")) * activerealplayers);
 		else
 			realminbots = cvar("bot_number");

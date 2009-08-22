@@ -586,27 +586,19 @@ void SetPlayerTeam(entity pl, float t, float s, float noprint)
 		LogTeamchange(pl);
 }
 
-
-
-
-
-
 // set c1...c4 to show what teams are allowed
 void CheckAllowedTeams (entity for_whom)
 {
-	string teament_name;
 	float dm;
 	entity head;
-
-//	if(!dom && !ctf)
-//		dm = 1;
+	string teament_name;
 
 	c1 = c2 = c3 = c4 = -1;
 	cb1 = cb2 = cb3 = cb4 = 0;
 
-	// onslaught is special
 	if(g_onslaught)
 	{
+		// onslaught is special
 		head = findchain(classname, "onslaught_generator");
 		while (head)
 		{
@@ -616,10 +608,8 @@ void CheckAllowedTeams (entity for_whom)
 			if (head.team == COLOR_TEAM4) c4 = 0;
 			head = head.chain;
 		}
-		return;
 	}
-
-	if(g_domination)
+	else if(g_domination)
 		teament_name = "dom_team";
 	else if(g_ctf)
 		teament_name = "ctf_team";
@@ -628,10 +618,7 @@ void CheckAllowedTeams (entity for_whom)
 	else if(g_nexball)
 		teament_name = "nexball_team";
 	else if(g_assault)
-	{
 		c1 = c2 = 0; // Assault always has 2 teams
-		return;
-	}
 	else
 	{
 		// cover anything else by treating it like tdm with no teams spawned
@@ -643,47 +630,44 @@ void CheckAllowedTeams (entity for_whom)
 			dm = 2;
 
 		if(dm >= 4)
-		{
 			c1 = c2 = c3 = c4 = 0;
-		}
 		else if(dm >= 3)
-		{
 			c1 = c2 = c3 = 0;
-		}
-		else// if(dm >= 2)
-		{
+		else
 			c1 = c2 = 0;
-		}
-		return;
 	}
 
-	// first find out what teams are allowed
-	head = find(world, classname, teament_name);
-	while(head)
+	// find out what teams are allowed if necessary
+	if(teament_name)
 	{
-		if(!(g_domination && head.netname == ""))
+		head = find(world, classname, teament_name);
+		while(head)
 		{
-			if(head.team == COLOR_TEAM1)
+			if(!(g_domination && head.netname == ""))
 			{
-				c1 = 0;
+				if(head.team == COLOR_TEAM1)
+				{
+					c1 = 0;
+				}
+				if(head.team == COLOR_TEAM2)
+				{
+					c2 = 0;
+				}
+				if(head.team == COLOR_TEAM3)
+				{
+					c3 = 0;
+				}
+				if(head.team == COLOR_TEAM4)
+				{
+					c4 = 0;
+				}
 			}
-			if(head.team == COLOR_TEAM2)
-			{
-				c2 = 0;
-			}
-			if(head.team == COLOR_TEAM3)
-			{
-				c3 = 0;
-			}
-			if(head.team == COLOR_TEAM4)
-			{
-				c4 = 0;
-			}
+			head = find(head, classname, teament_name);
 		}
-		head = find(head, classname, teament_name);
 	}
 
-	if(for_whom)
+	// TODO: Balance quantity of bots across > 2 teams when bot_vs_human is set
+	if(cvar("bot_vs_human") && for_whom)
 	{
 		if(cvar("bot_vs_human") > 0)
 		{
@@ -693,7 +677,7 @@ void CheckAllowedTeams (entity for_whom)
 			else
 				c2 = -1;
 		}
-		else if(cvar("bot_vs_human") < 0)
+		else
 		{
 			// bots are all red
 			if(clienttype(for_whom) == CLIENTTYPE_BOT)
