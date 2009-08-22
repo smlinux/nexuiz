@@ -646,27 +646,20 @@ void CheckAllowedTeams (entity for_whom)
 			if(!(g_domination && head.netname == ""))
 			{
 				if(head.team == COLOR_TEAM1)
-				{
 					c1 = 0;
-				}
-				if(head.team == COLOR_TEAM2)
-				{
+				else if(head.team == COLOR_TEAM2)
 					c2 = 0;
-				}
-				if(head.team == COLOR_TEAM3)
-				{
+				else if(head.team == COLOR_TEAM3)
 					c3 = 0;
-				}
-				if(head.team == COLOR_TEAM4)
-				{
+				else if(head.team == COLOR_TEAM4)
 					c4 = 0;
-				}
 			}
 			head = find(head, classname, teament_name);
 		}
 	}
 
-	// TODO: Balance quantity of bots across > 2 teams when bot_vs_human is set
+	// TODO: Balance quantity of bots across > 2 teams when bot_vs_human is set (and remove next line)
+	if(c3==-1&&c4==-1)
 	if(cvar("bot_vs_human") && for_whom)
 	{
 		if(cvar("bot_vs_human") > 0)
