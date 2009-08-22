@@ -16,6 +16,7 @@ void W_GiveWeapon (entity e, float wep, string name)
 	oldself = self;
 	self = e;
 
+	if not(g_minstagib)
 	if (other.classname == "player")
 	{
 		sprint (other, "You got the ^2");
