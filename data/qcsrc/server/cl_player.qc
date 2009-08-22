@@ -266,6 +266,10 @@ void player_anim (void)
 
 void SpawnThrownWeapon (vector org, float w)
 {
+	if(g_minstagib)
+	if(self.ammo_cells <= 0)
+		return;
+
 	if(g_pinata)
 	{
 		float j;
@@ -422,7 +426,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 			{
 				self.pain_finished = time + 0.5;	//Supajoe
 
-				if(sv_gentle < 1) {		
+				if(sv_gentle < 1) {
 					if(self.classname != "body") // pain anim is BORKED on our ZYMs, FIXME remove this once we have good models
 					{
 						if (random() > 0.5)
@@ -779,7 +783,7 @@ void Say(entity source, float teamsay, entity privatesay, string msgin, float fl
 
 	if(Ban_MaybeEnforceBan(source))
 		return;
-	
+
 	if(!teamsay && !privatesay)
 		if(substring(msgin, 0, 1) == " ")
 			msgin = substring(msgin, 1, strlen(msgin) - 1); // work around DP say bug (say_team does not have this!)
@@ -836,7 +840,7 @@ void Say(entity source, float teamsay, entity privatesay, string msgin, float fl
 		msgstr = strcat("\{1}", namestr, "^7: ", msgin);
 		cmsgstr = "";
 	}
-	
+
 	msgstr = strcat(strreplace("\n", " ", msgstr), "\n"); // newlines only are good for centerprint
 	fullmsgstr = msgstr;
 	fullcmsgstr = cmsgstr;
@@ -901,7 +905,7 @@ void Say(entity source, float teamsay, entity privatesay, string msgin, float fl
 			msgstr = fullmsgstr;
 		}
 	}
-	
+
 	if (timeoutStatus == 2) //when game is paused, no flood protection
 		source.flood_field = flood = 0;
 
@@ -934,7 +938,7 @@ void Say(entity source, float teamsay, entity privatesay, string msgin, float fl
 
 	if(flood)
 		print("NOTE: ", playername(source), "^7 is flooding.\n");
-	
+
 	// build sourcemsgstr by cutting off a prefix and replacing it by the other one
 	if(privatesay)
 		sourcemsgstr = strcat(privatemsgprefix, substring(sourcemsgstr, privatemsgprefixlen, -1));
@@ -1138,7 +1142,7 @@ void GlobalSound(string sample, float chan, float voicetype)
 		sample = strcat(argv(0), ftos(floor(random() * n + 1)), ".wav"); // randomization
 	else
 		sample = strcat(argv(0), ".wav"); // randomization
-	
+
 	switch(voicetype)
 	{
 		case VOICETYPE_LASTATTACKER_ONLY:
@@ -1255,7 +1259,7 @@ void VoiceMessage(string type, string msg)
 		self.flood_field = max(time, self.flood_field) + flood_spv;
 	else
 		flood = 1;
-		
+
 	if (timeoutStatus == 2) //when game is paused, no flood protection
 		self.flood_field = flood = 0;
 
