@@ -169,7 +169,12 @@ void spawnfunc_weapon_minstanex (void); // defined in t_items.qc
 float w_minstanex(float req)
 {
 	if (req == WR_AIM)
-		self.BUTTON_ATCK = bot_aim(1000000, 0, 1, FALSE);
+	{
+		if(self.ammo_cells>0)
+			self.BUTTON_ATCK = bot_aim(1000000, 0, 1, FALSE);
+		else
+			self.BUTTON_ATCK2 = bot_aim(cvar("g_balance_laser_primary_speed"), 0, cvar("g_balance_laser_primary_lifetime"), FALSE);
+	}
 	else if (req == WR_THINK)
 	{
 		if (self.BUTTON_ATCK)
