@@ -716,11 +716,11 @@ void onslaught_generator_damage(entity inflictor, entity attacker, float damage,
 		sound(self, CHAN_TRIGGER, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
 		i = random();
 		if(i < 0.3)
-			ons_throwgib(hitloc, (force * -1) + '0 0 40', "models/onslaught/gen_gib1.md3", 7, 1, 1);
+			ons_throwgib(hitloc + '0 0 20', force * -1, "models/onslaught/gen_gib1.md3", 7, 1, 1);
 		else if(i > 0.7)
-			ons_throwgib(hitloc, (force * -1)+ '0 0 40', "models/onslaught/gen_gib2.md3", 6, 1, 1);
+			ons_throwgib(hitloc + '0 0 20', force * -1, "models/onslaught/gen_gib2.md3", 6, 1, 1);
 		else
-			ons_throwgib(hitloc, (force * -1)+ '0 0 40', "models/onslaught/gen_gib3.md3", 5, 1, 1);
+			ons_throwgib(hitloc + '0 0 20', force * -1, "models/onslaught/gen_gib3.md3", 5, 1, 1);
 	}
 	else
 	{
@@ -737,7 +737,7 @@ void onslaught_generator_damage(entity inflictor, entity attacker, float damage,
 	//throw some gibs on damage
 	if(random() < damage/200+0.2)
 		if(random() < 0.5)
-			ons_throwgib(hitloc, randomvec()*360, "models/onslaught/gen_gib1.md3", 1, 1, 0);
+			ons_throwgib(hitloc + '0 0 20', randomvec()*360, "models/onslaught/gen_gib1.md3", 1, 1, 0);
 };
 
 // update links after a delay
