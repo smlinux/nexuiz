@@ -252,7 +252,7 @@ Keys:
 
 void spawnfunc_dom_team()
 {
-	if(!g_domination)
+	if(!g_domination || cvar("g_domination_teams_override") >= 2)
 	{
 		remove(self);
 		return;
@@ -578,8 +578,10 @@ void dom_spawnpoint(vector org)
 void dom_spawnteams()
 {
 	float numteams;
-
-	numteams = cvar("g_domination_default_teams");
+	if(cvar("g_domination_teams_override") < 2)
+		numteams = cvar("g_domination_default_teams");
+	else
+		numteams = cvar("g_domination_teams_override");
 	// LordHavoc: edit this if you want to change defaults
 	dom_spawnteam("Red", COLOR_TEAM1-1, "models/domination/dom_red.md3", 0, "domination/claim.wav", "", "Red team has captured a control point");
 	dom_spawnteam("Blue", COLOR_TEAM2-1, "models/domination/dom_blue.md3", 0, "domination/claim.wav", "", "Blue team has captured a control point");
@@ -594,8 +596,8 @@ void dom_delayedinit()
 {
 	local entity head;
 
-	// if no teams are found, spawn defaults
-	if (find(world, classname, "dom_team") == world)
+	// if no teams are found, spawn defaults, if custom teams are set, use them
+	if (find(world, classname, "dom_team") == world || cvar("g_domination_teams_override") >= 2)
 		dom_spawnteams();
 	// if no control points are found, spawn defaults
 	if (find(world, classname, "dom_controlpoint") == world)

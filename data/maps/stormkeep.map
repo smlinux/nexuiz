@@ -15229,12 +15229,12 @@ evil8_floor/e8cretefloor01c
 // entity 574
 {
 "classname" "dom_team"
-"netname" "^6Pink Team^3"
-"cnt" "9"
+"netname" "^6Yellow Team^3"
+"cnt" "12"
 "noise" "domination/claim.wav"
 "noise1" "domination/claim.wav"
-"message" "Pink team has captured a control point"
-"model" "models/domination/dom_pink.md3"
+"message" "Yellow team has captured a control point"
+"model" "models/domination/dom_yellow.md3"
 "origin" "0 152 96"
 }
 // entity 575

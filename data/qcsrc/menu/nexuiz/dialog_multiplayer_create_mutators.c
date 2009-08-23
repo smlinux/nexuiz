@@ -7,7 +7,7 @@ CLASS(NexuizMutatorsDialog) EXTENDS(NexuizDialog)
 	ATTRIB(NexuizMutatorsDialog, title, string, "Mutators")
 	ATTRIB(NexuizMutatorsDialog, color, vector, SKINCOLOR_DIALOG_MUTATORS)
 	ATTRIB(NexuizMutatorsDialog, intendedWidth, float, 0.9)
-	ATTRIB(NexuizMutatorsDialog, rows, float, 17)
+	ATTRIB(NexuizMutatorsDialog, rows, float, 18)
 	ATTRIB(NexuizMutatorsDialog, columns, float, 6)
 	ATTRIB(NexuizMutatorsDialog, refilterEntity, entity, NULL)
 ENDCLASS(NexuizMutatorsDialog)
@@ -70,6 +70,8 @@ string toStringNexuizMutatorsDialog(entity me)
 		s = strcat(s, ", NixNex");
 	if(cvar_string("g_weaponarena") != "0")
 		s = strcat(s, ", ", WeaponArenaString());
+	if(cvar("g_start_weapon_laser") == 0)
+		s = strcat(s, ", No start weapons");
 	if(cvar("sv_gravity") < 800)
 		s = strcat(s, ", Low gravity");
 	if(cvar("g_cloaked"))
@@ -257,6 +259,11 @@ void fillNexuizMutatorsDialog(entity me)
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_weaponarena", "most", "Most weapons"));
 			e.cvarOffValue = "0";
+	me.TR(me);
+		me.TDempty(me, 0.2);
+		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_start_weapon_laser", "0", "No start weapons"));
+			e.cvarOffValue = "-1";
+			makeMulti(e, "g_start_weapon_shotgun g_start_weapon_uzi g_start_weapon_grenadelauncher g_start_weapon_electro g_start_weapon_crylink g_start_weapon_nex g_start_weapon_hagar g_start_weapon_rocketlauncher g_start_weapon_campingrifle g_start_weapon_hlac g_start_weapon_seeker g_start_weapon_minstanex g_start_weapon_hook g_start_weapon_porto g_start_weapon_tuba");
 
 	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("OK", '0 0 0'));

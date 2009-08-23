@@ -477,6 +477,8 @@ void PrintWelcomeMessage(entity pl)
 		modifications = strcat(modifications, ", NixNex");
 	if(g_weaponarena)
 		modifications = strcat(modifications, ", ", g_weaponarena_list, " Arena");
+	if(cvar("g_start_weapon_laser") == 0)
+		modifications = strcat(modifications, ", No start weapons");
 	if(cvar("sv_gravity") < 800)
 		modifications = strcat(modifications, ", Low gravity");
 	if(g_cloaked)
@@ -874,15 +876,6 @@ float JoinBestTeam(entity pl, float only_return_best, float forcebestteam)
 
 	// find out what teams are available
 	CheckAllowedTeams(pl);
-
-	if(g_domination)
-	{
-		// <div0> WHY? TODO
-		if(cvar("g_domination_default_teams") < 3)
-			c3 = 999999999;
-		if(cvar("g_domination_default_teams") < 4)
-			c4 = 999999999;
-	}
 
 	// if we don't care what team he ends up on, put him on whatever team he entered as.
 	// if he's not on a valid team, then let other code put him on the smallest team

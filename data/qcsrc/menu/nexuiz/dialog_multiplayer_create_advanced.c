@@ -6,7 +6,7 @@ CLASS(NexuizAdvancedDialog) EXTENDS(NexuizDialog)
 	ATTRIB(NexuizAdvancedDialog, title, string, "Advanced server settings")
 	ATTRIB(NexuizAdvancedDialog, color, vector, SKINCOLOR_DIALOG_ADVANCED)
 	ATTRIB(NexuizAdvancedDialog, intendedWidth, float, 0.5)
-	ATTRIB(NexuizAdvancedDialog, rows, float, 13)
+	ATTRIB(NexuizAdvancedDialog, rows, float, 14)
 	ATTRIB(NexuizAdvancedDialog, columns, float, 3)
 	ATTRIB(NexuizAdvancedDialog, refilterEntity, entity, NULL)
 ENDCLASS(NexuizAdvancedDialog)
@@ -51,8 +51,19 @@ void fillNexuizAdvancedDialog(entity me)
 		me.TD(me, 1, 1.7, e = makeNexuizSlider(0, 1.0, 0.05, "g_friendlyfire"));
 	me.TR(me);
 		me.TDempty(me, 0.2);
-		me.TD(me, 1, 1.2, e = makeNexuizTextLabel(0, "Mirror damage:"));
+		me.TD(me, 1, 1.2, e = makeNexuizTextLabel(0, "Friendly fire penalty:"));
 		me.TD(me, 1, 1.7, e = makeNexuizSlider(0, 1.0, 0.05, "g_mirrordamage"));
+		setDependent(e, "g_tdm", 0, -1);
+	me.TR(me);
+		me.TDempty(me, 0.2);
+		me.TD(me, 1, 1.2, e = makeNexuizTextLabel(0, "Teams:"));
+		me.TD(me, 1, 1.7, e = makeNexuizTextSlider("g_tdm_teams_override"));
+			e.addValue(e, "Default", "0");
+			e.addValue(e, "2 teams", "2");
+			e.addValue(e, "3 teams", "3");
+			e.addValue(e, "4 teams", "4");
+			e.configureNexuizTextSliderValues(e);
+		makeMulti(e, "g_domination_teams_override g_keyhunt_teams_override");
 
 	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("OK", '0 0 0'));

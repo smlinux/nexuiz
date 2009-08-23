@@ -30625,10 +30625,10 @@ evil6_walls/e6cyb0rpipes
 // entity 150
 {
 "classname" "dom_team"
-"cnt" "9"
-"message" "Pink team has captured a control point"
-"model" "models/domination/dom_pink.md3"
-"netname" "^6Pink Team^3"
+"cnt" "12"
+"message" "Yellow team has captured a control point"
+"model" "models/domination/dom_yellow.md3"
+"netname" "^3Yellow Team^3"
 "noise" "domination/claim.wav"
 "noise1" "domination/claim.wav"
 "origin" "352.000000 -16.000000 -112.000000"
