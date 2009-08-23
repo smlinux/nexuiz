@@ -955,8 +955,12 @@ void havocbot_chooseweapon()
 				return;
 			}
 		}
-		// If now weapon was chosen by this system fall back to the previous one
 	}
+
+#ifdef 0
+	// TODO: This disabled code is not working well and got replaced by custom weapon priorities.
+	// However, this logic should be refactored and moved to weapons code so each new weapon can be
+	// evaluated dynamically by bots without updating the "ai" or config files.	--mand1nga
 
 	// Formula:
 	//	(Damage/Sec * Weapon spefic change to get that damage)
@@ -1074,6 +1078,7 @@ void havocbot_chooseweapon()
 		if ( cvar("bot_ai_weapon_combo") && bestweapon == WEP_ROCKET_LAUNCHER )
 			self.bot_chooseweapontime += (distance  / cvar("g_balance_rocketlauncher_speed"));
 	}
+#endif
 };
 
 .float nextaim;
