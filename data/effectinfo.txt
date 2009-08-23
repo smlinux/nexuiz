@@ -3960,3 +3960,94 @@ airfriction 1.5
 liquidfriction 3
 originjitter 10 10 25
 velocityjitter 656 656 912
+
+// fire effect which expands then slows
+effect onslaught_generator_gib_explode
+notunderwater
+count 34
+type static
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 20 26
+sizeincrease 45
+alpha 128 256 356
+bounce 1.5
+airfriction 5
+liquidfriction 8
+originjitter 8 8 8
+velocityjitter 286 286 286
+
+// smoke
+effect onslaught_generator_gib_explode
+type alphastatic
+notunderwater
+tex 0 8
+count 12
+size 1 10
+sizeincrease 90
+gravity -0.3
+alpha 200 500 600
+velocityjitter 244 244 244
+airfriction 5
+color 0x000000 0x111111
+bounce 2
+
+// underwater bubbles
+effect onslaught_generator_gib_explode
+underwater
+count 32
+type bubble
+tex 62 62
+color 0x404040 0x808080
+size 3 3
+alpha 128 256 64
+gravity -0.125
+bounce 1.5
+liquidfriction 0.25
+originjitter 16 16 16
+velocityjitter 96 96 96
+
+// fire effect which expands then slows
+effect onslaught_generator_gib_flame
+notunderwater
+count 30
+type static
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 5 10
+sizeincrease 25
+alpha 128 256 356
+gravity -0.5
+airfriction 5
+liquidfriction 8
+originjitter 3 3 3
+velocityjitter 86 86 86
+// smoke
+effect onslaught_generator_gib_flame
+type alphastatic
+notunderwater
+tex 0 8
+count 2
+size 10 20
+sizeincrease 30
+gravity -0.8
+alpha 200 500 600
+velocityjitter 44 44 44
+airfriction 5
+color 0x000000 0x111111
+bounce 2
+
+// underwater bubbles
+effect onslaught_generator_gib_flame
+underwater
+count 32
+type bubble
+tex 62 62
+color 0x404040 0x808080
+size 3 3
+alpha 128 256 64
+gravity -0.125
+bounce 1.5
+liquidfriction 0.25
+originjitter 16 16 16
+velocityjitter 96 96 96

@@ -18,35 +18,6 @@ void onslaught_link_checkupdate();
 
 .string model1, model2, model3;
 
-
-void onslaught_generator_boom_think()
-{
-	self.nextthink = time + 0.05;
-	if(self.frame > 14)
-	{
-		self.think = SUB_Remove;
-		return;
-	}
-	self.frame +=1;
-};
-
-void onslaught_generator_boom_spawn(vector org, float fscale)
-{
-	entity e;
-	e = spawn();
-	setmodel(e, "models/onslaught/boom.md3");
-	setorigin(e, org);
-
-	e.scale = fscale;
-	setsize(e, e.mins * e.scale, e.maxs * e.scale);
-	e.angles = randomvec() * 360;
-
-	e.effects = EF_NOSHADOW;
-
-	e.think = onslaught_generator_boom_think;
-	e.nextthink = time + 0.05;
-};
-
 void ons_gib_damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector vforce)
 {
 	self.velocity = self.velocity + vforce;
@@ -55,22 +26,26 @@ void ons_gib_damage (entity inflictor, entity attacker, float damage, float deat
 .float giblifetime;
 void ons_throwgib_think()
 {
-	local vector org;
+	float d;
 
 	self.nextthink = time + 0.05;
-	if(self.count > self.giblifetime)
+
+	d = self.giblifetime - time;
+
+	if(d<0)
 	{
 		self.think = SUB_Remove;
 		return;
 	}
-	if(self.count > self.giblifetime-10)
-		self.alpha -= 0.1;
-	org = self.origin + 20 * randomvec();
-	onslaught_generator_boom_spawn(org, random()*0.5+0.3);
-	self.count +=1;
+	if(d<1)
+		self.alpha = d;
+
+	if(d>2)
+	if(random()<0.6)
+		pointparticles(particleeffectnum("onslaught_generator_gib_flame"), self.origin, '0 0 0', 1);
 };
 
-void ons_throwgib(vector v_from, vector v_to, string smodel, float f_lifetime, float f_fadetime, float b_burn)
+void ons_throwgib(vector v_from, vector v_to, string smodel, float f_lifetime, float b_burn)
 {
 	local entity gib;
 
@@ -86,7 +61,7 @@ void ons_throwgib(vector v_from, vector v_to, string smodel, float f_lifetime, f
 	gib.effects = EF_LOWPRECISION;
 	gib.flags = FL_NOTARGET;
 	gib.velocity = v_to;
-	gib.giblifetime	= f_lifetime;
+	gib.giblifetime	= time + f_lifetime;
 
 	if (b_burn)
 	{
@@ -94,7 +69,7 @@ void ons_throwgib(vector v_from, vector v_to, string smodel, float f_lifetime, f
 		gib.nextthink = time + 0.05;
 	}
 	else
-		SUB_SetFade(gib, time + f_lifetime, 2);
+		SUB_SetFade(gib, gib.giblifetime, 2);
 };
 
 void onslaught_updatelinks()
@@ -574,18 +549,18 @@ void onslaught_generator_deaththink()
 	{
 		i = random();
 		if(i < 0.3)
-			ons_throwgib(self.origin + '0 0 40', (100 * randomvec() - '1 1 1') * 11 + '0 0 20', "models/onslaught/gen_gib1.md3", 25, 1, 1);
+			ons_throwgib(self.origin + '0 0 40', (100 * randomvec() - '1 1 1') * 11 + '0 0 20', "models/onslaught/gen_gib1.md3", 6, TRUE);
 		else if(i > 0.7)
-			ons_throwgib(self.origin + '0 0 40', (100 * randomvec() - '1 1 1') * 12 + '0 0 20', "models/onslaught/gen_gib2.md3", 20, 1, 1);
+			ons_throwgib(self.origin + '0 0 40', (100 * randomvec() - '1 1 1') * 12 + '0 0 20', "models/onslaught/gen_gib2.md3", 6, TRUE);
 		else
-			ons_throwgib(self.origin + '0 0 40', (100 * randomvec() - '1 1 1') * 13 + '0 0 20', "models/onslaught/gen_gib3.md3", 15, 1, 1);
+			ons_throwgib(self.origin + '0 0 40', (100 * randomvec() - '1 1 1') * 13 + '0 0 20', "models/onslaught/gen_gib3.md3", 6, TRUE);
 	}
 
 	// Spawn fire balls
-	for(i=0;i < 6;++i)
+	for(i=0;i < 10;++i)
 	{
 		org = self.origin + randompos('-30 -30 -30' * i + '0 0 -20', '30 30 30' * i + '0 0 20');
-		onslaught_generator_boom_spawn(org, (6-i)/5+0.3);
+		pointparticles(particleeffectnum("onslaught_generator_gib_explode"), org, '0 0 0', 1);
 	}
 
 	// Short explosion sound + small explosion
@@ -716,11 +691,11 @@ void onslaught_generator_damage(entity inflictor, entity attacker, float damage,
 		sound(self, CHAN_TRIGGER, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
 		i = random();
 		if(i < 0.3)
-			ons_throwgib(hitloc + '0 0 20', force * -1, "models/onslaught/gen_gib1.md3", 7, 1, 1);
+			ons_throwgib(hitloc + '0 0 20', force * -1, "models/onslaught/gen_gib1.md3", 5, TRUE);
 		else if(i > 0.7)
-			ons_throwgib(hitloc + '0 0 20', force * -1, "models/onslaught/gen_gib2.md3", 6, 1, 1);
+			ons_throwgib(hitloc + '0 0 20', force * -1, "models/onslaught/gen_gib2.md3", 5, TRUE);
 		else
-			ons_throwgib(hitloc + '0 0 20', force * -1, "models/onslaught/gen_gib3.md3", 5, 1, 1);
+			ons_throwgib(hitloc + '0 0 20', force * -1, "models/onslaught/gen_gib3.md3", 5, TRUE);
 	}
 	else
 	{
@@ -737,7 +712,7 @@ void onslaught_generator_damage(entity inflictor, entity attacker, float damage,
 	//throw some gibs on damage
 	if(random() < damage/200+0.2)
 		if(random() < 0.5)
-			ons_throwgib(hitloc + '0 0 20', randomvec()*360, "models/onslaught/gen_gib1.md3", 1, 1, 0);
+			ons_throwgib(hitloc + '0 0 20', randomvec()*360, "models/onslaught/gen_gib1.md3", 5, FALSE);
 };
 
 // update links after a delay
@@ -936,7 +911,6 @@ void spawnfunc_onslaught_generator()
 	precache_model("models/onslaught/generator_dmg8.md3");
 	precache_model("models/onslaught/generator_dmg9.md3");
 	precache_model("models/onslaught/generator_dead.md3");
-	precache_model("models/onslaught/boom.md3");
 	precache_model("models/onslaught/shockwave.md3");
 	precache_model("models/onslaught/shockwavetransring.md3");
 	precache_model("models/onslaught/gen_gib1.md3");
@@ -1072,13 +1046,13 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 			string t;
 			t = ColoredTeamName(attacker.team);
 			bprint(ColoredTeamName(self.team), " ", self.message, " control point destroyed by ", t, "\n");
-			ons_throwgib(self.origin, (2 * randomvec() - '1 1 1') * 25, "models/onslaught/controlpoint_icon_gib1.md3", 5, 1, 0);
-			ons_throwgib(self.origin, (2 * randomvec() - '1 1 1') * 45, "models/onslaught/controlpoint_icon_gib2.md3", 5, 1, 0);
-			ons_throwgib(self.origin, (2 * randomvec() - '1 1 1') * 45, "models/onslaught/controlpoint_icon_gib2.md3", 5, 1, 0);
-			ons_throwgib(self.origin, (2 * randomvec() - '1 1 1') * 75, "models/onslaught/controlpoint_icon_gib4.md3", 5, 1, 0);
-			ons_throwgib(self.origin, (2 * randomvec() - '1 1 1') * 75, "models/onslaught/controlpoint_icon_gib4.md3", 5, 1, 0);
-			ons_throwgib(self.origin, (2 * randomvec() - '1 1 1') * 75, "models/onslaught/controlpoint_icon_gib4.md3", 5, 1, 0);
-			ons_throwgib(self.origin, (2 * randomvec() - '1 1 1') * 75, "models/onslaught/controlpoint_icon_gib4.md3", 5, 1, 0);
+			ons_throwgib(self.origin, (2 * randomvec() - '1 1 1') * 25, "models/onslaught/controlpoint_icon_gib1.md3", 3, FALSE);
+			ons_throwgib(self.origin, (2 * randomvec() - '1 1 1') * 45, "models/onslaught/controlpoint_icon_gib2.md3", 3, FALSE);
+			ons_throwgib(self.origin, (2 * randomvec() - '1 1 1') * 45, "models/onslaught/controlpoint_icon_gib2.md3", 3, FALSE);
+			ons_throwgib(self.origin, (2 * randomvec() - '1 1 1') * 75, "models/onslaught/controlpoint_icon_gib4.md3", 3, FALSE);
+			ons_throwgib(self.origin, (2 * randomvec() - '1 1 1') * 75, "models/onslaught/controlpoint_icon_gib4.md3", 3, FALSE);
+			ons_throwgib(self.origin, (2 * randomvec() - '1 1 1') * 75, "models/onslaught/controlpoint_icon_gib4.md3", 3, FALSE);
+			ons_throwgib(self.origin, (2 * randomvec() - '1 1 1') * 75, "models/onslaught/controlpoint_icon_gib4.md3", 3, FALSE);
 		}
 		self.owner.goalentity = world;
 		self.owner.islinked = FALSE;
