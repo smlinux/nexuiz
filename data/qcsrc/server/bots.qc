@@ -2312,10 +2312,16 @@ float bot_shouldattack(entity e)
 		if (e.team != 0)
 			return FALSE;
 	}
-	if(!teams_matter)
-		if(bot_ignore_bots)
-			if(clienttype(e) == CLIENTTYPE_BOT)
-				return FALSE;
+
+	if(teams_matter)
+	{
+		if(e.team==0)
+			return FALSE;
+	}
+	else if(bot_ignore_bots)
+		if(clienttype(e) == CLIENTTYPE_BOT)
+			return FALSE;
+
 	if (!e.takedamage)
 		return FALSE;
 	if (e.deadflag)
