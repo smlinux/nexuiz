@@ -876,7 +876,7 @@ void havocbot_chooseweapon()
 	if(i < cvar("g_balance_campingrifle_reloadtime") + 1)
 		return;
 
-	local float w, s;
+	local float w;
 	local float rocket  ; rocket   =-1000;
 	local float nex     ; nex      =-1000;
 	local float hagar   ; hagar    =-1000;
@@ -888,13 +888,11 @@ void havocbot_chooseweapon()
 	local float campingrifle ; campingrifle  =-1000;
 	local float laser   ; laser    =-1000;
 	local float minstanex ; minstanex =-1000;
-	local float currentscore;
 	local float bestscore; bestscore = 0;
 	local float bestweapon; bestweapon=self.switchweapon;
 	local float distance; distance=bound(10,vlen(self.origin-self.enemy.origin)-200,10000);
 	local float maxdelaytime=0.5;
 	local float spreadpenalty=10;
-	local float distancefromfloor;
 
 	// Should it do a weapon combo?
 	local float af, ct, combo_time, combo;
@@ -961,6 +959,8 @@ void havocbot_chooseweapon()
 	// TODO: This disabled code is not working well and got replaced by custom weapon priorities.
 	// However, this logic should be refactored and moved to weapons code so each new weapon can be
 	// evaluated dynamically by bots without updating the "ai" or config files.	--mand1nga
+	float s, distancefromfloor, currentscore;
+
 
 	// Formula:
 	//	(Damage/Sec * Weapon spefic change to get that damage)
