@@ -841,11 +841,16 @@ void readplayerstartcvars()
     else if (g_weaponarena)
     {
         start_weapons = g_weaponarena;
-        start_ammo_rockets = 999;
-        start_ammo_shells = 999;
-        start_ammo_cells = 999;
-        start_ammo_nails = 999;
-        start_ammo_fuel = 999;
+		if (g_weaponarena & (WEPBIT_GRENADE_LAUNCHER | WEPBIT_HAGAR | WEPBIT_ROCKET_LAUNCHER))
+			start_ammo_rockets = 999;
+		if (g_weaponarena & WEPBIT_SHOTGUN)
+			start_ammo_shells = 999;
+		if (g_weaponarena & (WEPBIT_ELECTRO | WEPBIT_CRYLINK | WEPBIT_NEX | WEPBIT_MINSTANEX | WEPBIT_HLAC | WEPBIT_HOOK))
+			start_ammo_cells = 999;
+		if (g_weaponarena & (WEPBIT_UZI | WEPBIT_CAMPINGRIFLE))
+			start_ammo_nails = 999;
+		if (g_weaponarena & WEPBIT_HOOK)
+			start_ammo_fuel = 999;
         start_items |= IT_UNLIMITED_AMMO;
     }
     else if (g_minstagib)
