@@ -8,10 +8,8 @@ float AI_STATUS_OUT_WATER			= 32;	// Trying to get out of water
 float AI_STATUS_WAYPOINT_PERSONAL_LINKING	= 64;	// Waiting for the personal waypoint to be linked
 float AI_STATUS_WAYPOINT_PERSONAL_GOING		= 128;	// Going to a personal waypoint
 float AI_STATUS_WAYPOINT_PERSONAL_REACHED	= 256;	// Personal waypoint reached
-#ifdef BOT_JETPACK_NAVIGATION
 float AI_STATUS_JETPACK_FLYING			= 512;
 float AI_STATUS_JETPACK_LANDING			= 1024;
-#endif
 
 // utilities for path debugging
 #ifdef DEBUG_TRACEWALK
@@ -1749,11 +1747,9 @@ entity navigation_get_bestgoal()
 	return ent;
 }
 
-#ifdef BOT_JETPACK_NAVIGATION
 // fields required for jetpack navigation
 .entity navigation_jetpack_goal;
 .vector navigation_jetpack_point;
-#endif
 
 // updates the best goal according to a weighted calculation of travel cost and item value of a new proposed item
 .void() havocbot_role;
@@ -1763,7 +1759,6 @@ void navigation_routerating(entity e, float f, float rangebias)
 	if (!e)
 		return;
 
-#ifdef BOT_JETPACK_NAVIGATION
 	// Evaluate path using jetpack
 	if(g_jetpack)
 	if(self.items & IT_JETPACK)
@@ -1903,11 +1898,9 @@ float navigation_routetogoal(entity e, vector startposition)
 	// put the entity on the goal stack
 	navigation_pushroute(e);
 
-#ifdef BOT_JETPACK_NAVIGATION
 	if(g_jetpack)
 	if(e==self.navigation_jetpack_goal)
 		return TRUE;
-#endif
 
 	// if it can reach the goal there is nothing more to do
 	if (tracewalk(self, startposition, PL_MIN, PL_MAX, e.origin, bot_navigation_movemode))
@@ -2022,9 +2015,7 @@ void navigation_poptouchedgoals()
 // begin a goal selection session (queries spawnfunc_waypoint network)
 void navigation_goalrating_start()
 {
-#ifdef BOT_JETPACK_NAVIGATION
 	self.navigation_jetpack_goal = world;
-#endif
 	navigation_bestrating = -1;
 	self.navigation_hasgoals = FALSE;
 	navigation_bestgoals_reset();

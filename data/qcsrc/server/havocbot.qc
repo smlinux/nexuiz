@@ -308,7 +308,6 @@ void havocbot_movetogoal()
 	self.movement = '0 0 0';
 	maxspeed = cvar("sv_maxspeed");
 
-#ifdef BOT_JETPACK_NAVIGATION
 	// Jetpack navigation
 	if(self.navigation_jetpack_goal)
 	if(self.goalcurrent==self.navigation_jetpack_goal)
@@ -375,7 +374,6 @@ void havocbot_movetogoal()
 		}
 		return;
 	}
-#endif
 
 	// Handling of jump pads
 	if(self.jumppadcount)
