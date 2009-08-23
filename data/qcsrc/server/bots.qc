@@ -1847,7 +1847,6 @@ void navigation_routerating(entity e, float f, float rangebias)
 			}
 		}
 	}
-	#endif
 
 	//te_wizspike(e.origin);
 	//bprint(etos(e));
