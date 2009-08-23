@@ -2,6 +2,7 @@ title CyberParcour01
 description
 author sev
 type cts 20 5
+has weapons
 settemp_for_type cts g_start_weapon_shotgun 0
 settemp_for_type cts g_start_weapon_laser 0
 settemp_for_type cts g_start_weapon_hook 0

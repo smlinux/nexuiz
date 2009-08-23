@@ -3,6 +3,7 @@ description A long nexrun challenge without weapons, it's all about your strafin
 author FruitieX
 cdtrack 17
 type cts 20 5
+has weapons
 settemp_for_type all g_start_weapon_laser 0
 settemp_for_type all g_start_weapon_shotgun 0
 settemp_for_type cts #include physicsNexrun.cfg
