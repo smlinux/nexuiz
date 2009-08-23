@@ -152,7 +152,7 @@
 \r_coronas_occlusionquery\Fade coronas according to visibility (default: enabled)
 \r_bloom\Enable bloom effect, which brightens the neighboring pixels of very bright pixels. Has a big impact on performance. (default: disabled)
 \r_hdr\Higher quality version of bloom, which has a huge impact on performance. (default: disabled)
-\r_motionblur\Motion blur strength from 0.0 to 1.0 - 0.7 recommended
+\r_motionblur\Motion blur strength from 0.0 to 1.0 - 0.5 recommended
 \r_damageblur\Amount of motionblur when hurt - 0.4 recommended
 
 \NexuizSettingsDialog/Audio\Audio settings
