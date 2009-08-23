@@ -194,6 +194,9 @@
 \showtopspeed\Show your top speed, kept on the screen for a maximum of 3 seconds
 
 \NexuizSettingsDialog/Advanced settings...\Advanced settings where you can tweak every single variable of the game
+\g_friendlyfire\Percentage of damage dealt to teammates
+\g_mirrordamage\Percentage of teamdamage that will be mirrored to you
+\g_tdm_teams_override\Override the default amount of teams in teamgames
 
 \cl_teamradar_position\-
 \cl_teamradar_size\-
