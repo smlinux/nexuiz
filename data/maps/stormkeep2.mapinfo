@@ -1,0 +1,14 @@
+title Stormkeep 2
+description Remake of the large, slow paced complex
+author FruitieX and tZork
+_diameter 3965.079590
+_spawnpoints 8
+has weapons
+type dm 30 20
+type dom 200 20
+type rune 200 20
+type lms 9 20
+type arena 10 20
+type kh 1000 20 3
+type tdm 50 20 2
+cdtrack 6

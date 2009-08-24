@@ -53,6 +53,7 @@ spiderbot
 stralenex1
 stralenex8
 strength
+stormkeep
 swamp
 teamfx
 terrain_alphafade
