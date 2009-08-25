@@ -1495,7 +1495,7 @@ void Sbar_Score(float margin)
 		}
 	}
 
-	if(minutesLeft >= 1 || cvar("sbar_increment_maptime") || timelimit == 0) {
+	if(minutesLeft >= 1 || cvar("sbar_increment_maptime") || timelimit == 0 || warmup_stage) {
 		Sbar_DrawXNum(topright - '103 0 0' + '0 2 0', minutes, 3, 18, timer_color, 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 		drawpic(topright - '53 0 0' + '0 1 0', "gfx/hud/num_colon", '18 18 0', timer_color, sbar_alpha_fg, DRAWFLAG_NORMAL);
 	}
