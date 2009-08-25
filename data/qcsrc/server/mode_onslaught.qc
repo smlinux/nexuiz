@@ -484,18 +484,7 @@ void onslaught_generator_shockwave_think()
 
 void onslaught_generator_shockwave_spawn(vector org)
 {
-	entity e;
-	e = spawn();
-	setmodel(e, "models/onslaught/shockwave.md3");
-	setorigin(e, org);
-
-	e.alpha = 0;
-	e.frame = 0;
-	e.count = 0;
-
-
-	e.think = onslaught_generator_shockwave_think;
-	e.nextthink = time + 0.05;
+	shockwave_spawn("models/onslaught/shockwave.md3", org, 5120, 0.75, 0.5);
 };
 
 void onslaught_generator_damage_think()

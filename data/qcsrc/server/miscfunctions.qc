@@ -2468,3 +2468,54 @@ entity GetCommandPlayerSlotTargetFromTokenizedCommand(float tokens, float idx) /
 
     return world;
 }
+
+
+void shockwave_think()
+{
+	float t;
+	self.nextthink = time;
+
+	t = time - self.fade_time;
+	if(t < 0)
+	{
+		self.alpha = 1;
+	}
+	else
+	{
+		self.alpha = 1 - (time - self.fade_time) * self.fade_rate;
+	}
+
+	print(ftos(time), " ", ftos(self.alpha), "\n");
+
+	if(self.alpha < 0.003)
+	{
+		remove(self);
+		return;
+	}
+
+	self.scale = (time - self.teleport_time) / (self.fade_time + 1 / self.fade_rate - self.teleport_time) * self.count;
+
+	print(ftos(self.scale), "\n");
+
+	self.frame = self.count;
+};
+
+void shockwave_spawn(string m, vector org, float sz, float t1, float t2)
+{
+	entity e;
+	e = spawn();
+	e.classname = "shockwave";
+	setmodel(e, m);
+	setorigin(e, org);
+	e.alpha = -1;
+	e.frame = 0;
+	e.count = 0;
+	e.think = shockwave_think;
+	e.nextthink = time;
+	e.fade_time = time + t1;
+	e.fade_rate = 1/t2;
+	e.teleport_time = time;
+	e.count = bound(0, sz / max6(-e.mins_x, -e.mins_y, -e.mins_z, e.maxs_x, e.maxs_y, e.maxs_z), 16);
+	print(vtos(e.mins), " ", vtos(e.maxs), "\n");
+	setsize(e, e.mins * sz, e.maxs * sz);
+}
