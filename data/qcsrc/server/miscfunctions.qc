@@ -2485,8 +2485,6 @@ void shockwave_think()
 		self.alpha = 1 - (time - self.fade_time) * self.fade_rate;
 	}
 
-	print(ftos(time), " ", ftos(self.alpha), "\n");
-
 	if(self.alpha < 0.003)
 	{
 		remove(self);
@@ -2494,8 +2492,6 @@ void shockwave_think()
 	}
 
 	self.scale = (time - self.teleport_time) / (self.fade_time + 1 / self.fade_rate - self.teleport_time) * self.count;
-
-	print(ftos(self.scale), "\n");
 
 	self.frame = self.count;
 };
@@ -2515,7 +2511,9 @@ void shockwave_spawn(string m, vector org, float sz, float t1, float t2)
 	e.fade_time = time + t1;
 	e.fade_rate = 1/t2;
 	e.teleport_time = time;
-	e.count = bound(0, sz / max6(-e.mins_x, -e.mins_y, -e.mins_z, e.maxs_x, e.maxs_y, e.maxs_z), 16);
-	print(vtos(e.mins), " ", vtos(e.maxs), "\n");
+	if(sz >= 0)
+		e.count = bound(0, sz / max6(-e.mins_x, -e.mins_y, -e.mins_z, e.maxs_x, e.maxs_y, e.maxs_z), 16);
+	else
+		e.count = -sz;
 	setsize(e, e.mins * sz, e.maxs * sz);
 }

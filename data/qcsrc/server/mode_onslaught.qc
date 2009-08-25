@@ -461,30 +461,9 @@ void onslaught_generator_ray_spawn(vector org)
 	e.nextthink = time + 0.05;
 };
 
-void onslaught_generator_shockwave_think()
-{
-	self.nextthink = time + 0.05;
-	if(self.count > 25)
-	{
-		self.think = SUB_Remove;
-		return;
-	}
-
-	if(self.count > 15)
-		self.alpha -= 0.1;
-	else
-		self.alpha = 1;
-
-	self.scale = self.count * 4;
-	setsize(self, self.mins * self.scale, self.maxs * self.scale);
-	self.frame = self.count;
-
-	self.count +=1;
-};
-
 void onslaught_generator_shockwave_spawn(vector org)
 {
-	shockwave_spawn("models/onslaught/shockwave.md3", org, 5120, 0.75, 0.5);
+	shockwave_spawn("models/onslaught/shockwave.md3", org, -64, 0.75, 0.5);
 };
 
 void onslaught_generator_damage_think()
