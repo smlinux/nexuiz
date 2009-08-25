@@ -1,8 +1,5 @@
 void drawstringright(vector, string, vector, vector, float, float);
 void drawstringcenter(vector, string, vector, vector, float, float);
-void Sbar_DrawAccuracyStats();
-void Sbar_DrawAccuracyStats_Description_Splash(vector);
-void Sbar_DrawAccuracyStats_Description_Hitscan(vector);
 float weapon_hits[WEP_COUNT];
 float weapon_fired[WEP_COUNT];
 float weapon_number;
@@ -1936,6 +1933,22 @@ void Sbar_ShowSpeed(void)
 	drawstringcenter('1 0 0' + pos * '0 1 0', speed, numsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 }
 
+void Sbar_DrawAccuracyStats_Description_Hitscan(vector position)
+{
+	drawstring(position + '0 3 0' * sbar_fontsize_y, "Shots fired:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+	drawstring(position + '0 5 0' * sbar_fontsize_y, "Shots hit:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+	drawstring(position + '0 7 0' * sbar_fontsize_y, "Accuracy:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+	drawstring(position + '0 9 0' * sbar_fontsize_y, "Shots missed:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+}
+
+void Sbar_DrawAccuracyStats_Description_Splash(vector position)
+{
+	drawstring(position + '0 3 0' * sbar_fontsize_y, "Maximum damage:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+	drawstring(position + '0 5 0' * sbar_fontsize_y, "Actual damage:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+	drawstring(position + '0 7 0' * sbar_fontsize_y, "Accuracy:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+	drawstring(position + '0 9 0' * sbar_fontsize_y, "Damage wasted:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+}
+
 void Sbar_DrawAccuracyStats()
 {
 	float i, count_hitscan, count_splash, row;  // count is the number of 'colums'
@@ -1951,15 +1964,16 @@ void Sbar_DrawAccuracyStats()
 	fill_size_y = 10 * sbar_fontsize_y;  // height of the background
 
 	drawfont = sbar_bigfont;
-
 	pos_x = 0;
 	pos_y = SCOREBOARD_OFFSET;
 	pos_z = 0;
 	drawstringcenter(pos, "Weapon Accuracy", 2 * sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+
 	left_border = col_margin + 11 * sbar_fontsize_x;
 
 	if(warmup_stage)
 	{
+		drawfont = sbar_font;
 		pos_y += 40;
 		if(mod(time, 1) >= 0.4)
 			drawstringcenter(pos, "Stats are not tracked during warmup stage", sbar_fontsize, '1 1 0', sbar_alpha_fg, DRAWFLAG_NORMAL);
@@ -1972,6 +1986,8 @@ void Sbar_DrawAccuracyStats()
 
 	float top_border_splash = SCOREBOARD_OFFSET + 175;  // position where the splash row starts: pixels down the screen
 	Sbar_DrawAccuracyStats_Description_Splash('1 0 0' * col_margin + '0 1 0' * top_border_splash);
+
+	drawfont = sbar_font;
 
 	for(i = WEP_FIRST; i <= WEP_LAST; ++i)
 	{
@@ -2085,26 +2101,6 @@ void Sbar_DrawAccuracyStats()
 			++count_hitscan;
 		}
 	}
-}
-
-void Sbar_DrawAccuracyStats_Description_Hitscan(vector position)
-{
-	drawfont = sbar_font;
-	 // hitscan stats
-	drawstring(position + '0 3 0' * sbar_fontsize_y, "Shots fired:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
-	drawstring(position + '0 5 0' * sbar_fontsize_y, "Shots hit:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
-	drawstring(position + '0 7 0' * sbar_fontsize_y, "Accuracy:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
-	drawstring(position + '0 9 0' * sbar_fontsize_y, "Shots missed:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
-}
-
-void Sbar_DrawAccuracyStats_Description_Splash(vector position)
-{
-	//splash stats
-	drawfont = sbar_font;
-	drawstring(position + '0 3 0' * sbar_fontsize_y, "Maximum damage:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
-	drawstring(position + '0 5 0' * sbar_fontsize_y, "Actual damage:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
-	drawstring(position + '0 7 0' * sbar_fontsize_y, "Accuracy:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
-	drawstring(position + '0 9 0' * sbar_fontsize_y, "Damage wasted:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 }
 
 void drawstringright(vector position, string text, vector scale, vector rgb, float alpha, float flag)
