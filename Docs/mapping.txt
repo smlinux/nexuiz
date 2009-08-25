@@ -147,8 +147,9 @@ graphics card LOVES images of such dimension.
 
 In order to get Domination working well in your map, you need to place dom_team
 and dom_controlpoint entites. You *must* have at least 3 dom_team entities - 2
-minimum teams and one blank one (empty netname and no team). You can have up
-to 4 teams (5 dom_team entities).
+minimum teams and one blank one (empty netname and no team). You can have up to
+4 teams (5 dom_team entities), and remember: if you set 3 teams, the third team
+must be the yellow one, according to the team order.
 
 Dom Team
 --------
@@ -199,20 +200,18 @@ Here is an example entry in a .ent file that includes colored text and 3 teams:
 "model" "models/domination/dom_red.md3"
 }
 {
-"classname" "dom_team"
-"netname" "^6Pink Team"
-"cnt" "9"
-"noise" ""
-"noise1" "domination/claim.wav"
-"model" "models/domination/dom_pink.md3"
-}
-{
-"classname" "dom_team"
 "netname" "^3Yellow Team"
 "cnt" "12"
 "noise" ""
 "noise1" "domination/claim.wav"
 "model" "models/domination/dom_yellow.md3"
+}
+{
+"netname" "^6Pink Team"
+"cnt" "9"
+"noise" ""
+"noise1" "domination/claim.wav"
+"model" "models/domination/dom_pink.md3"
 }
 {
 "classname" "dom_controlpoint"
@@ -253,7 +252,7 @@ Here is an example entry in a .ent file that includes colored text and 3 teams:
 
 
 As you can see in the example, there are 5 dom_team ents: one blank, Red, Blue,
-Pink and Yellow. Each control point has a different message (giving it a
+Yellow and Pink. Each control point has a different message (giving it a
 special name), and the one in the hallways gives 3 frags every 5 seconds
 instead of just one, making it more valuable.
 

@@ -71,8 +71,8 @@ team colors:
     1 = No Team (Domination)
     5 = Red Team
    14 = Blue Team
-   10 = Pink Team
    13 = Yellow Team
+   10 = Pink Team
 
 label flags:
    !! = primary sorting key

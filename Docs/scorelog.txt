@@ -35,8 +35,8 @@ example:
 team colors:
    Red Team	=  5
    Blue Team	= 14
-   Pink Team	= 10
    Yellow Team	= 13
+   Pink Team	= 10
 
    other team numbers may appear in free for all games
 
