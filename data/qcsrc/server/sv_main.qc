@@ -194,7 +194,9 @@ void StartFrame (void)
 	sv_warsowbunny_backtosideratio = cvar("sv_warsowbunny_backtosideratio");
 	teamplay = cvar ("teamplay");
 	sys_ticrate = cvar("sys_ticrate");
-	orig_slowmo = cvar("slowmo");
+
+	if (timeoutStatus == 1) // just before the timeout (when timeoutStatus will be 2)
+		orig_slowmo = cvar("slowmo"); // slowmo will be restored after the timeout
 
 	if(teams_matter && !teamplay)
 		teamplay = 3;
@@ -206,9 +208,9 @@ void StartFrame (void)
 	Spawnqueue_Check();
 
 	// if in warmup stage and limit for warmup is hit start match
-	if (inWarmupStage
-	    && 0 < g_warmup_limit
-	    && time >= g_warmup_limit)
+	if (inWarmupStage)
+	if ((g_warmup_limit > 0 && time >= g_warmup_limit)
+	 || (g_warmup_limit == 0 && cvar("timelimit") != 0 && time >= cvar("timelimit") * 60))
 	{
 		ReadyRestart();
 		return;
