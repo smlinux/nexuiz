@@ -2206,6 +2206,7 @@ void Sbar_Draw (void)
 	pos = '0 0 0';
 
 	sbar_fontsize = Sbar_GetFontsize("sbar_fontsize");
+	sbar_fontsize_spec = Sbar_GetFontsize("sbar_fontsize_spec");
 
 	if(spectatee_status && !intermission)
 	{
@@ -2215,9 +2216,9 @@ void Sbar_Draw (void)
 			s = GetPlayerName(spectatee_status - 1);
 		// spectated player name between HUD and chat area, aligned to the left
 		pos_x = bottomleft_x;
-		pos_y = bottom_y - 61;
-		s = textShortenToWidth(s, vid_conwidth/2.5/sbar_fontsize_x, stringwidth_colors);
-		drawcolorcodedstring(pos, s, sbar_fontsize, 1, DRAWFLAG_NORMAL);
+		pos_y = bottom_y - 66;
+		s = textShortenToWidth(s, vid_conwidth/2.5/sbar_fontsize_spec_x, stringwidth_colors);
+		drawcolorcodedstring(pos, s, sbar_fontsize_spec, 1, DRAWFLAG_NORMAL);
 
 		// spectator text in the upper right corner
 		if(spectatee_status == -1)
