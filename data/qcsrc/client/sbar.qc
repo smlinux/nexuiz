@@ -2499,11 +2499,14 @@ void Sbar_Draw (void)
 			{
 				if (stat_items & GetAmmoItemCode(i))
 				{
-					if (vid_conwidth < 800)
-						pos_x = 105;
-					else
+					if (vid_conwidth >= 800) {
 						pos_x = 170;
-					pos_y = -40;
+						pos_y = -40;
+					}
+					else {
+						pos_x = 105;
+						pos_y = -32;
+					}
 
 					drawpic(bottomleft + pos + '0 1.5 0', "gfx/hud/sb_ammobg", '107 29 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 					drawpic(bottomleft + pos + '76 3 0', GetAmmoPicture(i), '24 24 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
@@ -2548,13 +2551,18 @@ void Sbar_Draw (void)
 			float invincibility_time, dt;
 			invincibility_time = getstatf(STAT_INVINCIBLE_FINISHED);
 			dt = invincibility_time - time;
-			if (dt > 0) { // if the invincibility timer is active, draw fuel ammo elsewhere
-				pos_x = bottom_x + 140;
-				pos_y = bottom_y - 72;
+			if (vid_conwidth >= 800) {
+				if (dt > 0) { // if the invincibility timer is active, draw fuel ammo elsewhere
+					pos_x = bottom_x + 140;
+					pos_y = bottom_y - 72;
+				}
+				else { // if the invincibility timer is inactive, draw the fuel ammo there (it's rare to have invincibility + fuel anyway)
+					pos_x = bottom_x + 140;
+					pos_y = bottom_y - 20;
+				}
 			}
-			else { // if the invincibility timer is inactive, draw the fuel ammo there (it's rare to have invincibility + fuel anyway)
-				pos_x = bottom_x + 140;
-				pos_y = bottom_y - 22;
+			else {
+				pos = bottomleft + '105 -40 0' + '25 -8 0';
 			}
 			drawpic(pos - '0 2 0' + '52 0 0', GetAmmoPicture(4), '20 20 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 			if (a > 10)
