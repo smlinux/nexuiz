@@ -28,6 +28,7 @@ final_rage
 flags
 flamethrower
 harlequin_sky
+hip_interstellar
 hlac
 kaznexctf2
 leiprojectile
