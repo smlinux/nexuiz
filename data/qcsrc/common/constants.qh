@@ -82,6 +82,7 @@ const float ENT_CLIENT_CLIENTDATA = 18;
 const float ENT_CLIENT_RANDOMSEED = 19;
 const float ENT_CLIENT_WALL = 20;
 const float ENT_CLIENT_SPIDERBOT = 21;
+const float ENT_CLIENT_MODELEFFECT = 22;
 
 const float ENT_CLIENT_TURRET = 40;
 
