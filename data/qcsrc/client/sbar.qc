@@ -2216,7 +2216,7 @@ void Sbar_Draw (void)
 			s = GetPlayerName(spectatee_status - 1);
 		// spectated player name between HUD and chat area, aligned to the left
 		pos_x = bottomleft_x;
-		pos_y = bottom_y - 66;
+		pos_y = bottom_y - 50 - sbar_fontsize_spec_y;
 		s = textShortenToWidth(s, vid_conwidth/2.5/sbar_fontsize_spec_x, stringwidth_colors);
 		drawcolorcodedstring(pos, s, sbar_fontsize_spec, 1, DRAWFLAG_NORMAL);
 
