@@ -2393,29 +2393,20 @@ void Sbar_Draw (void)
 		fade = bound(0.7, fade, 1);
 
 		vector bg_size; // hud background size
-		bg_size_x = 800;
-		if (vid_conwidth > 800) // if conwidth > 800, resize the background image
-			bg_size_x = vid_conwidth;
+		bg_size_x = 1600;
 		bg_size_y = 58;
 		bg_size_z = 0;
 
-		vector bgoffset; // hud background offset
-		bgoffset_x = 0;
-		bgoffset_y = 0;
-		bgoffset_z = 0;
-		if (vid_conwidth < 800) // if conwidth < 800 we need to offset the background image to keep it centered, as it will be scaled up
-			bgoffset_x = (vid_conwidth - 800) / 2;
-
-		if (cvar("viewsize") <= 100) {
+		if (cvar("viewsize") <= 100 && vid_conwidth <= 1600) {
 			if (teamplay)
-				drawpic(bottomleft - '0 58 0' + bgoffset, "gfx/hud/sbar", bg_size, GetTeamRGB(myteam) * sbar_color_bg_team, sbar_alpha_bg, DRAWFLAG_NORMAL); // hud color = myteam color
+				drawpic(bottom - '800 58 0', "gfx/hud/sbar", bg_size, GetTeamRGB(myteam) * sbar_color_bg_team, sbar_alpha_bg, DRAWFLAG_NORMAL); // hud color = myteam color
 			else {
 				// allow for custom HUD colors in non-teamgames
 				color_x = cvar("sbar_color_bg_r");
 				color_y = cvar("sbar_color_bg_g");
 				color_z = cvar("sbar_color_bg_b");
 
-				drawpic(bottomleft - '0 58 0' + bgoffset, "gfx/hud/sbar", bg_size, color, sbar_alpha_bg, DRAWFLAG_NORMAL);
+				drawpic(bottom - '800 58 0', "gfx/hud/sbar", bg_size, color, sbar_alpha_bg, DRAWFLAG_NORMAL);
 			}
 		}
 
@@ -2500,45 +2491,46 @@ void Sbar_Draw (void)
 				if (stat_items & GetAmmoItemCode(i))
 				{
 					if (vid_conwidth >= 800) {
-						pos_x = 170;
-						pos_y = -40;
+						pos_x = 230;
+						pos_y = 40;
 					}
 					else {
-						pos_x = 105;
-						pos_y = -32;
+						pos_x = 206;
+						pos_y = 33;
 					}
 
-					drawpic(bottomleft + pos + '0 1.5 0', "gfx/hud/sb_ammobg", '107 29 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
-					drawpic(bottomleft + pos + '76 3 0', GetAmmoPicture(i), '24 24 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+					if(vid_conwidth >= 800)
+						drawpic(bottom - pos + '0 1.5 0', "gfx/hud/sb_ammobg", '107 29 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+					drawpic(bottom - pos + '76 3 0', GetAmmoPicture(i), '24 24 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 					if(a < 10)
-						Sbar_DrawXNum(bottomleft + pos + '5 5 0', a, 3, 24, '0.7 0 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+						Sbar_DrawXNum(bottom - pos + '5 5 0', a, 3, 24, '0.7 0 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 					else
-						Sbar_DrawXNum(bottomleft + pos + '5 5 0', a, 3, 24, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+						Sbar_DrawXNum(bottom - pos + '5 5 0', a, 3, 24, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 				}
 			}
 			else
 			{
 				if (a > 0) {
 					switch (i) {
-						case 0: pos_x = 114; pos_y = -48; break; // shells
-						case 1: pos_x = 114; pos_y = -26; break; // bullets
-						case 2: pos_x = 200; pos_y = -48; break; // rockets
-						case 3: pos_x = 200; pos_y = -26; break; // cells
+						case 0: pos_x = 286; pos_y = 48; break; // shells
+						case 1: pos_x = 286; pos_y = 26; break; // bullets
+						case 2: pos_x = 200; pos_y = 48; break; // rockets
+						case 3: pos_x = 200; pos_y = 26; break; // cells
 					}
 
 					if (stat_items & GetAmmoItemCode(i))
-						drawpic(bottomleft + pos + '0 1.5 0', "gfx/hud/sb_ammobg", '80 22 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
-					drawpic(bottomleft + pos + '56 3 0', GetAmmoPicture(i), '18 18 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+						drawpic(bottom - pos + '0 1.5 0', "gfx/hud/sb_ammobg", '80 22 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+					drawpic(bottom - pos + '56 3 0', GetAmmoPicture(i), '18 18 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 					if (a < 10) {
 						if(stat_items & GetAmmoItemCode(i))
-							Sbar_DrawXNum(bottomleft + pos + '6 4.5 0', a, 3, 16, '0.7 0 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+							Sbar_DrawXNum(bottom - pos + '6 4.5 0', a, 3, 16, '0.7 0 0', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 						else
-							Sbar_DrawXNum(bottomleft + pos + '6 4.5 0', a, 3, 16, '0.7 0 0', 0, 0, sbar_alpha_fg * 0.7, DRAWFLAG_NORMAL);
+							Sbar_DrawXNum(bottom - pos + '6 4.5 0', a, 3, 16, '0.7 0 0', 0, 0, sbar_alpha_fg * 0.7, DRAWFLAG_NORMAL);
 					} else {
 						if(stat_items & GetAmmoItemCode(i))
-							Sbar_DrawXNum(bottomleft + pos + '6 4.5 0', a, 3, 16, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+							Sbar_DrawXNum(bottom - pos + '6 4.5 0', a, 3, 16, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 						else
-							Sbar_DrawXNum(bottomleft + pos + '6 4.5 0', a, 3, 16, '0.7 0.7 0.7', 0, 0, sbar_alpha_fg * 0.7, DRAWFLAG_NORMAL);
+							Sbar_DrawXNum(bottom - pos + '6 4.5 0', a, 3, 16, '0.7 0.7 0.7', 0, 0, sbar_alpha_fg * 0.7, DRAWFLAG_NORMAL);
 					}
 				}
 			}
@@ -2561,8 +2553,9 @@ void Sbar_Draw (void)
 					pos_y = bottom_y - 20;
 				}
 			}
-			else {
-				pos = bottomleft + '105 -40 0' + '25 -8 0';
+			else { // draw fuel on top of ammo if vid_conwidth < 800
+				pos_x = bottom_x - 200;
+				pos_y = bottom_y - 45;
 			}
 			drawpic(pos - '0 2 0' + '52 0 0', GetAmmoPicture(4), '20 20 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 			if (a > 10)
