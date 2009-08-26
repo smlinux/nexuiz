@@ -94,17 +94,15 @@ void turret_flac_dinit()
     self.ammo_flags     = TFL_AMMO_ROCKETS | TFL_AMMO_RECHARGE;
     self.aim_flags      = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE;
 
-    if (turret_stdproc_init("flac_std",0) == 0)
+    if (turret_stdproc_init("flac_std",0,"models/turrets/base.md3","models/turrets/flac.md3") == 0)
     {
         remove(self);
         return;
     }
+    setsize(self.tur_head,'-32 -32 0','32 32 64');
 
     self.damage_flags |= TFL_DMG_HEADSHAKE;
     self.target_select_flags |= TFL_TARGETSELECT_NOTURRETS;
-
-    setmodel(self,"models/turrets/base.md3");
-    setmodel(self.tur_head,"models/turrets/flac.md3");
 
     if (!turret_tag_setup())
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");

@@ -49,17 +49,12 @@ void turret_fusionreactor_dinit()
     self.aim_flags = TFL_AIM_NO;
     self.track_flags = TFL_TRACK_NO;
     self.turret_respawnhook = turret_fusionreactor_respawnhook;
-    if (turret_stdproc_init("fusreac_std",0) == 0)
+    if (turret_stdproc_init("fusreac_std",0,"models/turrets/base.md3","models/turrets/reactor.md3") == 0)
     {
         remove(self);
         return;
     }
-
-    setmodel(self,"models/turrets/base.md3");
-    setmodel(self.tur_head,"models/turrets/reactor.md3");
-
-    //if(!turret_tag_setup())
-    //    dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
+    setsize(self.tur_head,'-32 -32 0','32 32 64');
 
     self.tur_head.scale = 0.75;
     setorigin(self.tur_head,self.origin + '0 0 25');

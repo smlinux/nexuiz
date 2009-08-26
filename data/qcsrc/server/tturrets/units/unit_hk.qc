@@ -433,7 +433,7 @@ void turret_hk_dinit()
 
     self.shoot_flags = TFL_SHOOT_CLEARTARGET;
 
-    if (turret_stdproc_init("hk_std",0) == 0)
+    if (turret_stdproc_init("hk_std",0,"models/turrets/base.md3","models/turrets/hk.md3") == 0)
     {
         remove(self);
         return;
@@ -441,8 +441,6 @@ void turret_hk_dinit()
 
     self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_TEAMCHECK;
 
-    setmodel(self,"models/turrets/base.md3");
-    setmodel(self.tur_head,"models/turrets/hk.md3");
 
     if (!turret_tag_setup())
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");

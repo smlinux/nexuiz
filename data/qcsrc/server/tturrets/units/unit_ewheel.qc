@@ -439,7 +439,7 @@ void turret_ewheel_dinit()
     self.turret_respawnhook = ewheel_respawnhook;
     self.turret_diehook = ewheel_diehook;
 
-    if (turret_stdproc_init("ewheel_std",0) == 0)
+    if (turret_stdproc_init("ewheel_std",0,"models/turrets/ewheel-base.md3","models/turrets/ewheel-gun1.md3") == 0)
     {
         remove(self);
         return;
@@ -454,9 +454,9 @@ void turret_ewheel_dinit()
     self.solid      = SOLID_SLIDEBOX;
     self.takedamage = DAMAGE_AIM;
 
-    setmodel(self,"models/turrets/ewheel-base.md3");
-    setmodel(self.tur_head,"models/turrets/ewheel-gun1.md3");
     setattachment(self.tur_head,self,"tag_head");
+    setsize(self,'-32 -32 0','32 32 48');
+    setsize(self.tur_head,'0 0 0','0 0 0');
 
     self.pos1 = self.origin;
 

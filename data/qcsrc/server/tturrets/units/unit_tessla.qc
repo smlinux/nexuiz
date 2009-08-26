@@ -144,14 +144,14 @@ void turret_tesla_dinit()
     self.aim_flags           = TFL_AIM_NO;
     self.track_flags         = TFL_TRACK_NO;
 
-    if (turret_stdproc_init("tesla_std",0) == 0)
+    if (turret_stdproc_init("tesla_std",0,"models/turrets/tesla_base.md3","models/turrets/tesla_head.md3") == 0)
     {
         remove(self);
         return;
     }
-
-    setmodel(self,"models/turrets/tesla_base.md3");
-    setmodel(self.tur_head,"models/turrets/tesla_head.md3");
+    setsize(self,'-48 -48 0','48 48 96');
+    //setmodel(self,"models/turrets/tesla_base.md3");
+    //setmodel(self.tur_head,"models/turrets/tesla_head.md3");
 
     self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_MISSILES |
                                  TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK;

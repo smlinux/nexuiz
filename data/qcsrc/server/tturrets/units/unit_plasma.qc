@@ -127,7 +127,7 @@ void turret_plasma_std_init()
     self.aim_flags      = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_GROUND2;
     self.turrcaps_flags = TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_MEDPROJ | TFL_TURRCAPS_PLAYERKILL | TFL_TURRCAPS_MISSILEKILL;
 
-    if (turret_stdproc_init("plasma_std",FALSE) == 0)
+    if (turret_stdproc_init("plasma_std",FALSE,"models/turrets/base.md3","models/turrets/plasma.md3") == 0)
     {
         remove(self);
         return;
@@ -141,8 +141,8 @@ void turret_plasma_std_init()
     //self.target_select_flags |= TFL_TARGETSELECT_FOV;
     //self.target_select_fov    = 45;
 
-    setmodel(self,"models/turrets/base.md3");
-    setmodel(self.tur_head,"models/turrets/plasma.md3");
+    //setmodel(self,"models/turrets/base.md3");
+    //setmodel(self.tur_head,"models/turrets/plasma.md3");
     // self.tur_head.alpha = -1;
 
     if (!turret_tag_setup())
@@ -168,7 +168,7 @@ void turret_plasma_dual_init()
     self.aim_flags      = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE  | TFL_AIM_GROUND2 ;
     self.turrcaps_flags = TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_MEDPROJ | TFL_TURRCAPS_PLAYERKILL;
 
-    if (turret_stdproc_init("plasma_dual",0) == 0)
+    if (turret_stdproc_init("plasma_dual",0,"models/turrets/base.md3","models/turrets/plasmad.md3") == 0)
     {
         remove(self);
         return;
@@ -178,8 +178,8 @@ void turret_plasma_dual_init()
     //self.firecheck_flags |= (TFL_FIRECHECK_AFF | TFL_FIRECHECK_VERIFIED);
     //self.firecheck_flags |= TFL_FIRECHECK_AFF;
 
-    setmodel(self,"models/turrets/base.md3");
-    setmodel(self.tur_head,"models/turrets/plasmad.md3");
+    //setmodel(self,"models/turrets/base.md3");
+    //setmodel(self.tur_head,"models/turrets/plasmad.md3");
 
 
     if (!turret_tag_setup())

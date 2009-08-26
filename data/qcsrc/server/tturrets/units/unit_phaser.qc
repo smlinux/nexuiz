@@ -116,14 +116,11 @@ void turret_phaser_dinit()
     self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
     self.aim_flags = TFL_AIM_ZEASE | TFL_AIM_LEAD;
 
-    if (turret_stdproc_init("phaser_std",0) == 0)
+    if (turret_stdproc_init("phaser_std",0,"models/turrets/base.md3","models/turrets/phaser.md3") == 0)
     {
         remove(self);
         return;
     }
-
-    setmodel(self,"models/turrets/base.md3");
-    setmodel(self.tur_head,"models/turrets/phaser.md3");
 
     if (!turret_tag_setup())
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");

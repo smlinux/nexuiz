@@ -35,7 +35,7 @@
 .entity wkr_spawn;
 
 #define WALKER_MIN '-70 -70 5'
-#define WALKER_MAX '70 70 70'
+#define WALKER_MAX '70 70 90'
 
 #define WALKER_PATH(s,e) pathlib_astar(s,e)
 
@@ -939,11 +939,12 @@ void turret_walker_dinit()
     self.turret_diehook = walker_diehook;
 
     self.ticrate = 0.05;
-    if (turret_stdproc_init("walker_std",0) == 0)
+    if (turret_stdproc_init("walker_std",FALSE,"models/turrets/walker_body.md3","models/turrets/walker_head_minigun.md3") == 0)
     {
         remove(self);
         return;
     }
+    setsize(self.tur_head,'0 0 0','0 0 0');
 
     self.walker_verbs_move   = spawn();
     self.walker_verbs_attack = spawn();
@@ -966,8 +967,8 @@ void turret_walker_dinit()
     self.solid      = SOLID_SLIDEBOX;
     self.takedamage = DAMAGE_AIM;
 
-    setmodel(self,"models/turrets/walker_body.md3");
-    setmodel(self.tur_head,"models/turrets/walker_head_minigun.md3");
+    //setmodel(self,"models/turrets/walker_body.md3");
+    //setmodel(self.tur_head,"models/turrets/walker_head_minigun.md3");
     setmodel(self.wkr_spawn,"models/turrets/walker_spawn.md3");
 
     setattachment(self.tur_head,self,"tag_head");

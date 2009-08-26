@@ -42,16 +42,13 @@ void turret_machinegun_std_init()
     else
         self.aim_flags      |= TFL_AIM_SHOTTIMECOMPENSATE;
 
-    if (turret_stdproc_init("machinegun_std",0) == 0)
+    if (turret_stdproc_init("machinegun_std",0,"models/turrets/base.md3","models/turrets/machinegun.md3") == 0)
     {
         remove(self);
         return;
     }
 
     self.damage_flags |= TFL_DMG_HEADSHAKE;
-
-    setmodel(self,"models/turrets/base.md3");
-    setmodel(self.tur_head,"models/turrets/machinegun.md3");
 
     if (!turret_tag_setup())
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");

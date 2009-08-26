@@ -881,7 +881,7 @@ void turret_link()
 * (unless you have a very good reason not to)
 * if the return value is 0, the turret should be removed.
 */
-float turret_stdproc_init (string cvar_base_name, float csqc_shared)
+float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base, string head)
 {
 	entity e,ee;
 
@@ -1145,6 +1145,13 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared)
     self.tur_head.netname = self.tur_head.classname = "turret_head";
     self.tur_head.team    = self.team;
     self.tur_head.owner   = self;
+
+    setmodel(self,base);
+    setmodel(self.tur_head,head);
+
+    setsize(self,'-32 -32 0','32 32 32');
+    setsize(self.tur_head,'-32 -32 0','32 32 32');
+
 
     // Defend mode?
     if(!self.tur_defend)
