@@ -2277,7 +2277,7 @@ void Sbar_Draw (void)
 	else
 		blinkcolor = "^3";
 
-	if(ready_waiting && !intermission)
+	if(ready_waiting && !intermission && !spectatee_status)
 	{
 		if(ready_waiting_for_me)
 		{
@@ -2295,7 +2295,7 @@ void Sbar_Draw (void)
 		}
 		o = Sbar_DrawNoteLine(o, s);
 	}
-	else if(warmup_stage && !intermission)
+	else if(warmup_stage && !intermission && !spectatee_status)
 	{
 		s = strcat("^2Press ^3", getcommandkey("ready", "ready"), "^2 to end warmup");
 		o = Sbar_DrawNoteLine(o, s);
