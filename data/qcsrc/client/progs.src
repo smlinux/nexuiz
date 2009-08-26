@@ -38,6 +38,7 @@ damage.qc
 casings.qc
 effects.qc
 wall.qc
+modeleffects.qc
 
 //vehicles/spiderbot.qc
 Main.qc
