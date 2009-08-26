@@ -407,36 +407,9 @@ void FlagThink()
 		DropFlag(self, e, world);
 };
 
-void flag_cap_ring_think()
-{
-	self.nextthink = time + 0.05;
-	if(self.count > 24)
-	{
-		self.think = SUB_Remove;
-		return;
-	}
-
-	self.scale = self.count / 30;
-
-	self.frame = self.count;
-
-	self.count += 1;
-	self.alpha = self.alpha-0.04;
-};
-
 void flag_cap_ring_spawn(vector org)
 {
-	entity e;
-	e = spawn();
-	setmodel(e, "models/ctf/shockwavetransring.md3");
-	org_z=org_z-15;
-	setorigin(e, org);
-
-	e.count = 1;
-	e.alpha = 0.9;
-	
-	e.think = flag_cap_ring_think;
-	e.nextthink = time;
+	shockwave_spawn("models/ctf/shockwavetransring.md3", org, -0.8, 0, 1);
 };
 
 void FlagTouch()
