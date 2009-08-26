@@ -1,5 +1,5 @@
-.vector personal_v_angle; // view angles to restore on impulse 77
-.vector personal_velocity; // velocity to restore on impulse 77
+.vector personal_v_angle; // view angles to restore on reset impulse for CTF speedrun
+.vector personal_velocity; // velocity to restore on reset impulse for CTF speedrun
 
 void CopyBody(float keepvelocity);
 

@@ -360,7 +360,9 @@ void FlagThink()
 		{
 			bprint("The ", self.netname, " became impatient after ", ftos_decimals(flagcaptimerecord, 2), " seconds and returned itself\n");
 
-			self.owner.impulse = 77; // returning!
+			sound (self, CHAN_TRIGGER, self.noise3, VOL_BASE, ATTN_NONE);
+			self.owner.impulse = 141; // returning!
+
 			e = self;
 			self = self.owner;
 			ReturnFlag(e);
