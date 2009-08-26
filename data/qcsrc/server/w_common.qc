@@ -215,6 +215,7 @@ void W_BallisticBullet_Hit (void)
 		}
 
 		//calculate hits for ballistic weapons
+		if not(inWarmupStage)
 		if not(self.owner.isbot)
 		{
 			if(hit)
@@ -379,6 +380,7 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 	proj.oldvelocity = proj.velocity;
 
 	//calculate fired bullets for ballistics
+	if not(inWarmupStage)
 	if not(self.isbot)
 	{
 		self.bullets_fired[self.weapon] += 1;
@@ -423,6 +425,7 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 			self.velocity = v0;
 			self.gravity = g0;
 
+			if not(inWarmupStage)
 			if not(self.isbot)
 			{
 				self.bullets_fired[self.weapon] += 1;
