@@ -2547,5 +2547,5 @@ void modeleffect_spawn(string m, float f, vector o, vector v, vector ang, vector
 
 void shockwave_spawn(string m, vector org, float sz, float t1, float t2)
 {
-	modeleffect_spawn(m, 0, org, '0 0 0', '0 0 0', '0 0 0', 0, sz, 1, t1, t2);
+	return modeleffect_spawn(m, 0, org, '0 0 0', '0 0 0', '0 0 0', 0, sz, 1, t1, t2);
 }
