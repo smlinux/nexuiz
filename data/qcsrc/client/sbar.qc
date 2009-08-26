@@ -1284,14 +1284,8 @@ void Sbar_Score(float margin)
 
 	offset = '0 0 0';
 
-	if (vid_conwidth >= 800) {
-		score_offset_x = 196;
-		score_offset_y = 36;
-	}
-	else { // move the scores if vid_conwidth < 800
-		score_offset_x = 196;
-		score_offset_y = 84;
-	}
+	score_offset_x = 196;
+	score_offset_y = 36;
 	score_offset_z = 0;
 
 	if((scores_flags[ps_primary] & SFL_TIME) && !teamplay)
@@ -1625,6 +1619,7 @@ float Sbar_WouldDrawScoreboard ()
 }
 
 void CSQC_Strength_Timer() {
+	vector pos;
 	vector bottom;
 
 	bottom_x = vid_conwidth/2;
@@ -1648,6 +1643,11 @@ void CSQC_Strength_Timer() {
 	picsize = '22 22 0';
 	countdown_fontsize = 18;
 
+	if (vid_conwidth >= 800)
+		pos = bottom + '192 -46 0';
+	else
+		pos = bottom + '192 -94 0';
+
 	//strength
 	strength_time = getstatf(STAT_STRENGTH_FINISHED);
 	invincibility_time = getstatf(STAT_INVINCIBLE_FINISHED);
@@ -1658,18 +1658,18 @@ void CSQC_Strength_Timer() {
 		{
 			if(dt < 5)
 			{
-				drawpic_expanding_two(bottom + '192 -46 0', "gfx/hud/sb_str", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE,
+				drawpic_expanding_two(pos, "gfx/hud/sb_str", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE,
 					bound(0, (ceil(dt) - dt) / 0.5, 1));
 			}
 			else
 			{
-				drawpic(bottom + '192 -46 0', "gfx/hud/sb_str", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE);
+				drawpic(pos, "gfx/hud/sb_str", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE);
 			}
-			Sbar_DrawXNum(bottom + '152 -44 0', ceil(dt), 2, countdown_fontsize, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+			Sbar_DrawXNum(pos - '40 -2 0', ceil(dt), 2, countdown_fontsize, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 		}
 		else if(dt > -1)
 		{
-			drawpic_expanding(bottom + '192 -46 0', "gfx/hud/sb_str", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE,
+			drawpic_expanding(pos, "gfx/hud/sb_str", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE,
 				bound(0, -dt / 0.5, 1));
 		}
 	}
@@ -1681,18 +1681,18 @@ void CSQC_Strength_Timer() {
 		{
 			if(dt < 5)
 			{
-				drawpic_expanding_two(bottom + '192 -24 0', "gfx/hud/sb_invinc", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE,
+				drawpic_expanding_two(pos - '0 -22 0', "gfx/hud/sb_invinc", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE,
 					bound(0, (ceil(dt) - dt) / 0.5, 1));
 			}
 			else
 			{
-				drawpic(bottom + '192 -24 0', "gfx/hud/sb_invinc", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE);
+				drawpic(pos - '0 -22 0', "gfx/hud/sb_invinc", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE);
 			}
-			Sbar_DrawXNum(bottom + '152 -22 0', ceil(dt), 2, countdown_fontsize, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+			Sbar_DrawXNum(pos - '40 -24 0', ceil(dt), 2, countdown_fontsize, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 		}
 		else if(dt > -1)
 		{
-			drawpic_expanding(bottom + '192 -24 0', "gfx/hud/sb_invinc", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE,
+			drawpic_expanding(pos - '0 -22 0', "gfx/hud/sb_invinc", picsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE,
 				bound(0, -dt / 0.5, 1));
 		}
 	}
