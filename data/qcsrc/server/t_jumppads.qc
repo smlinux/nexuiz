@@ -150,13 +150,16 @@ void trigger_push_touch()
 		self.movedir = trigger_push_calculatevelocity(other.origin, self.enemy, self.height);
 
 	other.flags &~= FL_ONGROUND;
-	// reset tracking of oldvelocity for impact damage (sudden velocity changes)
-	other.oldvelocity = other.velocity = self.movedir;
+
+	other.velocity = self.movedir;
 
 	UpdateCSQCProjectile(other);
 
 	if (other.classname == "player")
 	{
+		// reset tracking of oldvelocity for impact damage (sudden velocity changes)
+		other.oldvelocity = other.velocity;
+
 		if(self.pushltime < time)  // prevent "snorring" sound when a player hits the jumppad more than once
 		{
 			// flash when activated
@@ -187,6 +190,9 @@ void trigger_push_touch()
 			other.lastteleporttime = time;
 		else
 			other.jumppadcount = TRUE;
+
+		// reset tracking of who pushed you into a hazard (for kill credit)
+		other.pushltime = 0;
 	}
 
 	if(self.enemy.target)
@@ -198,9 +204,6 @@ void trigger_push_touch()
 		SUB_UseTargets();
 		self = oldself;
 	}
-
-	// reset tracking of who pushed you into a hazard (for kill credit)
-	other.pushltime = 0;
 
 	if (other.flags & FL_PROJECTILE)
 		other.angles = vectoangles (other.velocity);
