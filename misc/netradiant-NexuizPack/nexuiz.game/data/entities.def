@@ -1709,3 +1709,23 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
 model="models/items/g_jetpack.md3"
 */
+
+/*QUAKED trigger_magicear (0 0 1) (-8 -8 -8) (8 8 8) IGNORE_SAY IGNORE_TEAMSAY IGNORE_TELL IGNORE_INVALIDTELL REPLACE_WHOLE_MESSAGE REPLACE_OUTSIDE CONTINUE
+Triggers targets when a given magic word has been said
+-------- KEYS --------
+message: message to wait for (can start or end with * for wildcards)
+netname: replacement text (by default, no replacement is performed if empty)
+radius: radius in which the player has to be for this to match
+target: all entities with a matching targetname will be triggered.
+target2: all entities with a matching targetname will be triggered.
+target3: all entities with a matching targetname will be triggered.
+target4: all entities with a matching targetname will be triggered.
+-------- SPAWNFLAGS --------
+IGNORE_SAY: do not respond to "say" messages
+IGNORE_TEAMSAY: do not respond to "say_team" messages
+IGNORE_TELL: do not respond to "tell" messages
+IGNORE_INVALIDTELL: do not respond to "tell" messages of invalid syntax
+REPLACE_WHOLE_MESSAGE: replace the whole message by netname, or drop the message if netname is empty
+REPLACE_OUTSIDE: also perform the replacement when outside the radius (to hide the "secret word")
+CONTINUE: even if this magic ear matched, continue looking for further matches/replacements (useful for swear word filters)
+*/
