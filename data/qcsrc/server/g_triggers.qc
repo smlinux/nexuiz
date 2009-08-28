@@ -1644,3 +1644,155 @@ void spawnfunc_trigger_disablerelay()
 {
 	self.use = trigger_disablerelay_use;
 }
+
+float magicear_matched;
+string trigger_magicear_processmessage(entity ear, entity source, float teamsay, entity privatesay, string msgin)
+{
+	float domatch, dotrigger, matchstart, l;
+	string s;
+	entity oldself;
+
+	magicear_matched = FALSE;
+
+	dotrigger = ((self.classname == "player") && ((ear.radius == 0) || (vlen(source.origin - ear.origin) <= ear.radius)));
+	domatch = ((ear.spawnflags & 32) || dotrigger);
+	if not(domatch)
+		return msgin;
+
+	if(privatesay)
+	{
+		if(ear.spawnflags & 4)
+			return msgin;
+	}
+	else
+	{
+		if(!teamsay)
+			if(ear.spawnflags & 1)
+				return msgin;
+		if(teamsay > 0)
+			if(ear.spawnflags & 2)
+				return msgin;
+		if(teamsay < 0)
+			if(ear.spawnflags & 8)
+				return msgin;
+	}
+	
+	matchstart = -1;
+	l = strlen(ear.message);
+
+	if(substring(ear.message, 0, 1) == "*")
+	{
+		if(substring(ear.message, -1, 1) == "*")
+		{
+			// two wildcards
+			// as we need multi-replacement here...
+			s = substring(ear.message, 1, -2);
+			l -= 2;
+			if(strstrofs(msgin, s, 0) >= 0)
+				matchstart = -2; // we use strreplace on s
+		}
+		else
+		{
+			// match at start
+			s = substring(ear.message, 1, -1);
+			l -= 1;
+			if(substring(msgin, -l, l) == s)
+				matchstart = strlen(msgin) - l;
+		}
+	}
+	else
+	{
+		if(substring(ear.message, -1, 1) == "*")
+		{
+			// match at end
+			s = substring(ear.message, 0, -2);
+			l -= 1;
+			if(substring(msgin, 0, l) == s)
+				matchstart = 0;
+		}
+		else
+		{
+			// full match
+			s = ear.message;
+			if(msgin == ear.message)
+				matchstart = 0;
+		}
+	}
+
+	if(matchstart == -1) // no match
+		return msgin;
+
+	magicear_matched = TRUE;
+
+	if(dotrigger)
+	{
+		oldself = activator = self;
+		self = ear;
+		SUB_UseTargets();
+		self = oldself;
+	}
+
+	if(ear.spawnflags & 16)
+	{
+		return ear.netname;
+	}
+	else if(ear.netname != "")
+	{
+		if(matchstart < 0)
+			return strreplace(s, ear.netname, msgin);
+		else
+			return strcat(
+				substring(msgin, 0, matchstart),
+				ear.netname,
+				substring(msgin, matchstart + l, -1)
+			);
+	}
+	else
+		return msgin;
+}
+
+entity magicears;
+string trigger_magicear_processmessage_forallears(entity source, float teamsay, entity privatesay, string msgin)
+{
+	entity ear;
+	string msgout;
+	for(ear = magicears; ear; ear = ear.enemy)
+	{
+		msgout = trigger_magicear_processmessage(ear, source, teamsay, privatesay, msgin);
+		if not(ear.spawnflags & 64)
+			if(magicear_matched)
+				return msgout;
+		msgin = msgout;
+	}
+	return msgin;
+}
+
+void spawnfunc_trigger_magicear()
+{
+	self.enemy = magicears;
+	magicears = self;
+
+	// actually handled in "say" processing
+	// spawnflags:
+	//   1 = ignore say
+	//   2 = ignore teamsay
+	//   4 = ignore tell
+	//   8 = ignore tell to unknown player
+	//   16 = let netname replace the whole message (otherwise, netname is a word replacement if set)
+	//   32 = perform the replacement even if outside the radius
+	//   64 = continue replacing/triggering even if this one matched
+	// message: either
+	//   *pattern*
+	// or
+	//   *pattern
+	// or
+	//   pattern*
+	// or
+	//   pattern
+	// netname:
+	//   if set, replacement for the matched text
+	// radius:
+	//   "hearing distance"
+	// target:
+	//   what to trigger
+}

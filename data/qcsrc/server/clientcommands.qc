@@ -315,9 +315,15 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "tell") {
 		e = GetCommandPlayerSlotTargetFromTokenizedCommand(tokens, 1);
 		if(e && tokens > ParseCommandPlayerSlotTarget_firsttoken)
-			Say(self, FALSE, e, substring(s, argv_start_index(ParseCommandPlayerSlotTarget_firsttoken), argv_end_index(-1) - argv_start_index(ParseCommandPlayerSlotTarget_firsttoken)), 1);
+		{
+			Say(self, FALSE, e, substring(s, argv_start_index(ParseCommandPlayerSlotTarget_firsttoken), argv_end_index(-1) - argv_start_index(ParseCommandPlayerSlotTarget_firsttoken)), TRUE);
+		}
 		else
+		{
+			if(tokens > ParseCommandPlayerSlotTarget_firsttoken)
+				trigger_magicear_processmessage_forallears(self, -1, world, substring(s, argv_start_index(ParseCommandPlayerSlotTarget_firsttoken), argv_end_index(-1) - argv_start_index(ParseCommandPlayerSlotTarget_firsttoken)));
 			sprint(self, "ERROR: usage: tell # playerid text...\n");
+		}
 		//clientcommand(self, formatmessage(s));
 	} else if(argv(0) == "info") {
 		cmd = cvar_string(strcat("sv_info_", argv(1)));
