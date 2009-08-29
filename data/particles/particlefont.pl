@@ -49,13 +49,13 @@ for my $row(0..$rows-1)
 		if($magick)
 		{
 			checkmagick $magick->Draw(
-				fill => (($row + $col)%2 ? 'green' : 'white'),
+				fill => (($row + $col)%2 ? 'green' : 'cyan'),
 				primitive => 'rectangle',
 				points => sprintf "%d,%d %d,%d", $s0 * $pixw, $t0 * $pixh, $s1 * $pixw, $t1 * $pixh
 			);
 			checkmagick $magick->Annotate(
-				x => $s0 * $pixw,
-				y => $t1 * $pixh,
+				x => $s0 * $pixw + 2,
+				y => $t1 * $pixh - 2,
 				text => $i
 			);
 		}
@@ -80,8 +80,8 @@ for my $beam(0..$beams-1)
 			points => sprintf "%d,%d %d,%d", $s0 * $pixw, $t0 * $pixh, $s1 * $pixw, $t1 * $pixh
 		);
 		checkmagick $magick->Annotate(
-			x => $s0 * $pixw,
-			y => $t1 * $pixh,
+			x => $s0 * $pixw + 2,
+			y => $t1 * $pixh - 2,
 			text => $i
 		);
 	}
