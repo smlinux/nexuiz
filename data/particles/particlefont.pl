@@ -33,8 +33,8 @@ if($magick)
 my $square = 1.0 / $cols;
 my $rows = $cols - $beams;
 
-my $dx = 0.5 / $pixw;
-my $dy = 0.5 / $pixh;
+my $dx = 1 / $pixw;
+my $dy = 1 / $pixh;
 
 my $i = 0;
 for my $row(0..$rows-1)
