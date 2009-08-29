@@ -23,6 +23,8 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_enemyplay
 .float isgenneighbor_blue, iscpneighbor_blue;
 .float isgenneighbor_red, iscpneighbor_red;
 
+.entity havocbot_ons_target;
+
 void havocbot_goalrating_ons_offenseitems(float ratingscale, vector org, float sradius)
 {
 	local entity head;
@@ -107,93 +109,128 @@ float havocbot_ons_teamcount(entity bot, float role)
 	return c;
 };
 
-float havocbot_goalrating_ons_controlpoints_attack(float ratingscale)
+void havocbot_goalrating_ons_controlpoints_attack(float ratingscale)
 {
-	local entity cp, wp, bestwp;
-	local float radius, found, bestcounter;
+	entity cp, cp1, cp2, best, pl, wp;
+	float radius, found, bestvalue, c;
 
-	for (cp = findchain(classname, "onslaught_controlpoint"); cp; cp = cp.chain)
+	cp1 = cp2 = findchain(classname, "onslaught_controlpoint");
+
+	// Filter control points
+	for (; cp2; cp2 = cp2.chain)
 	{
-		if(cp==world)
+		cp2.wpcost = c = 0;
+		cp2.wpconsidered = FALSE;
+
+		if(cp2.isshielded)
 			continue;
 
-		if(cp.isshielded)
-			continue;
-
+		// Ignore owned controlpoints
 		if(self.team == COLOR_TEAM1)
 		{
-			if( (cp.isgenneighbor_blue || cp.iscpneighbor_blue) && !(cp.isgenneighbor_red || cp.iscpneighbor_red) )
+			if( (cp2.isgenneighbor_blue || cp2.iscpneighbor_blue) && !(cp2.isgenneighbor_red || cp2.iscpneighbor_red) )
 				continue;
 		}
 		else if(self.team == COLOR_TEAM2)
 		{
-			if( (cp.isgenneighbor_red || cp.iscpneighbor_red) && !(cp.isgenneighbor_blue || cp.iscpneighbor_blue) )
+			if( (cp2.isgenneighbor_red || cp2.iscpneighbor_red) && !(cp2.isgenneighbor_blue || cp2.iscpneighbor_blue) )
 				continue;
 		}
 
-		if(cp.goalentity)
+		// Count team mates interested in this control point
+		// (easier and cleaner than keeping counters per cp and teams)
+		FOR_EACH_PLAYER(pl)
+		if(pl.team==self.team)
+		if(pl.havocbot_role_flags & HAVOCBOT_ONS_ROLE_OFFENSE)
+		if(pl.havocbot_ons_target==cp2)
+			++c;
+
+		// NOTE: probably decrease the cost of attackable control points
+		cp2.wpcost = c;
+		cp2.wpconsidered = TRUE;
+	}
+
+	// We'll consider only the best case
+	bestvalue = 99999999999;
+	for (; cp1; cp1 = cp1.chain)
+	{
+		if not(cp1.wpconsidered)
+			continue;
+
+		if(cp1.wpcost<bestvalue)
 		{
-			// Should be attacked
-			// Rate waypoints near it
-			found = FALSE;
-			bestwp = world;
-			bestcounter = 99999999999;
-			for(radius=0; radius<1000 && !found; radius+=500)
+			bestvalue = cp1.wpcost;
+			cp = cp1;
+			self.havocbot_ons_target = cp1;
+		}
+	}
+
+	if not(cp)
+		return;
+
+//	dprint(self.netname, " chose cp ranked ", ftos(bestvalue), "\n");
+
+	if(cp.goalentity)
+	{
+		// Should be attacked
+		// Rate waypoints near it
+		found = FALSE;
+		best = world;
+		bestvalue = 99999999999;
+		for(radius=0; radius<1000 && !found; radius+=500)
+		{
+			for(wp=findradius(cp.origin,radius); wp; wp=wp.chain)
 			{
-				for(wp=findradius(cp.origin,radius); wp; wp=wp.chain)
+				if(!(wp.wpflags & WAYPOINTFLAG_GENERATED))
+				if(wp.classname=="waypoint")
+				if(checkpvs(wp.origin,cp))
 				{
-					if(!(wp.wpflags & WAYPOINTFLAG_GENERATED))
-					if(wp.classname=="waypoint")
-					if(checkpvs(wp.origin,cp))
+					found = TRUE;
+					if(wp.cnt<bestvalue)
 					{
-						found = TRUE;
-						if(wp.cnt<bestcounter)
-						{
-							bestwp = wp;
-							bestcounter = wp.cnt;
-						}
+						best = wp;
+						bestvalue = wp.cnt;
 					}
 				}
 			}
+		}
 
-			if(bestwp)
-			{
-				navigation_routerating(bestwp, ratingscale, 10000);
-				bestwp.cnt += 1;
+		if(best)
+		{
+			navigation_routerating(best, ratingscale, 10000);
+			best.cnt += 1;
 
-				self.havocbot_attack_time = 0;
-				if(checkpvs(self.view_ofs,cp))
-				if(checkpvs(self.view_ofs,bestwp))
-					self.havocbot_attack_time = time + 2;
-			}
-			else
-			{
-				navigation_routerating(cp, ratingscale, 10000);
-			}
-			dprint(self.netname, " found an attackable controlpoint at ", vtos(cp.origin) ,"\n");
+			self.havocbot_attack_time = 0;
+			if(checkpvs(self.view_ofs,cp))
+			if(checkpvs(self.view_ofs,best))
+				self.havocbot_attack_time = time + 2;
 		}
 		else
 		{
-			dprint(self.netname, " found a touchable controlpoint at ", vtos(cp.origin) ,"\n");
-			// Should be touched
-			if not(bot_waypoints_for_items)
-			{
-				navigation_routerating(cp, ratingscale, 10000);
-				return TRUE;
-			}
-
-			for (wp = findradius(cp.origin,100); wp; wp = wp.chain)
-			{
-				if(wp.classname=="waypoint")
-				{
-					navigation_routerating(wp, ratingscale, 10000);
-					return TRUE;
-				}
-			}
 			navigation_routerating(cp, ratingscale, 10000);
 		}
+	//	dprint(self.netname, " found an attackable controlpoint at ", vtos(cp.origin) ,"\n");
 	}
-	return FALSE;
+	else
+	{
+		// Should be touched
+		// dprint(self.netname, " found a touchable controlpoint at ", vtos(cp.origin) ,"\n");
+
+		// Look for auto generated waypoint
+		if not(bot_waypoints_for_items)
+		for (wp = findradius(cp.origin,100); wp; wp = wp.chain)
+		{
+			if(wp.classname=="waypoint")
+			{
+				navigation_routerating(wp, ratingscale, 10000);
+				found = TRUE;
+			}
+		}
+
+		// Nothing found, rate the controlpoint itself
+		if not(found)
+			navigation_routerating(cp, ratingscale, 10000);
+	}
 };
 
 float havocbot_goalrating_ons_generator_attack(float ratingscale)
@@ -228,7 +265,7 @@ float havocbot_goalrating_ons_generator_attack(float ratingscale)
 
 		if(bestwp)
 		{
-			dprint("waypoints found around generator\n");
+		//	dprint("waypoints found around generator\n");
 			navigation_routerating(bestwp, ratingscale, 10000);
 			bestwp.cnt += 1;
 
@@ -241,7 +278,7 @@ float havocbot_goalrating_ons_generator_attack(float ratingscale)
 		}
 		else
 		{
-			dprint("generator found without waypoints around\n");
+		//	dprint("generator found without waypoints around\n");
 			// if there aren't waypoints near the generator go straight to it
 			navigation_routerating(g, ratingscale, 10000);
 			self.havocbot_attack_time = 0;
@@ -303,6 +340,8 @@ void havocbot_ons_reset_role(entity bot)
 
 	if(self.deadflag != DEAD_NO)
 		return;
+
+	bot.havocbot_ons_target = world;
 
 	// TODO: Defend control points or generator if necessary
 
