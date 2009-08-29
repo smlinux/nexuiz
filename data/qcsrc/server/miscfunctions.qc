@@ -1026,6 +1026,9 @@ float g_touchexplode_damage;
 float g_touchexplode_edgedamage;
 float g_touchexplode_force;
 
+float sv_autotaunt;
+float sv_taunt;
+
 void readlevelcvars(void)
 {
     g_bugrigs = cvar("g_bugrigs");
@@ -1079,6 +1082,8 @@ void readlevelcvars(void)
     sv_pogostick = cvar("sv_pogostick");
     sv_doublejump = cvar("sv_doublejump");
     g_ctf_reverse = cvar("g_ctf_reverse");
+	sv_autotaunt = cvar("sv_autotaunt");
+	sv_taunt = cvar("sv_taunt");
 
     inWarmupStage = cvar("g_warmup");
     g_warmup_limit = cvar("g_warmup_limit");

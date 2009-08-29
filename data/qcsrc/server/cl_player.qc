@@ -803,6 +803,10 @@ void Say(entity source, float teamsay, entity privatesay, string msgin, float fl
 	if(intermission_running)
 		teamsay = FALSE;
 
+	msgin = trigger_magicear_processmessage_forallears(source, teamsay, privatesay, msgin);
+	if(msgin == "")
+		return;
+
 	/*
 	 * using bprint solves this... me stupid
 	// how can we prevent the message from appearing in a listen server?
@@ -1187,6 +1191,12 @@ void GlobalSound(string sample, float chan, float voicetype)
 				}
 			break;
 		case VOICETYPE_AUTOTAUNT:
+			if(!sv_autotaunt)
+				break;
+			if(!sv_taunt)
+				break;
+			if(sv_gentle)
+				break;
 			tauntrand = random();
 			FOR_EACH_REALCLIENT(msg_entity)
 				if (tauntrand < msg_entity.cvar_cl_autotaunt)
@@ -1201,6 +1211,10 @@ void GlobalSound(string sample, float chan, float voicetype)
 			if(self.classname == "player")
 				if(self.deadflag == DEAD_NO)
 					setanim(self, self.anim_taunt, FALSE, TRUE, TRUE);
+			if(!sv_taunt)
+				break;
+			if(sv_gentle)
+				break;
 			FOR_EACH_REALCLIENT(msg_entity)
 			{
 				if (msg_entity.cvar_cl_voice_directional >= 1)
