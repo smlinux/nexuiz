@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use POSIX qw/ceil floor/;
 
 # particlefont.txt generator for DarkPlaces
 
@@ -33,8 +34,8 @@ if($magick)
 my $square = 1.0 / $cols;
 my $rows = $cols - $beams;
 
-my $dx = 1 / $pixw;
-my $dy = 1 / $pixh;
+my $dx = 1.0 / $pixw;
+my $dy = 1.0 / $pixh;
 
 my $i = 0;
 for my $row(0..$rows-1)
@@ -51,7 +52,7 @@ for my $row(0..$rows-1)
 			checkmagick $magick->Draw(
 				fill => (($row + $col)%2 ? 'green' : 'cyan'),
 				primitive => 'rectangle',
-				points => sprintf "%d,%d %d,%d", $s0 * $pixw, $t0 * $pixh, $s1 * $pixw, $t1 * $pixh
+				points => sprintf "%d,%d %d,%d", ceil($s0 * $pixw), ceil($t0 * $pixh), floor($s1 * $pixw)-1, floor($t1 * $pixh)-1
 			);
 			checkmagick $magick->Annotate(
 				x => $s0 * $pixw + 2,
@@ -77,7 +78,7 @@ for my $beam(0..$beams-1)
 		checkmagick $magick->Draw(
 			fill => (($beam)%2 ? 'yellow' : 'red'),
 			primitive => 'rectangle',
-			points => sprintf "%d,%d %d,%d", $s0 * $pixw, $t0 * $pixh, $s1 * $pixw, $t1 * $pixh
+			points => sprintf "%d,%d %d,%d", ceil($s0 * $pixw), ceil($t0 * $pixh), floor($s1 * $pixw)-1, floor($t1 * $pixh)-1
 		);
 		checkmagick $magick->Annotate(
 			x => $s0 * $pixw + 2,
