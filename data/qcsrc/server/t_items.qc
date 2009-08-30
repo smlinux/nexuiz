@@ -41,10 +41,40 @@ string Item_CounterFieldName(float it)
 
 .float max_armorvalue;
 
+void Item_Show (float visible)
+{
+	if (visible)
+	{
+		// make the item look normal, and be touchable
+		self.model = self.mdl;
+		self.solid = SOLID_TRIGGER;
+		self.effects = self.effects - (self.effects & (EF_ADDITIVE | EF_FULLBRIGHT));
+		//self.colormod = '0 0 0';
+		self.alpha = 1;
+
+		// special cases
+		if (self.strength_finished || self.invincible_finished)
+			self.effects = self.effects | EF_ADDITIVE | EF_FULLBRIGHT;
+		if (cvar("g_fullbrightitems"))
+			self.effects = self.effects | EF_FULLBRIGHT;
+	}
+	else
+	{
+		// make the item translucent green and not touchable
+		self.model = self.mdl;
+		self.solid = SOLID_NOT;
+		self.effects = self.effects | EF_ADDITIVE | EF_FULLBRIGHT;
+		//self.colormod = '0.2 1 0.2';
+		self.alpha = 0.1;
+	}
+
+	// relink entity (because solid may have changed)
+	setorigin(self, self.origin);
+}
+
 void Item_Respawn (void)
 {
-	self.model = self.mdl;		// restore original model
-	self.solid = SOLID_TRIGGER;	// allow it to be touched again
+	Item_Show(TRUE);
 	if(!g_minstagib && self.items == IT_STRENGTH)
 		sound (self, CHAN_TRIGGER, "misc/strength_respawn.wav", VOL_BASE, ATTN_NORM);	// play respawn sound
 	else if(!g_minstagib && self.items == IT_INVINCIBLE)
@@ -138,6 +168,7 @@ void Item_ScheduleRespawn(entity e)
 
 void Item_ScheduleInitialRespawn(entity e)
 {
+	Item_Show(FALSE);
 	Item_ScheduleRespawnIn(e, game_starttime - time + ITEM_RESPAWNTIME_INITIAL(e));
 }
 
@@ -392,8 +423,7 @@ void Item_Touch (void)
 		return;
 	else
 	{
-		self.solid = SOLID_NOT;
-		self.model = string_null;
+		Item_Show(FALSE);
 		if(self.team)
 		{
 			RandomSelection_Init();
@@ -426,44 +456,26 @@ void Item_FindTeam()
 			if(head != e)
 			{
 				// make it a non-spawned item
-				head.solid = SOLID_NOT;
-				head.model = string_null;
+				Item_Show(FALSE);
 				head.state = 1; // state 1 = initially hidden item
 			}
 			head.effects &~= EF_NODRAW;
 		}
 
 		if(e.flags & FL_POWERUP) // do not spawn powerups initially!
-		{
-			e.solid = SOLID_NOT;
-			e.model = string_null;
 			Item_ScheduleInitialRespawn(e);
-		}
 	}
 }
 
 void Item_Reset()
 {
-	if(self.state == 1)
-	{
-		self.model = string_null;
-		self.solid = SOLID_NOT;
-	}
-	else
-	{
-		self.model = self.mdl;
-		self.solid = SOLID_TRIGGER;
-	}
+	Item_Show(!self.state);
 	setorigin (self, self.origin);
 	self.think = SUB_Null;
 	self.nextthink = 0;
 
 	if(self.flags & FL_POWERUP) // do not spawn powerups initially!
-	{
-		self.solid = SOLID_NOT;
-		self.model = string_null;
 		Item_ScheduleInitialRespawn(self);
-	}
 }
 
 // Savage: used for item garbage-collection
@@ -600,7 +612,6 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		self.reset = SUB_Remove;
 		// it's a dropped weapon
 		self.movetype = MOVETYPE_TOSS;
-		self.solid = SOLID_TRIGGER;
 		// Savage: remove thrown items after a certain period of time ("garbage collection")
 		self.think = RemoveItem;
 		self.nextthink = time + 60;
@@ -623,7 +634,6 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 			self.movetype = MOVETYPE_NONE;
 		else
 			self.movetype = MOVETYPE_TOSS;
-		self.solid = SOLID_TRIGGER;
 		// do item filtering according to game mode and other things
 		if (!self.noalign)
 		{
@@ -804,9 +814,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		self.colormap = 1024; // color shirt=0 pants=0 grey
 	}
 
-	if (cvar("g_fullbrightitems"))
-		self.effects = self.effects | EF_FULLBRIGHT;
-
+	Item_Show(TRUE);
 	self.state = 0;
 	if(self.team)
 	{
@@ -816,11 +824,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		InitializeEntity(self, Item_FindTeam, INITPRIO_FINDTARGET);
 	}
 	else if(self.flags & FL_POWERUP) // do not spawn powerups initially!
-	{
-		self.solid = SOLID_NOT;
-		self.model = string_null;
 		Item_ScheduleInitialRespawn(self);
-	}
 }
 
 /* replace items in minstagib
@@ -865,7 +869,6 @@ void minstagib_items (float itemid)
 	// replace with invis
 	if (itemid == IT_STRENGTH)
 	{
-		self.effects = EF_ADDITIVE;
 		self.strength_finished = 30;
 		StartItem ("models/items/g_strength.md3",
 			"misc/powerup.wav", g_pickup_respawntime_powerup, g_pickup_respawntimejitter_powerup,
@@ -883,7 +886,6 @@ void minstagib_items (float itemid)
 	// replace with speed
 	if (itemid == IT_INVINCIBLE)
 	{
-		self.effects = EF_ADDITIVE;
 		self.invincible_finished = 30;
 		StartItem ("models/items/g_invincible.md3",
 			"misc/powerup_shield.wav", g_pickup_respawntime_powerup, g_pickup_respawntimejitter_powerup,
@@ -1223,7 +1225,6 @@ void spawnfunc_item_strength (void) {
 	} else {
 		precache_sound("weapons/strength_fire.wav");
 		self.strength_finished = 30;
-		self.effects = EF_ADDITIVE;
 		StartItem ("models/items/g_strength.md3", "misc/powerup.wav", g_pickup_respawntime_powerup, g_pickup_respawntimejitter_powerup, "Strength Powerup", IT_STRENGTH, 0, FL_POWERUP, generic_pickupevalfunc, 100000);
 	}
 }
@@ -1239,7 +1240,6 @@ void spawnfunc_item_invincible (void) {
 		minstagib_items(IT_INVINCIBLE);
 	} else {
 		self.invincible_finished = 30;
-		self.effects = EF_ADDITIVE;
 		StartItem ("models/items/g_invincible.md3", "misc/powerup_shield.wav", g_pickup_respawntime_powerup, g_pickup_respawntimejitter_powerup, "Shield", IT_INVINCIBLE, 0, FL_POWERUP, generic_pickupevalfunc, 100000);
 	}
 }
