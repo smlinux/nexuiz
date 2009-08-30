@@ -1078,3 +1078,62 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 
 	return total_damage_to_creatures;
 }
+
+.float fire_damagepersec;
+.float fire_endtime;
+.float fire_deathtype;
+.entity fire_owner;
+float Fire_AddDamage(entity e, entity o, float d, float t, float dt)
+{
+	float dps;
+	dps = d / t;
+	if(time >= e.fire_endtime)
+	{
+		e.fire_damagepersec = dps;
+		e.fire_endtime = time + t;
+		e.fire_deathtype = dt;
+		e.fire_owner = o;
+		return d;
+	}
+	else
+	{
+		float totaldamage, totaltime, maxdps, olddamage, oldtime;
+		oldtime = e.fire_endtime - time;
+		olddamage = e.fire_damagepersec * oldtime;
+		if(t > oldtime || d > olddamage || dps > e.fire_damagepersec)
+		{
+			maxdps = max(dps, e.fire_damagepersec);
+			totaltime = max(oldtime, t);
+			totaldamage = max(maxdps * totaltime, olddamage + d);
+			e.fire_damagepersec = totaldamage / totaltime;
+			e.fire_endtime = time + totaltime;
+			e.fire_deathtype = dt;
+			e.fire_owner = e;
+			return totaldamage - olddamage; // can never be negative
+		}
+		else
+			return 0;
+	}
+}
+void Fire_ApplyDamage(entity e)
+{
+	float t, d;
+
+	// water and slime stop fire
+	if(e.waterlevel)
+	if(e.watertype != CONTENT_LAVA)
+		e.fire_endtime = 0;
+
+	if(time >= e.fire_endtime)
+		return;
+	t = min(frametime, e.fire_endtime - time);
+	d = e.fire_damagepersec * t;
+	Damage(e, e, e.fire_owner, d, e.fire_deathtype, e.origin, '0 0 0');
+}
+void Fire_ApplyEffect(entity e)
+{
+	if(time < e.fire_endtime)
+		e.effects |= EF_FLAME;
+	else
+		e.effects &~= EF_FLAME;
+}

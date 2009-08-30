@@ -631,6 +631,7 @@ void PutObserverInServer (void)
 	self.punchangle = '0 0 0';
 	self.punchvector = '0 0 0';
 	self.oldvelocity = self.velocity;
+	self.fire_endtime = -1;
 
 	if(sv_loddistance1)
 		SetCustomizer(self, Client_customizeentityforclient, Client_uncustomizeentityforclient);
@@ -899,6 +900,7 @@ void PutClientInServer (void)
 		self.punchangle = '0 0 0';
 		self.punchvector = '0 0 0';
 		self.oldvelocity = self.velocity;
+		self.fire_endtime = -1;
 
 		msg_entity = self;
 		WRITESPECTATABLE_MSG_ONE({
@@ -1713,10 +1715,13 @@ void player_powerups (void)
 		self.modelflags &~= MF_ROCKET;
 	}
 
-	self.effects &~= (EF_RED | EF_BLUE | EF_ADDITIVE | EF_FULLBRIGHT);
+	self.effects &~= (EF_RED | EF_BLUE | EF_ADDITIVE | EF_FULLBRIGHT | EF_FLAME);
 
 	if(!self.modelindex || self.deadflag) // don't apply the flags if the player is gibbed
 		return;
+	
+	Fire_ApplyDamage(self);
+	Fire_ApplyEffect(self);
 
 	if (g_minstagib)
 	{
