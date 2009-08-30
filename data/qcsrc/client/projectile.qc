@@ -1,5 +1,6 @@
 .float spawntime;
 .vector trail_oldorigin;
+.float trail_oldtime;
 
 void SUB_Null()
 {
@@ -20,8 +21,21 @@ void SUB_Stop()
 void Projectile_DrawTrail(vector to)
 {
 	vector from;
+	float t0;
 	from = self.trail_oldorigin;
+	t0 = self.trail_oldtime;
 	self.trail_oldorigin = to;
+	self.trail_oldtime = time;
+
+	if(from == to)
+	{
+		switch(self.cnt)
+		{
+			default:
+				return;
+		}
+	}
+
 	switch(self.cnt)
 	{
 		case PROJECTILE_ROCKET:
@@ -64,7 +78,6 @@ void Projectile_DrawTrail(vector to)
 		default:
 			break;
 	}
-
 }
 
 void Projectile_Draw()
@@ -120,23 +133,26 @@ void Projectile_Draw()
 				break;
 		}
 		self.angles = AnglesTransform_Multiply(self.angles, rot * (t - self.spawntime));
+	}
 
-		fixedmakevectors(self.angles);
+	fixedmakevectors(self.angles);
 
-		trailorigin = self.origin;
-		switch(self.cnt)
-		{
-			case PROJECTILE_GRENADE:
-			case PROJECTILE_GRENADE_BOUNCING:
-				trailorigin += v_right * 1 + v_forward * -10;
-				break;
-			default:
-				break;
-		}
-		if(drawn)
-			Projectile_DrawTrail(trailorigin);
-		else
-			self.trail_oldorigin = trailorigin;
+	trailorigin = self.origin;
+	switch(self.cnt)
+	{
+		case PROJECTILE_GRENADE:
+		case PROJECTILE_GRENADE_BOUNCING:
+			trailorigin += v_right * 1 + v_forward * -10;
+			break;
+		default:
+			break;
+	}
+	if(drawn)
+		Projectile_DrawTrail(trailorigin);
+	else
+	{
+		self.trail_oldorigin = trailorigin;
+		self.trail_oldtime = time;
 	}
 
 	if(!drawn)
