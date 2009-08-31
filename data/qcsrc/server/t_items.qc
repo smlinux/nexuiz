@@ -41,40 +41,49 @@ string Item_CounterFieldName(float it)
 
 .float max_armorvalue;
 
-void Item_Show (float visible)
+void Item_Show (entity e, float mode)
 {
-	if (visible)
+	if (mode > 0)
 	{
 		// make the item look normal, and be touchable
-		self.model = self.mdl;
-		self.solid = SOLID_TRIGGER;
-		self.effects = self.effects - (self.effects & (EF_ADDITIVE | EF_FULLBRIGHT));
-		//self.colormod = '0 0 0';
-		self.alpha = 1;
+		e.model = e.mdl;
+		e.solid = SOLID_TRIGGER;
+		e.effects = e.effects - (e.effects & (EF_ADDITIVE | EF_FULLBRIGHT));
+		//e.colormod = '0 0 0';
+		e.alpha = 0;
 
 		// special cases
-		if (self.strength_finished || self.invincible_finished)
-			self.effects = self.effects | EF_ADDITIVE | EF_FULLBRIGHT;
+		if (e.strength_finished || e.invincible_finished)
+			e.effects = e.effects | EF_ADDITIVE | EF_FULLBRIGHT;
 		if (cvar("g_fullbrightitems"))
-			self.effects = self.effects | EF_FULLBRIGHT;
+			e.effects = e.effects | EF_FULLBRIGHT;
+	}
+	else if (mode < 0)
+	{
+		// hide the item completely
+		e.model = string_null;
+		e.solid = SOLID_NOT;
+		e.effects = e.effects - (e.effects & (EF_ADDITIVE | EF_FULLBRIGHT));
+		//e.colormod = '0 0 0';
+		e.alpha = 0;
 	}
 	else
 	{
 		// make the item translucent green and not touchable
-		self.model = self.mdl;
-		self.solid = SOLID_NOT;
-		self.effects = self.effects | EF_ADDITIVE | EF_FULLBRIGHT;
-		//self.colormod = '0.2 1 0.2';
-		self.alpha = 0.1;
+		e.model = e.mdl;
+		e.solid = SOLID_NOT;
+		e.effects = e.effects | EF_ADDITIVE | EF_FULLBRIGHT;
+		//e.colormod = '0.2 1 0.2';
+		e.alpha = 0.1;
 	}
 
 	// relink entity (because solid may have changed)
-	setorigin(self, self.origin);
+	setorigin(e, e.origin);
 }
 
 void Item_Respawn (void)
 {
-	Item_Show(TRUE);
+	Item_Show(self, 1);
 	if(!g_minstagib && self.items == IT_STRENGTH)
 		sound (self, CHAN_TRIGGER, "misc/strength_respawn.wav", VOL_BASE, ATTN_NORM);	// play respawn sound
 	else if(!g_minstagib && self.items == IT_INVINCIBLE)
@@ -163,12 +172,13 @@ void Item_ScheduleRespawnIn(entity e, float t)
 
 void Item_ScheduleRespawn(entity e)
 {
+	Item_Show(e, 0);
 	Item_ScheduleRespawnIn(e, ITEM_RESPAWNTIME(e));
 }
 
 void Item_ScheduleInitialRespawn(entity e)
 {
-	Item_Show(FALSE);
+	Item_Show(e, 0);
 	Item_ScheduleRespawnIn(e, game_starttime - time + ITEM_RESPAWNTIME_INITIAL(e));
 }
 
@@ -423,12 +433,17 @@ void Item_Touch (void)
 		return;
 	else
 	{
-		Item_Show(FALSE);
 		if(self.team)
 		{
 			RandomSelection_Init();
-			for(head = world; (head = findfloat(head, team, self.team)); ) if(head.flags & FL_ITEM)
-				RandomSelection_Add(head, 0, string_null, head.cnt, 0);
+			for(head = world; (head = findfloat(head, team, self.team)); )
+			{
+				if(head.flags & FL_ITEM)
+				{
+					Item_Show(head, -1);
+					RandomSelection_Add(head, 0, string_null, head.cnt, 0);
+				}
+			}
 			e = RandomSelection_chosen_ent;
 		}
 		else
@@ -450,13 +465,14 @@ void Item_FindTeam()
 			RandomSelection_Add(head, 0, string_null, head.cnt, 0);
 		e = RandomSelection_chosen_ent;
 		e.state = 0;
+		Item_Show(e, 1);
 
 		for(head = world; (head = findfloat(head, team, self.team)); ) if(head.flags & FL_ITEM)
 		{
 			if(head != e)
 			{
 				// make it a non-spawned item
-				Item_Show(FALSE);
+				Item_Show(head, -1);
 				head.state = 1; // state 1 = initially hidden item
 			}
 			head.effects &~= EF_NODRAW;
@@ -469,7 +485,7 @@ void Item_FindTeam()
 
 void Item_Reset()
 {
-	Item_Show(!self.state);
+	Item_Show(self, !self.state);
 	setorigin (self, self.origin);
 	self.think = SUB_Null;
 	self.nextthink = 0;
@@ -814,7 +830,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		self.colormap = 1024; // color shirt=0 pants=0 grey
 	}
 
-	Item_Show(TRUE);
+	Item_Show(self, 1);
 	self.state = 0;
 	if(self.team)
 	{
