@@ -153,8 +153,6 @@ void trigger_push_touch()
 
 	other.velocity = self.movedir;
 
-	UpdateCSQCProjectile(other);
-
 	if (other.classname == "player")
 	{
 		// reset tracking of oldvelocity for impact damage (sudden velocity changes)
@@ -206,7 +204,21 @@ void trigger_push_touch()
 	}
 
 	if (other.flags & FL_PROJECTILE)
+	{
 		other.angles = vectoangles (other.velocity);
+		switch(other.movetype)
+		{
+			case MOVETYPE_FLY:
+				other.movetype = MOVETYPE_TOSS;
+				other.gravity = 1;
+				break;
+			case MOVETYPE_BOUNCEMISSILE:
+				other.movetype = MOVETYPE_BOUNCE;
+				other.gravity = 1;
+				break;
+		}
+		UpdateCSQCProjectile(other);
+	}
 
 	if (self.spawnflags & PUSH_ONCE)
 	{
