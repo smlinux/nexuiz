@@ -254,7 +254,7 @@ void Ent_Projectile()
 			self.move_velocity = self.velocity;
 		}
 
-		if(time == self.spawntime || self.count & 0x80)
+		if(time == self.spawntime || (self.count & 0x80) || (f & 0x20))
 			self.trail_oldorigin = self.origin;
 	}
 
