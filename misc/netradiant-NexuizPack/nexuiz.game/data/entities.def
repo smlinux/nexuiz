@@ -30,7 +30,7 @@ noise: Sound to be played on the control point when it's captured.  Only players
 noise1: Sound to be played to all players when the control point is captured.  Also good for an announcer voice ("Red Team has captured a control point")
 */
 
-/*QUAKED func_assault_destructible (.5 0 .5) ?
+/*QUAKED func_assault_destructible (.5 0 .5) ? - - - - - - - - NOSPLASH
 This is a brush model which can be damaged. Once triggered it's active and will happily receive damage players inflict upon it. Once all health is consumed it'll disappear and trigger the targeted entity/entities. As damage is received the brush model will be tinted in an increasingly visible flavor of red to give visible feedback.
 -------- KEYS --------
 health: The damage this trigger can take
@@ -57,6 +57,8 @@ debristimejitter: time till the debris fades (random part)
 debrisfadetime: how long debris takes to fade
 debrisdamageforcescale: how much debris is affected by damage force (e.g. explosions)
 debrisskin: skin number of debris
+-------- SPAWNFLAGS --------
+NOSPLASH: if set, splash damage cannot activate the door, only direct damage can (requires health to be set)
 */
 
 /*QUAKED func_assault_wall (.5 0 .5) ?
@@ -81,7 +83,7 @@ X_AXIS: entity will bob along the X axis.
 Y_AXIS: entity will bob along the Y axis.
 */
 
-/*QUAKED func_button (0 .5 .8) ? 
+/*QUAKED func_button (0 .5 .8) ? - - - - - - - - NOSPLASH
 When a button is touched by a player, it moves in the direction set by the "angle" key, triggers all its targets, stays pressed by an amount of time set by the "wait" key, then returns to it's original position where it can be operated again.
 -------- KEYS --------
 angle: determines the direction in which the button will move (up = -1, down = -2).
@@ -93,9 +95,11 @@ speed: speed of button's displacement (default 40).
 wait: number of seconds button stays pressed (default 1, -1 = return immediately).
 lip: lip remaining at end of move (default 4 units).
 health: (default 0) if set to any non-zero value, the button must take damage (any amount) to activate.
+-------- SPAWNFLAGS --------
+NOSPLASH: if set, splash damage cannot activate the door, only direct damage can (requires health to be set)
 */
 
-/*QUAKED func_door (0 .5 .8) ? START_OPEN - DOOR_DONT_LINK - - TOGGLE
+/*QUAKED func_door (0 .5 .8) ? START_OPEN - DOOR_DONT_LINK - - TOGGLE - - NOSPLASH
 Normal sliding door entity. By default, the door will activate when player walks close to it or when damage is inflicted to it.
 If DOOR_DONT_LINK is not set, the door will be linked with all doors it touches. Note however that for linked doors to work properly, it is necessary that ALL linked doors have SOME volume of common area (that is, there must be a point that is part of ALL doors).
 -------- KEYS --------
@@ -115,9 +119,10 @@ noise2: sound when the door closes
 START_OPEN: causes the door to move to its destination when spawned, and operate in reverse.  It is used to temporarily or permanently close off an area when triggered (not useful for touch or damage triggered doors).
 DOOR_DONT_LINK: the door won't link with another door it touches
 TOGGLE: causes the door to wait in both the start and end states for a trigger event.
+NOSPLASH: if set, splash damage cannot activate the door, only direct damage can (requires health to be set)
 */
 
-/*QUAKED func_door_rotating (0 .5 .8) ? START_OPEN BIDIR DOOR_DONT_LINK BIDIR_IN_DOWN - TOGGLE X_AXIS Y_AXIS
+/*QUAKED func_door_rotating (0 .5 .8) ? START_OPEN BIDIR DOOR_DONT_LINK BIDIR_IN_DOWN - TOGGLE X_AXIS Y_AXIS NOSPLASH
 Normal rotating door entity that opens by rotating around an axis (default: Z). Use an origin brush to specify the rotation axis.
 By default, the door will activate when player walks close to it or when damage is inflicted to it.
 If DOOR_DONT_LINK is not set, the door will be linked with all doors it touches.
@@ -141,6 +146,7 @@ noise2: sound when the door closes
 START_OPEN: causes the door to move to its destination when spawned, and operate in reverse.  It is used to temporarily or permanently close off an area when triggered (not useful for touch or damage triggered doors).
 DOOR_DONT_LINK: the door won't link with another door it touches
 TOGGLE: causes the door to wait in both the start and end states for a trigger event.
+NOSPLASH: if set, splash damage cannot activate the door, only direct damage can (requires health to be set)
 */
 
 /*QUAKED func_door_secret (0 .5 .8) ? OPEN_ONCE 1ST_LEFT 1ST_DOWN NO_SHOOT ALWAYS_SHOOT
@@ -984,7 +990,7 @@ strength: "wind field", "gravity field": amount of force per second to apply. "d
 falloff: "gravity field": 0 means no falloff, 1 means linear falloff (zero at the outside), 2 means inverted linear falloff (zero at the inside)
 */
 
-/*QUAKED trigger_multiple (.5 .5 .5) ? NOTOUCH ALLENTS
+/*QUAKED trigger_multiple (.5 .5 .5) ? NOTOUCH ALLENTS - - - - - - NOSPLASH
 Variable sized repeatable trigger.  Must be targeted at one or more entities.  If "health" is set, the trigger must be killed to activate each time.
 -------- KEYS --------
 health: amount of damage that has to be dealt to the trigger to activate (it then won't respond to merely touching it)
@@ -1002,9 +1008,10 @@ killtarget: remove all entities with this targetname when triggered
 -------- SPAWNFLAGS --------
 NOTOUCH: the trigger can only be triggered by other entities, not by touching or firing (you should probably use trigger_relay or trigger_delay instead)
 ALLENTS: the trigger responds to all entities, not just players (useful for targetting trigger_items)
+NOSPLASH: if set, splash damage cannot activate the door, only direct damage can (requires health to be set)
 */
 
-/*QUAKED trigger_once (.5 .5 .5) ? NOTOUCH
+/*QUAKED trigger_once (.5 .5 .5) ? NOTOUCH - - - - - - - NOSPLASH
 Variable sized repeatable trigger.  Must be targeted at one or more entities.  If "health" is set, the trigger must be killed to activate each time.
 Basically, it's a use-once trigger_multiple.
 -------- KEYS --------
@@ -1018,6 +1025,7 @@ message: print this message to the player who activated the trigger
 killtarget: remove all entities with this targetname when triggered
 -------- SPAWNFLAGS --------
 NOTOUCH: the trigger can only be triggered by other entities, not by touching or firing (you should probably use trigger_relay or trigger_delay instead)
+NOSPLASH: if set, splash damage cannot activate the door, only direct damage can (requires health to be set)
 */
 
 /*QUAKED trigger_push (1 .5 0) ? - - INVERT_TEAM
@@ -1432,7 +1440,7 @@ target4: reference entity (can be used as $target4)
 ONLOAD: create a first entity on map load
 */
 
-/*QUAKED func_breakable (1 0 0) ? DISABLED INDICATE
+/*QUAKED func_breakable (1 0 0) ? DISABLED INDICATE - - - - - - NOSPLASH
 This is a brush model which can be damaged.
 Once all health is consumed it'll disappear and trigger the targeted entity/entities.
 When triggered, it resets to full health, and unbreaks.
@@ -1464,6 +1472,7 @@ debrisskin: skin number of debris
 -------- SPAWNFLAGS --------
 DISABLED: do not allow damaging this until it is first activated
 INDICATE: indicate amount of damage already taken by coloring
+NOSPLASH: if set, splash damage cannot activate the door, only direct damage can (requires health to be set)
 */
 
 /*QUAKED trigger_relay_if (0 1 0) (-8 -8 -8) (8 8 8) NEGATE
