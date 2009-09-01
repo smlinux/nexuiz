@@ -79,7 +79,7 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 	player.velocity = to_velocity;
 	BITXOR_ASSIGN(player.effects, EF_TELEPORT_BIT);
 
-	UpdateCSQCProjectile(player);
+	UpdateCSQCProjectileAtferTeleport(player);
 
 	if(player.classname == "player")
 	{

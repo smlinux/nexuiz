@@ -2,6 +2,7 @@
 
 float CSQCProjectile_SendEntity(entity to, float sf)
 {
+	// note: flag 0x20 = no trail please
 	sf = sf & 0x3F;
 
 	if(self.csqcprojectile_clientanimate)
@@ -69,6 +70,15 @@ void UpdateCSQCProjectile(entity e)
 	{
 		// send new origin data
 		e.SendFlags |= 1;
+	}
+}
+
+void UpdateCSQCProjectileAfterTeleport(entity e)
+{
+	if(e.SendEntity == CSQCProjectile_SendEntity)
+	{
+		// send new origin data and mark as teleported
+		e.SendFlags |= 0x21;
 	}
 }
 
