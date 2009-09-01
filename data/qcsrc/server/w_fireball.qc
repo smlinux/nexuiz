@@ -77,7 +77,7 @@ void W_Fireball_LaserPlay(float dt, float dist, float damage, float edgedamage, 
 	{
 		d = vlen(self.origin - RandomSelection_chosen_ent.fireball_impactvec);
 		d = damage + (edgedamage - damage) * (d / dist);
-		//Fire_AddDamage(RandomSelection_chosen_ent, self.realowner, d * burntime, burntime, self.projectiledeathtype | HITTYPE_BOUNCE);
+		Fire_AddDamage(RandomSelection_chosen_ent, self.realowner, d * burntime, burntime, self.projectiledeathtype | HITTYPE_BOUNCE);
 		//trailparticles(self, particleeffectnum("fireball_laser"), self.origin, RandomSelection_chosen_ent.fireball_impactvec);
 		pointparticles(particleeffectnum("fireball_laser"), self.origin, RandomSelection_chosen_ent.fireball_impactvec - self.origin, 1);
 	}
