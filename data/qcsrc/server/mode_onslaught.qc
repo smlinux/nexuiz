@@ -402,7 +402,7 @@ void onslaught_generator_think()
 
 void onslaught_generator_ring_spawn(vector org)
 {
-	modeleffect_spawn("models/onslaught/shockwavetransring.md3", 0, org, '0 0 0', '0 0 0', '0 0 0', 0, -16, 0.1, 1.25, 0.25);
+	modeleffect_spawn("models/onslaught/shockwavetransring.md3", 0, 0, org, '0 0 0', '0 0 0', '0 0 0', 0, -16, 0.1, 1.25, 0.25);
 };
 
 void onslaught_generator_ray_think()
