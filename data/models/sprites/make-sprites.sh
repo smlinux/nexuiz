@@ -183,7 +183,7 @@ sprite wpn-rl             "Rocket Launcher" ffff00 000000 0.0 # yellow
 sprite wpn-porto          "Port-O-Launch" 808080 000000 0.0 # grey
 sprite wpn-minstanex      "Minstanex"     80ffff 000000 0.0 # bright cyan
 sprite wpn-hookgun        "Hook"          008000 000000 0.0 # dark green
-sprite wpn-seeker         "Seeker"        ff8000 000000 0.0 # orange
+sprite wpn-fireball       "Fireball"      ff8000 000000 0.0 # orange
 sprite wpn-hlac           "HLAC"          00ff00 000000 0.0 # green
 sprite wpn-campingrifle   "Rifle"         80ff00 000000 0.0 # orange
 
