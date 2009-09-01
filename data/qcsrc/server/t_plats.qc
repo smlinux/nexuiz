@@ -551,6 +551,9 @@ void button_touch()
 
 void button_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
+	if(self.spawnflags & DOOR_NOSPLASH)
+		if(!(DEATH_ISSPECIAL(deathtype)) && (deathtype & HITTYPE_SPLASH))
+			return;
 	self.health = self.health - damage;
 	if (self.health <= 0)
 	{
@@ -867,6 +870,9 @@ void door_trigger_touch()
 void door_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	local entity oself;
+	if(self.spawnflags & DOOR_NOSPLASH)
+		if(!(DEATH_ISSPECIAL(deathtype)) && (deathtype & HITTYPE_SPLASH))
+			return;
 	self.health = self.health - damage;
 	if (self.health <= 0)
 	{

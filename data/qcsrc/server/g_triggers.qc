@@ -210,6 +210,9 @@ void multi_eventdamage (entity inflictor, entity attacker, float damage, float d
 {
 	if (!self.takedamage)
 		return;
+	if(self.spawnflags & DOOR_NOSPLASH)
+		if(!(DEATH_ISSPECIAL(deathtype)) && (deathtype & HITTYPE_SPLASH))
+			return;
 	self.health = self.health - damage;
 	if (self.health <= 0)
 	{

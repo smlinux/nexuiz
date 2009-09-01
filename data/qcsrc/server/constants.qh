@@ -1,5 +1,5 @@
-string CVAR_CHECK_DEFAULT = "ff6f4ae047891b3b61ecfc5b3d3b38b4";
-string CVAR_CHECK_WEAPONS = "a7ca57b891d66754b856e24e5c1745e3";
+string CVAR_CHECK_DEFAULT = "ba4f55ed0f5a00a082bfb12c80dd3f8e";
+string CVAR_CHECK_WEAPONS = "6a27beecdcab1d3128a1f0f909257e0d";
 
 float	FALSE					= 0;
 float	TRUE					= 1;
@@ -166,3 +166,5 @@ float COLOR_TEAM4	= 10; // pink
 float NUM_PLAYERSKINS_TEAMPLAY = 3;
 
 float ASSAULT_VALUE_INACTIVE = 1000;
+
+float DOOR_NOSPLASH = 256; // generic anti-splashdamage spawnflag
