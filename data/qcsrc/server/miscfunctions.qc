@@ -935,6 +935,7 @@ void readplayerstartcvars()
         warmup_start_ammo_nails = start_ammo_nails;
         warmup_start_ammo_rockets = start_ammo_rockets;
         warmup_start_ammo_cells = start_ammo_cells;
+        warmup_start_ammo_fuel = start_ammo_fuel;
         warmup_start_health = start_health;
         warmup_start_armorvalue = start_armorvalue;
         warmup_start_weapons = start_weapons;
@@ -947,6 +948,7 @@ void readplayerstartcvars()
                 warmup_start_ammo_cells = cvar("g_warmup_start_ammo_cells");
                 warmup_start_ammo_nails = cvar("g_warmup_start_ammo_nails");
                 warmup_start_ammo_rockets = cvar("g_warmup_start_ammo_rockets");
+                warmup_start_ammo_fuel = cvar("g_warmup_start_ammo_fuel");
             }
             warmup_start_health = cvar("g_warmup_start_health");
             warmup_start_armorvalue = cvar("g_warmup_start_armor");
@@ -972,6 +974,7 @@ void readplayerstartcvars()
         g_grappling_hook = 0; // these two can't coexist, as they use the same button
         start_items |= IT_FUEL_REGEN;
         start_ammo_fuel = max(start_ammo_fuel, cvar("g_balance_fuel_rotstable"));
+        warmup_start_ammo_fuel = max(warmup_start_ammo_fuel, cvar("g_balance_fuel_rotstable"));
     }
 
     if (g_jetpack)
