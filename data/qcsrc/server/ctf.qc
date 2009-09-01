@@ -409,7 +409,7 @@ void FlagThink()
 
 void flag_cap_ring_spawn(vector org)
 {
-	shockwave_spawn("models/ctf/shockwavetransring.md3", org, -0.8, 0, 1);
+	shockwave_spawn("models/ctf/shockwavetransring.md3", org - '0 0 15', -0.8, 0, 1);
 };
 
 void FlagTouch()
