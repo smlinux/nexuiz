@@ -285,6 +285,8 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 					bprint ("^1",s, "^1 didn't become friends with the Lord of Teamplay\n");
 				else if (deathtype == DEATH_CHEAT)
 					bprint ("^1",s, "^1 unfairly eliminated himself\n");
+				else if (deathtype == DEATH_FIRE)
+					bprint ("^1",s, "^1 burned to death\n");
 				else if (deathtype != DEATH_TEAMCHANGE)
 					bprint ("^1",s, "^1 couldn't resist the urge to self-destruct\n");
 
@@ -397,6 +399,8 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 						bprint ("^1",s, "^1 was pushed into an accident by ^1", a, "\n");
 					else if(deathtype == DEATH_CHEAT)
 						bprint ("^1",s, "^1 was unfairly eliminated by ^1", a, "\n");
+					else if (deathtype == DEATH_FIRE)
+						bprint ("^1",s, "^1 was burnt to death by ^1", a, "\n");
 					else
 						bprint ("^1",s, "^1 was fragged by ", a, "\n");
 				}
@@ -528,6 +532,11 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 				bprint ("^1",s, "^1 died in an accident\n");
 			else if(deathtype == DEATH_CHEAT)
 				bprint ("^1",s, "^1 was unfairly eliminated\n");
+			else if(deathtype == DEATH_FIRE)
+				if(sv_gentle)
+					bprint ("^1",s, "^1 felt a little hot\n");
+				else
+					bprint ("^1",s, "^1 burnt to death\n");
 			else
 				if(sv_gentle)
 					bprint ("^1",s, "^1 needs a restart\n");
@@ -825,7 +834,8 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			}
 			else
 			{
-				attacker.typehitsound += 1;
+				if(deathtype != DEATH_FIRE)
+					attacker.typehitsound += 1;
 				if(mirrordamage > 0)
 					if(time > attacker.teamkill_complain)
 					{
@@ -1083,56 +1093,92 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 .float fire_endtime;
 .float fire_deathtype;
 .entity fire_owner;
+.float fire_hitsound;
+
+float Fire_IsBurning(entity e)
+{
+	return (time < e.fire_endtime);
+}
+
 float Fire_AddDamage(entity e, entity o, float d, float t, float dt)
 {
 	float dps;
+	t = max(t, 0.1);
 	dps = d / t;
-	if(time >= e.fire_endtime)
-	{
-		e.fire_damagepersec = dps;
-		e.fire_endtime = time + t;
-		e.fire_deathtype = dt;
-		e.fire_owner = o;
-		return d;
-	}
-	else
+	if(Fire_IsBurning(e))
 	{
 		float totaldamage, totaltime, maxdps, olddamage, oldtime;
 		oldtime = e.fire_endtime - time;
 		olddamage = e.fire_damagepersec * oldtime;
-		if(t > oldtime || d > olddamage || dps > e.fire_damagepersec)
+		if(t > oldtime + 0.1 || d > olddamage + 1 || dps > e.fire_damagepersec + 1) // some thresholds to prevent toggling due to roundoff errors
 		{
 			maxdps = max(dps, e.fire_damagepersec);
 			totaltime = max(oldtime, t);
-			totaldamage = max(maxdps * totaltime, olddamage + d);
+			totaldamage = min(maxdps * totaltime, olddamage + d);
 			e.fire_damagepersec = totaldamage / totaltime;
 			e.fire_endtime = time + totaltime;
 			e.fire_deathtype = dt;
-			e.fire_owner = e;
+			e.fire_owner = o;
+			e.fire_hitsound = FALSE;
 			return totaldamage - olddamage; // can never be negative
 		}
 		else
 			return 0;
 	}
+	else
+	{
+		e.fire_damagepersec = dps;
+		e.fire_endtime = time + t;
+		e.fire_deathtype = dt;
+		e.fire_owner = o;
+		e.fire_hitsound = FALSE;
+		return d;
+	}
 }
+
 void Fire_ApplyDamage(entity e)
 {
-	float t, d;
+	float t, d, hi, ty;
+
+	if not(Fire_IsBurning(e))
+		return;
 
 	// water and slime stop fire
 	if(e.waterlevel)
 	if(e.watertype != CONTENT_LAVA)
 		e.fire_endtime = 0;
 
-	if(time >= e.fire_endtime)
-		return;
 	t = min(frametime, e.fire_endtime - time);
 	d = e.fire_damagepersec * t;
+
+	hi = e.fire_owner.hitsound;
+	ty = e.fire_owner.typehitsound;
 	Damage(e, e, e.fire_owner, d, e.fire_deathtype, e.origin, '0 0 0');
+	if(e.fire_hitsound && e.fire_owner)
+	{
+		e.fire_owner.hitsound = hi;
+		e.fire_owner.typehitsound = ty;
+	}
+	e.fire_hitsound = TRUE;
+
+	if not(IS_INDEPENDENT_PLAYER(e))
+	FOR_EACH_PLAYER(other) if(e != other)
+	{
+		if(other.classname == "player")
+		if(other.deadflag == DEAD_NO)
+		if not(IS_INDEPENDENT_PLAYER(other))
+		if(boxesoverlap(e.absmin, e.absmax, other.absmin, other.absmax))
+		{
+			t = cvar("g_balance_firetransfer_time") * (e.fire_endtime - time);
+			d = cvar("g_balance_firetransfer_damage") * e.fire_damagepersec * t;
+			Fire_AddDamage(other, e, d, t, DEATH_FIRE);
+		}
+	}
 }
+
 void Fire_ApplyEffect(entity e)
 {
-	if(time < e.fire_endtime)
+	if(Fire_IsBurning(e))
 		e.effects |= EF_FLAME;
 	else
 		e.effects &~= EF_FLAME;

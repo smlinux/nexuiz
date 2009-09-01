@@ -25,7 +25,7 @@
 "impulse 6"                             "crylink / hlac"
 "impulse 7"                             "nex / minstanex"
 "impulse 8"                             "hagar"
-"impulse 9"                             "rocket launcher"
+"impulse 9"                             "rocket launcher / fireball"
 "impulse 14"                            "porto / hook"
 ""                                      ""
 ""                                      "View"

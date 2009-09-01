@@ -1582,5 +1582,5 @@ void spawnfunc_item_jetpack(void)
 // we no longer have the seeker
 void spawnfunc_weapon_seeker()
 {
-	spawnfunc_weapon_rocketlauncher();
+	spawnfunc_weapon_fireball();
 }

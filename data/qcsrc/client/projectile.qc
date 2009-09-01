@@ -31,6 +31,9 @@ void Projectile_DrawTrail(vector to)
 	{
 		switch(self.cnt)
 		{
+			case PROJECTILE_FIREMINE:
+				to_z += 1;
+				break;
 			default:
 				return;
 		}
@@ -74,6 +77,12 @@ void Projectile_DrawTrail(vector to)
 		case PROJECTILE_BULLET:
 		case PROJECTILE_BULLET_GLOWING:
 			trailparticles(self, particleeffectnum("tr_bullet"), from, to);
+			break;
+		case PROJECTILE_FIREMINE:
+			trailparticles(self, particleeffectnum("firemine"), from, to);
+			break;
+		case PROJECTILE_FIREBALL:
+			trailparticles(self, particleeffectnum("fireball"), from, to);
 			break;
 		default:
 			break;
@@ -284,6 +293,8 @@ void Ent_Projectile()
 			case PROJECTILE_HOOKBOMB: setmodel(self, "models/grenademodel.md3"); break;
 			case PROJECTILE_HAGAR: setmodel(self, "models/hagarmissile.mdl"); self.scale = 0.4; break;
 			case PROJECTILE_HAGAR_BOUNCING: setmodel(self, "models/hagarmissile.mdl"); self.scale = 0.4; break;
+			case PROJECTILE_FIREBALL: self.model = ""; self.modelindex = 0; break; // particle effect is good enough
+			case PROJECTILE_FIREMINE: self.model = ""; self.modelindex = 0; break; // particle effect is good enough
 			default:
 				error("Received invalid CSQC projectile, can't work with this!");
 				break;
@@ -340,6 +351,18 @@ void Ent_Projectile()
 				self.move_movetype = MOVETYPE_BOUNCE;
 				self.move_touch = SUB_Null;
 				break;
+			case PROJECTILE_FIREBALL:
+				loopsound(self, CHAN_PROJECTILE, "weapons/fireball_fly2.wav", VOL_BASE, ATTN_NORM);
+				self.mins = '-16 -16 -16';
+				self.maxs = '16 16 16';
+				break;
+			case PROJECTILE_FIREMINE:
+				loopsound(self, CHAN_PROJECTILE, "weapons/fireball_fly.wav", VOL_BASE, ATTN_NORM);
+				self.move_movetype = MOVETYPE_BOUNCE;
+				self.move_touch = SUB_Null;
+				self.mins = '-4 -4 -4';
+				self.maxs = '4 4 4';
+				break;
 			default:
 				break;
 		}
@@ -380,4 +403,6 @@ void Projectile_Precache()
 	precache_model("models/tracer.mdl");
 	precache_sound("weapons/electro_fly.wav");
 	precache_sound("weapons/rocket_fly.wav");
+	precache_sound("weapons/fireball_fly.wav");
+	precache_sound("weapons/fireball_fly2.wav");
 }

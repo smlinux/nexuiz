@@ -4051,3 +4051,373 @@ bounce 1.5
 liquidfriction 0.25
 originjitter 16 16 16
 velocityjitter 96 96 96
+
+
+// used nowhere in code
+effect firemine
+trailspacing 0.5
+count 1
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 1 1
+sizeincrease 5
+gravity -0.06
+alpha 50 256 250
+bounce 1.5
+velocityjitter 10 10 2
+airfriction 1.2
+//slowfire
+effect firemine
+trailspacing 0.5
+count 1
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 1 1
+sizeincrease 5
+gravity -0.06
+alpha 50 256 200
+bounce 1.5
+velocityjitter 10 10 10
+airfriction 1.2
+// very slow and small fire
+effect firemine
+trailspacing 1
+count 1
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 1 1
+sizeincrease 2
+gravity -0.06
+alpha 50 256 200
+bounce 1.5
+velocityjitter 8 8 8
+airfriction 0.3
+//decreasing fire
+effect firemine
+trailspacing 1
+count 1
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 5 7
+sizeincrease -3
+gravity -0.06
+alpha 50 256 200
+bounce 1.5
+velocityjitter 3 3 3
+airfriction 0.3
+//smoke
+effect firemine
+trailspacing 2
+count 1
+type alphastatic
+tex 0 8
+size 1 4
+sizeincrease 1
+color 0x000000 0x111111
+alpha 256 256 90
+//gravity -0.2
+originjitter 2 2 2
+velocityoffset 0 0 3
+airfriction 1
+//fastfire
+effect firemine
+trailspacing 0.25
+count 1
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 12 12
+sizeincrease 0
+gravity 0
+alpha 50 256 1600
+bounce 1.5
+velocityjitter 0 0 0
+airfriction 1.2
+// light only
+effect firemine
+trailspacing 4
+lightradius 50
+lightradiusfade 50000
+lightcolor 2.7 2.7 0.6
+
+// used nowhere in code
+effect fireball
+trailspacing 0.5
+count 1
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 5 5
+sizeincrease 20
+gravity -0.06
+alpha 50 256 250
+bounce 1.5
+velocityjitter 40 40 11
+airfriction 1.2
+//slowfire
+effect fireball
+trailspacing 0.5
+count 1
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 5 5
+sizeincrease 20
+gravity -0.06
+alpha 50 256 200
+bounce 1.5
+velocityjitter 40 40 40
+airfriction 1.2
+// very slow and small fire
+effect fireball
+trailspacing 1
+count 1
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 5 5
+sizeincrease 10
+gravity -0.06
+alpha 50 256 200
+bounce 1.5
+velocityjitter 30 30 30
+airfriction 0.3
+//decreasing fire
+effect fireball
+trailspacing 1
+count 1
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 20 30
+sizeincrease -10
+gravity -0.06
+alpha 50 256 200
+bounce 1.5
+velocityjitter 10 10 10
+airfriction 0.3
+//smoke
+effect fireball
+trailspacing 2
+count 1
+type alphastatic
+tex 0 8
+size 5 15
+sizeincrease 7
+color 0x000000 0x111111
+alpha 256 256 90
+//gravity -0.2
+originjitter 10 10 10
+velocityoffset 0 0 10
+airfriction 1
+//fastfire
+effect fireball
+trailspacing 0.25
+count 1
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 48 48
+sizeincrease 0
+gravity 0
+alpha 50 256 1600
+bounce 1.5
+velocityjitter 0 0 0
+airfriction 1.2
+// light only
+effect fireball
+trailspacing 4
+lightradius 300
+lightradiusfade 50000
+lightcolor 2.7 2.7 0.6
+
+// fireball
+effect fireball_laser
+count 20
+type spark
+color 0x800000 0xFF8020
+alpha 192 256 2560
+size 1 1
+velocityjitter 1 1 1
+velocitymultiplier 10
+stretchfactor 0.7
+
+// rocket explosion (bigger than mortar and hagar)
+// decal
+// used nowhere in code
+effect fireball_explode
+countabsolute 1
+type decal
+tex 8 16
+size 72 72
+alpha 256 256 0
+originjitter 40 40 40
+lightradius 500
+lightradiusfade 500
+lightcolor 4 2 0.5
+// flare effect
+effect fireball_explode
+countabsolute 1
+type static
+tex 35 37
+color 0x404040 0x404040
+size 72 72
+alpha 192 192 64
+// fire effect
+effect fireball_explode
+notunderwater
+count 256
+type static
+tex 48 55
+color 0x902010 0xFFD080
+size 16 16
+alpha 128 128 256
+bounce 1.5
+airfriction 4
+liquidfriction 4
+originjitter 8 8 8
+velocityjitter 512 512 512
+// underwater bubbles
+effect fireball_explode
+underwater
+count 64
+type bubble
+tex 62 62
+color 0x404040 0x808080
+size 3 3
+alpha 128 256 64
+gravity -0.125
+bounce 1.5
+liquidfriction 0.25
+originjitter 16 16 16
+velocityjitter 144 144 144
+// bouncing sparks
+effect fireball_explode
+notunderwater
+count 128
+type spark
+color 0x903010 0xFFD030
+size 2 2
+alpha 256 256 384
+gravity 1
+airfriction 0.2
+bounce 1.5
+liquidfriction 0.8
+velocityoffset 0 0 80
+velocityjitter 384 384 384
+
+effect fireball_muzzleflash
+count 4
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 5 5
+alpha 256 256 512
+originjitter 1.5 1.5 1.5
+velocityjitter 6 6 6
+velocitymultiplier 0.01
+lightradius 200
+lightradiusfade 2000
+lightcolor 2 1.5 0.2
+effect fireball_muzzleflash
+count 30
+type spark
+tex 40 40
+color 0xFFFDD9 0xFFFDD9
+size 3 3
+alpha 0 128 1024
+originjitter 1 1 1
+velocityjitter 300 300 300
+velocitymultiplier 0.5
+airfriction 12
+
+effect fireball_preattack_muzzleflash
+count 4
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 5 5
+alpha 256 256 512
+originjitter 1.5 1.5 1.5
+velocityjitter 6 6 6
+velocitymultiplier 0.01
+lightradius 200
+lightradiusfade 2000
+lightcolor 2 1.5 0.2
+effect fireball_preattack_muzzleflash
+count 30
+type spark
+tex 40 40
+color 0xFFFDD9 0xFFFDD9
+size 3 3
+alpha 0 128 1024
+originjitter 1 1 1
+velocityjitter 300 300 300
+velocitymultiplier 0.5
+airfriction 12
+
+effect fireball_bfgdamage
+count 4
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 5 5
+alpha 256 256 512
+originjitter 1.5 1.5 1.5
+velocityjitter 6 6 6
+velocitymultiplier 0.01
+lightradius 200
+lightradiusfade 2000
+lightcolor 2 1.5 0.2
+effect fireball_bfgdamage
+count 30
+type spark
+tex 40 40
+color 0xFFFDD9 0xFFFDD9
+size 3 3
+alpha 0 128 1024
+originjitter 1 1 1
+velocityjitter 300 300 300
+velocitymultiplier 0.5
+airfriction 12
+
+//EF_FLAME
+//fire
+// used nowhere in code
+effect EF_FLAME
+//notunderwater
+count 200
+type smoke
+tex 48 55
+size 5 21
+alpha 200 356 512
+gravity -0.5
+color 0x8f0d00 0xff5a00
+bounce 2
+sizeincrease -1
+originoffset 0 0 10
+originjitter 12 12 34
+velocityjitter 22 22 50
+// smoke
+effect EF_FLAME
+type alphastatic
+count 100
+tex 0 8
+size 11 15
+sizeincrease 6
+alpha 200 256 200
+color 0x000000 0x111111
+gravity -0.3
+originoffset 0 0 10
+originjitter 12 12 34
+velocityjitter 11 11 50
+bounce 2
+effect EF_FLAME
+count 1
+lightradius 200
+lightradiusfade 10000
+lightcolor 0.9 0.9 0.2

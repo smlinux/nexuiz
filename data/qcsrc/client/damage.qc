@@ -236,6 +236,19 @@ void Ent_DamageInfo()
 				break;
 			case WEP_TUBA:
 				break;
+			case WEP_FIREBALL:
+				if(secondary)
+				{
+					org2 = org + backoff * 16;
+					pointparticles(particleeffectnum("fireball_explode"), org2, '0 0 0', 1);
+					if(!issilent)
+						sound(self, CHAN_PROJECTILE, "weapons/fireball_impact2.wav", VOL_BASE, ATTN_NORM * 0.25); // long range boom
+				}
+				else
+				{
+					// firemine goes out silently
+				}
+				break;
 			default:
 				dprint("Unhandled damage of weapon ", ftos(hitwep), "\n");
 				break;
@@ -253,6 +266,9 @@ void DamageInfo_Precache()
 	precache_sound("weapons/hagexp1.wav");
 	precache_sound("weapons/hagexp2.wav");
 	precache_sound("weapons/hagexp3.wav");
+	precache_sound("weapons/flacexp1.wav");
+	precache_sound("weapons/flacexp2.wav");
+	precache_sound("weapons/flacexp3.wav");
 	precache_sound("weapons/hookbomb_impact.wav");
 	precache_sound("weapons/laserimpact.wav");
 	precache_sound("weapons/neximpact.wav");
@@ -260,4 +276,6 @@ void DamageInfo_Precache()
 	precache_sound("weapons/ric2.wav");
 	precache_sound("weapons/ric3.wav");
 	precache_sound("weapons/rocket_impact.wav");
+	precache_sound("weapons/fireball_impact.wav");
+	precache_sound("weapons/fireball_impact2.wav");
 }
