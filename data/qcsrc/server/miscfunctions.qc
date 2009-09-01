@@ -2530,7 +2530,6 @@ void modeleffect_spawn(string m, float f, vector o, vector v, vector ang, vector
 	e.alpha = a;
 	e.teleport_time = t1;
 	e.fade_time = t2;
-	sz = max(s0, s2);
 	if(s0 >= 0)
 		e.scale = s0 / max6(-e.mins_x, -e.mins_y, -e.mins_z, e.maxs_x, e.maxs_y, e.maxs_z);
 	else
@@ -2539,6 +2538,7 @@ void modeleffect_spawn(string m, float f, vector o, vector v, vector ang, vector
 		e.scale2 = s2 / max6(-e.mins_x, -e.mins_y, -e.mins_z, e.maxs_x, e.maxs_y, e.maxs_z);
 	else
 		e.scale2 = -s2;
+	sz = max(e.scale, e.scale2);
 	setsize(e, e.mins * sz, e.maxs * sz);
 	Net_LinkEntity(e, FALSE, 0.1, modeleffect_SendEntity);
 }
