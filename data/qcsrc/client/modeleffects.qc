@@ -32,6 +32,7 @@ void Ent_ModelEffect()
 	e.classname = "modeleffect";
 	e.model = "from network";
 	e.modelindex = ReadShort();
+	e.skin = ReadByte();
 	e.frame = ReadByte();
 	e.frame1time = time;
 	e.origin_x = ReadCoord();

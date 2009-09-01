@@ -2484,6 +2484,7 @@ float modeleffect_SendEntity(entity to, float sf)
 	
 	WriteByte(MSG_ENTITY, f);
 	WriteShort(MSG_ENTITY, self.modelindex);
+	WriteByte(MSG_ENTITY, self.skin);
 	WriteByte(MSG_ENTITY, self.frame);
 	WriteCoord(MSG_ENTITY, self.origin_x);
 	WriteCoord(MSG_ENTITY, self.origin_y);
@@ -2515,7 +2516,7 @@ float modeleffect_SendEntity(entity to, float sf)
 	return TRUE;
 }
 
-void modeleffect_spawn(string m, float f, vector o, vector v, vector ang, vector angv, float s0, float s2, float a, float t1, float t2)
+void modeleffect_spawn(string m, float s, float f, vector o, vector v, vector ang, vector angv, float s0, float s2, float a, float t1, float t2)
 {
 	entity e;
 	float sz;
@@ -2530,6 +2531,7 @@ void modeleffect_spawn(string m, float f, vector o, vector v, vector ang, vector
 	e.alpha = a;
 	e.teleport_time = t1;
 	e.fade_time = t2;
+	e.skin = s;
 	if(s0 >= 0)
 		e.scale = s0 / max6(-e.mins_x, -e.mins_y, -e.mins_z, e.maxs_x, e.maxs_y, e.maxs_z);
 	else
@@ -2545,5 +2547,5 @@ void modeleffect_spawn(string m, float f, vector o, vector v, vector ang, vector
 
 void shockwave_spawn(string m, vector org, float sz, float t1, float t2)
 {
-	return modeleffect_spawn(m, 0, org, '0 0 0', '0 0 0', '0 0 0', 0, sz, 1, t1, t2);
+	return modeleffect_spawn(m, 0, 0, org, '0 0 0', '0 0 0', '0 0 0', 0, sz, 1, t1, t2);
 }
