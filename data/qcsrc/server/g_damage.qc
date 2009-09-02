@@ -945,6 +945,19 @@ vector NearestPointOnBox(entity box, vector org)
 FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(actual_damage);
 FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(max_damage);
 
+void Damage_RecordDamage(entity attacker, float deathtype, float damage)
+{
+	float weaponid;
+	weaponid = DEATH_WEAPONOF(deathtype);
+	if not(inWarmupStage)
+	if(weaponid)
+	if(clienttype(attacker) == CLIENTTYPE_REAL)
+	{
+		// Track damage done and update the stat to be sent later in g_world.qc
+		attacker.actual_damage[weaponid] += damage;
+		attacker.damage_hits = weaponid + 64 * rint(attacker.actual_damage[weaponid]);
+	}
+}
 
 float RadiusDamage_running;
 float RadiusDamage (entity inflictor, entity attacker, float coredamage, float edgedamage, float rad, entity ignore, float forceintensity, float deathtype, entity directhitentity)
@@ -960,7 +973,6 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 	vector  nearest;
 	float   total_damage_to_creatures;
 	entity  next;
-	float weaponid;
 
 	float stat_damagedone;
 	float stat_maxdamage;
@@ -1073,18 +1085,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 
 	RadiusDamage_running = 0;
 
-	weaponid = DEATH_WEAPONOF(deathtype);
-
-	// Calculates stats for all RadiusDamage weapons
-	if not(inWarmupStage)
-	if(weaponid)
-	if(clienttype(attacker) == CLIENTTYPE_REAL)
-	{
-		// Track damage done and update the stat to be sent later in g_world.qc
-		float f = min(stat_maxdamage, stat_damagedone);
-		attacker.actual_damage[weaponid] += f; // value temporarily stored in f due to a ftqecc bug
-		attacker.damage_hits = weaponid + 64 * rint(attacker.actual_damage[weaponid]);
-	}
+	Damage_RecordDamage(attacker, deathtype, min(stat_maxdamage, stat_damagedone));
 
 	return total_damage_to_creatures;
 }
@@ -1203,6 +1204,8 @@ void Fire_ApplyDamage(entity e)
 		e.fire_owner.typehitsound = ty;
 	}
 	e.fire_hitsound = TRUE;
+
+	Damage_RecordDamage(e.fire_owner, e.fire_deathtype, d);
 
 	if not(IS_INDEPENDENT_PLAYER(e))
 	FOR_EACH_PLAYER(other) if(e != other)

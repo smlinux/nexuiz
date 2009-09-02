@@ -38,6 +38,8 @@ void W_Fireball_Explode (void)
 			dir = normalize(e.origin + e.view_ofs - self.origin);
 			Damage(e, self, self.realowner, cvar("g_balance_fireball_secondary_bfgdamage") * points, self.projectiledeathtype | HITTYPE_BOUNCE | HITTYPE_SPLASH, e.origin + e.view_ofs, cvar("g_balance_fireball_secondary_bfgforce") * dir);
 			pointparticles(particleeffectnum("fireball_bfgdamage"), e.origin, -1 * dir, 1);
+
+			Damage_RecordDamage(self.owner, self.projectiledeathtype, cvar("g_balance_fireball_secondary_bfgdamage") * points);
 		}
 	}
 
@@ -113,7 +115,7 @@ void W_Fireball_Attack2()
 {
 	local entity proj;
 
-	W_SetupShot_ProjectileSize (self, '-16 -16 -16', '16 16 16', FALSE, 2, "weapons/fireball_fire2.wav", cvar("g_balance_fireball_secondary_damage"));
+	W_SetupShot_ProjectileSize (self, '-16 -16 -16', '16 16 16', FALSE, 2, "weapons/fireball_fire2.wav", cvar("g_balance_fireball_secondary_damage") + cvar("g_balance_fireball_secondary_bfgdamage"));
 
 	pointparticles(particleeffectnum("fireball_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 

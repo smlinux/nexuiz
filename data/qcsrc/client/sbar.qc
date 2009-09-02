@@ -1998,7 +1998,7 @@ void Sbar_DrawAccuracyStats()
 		//if ((weapon_number != 42))  // print them all :)
  		if ((self.weapon_type == WEP_TYPE_SPLASH) && (weapon_damage))
 		{
-			weapon_stats = rint(100 * weapon_hit / weapon_damage);
+			weapon_stats = bound(0, rint(100 * weapon_hit / weapon_damage), 100);
 
 			fill_colour_x = 1 - 0.015 * weapon_stats;
 			fill_colour_y = 1 - 0.015 * (100 - weapon_stats);
@@ -2044,13 +2044,13 @@ void Sbar_DrawAccuracyStats()
 			drawstringright(pos + '4.5 0 0' * sbar_fontsize_x + '0 7 0' * sbar_fontsize_y, strcat(ftos(weapon_stats),"%"), sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 			// the amount of shots missed or damage wasted
-			drawstringright(pos + '4.5 0 0' * sbar_fontsize_x + '0 9 0' * sbar_fontsize_y, ftos(weapon_damage - weapon_hit), sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+			drawstringright(pos + '4.5 0 0' * sbar_fontsize_x + '0 9 0' * sbar_fontsize_y, ftos(max(0, weapon_damage - weapon_hit)), sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 			++count_splash;
 		}
 		else if ((self.weapon_type == WEP_TYPE_HITSCAN) && (weapon_damage))
 		{
-			weapon_stats = rint(100 * weapon_hit / weapon_damage);
+			weapon_stats = bound(0, rint(100 * weapon_hit / weapon_damage), 100);
 
 			fill_colour_x = 1 - 0.015 * weapon_stats;
 			fill_colour_y = 1 - 0.015 * (100 - weapon_stats);
@@ -2096,7 +2096,7 @@ void Sbar_DrawAccuracyStats()
 			drawstringright(pos + '4.5 0 0' * sbar_fontsize_x + '0 7 0' * sbar_fontsize_y, strcat(ftos(weapon_stats),"%"), sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 			// the amount of shots missed or damage wasted
-			drawstringright(pos + '4.5 0 0' * sbar_fontsize_x + '0 9 0' * sbar_fontsize_y, ftos(weapon_damage - weapon_hit), sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+			drawstringright(pos + '4.5 0 0' * sbar_fontsize_x + '0 9 0' * sbar_fontsize_y, ftos(max(0, weapon_damage - weapon_hit)), sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 			++count_hitscan;
 		}
