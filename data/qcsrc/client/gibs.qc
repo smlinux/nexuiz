@@ -88,6 +88,8 @@ void TossGib (string mdlname, vector org, vector vconst, vector vrand, float spe
 	++gibcount;
 	if(gibcount >= cvar_or("cl_gibs_maxcount",100))
         RubbleDrop(giblist,Gib_Delete);
+	if(wasfreed(gib))
+		return;
 
 	//gib = spawn();
 

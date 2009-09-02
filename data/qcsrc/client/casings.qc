@@ -84,6 +84,8 @@ void Ent_Casing()
 	++casecount;
 	if(casecount >= cvar_or("cl_casings_maxcount",100))
         RubbleDrop(caselist,Casing_Delete);
+	if(wasfreed(casing))
+		return;
 
 	casing.state = ReadByte();
 	casing.silent = (casing.state & 0x80);
