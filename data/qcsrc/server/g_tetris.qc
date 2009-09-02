@@ -789,15 +789,12 @@ void HandleGame(float keyss)
 		for(i = 1; i <= nudge; ++i)
 		{
 			if(CheckMetrics(self.piece_type, check_pos_x + i, check_pos_y, check_pos_z))
-			{
 				self.piece_pos = check_pos + '1 0 0' * i;
-				break;
-			}
 			else if(CheckMetrics(self.piece_type, check_pos_x - i, check_pos_y, check_pos_z))
-			{
 				self.piece_pos = check_pos - '1 0 0' * i;
-				break;
-			}
+			else
+				continue;
+			break;
 		}
 	}
 	check_pos = self.piece_pos;
