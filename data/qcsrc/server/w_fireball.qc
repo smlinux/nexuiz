@@ -17,7 +17,7 @@ void W_Fireball_Explode (void)
 	if(self.realowner.health + self.realowner.armorvalue >= d)
 	if(!self.cnt)
 	{
-		shockwave_spawn("models/sphere/sphere.md3", self.origin, cvar("g_balance_fireball_secondary_bfgradius"), 0.1, 0.4);
+		modeleffect_spawn("models/sphere/sphere.md3", 0, 0, self.origin, '0 0 0', '0 0 0', '0 0 0', 0, cvar("g_balance_fireball_secondary_bfgradius"), 0.2, 0.05, 0.25);
 
 		// 2. bfg effect
 		FOR_EACH_PLAYER(e) if(e != self.owner) if(e.takedamage) if(!self.owner || IsDifferentTeam(e, self))
