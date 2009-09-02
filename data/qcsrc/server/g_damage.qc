@@ -1103,24 +1103,67 @@ float Fire_IsBurning(entity e)
 float Fire_AddDamage(entity e, entity o, float d, float t, float dt)
 {
 	float dps;
+	float maxtime, mintime, maxdamage, mindamage, maxdps, mindps, totaldamage, totaltime;
 	t = max(t, 0.1);
 	dps = d / t;
 	if(Fire_IsBurning(e))
 	{
-		float totaldamage, totaltime, maxdps, olddamage, oldtime;
-		oldtime = e.fire_endtime - time;
-		olddamage = e.fire_damagepersec * oldtime;
-		if(t > oldtime + 0.1 || d > olddamage + 1 || dps > e.fire_damagepersec + 1) // some thresholds to prevent toggling due to roundoff errors
+		mintime = e.fire_endtime - time;
+		maxtime = max(mintime, t);
+
+		mindps = e.fire_damagepersec;
+		maxdps = max(mindps, dps);
+
+		if(maxtime > mintime || maxdps > mindps)
 		{
-			maxdps = max(dps, e.fire_damagepersec);
-			totaltime = max(oldtime, t);
-			totaldamage = min(maxdps * totaltime, olddamage + d);
+			mindamage = mindps * mintime;
+			maxdamage = mindamage + d;
+
+			// interval [mintime, maxtime] * [mindps, maxdps]
+			// intersected with
+			// [mindamage, maxdamage]
+			// maximum of this!
+
+			if(maxdamage >= maxtime * maxdps)
+			{
+				totaltime = maxtime;
+				totaldamage = maxtime * maxdps;
+
+				// this branch increases totaldamage if either t > mintime, or dps > mindps
+			}
+			else
+			{
+				// maxdamage is inside the interval!
+				// first, try to use mindps; only if this fails, increase dps as needed
+				totaltime = min(maxdamage / mindps, maxtime); // maxdamage / mindps >= mindamage / mindps = mintime
+				totaldamage = maxdamage;
+				// can totaldamage / totaltime be >= maxdps?
+				// max(mindps, maxdamage / maxtime) >= maxdps?
+				// we know maxdamage < maxtime * maxdps
+				// so it cannot be
+
+				// this branch ALWAYS increases totaldamage, but requires maxdamage < maxtime * maxdps
+			}
+
+			// total conditions for increasing:
+			//     maxtime > mintime OR maxdps > mindps OR maxtime * maxdps > maxdamage
+			// however:
+			//     if maxtime = mintime, maxdps = mindps
+			// then:
+			//     maxdamage = mindamage + d
+			//     mindamage = mindps * mintime = maxdps * maxtime < maxdamage!
+			// so the last condition is not needed
+
 			e.fire_damagepersec = totaldamage / totaltime;
 			e.fire_endtime = time + totaltime;
-			e.fire_deathtype = dt;
-			e.fire_owner = o;
-			e.fire_hitsound = FALSE;
-			return totaldamage - olddamage; // can never be negative
+			if(totaldamage > 1.2 * mindamage)
+			if(e.fire_owner != o)
+			{
+				e.fire_deathtype = dt;
+				e.fire_owner = o;
+				e.fire_hitsound = FALSE;
+			}
+			return totaldamage - mindamage; // can never be negative
 		}
 		else
 			return 0;
