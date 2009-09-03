@@ -1378,12 +1378,15 @@ entity navigation_findnearestwaypoint(entity ent, float walkfromwp)
 	pm2 = ent.origin + PL_MAX;
 	waylist = findchain(classname, "waypoint");
 
+	if(ent.classname == "waypoint")
+		error("finding a nearest waypoint to a waypoint wtf");
+
 	// do two scans, because box test is cheaper
 	w = waylist;
 	while (w)
 	{
 		// if object is touching spawnfunc_waypoint
-		if(w != ent)
+		//if(w != ent)
 			if (boxesoverlap(pm1, pm2, w.absmin, w.absmax))
 				return w;
 		w = w.chain;
@@ -1403,7 +1406,7 @@ entity navigation_findnearestwaypoint(entity ent, float walkfromwp)
 	while (w)
 	{
 		// if object can walk from spawnfunc_waypoint
-		if(w != ent)
+		//if(w != ent)
 		{
 			if (w.wpisbox)
 			{
@@ -1642,6 +1645,7 @@ entity navigation_get_bestgoal()
 void() havocbot_role_ctf_offense;
 void navigation_routerating(entity e, float f, float rangebias)
 {
+	entity nwp;
 	if (!e)
 		return;
 
@@ -1738,24 +1742,32 @@ void navigation_routerating(entity e, float f, float rangebias)
 	//bprint(etos(e));
 	//bprint("\n");
 	// update the cached spawnfunc_waypoint link on a dynamic item entity
-	if (time > e.nearestwaypointtimeout)
+	if(e.classname == "waypoint")
 	{
-		e.nearestwaypoint = navigation_findnearestwaypoint(e, TRUE);
+		nwp = e;
+	}
+	else
+	{
+		if (time > e.nearestwaypointtimeout)
+		{
+			e.nearestwaypoint = navigation_findnearestwaypoint(e, TRUE);
 
-		// TODO: Cleaner solution, probably handling this timeout from ctf.qc
-		if(e.classname=="item_flag_team")
-			e.nearestwaypointtimeout = time + 2;
-		else
-			e.nearestwaypointtimeout = time + random() * 3 + 5;
+			// TODO: Cleaner solution, probably handling this timeout from ctf.qc
+			if(e.classname=="item_flag_team")
+				e.nearestwaypointtimeout = time + 2;
+			else
+				e.nearestwaypointtimeout = time + random() * 3 + 5;
+		}
+		nwp = e.nearestwaypoint;
 	}
 
-	//dprint("-- checking ", e.classname, " (with cost ", ftos(e.nearestwaypoint.wpcost), ")\n");
-	if (e.nearestwaypoint)
-	if (e.nearestwaypoint.wpcost < 10000000)
+	//dprint("-- checking ", e.classname, " (with cost ", ftos(nwp.wpcost), ")\n");
+	if (nwp)
+	if (nwp.wpcost < 10000000)
 	{
-		//te_wizspike(e.nearestwaypoint.wpnearestpoint);
-	//	dprint(e.classname, " ", ftos(f), "/(1+", ftos((e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint))), "/", ftos(rangebias), ") = ");
-		f = f * rangebias / (rangebias + (e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint)));
+		//te_wizspike(nwp.wpnearestpoint);
+	//	dprint(e.classname, " ", ftos(f), "/(1+", ftos((nwp.wpcost + vlen(e.origin - nwp.wpnearestpoint))), "/", ftos(rangebias), ") = ");
+		f = f * rangebias / (rangebias + (nwp.wpcost + vlen(e.origin - nwp.wpnearestpoint)));
 		//if (self.havocbot_role == havocbot_role_ctf_offense)
 		//dprint("considering ", e.classname, " (with rating ", ftos(f), ")\n");
 		//dprint(ftos(f));
@@ -1792,7 +1804,8 @@ float navigation_routetogoal(entity e, vector startposition)
 		return TRUE;
 
 	// see if there are waypoints describing a path to the item
-	e = e.nearestwaypoint;
+	if(e.classname != "waypoint")
+		e = e.nearestwaypoint;
 	if(e == world)
 		return FALSE;
 
