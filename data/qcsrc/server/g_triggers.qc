@@ -1174,7 +1174,7 @@ void trigger_impulse_touch2()
     if(!pushdeltatime) return;
 
     // div0: ticrate independent, 1 = identity (not 20)
-    other.velocity = other.velocity * pow(self.strength, * pushdeltatime);
+    other.velocity = other.velocity * pow(self.strength, pushdeltatime);
 }
 
 // Spherical (gravity/repulsor) mode

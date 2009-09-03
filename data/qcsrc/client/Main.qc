@@ -649,7 +649,7 @@ void Ent_ReadTeamScore()
 	self.team = ReadByte();
 	o = self.owner = GetTeam(self.team, true); // these team numbers can always be trusted
 
-	float sf;
+	float sf, lf;
 #if MAX_TEAMSCORE <= 8
 	sf = ReadByte();
 	lf = ReadByte();

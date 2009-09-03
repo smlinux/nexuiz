@@ -49,7 +49,7 @@ vector ScoreField_Compare(entity t1, entity t2, .float field, float fieldflags, 
 
 float TeamScore_SendEntity(entity to, float sendflags)
 {
-	float i, longflags;
+	float i, p, longflags;
 
 	WriteByte(MSG_ENTITY, ENT_CLIENT_TEAMSCORES);
 	WriteByte(MSG_ENTITY, self.team - 1);
@@ -66,7 +66,6 @@ float TeamScore_SendEntity(entity to, float sendflags)
 	WriteShort(MSG_ENTITY, sendflags);
 	WriteShort(MSG_ENTITY, longflags);
 #endif
-	float p;
 	for(i = 0, p = 1; i < MAX_TEAMSCORE; ++i, p *= 2)
 		if(sendflags & p)
 		{
@@ -210,7 +209,7 @@ void ScoreInfo_Init(float teams)
 
 float PlayerScore_SendEntity(entity to, float sendflags)
 {
-	float i;
+	float i, p, longflags;
 
 	WriteByte(MSG_ENTITY, ENT_CLIENT_SCORES);
 	WriteByte(MSG_ENTITY, num_for_edict(self.owner));
@@ -227,7 +226,6 @@ float PlayerScore_SendEntity(entity to, float sendflags)
 	WriteShort(MSG_ENTITY, sendflags);
 	WriteShort(MSG_ENTITY, longflags);
 #endif
-	float p;
 	for(i = 0, p = 1; i < MAX_SCORE; ++i, p *= 2)
 		if(sendflags & p)
 		{
