@@ -49,7 +49,7 @@ void MultiCampaign_Prev(entity btn, entity me);
 #ifdef IMPLEMENTATION
 string campaign_longdesc_wrapped[CAMPAIGN_MAX_ENTRIES];
 
-void rewrapCampaign(float w, float l0, float emptyheight)
+void rewrapCampaign(float w, float l0, float emptyheight, vector theFontSize)
 {
 	float i, j;
 	float n, l;
@@ -74,7 +74,7 @@ void rewrapCampaign(float w, float l0, float emptyheight)
 			getWrappedLine_remaining = s;
 			while(getWrappedLine_remaining)
 			{
-				s = getWrappedLine(w, draw_TextWidth_WithoutColors);
+				s = getWrappedLine(w, theFontSize, draw_TextWidth_WithoutColors);
 				if(--l < 0) goto toolong;
 				r = strcat(r, s, "\n");
 			}
@@ -125,7 +125,7 @@ void loadCvarsNexuizCampaignList(entity me)
 	me.campaignIndex = bound(0, cvar(me.cvarName), campaign_entries);
 	cvar_set(me.cvarName, ftos(me.campaignIndex));
 	if(me.columnNameSize)
-		rewrapCampaign(me.columnNameSize / me.realFontSize_x, me.rowsPerItem - 3, me.emptyLineHeight);
+		rewrapCampaign(me.columnNameSize, me.rowsPerItem - 3, me.emptyLineHeight, me.realFontSize);
 	me.nItems = min(me.campaignIndex + 2, campaign_entries);
 	me.selectedItem = min(me.campaignIndex, me.nItems - 1);
 	me.scrollPos = me.nItems * me.itemHeight - 1;
@@ -222,7 +222,7 @@ void resizeNotifyNexuizCampaignList(entity me, vector relOrigin, vector relSize,
 
 	me.checkMarkOrigin = eY + eX * (me.columnCheckMarkOrigin + me.columnCheckMarkSize) - me.checkMarkSize;
 
-	rewrapCampaign(me.columnNameSize / me.realFontSize_x, me.rowsPerItem - 3, me.emptyLineHeight);
+	rewrapCampaign(me.columnNameSize, me.rowsPerItem - 3, me.emptyLineHeight, me.realFontSize);
 }
 void clickListBoxItemNexuizCampaignList(entity me, float i, vector where)
 {
@@ -273,8 +273,8 @@ void drawListBoxItemNexuizCampaignList(entity me, float i, vector absSize, float
 		s = campaign_shortdesc[i]; // fteqcc sucks
 	else
 		s = "???";
-	s = draw_TextShortenToWidth(strcat("Level ", ftos(i + 1), ": ", s), me.columnNameSize / me.realFontSize_x, 0);
-	draw_Text(me.realUpperMargin1 * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 0) * me.realFontSize_x)) * eX, s, me.realFontSize, theColor, theAlpha, 0);
+	s = draw_TextShortenToWidth(strcat("Level ", ftos(i + 1), ": ", s), me.columnNameSize, 0, me.realFontSize);
+	draw_Text(me.realUpperMargin1 * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 0, me.realFontSize))) * eX, s, me.realFontSize, theColor, theAlpha, 0);
 
 	if(i <= me.campaignIndex)
 	{

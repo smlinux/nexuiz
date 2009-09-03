@@ -324,7 +324,7 @@ void preMenuDraw()
 	{
 		fs = ((1/draw_scale_x) * eX + (1/draw_scale_y) * eY) * 12;
 		line = eY * fs_y;
-		sz_x = draw_TextWidth("  http://www.nexuiz.com/  ", 0) * fs_x;
+		sz_x = draw_TextWidth("  http://www.nexuiz.com/  ", 0, fs);
 		sz_y = 3 * fs_y;
 
 		draw_alpha = sin(time * 0.112 - 0.3) * 0.7;

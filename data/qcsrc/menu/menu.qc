@@ -377,13 +377,13 @@ void m_tooltip(vector pos)
 					getWrappedLine_remaining = it.tooltip;
 					while(getWrappedLine_remaining)
 					{
-						s = getWrappedLine(SKINWIDTH_TOOLTIP / fontsize_x, draw_TextWidth_WithoutColors);
+						s = getWrappedLine(SKINWIDTH_TOOLTIP, fontsize, draw_TextWidth_WithoutColors);
 						++i;
-						f = draw_TextWidth(s, FALSE);
+						f = draw_TextWidth(s, FALSE, fontsize);
 						if(f > w)
 							w = f;
 					}
-					menuTooltipSize_x = w * fontsize_x + 2 * (SKINMARGIN_TOOLTIP_x / conwidth);
+					menuTooltipSize_x = w + 2 * (SKINMARGIN_TOOLTIP_x / conwidth);
 					menuTooltipSize_y = i * fontsize_y + 2 * (SKINMARGIN_TOOLTIP_y / conheight);
 					menuTooltipSize_z = 0;
 				}
@@ -439,7 +439,7 @@ void m_tooltip(vector pos)
 			getWrappedLine_remaining = menuTooltipItem.tooltip;
 			while(getWrappedLine_remaining)
 			{
-				s = getWrappedLine(SKINWIDTH_TOOLTIP / fontsize_x, draw_TextWidth_WithoutColors);
+				s = getWrappedLine(SKINWIDTH_TOOLTIP, fontsize, draw_TextWidth_WithoutColors);
 				draw_Text(p, s, fontsize, '1 1 1', SKINALPHA_TOOLTIP * menuTooltipAlpha, FALSE);
 				p_y += fontsize_y;
 			}

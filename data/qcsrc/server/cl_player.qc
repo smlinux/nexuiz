@@ -888,7 +888,7 @@ void Say(entity source, float teamsay, entity privatesay, string msgin, float fl
 		lines = 0;
 		while(getWrappedLine_remaining && (!flood_lmax || lines <= flood_lmax))
 		{
-			msgstr = strcat(msgstr, " ", getWrappedLine(82.4289758859709, strlennocol)); // perl averagewidth.pl < gfx/vera-sans.width
+			msgstr = strcat(msgstr, " ", getWrappedLineLen(82.4289758859709, strlennocol)); // perl averagewidth.pl < gfx/vera-sans.width
 			++lines;
 		}
 		msgstr = substring(msgstr, 1, strlen(msgstr) - 1);

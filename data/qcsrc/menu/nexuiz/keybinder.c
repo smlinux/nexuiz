@@ -312,7 +312,7 @@ void drawListBoxItemNexuizKeyBinder(entity me, float i, vector absSize, float is
 				s = strcat(s, keynumtostring(k));
 			}
 		}
-		s = draw_TextShortenToWidth(s, me.columnKeysSize / me.realFontSize_x, 0);
+		s = draw_TextShortenToWidth(s, me.columnKeysSize, 0, me.realFontSize);
 		draw_CenterText(me.realUpperMargin * eY + (me.columnKeysOrigin + 0.5 * me.columnKeysSize) * eX, s, me.realFontSize, theColor, theAlpha, 0);
 	}
 }

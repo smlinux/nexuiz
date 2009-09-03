@@ -143,9 +143,9 @@ void drawListBoxItemNexuizCvarList(entity me, float i, vector absSize, float isS
 	else
 		theColor = SKINCOLOR_CVARLIST_CHANGED;
 
-	s = draw_TextShortenToWidth(k, me.columnNameSize / me.realFontSize_x, 0);
+	s = draw_TextShortenToWidth(k, me.columnNameSize, 0, me.realFontSize);
 	draw_Text(me.realUpperMargin * eY + me.columnNameOrigin * eX, s, me.realFontSize, theColor, theAlpha, 0);
-	s = draw_TextShortenToWidth(v, me.columnValueSize / me.realFontSize_x, 0);
+	s = draw_TextShortenToWidth(v, me.columnValueSize, 0, me.realFontSize);
 	draw_Text(me.realUpperMargin * eY + me.columnValueOrigin * eX, s, me.realFontSize, theColor, theAlpha, 0);
 }
 

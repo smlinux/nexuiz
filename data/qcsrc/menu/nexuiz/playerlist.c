@@ -127,11 +127,11 @@ void drawListBoxItemNexuizPlayerList(entity me, float i, vector absSize, float i
 			score = substring(score, 0, t);
 	}
 
-	s = draw_TextShortenToWidth(s, (me.columnNameSize / me.realFontSize_x), 1);
-	score = draw_TextShortenToWidth(score, me.columnScoreSize / me.realFontSize_x, 0);
+	s = draw_TextShortenToWidth(s, me.columnNameSize, 1, me.realFontSize);
+	score = draw_TextShortenToWidth(score, me.columnScoreSize, 0, me.realFontSize);
 
-	draw_Text(me.realUpperMargin2 * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 1) * me.realFontSize_x)) * eX, s, me.realFontSize, '1 1 1', 1, 1);
-	draw_Text(me.realUpperMargin2 * eY + (me.columnScoreOrigin + 1.00 * (me.columnScoreSize - draw_TextWidth(score, 1) * me.realFontSize_x)) * eX, score, me.realFontSize, rgb, 1, 0);
+	draw_Text(me.realUpperMargin2 * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 1, me.realFontSize))) * eX, s, me.realFontSize, '1 1 1', 1, 1);
+	draw_Text(me.realUpperMargin2 * eY + (me.columnScoreOrigin + 1.00 * (me.columnScoreSize - draw_TextWidth(score, 1, me.realFontSize))) * eX, score, me.realFontSize, rgb, 1, 0);
 }
 
 #endif
