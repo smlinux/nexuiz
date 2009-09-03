@@ -226,7 +226,7 @@ float	getmousetarget(void)	  = #604;
 float	isfunction(string function_name) = #607;
 void	callfunction(...) = #605;
 void	writetofile(float fhandle, entity ent) = #606;
-vector	getresolution(float number) = #608;
+vector	getresolution(float number, ...) = #608; // optional argument "isfullscreen"
 string	keynumtostring(float keynum) = #609;
 string	findkeysforcommand(string command) = #610;
 
