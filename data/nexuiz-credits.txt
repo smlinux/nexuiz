@@ -14,7 +14,7 @@ Rudolf "div0" Polzer
 
 Kristian "morfar" Johansson
 
-SavageX
+Maik "SavageX" Merten
 
 
 **Development Team:
@@ -39,6 +39,9 @@ Saulo "mand1nga" Gil
 
 Stephan "esteel" Stahl
 *Programmer
+
+Jakob "tZork" Markstrom Grohn
+*Programmer and Artist
 
 Tyler "-z-" Mulligan
 *Web Developer and Interaction Designer
@@ -89,63 +92,68 @@ Garth "Zombie" Hendy
 
 **Thanks:
 
-Gerd "Elysis" Raudenbusch - Music
-Braden "meoblast001" Walters - Music
-Michael "Tenshihan" Quinn - Music
+Robert "ai" Kuroto - Various models
+Chris "amethyst7" Matz - Level design
 blkrbt - Music
-Amos "torus" Dudley - Announcer voices
-William "Willis" Weilep - Master server host
+Gerd "Elysis" Raudenbusch - Music
+Rasmus "FruitieX" Eskola - Artist
+Braden "meoblast001" Walters - Music
+Alexander "motorsep" Zubov - Weapon animation
+Eric "Munyul Verminard" Sambach - Level design
 Severin "sev" Meyer - Artist
 Simon O'Callaghan - "egyptsoc" texture set
-Robert "ai" Kuroto - Various models
-Alexander "motorsep" Zubov - Weapon animation
+Michael "Tenshihan" Quinn - Sound effects
+Amos "torus" Dudley - Announcer voices
+Mattrew "Tronyn" Rye - Level design
+Henning "Tymo" Janssen - Level design
+Kevin "Tyrann" Shanahan - Level design
+William "Willis" Weilep - Master server host
 
-Qantourisc
-Tymo
-Spirit
+
+
 Attila "WW3" Houtkooper
-GreEn`mArine
-Dan "Digger" Korostelev
-leileilol
-Jody Gallagher
-Donkey
-Vortex
-Juergen "LowDragon" Timm
-Sajt
-Supajoe
-lcatlnx
-Zenex
-Q1 Retexturing Project
-Tomaz
-Jitspoe
-"Parapraxis"
-NoelCower
-Brain Younds
-Spike
-Petithomme
-Tei
-Munyul
-Mathieu "Elric" Olivier
-SomeGuy
-Lee David Ash
-Shank
-FrikaC
-Dustin Geeraert
-Steve Vermeulen
-Edgenetwork
-Clinton "Kaziganthe" Freeman
-Jakob "tZork" Markstrom Grohn
 BigMac
-Mephisto
-michaelb
-dstrek
-Netzwerg
-Ulrich Galbraith
+Brain Younds
 Christian Ice
-FruitieX
+Clinton "Kaziganthe" Freeman
+Dan "Digger" Korostelev
+Donkey
+Dustin Geeraert
+Edgenetwork
 Edward "Ed" Holness
+FrikaC
+GreEn`mArine
+Jitspoe
+Jody Gallagher
+Juergen "LowDragon" Timm
+Lee David Ash
+Mathieu "Elric" Olivier
+Mephisto
 MirceaKitsune
-Ronan
-Shaggy
 MrBougo
+Munyul
+Netzwerg
+NoelCower
+Parapraxis
+Petithomme
+Q1 Retexturing Project
+Qantourisc
+Ronan
+Sajt
+Shaggy
+Shank
+SomeGuy
+Spike
+Spirit
+Steve Vermeulen
+Supajoe
+Tei
+Tomaz
+Ulrich Galbraith
+Vortex
+Zenex
+dstrek
+lcatlnx
+leileilol
+michaelb
 terencehill
