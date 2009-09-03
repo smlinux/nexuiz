@@ -1137,7 +1137,7 @@ void trigger_impulse_touch1()
     other.lastpushtime = time;
     if(!pushdeltatime) return;
 
-    other.velocity = other.velocity + normalize(targ.origin - self.origin) * self.strength * pushdeltatime;
+    other.velocity = other.velocity + normalize(targ.origin - self.origin) * str * pushdeltatime;
 	other.flags &~= FL_ONGROUND;
 }
 
