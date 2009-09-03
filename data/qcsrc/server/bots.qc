@@ -1376,15 +1376,12 @@ entity navigation_findnearestwaypoint(entity ent, float walkfromwp)
 	pm2 = ent.origin + PL_MAX;
 	waylist = findchain(classname, "waypoint");
 
-	if(ent.classname == "waypoint")
-		error("finding a nearest waypoint to a waypoint wtf");
-
 	// do two scans, because box test is cheaper
 	w = waylist;
 	while (w)
 	{
 		// if object is touching spawnfunc_waypoint
-		//if(w != ent)
+		if(w != ent)
 			if (boxesoverlap(pm1, pm2, w.absmin, w.absmax))
 				return w;
 		w = w.chain;
@@ -1404,7 +1401,7 @@ entity navigation_findnearestwaypoint(entity ent, float walkfromwp)
 	while (w)
 	{
 		// if object can walk from spawnfunc_waypoint
-		//if(w != ent)
+		if(w != ent)
 		{
 			if (w.wpisbox)
 			{
@@ -1740,7 +1737,7 @@ void navigation_routerating(entity e, float f, float rangebias)
 	//bprint(etos(e));
 	//bprint("\n");
 	// update the cached spawnfunc_waypoint link on a dynamic item entity
-	if(e.classname == "waypoint")
+	if(e.classname == "waypoint" && !(e.wpflags & WAYPOINTFLAG_PERSONAL))
 	{
 		nwp = e;
 	}
@@ -1802,7 +1799,7 @@ float navigation_routetogoal(entity e, vector startposition)
 		return TRUE;
 
 	// see if there are waypoints describing a path to the item
-	if(e.classname != "waypoint")
+	if(e.classname != "waypoint" || (e.wpflags & WAYPOINTFLAG_PERSONAL))
 		e = e.nearestwaypoint;
 	if(e == world)
 		return FALSE;
