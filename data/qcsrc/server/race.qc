@@ -100,7 +100,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 	if(g_race_qualifying)
 		t += e.race_penalty_accumulator;
 
-	t = floor(0.4 + 10 * t); // make integer
+	t = TIME_ENCODE(t); // make integer
 	// adding just 0.4 so it rounds down in the .5 case (matching the timer display)
 
 	if(tvalid)
@@ -117,7 +117,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 		else
 		{
 			s = PlayerScore_Add(e, SP_RACE_TIME, 0);
-			snew = floor(0.4 + 10 * (time - game_starttime));
+			snew = TIME_ENCODE(time - game_starttime);
 			PlayerScore_Add(e, SP_RACE_TIME, snew - s);
 			l = PlayerTeamScore_Add(e, SP_RACE_LAPS, ST_RACE_LAPS, 1);
 
@@ -160,36 +160,36 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 					string grecordholder;
 					string rr;
 					if(g_cts)
-						rr = "/ctsrecord/";
+						rr = CTS_RECORD;
 					else
-						rr = "/racerecord/";
+						rr = RACE_RECORD;
 					grecordtime = stof(db_get(ServerProgsDB, strcat(GetMapname(), rr, "time")));
 					grecordholder = db_get(ServerProgsDB, strcat(GetMapname(), rr, "netname"));
 					if(grecordholder == e.netname)
 						grecordholder = "";
 					if(grecordtime == 0)
 					{
-						bprint(e.netname, "^7 set the all-time fastest lap record with ", mmsss(t), "\n");
+						bprint(e.netname, "^7 set the all-time fastest lap record with ", TIME_ENCODED_TOSTRING(t), "\n");
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "time"), ftos(t));
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname"), e.netname);
-						write_recordmarker(e, time - t/10, t/10);
+						write_recordmarker(e, time - TIME_DECODE(t), TIME_DECODE(t));
 					}
 					else if(t < grecordtime)
 					{
 						if(grecordholder == "")
-							bprint(e.netname, "^7 broke his all-time fastest lap record with ", mmsss(t), "\n");
+							bprint(e.netname, "^7 broke his all-time fastest lap record with ", TIME_ENCODED_TOSTRING(t), "\n");
 						else
-							bprint(e.netname, "^7 broke ", grecordholder, "^7's all-time fastest lap record with ", mmsss(t), "\n");
+							bprint(e.netname, "^7 broke ", grecordholder, "^7's all-time fastest lap record with ", TIME_ENCODED_TOSTRING(t), "\n");
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "time"), ftos(t));
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname"), e.netname);
-						write_recordmarker(e, time - t/10, t/10);
+						write_recordmarker(e, time - TIME_DECODE(t), TIME_DECODE(t));
 					}
 					else
 					{
 						if(grecordholder == "")
-							bprint(e.netname, "^7's new fastest lap could not break his all-time fastest lap record of ", mmsss(grecordtime), "\n");
+							bprint(e.netname, "^7's new fastest lap could not break his all-time fastest lap record of ", TIME_ENCODED_TOSTRING(grecordtime), "\n");
 						else
-							bprint(e.netname, "^7's new fastest lap could not break ", grecordholder, "^7's all-time fastest lap record of ", mmsss(grecordtime), "\n");
+							bprint(e.netname, "^7's new fastest lap could not break ", grecordholder, "^7's all-time fastest lap record of ", TIME_ENCODED_TOSTRING(grecordtime), "\n");
 					}
 				}
 
@@ -251,7 +251,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 			}
 			else
 			{
-				WriteShort(MSG_ONE, floor(10 * (time - race_checkpoint_lasttimes[cp]) + 0.5));
+				WriteShort(MSG_ONE, TIME_ENCODE(time - race_checkpoint_lasttimes[cp]));
 				WriteByte(MSG_ONE, lself - lother);
 				WriteString(MSG_ONE, oth.netname); // record holder
 			}
@@ -275,7 +275,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 			}
 			else
 			{
-				WriteShort(MSG_ONE, floor(10 * (time - othtime) + 0.5));
+				WriteShort(MSG_ONE, TIME_ENCODE(time - othtime));
 				WriteByte(MSG_ONE, lother - lself);
 				WriteString(MSG_ONE, e.netname); // record holder
 			}
@@ -703,7 +703,7 @@ void race_ImposePenaltyTime(entity pl, float penalty, string reason)
 			WriteByte(MSG_ONE, SVC_TEMPENTITY);
 			WriteByte(MSG_ONE, TE_CSQC_RACE);
 			WriteByte(MSG_ONE, RACE_NET_PENALTY_QUALIFYING);
-			WriteByte(MSG_ONE, floor(0.4 + 10 * penalty));
+			WriteShort(MSG_ONE, TIME_ENCODE(penalty));
 			WriteString(MSG_ONE, reason);
 		});
 	}
@@ -715,7 +715,7 @@ void race_ImposePenaltyTime(entity pl, float penalty, string reason)
 			WriteByte(MSG_ONE, SVC_TEMPENTITY);
 			WriteByte(MSG_ONE, TE_CSQC_RACE);
 			WriteByte(MSG_ONE, RACE_NET_PENALTY_RACE);
-			WriteByte(MSG_ONE, floor(0.4 + 10 * penalty));
+			WriteShort(MSG_ONE, TIME_ENCODE(penalty));
 			WriteString(MSG_ONE, reason);
 		});
 	}

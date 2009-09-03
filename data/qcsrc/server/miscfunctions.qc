@@ -2021,11 +2021,11 @@ string getrecords()
         {
             if (MapInfo_Get_ByID(i))
             {
-                r = stof(db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, "/racerecord/time")));
+                r = stof(db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, RACE_RECORD, "time")));
                 if (r == 0)
                     continue;
-                h = db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, "/racerecord/netname"));
-                s = strcat(s, strpad(32, MapInfo_Map_bspname), " ", strpad(-8, mmsss(r)), " ", h, "\n");
+                h = db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, RACE_RECORD, "netname"));
+                s = strcat(s, strpad(32, MapInfo_Map_bspname), " ", strpad(-8, TIME_ENCODED_TOSTRING(r)), " ", h, "\n");
                 ++rec;
             }
         }
@@ -2037,11 +2037,11 @@ string getrecords()
         {
             if (MapInfo_Get_ByID(i))
             {
-                r = stof(db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, "/ctsrecord/time")));
+                r = stof(db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, CTS_RECORD, "time")));
                 if (r == 0)
                     continue;
-                h = db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, "/ctsrecord/netname"));
-                s = strcat(s, strpad(32, MapInfo_Map_bspname), " ", strpad(-8, mmsss(r)), " ", h, "\n");
+                h = db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, CTS_RECORD, "netname"));
+                s = strcat(s, strpad(32, MapInfo_Map_bspname), " ", strpad(-8, TIME_ENCODED_TOSTRING(r)), " ", h, "\n");
                 ++rec;
             }
         }
@@ -2194,7 +2194,7 @@ void write_recordmarker(entity pl, float tstart, float dt)
     // also write a marker into demo files for demotc-race-record-extractor to find
     stuffcmd(pl,
              strcat(
-                 strcat("//", strconv(2, 0, 0, GetGametype()), " RECORD SET ", mmsss(dt * 10)),
+                 strcat("//", strconv(2, 0, 0, GetGametype()), " RECORD SET ", TIME_ENCODED_TOSTRING(TIME_ENCODE(dt))),
                  " ", ftos(tstart), " ", ftos(dt), "\n"));
 }
 

@@ -1200,7 +1200,7 @@ string MakeRaceString(float cp, float mytime, float histime, float lapdelta, str
 	{
 		if(mytime > 0)
 		{
-			timestr = strcat("+", ftos_decimals(+mytime, 1));
+			timestr = strcat("+", ftos_decimals(+mytime, TIME_DECIMALS));
 			col = "^1";
 		}
 		else if(mytime == 0)
@@ -1210,7 +1210,7 @@ string MakeRaceString(float cp, float mytime, float histime, float lapdelta, str
 		}
 		else
 		{
-			timestr = strcat("-", ftos_decimals(-mytime, 1));
+			timestr = strcat("-", ftos_decimals(-mytime, TIME_DECIMALS));
 			col = "^2";
 		}
 
@@ -1228,9 +1228,9 @@ string MakeRaceString(float cp, float mytime, float histime, float lapdelta, str
 	else if(histime > 0) // anticipation
 	{
 		if(mytime >= histime)
-			timestr = strcat("+", ftos_decimals(mytime - histime, 1));
+			timestr = strcat("+", ftos_decimals(mytime - histime, TIME_DECIMALS));
 		else
-			timestr = mmsss(histime * 10);
+			timestr = TIME_ENCODED_TOSTRING(TIME_ENCODE(histime));
 		col = "^3";
 	}
 	else
@@ -1301,20 +1301,20 @@ void Sbar_Score(float margin)
 
 		score = me.(scores[ps_primary]);
 
-		racemin = floor(score/600);
-		racesec = floor((score - racemin*600)/10);
-		racemsec = score - racemin*600 - racesec*10;
+		racemin = floor(score/(60 * TIME_FACTOR));
+		racesec = floor((score - racemin*(60 * TIME_FACTOR))/TIME_FACTOR);
+		racemsec = score - racemin*60*TIME_FACTOR - racesec*TIME_FACTOR;
 
 		if (pl && ((!(scores_flags[ps_primary] & SFL_ZERO_IS_WORST)) || score)) {
 			// distribution display
 			distribution = me.(scores[ps_primary]);
 			distribution -= pl.(scores[ps_primary]);
 
-			if (distribution < 10 && distribution > -10)
+			if (distribution < TIME_FACTOR && distribution > -TIME_FACTOR)
 				distmsec = fabs(distribution);
 			else {
-				distsec = floor(fabs(distribution)/10);
-				distmsec = fabs(distribution) - distsec*10;
+				distsec = floor(fabs(distribution)/TIME_FACTOR);
+				distmsec = fabs(distribution) - distsec*TIME_FACTOR;
 			}
 
 			if (distribution < 100 && distribution > -100)
@@ -1335,7 +1335,7 @@ void Sbar_Score(float margin)
 				drawpic(minuspos, "gfx/hud/num_plus", '16 16 0', distribution_color, sbar_alpha_fg, DRAWFLAG_ADDITIVE);
 			}
 
-			Sbar_DrawXNum(bottomright - element_offset - score_offset + '180 -6 0', distmsec, 1, 16, distribution_color, 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+			Sbar_DrawXNum(bottomright - element_offset - score_offset + '180 -6 0', distmsec, -TIME_DECIMALS, 16, distribution_color, 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 			Sbar_DrawXNum(bottomright - element_offset - score_offset + '112 -6 0', distsec, 4, 16, distribution_color, 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 			drawpic(bottomright - element_offset - score_offset + '170 -6 0', "gfx/hud/num_dot", '16 16 0', distribution_color, sbar_alpha_fg, DRAWFLAG_ADDITIVE);
 		}
@@ -1344,7 +1344,7 @@ void Sbar_Score(float margin)
 		if (distribution <= 0 || distribution == score) // draw the highlight background behind the timer if we have the lead
 			drawpic(bottomright - element_offset - score_offset + '20 10 0', "gfx/hud/sb_highlight_4", '178 28 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 
-		Sbar_DrawXNum(bottomright - element_offset - score_offset + '166 10 0', racemsec, 1, 30, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+		Sbar_DrawXNum(bottomright - element_offset - score_offset + '166 10 0', racemsec, -TIME_DECIMALS, 30, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 		Sbar_DrawXNum(bottomright - element_offset - score_offset + '96 10 0', racesec, -2, 30, '1 1 1', 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 		drawpic(bottomright - element_offset - score_offset + '145 10 0', "gfx/hud/num_dot", '30 30 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_ADDITIVE);
 
@@ -1514,21 +1514,21 @@ void Sbar_Score(float margin)
 				if(race_checkpoint != 254)
 				{
 					if(race_time && race_previousbesttime)
-						s = MakeRaceString(race_checkpoint, race_time / 10 - race_previousbesttime / 10, 0, 0, race_previousbestname);
+						s = MakeRaceString(race_checkpoint, TIME_DECODE(race_time) - TIME_DECODE(race_previousbesttime), 0, 0, race_previousbestname);
 					else
 						s = MakeRaceString(race_checkpoint, 0, -1, 0, race_previousbestname);
 					if(race_time)
-						forcetime = mmsss(race_time);
+						forcetime = TIME_ENCODED_TOSTRING(race_time);
 				}
 			}
 			else
 			{
 				if(race_laptime && race_nextbesttime && race_nextcheckpoint != 254)
 				{
-					a = bound(0, 2 - ((race_laptime + race_nextbesttime/10) - (time + race_penaltyaccumulator/10)), 1);
+					a = bound(0, 2 - ((race_laptime + TIME_DECODE(race_nextbesttime)) - (time + TIME_DECODE(race_penaltyaccumulator))), 1);
 					if(a > 0) // next one?
 					{
-						s = MakeRaceString(race_nextcheckpoint, (time + race_penaltyaccumulator/10) - race_laptime, race_nextbesttime / 10, 0, race_nextbestname);
+						s = MakeRaceString(race_nextcheckpoint, (time + TIME_DECODE(race_penaltyaccumulator)) - race_laptime, TIME_DECODE(race_nextbesttime), 0, race_nextbestname);
 					}
 				}
 			}
@@ -1560,7 +1560,7 @@ void Sbar_Score(float margin)
 
 			if(race_laptime && race_checkpoint != 255)
 			{
-				s = mmsss(10*(time + race_penaltyaccumulator/10 - race_laptime));
+				s = TIME_ENCODED_TOSTRING(TIME_ENCODE(time + TIME_DECODE(race_penaltyaccumulator) - race_laptime));
 				drawstring(m - '16 0 0' * stringwidth(s, FALSE), s, '32 32 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
 			}
 		}
@@ -1569,14 +1569,14 @@ void Sbar_Score(float margin)
 			if(race_mycheckpointtime)
 			{
 				a = bound(0, 2 - (time - race_mycheckpointtime), 1);
-				s = MakeRaceString(race_mycheckpoint, race_mycheckpointdelta / 10, -!race_mycheckpointenemy, race_mycheckpointlapsdelta, race_mycheckpointenemy);
+				s = MakeRaceString(race_mycheckpoint, TIME_DECODE(race_mycheckpointdelta), -!race_mycheckpointenemy, race_mycheckpointlapsdelta, race_mycheckpointenemy);
 				dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
 				drawcolorcodedstring(m - '0 16 0' - '8 0 0' * stringwidth(s, TRUE), s, '16 16 0', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
 			}
 			if(race_othercheckpointtime && race_othercheckpointenemy != "")
 			{
 				a = bound(0, 2 - (time - race_othercheckpointtime), 1);
-				s = MakeRaceString(race_othercheckpoint, -race_othercheckpointdelta / 10, -!race_othercheckpointenemy, race_othercheckpointlapsdelta, race_othercheckpointenemy);
+				s = MakeRaceString(race_othercheckpoint, -TIME_DECODE(race_othercheckpointdelta), -!race_othercheckpointenemy, race_othercheckpointlapsdelta, race_othercheckpointenemy);
 				dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
 				drawcolorcodedstring(m - '0 0 0' - '8 0 0' * stringwidth(s, TRUE), s, '16 16 0', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
 			}

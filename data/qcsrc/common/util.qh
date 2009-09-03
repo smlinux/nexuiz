@@ -57,7 +57,26 @@ float mod(float a, float b) { return a - (floor(a / b) * b); }
 #endif
 
 string GametypeNameFromType(float g);
+#define TIME_TO_NTHS(t,n) floor((t) * (n) + 0.4)
 string mmsss(float t);
+string mmssss(float t);
+
+#ifdef RACE_100THS
+#define TIME_DECIMALS 2
+#define TIME_FACTOR 100
+#define TIME_ENCODED_TOSTRING(n) mmssss(n)
+#define RACE_RECORD "/race100record/"
+#define CTS_RECORD "/cts100record/"
+#else
+#define TIME_DECIMALS 1
+#define TIME_FACTOR 10
+#define TIME_ENCODED_TOSTRING(n) mmsss(n)
+#define RACE_RECORD "/racerecord/"
+#define CTS_RECORD "/ctsrecord/"
+#endif
+#define TIME_ENCODE(t) TIME_TO_NTHS(t, TIME_FACTOR)
+#define TIME_DECODE(n) ((n) / TIME_FACTOR)
+
 string ScoreString(float vflags, float value);
 
 vector cross(vector a, vector b);

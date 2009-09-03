@@ -988,7 +988,7 @@ void Net_ReadRace()
 
 		case RACE_NET_PENALTY_RACE:
 			race_penaltyeventtime = time;
-			race_penaltytime = ReadByte();
+			race_penaltytime = ReadShort();
 			//race_penaltyaccumulator += race_penaltytime;
 			if(race_penaltyreason)
 				strunzone(race_penaltyreason);
@@ -997,7 +997,7 @@ void Net_ReadRace()
 
 		case RACE_NET_PENALTY_QUALIFYING:
 			race_penaltyeventtime = time;
-			race_penaltytime = ReadByte();
+			race_penaltytime = ReadShort();
 			race_penaltyaccumulator += race_penaltytime;
 			if(race_penaltyreason)
 				strunzone(race_penaltyreason);

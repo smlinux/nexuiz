@@ -442,6 +442,17 @@ string mmsss(float tenths)
 	return strcat(ftos(minutes), ":", substring(s, 1, 2), ".", substring(s, 3, 1));
 }
 
+string mmssss(float hundredths)
+{
+	float minutes;
+	string s;
+	hundredths = floor(hundredths + 0.5);
+	minutes = floor(hundredths / 6000);
+	hundredths -= minutes * 6000;
+	s = ftos(10000 + hundredths);
+	return strcat(ftos(minutes), ":", substring(s, 1, 2), ".", substring(s, 3, 2));
+}
+
 string ScoreString(float pFlags, float pValue)
 {
 	string valstr;
@@ -467,7 +478,7 @@ string ScoreString(float pFlags, float pValue)
 			valstr = strcat(valstr, "th");
 	}
 	else if(pFlags & SFL_TIME)
-		valstr = mmsss(pValue);
+		valstr = TIME_ENCODED_TOSTRING(pValue);
 	else
 		valstr = ftos(pValue);
 	
