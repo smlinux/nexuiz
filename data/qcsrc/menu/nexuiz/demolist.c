@@ -99,8 +99,8 @@ void drawListBoxItemNexuizDemoList(entity me, float i, vector absSize, float isS
     	draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_SELECTED, SKINALPHA_LISTBOX_SELECTED);
 		
     s = me.demoName(me,i);
-    s = draw_TextShortenToWidth(s, me.columnNameSize, 0, me.realFontSize);
-    draw_Text(me.realUpperMargin * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 0, me.realFontSize))) * eX, s, me.realFontSize, '1 1 1', SKINALPHA_TEXT, 0);		
+    s = draw_TextShortenToWidth(s, me.columnNameSize / me.realFontSize_x, 0);
+    draw_Text(me.realUpperMargin * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 0) * me.realFontSize_x)) * eX, s, me.realFontSize, '1 1 1', SKINALPHA_TEXT, 0);		
 }
 
 void showNotifyNexuizDemoList(entity me)

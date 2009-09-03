@@ -1,4 +1,4 @@
-var float(string text, float handleColors, vector fontSize) stringwidth;
+var float(string text, float handleColors) stringwidth;
 
 entity players;
 entity teams;
@@ -384,7 +384,7 @@ void drawstring_expanding(vector position, string text, vector scale, vector rgb
 	sz = expandingbox_sizefactor_from_fadelerp(fadelerp);
 
 	dummyfunction(0, 0, 0, 0, 0, 0, 0, 0);
-	drawstring(position + expandingbox_resize_centered_box_offset(sz, scale, stringwidth(text, FALSE, '1 0 0')), text, scale * sz, rgb, alpha * (1 - fadelerp), flag);
+	drawstring(position + expandingbox_resize_centered_box_offset(sz, scale, stringwidth(text, FALSE)), text, scale * sz, rgb, alpha * (1 - fadelerp), flag);
 }
 
 void drawcolorcodedstring_expanding(vector position, string text, vector scale, float alpha, float flag, float fadelerp)
@@ -393,5 +393,5 @@ void drawcolorcodedstring_expanding(vector position, string text, vector scale, 
 	sz = expandingbox_sizefactor_from_fadelerp(fadelerp);
 
 	dummyfunction(0, 0, 0, 0, 0, 0, 0, 0);
-	drawcolorcodedstring(position + expandingbox_resize_centered_box_offset(sz, scale, stringwidth(text, TRUE, '1 0 0')), text, scale * sz, alpha * (1 - fadelerp), flag);
+	drawcolorcodedstring(position + expandingbox_resize_centered_box_offset(sz, scale, stringwidth(text, TRUE)), text, scale * sz, alpha * (1 - fadelerp), flag);
 }

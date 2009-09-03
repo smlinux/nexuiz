@@ -160,12 +160,12 @@ void drawListBoxItemNexuizSkinList(entity me, float i, vector absSize, float isS
 	
 	s = me.skinParameter(me, i, SKINPARM_NAME);
 	s = strcat(s, ": ", me.skinParameter(me, i, SKINPARM_TITLE));
-	s = draw_TextShortenToWidth(s, me.columnNameSize, 0, me.realFontSize);
-	draw_Text(me.realUpperMargin1 * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 0, me.realFontSize))) * eX, s, me.realFontSize, SKINCOLOR_SKINLIST_TITLE, SKINALPHA_TEXT, 0);
+	s = draw_TextShortenToWidth(s, me.columnNameSize / me.realFontSize_x, 0);
+	draw_Text(me.realUpperMargin1 * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 0) * me.realFontSize_x)) * eX, s, me.realFontSize, SKINCOLOR_SKINLIST_TITLE, SKINALPHA_TEXT, 0);
 
 	s = me.skinParameter(me, i, SKINPARM_AUTHOR);
-	s = draw_TextShortenToWidth(s, me.columnNameSize, 0, me.realFontSize);
-	draw_Text(me.realUpperMargin2 * eY + (me.columnNameOrigin + 1.00 * (me.columnNameSize - draw_TextWidth(s, 0, me.realFontSize))) * eX, s, me.realFontSize, SKINCOLOR_SKINLIST_AUTHOR, SKINALPHA_TEXT, 0);
+	s = draw_TextShortenToWidth(s, me.columnNameSize / me.realFontSize_x, 0);
+	draw_Text(me.realUpperMargin2 * eY + (me.columnNameOrigin + 1.00 * (me.columnNameSize - draw_TextWidth(s, 0) * me.realFontSize_x)) * eX, s, me.realFontSize, SKINCOLOR_SKINLIST_AUTHOR, SKINALPHA_TEXT, 0);
 }
 
 void setSkinNexuizSkinList(entity me)

@@ -13,7 +13,7 @@ float mv_detail;
 float mv_timeout;
 float mv_maps_mask;
 
-string MapVote_FormatMapItem(float id, string map, float count, float maxwidth, vector fontsize)
+string MapVote_FormatMapItem(float id, string map, float count, float maxwidth)
 {
 	string pre, post;
 	pre = strcat(ftos(id+1), ". ");
@@ -26,8 +26,8 @@ string MapVote_FormatMapItem(float id, string map, float count, float maxwidth, 
 	}
 	else
 		post = "";
-	maxwidth -= stringwidth(pre, FALSE, fontsize) + stringwidth(post, FALSE, fontsize);
-	map = textShortenToWidth(map, maxwidth, fontsize, stringwidth_nocolors);
+	maxwidth -= stringwidth(pre, FALSE) + stringwidth(post, FALSE);
+	map = textShortenToWidth(map, maxwidth, stringwidth_nocolors);
 	return strcat(pre, map, post);
 }
 
@@ -56,9 +56,9 @@ void MapVote_DrawMapItem(vector pos, float isize, float tsize, string map, strin
 	drawfont = sbar_font;
 	pos_y = pos_y + img_size_y;
 	
-	label = MapVote_FormatMapItem(id, map, count, tsize, sbar_fontsize);
+	label = MapVote_FormatMapItem(id, map, count, tsize / sbar_fontsize_x);
 
-	text_size = stringwidth(label, false, sbar_fontsize);
+	text_size = stringwidth(label, false) * sbar_fontsize_x;
 	
 	pos_x -= text_size*0.5;
 	drawstring(pos, label, sbar_fontsize, rgb, 1, DRAWFLAG_NORMAL);
@@ -102,9 +102,9 @@ void MapVote_DrawAbstain(vector pos, float isize, float tsize, float count, floa
 	drawfont = sbar_font;
 	pos_y = pos_y + sbar_fontsize_y;
 	
-	label = MapVote_FormatMapItem(id, "Don't care", count, tsize, sbar_fontsize);
+	label = MapVote_FormatMapItem(id, "Don't care", count, tsize / sbar_fontsize_x);
 
-	text_size = stringwidth(label, false, sbar_fontsize);
+	text_size = stringwidth(label, false) * sbar_fontsize_x;
 	
 	pos_x -= text_size*0.5;
 	drawstring(pos, label, sbar_fontsize, rgb, 1, DRAWFLAG_NORMAL);
@@ -149,15 +149,13 @@ void MapVote_Draw()
 
 	pos_y = ymin;
 	pos_z = 0;
-	//pos_x = center - stringwidth("Vote for a map", false) * 0.5 * 24;
-	pos_x = center - stringwidth("Vote for a map", false, '12 0 0');
+	pos_x = center - stringwidth("Vote for a map", false) * 0.5 * 24;
 	drawstring(pos, "Vote for a map", '24 24 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 	pos_y += 26;
 
 	i = ceil(max(0, mv_timeout - time));
 	map = strcat(ftos(i), " seconds left");
-	//pos_x = center - stringwidth(map, false) * 0.5 * 16;
-	pos_x = center - stringwidth(map, false, '8 0 0');
+	pos_x = center - stringwidth(map, false) * 0.5 * 16;
 	drawstring(pos, map, '16 16 0', '0 1 0', 1, DRAWFLAG_NORMAL);
 	pos_y += 22;
 	pos_x = xmin;

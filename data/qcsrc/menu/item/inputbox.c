@@ -55,7 +55,7 @@ float mouseDragInputBox(entity me, vector pos)
 	float p;
 	me.dragScrollPos = pos;
 	p = me.scrollPos + pos_x - me.keepspaceLeft;
-	me.cursorPos = draw_TextLengthUpToWidth(me.text, p, 0, me.realFontSize);
+	me.cursorPos = draw_TextLengthUpToWidth(me.text, p / me.realFontSize_x, 0);
 	me.lastChangeTime = time;
 	return 1;
 }
@@ -146,8 +146,8 @@ void drawInputBox(entity me)
 	}
 
 	me.cursorPos = bound(0, me.cursorPos, strlen(me.text));
-	cursorPosInWidths = draw_TextWidth(substring(me.text, 0, me.cursorPos), 0, me.realFontSize);
-	totalSizeInWidths = draw_TextWidth(strcat(me.text, CURSOR), 0, me.realFontSize);
+	cursorPosInWidths = draw_TextWidth(substring(me.text, 0, me.cursorPos), 0) * me.realFontSize_x;
+	totalSizeInWidths = draw_TextWidth(strcat(me.text, CURSOR), 0) * me.realFontSize_x;
 
 	if(me.dragScrollTimer < time)
 	{
@@ -183,7 +183,7 @@ void drawInputBox(entity me)
 			{
 				float w;
 				ch2 = substring(me.text, i+1, 1);
-				w = draw_TextWidth(strcat(ch, ch2), 0, me.realFontSize);
+				w = draw_TextWidth(strcat(ch, ch2), 0) * me.realFontSize_x;
 				if(ch2 == "^")
 				{
 					draw_Fill(p, eX * w + eY * me.realFontSize_y, '1 1 1', 0.5);
@@ -227,7 +227,7 @@ void drawInputBox(entity me)
 							{
 								theTempColor_z = component/15;
 								theColor = theTempColor;
-								w = draw_TextWidth(substring(me.text, i, 5), 0, me.realFontSize);
+								w = draw_TextWidth(substring(me.text, i, 5), 0) * me.realFontSize_x;
 								
 								draw_Fill(p, eX * w + eY * me.realFontSize_y, '1 1 1', 0.5);
 								draw_Text(p, substring(me.text, i, 5), me.realFontSize, theColor, 1, 0);    // theVariableAlpha instead of 1 using alpha tags ^ax
@@ -236,7 +236,7 @@ void drawInputBox(entity me)
 							else
 							{
 								// blue missing
-								w = draw_TextWidth(substring(me.text, i, 4), 0, me.realFontSize);
+								w = draw_TextWidth(substring(me.text, i, 4), 0) * me.realFontSize_x;
 								draw_Fill(p, eX * w + eY * me.realFontSize_y, eZ, 0.5);
 								draw_Text(p, substring(me.text, i, 4), me.realFontSize, '1 1 1', theAlpha, 0);
 								i += 2;
@@ -245,7 +245,7 @@ void drawInputBox(entity me)
 						else
 						{
 							// green missing
-							w = draw_TextWidth(substring(me.text, i, 3), 0, me.realFontSize);
+							w = draw_TextWidth(substring(me.text, i, 3), 0) * me.realFontSize_x;
 							draw_Fill(p, eX * w + eY * me.realFontSize_y, eY, 0.5);
 							draw_Text(p, substring(me.text, i, 3), me.realFontSize, '1 1 1', theAlpha, 0);
 							i += 1;
@@ -284,7 +284,7 @@ void drawInputBox(entity me)
 						else
 							theVariableAlpha = component*0.0625;
 						
-						draw_Fill(p, eX * draw_TextWidth(substring(me.text, i, 3), 0, me.realFontSize) + eY * me.realFontSize_y, '0.8 0.8 0.8', 0.5);
+						draw_Fill(p, eX * draw_TextWidth(substring(me.text, i, 3), 0) * me.realFontSize_x + eY * me.realFontSize_y, '0.8 0.8 0.8', 0.5);
 						draw_Text(p, strcat(ch, ch2), me.realFontSize, theColor, 0.8, 0);
 					}
 				}*/
@@ -298,7 +298,7 @@ void drawInputBox(entity me)
 				continue;
 			}
 			draw_Text(p, ch, me.realFontSize, theColor, theAlpha, 0); // TODO theVariableAlpha
-			p += eX * draw_TextWidth(ch, 0, me.realFontSize);
+			p += eX * draw_TextWidth(ch, 0) * me.realFontSize_x;
 		}
 	}
 	else
