@@ -617,21 +617,23 @@ void Ent_ReadPlayerScore()
 	//	RegisterPlayer(o);
 	//playerchecker will do this for us later, if it has not already done so
 
-#if MAX_SCORE <= 3
-	for(i = 0; i < MAX_SCORE; ++i)
-		o.(scores[i]) = ReadShort();
-#else
-	float sf;
+	float sf, lf;
 #if MAX_SCORE <= 8
 	sf = ReadByte();
+	lf = ReadByte();
 #else
 	sf = ReadShort();
+	lf = ReadShort();
 #endif
 	float p;
 	for(i = 0, p = 1; i < MAX_SCORE; ++i, p *= 2)
 		if(sf & p)
-			o.(scores[i]) = ReadShort();
-#endif
+		{
+			if(lf & p)
+				o.(scores[i]) = ReadLong();
+			else
+				o.(scores[i]) = ReadShort();
+		}
 
 	if(o.sort_prev)
 		Sbar_UpdatePlayerPos(o); // if not registered, we cannot do this yet!
@@ -647,21 +649,23 @@ void Ent_ReadTeamScore()
 	self.team = ReadByte();
 	o = self.owner = GetTeam(self.team, true); // these team numbers can always be trusted
 
-#if MAX_TEAMSCORE <= 3
-	for(i = 0; i < MAX_TEAMSCORE; ++i)
-		o.(teamscores[i]) = ReadShort();
-#else
 	float sf;
 #if MAX_TEAMSCORE <= 8
 	sf = ReadByte();
+	lf = ReadByte();
 #else
 	sf = ReadShort();
+	lf = ReadShort();
 #endif
 	float p;
 	for(i = 0, p = 1; i < MAX_TEAMSCORE; ++i, p *= 2)
 		if(sf & p)
-			o.(teamscores[i]) = ReadShort();
-#endif
+		{
+			if(lf & p)
+				o.(teamscores[i]) = ReadLong();
+			else
+				o.(teamscores[i]) = ReadShort();
+		}
 
 	Sbar_UpdateTeamPos(o);
 }
@@ -928,8 +932,8 @@ void Net_ReadRace()
 	{
 		case RACE_NET_CHECKPOINT_HIT_QUALIFYING:
 			race_checkpoint = ReadByte();
-			race_time = ReadShort();
-			race_previousbesttime = ReadShort();
+			race_time = ReadLong();
+			race_previousbesttime = ReadLong();
 			if(race_previousbestname)
 				strunzone(race_previousbestname);
 			race_previousbestname = strzone(ColorTranslateRGB(ReadString()));
@@ -956,7 +960,7 @@ void Net_ReadRace()
 		case RACE_NET_CHECKPOINT_NEXT_QUALIFYING:
 			race_nextcheckpoint = ReadByte();
 
-			race_nextbesttime = ReadShort();
+			race_nextbesttime = ReadLong();
 			if(race_nextbestname)
 				strunzone(race_nextbestname);
 			race_nextbestname = strzone(ColorTranslateRGB(ReadString()));
@@ -965,7 +969,7 @@ void Net_ReadRace()
 		case RACE_NET_CHECKPOINT_HIT_RACE:
 			race_mycheckpoint = ReadByte();
 			race_mycheckpointtime = time;
-			race_mycheckpointdelta = ReadShort();
+			race_mycheckpointdelta = ReadLong();
 			race_mycheckpointlapsdelta = ReadByte();
 			if(race_mycheckpointlapsdelta >= 128)
 				race_mycheckpointlapsdelta -= 256;
@@ -977,7 +981,7 @@ void Net_ReadRace()
 		case RACE_NET_CHECKPOINT_HIT_RACE_BY_OPPONENT:
 			race_othercheckpoint = ReadByte();
 			race_othercheckpointtime = time;
-			race_othercheckpointdelta = ReadShort();
+			race_othercheckpointdelta = ReadLong();
 			race_othercheckpointlapsdelta = ReadByte();
 			if(race_othercheckpointlapsdelta >= 128)
 				race_othercheckpointlapsdelta -= 256;
