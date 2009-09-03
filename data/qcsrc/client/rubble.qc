@@ -2,19 +2,25 @@
 
 void RubbleDrop(entity list, void() deleteproc)
 {
-    float t,tt;
+    float t;
     entity rub,old_rub;
 
     rub = findchainentity(owner,list);
+    old_rub = rub;
+    t = rub.creationtime;
+    rub = rub.chain;
     while(rub)
     {
-        if(rub.creationtime > t)
+        if(t > rub.creationtime)
         {
+            t = rub.creationtime;
             old_rub = rub;
-            tt = t;
         }
         rub = rub.chain;
     }
+
+    if (old_rub == world)
+        return;
 
     rub = self;
     self = old_rub;
