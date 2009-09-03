@@ -1,11 +1,8 @@
-float  gibcount;
-entity giblist;
 .float silent;
 
 void Gib_Delete()
 {
-    --gibcount;
-    remove(self);
+	remove(self);
 }
 
 string species_prefix(float specnum)
@@ -80,20 +77,8 @@ void TossGib (string mdlname, vector org, vector vconst, vector vrand, float spe
 {
 	entity gib;
 
-	if not(giblist)
-        giblist = spawn();
-
 	// TODO remove some gibs according to cl_nogibs
-	gib = RubbleNew(giblist);
-	++gibcount;
-	if(gibcount >= cvar_or("cl_gibs_maxcount",100))
-        RubbleDrop(giblist,Gib_Delete);
-	if(wasfreed(gib))
-		return;
-
-	//gib = spawn();
-
-	gib.classname = "gib";
+	gib = RubbleNew("gib");
 	gib.move_movetype = MOVETYPE_BOUNCE;
 	gib.gravity = 1;
 	gib.solid = SOLID_CORPSE;
@@ -118,6 +103,8 @@ void TossGib (string mdlname, vector org, vector vconst, vector vrand, float spe
 	gib.damageforcescale = cvar_or("cl_gibs_damageforcescale", 3.5);
 
 	gib.nextthink = time + cvar_or("cl_gibs_lifetime", 14) * (1 + prandom() * 0.15);
+
+	RubbleLimit("gib", cvar_or("cl_gibs_maxcount",100), Gib_Delete);
 }
 
 void Ent_GibSplash()

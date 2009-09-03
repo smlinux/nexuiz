@@ -1,10 +1,7 @@
-float  casecount;
-entity caselist;
 .float silent;
 
 void Casing_Delete()
 {
-    --casecount;
     remove(self);
 }
 
@@ -77,16 +74,7 @@ void Ent_Casing()
 {
 	entity casing;
 
-	if not(caselist)
-        caselist = spawn();
-
-	casing = RubbleNew(caselist);
-	++casecount;
-	if(casecount >= cvar_or("cl_casings_maxcount",100))
-        RubbleDrop(caselist,Casing_Delete);
-	if(wasfreed(casing))
-		return;
-
+	casing = RubbleNew("casing");
 	casing.state = ReadByte();
 	casing.silent = (casing.state & 0x80);
 	casing.state = (casing.state & 0x7F);
@@ -126,6 +114,8 @@ void Ent_Casing()
 	}
     else
         Casing_Delete();
+
+	RubbleLimit("casing", cvar_or("cl_casings_maxcount",100), Casing_Delete);
 }
 
 void Casings_Precache()
