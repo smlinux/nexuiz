@@ -23,6 +23,7 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_enemyplay
 .float havocbot_cantfindflag;
 .float havocbot_role_timeout;
 .entity ctf_worldflagnext;
+.entity basewaypoint;
 
 vector havocbot_ctf_middlepoint;
 float havocbot_ctf_middlepoint_radius;
@@ -90,12 +91,6 @@ void havocbot_goalrating_ctf_ourflag(float ratingscale)
 
 void havocbot_goalrating_ctf_ourbase(float ratingscale)
 {
-	if not(bot_waypoints_for_items)
-	{
-		havocbot_goalrating_ctf_ourflag(ratingscale);
-		return;
-	}
-
 	local entity head;
 	head = ctf_worldflaglist;
 	while (head)
@@ -107,17 +102,7 @@ void havocbot_goalrating_ctf_ourbase(float ratingscale)
 	if not(head)
 		return;
 
-	// dropped_origin is set by ctf code whenever the flag is picked up
-	head = findradius(head.dropped_origin, 100);
-	while(head)
-	{
-		if(head.classname=="waypoint")
-		{
-			navigation_routerating(head, ratingscale, 10000);
-			return;
-		}
-		head=head.chain;
-	}
+	navigation_routerating(head.basewaypoint, ratingscale, 10000);
 };
 
 void havocbot_goalrating_ctf_enemyflag(float ratingscale)
@@ -149,16 +134,7 @@ void havocbot_goalrating_ctf_enemybase(float ratingscale)
 	if not(head)
 		return;
 
-	head = findradius(head.dropped_origin, 100);
-	while(head)
-	{
-		if(head.classname=="waypoint")
-		{
-			navigation_routerating(head, ratingscale, 10000);
-			return;
-		}
-		head=head.chain;
-	}
+	navigation_routerating(head.basewaypoint, ratingscale, 10000);
 };
 
 void havocbot_goalrating_ctf_ourstolenflag(float ratingscale)

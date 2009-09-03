@@ -2577,6 +2577,11 @@ void RestoreGame()
 
 void SV_Shutdown()
 {
+	if(gameover > 1) // shutting down already?
+		return;
+
+	gameover = 2; // 2 = server shutting down
+
 	if(world_initialized > 0)
 	{
 		world_initialized = 0;

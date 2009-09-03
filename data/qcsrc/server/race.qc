@@ -512,8 +512,7 @@ void spawnfunc_trigger_race_checkpoint()
 
 	o = (self.absmin + self.absmax) * 0.5;
 	tracebox(o, PL_MIN, PL_MAX, o - '0 0 1' * (o_z - self.absmin_z), MOVE_NORMAL, self);
-	self.nearestwaypoint = waypoint_spawn(trace_endpos, trace_endpos, WAYPOINTFLAG_GENERATED);
-	self.nearestwaypointtimeout = time + 1000000000;
+	waypoint_spawnforitem_force(self, trace_endpos);
 
 	if(!self.message)
 		self.message = "went backwards";

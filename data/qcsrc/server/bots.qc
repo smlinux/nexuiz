@@ -1161,16 +1161,10 @@ float waypoint_loadall()
 	return cwp + cwb;
 };
 
-void waypoint_spawnforitem(entity e)
+void waypoint_spawnforitem_force(entity e, vector org)
 {
 	local entity w;
 	local vector org;
-
-	if(!bot_waypoints_for_items)
-		return;
-
-	// Center of entity
-	org = (e.absmax + e.absmin) * 0.5;
 
 	// Fix the waypoint altitude if necessary
 	traceline(org, org + '0 0 -65535', TRUE, e);
@@ -1179,10 +1173,6 @@ void waypoint_spawnforitem(entity e)
 		|| org_z - trace_endpos_z < (PL_MAX_z - PL_MIN_z) * 0.5 // or below half player height
 	)
 		org_z = trace_endpos_z + PL_MAX_z - PL_MIN_z;
-
-	// TODO: Cleaner solution
-	if(e.classname!="item_flag_team")
-		e.nearestwaypointtimeout = time + 1000000000;
 
 	// don't spawn an item spawnfunc_waypoint if it already exists
 	w = findchain(classname, "waypoint");
@@ -1207,6 +1197,14 @@ void waypoint_spawnforitem(entity e)
 		w = w.chain;
 	}
 	e.nearestwaypoint = waypoint_spawn(org, org, WAYPOINTFLAG_GENERATED | WAYPOINTFLAG_ITEM);
+}
+
+void waypoint_spawnforitem(entity e)
+{
+	if(!bot_waypoints_for_items)
+		return;
+
+	waypoint_spawnforitem_force(e, e.origin);
 };
 
 void waypoint_spawnforteleporter(entity e, vector destination, float timetaken)

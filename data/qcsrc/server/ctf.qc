@@ -1,6 +1,7 @@
 #define FLAG_MIN (PL_MIN + '0 0 -13')
 #define FLAG_MAX (PL_MAX + '0 0 -13')
 
+.entity basewaypoint;
 .entity sprite;
 entity ctf_worldflaglist; // CTF flags in the map
 .entity ctf_worldflagnext;
@@ -822,7 +823,9 @@ void spawnfunc_item_flag_team1()
 	// From Spidflisk
 	item_flag_postspawn();
 
-	waypoint_spawnforitem(self);
+	waypoint_spawnforitem_force(self, self.origin);
+	self.nearestwaypointtimeout = 0; // activate waypointing again
+	self.basewaypoint = self.nearestwaypoint;
 
 	WaypointSprite_SpawnFixed("redbase", self.origin + '0 0 37', self, sprite);
 	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_FLAG, colormapPaletteColor(COLOR_TEAM1 - 1, FALSE));
@@ -927,7 +930,9 @@ void spawnfunc_item_flag_team2()
 	// From Spidflisk
 	item_flag_postspawn();
 
-	waypoint_spawnforitem(self);
+	waypoint_spawnforitem_force(self, self.origin);
+	self.nearestwaypointtimeout = 0; // activate waypointing again
+	self.basewaypoint = self.nearestwaypoint;
 
 	WaypointSprite_SpawnFixed("bluebase", self.origin + '0 0 37', self, sprite);
 	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_FLAG, colormapPaletteColor(COLOR_TEAM2 - 1, FALSE));
