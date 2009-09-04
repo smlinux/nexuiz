@@ -429,7 +429,7 @@ void PrintWelcomeMessage(entity pl)
 
 	if(cvar("g_campaign"))
 	{
-		if(self.classname == "player")
+		if(self.classname == "player" && !self.BUTTON_INFO)
 			return;
 	}
 	else
@@ -462,7 +462,7 @@ void PrintWelcomeMessage(entity pl)
 			specString = strcat(specString, "\n\n", getTimeoutText(1));
 		else
 		{
-			if(!self.BUTTON_INFO && self.classname == "player")
+			if(self.classname == "player")
 				return;
 			goto normal;
 		}
