@@ -1627,3 +1627,21 @@ string getcurrentmod()
 	else
 		return argv(n - 1);
 }
+
+#ifndef MENUQC
+#ifdef CSQC
+float ReadInt24_t()
+{
+	float v;
+	v = ReadShort() * 256; // note: this is signed
+	v += ReadByte(); // note: this is unsigned
+}
+#else
+void WriteInt24_t(float dest, float val)
+{
+	float v;
+	WriteShort((v = floor(val / 256)));
+	WriteByte(val - v * 256); // 0..255
+}
+#endif
+#endif

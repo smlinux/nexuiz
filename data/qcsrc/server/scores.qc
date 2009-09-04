@@ -70,7 +70,7 @@ float TeamScore_SendEntity(entity to, float sendflags)
 		if(sendflags & p)
 		{
 			if(longflags & p)
-				WriteLong(MSG_ENTITY, self.teamscores[i]);
+				WriteInt24_t(MSG_ENTITY, self.teamscores[i]);
 			else
 				WriteChar(MSG_ENTITY, self.teamscores[i]);
 		}
@@ -230,7 +230,7 @@ float PlayerScore_SendEntity(entity to, float sendflags)
 		if(sendflags & p)
 		{
 			if(longflags & p)
-				WriteLong(MSG_ENTITY, self.scores[i]);
+				WriteInt24_t(MSG_ENTITY, self.scores[i]);
 			else
 				WriteChar(MSG_ENTITY, self.scores[i]);
 		}

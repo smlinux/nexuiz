@@ -630,7 +630,7 @@ void Ent_ReadPlayerScore()
 		if(sf & p)
 		{
 			if(lf & p)
-				o.(scores[i]) = ReadLong();
+				o.(scores[i]) = ReadInt24_t();
 			else
 				o.(scores[i]) = ReadChar();
 		}
@@ -662,7 +662,7 @@ void Ent_ReadTeamScore()
 		if(sf & p)
 		{
 			if(lf & p)
-				o.(teamscores[i]) = ReadLong();
+				o.(teamscores[i]) = ReadInt24_t();
 			else
 				o.(teamscores[i]) = ReadChar();
 		}
@@ -932,8 +932,8 @@ void Net_ReadRace()
 	{
 		case RACE_NET_CHECKPOINT_HIT_QUALIFYING:
 			race_checkpoint = ReadByte();
-			race_time = ReadLong();
-			race_previousbesttime = ReadLong();
+			race_time = ReadInt24_t();
+			race_previousbesttime = ReadInt24_t();
 			if(race_previousbestname)
 				strunzone(race_previousbestname);
 			race_previousbestname = strzone(ColorTranslateRGB(ReadString()));
@@ -960,7 +960,7 @@ void Net_ReadRace()
 		case RACE_NET_CHECKPOINT_NEXT_QUALIFYING:
 			race_nextcheckpoint = ReadByte();
 
-			race_nextbesttime = ReadLong();
+			race_nextbesttime = ReadInt24_t();
 			if(race_nextbestname)
 				strunzone(race_nextbestname);
 			race_nextbestname = strzone(ColorTranslateRGB(ReadString()));
@@ -969,7 +969,7 @@ void Net_ReadRace()
 		case RACE_NET_CHECKPOINT_HIT_RACE:
 			race_mycheckpoint = ReadByte();
 			race_mycheckpointtime = time;
-			race_mycheckpointdelta = ReadLong();
+			race_mycheckpointdelta = ReadInt24_t();
 			race_mycheckpointlapsdelta = ReadByte();
 			if(race_mycheckpointlapsdelta >= 128)
 				race_mycheckpointlapsdelta -= 256;
@@ -981,7 +981,7 @@ void Net_ReadRace()
 		case RACE_NET_CHECKPOINT_HIT_RACE_BY_OPPONENT:
 			race_othercheckpoint = ReadByte();
 			race_othercheckpointtime = time;
-			race_othercheckpointdelta = ReadLong();
+			race_othercheckpointdelta = ReadInt24_t();
 			race_othercheckpointlapsdelta = ReadByte();
 			if(race_othercheckpointlapsdelta >= 128)
 				race_othercheckpointlapsdelta -= 256;

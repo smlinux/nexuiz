@@ -194,3 +194,11 @@ vector healtharmor_maxdamage(float h, float a, float armorblock); // returns vec
 vector healtharmor_applydamage(float a, float armorblock, float damage); // returns vector: take, save, 0
 
 string getcurrentmod();
+
+#ifndef MENUQC
+#ifdef CSQC
+float ReadInt24_t();
+#else
+void WriteInt24_t(float dest, float val);
+#endif
+#endif
