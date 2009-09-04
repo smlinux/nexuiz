@@ -1635,6 +1635,7 @@ float ReadInt24_t()
 	float v;
 	v = ReadShort() * 256; // note: this is signed
 	v += ReadByte(); // note: this is unsigned
+	return v;
 }
 #else
 void WriteInt24_t(float dest, float val)
