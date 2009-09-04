@@ -632,7 +632,7 @@ void Ent_ReadPlayerScore()
 			if(lf & p)
 				o.(scores[i]) = ReadLong();
 			else
-				o.(scores[i]) = ReadShort();
+				o.(scores[i]) = ReadChar();
 		}
 
 	if(o.sort_prev)
@@ -664,7 +664,7 @@ void Ent_ReadTeamScore()
 			if(lf & p)
 				o.(teamscores[i]) = ReadLong();
 			else
-				o.(teamscores[i]) = ReadShort();
+				o.(teamscores[i]) = ReadChar();
 		}
 
 	Sbar_UpdateTeamPos(o);
