@@ -1640,8 +1640,8 @@ float ReadInt24_t()
 void WriteInt24_t(float dest, float val)
 {
 	float v;
-	WriteShort((v = floor(val / 256)));
-	WriteByte(val - v * 256); // 0..255
+	WriteShort(dest, (v = floor(val / 256)));
+	WriteByte(dest, val - v * 256); // 0..255
 }
 #endif
 #endif
