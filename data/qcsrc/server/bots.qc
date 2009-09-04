@@ -435,14 +435,10 @@ float lag_additem(float t, float f1, float f2, entity e1, vector v1, vector v2, 
 
 // stack of current goals (the last one of which may be an item or other
 // desirable object, the rest are typically waypoints to reach it)
-.entity goalcurrent, goalstack01, goalstack02, goalstack03;
-.entity goalstack04, goalstack05, goalstack06, goalstack07;
-.entity goalstack08, goalstack09, goalstack10, goalstack11;
-.entity goalstack12, goalstack13, goalstack14, goalstack15;
-.entity goalstack16, goalstack17, goalstack18, goalstack19;
-.entity goalstack20, goalstack21, goalstack22, goalstack23;
-.entity goalstack24, goalstack25, goalstack26, goalstack27;
-.entity goalstack28, goalstack29, goalstack30, goalstack31;
+#define GOALSTACK_LENGTH 32
+.entity goalstack[GOALSTACK_LENGTH];
+.entity goalcurrent;
+
 
 .entity nearestwaypoint;
 .float nearestwaypointtimeout;
@@ -1250,78 +1246,28 @@ entity waypoint_spawnpersonal(vector position)
 // completely empty the goal stack, used when deciding where to go
 void navigation_clearroute()
 {
+	float i;
+
 	//print("bot ", etos(self), " clear\n");
 	self.navigation_hasgoals = FALSE;
+
 	self.goalcurrent = world;
-	self.goalstack01 = world;
-	self.goalstack02 = world;
-	self.goalstack03 = world;
-	self.goalstack04 = world;
-	self.goalstack05 = world;
-	self.goalstack06 = world;
-	self.goalstack07 = world;
-	self.goalstack08 = world;
-	self.goalstack09 = world;
-	self.goalstack10 = world;
-	self.goalstack11 = world;
-	self.goalstack12 = world;
-	self.goalstack13 = world;
-	self.goalstack14 = world;
-	self.goalstack15 = world;
-	self.goalstack16 = world;
-	self.goalstack17 = world;
-	self.goalstack18 = world;
-	self.goalstack19 = world;
-	self.goalstack20 = world;
-	self.goalstack21 = world;
-	self.goalstack22 = world;
-	self.goalstack23 = world;
-	self.goalstack24 = world;
-	self.goalstack25 = world;
-	self.goalstack26 = world;
-	self.goalstack27 = world;
-	self.goalstack28 = world;
-	self.goalstack29 = world;
-	self.goalstack30 = world;
-	self.goalstack31 = world;
+
+	for(i=0; i<GOALSTACK_LENGTH; ++i)
+		self.(goalstack[i]) = world;
 };
 
 // add a new goal at the beginning of the stack
 // (in other words: add a new prerequisite before going to the later goals)
 void navigation_pushroute(entity e)
 {
+	float i;
+
 	//print("bot ", etos(self), " push ", etos(e), "\n");
-	self.goalstack31 = self.goalstack30;
-	self.goalstack30 = self.goalstack29;
-	self.goalstack29 = self.goalstack28;
-	self.goalstack28 = self.goalstack27;
-	self.goalstack27 = self.goalstack26;
-	self.goalstack26 = self.goalstack25;
-	self.goalstack25 = self.goalstack24;
-	self.goalstack24 = self.goalstack23;
-	self.goalstack23 = self.goalstack22;
-	self.goalstack22 = self.goalstack21;
-	self.goalstack21 = self.goalstack20;
-	self.goalstack20 = self.goalstack19;
-	self.goalstack19 = self.goalstack18;
-	self.goalstack18 = self.goalstack17;
-	self.goalstack17 = self.goalstack16;
-	self.goalstack16 = self.goalstack15;
-	self.goalstack15 = self.goalstack14;
-	self.goalstack14 = self.goalstack13;
-	self.goalstack13 = self.goalstack12;
-	self.goalstack12 = self.goalstack11;
-	self.goalstack11 = self.goalstack10;
-	self.goalstack10 = self.goalstack09;
-	self.goalstack09 = self.goalstack08;
-	self.goalstack08 = self.goalstack07;
-	self.goalstack07 = self.goalstack06;
-	self.goalstack06 = self.goalstack05;
-	self.goalstack05 = self.goalstack04;
-	self.goalstack04 = self.goalstack03;
-	self.goalstack03 = self.goalstack02;
-	self.goalstack02 = self.goalstack01;
-	self.goalstack01 = self.goalcurrent;
+	for(i=GOALSTACK_LENGTH-1; i>0; --i)
+		self.(goalstack[i]) = self.goalstack[i-1];
+
+	self.(goalstack[0]) = self.goalcurrent;
 	self.goalcurrent = e;
 };
 
@@ -1330,39 +1276,19 @@ void navigation_pushroute(entity e)
 // (used when a spawnfunc_waypoint is reached)
 void navigation_poproute()
 {
+	float i;
 	//print("bot ", etos(self), " pop\n");
-	self.goalcurrent = self.goalstack01;
-	self.goalstack01 = self.goalstack02;
-	self.goalstack02 = self.goalstack03;
-	self.goalstack03 = self.goalstack04;
-	self.goalstack04 = self.goalstack05;
-	self.goalstack05 = self.goalstack06;
-	self.goalstack06 = self.goalstack07;
-	self.goalstack07 = self.goalstack08;
-	self.goalstack08 = self.goalstack09;
-	self.goalstack09 = self.goalstack10;
-	self.goalstack10 = self.goalstack11;
-	self.goalstack11 = self.goalstack12;
-	self.goalstack12 = self.goalstack13;
-	self.goalstack13 = self.goalstack14;
-	self.goalstack14 = self.goalstack15;
-	self.goalstack15 = self.goalstack16;
-	self.goalstack16 = self.goalstack17;
-	self.goalstack17 = self.goalstack18;
-	self.goalstack18 = self.goalstack19;
-	self.goalstack19 = self.goalstack20;
-	self.goalstack20 = self.goalstack21;
-	self.goalstack21 = self.goalstack22;
-	self.goalstack22 = self.goalstack23;
-	self.goalstack23 = self.goalstack24;
-	self.goalstack24 = self.goalstack25;
-	self.goalstack25 = self.goalstack26;
-	self.goalstack26 = self.goalstack27;
-	self.goalstack27 = self.goalstack28;
-	self.goalstack28 = self.goalstack29;
-	self.goalstack29 = self.goalstack30;
-	self.goalstack30 = self.goalstack31;
-	self.goalstack31 = world;
+	self.goalcurrent = self.goalstack[0];
+
+	for(i=0; i<GOALSTACK_LENGTH-1; ++i)
+	{
+		if(self.goalstack[i])
+			self.(goalstack[i]) = self.goalstack[i+1];
+		else
+			return;
+	}
+
+	self.(goalstack[i]) = world;
 };
 
 // find the spawnfunc_waypoint near a dynamic goal such as a dropped weapon
@@ -1572,7 +1498,8 @@ void navigation_markroutes()
 						if (wp.wpcost > cost2 + wp.wpmincost[i])
 							navigation_markroutes_checkwaypoint(w, wp, cost2, p);
 					}
-					// break
+					else
+						break;
 				}
 			}
 			w = w.chain;
@@ -2995,3 +2922,4 @@ FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_vec4);
 FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_entity1);
 FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(wlink);
 FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(wpmincost);
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(goalstack);

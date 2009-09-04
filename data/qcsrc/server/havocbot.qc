@@ -143,9 +143,9 @@ void havocbot_keyboard_movement(vector destorg)
 .float bot_canruntogoal;
 void havocbot_bunnyhop(vector dir)
 {
-	local float bunnyhopdistance;
+	local float maxspeed, bunnyhopdistance;
 	local vector deviation;
-	local float maxspeed;
+	local entity nextgoal;
 
 	if(cvar("g_midair"))
 		return;
@@ -183,6 +183,8 @@ void havocbot_bunnyhop(vector dir)
 
 	bunnyhopdistance = vlen(self.origin - self.goalcurrent.origin);
 
+	nextgoal = self.goalstack[0];
+
 	// Run only to visible goals
 	if(self.flags & FL_ONGROUND)
 	if(self.speed==maxspeed)
@@ -215,18 +217,18 @@ void havocbot_bunnyhop(vector dir)
 					if(self.goalcurrent.classname=="waypoint")
 					if not(self.goalcurrent.wpflags & WAYPOINTFLAG_PERSONAL)
 					if(fabs(self.goalcurrent.origin_z - self.origin_z) < self.maxs_z - self.mins_z)
-					if(self.goalstack01!=world)
+					if(nextgoal!=world)
 					{
-						deviation = vectoangles(self.goalstack01.origin - self.origin) - vectoangles(self.goalcurrent.origin - self.origin);
+						deviation = vectoangles(nextgoal.origin - self.origin) - vectoangles(self.goalcurrent.origin - self.origin);
 						while (deviation_y < -180) deviation_y = deviation_y + 360;
 						while (deviation_y > 180) deviation_y = deviation_y - 360;
 
 						if(fabs(deviation_y) < 20)
-						if(bunnyhopdistance < vlen(self.origin - self.goalstack01.origin))
-						if(fabs(self.goalstack01.origin_z - self.goalcurrent.origin_z) < self.maxs_z - self.mins_z)
+						if(bunnyhopdistance < vlen(self.origin - nextgoal.origin))
+						if(fabs(nextgoal.origin_z - self.goalcurrent.origin_z) < self.maxs_z - self.mins_z)
 						{
-							if(vlen(self.goalcurrent.origin - self.goalstack01.origin) > cvar("bot_ai_bunnyhop_startdistance"))
-							if(checkpvs(self.origin + self.view_ofs, self.goalstack01))
+							if(vlen(self.goalcurrent.origin - nextgoal.origin) > cvar("bot_ai_bunnyhop_startdistance"))
+							if(checkpvs(self.origin + self.view_ofs, nextgoal))
 							{
 								checkdistance = FALSE;
 							}
@@ -1216,15 +1218,18 @@ void havocbot_ai()
 
 		local vector now,v,next;//,heading;
 		local float aimdistance,skillblend,distanceblend,blend;
+		local entity nextgoal;
+
+		nextgoal = self.goalstack[0];
 		next = now = self.goalcurrent.origin - (self.origin + self.view_ofs);
 		aimdistance = vlen(now);
 		//heading = self.velocity;
 		//dprint(self.goalstack01.classname,etos(self.goalstack01),"\n");
 		if(
-			self.goalstack01 != self && self.goalstack01 != world && self.aistatus & AI_STATUS_RUNNING == 0 &&
+			nextgoal != self && nextgoal != world && self.aistatus & AI_STATUS_RUNNING == 0 &&
 			!(self.goalcurrent.wpflags & WAYPOINTFLAG_TELEPORT)
 		)
-			next = self.goalstack01.origin - (self.origin + self.view_ofs);
+			next = nextgoal.origin - (self.origin + self.view_ofs);
 
 		skillblend=bound(0,(skill-2.5)*0.5,1); //lower skill player can't preturn
 		distanceblend=bound(0,aimdistance/cvar("bot_ai_keyboard_distance"),1);
@@ -1388,38 +1393,10 @@ void debuggoalstack()
 	local entity target;
 	local vector org;
 
-	if(self.goalcounter==0)target=self.goalcurrent;
-	else if(self.goalcounter==1)target=self.goalstack01;
-	else if(self.goalcounter==2)target=self.goalstack02;
-	else if(self.goalcounter==3)target=self.goalstack03;
-	else if(self.goalcounter==4)target=self.goalstack04;
-	else if(self.goalcounter==5)target=self.goalstack05;
-	else if(self.goalcounter==6)target=self.goalstack06;
-	else if(self.goalcounter==7)target=self.goalstack07;
-	else if(self.goalcounter==8)target=self.goalstack08;
-	else if(self.goalcounter==9)target=self.goalstack09;
-	else if(self.goalcounter==10)target=self.goalstack10;
-	else if(self.goalcounter==11)target=self.goalstack11;
-	else if(self.goalcounter==12)target=self.goalstack12;
-	else if(self.goalcounter==13)target=self.goalstack13;
-	else if(self.goalcounter==14)target=self.goalstack14;
-	else if(self.goalcounter==15)target=self.goalstack15;
-	else if(self.goalcounter==16)target=self.goalstack16;
-	else if(self.goalcounter==17)target=self.goalstack17;
-	else if(self.goalcounter==18)target=self.goalstack18;
-	else if(self.goalcounter==19)target=self.goalstack19;
-	else if(self.goalcounter==20)target=self.goalstack20;
-	else if(self.goalcounter==21)target=self.goalstack21;
-	else if(self.goalcounter==22)target=self.goalstack22;
-	else if(self.goalcounter==23)target=self.goalstack23;
-	else if(self.goalcounter==24)target=self.goalstack24;
-	else if(self.goalcounter==25)target=self.goalstack25;
-	else if(self.goalcounter==26)target=self.goalstack26;
-	else if(self.goalcounter==27)target=self.goalstack27;
-	else if(self.goalcounter==28)target=self.goalstack28;
-	else if(self.goalcounter==29)target=self.goalstack29;
-	else if(self.goalcounter==30)target=self.goalstack30;
-	else if(self.goalcounter==31)target=self.goalstack31;
+	if(self.goalcounter==0)
+		target=self.goalcurrent;
+	else if(self.goalcounter<=GOALSTACK_LENGTH)
+		target = self.goalstack[self.goalcounter-1];
 
 	if(target==world)
 	{

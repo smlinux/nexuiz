@@ -3,7 +3,7 @@
 **/
 
 
-#define checkpoint_target goalstack03
+//.entity checkpoint_target;
 
 /*
 #define checkpoint_cache_who  flagcarried
@@ -11,8 +11,8 @@
 #define checkpoint_cache_to   selected_player
 */
 
-#define pathgoal    goalstack01
-#define pathcurrent goalstack02
+.entity pathgoal;
+.entity pathcurrent;
 
 /*
 entity path_makeorcache(entity forwho,entity start, entity end)
