@@ -19,4 +19,7 @@ float race_timelimit;
 float race_completing;
 void race_ImposePenaltyTime(entity pl, float penalty, string reason);
 void race_StartCompleting();
-.float race_movetime;
+
+.float race_movetime; // for reading
+.float race_movetime_frac; // fractional accumulator for higher accuracy (helper for writing)
+.float race_movetime_count; // integer accumulator

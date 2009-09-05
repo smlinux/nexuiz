@@ -288,7 +288,7 @@ void race_ClearTime(entity e)
 {
 	e.race_checkpoint = -1;
 	e.race_laptime = 0;
-	e.race_movetime = 0;
+	e.race_movetime = e.race_movetime_frac = e.race_movetime_count = 0;
 	e.race_penalty_accumulator = 0;
 	e.race_lastpenalty = world;
 
@@ -392,7 +392,7 @@ void checkpoint_passed()
 		if(!self.race_checkpoint) // start line
 		{
 			other.race_laptime = time;
-			other.race_movetime = 0;
+			other.race_movetime = other.race_movetime_frac = other.race_movetime_count = 0;
 			other.race_penalty_accumulator = 0;
 			other.race_lastpenalty = world;
 		}
