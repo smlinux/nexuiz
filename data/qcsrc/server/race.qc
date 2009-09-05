@@ -52,7 +52,7 @@ float race_CheckpointNetworkID(float f)
 	return f;
 }
 
-void race_SendNextCheckpoint(entity e, float spec)
+void race_SendNextCheckpoint(entity e, float spec) // qualifying only
 {
 	float recordtime;
 	string recordholder;
@@ -75,7 +75,8 @@ void race_SendNextCheckpoint(entity e, float spec)
 		if(spec)
 		{
 			WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_NEXT_SPEC_QUALIFYING);
-			WriteCoord(MSG_ONE, e.race_laptime - e.race_penalty_accumulator);
+			//WriteCoord(MSG_ONE, e.race_laptime - e.race_penalty_accumulator);
+			WriteCoord(MSG_ONE, time - e.race_movetime - e.race_penalty_accumulator);
 		}
 		else
 			WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_NEXT_QUALIFYING);
@@ -287,6 +288,7 @@ void race_ClearTime(entity e)
 {
 	e.race_checkpoint = -1;
 	e.race_laptime = 0;
+	e.race_movetime = 0;
 	e.race_penalty_accumulator = 0;
 	e.race_lastpenalty = world;
 
@@ -385,11 +387,12 @@ void checkpoint_passed()
 
 		other.race_checkpoint = race_NextCheckpoint(self.race_checkpoint);
 
-		race_SendTime(other, self.race_checkpoint, time - other.race_laptime, !!other.race_laptime);
+		race_SendTime(other, self.race_checkpoint, other.race_movetime, !!other.race_laptime);
 
 		if(!self.race_checkpoint) // start line
 		{
 			other.race_laptime = time;
+			other.race_movetime = 0;
 			other.race_penalty_accumulator = 0;
 			other.race_lastpenalty = world;
 		}

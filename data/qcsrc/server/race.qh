@@ -19,3 +19,4 @@ float race_timelimit;
 float race_completing;
 void race_ImposePenaltyTime(entity pl, float penalty, string reason);
 void race_StartCompleting();
+.float race_movetime;
