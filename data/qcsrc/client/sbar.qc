@@ -1269,14 +1269,7 @@ void Sbar_Score()
 	float score, distribution, leader;
 	vector score_pos, secondary_score_pos, distribution_color;
 	entity tm, pl, me;
-	//me = (spectatee_status > 0) ? playerslots[spectatee_status - 1] : playerslots[player_localentnum - 1];
-	
-	float desiredPlayerId;
-	if (spectatee_status > 0)
-		desiredPlayerId = spectatee_status - 1;
-	else
-		desiredPlayerId = player_localentnum - 1;
-	me = playerslots[desiredPlayerId];
+	me = (spectatee_status > 0) ? playerslots[spectatee_status - 1] : playerslots[player_localentnum - 1];
 
  	vector bottomright;
  	bottomright_x = vid_conwidth;
