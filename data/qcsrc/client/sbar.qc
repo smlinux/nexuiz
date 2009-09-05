@@ -404,34 +404,53 @@ void Sbar_UpdateTeamPos(entity Team)
 
 void Cmd_Sbar_Help(float argc)
 {
-	print("You can modify the scoreboard using the\n");
+	print("You can modify the scoreboard using the ^2sbar_columns_set command.\n");
 	print("^3|---------------------------------------------------------------|\n");
-	print("^1 TO BE DONE\n");
 	print("Usage:\n");
 	print("^2sbar_columns_set default\n");
 	print("^2sbar_columns_set ^7filed1 field2 ...\n");
-	print("The following field names are recognized (case INsensitive):\n");
-	print("You can use a ^3|^7 to start the right-aligned fields.\n");
+	print("The following field names are recognized (case insensitive):\n");
+	print("You can use a ^3|^7 to start the right-aligned fields.\n\n");
 
-	print("^3name^7 or ^3nick^7             Name of a player\n");
-	print("^3ping^7                     Ping time\n\n");
-	print("^3kd^7 or ^3kdr^7 or ^3kdratio^7 or ^3k/d\n");
-	print("                         The kill-death ratio\n");
+	print("^3name^7 or ^3nick^7         Name of a player\n");
+	print("^3ping^7                     Ping time\n");
+	print("^3pl^7                       Packet loss\n");
+	print("^3kills^7                    Number of kills\n");
+	print("^3deaths^7                   Number of deaths\n");
+	print("^3suicides^7                 Number of suicides\n");
+	print("^3frags^7                    kills - suicides\n");
+	print("^3kd^7                       The kill-death ratio\n");
+	print("^3caps^7                     How often a flag (CTF) or a key (KeyHunt) was captured\n");
+	print("^3pickups^7                  How often a flag (CTF) or a key (KeyHunt) was picked up\n");
+	print("^3fckills^7                  Number of flag carrier kills\n");
+	print("^3returns^7                  Number of flag returns\n");
+	print("^3drops^7                    Number of flag drops\n");
+	print("^3lives^7                    Number of lives (LMS)\n");
+	print("^3rank^7                     Player rank\n");
+	print("^3pushes^7                   Number of players pushed into void\n");
+	print("^3destroyed^7                Number of keys destroyed by pushing them into void\n");
+	print("^3kckills^7                  Number of keys carrier kills\n");
+	print("^3losses^7                   Number of times a key was lost\n");
+	print("^3laps^7                     Number of laps finished (race/cts)\n");
+	print("^3time^7                     Total time raced (race/cts)\n");
+	print("^3fastest^7                  Time of fastest lap (race/cts)\n");
+	print("^3ticks^7                    Number of ticks (DOM)\n");
+	print("^3takes^7                    Number of domination points taken (DOM)\n");
+	print("^3score^7                    Total score\n\n");
 
 	print("Before a field you can put a + or - sign, then a comma separated list\n");
 	print("of game types, then a slash, to make the field show up only in these\n");
-	print("or in all but these game types.\n");
-
+	print("or in all but these game types. You can also specify 'all' as a\n");
+	print("field to show all fields available for the current game mode.\n\n");
+	
 	print("The special game type names 'teams' and 'noteams' can be used to\n");
-	print("include/exclude ALL teams/noteams game modes.\n");
+	print("include/exclude ALL teams/noteams game modes.\n\n");
 
-	local float i;
-	print("Additional columns:\n");
-	for(i = 0; i < MAX_SCORE; ++i)
-	{
-		if(scores_label[i] != "")
-			print(strcat(scores_label[i], "\n"));
-	}
+	print("Example: sbar_columns_set name ping pl | +ctf/field3 -dm/field4\n");
+	print("will display name, ping and pl aligned to the left, and the fields\n");
+	print("right of the vertical bar aligned to the right.\n");
+	print("'field3' will only be shown in CTF, and 'field4' will be shown in all\n");
+	print("other gamemodes except DM.\n");
 }
 
 string Sbar_DefaultColumnLayout()
