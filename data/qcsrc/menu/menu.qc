@@ -201,10 +201,14 @@ void(float key, float ascii) m_keydown =
 	if(key == K_SHIFT) menuShiftState |= S_SHIFT;
 };
 
-void(string img, float a) drawBackground =
+void(string img, float a, float algn) drawBackground =
 {
 	vector sz;
 	vector isz;
+	vector tl, ce, br;
+	vector v;
+	string s;
+	float i, f;
 	sz = draw_PictureSize(img);
 	// keep aspect of image
 	if(sz_x * draw_scale_y >= sz_y * draw_scale_x)
@@ -221,9 +225,35 @@ void(string img, float a) drawBackground =
 		isz_x = 1;
 		isz_y = isz_x * (sz_y / sz_x) * (draw_scale_x / draw_scale_y);
 	}
-	draw_Picture('0.5 0.5 0' - 0.5 * isz, img, isz, '1 1 1', a);
-}
+	tl = '0 0 0';
+	ce = '0.5 0.5 0' - 0.5 * isz;
+	br = '1 1 0' - isz;
 
+	s = ftos(algn);
+	v_z = 0;
+	for(i = 0; i < strlen(s); ++i)
+	{
+		f = stof(substring(s, i, 1));
+		switch(f)
+		{
+			case 1: case 4: case 7: v_x = tl_x; break;
+			case 2: case 5: case 8: v_x = ce_x; break;
+			case 3: case 6: case 9: v_x = br_x; break;
+			default: v_x = tl_x + (br_x - tl_x) * random(); break;
+		}
+		switch(f)
+		{
+			case 7: case 8: case 9: v_y = tl_y; break;
+			case 4: case 5: case 6: v_y = ce_y; break;
+			case 1: case 2: case 3: v_y = br_y; break;
+			default: v_y = tl_y + (br_y - tl_y) * random(); break;
+		}
+		if(i == 0)
+			draw_Picture(v, img, isz, '1 1 1', a);
+		else
+			draw_Picture(v, strcat(img, "_l", ftos(i+1)), isz, '1 1 1', a);
+	}
+}
 
 vector menuTooltipAveragedMousePos;
 entity menuTooltipItem;
@@ -533,7 +563,7 @@ void() m_draw =
 	{
 		if(menuLogoAlpha > 0)
 		{
-			drawBackground(SKINGFX_BACKGROUND, bound(0, menuLogoAlpha, 1));
+			drawBackground(SKINGFX_BACKGROUND, bound(0, menuLogoAlpha, 1), SKINALIGN_BACKGROUND);
 			if(menuAlpha <= 0 && SKINALPHA_CURSOR_INTRO > 0)
 			{
 				draw_alpha = SKINALPHA_CURSOR_INTRO * bound(0, menuLogoAlpha, 1);
@@ -545,7 +575,7 @@ void() m_draw =
 	else if(SKINALPHA_BACKGROUND_INGAME)
 	{
 		if(menuAlpha > 0)
-			drawBackground(SKINGFX_BACKGROUND_INGAME, menuAlpha * SKINALPHA_BACKGROUND_INGAME);
+			drawBackground(SKINGFX_BACKGROUND_INGAME, menuAlpha * SKINALPHA_BACKGROUND_INGAME, SKINALIGN_BACKGROUND_INGAME);
 	}
 
 	draw_reset();

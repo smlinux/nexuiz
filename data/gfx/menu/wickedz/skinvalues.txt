@@ -64,6 +64,8 @@ ALPHA_CURSOR_INTRO              0
 // general
 //   uses "background" images
 //   uses "background_ingame" images
+ALIGN_BACKGROUND                5
+ALIGN_BACKGROUND_INGAME         5
 ALPHA_BACKGROUND_INGAME         0.7
 ALPHA_DISABLED                  0.2
 ALPHA_BEHIND                    0.5
