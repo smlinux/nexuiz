@@ -201,7 +201,7 @@ void(float key, float ascii) m_keydown =
 	if(key == K_SHIFT) menuShiftState |= S_SHIFT;
 };
 
-void(string img, float a, float algn) drawBackground =
+void(string img, float a, float algn, float force1) drawBackground =
 {
 	vector sz;
 	vector isz;
@@ -250,6 +250,11 @@ void(string img, float a, float algn) drawBackground =
 		}
 		if(i == 0)
 			draw_Picture(v, img, isz, '1 1 1', a);
+		else if(force1)
+			// force all secondary layers to use alpha 1. Prevents ugly issues
+			// with overlap. It's a flag because it cannot be used for the
+			// ingame background
+			draw_Picture(v, strcat(img, "_l", ftos(i+1)), isz, '1 1 1', 1);
 		else
 			draw_Picture(v, strcat(img, "_l", ftos(i+1)), isz, '1 1 1', a);
 	}
@@ -563,7 +568,7 @@ void() m_draw =
 	{
 		if(menuLogoAlpha > 0)
 		{
-			drawBackground(SKINGFX_BACKGROUND, bound(0, menuLogoAlpha, 1), SKINALIGN_BACKGROUND);
+			drawBackground(SKINGFX_BACKGROUND, bound(0, menuLogoAlpha, 1), SKINALIGN_BACKGROUND, TRUE);
 			if(menuAlpha <= 0 && SKINALPHA_CURSOR_INTRO > 0)
 			{
 				draw_alpha = SKINALPHA_CURSOR_INTRO * bound(0, menuLogoAlpha, 1);
@@ -575,7 +580,7 @@ void() m_draw =
 	else if(SKINALPHA_BACKGROUND_INGAME)
 	{
 		if(menuAlpha > 0)
-			drawBackground(SKINGFX_BACKGROUND_INGAME, menuAlpha * SKINALPHA_BACKGROUND_INGAME, SKINALIGN_BACKGROUND_INGAME);
+			drawBackground(SKINGFX_BACKGROUND_INGAME, menuAlpha * SKINALPHA_BACKGROUND_INGAME, SKINALIGN_BACKGROUND_INGAME, FALSE);
 	}
 
 	draw_reset();
