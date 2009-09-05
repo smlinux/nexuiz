@@ -163,6 +163,15 @@ void campaignGoNexuizCampaignList(entity me, float step)
 			}
 			if(j < 0)
 			{
+				s = strcat("maps/campaign", cvar_defstring("g_campaign_name"), ".txt");
+				for(i = 0; i < n; ++i)
+				{
+					if(search_getfilename(me.campaignGlob, i) == s)
+						j = i;
+				}
+			}
+			if(j < 0)
+			{
 				if(step >= 0)
 					j = 0;
 				else
