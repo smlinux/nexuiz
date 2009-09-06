@@ -24,8 +24,9 @@ build_version()
 # place the image string on the big image
 place_on_bg()
 {
-	convert background_25.tga -page +259+41 TGA:"$1" -flatten "$2"/background.tga
-	convert background_ingame_25.tga -page +259+41 TGA:"$1" -flatten "$2"/background_ingame.tga
+	#convert background_25.tga -page +259+41 TGA:"$1" -flatten "$2"/background.tga
+	#convert background_ingame_25.tga -page +259+41 TGA:"$1" -flatten "$2"/background_ingame.tga
+	convert background_l2.tga -draw "image over 259,41 0,0 'TGA:$1'" "$2"/background_l2.tga
 }
 
 # test case
