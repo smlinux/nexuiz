@@ -133,6 +133,7 @@ void W_Fireball_Attack2()
 	proj.health = cvar("g_balance_fireball_secondary_health");
 	proj.team = self.team;
 	proj.event_damage = W_Fireball_Damage;
+	proj.takedamage = DAMAGE_YES;
 	proj.damageforcescale = cvar("g_balance_fireball_secondary_damageforcescale");
 	PROJECTILE_MAKETRIGGER(proj);
 	proj.projectiledeathtype = WEP_FIREBALL | HITTYPE_SECONDARY;
