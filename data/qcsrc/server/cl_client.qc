@@ -2340,9 +2340,6 @@ void PlayerPreThink (void)
 		return;
 #endif
 
-	if(frametime)
-		antilag_record(self);
-
 	if(self.classname == "player") {
 //		if(self.netname == "Wazat")
 //			bprint(self.classname, "\n");
@@ -2800,6 +2797,9 @@ void PlayerPostThink (void)
 		}
 		self.idlekick_lasttimeleft = timeleft;
 	}
+
+	if(frametime)
+		antilag_record(self);
 
 #ifdef TETRIS
 	if(self.impulse == 100)
