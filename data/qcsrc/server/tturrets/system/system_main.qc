@@ -28,13 +28,13 @@ void load_unit_settings(entity ent,string unitname,float is_reload)
     if (ent == world)
         return;
 
-    if (!ent.turret_scale_damage)    ent.turret_scale_damage  = 1;
-    if (!ent.turret_scale_range)     ent.turret_scale_range   = 1;
-    if (!ent.turret_scale_refire)    ent.turret_scale_refire  = 1;
-    if (!ent.turret_scale_ammo)      ent.turret_scale_ammo    = 1;
-    if (!ent.turret_scale_aim)       ent.turret_scale_aim     = 1;
-    if (!ent.turret_scale_health)    ent.turret_scale_health  = 1;
-    if (!ent.turret_scale_respawn)   ent.turret_scale_respawn = 1;
+    if not (ent.turret_scale_damage)    ent.turret_scale_damage  = 1;
+    if not (ent.turret_scale_range)     ent.turret_scale_range   = 1;
+    if not (ent.turret_scale_refire)    ent.turret_scale_refire  = 1;
+    if not (ent.turret_scale_ammo)      ent.turret_scale_ammo    = 1;
+    if not (ent.turret_scale_aim)       ent.turret_scale_aim     = 1;
+    if not (ent.turret_scale_health)    ent.turret_scale_health  = 1;
+    if not (ent.turret_scale_respawn)   ent.turret_scale_respawn = 1;
 
     sbase = strcat(cvar_base,unitname);
     if (is_reload)
@@ -134,17 +134,12 @@ void turret_do_updates(entity t_turret)
     {
         oldpos = self.enemy.origin;
         setorigin(self.enemy,self.tur_aimpos);
+        tracebox(self.tur_shotorg, '-1 -1 -1','1 1 1',self.tur_shotorg + (self.tur_shotdir_updated * self.tur_dist_aimpos),MOVE_NORMAL,self);
+        setorigin(self.enemy,oldpos);
     }
+    else
+        tracebox(self.tur_shotorg, '-1 -1 -1','1 1 1',self.tur_shotorg + (self.tur_shotdir_updated * self.tur_dist_aimpos),MOVE_NORMAL,self);
 
-    //dprint("NN: ", self.netname," THVN: ",self.tur_head.classname," frame:",ftos(self.tur_head.frame),"\n");
-    //dprint("self.tur_shotorg: ",vtos(self.tur_shotorg),"\n");
-    tracebox(self.tur_shotorg, '-1 -1 -1','1 1 1',self.tur_shotorg + (self.tur_shotdir_updated * self.tur_dist_aimpos),MOVE_NORMAL,self);
-
-    if(self.firecheck_flags & TFL_FIRECHECK_VERIFIED)
-        if(self.enemy)
-            setorigin(self.enemy,oldpos);
-
-    //self.tur_impactpoint           = trace_endpos;
     self.tur_impactent             = trace_ent;
     self.tur_dist_impact_to_aimpos = vlen(trace_endpos - self.tur_aimpos) - (vlen(self.enemy.maxs - self.enemy.mins)*0.5);
     self.tur_impacttime            = vlen(self.tur_shotorg - trace_endpos) / self.shot_speed;
@@ -227,12 +222,13 @@ void turret_stdproc_track()
 {
     vector target_angle; // This is where we want to aim
     vector move_angle;   // This is where we can aim
+    vector a_off;
     float f_tmp;
 
     if (self.track_flags == TFL_TRACK_NO)
         return;
 
-    if(!self.tur_active)
+    if not (self.tur_active)
         target_angle = self.idle_aim - ('1 0 0' * self.aim_maxpitch);
     else if (self.enemy == world)
     {
@@ -255,9 +251,6 @@ void turret_stdproc_track()
     self.tur_head.angles_y = safeangle(self.tur_head.angles_y);
 
     // Find the diffrence between where we currently aim and where we want to aim
-    vector a_off;
-
-
     if (self.turrcaps_flags & TFL_TURRCAPS_HEADATTACHED)
     {
         move_angle = target_angle - (self.angles + self.tur_head.angles);
@@ -384,24 +377,29 @@ float turret_stdproc_firecheck()
         if (self.attack_finished_single >= time) return 0;
 
     // Special case: volly fire turret that has to fire a full volly if a shot was fired.
-    if((self.shoot_flags & TFL_SHOOT_VOLLYALWAYS) && (self.volly_counter != self.shot_volly))
-        return 1;
+    if (self.shoot_flags & TFL_SHOOT_VOLLYALWAYS)
+        if not (self.volly_counter == self.shot_volly)
+            return 1;
 
     // Lack of zombies makes shooting dead things unnecessary :P
     if (self.firecheck_flags & TFL_FIRECHECK_DEAD)
-        if (self.enemy.deadflag != DEAD_NO) return 0;
+        if (self.enemy.deadflag != DEAD_NO)
+            return 0;
 
     // Plz stop killing the world!
     if (self.firecheck_flags & TFL_FIRECHECK_WORLD)
-        if (self.enemy == world) return 0;
+        if (self.enemy == world)
+            return 0;
 
     // Own ammo?
     if (self.firecheck_flags & TFL_FIRECHECK_OWM_AMMO)
-        if (self.ammo < self.shot_dmg) return 0;
+        if (self.ammo < self.shot_dmg)
+            return 0;
 
     // Other's ammo? (support-supply units)
     if (self.firecheck_flags & TFL_FIRECHECK_OTHER_AMMO)
-        if (self.enemy.ammo >= self.enemy.ammo_max) return 0;
+        if (self.enemy.ammo >= self.enemy.ammo_max)
+            return 0;
 
     if (self.firecheck_flags & TFL_FIRECHECK_DISTANCES)
     {
@@ -409,12 +407,14 @@ float turret_stdproc_firecheck()
         //if (self.tur_dist_aimpos > self.target_range_fire) return 0;
 
         // To close?
-        if (self.tur_dist_aimpos < self.target_range_min) return 0;
+        if (self.tur_dist_aimpos < self.target_range_min)
+            return 0;
     }
 
     // Try to avoid FF?
     if (self.firecheck_flags & TFL_FIRECHECK_AFF)
-        if (self.tur_impactent.team == self.team) return 0;
+        if (self.tur_impactent.team == self.team)
+            return 0;
 
     // aim<->predicted impact
     if (self.firecheck_flags & TFL_FIRECHECK_AIMDIST)
@@ -450,6 +450,7 @@ float turret_stdproc_firecheck()
 
 /**
 ** Evaluate a entity for target valitity based on validate_flags
+** NOTE: the caller must check takedamage before calling this, to inline this check.
 **/
 float turret_validate_target(entity e_turret,entity e_target,float validate_flags)
 {
@@ -479,7 +480,7 @@ float turret_validate_target(entity e_turret,entity e_target,float validate_flag
         return -5;
 
     // Cant touch this
-    if ((e_target.takedamage == DAMAGE_NO) || (e_target.health < 0))
+    if (e_target.health < 0)
         return -6;
 
     // player
@@ -502,6 +503,8 @@ float turret_validate_target(entity e_turret,entity e_target,float validate_flag
     if (e_target.flags & FL_PROJECTILE)
         if not (validate_flags & TFL_TARGETSELECT_MISSILES)
             return -10;
+        else
+            bprint(e_target.classname, " is a missile target.\n");
 
     // Team check
     if (validate_flags & TFL_TARGETSELECT_TEAMCHECK)
@@ -602,6 +605,7 @@ entity turret_select_target()
 
     m_score = 0;
     if(self.enemy)
+	if(self.enemy.takedamage)
     if(turret_validate_target(self,self.enemy,self.target_validate_flags) > 0)
     {
         e_enemy = self.enemy;
@@ -615,16 +619,19 @@ entity turret_select_target()
 
     while (e)
     {
-        f = turret_validate_target(self,e,self.target_select_flags);
-        if (f > 0)
-        {
-            score = self.turret_score_target(self,e);
-            if ((score > m_score) && (score > 0))
-            {
-                e_enemy = e;
-                m_score = score;
-            }
-        }
+		if(e.takedamage)
+		{
+			f = turret_validate_target(self,e,self.target_select_flags);
+			if (f > 0)
+			{
+				score = self.turret_score_target(self,e);
+				if ((score > m_score) && (score > 0))
+				{
+					e_enemy = e;
+					m_score = score;
+				}
+			}
+		}
         e = e.chain;
     }
 
@@ -706,25 +713,29 @@ void turret_think()
     // turret_fusionreactor uses this to recharge friendlys.
     if (self.shoot_flags & TFL_SHOOT_HITALLVALID)
     {
-
         // Do a self.turret_fire for every valid target.
         e = findradius(self.origin,self.target_range);
         while (e)
         {
-            if (turret_validate_target(self,e,self.target_validate_flags))
-            {
-                self.enemy = e;
+			if(e.takedamage)
+			{
+				if (turret_validate_target(self,e,self.target_validate_flags))
+				{
+					self.enemy = e;
 
-                turret_do_updates(self);
+					turret_do_updates(self);
 
-                if (self.turret_firecheckfunc())
-                    turret_fire();
-            }
+					if (self.turret_firecheckfunc())
+						turret_fire();
+				}
+			}
 
             e = e.chain;
         }
         self.enemy = world;
     }
+    /*
+    // not used
     else if(self.shoot_flags & TFL_SHOOT_CUSTOM)
     {
         // This one is doing something.. oddball. assume its handles what needs to be handled.
@@ -743,6 +754,7 @@ void turret_think()
         if (self.turret_firecheckfunc())
             turret_fire();
     }
+    */
     else
     {
         // Special case for volly always. if it fired once it must compleate the volly.
@@ -771,6 +783,7 @@ void turret_think()
 
         // Check if we have a vailid enemy, and try to find one if we dont.
         if( ((self.target_select_time + cvar("g_turrets_targetscan_maxdelay")) < time)
+		  || !self.enemy.takedamage
           || (turret_validate_target(self,self.enemy,self.target_validate_flags) <= 0) )
         if not (self.target_select_time + cvar("g_turrets_targetscan_mindelay") > time)
         {
@@ -779,7 +792,6 @@ void turret_think()
                 self.target_select_time = time;
 
         }
-
 
         // No target, just go to idle, do any custom stuff and bail.
         if (self.enemy == world)
