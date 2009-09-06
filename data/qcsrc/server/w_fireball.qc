@@ -20,16 +20,17 @@ void W_Fireball_Explode (void)
 		modeleffect_spawn("models/sphere/sphere.md3", 0, 0, self.origin, '0 0 0', '0 0 0', '0 0 0', 0, cvar("g_balance_fireball_secondary_bfgradius"), 0.2, 0.05, 0.25);
 
 		// 2. bfg effect
-		FOR_EACH_PLAYER(e) if(e != self.owner) if(e.takedamage) if(!self.owner || IsDifferentTeam(e, self))
+		for(e = findradius(self.origin, cvar("g_balance_fireball_secondary_bfgradius")); e; e = e.chain)
+		if(e != self.owner) if(e.takedamage == DAMAGE_AIM) if(e.classname != "player" || !self.owner || IsDifferentTeam(e, self))
 		{
 			// can we see fireball?
 			traceline(e.origin + e.view_ofs, self.origin, MOVE_NORMAL, e);
-			if(trace_startsolid || trace_fraction != 1)
+			if(/* trace_startsolid || */ trace_fraction != 1) // startsolid should be never happening anyway
 				continue;
 			// can we see player who shot fireball?
 			traceline(e.origin + e.view_ofs, self.realowner.origin + self.realowner.view_ofs, MOVE_NORMAL, e);
 			if(trace_ent != self.realowner)
-			if(trace_startsolid || trace_fraction != 1)
+			if(/* trace_startsolid || */ trace_fraction != 1)
 				continue;
 			dist = vlen(self.origin - e.origin - e.view_ofs);
 			points = (1 - sqrt(dist / cvar("g_balance_fireball_secondary_bfgradius")));
@@ -59,7 +60,8 @@ void W_Fireball_LaserPlay(float dt, float dist, float damage, float edgedamage, 
 	vector p;
 
 	RandomSelection_Init();
-	FOR_EACH_PLAYER(e) if(e != self.owner) if(e.takedamage) if(!self.owner || IsDifferentTeam(e, self))
+	for(e = findradius(self.origin, dist); e; e = e.chain)
+	if(e != self.owner) if(e.takedamage == DAMAGE_AIM) if(e.classname != "player" || !self.owner || IsDifferentTeam(e, self))
 	{
 		p = e.origin;
 		p_x += e.mins_x + random() * (e.maxs_x - e.mins_x);
@@ -69,7 +71,7 @@ void W_Fireball_LaserPlay(float dt, float dist, float damage, float edgedamage, 
 		if(d < dist)
 		{
 			traceline(p, self.origin, MOVE_NORMAL, e);
-			if(trace_startsolid || trace_fraction != 1)
+			if(/* trace_startsolid || */ trace_fraction != 1)
 				continue;
 			e.fireball_impactvec = p;
 			RandomSelection_Add(e, 0, string_null, 1 / (1 + d), !Fire_IsBurning(e));
