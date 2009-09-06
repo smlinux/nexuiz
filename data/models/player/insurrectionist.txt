@@ -7,5 +7,5 @@ species human
 Warrior
 
 Sex: Male
-Weight: 192 lb
+Weight: 87 kg
 Age: 56

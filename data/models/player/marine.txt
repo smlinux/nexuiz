@@ -7,5 +7,5 @@ species human
 Service Man
 
 Sex: Male
-Weight: 204 lb
+Weight: 93 kg
 Age: 35

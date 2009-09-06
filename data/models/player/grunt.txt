@@ -8,5 +8,5 @@ Half Mechanical
 Human Fighter
 
 Sex: Male
-Weight: 375 lb
+Weight: 170 kg
 Age: 53

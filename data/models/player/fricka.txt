@@ -7,5 +7,5 @@ species alien
 Mutated Warrior
 
 Sex: Female
-Weight: 126 lb
+Weight: 57 kg
 Age: 16

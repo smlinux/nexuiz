@@ -7,5 +7,5 @@ species human
 Solo Warrior
 
 Sex: Female
-Weight: 134 lb
+Weight: 61 kg
 Age: 31

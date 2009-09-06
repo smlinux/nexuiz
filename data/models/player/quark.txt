@@ -6,5 +6,5 @@ species robot_shiny
 
 Robot Fighter
 
-Weight: 305 lb
+Weight: 138 kg
 Age: 3 years

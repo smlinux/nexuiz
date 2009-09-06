@@ -6,5 +6,5 @@ species alien
 
 Reptilian Combatant
 
-Weight: 176 lb
+Weight: 80 kg
 Age: 32

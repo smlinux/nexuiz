@@ -7,5 +7,5 @@ species human
 Monsterous Opponent
 
 Sex: Female
-Weight: 234 lb
+Weight: 106 kg
 Age: 24

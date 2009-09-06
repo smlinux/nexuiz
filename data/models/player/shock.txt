@@ -7,5 +7,5 @@ species human
 Necro Warrior
 
 Sex: Male
-Weight: 145 lb
+Weight: 66 kg
 Age: 65

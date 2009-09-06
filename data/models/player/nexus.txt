@@ -6,5 +6,5 @@ species human
 
 Nexuiz's Soldier
 
-Weight: 621 lb
+Weight: 282 kg
 Age: 313

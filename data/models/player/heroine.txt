@@ -7,5 +7,5 @@ species human
 Solo Fighter
 
 Sex: Female
-Weight: 111 lb
+Weight: 50 kg
 Age: 23
