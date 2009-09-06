@@ -1650,7 +1650,7 @@ float magicear_matched;
 string trigger_magicear_processmessage(entity ear, entity source, float teamsay, entity privatesay, string msgin)
 {
 	float domatch, dotrigger, matchstart, l;
-	string s;
+	string s, msg;
 	entity oldself;
 
 	magicear_matched = FALSE;
@@ -1681,6 +1681,11 @@ string trigger_magicear_processmessage(entity ear, entity source, float teamsay,
 	matchstart = -1;
 	l = strlen(ear.message);
 
+	if(self.spawnflags & 128)
+		msg = msgin;
+	else
+		msg = strdecolorize(msgin);
+
 	if(substring(ear.message, 0, 1) == "*")
 	{
 		if(substring(ear.message, -1, 1) == "*")
@@ -1689,7 +1694,7 @@ string trigger_magicear_processmessage(entity ear, entity source, float teamsay,
 			// as we need multi-replacement here...
 			s = substring(ear.message, 1, -2);
 			l -= 2;
-			if(strstrofs(msgin, s, 0) >= 0)
+			if(strstrofs(msg, s, 0) >= 0)
 				matchstart = -2; // we use strreplace on s
 		}
 		else
@@ -1697,8 +1702,8 @@ string trigger_magicear_processmessage(entity ear, entity source, float teamsay,
 			// match at start
 			s = substring(ear.message, 1, -1);
 			l -= 1;
-			if(substring(msgin, -l, l) == s)
-				matchstart = strlen(msgin) - l;
+			if(substring(msg, -l, l) == s)
+				matchstart = strlen(msg) - l;
 		}
 	}
 	else
@@ -1708,14 +1713,14 @@ string trigger_magicear_processmessage(entity ear, entity source, float teamsay,
 			// match at end
 			s = substring(ear.message, 0, -2);
 			l -= 1;
-			if(substring(msgin, 0, l) == s)
+			if(substring(msg, 0, l) == s)
 				matchstart = 0;
 		}
 		else
 		{
 			// full match
 			s = ear.message;
-			if(msgin == ear.message)
+			if(msg == ear.message)
 				matchstart = 0;
 		}
 	}
@@ -1740,12 +1745,12 @@ string trigger_magicear_processmessage(entity ear, entity source, float teamsay,
 	else if(ear.netname != "")
 	{
 		if(matchstart < 0)
-			return strreplace(s, ear.netname, msgin);
+			return strreplace(s, ear.netname, msg);
 		else
 			return strcat(
-				substring(msgin, 0, matchstart),
+				substring(msg, 0, matchstart),
 				ear.netname,
-				substring(msgin, matchstart + l, -1)
+				substring(msg, matchstart + l, -1)
 			);
 	}
 	else
