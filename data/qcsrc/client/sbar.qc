@@ -1538,7 +1538,6 @@ void Sbar_Timer()
 			//while restart is still active, show 00:00
 			minutes = seconds = 0;
 		} else {
-			float elapsedTime;
 			elapsedTime = floor(time - getstatf(STAT_GAMESTARTTIME)); //127
 			minutes = floor(elapsedTime / 60);
 			seconds = elapsedTime - minutes*60;
