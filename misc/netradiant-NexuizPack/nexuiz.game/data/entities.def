@@ -1719,7 +1719,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/items/g_jetpack.md3"
 */
 
-/*QUAKED trigger_magicear (0 0 1) (-8 -8 -8) (8 8 8) IGNORE_SAY IGNORE_TEAMSAY IGNORE_TELL IGNORE_INVALIDTELL REPLACE_WHOLE_MESSAGE REPLACE_OUTSIDE CONTINUE
+/*QUAKED trigger_magicear (0 0 1) (-8 -8 -8) (8 8 8) IGNORE_SAY IGNORE_TEAMSAY IGNORE_TELL IGNORE_INVALIDTELL REPLACE_WHOLE_MESSAGE REPLACE_OUTSIDE CONTINUE NODECOLORIZE
 Triggers targets when a given magic word has been said
 -------- KEYS --------
 message: message to wait for (can start or end with * for wildcards)
@@ -1737,4 +1737,5 @@ IGNORE_INVALIDTELL: do not respond to "tell" messages of invalid syntax
 REPLACE_WHOLE_MESSAGE: replace the whole message by netname, or drop the message if netname is empty
 REPLACE_OUTSIDE: also perform the replacement when outside the radius (to hide the "secret word")
 CONTINUE: even if this magic ear matched, continue looking for further matches/replacements (useful for swear word filters)
+NODECOLORIZE: do not decolorize the input string before matching
 */
