@@ -1,5 +1,5 @@
 string CVAR_CHECK_DEFAULT = "24fd8644ab949a1c138560b94abda4d3";
-string CVAR_CHECK_WEAPONS = "d8c27ad261a5506934d70968b6a47244";
+string CVAR_CHECK_WEAPONS = "fe2dfa3c0b8a05734acfcdd6af0649df";
 
 float	FALSE					= 0;
 float	TRUE					= 1;
