@@ -1253,6 +1253,7 @@ void fireburner_think()
 		remove(self);
 		return;
 	}
+	Fire_ApplyEffect(self.owner);
 	if(!Fire_IsBurning(self.owner))
 	{
 		self.owner.fire_burner = world;
@@ -1260,6 +1261,5 @@ void fireburner_think()
 		return;
 	}
 	Fire_ApplyDamage(self.owner);
-	Fire_ApplyEffect(self.owner);
 	self.nextthink = time;
 }
