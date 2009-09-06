@@ -1095,6 +1095,9 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 .float fire_deathtype;
 .entity fire_owner;
 .float fire_hitsound;
+.entity fire_burner;
+
+void fireburner_think();
 
 float Fire_IsBurning(entity e)
 {
@@ -1105,6 +1108,18 @@ float Fire_AddDamage(entity e, entity o, float d, float t, float dt)
 {
 	float dps;
 	float maxtime, mintime, maxdamage, mindamage, maxdps, mindps, totaldamage, totaltime;
+
+	if(e.classname != "player")
+	if(!e.fire_burner)
+	{
+		// print("adding a fire burner to ", e.classname, "\n");
+		e.fire_burner = spawn();
+		e.fire_burner.classname = "fireburner";
+		e.fire_burner.think = fireburner_think;
+		e.fire_burner.nextthink = time;
+		e.fire_burner.owner = e;
+	}
+
 	t = max(t, 0.1);
 	dps = d / t;
 	if(Fire_IsBurning(e))
@@ -1228,4 +1243,23 @@ void Fire_ApplyEffect(entity e)
 		e.effects |= EF_FLAME;
 	else
 		e.effects &~= EF_FLAME;
+}
+
+void fireburner_think()
+{
+	// for players, this is done in the regular loop
+	if(wasfreed(self.owner))
+	{
+		remove(self);
+		return;
+	}
+	if(!Fire_IsBurning(self.owner))
+	{
+		self.owner.fire_burner = world;
+		remove(self);
+		return;
+	}
+	Fire_ApplyDamage(self.owner);
+	Fire_ApplyEffect(self.owner);
+	self.nextthink = time;
 }
