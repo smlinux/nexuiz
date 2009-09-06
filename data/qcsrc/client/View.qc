@@ -649,7 +649,7 @@ void CSQC_UpdateView(float w, float h)
 				else
 					bullets = 0;
 				
-                if(shottype == SHOTTYPE_HITTEAM || (shottype == SHOTTYPE_HITOBSTRUCTION && cvar("crosshair_hittest_blur")))
+                if(shottype == SHOTTYPE_HITTEAM || (shottype == SHOTTYPE_HITOBSTRUCTION && cvar("crosshair_hittest_blur") && !cvar("chase_active")))
                 {
                     wcross_alpha *= 0.04 * 0.75;
                     for(i = -2; i <= 2; ++i)
