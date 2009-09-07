@@ -503,8 +503,6 @@ float turret_validate_target(entity e_turret,entity e_target,float validate_flag
     if (e_target.flags & FL_PROJECTILE)
         if not (validate_flags & TFL_TARGETSELECT_MISSILES)
             return -10;
-        else
-            bprint(e_target.classname, " is a missile target.\n");
 
     // Team check
     if (validate_flags & TFL_TARGETSELECT_TEAMCHECK)
