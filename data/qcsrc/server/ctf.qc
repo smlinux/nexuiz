@@ -437,7 +437,7 @@ void FlagTouch()
 		{
 			return;
 		}
-		if(cvar("g_ctf_captimerecord_allow_assisted") || player_count - currentbots <= 1) // at most one human
+		if(cvar("g_ctf_captimerecord_always") || player_count - currentbots <= 1) // at most one human
 		{
 			t = time - other.flagcarried.flagpickuptime;
 			s = ftos_decimals(t, 2);
