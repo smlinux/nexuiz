@@ -16,8 +16,19 @@ void W_Laser_Touch (void)
 void W_Laser_Attack (float issecondary)
 {
 	local entity missile;
+	vector s_forward;
+	float a;
 
-	W_SetupShot (self, FALSE, 3, "weapons/lasergun_fire.wav", cvar("g_balance_laser_secondary_damage"));
+	if (issecondary)
+		a = cvar("g_balance_laser_secondary_shotangle");
+	else
+		a = cvar("g_balance_laser_primary_shotangle");
+	s_forward = v_forward * cos(a * DEG2RAD) + v_up * sin(a * DEG2RAD);
+
+	if(issecondary)
+		W_SetupShot_Dir (self, s_forward, FALSE, 3, "weapons/lasergun_fire.wav", cvar("g_balance_laser_secondary_damage"));
+	else
+		W_SetupShot_Dir (self, s_forward, FALSE, 3, "weapons/lasergun_fire.wav", cvar("g_balance_laser_primary_damage"));
 	pointparticles(particleeffectnum("laser_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
 	missile = spawn ();

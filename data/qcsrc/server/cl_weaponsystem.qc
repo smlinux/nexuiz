@@ -126,7 +126,7 @@ vector w_shotdir;
 // this function calculates w_shotorg and w_shotdir based on the weapon model
 // offset, trueaim and antilag, and won't put w_shotorg inside a wall.
 // make sure you call makevectors first (FIXME?)
-void W_SetupShot_ProjectileSize(entity ent, vector mi, vector ma, float antilag, float recoil, string snd, float maxdamage)
+void W_SetupShot_Dir_ProjectileSize(entity ent, vector s_forward, vector mi, vector ma, float antilag, float recoil, string snd, float maxdamage)
 {
 	float nudge = 1; // added to traceline target and subtracted from result
 	local vector trueaimpoint;
@@ -134,7 +134,7 @@ void W_SetupShot_ProjectileSize(entity ent, vector mi, vector ma, float antilag,
 	vector vecs, dv;
 	oldsolid = ent.dphitcontentsmask;
 	ent.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE;
-	traceline(ent.origin + ent.view_ofs, ent.origin + ent.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, ent); // no antilag needed
+	traceline(ent.origin + ent.view_ofs, ent.origin + ent.view_ofs + s_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, ent); // no antilag needed
 	trueaimpoint = trace_endpos;
 
 	// Track max damage and set the stat to be sent later in g_world.qc
@@ -301,10 +301,9 @@ void W_SetupShot_ProjectileSize(entity ent, vector mi, vector ma, float antilag,
 		sound (ent, CHAN_AUTO, "weapons/strength_fire.wav", VOL_BASE, ATTN_NORM);
 };
 
-void W_SetupShot(entity ent, float antilag, float recoil, string snd, float maxdamage)
-{
-	W_SetupShot_ProjectileSize(ent, '0 0 0', '0 0 0', antilag, recoil, snd, maxdamage);
-}
+#define W_SetupShot_ProjectileSize(ent,mi,ma,antilag,recoil,snd,maxdamage) W_SetupShot_Dir_ProjectileSize(ent, v_forward, mi, ma, antilag, recoil, snd, maxdamage)
+#define W_SetupShot_Dir(ent,s_forward,antilag,recoil,snd,maxdamage) W_SetupShot_Dir_ProjectileSize(ent, s_forward, '0 0 0', '0 0 0', antilag, recoil, snd, maxdamage)
+#define W_SetupShot(ent,antilag,recoil,snd,maxdamage) W_SetupShot_ProjectileSize(ent, '0 0 0', '0 0 0', antilag, recoil, snd, maxdamage)
 
 void LaserTarget_Think()
 {
