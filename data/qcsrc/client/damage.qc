@@ -75,8 +75,6 @@ void Ent_DamageInfo()
 
 	self = oldself;
 
-	setorigin(self, org); // for sound() calls
-
 	// TODO spawn particle effects and sounds based on hittype
 	
 	if(!DEATH_ISSPECIAL(hittype))
@@ -96,6 +94,8 @@ void Ent_DamageInfo()
 			backoff = trace_plane_normal;
 		else
 			backoff = -1 * normalize(force);
+
+		setorigin(self, org + backoff * 2); // for sound() calls
 
 		switch(hitwep)
 		{
