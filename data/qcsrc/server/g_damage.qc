@@ -126,7 +126,7 @@ void GiveFrags (entity attacker, entity targ, float f)
 	if(g_weaponarena_random)
 	{
 		// after a frag, choose another random weapon set
-		attacker.weapons = randombits(attacker.weapons, (inWarmupStage ? warmup_start_weapons : start_weapons));
+		attacker.weapons = randombits((inWarmupStage ? warmup_start_weapons : start_weapons), g_weaponarena_random);
 		if not(attacker.weapons & W_WeaponBit(attacker.weapon))
 			W_SwitchWeapon_Force(attacker, w_getbestweapon(attacker));
 	}
