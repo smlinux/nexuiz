@@ -48,7 +48,7 @@ void Item_Show (entity e, float mode)
 		// make the item look normal, and be touchable
 		e.model = e.mdl;
 		e.solid = SOLID_TRIGGER;
-		e.effects = e.effects - (e.effects & (EF_ADDITIVE | EF_FULLBRIGHT));
+		e.effects &~= EF_ADDITIVE;
 		//e.colormod = '0 0 0';
 		e.alpha = 0;
 
@@ -63,7 +63,7 @@ void Item_Show (entity e, float mode)
 		// hide the item completely
 		e.model = string_null;
 		e.solid = SOLID_NOT;
-		e.effects = e.effects - (e.effects & (EF_ADDITIVE | EF_FULLBRIGHT));
+		e.effects &~= EF_ADDITIVE;
 		//e.colormod = '0 0 0';
 		e.alpha = 0;
 	}
@@ -72,7 +72,7 @@ void Item_Show (entity e, float mode)
 		// make the item translucent green and not touchable
 		e.model = e.mdl;
 		e.solid = SOLID_NOT;
-		e.effects = e.effects | EF_ADDITIVE | EF_FULLBRIGHT;
+		e.effects |= EF_ADDITIVE;
 		//e.colormod = '0.2 1 0.2';
 		e.alpha = 0.1;
 	}
