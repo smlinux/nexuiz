@@ -115,6 +115,8 @@ void CSQC_Init(void)
 
 	postinit = false;
 
+	calledhooks = 0;
+
 	teams = Sort_Spawn();
 	players = Sort_Spawn();
 
@@ -170,6 +172,14 @@ void CSQC_Shutdown(void)
 
 	if(camera_active)
 		cvar_set("chase_active",ftos(chase_active_backup));
+
+	if not(isdemo())
+	{
+		if not(calledhooks & HOOK_START)
+			localcmd("\n_cl_hook_gamestart nop;");
+		if not(calledhooks & HOOK_END)
+			localcmd("\ncl_hook_gameend;");
+	}
 }
 
 .float has_team;
@@ -852,6 +862,12 @@ void Gamemode_Init()
 	} else if(gametype == GAME_KEYHUNT) {
 		precache_pic("gfx/sb_key_carrying");
 		precache_pic("gfx/sb_key_carrying_outline");
+	}
+
+	if not(isdemo())
+	{
+		localcmd("\n_cl_hook_gamestart ", GametypeNameFromType(gametype), ";");
+		calledhooks |= HOOK_START;
 	}
 }
 // CSQC_Parse_StuffCmd : Provides the stuffcmd string in the first parameter that the server provided.  To execute standard behavior, simply execute localcmd with the string.

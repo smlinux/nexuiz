@@ -383,6 +383,13 @@ void CSQC_UpdateView(float w, float h)
 	if(!postinit)
 		PostInit();
 
+	if(intermission && !isdemo() && !(calledhooks & HOOK_END))
+	if(calledhooks & HOOK_START)
+	{
+		localcmd("\ncl_hook_gameend;");
+		calledhooks |= HOOK_END;
+	}
+
 	CheckForGamestartChange();
 	maptimeAnnouncer();
 

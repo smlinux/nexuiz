@@ -152,3 +152,8 @@ void centerprint(string strMessage);
 #define ALPHA_MIN_VISIBLE 0.003
 
 float armorblockpercent;
+
+//hooks
+float calledhooks;
+#define HOOK_START    1
+#define HOOK_END      2

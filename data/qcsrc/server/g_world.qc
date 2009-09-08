@@ -645,6 +645,8 @@ void spawnfunc_worldspawn (void)
 	ClientInit_Spawn();
 	RandomSeed_Spawn();
 
+	localcmd("\n_sv_hook_gamestart ", GetGametype(), ";");
+
 	world_initialized = 1;
 }
 
@@ -1353,6 +1355,8 @@ void NextLevel()
 
 	if(cvar("g_campaign"))
 		CampaignPreIntermission();
+
+	localcmd("\nsv_hook_gameend;");
 
 	// WriteByte (MSG_ALL, SVC_INTERMISSION);
 };

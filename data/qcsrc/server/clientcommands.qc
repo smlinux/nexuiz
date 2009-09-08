@@ -781,6 +781,8 @@ void ReadyRestart()
 	// no arena, assault support yet...
 	if(g_arena | g_assault | gameover | intermission_running | race_completing)
 		localcmd("restart\n");
+	else
+		localcmd("\nsv_hook_gamerestart;");
 
 	ReadyRestartForce();
 
