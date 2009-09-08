@@ -92,6 +92,7 @@ void UpdateFrags(entity player, float f)
 }
 
 // NOTE: f=0 means still count as a (positive) kill, but count no frags for it
+void W_SwitchWeapon_Force(entity e, float w);
 void GiveFrags (entity attacker, entity targ, float f)
 {
 	// TODO route through PlayerScores instead
