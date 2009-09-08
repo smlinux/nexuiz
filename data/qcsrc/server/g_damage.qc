@@ -122,6 +122,14 @@ void GiveFrags (entity attacker, entity targ, float f)
 		if(cvar("g_arena_roundbased"))
 			return;
 
+	if(g_weaponarena_random)
+	{
+		// after a frag, choose another random weapon set
+		attacker.weapons = randombits(attacker.weapons, (inWarmupStage ? warmup_start_weapons : start_weapons));
+		if not(attacker.weapons & W_WeaponBit(attacker.weapon))
+			W_SwitchWeapon_Force(attacker, w_getbestweapon(attacker));
+	}
+
 	// FIXME fix the mess this is (we have REAL points now!)
 	if(g_runematch)
 	{
