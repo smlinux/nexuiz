@@ -123,6 +123,7 @@ void GiveFrags (entity attacker, entity targ, float f)
 		if(cvar("g_arena_roundbased"))
 			return;
 
+	if(targ != attacker) // not for suicides
 	if(g_weaponarena_random)
 	{
 		// after a frag, choose another random weapon set
