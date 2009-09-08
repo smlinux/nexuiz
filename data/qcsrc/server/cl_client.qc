@@ -850,7 +850,7 @@ void PutClientInServer (void)
 		}
 
 		if(g_weaponarena_random)
-			self.weapons = randombits(self.weapons, g_weaponarena_random);
+			self.weapons = randombits(self.weapons, g_weaponarena_random, FALSE);
 
 		self.items = start_items;
 		self.switchweapon = w_getbestweapon(self);

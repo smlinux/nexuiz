@@ -2586,7 +2586,7 @@ float randombit(float bits)
 	return b;
 }
 
-float randombits(float bits, float k)
+float randombits(float bits, float k, float error_return)
 {
 	float r;
 	r = 0;
@@ -2595,6 +2595,9 @@ float randombits(float bits, float k)
 		r += randombit(bits - r);
 		--k;
 	}
+	if(error_return)
+		if(k > 0)
+			return -1; // all
 	return r;
 }
 

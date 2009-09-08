@@ -95,6 +95,8 @@ void UpdateFrags(entity player, float f)
 void W_SwitchWeapon_Force(entity e, float w);
 void GiveFrags (entity attacker, entity targ, float f)
 {
+	float w;
+
 	// TODO route through PlayerScores instead
 	if(gameover) return;
 
@@ -127,7 +129,18 @@ void GiveFrags (entity attacker, entity targ, float f)
 	if(g_weaponarena_random)
 	{
 		// after a frag, choose another random weapon set
-		attacker.weapons = randombits((inWarmupStage ? warmup_start_weapons : start_weapons), g_weaponarena_random);
+		if(inWarmupStage)
+			w = warmup_start_weapons;
+		else
+			w = start_weapons;
+
+		attacker.weapons = randombits(w - (w & W_WeaponBit(attacker.weapon)), g_weaponarena_random, TRUE);
+		if(attacker.weapons < 0)
+		{
+			// error from randombits: no weapon available
+			// this means we can just give ALL weapons
+			attacker.weapons = w;
+		}
 		if not(attacker.weapons & W_WeaponBit(attacker.weapon))
 			W_SwitchWeapon_Force(attacker, w_getbestweapon(attacker));
 	}
