@@ -725,6 +725,7 @@ float g_pickup_healthlarge_max;
 float g_pickup_healthmega;
 float g_pickup_healthmega_max;
 float g_weaponarena;
+float g_weaponarena_random;
 string g_weaponarena_list;
 float g_weaponspeedfactor;
 float g_weaponratefactor;
@@ -825,8 +826,13 @@ void readplayerstartcvars()
                 print("The weapon mutator list contains an unknown weapon ", s, ". Skipped.\n");
             }
         }
-        g_weaponarena_list = strzone(substring(g_weaponarena_list, 0, strlen(g_weaponarena_list) - 3));
-    }
+		g_weaponarena_list = strzone(substring(g_weaponarena_list, 0, strlen(g_weaponarena_list) - 3));
+	}
+
+	if(g_weaponarena)
+		g_weaponarena_random = cvar("g_weaponarena_random");
+	else
+		g_weaponarena_random = 0;
 
     if (g_nixnex)
     {
@@ -2551,4 +2557,52 @@ void modeleffect_spawn(string m, float s, float f, vector o, vector v, vector an
 void shockwave_spawn(string m, vector org, float sz, float t1, float t2)
 {
 	return modeleffect_spawn(m, 0, 0, org, '0 0 0', '0 0 0', '0 0 0', 0, sz, 1, t1, t2);
+}
+
+float randombit(float bits)
+{
+	if not(bits & (bits-1)) // this ONLY holds for powers of two!
+		return bits;
+
+	float n, f, b, r;
+
+	r = random();
+	b = 0;
+	n = 0;
+
+	for(f = 1; f <= bits; f *= 2)
+	{
+		if(bits & f)
+		{
+			++n;
+			r *= n;
+			if(r <= 1)
+				b = f;
+			else
+				r = (r - 1) / (n - 1);
+		}
+	}
+
+	return b;
+}
+
+float randombits(float bits, float k)
+{
+	float r;
+	r = 0;
+	while(k > 0 && bits != r)
+	{
+		r += randombit(bits - r);
+		--k;
+	}
+	return r;
+}
+
+void randombit_test(float bits, float iter)
+{
+	while(iter > 0)
+	{
+		print(ftos(randombit(bits)), "\n");
+		--iter;
+	}
 }
