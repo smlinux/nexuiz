@@ -17,7 +17,6 @@ float turret_fusionreactor_firecheck()
     return 1;
 }
 
-
 void turret_fusionreactor_fire()
 {
     self.enemy.ammo = min(self.enemy.ammo + self.shot_dmg,self.enemy.ammo_max);

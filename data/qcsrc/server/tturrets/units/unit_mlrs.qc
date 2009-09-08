@@ -20,7 +20,6 @@ void turret_mlrs_attack()
     sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", VOL_BASE, ATTN_NORM);
 
     missile                    = spawn ();
-    //setsize (missile, '0 0 0', '0 0 0'); // give it some size so it can be shot
     setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
     setorigin(missile, self.tur_shotorg);
     missile.classname          = "mlrs_missile";
@@ -29,12 +28,8 @@ void turret_mlrs_attack()
     missile.bot_dodgerating    = self.shot_dmg;
     missile.takedamage         = DAMAGE_NO;
     missile.damageforcescale   = 4;
-    //missile.health             = 25;
     missile.think              = turret_mlrs_rocket_explode;
-
     missile.nextthink          = time + max(self.tur_impacttime,(self.shot_radius * 2) / self.shot_speed);
-    //missile.nextthink          = missile.nextthink + random() * self.shot_spread;
-
     missile.solid              = SOLID_BBOX;
     missile.movetype           = MOVETYPE_FLYMISSILE;
     missile.velocity           = normalize(self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
@@ -47,8 +42,6 @@ void turret_mlrs_attack()
 	CSQCProjectile(missile, TRUE, PROJECTILE_ROCKET, FALSE); // no cull, fly sound
 
     te_explosion (missile.origin);
-
-    //self.tur_head.frame = 7 - self.volly_counter;
 }
 
 void turret_mlrs_rocket_touch()
@@ -101,7 +94,7 @@ void turret_mlrs_dinit()
 
     self.turrcaps_flags = TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_MEDPROJ | TFL_TURRCAPS_PLAYERKILL;
     self.ammo_flags = TFL_AMMO_ROCKETS | TFL_AMMO_RECHARGE;
-    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_ZEASE | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_INFRONT;
+    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE;// | TFL_AIM_GROUND2;
 
     if (turret_stdproc_init("mlrs_std",0,"models/turrets/base.md3","models/turrets/mlrs.md3") == 0)
     {
@@ -110,8 +103,7 @@ void turret_mlrs_dinit()
     }
 
     self.damage_flags |= TFL_DMG_HEADSHAKE;
-
-    self.shoot_flags |= TFL_SHOOT_VOLLYALWAYS;
+    self.shoot_flags  |= TFL_SHOOT_VOLLYALWAYS;
     self.volly_counter = self.shot_volly;
 
     if (!turret_tag_setup())
@@ -128,7 +120,6 @@ void turret_mlrs_dinit()
 
 void spawnfunc_turret_mlrs()
 {
-    //precache_model ( "models/turrets/rocket.md3");
     precache_model ("models/turrets/mlrs.md3");
     precache_model ("models/turrets/base.md3");
 

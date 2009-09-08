@@ -122,25 +122,6 @@ void turret_hk_attack()
 
 }
 
-/*
-void turret_hk_missile_touch()
-{
-    if(other == self.enemy)
-        turret_hk_missile_explode();
-    else
-    {
-        if(self.cnt < time)
-        {
-            self.cnt = time + 0.25;
-            self.health = self.health - 5;
-            if(self.health <= 0)
-                turret_hk_missile_explode();
-
-        }
-    }
-}
-*/
-
 void turret_hk_missile_think()
 {
     vector vu, vd, vf, vl, vr, ve;  // Vector (direction)
@@ -291,7 +272,6 @@ void turret_hk_missile_think()
             myspeed = min(myspeed * hk_accel2,hk_maxspeed);
 
         wishdir = ve;
-        //wishdir = normalize(self.enemy.origin - (self.enemy.origin + self.enemy.velocity));
     }
 
     if ((myspeed > hk_minspeed) && (self.cnt > time))
@@ -309,12 +289,7 @@ void turret_hk_missile_think()
 
     // Calculate new heading
     olddir = normalize(self.velocity);
-
     newdir = normalize(olddir + wishdir * cvar("g_turrets_unit_hk_std_shot_speed_turnrate"));
-
-    //fu = (1 / hk_maxspeed) * myspeed;
-    //fd = fu - (0.75 - 0.25);
-    //newdir = normalize(olddir + wishdir * fd);
 
     // Set heading & speed
     self.velocity = newdir * myspeed;
@@ -455,19 +430,15 @@ void turret_hk_dinit()
     self.turret_addtarget = turret_hk_addtarget;
 }
 
-/*
+
+/*QUAKED turret_hk (0 .5 .8) ?
 * Turret that fires Hunter-killer missiles.
 * Missiles seek their target and try to avoid obstacles. If target dies early, they
 * pick a new one on their own.
 */
 
-/*QUAKED turret_hk (0 .5 .8) ?
-hunter-killer missiles.
-*/
-
 void spawnfunc_turret_hk()
 {
-    //precache_model ( "models/turrets/hunter2.md3");
     precache_model ("models/turrets/base.md3");
     precache_model ("models/turrets/hk.md3");
 

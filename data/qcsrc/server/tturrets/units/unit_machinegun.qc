@@ -13,11 +13,9 @@ void turret_machinegun_attack()
 
     //w_deathtypestring = "had an alergic reaction due to 10 kilos of led";
     te_smallflash(self.tur_shotorg);
-    //  trailparticles(self,particleeffectnum("EF_MGTURRETTRAIL"),self.tur_shotorg_updated,trace_endpos);
 
     // muzzle flash for 3rd person view
     flash = spawn();
-    //setorigin(flash, '43 1 8');
     setmodel(flash, "models/uziflash.md3"); // precision set below
     setattachment(flash, self.tur_head, "tag_fire");
     flash.think = W_Uzi_Flash_Go;
@@ -34,7 +32,7 @@ void turret_machinegun_std_init()
     if (self.netname == "")      self.netname     = "Machinegun Turret";
 
     self.ammo_flags = TFL_AMMO_BULLETS | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
-    self.turrcaps_flags = TFL_TURRCAPS_PLAYERKILL;// | TFL_TURRCAPS_MISSILEKILL;
+    self.turrcaps_flags = TFL_TURRCAPS_PLAYERKILL;
     self.aim_flags = TFL_AIM_LEAD;
 
     if(cvar("g_antilag_bullets"))
@@ -59,12 +57,8 @@ void turret_machinegun_std_init()
 }
 
 
-
-/*
-* machinegun turret. does what you'd expect
-*/
-
 /*QUAKED turret_machinegun (0 .5 .8) ?
+* machinegun turret. does what you'd expect
 */
 void spawnfunc_turret_machinegun()
 {

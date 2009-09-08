@@ -866,8 +866,6 @@ void walker_respawnhook()
     entity e;
 
     self.origin = self.wkr_spawn.origin;
-    //self.wkr_props.solid = SOLID_BBOX;
-    //self.wkr_props.alpha = 1;
 
     self.angles = self.wkr_spawn.angles;
     vtmp = self.wkr_spawn.origin;
@@ -967,8 +965,6 @@ void turret_walker_dinit()
     self.solid      = SOLID_SLIDEBOX;
     self.takedamage = DAMAGE_AIM;
 
-    //setmodel(self,"models/turrets/walker_body.md3");
-    //setmodel(self.tur_head,"models/turrets/walker_head_minigun.md3");
     setmodel(self.wkr_spawn,"models/turrets/walker_spawn.md3");
 
     setattachment(self.tur_head,self,"tag_head");

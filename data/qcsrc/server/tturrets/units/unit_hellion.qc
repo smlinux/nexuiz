@@ -29,6 +29,9 @@ void turret_hellion_attack()
 
     sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", VOL_BASE, ATTN_NORM);
 
+    // switch tubes
+    //self.tur_shotorg_y = self.tur_shotorg_y * -1;
+
     missile = spawn ();
     setorigin(missile, self.tur_shotorg);
     setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
@@ -56,9 +59,6 @@ void turret_hellion_attack()
     te_explosion (missile.origin);
 
 	CSQCProjectile(missile, FALSE, PROJECTILE_ROCKET, FALSE); // no culling, has fly sound
-
-    // switch tubes
-    self.tur_shotorg_y = self.tur_shotorg_y * -1;
 
     if (self.tur_head.frame == 0)
         self.tur_head.frame = self.tur_head.frame + 1;
@@ -115,8 +115,6 @@ void turret_hellion_missile_think()
     pre_pos = self.enemy.origin + self.enemy.velocity * itime;
 
     pre_pos = (pre_pos + self.enemy.origin) * 0.5;
-
-    //pre_pos += randomvec() * 128; //self.tur_aimpos * (sin(32) * time) ;
 
     // Find out the direction to that place
     newdir = normalize(pre_pos - self.origin);
@@ -179,12 +177,15 @@ void turret_hellion_dinit()
 {
     if (self.netname == "")      self.netname  = "Hellion Missile Turret";
 
-    if (!self.shot_speed_max)  self.shot_speed_max  = cvar("g_turrets_unit_hellion_std_shot_speed_max");
-    if (!self.shot_speed_gain) self.shot_speed_gain = cvar("g_turrets_unit_hellion_std_shot_speed_gain");
+    if not (self.shot_speed_max)
+        self.shot_speed_max  = cvar("g_turrets_unit_hellion_std_shot_speed_max");
+
+    if not (self.shot_speed_gain)
+        self.shot_speed_gain = cvar("g_turrets_unit_hellion_std_shot_speed_gain");
 
     self.turrcaps_flags = TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_FASTPROJ | TFL_TURRCAPS_PLAYERKILL | TFL_TURRCAPS_MISSILEKILL;
     self.aim_flags = TFL_AIM_SIMPLE;
-    self.target_select_flags = TFL_TARGETSELECT_LOS | TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_TRIGGERTARGET | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK ;
+    self.target_select_flags = TFL_TARGETSELECT_LOS | TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK ;
     self.firecheck_flags = TFL_FIRECHECK_WORLD | TFL_FIRECHECK_DEAD | TFL_FIRECHECK_DISTANCES | TFL_FIRECHECK_TEAMCECK | TFL_FIRECHECK_REFIRE | TFL_FIRECHECK_AFF | TFL_FIRECHECK_OWM_AMMO;
     self.ammo_flags = TFL_AMMO_ROCKETS | TFL_AMMO_RECHARGE;
 
@@ -197,10 +198,7 @@ void turret_hellion_dinit()
     if (!turret_tag_setup())
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
-    // Our fire routine
     self.turret_firefunc  = turret_hellion_attack;
-
-    // Custom animations and sutch
     self.turret_postthink = turret_hellion_postthink;
 }
 
@@ -208,7 +206,6 @@ void turret_hellion_dinit()
 */
 void spawnfunc_turret_hellion()
 {
-    //precache_model ( "models/turrets/mlrs_rocket.md3");
     precache_model ("models/turrets/hellion.md3");
     precache_model ("models/turrets/base.md3");
 

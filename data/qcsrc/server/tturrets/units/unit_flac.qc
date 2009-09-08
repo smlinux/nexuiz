@@ -12,7 +12,6 @@ void turret_flac_attack()
     sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", VOL_BASE, ATTN_NORM);
     proj = spawn ();
     setorigin(proj, self.tur_shotorg);
-    // setmodel(proj, "models/turrets/pd_proj.md3");
     setsize(proj, '0 0 0', '0 0 0');
     proj.classname          = "flac_projectile";
     proj.owner              = self;
@@ -21,14 +20,11 @@ void turret_flac_attack()
     proj.solid              = SOLID_BBOX;
     proj.movetype           = MOVETYPE_FLYMISSILE;
     proj.flags              = FL_PROJECTILE;
-    // proj.effects            = EF_LOWPRECISION;
     proj.takedamage         = DAMAGE_NO;
-    //proj.health             =  100;
     proj.velocity           = normalize(self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
     proj.angles             = vectoangles(proj.velocity);
     proj.touch              = turret_flac_projectile_explode;
     proj.think              = turret_flac_projectile_explode;
-    //proj.nextthink          = time + vlen(self.tur_shotorg - self.enemy.origin) / self.shot_speed;
     proj.nextthink          = time + max(self.tur_impacttime,(self.shot_radius * 3) / self.shot_speed);
     proj.enemy              = self.enemy;
     proj.cnt                = time + 5;
@@ -89,7 +85,6 @@ void turret_flac_dinit()
 {
     if (self.netname == "")      self.netname  = "FLAC Cannon";
 
-
     self.turrcaps_flags = TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_FASTPROJ | TFL_TURRCAPS_MISSILEKILL;
     self.ammo_flags     = TFL_AMMO_ROCKETS | TFL_AMMO_RECHARGE;
     self.aim_flags      = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE;
@@ -102,7 +97,7 @@ void turret_flac_dinit()
     setsize(self.tur_head,'-32 -32 0','32 32 64');
 
     self.damage_flags |= TFL_DMG_HEADSHAKE;
-    self.target_select_flags |= TFL_TARGETSELECT_NOTURRETS;
+    self.target_select_flags |= TFL_TARGETSELECT_NOTURRETS | TFL_TARGETSELECT_MISSILESONLY;
 
     if (!turret_tag_setup())
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
@@ -118,7 +113,6 @@ void spawnfunc_turret_flac()
 {
     precache_model ("models/turrets/base.md3");
     precache_model ("models/turrets/flac.md3");
-    //precache_model("models/turrets/pd_proj.md3");
 
     self.think = turret_flac_dinit;
     self.nextthink = time + 0.5;

@@ -64,6 +64,8 @@ vector real_origin(entity ent);
 /// Use feild of view
 #define TFL_TARGETSELECT_FOV           4096
 
+#define TFL_TARGETSELECT_MISSILESONLY  8192
+
 /// aim flags
 .float aim_flags;
 /// Dont aim.

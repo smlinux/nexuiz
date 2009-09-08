@@ -44,7 +44,6 @@ void turret_plasma_attack()
     proj.solid           = SOLID_BBOX;
     proj.movetype        = MOVETYPE_FLYMISSILE;
     proj.velocity        = normalize(self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
-    //proj.velocity        = self.tur_shotdir_updated  * self.shot_speed;
     proj.touch           = turret_plasma_projectile_explode;
     proj.flags           = FL_PROJECTILE;
     proj.enemy           = self.enemy;
@@ -73,7 +72,6 @@ void turret_plasma_dual_attack()
     proj.solid           = SOLID_BBOX;
     proj.movetype        = MOVETYPE_FLYMISSILE;
     proj.velocity        = normalize(self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
-    //proj.velocity        = self.tur_shotdir_updated  * self.shot_speed;
     proj.touch           = turret_plasma_projectile_explode;
     proj.flags           = FL_PROJECTILE;
     proj.enemy           = self.enemy;
@@ -123,7 +121,6 @@ void turret_plasma_std_init()
     self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
 
     // How to aim
-    //self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_ZPREDICT | TFL_AIM_GROUND2;
     self.aim_flags      = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_GROUND2;
     self.turrcaps_flags = TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_MEDPROJ | TFL_TURRCAPS_PLAYERKILL | TFL_TURRCAPS_MISSILEKILL;
 
@@ -134,16 +131,7 @@ void turret_plasma_std_init()
     }
 
     self.damage_flags    |= TFL_DMG_HEADSHAKE;
-
-    //self.firecheck_flags |= (TFL_FIRECHECK_AFF | TFL_FIRECHECK_VERIFIED);
     self.firecheck_flags |= TFL_FIRECHECK_AFF;
-
-    //self.target_select_flags |= TFL_TARGETSELECT_FOV;
-    //self.target_select_fov    = 45;
-
-    //setmodel(self,"models/turrets/base.md3");
-    //setmodel(self.tur_head,"models/turrets/plasma.md3");
-    // self.tur_head.alpha = -1;
 
     if (!turret_tag_setup())
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
@@ -175,12 +163,7 @@ void turret_plasma_dual_init()
     }
 
     self.damage_flags    |= TFL_DMG_HEADSHAKE;
-    //self.firecheck_flags |= (TFL_FIRECHECK_AFF | TFL_FIRECHECK_VERIFIED);
-    //self.firecheck_flags |= TFL_FIRECHECK_AFF;
-
-    //setmodel(self,"models/turrets/base.md3");
-    //setmodel(self.tur_head,"models/turrets/plasmad.md3");
-
+    self.firecheck_flags |= TFL_FIRECHECK_AFF;
 
     if (!turret_tag_setup())
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");

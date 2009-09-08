@@ -26,15 +26,16 @@ vector turret_stdproc_aim_generic()
 
     // Keep track of when we can shoot the next time and
     // try to predict where the target will be then, so we can put our aimpoint there.
-    // + sys_ticrate for non hitscan, becouse spawned
+    // + sys_ticrate, becouse spawned REMOVE THIS IF sv_gameplayfix_delayprojectiles are 0!
     // projectiles dont move during the first tic of their life.
-    if (self.turrcaps_flags & TFL_TURRCAPS_HITSCAN)
-        mintime = max(self.attack_finished_single - time,0);
-    else
-        mintime = max(self.attack_finished_single - time,0) + sys_ticrate;
+    //if (self.turrcaps_flags & TFL_TURRCAPS_HITSCAN)
+    //    mintime = max(self.attack_finished_single - time,0) + sys_ticrate;
+    //else
+
+    mintime = max(self.attack_finished_single - time,0) + sys_ticrate;
 
     // Baseline
-    pre_pos = real_origin(self.enemy);// + (self.enemy.velocity * mintime);
+    pre_pos = real_origin(self.enemy);
 
     if (self.aim_flags & TFL_AIM_INFRONT)   // Aim a bit in front of the target
         pre_pos = pre_pos + (normalize(self.enemy.velocity) * 64);
@@ -47,8 +48,6 @@ vector turret_stdproc_aim_generic()
     if (self.aim_flags & TFL_AIM_SHOTTIMECOMPENSATE)       // Need to conpensate for shot traveltime
     {
         // FIXME: this cant be the best way to do this..
-
-
         prep = pre_pos;
         for(i = 0; i < 4; ++i)
         {
@@ -84,8 +83,6 @@ vector turret_stdproc_aim_generic()
                 prep_z = prep_z + vz * sys_ticrate;
             }
         }
-
-
         pre_pos = prep;
     }
     else
@@ -104,7 +101,8 @@ vector turret_stdproc_aim_generic()
 
     if(self.aim_flags & TFL_AIM_GROUND2)
     {
-        tracebox(pre_pos + '0 0 32',self.enemy.mins,self.enemy.maxs,pre_pos -'0 0 64',MOVE_WORLDONLY,self.enemy);
+        //tracebox(pre_pos + '0 0 32',self.enemy.mins,self.enemy.maxs,pre_pos -'0 0 64',MOVE_WORLDONLY,self.enemy);
+        traceline(pre_pos + '0 0 32',pre_pos -'0 0 64',MOVE_WORLDONLY,self.enemy);
         if(trace_fraction != 1.0)
             pre_pos = trace_endpos;
     }

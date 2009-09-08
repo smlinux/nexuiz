@@ -25,7 +25,7 @@ void ewheel_attack()
     entity proj;
     float i;
 
-    for (i=0;i<1;++i)
+    for (i = 0; i < 1; ++i)
     {
         turret_do_updates(self);
 
@@ -34,8 +34,6 @@ void ewheel_attack()
 
         proj                    = spawn ();
         setorigin(proj, self.tur_shotorg);
-        //setsize(proj, '-0.5 -0.5 -0.5', '0.5 0.5 0.5');
-        //setmodel(proj, "models/laser.mdl"); // precision set above
         proj.classname       = "ewheel bolt";
         proj.owner           = self;
         proj.bot_dodge       = FALSE;
@@ -45,9 +43,8 @@ void ewheel_attack()
         proj.solid           = SOLID_BBOX;
         proj.movetype        = MOVETYPE_FLYMISSILE;
         proj.velocity        = normalize(self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
-        proj.angles          = vectoangles(proj.velocity);
+        //proj.angles          = vectoangles(proj.velocity);
         proj.touch           = turret_ewheel_projectile_explode;
-        //proj.effects         = EF_LOWPRECISION |  EF_BRIGHTFIELD;
         proj.enemy           = self.enemy;
         proj.flags           = FL_PROJECTILE | FL_NOTARGET;
 
@@ -135,6 +132,7 @@ float ewheel_moveverb_path(float eval)
 
         if (self.pathcurrent)
         {
+            /*
             switch (self.waterlevel)
             {
             case 0:
@@ -142,6 +140,7 @@ float ewheel_moveverb_path(float eval)
             case 2:
             case 3:
             }
+            */
 
             self.moveto = self.pathcurrent.origin;
             self.steerto = steerlib_attract2(self.moveto,0.5,500,0.95);
@@ -358,59 +357,6 @@ void ewheel_diehook()
 
 }
 
-/*
-float test_stack_1(float eval)
-{
-    switch (eval)
-    {
-    case VCM_EVAL:
-        return verb.verb_static_value;
-
-    case VCM_DO:
-        dprint("test_stack_1\n");
-        return VS_CALL_REMOVE;
-    }
-
-    return VS_CALL_REMOVE;
-}
-
-float test_stack_2(float eval)
-{
-    switch (eval)
-    {
-    case VCM_EVAL:
-        return verb.verb_static_value;
-
-    case VCM_DO:
-        dprint("test_stack_2\n");
-        return VS_CALL_REMOVE;
-    }
-
-    return VS_CALL_REMOVE;
-}
-
-float ccnntt;
-float test_stack_3(float eval)
-{
-    switch (eval)
-    {
-    case VCM_EVAL:
-        return verb.verb_static_value;
-
-    case VCM_DO:
-        dprint("test_stack_3\n");
-        ++ccnntt;
-        if(ccnntt > 3)
-            return VS_CALL_REMOVE;
-        else
-            return VS_CALL_YES_DONE;
-    }
-
-    return VS_CALL_YES_DONE;
-}
-
-.entity test_stack;
-*/
 void turret_ewheel_dinit()
 {
     entity e;
@@ -434,7 +380,6 @@ void turret_ewheel_dinit()
 
     self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
     self.turrcaps_flags = TFL_TURRCAPS_PLAYERKILL | TFL_TURRCAPS_MOVE | TFL_TURRCAPS_ROAM | TFL_TURRCAPS_HEADATTACHED;
-    //self.aim_flags = TFL_AIM_SIMPLE;// TFL_AIM_LEAD | TFL_AIM_ZEASE;
 
     self.turret_respawnhook = ewheel_respawnhook;
     self.turret_diehook = ewheel_diehook;
@@ -474,16 +419,6 @@ void turret_ewheel_dinit()
     verbstack_push(self.verbs_move, ewheel_moveverb_enemy,  WVM_ENEMY, 0, self);
     verbstack_push(self.verbs_move, ewheel_moveverb_path,   WVM_PATH,  0, self);
     //verbstack_push(self.verbs_move, ewheel_moveverb_runaway,WVM_PANIC,  0, self);
-
-    /*
-    self.test_stack = spawn();
-    verbstack_push(self.test_stack, test_stack_1,1,  0, self);
-    verbstack_push(self.test_stack, test_stack_2,2,  0, self);
-    verbstack_push(self.test_stack, test_stack_3,100,0, self);
-    while(verbstack_popfifo(self.test_stack) != 0)
-    */
-
-
 
     // Convert from dgr / sec to dgr / tic
     self.tur_head.aim_speed = cvar("g_turrets_unit_ewheel_turnrate");

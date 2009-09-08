@@ -8,6 +8,7 @@ entity toast(entity from, float range, float damage)
     entity e;
     entity etarget;
     float d,dd;
+    float r;
 
     dd = range + 1;
 
@@ -15,9 +16,11 @@ entity toast(entity from, float range, float damage)
     while (e)
     {
         if ((e.toasted != 1) && (e != from))
-            if (turret_validate_target(self,e,self.target_validate_flags) > 0)
+        {
+            r = turret_validate_target(self,e,self.target_validate_flags);
+            if (r > 0)
             {
-                traceline(from.origin,e.origin,MOVE_WORLDONLY,from);
+                traceline(from.origin,0.5 * (e.absmin + e.absmax),MOVE_WORLDONLY,from);
                 if (trace_fraction == 1.0)
                 {
                     d = vlen(e.origin - from.origin);
@@ -28,6 +31,8 @@ entity toast(entity from, float range, float damage)
                     }
                 }
             }
+        }
+
         e = e.chain;
     }
 
@@ -82,6 +87,8 @@ void turret_tesla_fire()
 
     self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_MISSILES |
                                  TFL_TARGETSELECT_TEAMCHECK;
+
+
 
     self.attack_finished_single = time + self.shot_refire;
     for (i = 0; i < 10; ++i)
@@ -150,8 +157,6 @@ void turret_tesla_dinit()
         return;
     }
     setsize(self,'-48 -48 0','48 48 96');
-    //setmodel(self,"models/turrets/tesla_base.md3");
-    //setmodel(self.tur_head,"models/turrets/tesla_head.md3");
 
     self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_MISSILES |
                                  TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK;
