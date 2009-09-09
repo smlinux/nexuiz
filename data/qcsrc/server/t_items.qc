@@ -76,7 +76,13 @@ void Item_Show (entity e, float mode)
 			// we need this to prevent weird display because of
 			// missing depth sorting - or maybe not
 		//e.colormod = '0.2 1 0.2';
-		e.alpha = 0.1;
+		e.alpha = 0.2;
+
+		// special cases
+		if (e.strength_finished || e.invincible_finished)
+			e.effects = e.effects | EF_ADDITIVE | EF_FULLBRIGHT;
+		if (cvar("g_fullbrightitems"))
+			e.effects = e.effects | EF_FULLBRIGHT;
 	}
 
 	// relink entity (because solid may have changed)
