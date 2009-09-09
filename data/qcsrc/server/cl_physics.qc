@@ -129,7 +129,8 @@ void PlayerJump (void)
 		self.doublejump_nextjumptime = time + 4 / max(40, self.velocity_z); // max 0.1s blocking of jumps
 	}
 
-	self.restart_jump = TRUE; // restart jump anim next time
+	self.restart_jump = -1; // restart jump anim next time
+	// value -1 is used to not use the teleport bit (workaround for tiny hitch when re-jumping)
 }
 
 void CheckWaterJump()

@@ -22,6 +22,7 @@ void setanim(entity e, vector anim, float looping, float override, float restart
 	{
 		if(restart)
 		{
+			if(restart > 0)
 			if(anim_y == 1) // ZYM animation
 				BITXOR_ASSIGN(e.effects, EF_TELEPORT_BIT);
 		}
