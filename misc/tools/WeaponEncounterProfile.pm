@@ -108,8 +108,9 @@ our %WeaponMap = (
         11 => ["MinstaNex", "minstanex"],
         12 => ["Grappling Hook", "hookgun"],
         13 => ["Heavy Laser Assault Cannon", "hlac"],
-        14 => ["T.A.G. Seeker", "seeker"],
+        14 => ["Tuba", "tuba"],
         15 => ["Camping Rifle", "campingrifle"],
+        16 => ["Fireball", "fireball"],
 );
 
 sub weaponid_valid($$)
