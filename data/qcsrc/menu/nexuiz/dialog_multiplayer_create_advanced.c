@@ -53,7 +53,6 @@ void fillNexuizAdvancedDialog(entity me)
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 1.2, e = makeNexuizTextLabel(0, "Friendly fire penalty:"));
 		me.TD(me, 1, 1.7, e = makeNexuizSlider(0, 1.0, 0.05, "g_mirrordamage"));
-		setDependent(e, "g_tdm", 0, -1);
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 1.2, e = makeNexuizTextLabel(0, "Teams:"));
