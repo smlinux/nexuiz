@@ -64,6 +64,11 @@ void CampaignPreInit()
 {
 	float baseskill;
 	string title;
+	if(cvar("sv_cheats"))
+	{
+		CampaignBailout("JOLLY CHEATS AHAHAHAHAHAHAH))");
+		return;
+	}
 	campaign_level = cvar("_campaign_index");
 	campaign_name = strzone(cvar_string("_campaign_name"));
 	campaign_index_var = strzone(strcat("g_campaign", campaign_name, "_index"));
