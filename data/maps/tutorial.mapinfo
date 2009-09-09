@@ -4,6 +4,7 @@ author Map by FruitieX, tutor voice by -z-
 cdtrack 19
 type dm 1 0
 hidden
+has weapons
 settemp_for_type all bot_config_file maps/tutorial_bot.txt
 settemp_for_type all bot_number 1
 settemp_for_type all g_start_weapon_laser 0
