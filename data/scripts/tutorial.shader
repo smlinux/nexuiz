@@ -119,3 +119,19 @@ textures/tutorial/11
 	}
 }
 
+textures/tutorial/nonsolidglass
+{
+	qer_editorimage textures/trak5/glass.tga
+	surfaceparm trans
+	surfaceparm nonsolid
+	cull disable
+	qer_trans 0.5
+
+	{
+		map textures/trak5/glass.tga
+		blendfunc add
+		//rgbGen vertex
+		tcgen environment
+		tcmod scale 4 4
+	}	
+}
