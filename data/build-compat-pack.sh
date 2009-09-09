@@ -376,6 +376,19 @@ COMPAT_FILES="
 	textures/tuba_gloss.tga
 	textures/tuba_glow.tga
 	textures/tuba.tga
+	sound/weapons/fireball_fire2.wav
+	sound/weapons/fireball_fire.wav
+	sound/weapons/fireball_fly2.wav
+	sound/weapons/fireball_fly.wav
+	sound/weapons/fireball_impact2.wav
+	sound/weapons/fireball_prefire2.wav
+	models/weapons/g_fireball.md3
+	models/weapons/h_fireball.dpm
+	models/weapons/h_fireball.dpm.framegroups
+	models/weapons/v_fireball.md3
+	textures/fireball_gloss.tga
+	textures/fireball_glow.tga
+	textures/fireball.tga
 "
 
 rm -rf pack
