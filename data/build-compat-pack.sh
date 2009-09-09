@@ -389,6 +389,8 @@ COMPAT_FILES="
 	textures/fireball_gloss.tga
 	textures/fireball_glow.tga
 	textures/fireball.tga
+	models/sphere/sphere.md3
+	models/sphere/sphere.tga
 "
 
 rm -rf pack
