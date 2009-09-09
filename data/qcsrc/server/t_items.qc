@@ -72,11 +72,11 @@ void Item_Show (entity e, float mode)
 		// make the item translucent green and not touchable
 		e.model = e.mdl;
 		e.solid = SOLID_NOT;
-		e.effects |= EF_ADDITIVE;
+		// e.effects |= EF_ADDITIVE;
 			// we need this to prevent weird display because of
-			// missing depth sorting
+			// missing depth sorting - or maybe not
 		//e.colormod = '0.2 1 0.2';
-		e.alpha = 0.2;
+		e.alpha = 0.1;
 	}
 
 	// relink entity (because solid may have changed)
