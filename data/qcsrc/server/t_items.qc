@@ -73,8 +73,10 @@ void Item_Show (entity e, float mode)
 		e.model = e.mdl;
 		e.solid = SOLID_NOT;
 		e.effects |= EF_ADDITIVE;
+			// we need this to prevent weird display because of
+			// missing depth sorting
 		//e.colormod = '0.2 1 0.2';
-		e.alpha = 0.1;
+		e.alpha = 0.2;
 	}
 
 	// relink entity (because solid may have changed)
