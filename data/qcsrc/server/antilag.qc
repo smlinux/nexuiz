@@ -71,10 +71,10 @@ vector antilag_takebackorigin(entity e, float t)
 void antilag_takeback(entity e, float t)
 {
 	e.antilag_saved_origin = e.origin;
-	e.origin = antilag_takebackorigin(e, t);
+	setorigin(e, antilag_takebackorigin(e, t));
 }
 
 void antilag_restore(entity e)
 {
-	e.origin = e.antilag_saved_origin;
+	setorigin(e, e.antilag_saved_origin);
 }
