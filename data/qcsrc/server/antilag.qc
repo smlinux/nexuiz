@@ -12,18 +12,18 @@ void antilag_dummy()
 	self.antilag_origins = '0 0 0';
 }
 
-void antilag_record(entity e)
+void antilag_record(entity e, float t)
 {
 	if(time < e.(antilag_times[e.antilag_index]))
 		return;
 	e.antilag_index = e.antilag_index + 1;
 	if(e.antilag_index >= ANTILAG_MAX_ORIGINS)
 		e.antilag_index = 0;
-	e.(antilag_times[e.antilag_index]) = time;
+	e.(antilag_times[e.antilag_index]) = t;
 	e.(antilag_origins[e.antilag_index]) = e.origin;
 
 	if(e.antilag_debug)
-		te_spark(antilag_takebackorigin(e, time - e.antilag_debug), '0 0 0', 32);
+		te_spark(antilag_takebackorigin(e, t - e.antilag_debug), '0 0 0', 32);
 }
 
 // finds the index BEFORE t

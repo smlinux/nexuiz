@@ -2803,7 +2803,7 @@ void PlayerPostThink (void)
 	}
 
 	if(frametime)
-		antilag_record(self);
+		antilag_record(self, time + frametime);
 
 #ifdef TETRIS
 	if(self.impulse == 100)

@@ -1,4 +1,4 @@
-void antilag_record(entity e);
+void antilag_record(entity e, float t);
 float antilag_find(entity e, float t);
 vector antilag_takebackorigin(entity e, float t);
 void antilag_takeback(entity e, float t);
