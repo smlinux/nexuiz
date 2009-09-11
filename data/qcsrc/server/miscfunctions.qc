@@ -2166,7 +2166,7 @@ void endzcurveparticles()
 	if(zcurveparticles_effectno)
 	{
 		// terminator
-		WriteShort(zcurveparticles_spd | 0x8000);
+		WriteShort(MSG_BROADCAST, zcurveparticles_spd | 0x8000);
 	}
 	zcurveparticles_effectno = 0;
 }
