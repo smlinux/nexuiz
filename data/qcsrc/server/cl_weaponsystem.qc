@@ -511,7 +511,7 @@ void CL_Weaponentity_Think()
 					self.weaponentity = world;
 				}
 
-				self.origin = '0 0 0';
+				setorigin(self,'0 0 0');
 				self.angles = '0 0 0';
 				self.frame = 0;
 				self.viewmodelforclient = world;
@@ -848,7 +848,7 @@ void CL_SpawnWeaponentity()
 	self.weaponentity.solid = SOLID_NOT;
 	self.weaponentity.owner = self;
 	setmodel(self.weaponentity, ""); // precision set when changed
-	self.weaponentity.origin = '0 0 0';
+	setorigin(self.weaponentity, '0 0 0');
 	self.weaponentity.angles = '0 0 0';
 	self.weaponentity.viewmodelforclient = self;
 	self.weaponentity.flags = 0;
@@ -861,7 +861,7 @@ void CL_SpawnWeaponentity()
 	self.exteriorweaponentity.solid = SOLID_NOT;
 	self.exteriorweaponentity.exteriorweaponentity = self.exteriorweaponentity;
 	self.exteriorweaponentity.owner = self;
-	self.exteriorweaponentity.origin = '0 0 0';
+	setorigin(self.exteriorweaponentity, '0 0 0');
 	self.exteriorweaponentity.angles = '0 0 0';
 	self.exteriorweaponentity.think = CL_ExteriorWeaponentity_Think;
 	self.exteriorweaponentity.nextthink = time;

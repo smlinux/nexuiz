@@ -404,7 +404,7 @@ void SV_ParseClientCommand(string s) {
 				self.model = strzone(argv(1));
 				self.mdl = "rocket_explode";
 				self.health = 1000;
-				self.origin = trace_endpos;
+				setorigin(self, trace_endpos);
 				self.effects = EF_NOMODELFLAGS;
 				if(f == 1)
 				{

@@ -1096,7 +1096,7 @@ void onslaught_controlpoint_icon_think()
 		self.cp_bob_dmg_z = self.cp_bob_dmg_z - 0.1;
 	else
 		self.cp_bob_dmg_z = 0;
-	self.origin = self.cp_origin + self.cp_bob_origin + self.cp_bob_dmg;
+	setorigin(self,self.cp_origin + self.cp_bob_origin + self.cp_bob_dmg);
 
 	// damaged fx
 	if(random() < 0.6 - self.health / self.max_health)

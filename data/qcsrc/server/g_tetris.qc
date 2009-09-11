@@ -54,9 +54,9 @@ line16, line17, line18, line19, line20;
 float	SVC_CENTERPRINTa		= 26;
 
 float Tetris_Level()
-{ 
-	return ((floor((self.tet_lines / 10)) + 1)); 
-}; 
+{
+	return ((floor((self.tet_lines / 10)) + 1));
+};
 
 void tetsnd(string snd)
 {
@@ -958,8 +958,8 @@ float TetrisPostFrame()
 		self.tetris_on = 1; // start VS game
 		self.tet_drawtime = 0;
 	}
-	
-	self.origin = self.tet_org;
+
+	setorigin(self, self.tet_org);
 	self.movetype = MOVETYPE_NONE;
 
 	if(self.tetris_on == 1)
@@ -975,7 +975,7 @@ float TetrisPostFrame()
 
 		if(TetrisKeyRepeat(tetkey_right, self.movement_y > 0))
 			keysa |= TETKEY_RIGHT;
-		
+
 		if(TetrisKeyRepeat(tetkey_rotleft, self.BUTTON_CROUCH))
 			keysa |= TETKEY_ROTLEFT;
 

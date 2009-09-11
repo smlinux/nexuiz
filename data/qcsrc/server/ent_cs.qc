@@ -59,7 +59,7 @@ void entcs_think()
 
 	if(o.origin != self.origin || o.angles != self.angles)
 	{
-		self.origin = o.origin;
+		setorigin(self, o.origin);
 		self.angles = o.angles;
 		self.SendFlags |= 1;
 	}

@@ -79,12 +79,12 @@ void dompoint_captured ()
 
 	//self.nextthink = time + cvar("g_domination_point_rate");
 	//self.think = dompointthink;
-	
+
 	if(cvar("g_domination_point_rate"))
 		self.delay = time + cvar("g_domination_point_rate");
 	else
 		self.delay = time + self.wait;
-		
+
 	// do trigger work
 	old_delay = self.delay;
 	old_team = self.team;
@@ -179,7 +179,7 @@ void dompointtouch()
 		return;
 	if (other.health < 1)
 		return;
-	
+
 	if(time < self.captime + 0.3)
 		return;
 
@@ -569,7 +569,7 @@ void dom_spawnpoint(vector org)
 	self.classname = "dom_controlpoint";
 	self.think = spawnfunc_dom_controlpoint;
 	self.nextthink = time;
-	self.origin = org;
+	setorigin(self, org);
 	spawnfunc_dom_controlpoint();
 	self = oldself;
 };

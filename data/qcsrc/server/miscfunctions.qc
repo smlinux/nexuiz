@@ -43,7 +43,7 @@ void move_out_of_solid_expand(entity e, vector by)
     {
         // hit something
         // adjust origin in the other direction...
-        e.origin = e.origin - by * (1 - trace_fraction);
+        setorigin(e,e.origin - by * (1 - trace_fraction));
     }
 }
 
@@ -195,7 +195,7 @@ void relocate_spawnpoint()
         }
         else
         {
-            self.origin = o;
+            setorigin(self, o);
             self.mins = self.maxs = '0 0 0';
             objerror("player spawn point in solid, mapper sucks!\n");
             return;
@@ -2341,7 +2341,7 @@ void detach_sameorigin(entity e)
     e.angles = fixedvectoangles2(v_forward, v_up);
     if (substring(e.model, 0, 1) == "*") // bmodels have their own rules
         e.angles_x = -e.angles_x;
-    e.origin = org;
+    setorigin(e, org);
     setattachment(e, world, "");
     setorigin(e, e.origin);
 }
@@ -2490,7 +2490,7 @@ float modeleffect_SendEntity(entity to, float sf)
 		f |= 2;
 	if(self.avelocity != '0 0 0')
 		f |= 4;
-	
+
 	WriteByte(MSG_ENTITY, f);
 	WriteShort(MSG_ENTITY, self.modelindex);
 	WriteByte(MSG_ENTITY, self.skin);

@@ -42,7 +42,7 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 	to = to + AnglesTransform_Apply(teleporter.portal_transform, player.origin - from);
 	newvel = AnglesTransform_Apply(transform, player.velocity);
 	// this now is INSIDE the plane... can't use that
-	
+
 	// shift it out
 	fixedmakevectors(teleporter.enemy.angles);
 
@@ -55,7 +55,7 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 	else
 	*/
 		to += v_forward * planeshift;
-	
+
 	s = (to - teleporter.enemy.origin) * v_right;
 	t = (to - teleporter.enemy.origin) * v_up;
 	s = bound(-48, s, 48);
@@ -239,10 +239,10 @@ void Portal_Touch()
 
 	if(other.classname == "item_flag_team")
 		return; // never portal these
-	
+
 	if(other.classname == "grapplinghook")
 		return; // handled by think
-	
+
 	if(!self.enemy)
 		error("Portal_Touch called for a broken portal\n");
 
@@ -598,7 +598,7 @@ entity Portal_Spawn(entity own, vector org, vector ang)
 	portal = spawn();
 	portal.classname = "portal";
 	portal.aiment = own;
-	portal.origin = org;
+	setorigin(portal, org);
 	portal.angles = ang;
 	portal.think = Portal_Think;
 	portal.nextthink = 0;

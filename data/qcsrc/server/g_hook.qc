@@ -149,7 +149,7 @@ void GrapplingHookThink()
 			UnsetMovetypeFollow(self);
 
 		// 2. cut it off
-		self.origin = trace_endpos;
+		setorigin(self, trace_endpos);
 
 		// 3. reattach the hook
 		if(trace_ent)

@@ -319,12 +319,12 @@ void kh_Key_AssignTo(entity key, entity player)  // runs every time a key is pic
 				WaypointSprite_Ping(player.waypointsprite_attachedforcarrier);
 		}
 	}
-	
+
 	// moved that here, also update if there's no player
 	kh_show_temp();
 	if(key.owner)
 		key.owner.kh_state = (key.owner.kh_state | 255) - 255 + test[key.owner.playerid];
-		
+
 	key.pusher = world;
 
 	ownerteam = kh_Key_AllOwnedByWhichTeam();
@@ -562,7 +562,7 @@ void kh_Key_Think()  // runs all the time
 		if(cvar_string("_angles") != "")
 		{
 			self.angles = stov(cvar_string("_angles"));
-			self.origin = stov(cvar_string("_origin"));
+			setorigin(self, stov(cvar_string("_origin")));
 		}
 	}
 #endif

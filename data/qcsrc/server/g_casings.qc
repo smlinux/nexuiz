@@ -24,7 +24,7 @@ void SpawnCasing(vector vel, float randomvel, vector ang, vector avel, float ran
 
 	e = spawn();
 	e.state = casingtype;
-	e.origin = org;
+	setorigin(e, org);
 	e.velocity = vel;
 	e.angles = ang;
 	e.oldorigin_x = compressShortVector(e.velocity);
