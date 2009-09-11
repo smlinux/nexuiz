@@ -836,6 +836,7 @@ void walker_attack()
     //w_deathtypestring = "was miniguned";
     sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", VOL_BASE, ATTN_NORM);
     fireBallisticBullet (self.tur_shotorg, self.tur_shotdir_updated,self.shot_spread, self.shot_speed, 5, self.shot_dmg, 0, self.shot_force, DEATH_TURRET, 0, 1, cvar("g_balance_uzi_bulletconstant"));
+    endFireBallisticBullet();
     if (self.uzi_bulletcounter == 2)
     {
 

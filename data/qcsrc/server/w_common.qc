@@ -346,6 +346,10 @@ void W_BallisticBullet_Touch (void)
 	self.projectiledeathtype |= HITTYPE_BOUNCE;
 }
 
+void endFireBallisticBullet()
+{
+	endzcurveparticles();
+}
 void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, float lifetime, float damage, float headshotbonus, float force, float dtype, float tracereffects, float gravityfactor, float bulletconstant)
 {
 	float lag, dt, savetime;
@@ -464,8 +468,6 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 		}
 		frametime = savetime;
 		self = oldself;
-
-		endzcurveparticles();
 
 		if(lag)
 			FOR_EACH_PLAYER(pl)

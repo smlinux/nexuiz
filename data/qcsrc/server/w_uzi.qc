@@ -36,6 +36,7 @@ void W_Uzi_Attack (float deathtype)
 		fireBallisticBullet(w_shotorg, w_shotdir, cvar("g_balance_uzi_first_spread"), cvar("g_balance_uzi_speed"), 5, cvar("g_balance_uzi_first_damage"), 0, cvar("g_balance_uzi_first_force"), deathtype, 0, 1, cvar("g_balance_uzi_bulletconstant"));
 	else
 		fireBallisticBullet(w_shotorg, w_shotdir, cvar("g_balance_uzi_sustained_spread"), cvar("g_balance_uzi_speed"), 5, cvar("g_balance_uzi_sustained_damage"), 0, cvar("g_balance_uzi_sustained_force"), deathtype, 0, 1, cvar("g_balance_uzi_bulletconstant"));
+	endFireBallisticBullet();
 
 	pointparticles(particleeffectnum("uzi_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
