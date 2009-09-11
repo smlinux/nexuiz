@@ -1132,15 +1132,22 @@ float Fire_AddDamage(entity e, entity o, float d, float t, float dt)
 	float dps;
 	float maxtime, mintime, maxdamage, mindamage, maxdps, mindps, totaldamage, totaltime;
 
-	if(e.classname != "player")
-	if(!e.fire_burner)
+	if(e.classname == "player")
 	{
-		// print("adding a fire burner to ", e.classname, "\n");
-		e.fire_burner = spawn();
-		e.fire_burner.classname = "fireburner";
-		e.fire_burner.think = fireburner_think;
-		e.fire_burner.nextthink = time;
-		e.fire_burner.owner = e;
+		if(e.deadflag)
+			return -1;
+	}
+	else
+	{
+		if(!e.fire_burner)
+		{
+			// print("adding a fire burner to ", e.classname, "\n");
+			e.fire_burner = spawn();
+			e.fire_burner.classname = "fireburner";
+			e.fire_burner.think = fireburner_think;
+			e.fire_burner.nextthink = time;
+			e.fire_burner.owner = e;
+		}
 	}
 
 	t = max(t, 0.1);
@@ -1204,7 +1211,7 @@ float Fire_AddDamage(entity e, entity o, float d, float t, float dt)
 					e.fire_hitsound = FALSE;
 				}
 			}
-			return totaldamage - mindamage; // can never be negative
+			return max(0, totaldamage - mindamage); // can never be negative, but to make sure
 		}
 		else
 			return 0;
