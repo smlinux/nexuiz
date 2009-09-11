@@ -2511,6 +2511,11 @@ void EndFrame()
 	{
 		self.hitsound = FALSE;
 		self.typehitsound = FALSE;
+		antilag_record(self, time + 2*frametime);
+		// add 1 frametime because after this, engine SV_Physics
+		// increases time by a frametime and then networks the frame
+		// add another frametime because client shows everything with
+		// 1 frame of lag (cl_nolerp 0).
 	}
 }
 

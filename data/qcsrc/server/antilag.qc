@@ -60,7 +60,11 @@ vector antilag_takebackorigin(entity e, float t)
 
 	i0 = antilag_find(e, t);
 	if(i0 < 0)
-		return e.origin;
+	{
+		i0 = e.antilag_index - 1;
+		if(i0 < 0)
+			i0 = ANTILAG_MAX_ORIGINS - 1;
+	}
 	i1 = i0 + 1;
 	if(i1 >= ANTILAG_MAX_ORIGINS)
 		i1 = 0;
