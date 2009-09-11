@@ -308,13 +308,17 @@ void Net_ReadZCurveParticles()
 	start_x = ReadCoord();
 	start_y = ReadCoord();
 	start_z = ReadCoord();
-	end_x = ReadCoord();
-	end_y = ReadCoord();
-	end_z = ReadCoord();
-	end_dz = ReadCoord();
-	speed = ReadShort() * 16;
 
-	zcurveparticles(effectnum, start, end, end_dz, speed, 5); // at most 32 segments
+	do
+	{
+		end_x = ReadCoord();
+		end_y = ReadCoord();
+		end_z = ReadCoord();
+		end_dz = ReadCoord();
+		speed = ReadShort();
+		zcurveparticles(effectnum, start, end, end_dz, 16 * (speed & 0x7FFF), 5); // at most 32 segments
+	}
+	while(!(speed & 0x8000));
 }
 
 void Net_ReadNexgunBeamParticle()

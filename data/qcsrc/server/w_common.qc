@@ -189,6 +189,8 @@ void W_BallisticBullet_Hit (void)
 
 	if(other && other != self.enemy)
 	{
+		endzcurveparticles();
+
 		headshot = 0;
 		yoda = 0;
 		damage_headshotbonus = self.dmg_edge;
@@ -462,6 +464,8 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 		}
 		frametime = savetime;
 		self = oldself;
+
+		endzcurveparticles();
 
 		if(lag)
 			FOR_EACH_PLAYER(pl)
