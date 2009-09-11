@@ -20,7 +20,7 @@ FONTSIZE_NORMAL                 12
 HEIGHT_NORMAL                   1.5
 FONTSIZE_TITLE                  16
 HEIGHT_TITLE                    1.5
-HEIGHT_ZOOMEDTITLE              0
+HEIGHT_ZOOMEDTITLE              -1
 
 // tooltips
 //   uses "tooltip" images
@@ -51,7 +51,7 @@ COLOR_DIALOG_CVARS              '1 0 0'
 // centers, NOT the actual positions of the windows!)
 POSITION_DIALOG_MULTIPLAYER     '0.8 0.4 0'
 POSITION_DIALOG_SINGLEPLAYER    '0.2 0.4 0'
-POSITION_DIALOG_SETTINGS        '0.5 1 0'
+POSITION_DIALOG_SETTINGS        '0.5 0.95 0'
 POSITION_DIALOG_CREDITS         '-0.05 1.2 0'
 POSITION_DIALOG_QUIT            '1.05 1.2 0'
 
@@ -66,7 +66,7 @@ ALPHA_CURSOR_INTRO              0
 //   uses "background_ingame" images
 ALIGN_BACKGROUND                37915
 ALIGN_BACKGROUND_INGAME         59
-ALPHA_BACKGROUND_INGAME         0.7
+ALPHA_BACKGROUND_INGAME         1
 ALPHA_DISABLED                  0.2
 ALPHA_BEHIND                    0.5
 ALPHA_TEXT                      0.7
