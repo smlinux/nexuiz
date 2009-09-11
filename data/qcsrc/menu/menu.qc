@@ -20,6 +20,8 @@ void SUB_Null() { };
 
 void() m_init =
 {
+	cvar_set("_menu_alpha", 0);
+
 	dprint_load();
 	check_unacceptable_compiler_bugs();
 
@@ -582,6 +584,9 @@ void() m_draw =
 		if(menuAlpha > 0)
 			drawBackground(SKINGFX_BACKGROUND_INGAME, menuAlpha * SKINALPHA_BACKGROUND_INGAME, SKINALIGN_BACKGROUND_INGAME, FALSE);
 	}
+
+	if(menuAlpha != prevMenuAlpha)
+		cvar_set("_menu_alpha", ftos(menuAlpha));
 
 	draw_reset();
 	preMenuDraw();
