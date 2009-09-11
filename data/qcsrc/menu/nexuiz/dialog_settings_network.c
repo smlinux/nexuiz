@@ -25,7 +25,7 @@ void fillNexuizNetworkSettingsTab(entity me)
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_movement", "Client-side movement prediction"));
 	me.TR(me);
-		me.TD(me, 1, 3, e = makeNexuizCheckBox(1, "cl_nolerp", "Network update smoothing"));
+		//me.TD(me, 1, 3, e = makeNexuizCheckBox(1, "cl_nolerp", "Network update smoothing"));
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "shownetgraph", "Show netgraph"));
 	me.TR(me);
