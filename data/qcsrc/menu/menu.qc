@@ -20,7 +20,7 @@ void SUB_Null() { };
 
 void() m_init =
 {
-	cvar_set("_menu_alpha", 0);
+	cvar_set("_menu_alpha", "0");
 
 	dprint_load();
 	check_unacceptable_compiler_bugs();
