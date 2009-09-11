@@ -1196,11 +1196,13 @@ float Fire_AddDamage(entity e, entity o, float d, float t, float dt)
 			e.fire_damagepersec = totaldamage / totaltime;
 			e.fire_endtime = time + totaltime;
 			if(totaldamage > 1.2 * mindamage)
-			if(e.fire_owner != o)
 			{
 				e.fire_deathtype = dt;
-				e.fire_owner = o;
-				e.fire_hitsound = FALSE;
+				if(e.fire_owner != o)
+				{
+					e.fire_owner = o;
+					e.fire_hitsound = FALSE;
+				}
 			}
 			return totaldamage - mindamage; // can never be negative
 		}
