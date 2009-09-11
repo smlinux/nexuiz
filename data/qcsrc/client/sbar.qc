@@ -2158,7 +2158,7 @@ void Sbar_Draw (void)
 	bottomleft_y = vid_conheight;
 	bottomleft_z = 0;
 
-	sbar_alpha_bg = cvar("sbar_alpha_bg");
+	sbar_alpha_bg = cvar("sbar_alpha_bg") * (1 - cvar("_menu_alpha"));
 	sbar_border_thickness = bound(0, cvar("sbar_border_thickness"), 5);
 	sbar_color_bg_team = cvar("sbar_color_bg_team");
 	sbar_scoreboard_alpha_bg = cvar("sbar_scoreboard_alpha_bg");
