@@ -137,6 +137,28 @@ void DragBox_Think()
 float readyrestart_happened;
 .float lms_spectate_warning;
 void spawnfunc_func_breakable();
+
+.float cmd_floodtime;
+.float cmd_floodcount;
+float cmd_floodcheck()
+{
+	if (timeoutStatus != 2)
+	{
+		if(time == self.cmd_floodtime)
+		{
+			self.cmd_floodcount += 1;
+			if(self.cmd_floodcount > 8)
+				return TRUE;
+		}
+		else
+		{
+			self.cmd_floodtime = time;
+			self.cmd_floodcount = 1;
+		}
+	}
+	return FALSE;
+}
+
 void SV_ParseClientCommand(string s) {
 	string cmd;
 	float tokens, f, effectnum;
@@ -145,11 +167,23 @@ void SV_ParseClientCommand(string s) {
 
 	tokens = tokenize_console(s);
 
+	cmd = argv(0);
+	if(cmd != "reportcvar")
+	if(cmd != "sentcvar")
+	if(cmd != "pause")
+	if(cmd != "prespawn")
+	if(cmd != "spawn")
+	if(cmd != "begin")
+	{
+		if(cmd_floodcheck())
+			return;
+	}
+
 	if(GameCommand_Vote(s, self)) {
 		return;
 	} else if(GameCommand_MapVote(argv(0))) {
 		return;
-	} else if(argv(0) == "autoswitch") {
+	} else if(cmd == "autoswitch") {
 		// be backwards compatible with older clients (enabled)
 		self.autoswitch = ("0" != argv(1));
 		local string autoswitchmsg;
@@ -159,7 +193,7 @@ void SV_ParseClientCommand(string s) {
 			autoswitchmsg = "off";
 		}
 		sprint(self, strcat("^1autoswitch turned ", autoswitchmsg, "\n"));
-	} else if(argv(0) == "clientversion") {
+	} else if(cmd == "clientversion") {
 		if not(self.flags & FL_CLIENT)
 			return;
 		if (argv(1) == "$gameversion") {
@@ -180,21 +214,23 @@ void SV_ParseClientCommand(string s) {
 			self.classname = "observer";
 			stuffcmd(self,"menu_showteamselect\n");
 		}
-	} else if(argv(0) == "reportcvar") { // old system
+	} else if(cmd == "reportcvar") { // old system
 		if(substring(argv(2), 0, 1) == "$") // undefined cvar: use the default value on the server then
 		{
 			s = strcat(substring(s, argv_start_index(0), argv_end_index(1) - argv_start_index(0)), " \"", cvar_defstring(argv(1)), "\"");
 			tokens = tokenize_console(s);
 		}
 		GetCvars(1);
-	} else if(argv(0) == "sentcvar") { // new system
+	} else if(cmd == "sentcvar") { // new system
 		if(tokens == 2) // undefined cvar: use the default value on the server then
 		{
 			s = strcat(substring(s, argv_start_index(0), argv_end_index(1) - argv_start_index(0)), " \"", cvar_defstring(argv(1)), "\"");
 			tokens = tokenize_console(s);
 		}
 		GetCvars(1);
-	} else if(argv(0) == "spectate") {
+	} else if(cmd == "spectate") {
+		if(cmd_floodcheck())
+			return;
 		if not(self.flags & FL_CLIENT)
 			return;
 		if(g_arena)
@@ -225,7 +261,7 @@ void SV_ParseClientCommand(string s) {
 				sprint(self, strcat("^7You have to become a player within the next ", ftos(cvar("g_maxplayers_spectator_blocktime")), " seconds, otherwise you will be kicked, because spectators aren't allowed at this time!\n"));
 			PutClientInServer();
 		}
-	} else if(argv(0) == "join") {
+	} else if(cmd == "join") {
 		if not(self.flags & FL_CLIENT)
 			return;
 		if(!g_arena)
@@ -244,7 +280,7 @@ void SV_ParseClientCommand(string s) {
 				centerprint_atprio(self, CENTERPRIO_MAPVOTE, PREVENT_JOIN_TEXT);
 			}
 		}
-	} else if( argv(0) == "selectteam" ) {
+	} else if( cmd == "selectteam" ) {
 		if not(self.flags & FL_CLIENT)
 			return;
 		if( !teams_matter ) {
@@ -266,7 +302,7 @@ void SV_ParseClientCommand(string s) {
 		} else {
 			sprint( self, strcat( "selectteam none/red/blue/yellow/pink/auto - \"", argv(1), "\" not recognised\n" ) );
 		}
-	} else if(argv(0) == "ready") {
+	} else if(cmd == "ready") {
 		if not(self.flags & FL_CLIENT)
 			return;
 
@@ -293,26 +329,26 @@ void SV_ParseClientCommand(string s) {
 				sprint(self, "^1Game has already been restarted\n");
 			}
 		}
-	} else if(argv(0) == "maplist") {
+	} else if(cmd == "maplist") {
 		sprint(self, maplist_reply);
-	} else if(argv(0) == "lsmaps") {
+	} else if(cmd == "lsmaps") {
 		sprint(self, lsmaps_reply);
-	} else if(argv(0) == "records") {
+	} else if(cmd == "records") {
 		sprint(self, records_reply);
-	} else if(argv(0) == "voice") {
+	} else if(cmd == "voice") {
 		if(tokens >= 3)
 			VoiceMessage(argv(1), substring(s, argv_start_index(2), argv_end_index(-1) - argv_start_index(2)));
 		else
 			VoiceMessage(argv(1), "");
-	} else if(argv(0) == "say") {
+	} else if(cmd == "say") {
 		if(tokens >= 2)
 			Say(self, FALSE, world, substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)), 1);
 		//clientcommand(self, formatmessage(s));
-	} else if(argv(0) == "say_team") {
+	} else if(cmd == "say_team") {
 		if(tokens >= 2)
 			Say(self, TRUE, world, substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)), 1);
 		//clientcommand(self, formatmessage(s));
-	} else if(argv(0) == "tell") {
+	} else if(cmd == "tell") {
 		e = GetCommandPlayerSlotTargetFromTokenizedCommand(tokens, 1);
 		if(e && tokens > ParseCommandPlayerSlotTarget_firsttoken)
 		{
@@ -325,15 +361,15 @@ void SV_ParseClientCommand(string s) {
 			sprint(self, "ERROR: usage: tell # playerid text...\n");
 		}
 		//clientcommand(self, formatmessage(s));
-	} else if(argv(0) == "info") {
+	} else if(cmd == "info") {
 		cmd = cvar_string(strcat("sv_info_", argv(1)));
 		if(cmd == "")
 			sprint(self, "ERROR: unsupported info command\n");
 		else
 			wordwrap_sprint(cmd, 1111);
-	} else if(argv(0) == "suggestmap") {
+	} else if(cmd == "suggestmap") {
 		sprint(self, strcat(MapVote_Suggest(argv(1)), "\n"));
-	} else if(argv(0) == "timeout") {
+	} else if(cmd == "timeout") {
 		if not(self.flags & FL_CLIENT)
 			return;
 		if(cvar("sv_timeout")) {
@@ -346,17 +382,17 @@ void SV_ParseClientCommand(string s) {
 			else
 				sprint(self, "^7Error: only players can call a timeout!\n");
 		}
-	} else if(argv(0) == "timein") {
+	} else if(cmd == "timein") {
 		if not(self.flags & FL_CLIENT)
 			return;
 		if(cvar("sv_timeout")) {
 			evaluateTimein();
 		}
-	} else if(argv(0) == "teamstatus") {
+	} else if(cmd == "teamstatus") {
 		Score_NicePrint(self);
-	} else if(argv(0) == "cvar_changes") {
+	} else if(cmd == "cvar_changes") {
 		sprint(self, cvar_changes);
-	} else if(argv(0) == "pointparticles") {
+	} else if(cmd == "pointparticles") {
 		if((sv_cheats || self.maycheat) && tokens == 5)
 		{
 			// arguments:
@@ -373,7 +409,7 @@ void SV_ParseClientCommand(string s) {
 		}
 		else
 			sprint(self, "Usage: sv_cheats 1; restart; cmd pointparticles effectname position(0..1) velocityvector multiplier\n");
-	} else if(argv(0) == "trailparticles") {
+	} else if(cmd == "trailparticles") {
 		if((sv_cheats || self.maycheat) && tokens == 2)
 		{
 			// arguments:
@@ -385,7 +421,7 @@ void SV_ParseClientCommand(string s) {
 		}
 		else
 			sprint(self, "Usage: sv_cheats 1; restart; cmd trailparticles effectname\n");
-	} else if(argv(0) == "make") {
+	} else if(cmd == "make") {
 		if((sv_cheats || self.maycheat) && tokens == 3)
 		{
 			// arguments:
@@ -427,12 +463,12 @@ void SV_ParseClientCommand(string s) {
 		}
 		else
 			sprint(self, "Usage: sv_cheats 1; restart; cmd make models/... 0/1/2\n");
-	} else if(argv(0) == "penalty") {
+	} else if(cmd == "penalty") {
 		if((sv_cheats || self.maycheat) && tokens == 3)
 			race_ImposePenaltyTime(self, stof(argv(1)), argv(2));
 		else
 			sprint(self, "Usage: sv_cheats 1; restart; cmd penalty 5.0 AHAHAHAHAHAHAH))\n");
-	} else if(argv(0) == "dragbox_spawn") {
+	} else if(cmd == "dragbox_spawn") {
 		if(sv_cheats || self.maycheat)
 		{
 			e = spawn();
@@ -485,7 +521,7 @@ void SV_ParseClientCommand(string s) {
 		}
 		else
 			sprint(self, "Usage: sv_cheats 1; r_showbboxes 1.5; restart; cmd dragbox_spawn\n");
-	} else if(argv(0) == "dragpoint_spawn") {
+	} else if(cmd == "dragpoint_spawn") {
 		if(sv_cheats || self.maycheat)
 		{
 			e = spawn();
@@ -521,7 +557,7 @@ void SV_ParseClientCommand(string s) {
 		}
 		else
 			sprint(self, "Usage: sv_cheats 1; r_showbboxes 1.5; restart; cmd dragbox_spawn\n");
-	} else if(argv(0) == "drag_remove") {
+	} else if(cmd == "drag_remove") {
 		if(sv_cheats || self.maycheat)
 		{
 			RandomSelection_Init();
@@ -542,7 +578,7 @@ void SV_ParseClientCommand(string s) {
 		}
 		else
 			sprint(self, "Usage: sv_cheats 1; restart; cmd dragbox_remove\n");
-	} else if(argv(0) == "drag_setcnt") {
+	} else if(cmd == "drag_setcnt") {
 		if((sv_cheats || self.maycheat) && tokens >= 2)
 		{
 			RandomSelection_Init();
@@ -560,7 +596,7 @@ void SV_ParseClientCommand(string s) {
 		}
 		else
 			sprint(self, "Usage: sv_cheats 1; restart; cmd dragbox_setcnt cnt\n");
-	} else if(argv(0) == "drag_save") {
+	} else if(cmd == "drag_save") {
 		if((sv_cheats || self.maycheat) && tokens >= 2)
 		{
 			f = fopen(argv(1), FILE_WRITE);
@@ -577,7 +613,7 @@ void SV_ParseClientCommand(string s) {
 		}
 		else
 			sprint(self, "Usage: sv_cheats 1; restart; cmd dragbox_save filename\n");
-	} else if(argv(0) == "drag_saveraceent") {
+	} else if(cmd == "drag_saveraceent") {
 		if((sv_cheats || self.maycheat) && tokens >= 2)
 		{
 			f = fopen(argv(1), FILE_WRITE);
@@ -643,7 +679,7 @@ void SV_ParseClientCommand(string s) {
 		}
 		else
 			sprint(self, "Usage: sv_cheats 1; restart; cmd dragbox_save filename\n");
-	} else if(argv(0) == "drag_clear") {
+	} else if(cmd == "drag_clear") {
 		if(sv_cheats || self.maycheat)
 		{
 			for(e = world; (e = find(e, classname, "dragbox_box")); )
@@ -662,7 +698,6 @@ void SV_ParseClientCommand(string s) {
 	} else {
 		//if(ctf_clientcommand())
 		//	return;
-		cmd = argv(0);
 		// grep for Cmd_AddCommand_WithClientCommand to find them all
 		if(cmd != "status")
 		if(cmd != "max")
@@ -677,7 +712,6 @@ void SV_ParseClientCommand(string s) {
 		if(cmd != "give")
 		//if(cmd != "say") // handled above
 		//if(cmd != "say_team") // handled above
-		if(cmd != "tell")
 		if(cmd != "kill")
 		if(cmd != "pause")
 		if(cmd != "ping")
