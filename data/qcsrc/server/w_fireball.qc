@@ -201,8 +201,16 @@ void W_Firemine_Think()
 
 	// make it "hot" once it leaves its owner
 	if(self.owner)
+	{
 		if(vlen(self.origin - self.owner.origin - self.owner.view_ofs) > cvar("g_balance_fireball_primary_laserradius"))
-			self.owner = world;
+		{
+			self.cnt += 1;
+			if(self.cnt == 3)
+				self.owner = world;
+		}
+		else
+			self.cnt = 0;
+	}
 
 	W_Fireball_LaserPlay(0.1, cvar("g_balance_fireball_primary_laserradius"), cvar("g_balance_fireball_primary_laserdamage"), cvar("g_balance_fireball_primary_laseredgedamage"), cvar("g_balance_fireball_primary_laserburntime"));
 
