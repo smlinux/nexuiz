@@ -1913,6 +1913,46 @@ void Sbar_ShowSpeed(void)
 	drawstringcenter('1 0 0' + pos * '0 1 0', speed, numsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 }
 
+float acc_avgspeeds = 10; // amount of frames' speeds to average, increasing this value makes the meter smoother but less responsive
+float prev_speed[acc_avgspeeds];
+
+void Sbar_ShowAcceleration(void)
+{
+	float acceleration, avgspeed, size, scale, alpha, i;
+	vector pos, top, color;
+	top_x = vid_conwidth/2;
+	top_y = 0;
+
+	size = cvar("cl_showacceleration_size");
+	scale = cvar("cl_showacceleration_scale");
+	alpha = cvar("cl_showacceleration_alpha");
+	color = stov(cvar_string("cl_showacceleration_color"));
+
+	for(i=0;i<=acc_avgspeeds;i+=1)
+		avgspeed += prev_speed[i];
+	avgspeed /= acc_avgspeeds;
+
+	if (cvar("cl_showacceleration_z") == 1)
+		acceleration = vlen(pmove_vel) - avgspeed;
+	else
+		acceleration = vlen(pmove_vel - pmove_vel_z * '0 0 1') - avgspeed;
+
+	for (i=acc_avgspeeds;i>=1;i-=1)
+		prev_speed[i] = prev_speed[i-1];
+
+	if (cvar("cl_showacceleration_z") == 1)
+		prev_speed[0] = vlen(pmove_vel);
+	else
+		prev_speed[0] = vlen(pmove_vel - pmove_vel_z * '0 0 1');
+
+	pos = top - size/2 * '0 1 0' + (cvar("cl_showacceleration_position") * vid_conheight) * '0 1 0';
+	
+	if (acceleration >= 0)
+		drawfill(pos, acceleration * scale * '10 0 0' + size * '0 1 0', color, alpha, DRAWFLAG_NORMAL);
+	else
+		drawfill(pos + acceleration * scale * '10 0 0', -acceleration * scale * '10 0 0' + size * '0 1 0', color, alpha, DRAWFLAG_NORMAL);
+}
+
 void Sbar_DrawAccuracyStats_Description_Hitscan(vector position)
 {
 	drawstring(position + '0 3 0' * sbar_fontsize_y, "Shots fired:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
