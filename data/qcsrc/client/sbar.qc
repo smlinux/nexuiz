@@ -1913,32 +1913,28 @@ void Sbar_ShowSpeed(void)
 	drawstringcenter('1 0 0' + pos * '0 1 0', speed, numsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 }
 
-float acc_avgspeeds = 10; // amount of frames' speeds to average, increasing this value makes the meter smoother but less responsive
-float prev_speed[acc_avgspeeds];
+vector acc_prevspeed;
+float acc_prevtime;
+float acc_avg;
 
 void Sbar_ShowAcceleration(void)
 {
-	float acceleration, avgspeed, size, scale, alpha, i;
+	float acceleration, avgspeed, size, scale, alpha, i, f;
 	vector pos, top, color;
 	top_x = vid_conwidth/2;
 	top_y = 0;
 
-	for(i=0;i<=acc_avgspeeds;i+=1)
-		avgspeed += prev_speed[i];
-	avgspeed /= acc_avgspeeds;
-
-	if (cvar("cl_showacceleration_z") == 1)
-		acceleration = vlen(pmove_vel) - avgspeed;
+	f = time - acc_prevtime;
+	if(cvar("cl_showacceleration_z"))
+		acceleration = (vlen(pmove_vel) - vlen(acc_prevspeed)) * (1 / f);
 	else
-		acceleration = vlen(pmove_vel - pmove_vel_z * '0 0 1') - avgspeed;
+		acceleration = (vlen(pmove_vel - '0 0 1' * pmove_vel_z) - vlen(acc_prevspeed - '0 0 1' * acc_prevspeed_z)) * (1 / f);
+	acc_prevspeed = pmove_vel;
+	acc_prevtime = time;
 
-	for (i=acc_avgspeeds;i>=1;i-=1)
-		prev_speed[i] = prev_speed[i-1];
-
-	if (cvar("cl_showacceleration_z") == 1)
-		prev_speed[0] = vlen(pmove_vel);
-	else
-		prev_speed[0] = vlen(pmove_vel - pmove_vel_z * '0 0 1');
+	f = bound(0, f * 10, 1);
+	acc_avg = acc_avg * (1 - f) + acceleration * f;
+	acceleration = acc_avg / getstatf(STAT_MOVEVARS_MAXSPEED);
 
 	pos = top - size/2 * '0 1 0' + (cvar("cl_showacceleration_position") * vid_conheight) * '0 1 0';
 
@@ -1950,18 +1946,16 @@ void Sbar_ShowAcceleration(void)
 	else {
 		color = '1 1 1';
 		if (acceleration < 0) {
-			color_y = 1 - (-acceleration * 0.05);
-			color_z = 1 - (-acceleration * 0.05);
+			color = '1 .5 .5' - '0 .5 .5' * bound(0, -acceleration * 0.2, 1);
 		} else if (acceleration > 0) {
-			color_x = 1 - (acceleration * 0.05);
-			color_z = 1 - (acceleration * 0.05);
+			color = '.5 1 .5' - '.5 0 .5' * bound(0, +acceleration * 0.2, 1);
 		}
 	}
 		
 	if (acceleration > 0)
-		drawpic(pos, "gfx/hud/accelerometer_gradient", acceleration * scale * '10 0 0' + size * '0 1 0', color, alpha, DRAWFLAG_NORMAL);
+		drawpic(pos, "gfx/hud/accelerometer_gradient", acceleration * scale * '40 0 0' + size * '0 1 0', color, alpha, DRAWFLAG_NORMAL);
 	else if (acceleration < 0)
-		drawpic(pos + acceleration * scale * '10 0 0', "gfx/hud/accelerometer_gradient", -acceleration * scale * '10 0 0' + size * '0 1 0', color, alpha, DRAWFLAG_NORMAL);
+		drawpic(pos + acceleration * scale * '40 0 0', "gfx/hud/accelerometer_gradient", -acceleration * scale * '40 0 0' + size * '0 1 0', color, alpha, DRAWFLAG_NORMAL);
 }
 
 void Sbar_DrawAccuracyStats_Description_Hitscan(vector position)

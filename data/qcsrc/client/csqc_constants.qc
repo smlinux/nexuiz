@@ -63,6 +63,7 @@ const float		STAT_MOVEVARS_TIMESCALE         = 241;
 const float		STAT_FRAGLIMIT					= 235;
 const float		STAT_TIMELIMIT					= 236;
 const float     STAT_MOVEVARS_GRAVITY           = 242;
+const float     STAT_MOVEVARS_MAXSPEED          = 244;
 
 // Sound Constants
 //const float		CHAN_AUTO						= 0;
