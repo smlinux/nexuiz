@@ -1923,11 +1923,6 @@ void Sbar_ShowAcceleration(void)
 	top_x = vid_conwidth/2;
 	top_y = 0;
 
-	size = cvar("cl_showacceleration_size");
-	scale = cvar("cl_showacceleration_scale");
-	alpha = cvar("cl_showacceleration_alpha");
-	color = stov(cvar_string("cl_showacceleration_color"));
-
 	for(i=0;i<=acc_avgspeeds;i+=1)
 		avgspeed += prev_speed[i];
 	avgspeed /= acc_avgspeeds;
@@ -1946,11 +1941,27 @@ void Sbar_ShowAcceleration(void)
 		prev_speed[0] = vlen(pmove_vel - pmove_vel_z * '0 0 1');
 
 	pos = top - size/2 * '0 1 0' + (cvar("cl_showacceleration_position") * vid_conheight) * '0 1 0';
-	
-	if (acceleration >= 0)
-		drawfill(pos, acceleration * scale * '10 0 0' + size * '0 1 0', color, alpha, DRAWFLAG_NORMAL);
-	else
-		drawfill(pos + acceleration * scale * '10 0 0', -acceleration * scale * '10 0 0' + size * '0 1 0', color, alpha, DRAWFLAG_NORMAL);
+
+	size = cvar("cl_showacceleration_size");
+	scale = cvar("cl_showacceleration_scale");
+	alpha = cvar("cl_showacceleration_alpha");
+	if (cvar("cl_showacceleration_color_custom"))
+		color = stov(cvar_string("cl_showacceleration_color"));
+	else {
+		color = '1 1 1';
+		if (acceleration < 0) {
+			color_y = 1 - (-acceleration * 0.05);
+			color_z = 1 - (-acceleration * 0.05);
+		} else if (acceleration > 0) {
+			color_x = 1 - (acceleration * 0.05);
+			color_z = 1 - (acceleration * 0.05);
+		}
+	}
+		
+	if (acceleration > 0)
+		drawpic(pos, "gfx/hud/accelerometer_gradient", acceleration * scale * '10 0 0' + size * '0 1 0', color, alpha, DRAWFLAG_NORMAL);
+	else if (acceleration < 0)
+		drawpic(pos + acceleration * scale * '10 0 0', "gfx/hud/accelerometer_gradient", -acceleration * scale * '10 0 0' + size * '0 1 0', color, alpha, DRAWFLAG_NORMAL);
 }
 
 void Sbar_DrawAccuracyStats_Description_Hitscan(vector position)
