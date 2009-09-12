@@ -1919,8 +1919,8 @@ float acc_avg;
 
 void Sbar_ShowAcceleration(void)
 {
-	float acceleration, avgspeed, size, scale, alpha, i, f;
-	vector pos, top, color;
+	float acceleration, sz, scale, alpha, f;
+	vector pos, top, rgb;
 	top_x = vid_conwidth/2;
 	top_y = 0;
 
@@ -1936,26 +1936,26 @@ void Sbar_ShowAcceleration(void)
 	acc_avg = acc_avg * (1 - f) + acceleration * f;
 	acceleration = acc_avg / getstatf(STAT_MOVEVARS_MAXSPEED);
 
-	pos = top - size/2 * '0 1 0' + (cvar("cl_showacceleration_position") * vid_conheight) * '0 1 0';
+	pos = top - sz/2 * '0 1 0' + (cvar("cl_showacceleration_position") * vid_conheight) * '0 1 0';
 
-	size = cvar("cl_showacceleration_size");
+	sz = cvar("cl_showacceleration_size");
 	scale = cvar("cl_showacceleration_scale");
 	alpha = cvar("cl_showacceleration_alpha");
 	if (cvar("cl_showacceleration_color_custom"))
-		color = stov(cvar_string("cl_showacceleration_color"));
+		rgb = stov(cvar_string("cl_showacceleration_color"));
 	else {
-		color = '1 1 1';
+		rgb = '1 1 1';
 		if (acceleration < 0) {
-			color = '1 .5 .5' - '0 .5 .5' * bound(0, -acceleration * 0.2, 1);
+			rgb = '1 .5 .5' - '0 .5 .5' * bound(0, -acceleration * 0.2, 1);
 		} else if (acceleration > 0) {
-			color = '.5 1 .5' - '.5 0 .5' * bound(0, +acceleration * 0.2, 1);
+			rgb = '.5 1 .5' - '.5 0 .5' * bound(0, +acceleration * 0.2, 1);
 		}
 	}
 		
 	if (acceleration > 0)
-		drawpic(pos, "gfx/hud/accelerometer_gradient", acceleration * scale * '40 0 0' + size * '0 1 0', color, alpha, DRAWFLAG_NORMAL);
+		drawpic(pos, "gfx/hud/accelerometer_gradient", acceleration * scale * '40 0 0' + sz * '0 1 0', rgb, alpha, DRAWFLAG_NORMAL);
 	else if (acceleration < 0)
-		drawpic(pos + acceleration * scale * '40 0 0', "gfx/hud/accelerometer_gradient", -acceleration * scale * '40 0 0' + size * '0 1 0', color, alpha, DRAWFLAG_NORMAL);
+		drawpic(pos + acceleration * scale * '40 0 0', "gfx/hud/accelerometer_gradient", -acceleration * scale * '40 0 0' + sz * '0 1 0', rgb, alpha, DRAWFLAG_NORMAL);
 }
 
 void Sbar_DrawAccuracyStats_Description_Hitscan(vector position)
