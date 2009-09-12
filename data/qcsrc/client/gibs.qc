@@ -34,7 +34,7 @@ void Gib_setmodel(entity gib, string mdlname, float specnum)
 				gib.skin = 1;
 				gib.colormod = '2 2 2';
 			}
-			gib.scale = 2;
+			gib.scale = 1;
 			break;
 		default:
 			setmodel(gib, mdlname);
