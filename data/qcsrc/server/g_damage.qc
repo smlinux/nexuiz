@@ -1017,8 +1017,8 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 
 	RadiusDamage_running = 1;
 
-	tfloordmg = cvar("g_throughfloor");
-	tfloorforce = cvar("g_throughfloor");
+	tfloordmg = cvar("g_throughfloor_damage");
+	tfloorforce = cvar("g_throughfloor_force");
 
 	blastorigin = (inflictor.origin + (inflictor.mins + inflictor.maxs) * 0.5);
 	total_damage_to_creatures = 0;
