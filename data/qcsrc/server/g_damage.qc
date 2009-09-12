@@ -996,6 +996,8 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 	vector  nearest;
 	float   total_damage_to_creatures;
 	entity  next;
+	float   tfloordmg;
+	float   tfloorforce;
 
 	float stat_damagedone;
 	float stat_maxdamage;
@@ -1013,8 +1015,10 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 		return 0;
 	}
 
-
 	RadiusDamage_running = 1;
+
+	tfloordmg = cvar("g_throughfloor");
+	tfloorforce = cvar("g_throughfloor");
 
 	blastorigin = (inflictor.origin + (inflictor.mins + inflictor.maxs) * 0.5);
 	total_damage_to_creatures = 0;
@@ -1051,6 +1055,8 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 				power = 1 - ((vlen (diff) - 2) / rad);
 				//bprint(" ");
 				//bprint(ftos(power));
+				//if (targ == attacker)
+				//	print(ftos(power), "\n");
 				if (power > 0)
 				{
 					if (power > 1)
@@ -1058,47 +1064,70 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 					finaldmg = coredamage * power + edgedamage * (1 - power);
 					if (finaldmg > 0)
 					{
+						local float a;
+						local float c;
+						local float hits;
+						local float total;
+						local float hitratio;
+						local vector hitloc;
 						center = targ.origin + (targ.mins + targ.maxs) * 0.5;
 						// if it's a player, use the view origin as reference
 						if (targ.classname == "player")
 							center = targ.origin + targ.view_ofs;
-						force = normalize(center - blastorigin) * (finaldmg / coredamage) * forceintensity;
+						force = normalize(center - blastorigin);
+						force = force * (finaldmg / coredamage) * forceintensity;
 						// test line of sight to multiple positions on box,
 						// and do damage if any of them hit
-						local float c;
-						c = ceil(finaldmg / 10);
-						if (c > 20)
-							c = 20;
-						while (c > 0)
+						hits = 0;
+						total = ceil(bound(1, finaldmg, 50));
+						hitloc = nearest;
+						c = 0;
+						while (c < total)
 						{
-							c = c - 1;
-							traceline(blastorigin, nearest, TRUE, inflictor);
-							if (trace_fraction == 1 || trace_ent == targ
-							    || cvar("g_throughfloor"))
+							traceline(blastorigin, nearest, MOVE_NOMONSTERS, inflictor);
+							if (trace_fraction == 1 || trace_ent == targ)
 							{
-								if(targ.iscreature)
-								{
-									total_damage_to_creatures += finaldmg;
-
-									if(targ.flags & FL_CLIENT)
-									if(targ.deadflag == DEAD_NO)
-									if(targ != attacker)
-									if(!teamplay || targ.team != attacker.team)
-									{
-										stat_damagedone += finaldmg;
-										stat_maxdamage += coredamage;
-									}
-								}
-
-								if(targ == directhitentity || DEATH_ISSPECIAL(deathtype))
-									Damage (targ, inflictor, attacker, finaldmg, deathtype, nearest, force);
-								else
-									Damage (targ, inflictor, attacker, finaldmg, deathtype | HITTYPE_SPLASH, nearest, force);
-								break;
+								hits = hits + 1;
+								if (hits > 1)
+									hitloc = hitloc + nearest;
 							}
-							nearest_x = targ.mins_x + random() * targ.size_x;
-							nearest_y = targ.mins_y + random() * targ.size_y;
-							nearest_z = targ.mins_z + random() * targ.size_z;
+							nearest_x = targ.origin_x + targ.mins_x + random() * targ.size_x;
+							nearest_y = targ.origin_y + targ.mins_y + random() * targ.size_y;
+							nearest_z = targ.origin_z + targ.mins_z + random() * targ.size_z;
+							c = c + 1;
+						}
+						nearest = hitloc * (1 / max(1, hits));
+						hitratio = (hits / total);
+						a = bound(0, tfloordmg + (1-tfloordmg) * hitratio, 1);
+						finaldmg = finaldmg * a;
+						a = bound(0, tfloorforce + (1-tfloorforce) * hitratio, 1);
+						force = force * a;
+						//if (targ == attacker)
+						//{
+						//	print("hits ", ftos(hits), " / ", ftos(total));
+						//	print(" finaldmg ", ftos(finaldmg), " force ", vtos(force));
+						//	print(" (", ftos(a), ")\n");
+						//}
+						if (finaldmg > 0)
+						{
+							if(targ.iscreature)
+							{
+								total_damage_to_creatures += finaldmg;
+
+								if(targ.flags & FL_CLIENT)
+								if(targ.deadflag == DEAD_NO)
+								if(targ != attacker)
+								if(!teamplay || targ.team != attacker.team)
+								{
+									stat_damagedone += finaldmg;
+									stat_maxdamage += coredamage;
+								}
+							}
+
+							if(targ == directhitentity || DEATH_ISSPECIAL(deathtype))
+								Damage (targ, inflictor, attacker, finaldmg, deathtype, nearest, force);
+							else
+								Damage (targ, inflictor, attacker, finaldmg, deathtype | HITTYPE_SPLASH, nearest, force);
 						}
 					}
 				}
