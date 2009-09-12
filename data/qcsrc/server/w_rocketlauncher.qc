@@ -205,7 +205,7 @@ void W_Rocket_Think (void)
 			if(time > self.pushltime)
 			if(self.owner.deadflag == DEAD_NO)
 			{
-				f = min(1, (time - self.pushltime) / cvar("g_balance_rocketlauncher_guideratetime"));
+				f = min(1, (time - self.pushltime) / cvar("g_balance_rocketlauncher_guideratedelay"));
 				velspeed = vlen(self.velocity);
 
 				makevectors(self.owner.v_angle);
