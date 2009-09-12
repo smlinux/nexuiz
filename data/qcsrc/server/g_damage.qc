@@ -1090,6 +1090,8 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 								hits = hits + 1;
 								if (hits > 1)
 									hitloc = hitloc + nearest;
+								else
+									hitloc = nearest;
 							}
 							nearest_x = targ.origin_x + targ.mins_x + random() * targ.size_x;
 							nearest_y = targ.origin_y + targ.mins_y + random() * targ.size_y;
@@ -1108,7 +1110,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 						//	print(" finaldmg ", ftos(finaldmg), " force ", vtos(force));
 						//	print(" (", ftos(a), ")\n");
 						//}
-						if (finaldmg > 0)
+						if(hits || tfloordmg || tfloorforce)
 						{
 							if(targ.iscreature)
 							{
