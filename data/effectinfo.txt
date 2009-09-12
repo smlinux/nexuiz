@@ -4049,7 +4049,7 @@ velocityjitter 96 96 96
 
 // used nowhere in code
 effect firemine
-trailspacing 0.5
+trailspacing 1
 count 1
 type smoke
 tex 48 55
@@ -4063,7 +4063,7 @@ velocityjitter 10 10 2
 airfriction 1.2
 //slowfire
 effect firemine
-trailspacing 0.5
+trailspacing 1
 count 1
 type smoke
 tex 48 55
@@ -4077,7 +4077,7 @@ velocityjitter 10 10 10
 airfriction 1.2
 // very slow and small fire
 effect firemine
-trailspacing 1
+trailspacing 2
 count 1
 type smoke
 tex 48 55
@@ -4091,7 +4091,7 @@ velocityjitter 8 8 8
 airfriction 0.3
 //decreasing fire
 effect firemine
-trailspacing 1
+trailspacing 2
 count 1
 type smoke
 tex 48 55
@@ -4105,7 +4105,7 @@ velocityjitter 3 3 3
 airfriction 0.3
 //smoke
 effect firemine
-trailspacing 2
+trailspacing 4
 count 1
 type alphastatic
 tex 0 8
@@ -4119,7 +4119,7 @@ velocityoffset 0 0 3
 airfriction 1
 //fastfire
 effect firemine
-trailspacing 0.25
+trailspacing 0.5
 count 1
 type smoke
 tex 48 55
@@ -4133,7 +4133,7 @@ velocityjitter 0 0 0
 airfriction 1.2
 // light only
 effect firemine
-trailspacing 4
+trailspacing 8
 lightradius 50
 lightradiusfade 50000
 lightcolor 2.7 2.7 0.6
