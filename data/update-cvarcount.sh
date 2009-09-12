@@ -1,9 +1,9 @@
 #!/bin/sh
 
-countd=`awk '/^seta? g_/ { print $2; }' defaultNexuiz.cfg | sort -u | md5sum | cut -c 1-32`
-countw=`awk '/^seta? g_/ { print $2; }' weapons.cfg       | sort -u | md5sum | cut -c 1-32`
-counth=`awk '/^seta? g_/ { print $2; }' weaponsHavoc.cfg  | sort -u | md5sum | cut -c 1-32`
-countl=`awk '/^seta? g_/ { print $2; }' weapons25.cfg     | sort -u | md5sum | cut -c 1-32`
+countd=`awk '/^seta? g_/ { print $2; }' defaultNexuiz.cfg | sort -u | tr -d '\r' | md5sum | cut -c 1-32`
+countw=`awk '/^seta? g_/ { print $2; }' weapons.cfg       | sort -u | tr -d '\r' | md5sum | cut -c 1-32`
+counth=`awk '/^seta? g_/ { print $2; }' weaponsHavoc.cfg  | sort -u | tr -d '\r' | md5sum | cut -c 1-32`
+countl=`awk '/^seta? g_/ { print $2; }' weapons25.cfg     | sort -u | tr -d '\r' | md5sum | cut -c 1-32`
 
 if [ "$countw" != "$counth" ]; then
 	echo "Mismatch between weapons.cfg and weaponsHavoc.cfg. Aborting."
