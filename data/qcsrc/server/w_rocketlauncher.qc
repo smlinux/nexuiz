@@ -129,7 +129,7 @@ void W_Rocket_Think (void)
 {
 	entity e;
 	vector desireddir, olddir, newdir, desiredorigin, goal;
-	float turnrate, velspeed;
+	float turnrate, velspeed, f;
 	self.nextthink = time;
 	if (time > self.cnt)
 	{
@@ -205,6 +205,7 @@ void W_Rocket_Think (void)
 			if(time > self.pushltime)
 			if(self.owner.deadflag == DEAD_NO)
 			{
+				f = min(1, (time - self.pushltime) / cvar("g_balance_rocketlauncher_guideratetime"));
 				velspeed = vlen(self.velocity);
 
 				makevectors(self.owner.v_angle);
@@ -215,7 +216,7 @@ void W_Rocket_Think (void)
 				// now it gets tricky... we want to move like some curve to approximate the target direction
 				// but we are limiting the rate at which we can turn!
 				goal = desiredorigin + ((self.origin - desiredorigin) * desireddir + cvar("g_balance_rocketlauncher_guidegoal")) * desireddir;
-				newdir = rocket_steerto(olddir, normalize(goal - self.origin), cos(cvar("g_balance_rocketlauncher_guiderate") * frametime * PI / 180));
+				newdir = rocket_steerto(olddir, normalize(goal - self.origin), cos(cvar("g_balance_rocketlauncher_guiderate") * f * frametime * PI / 180));
 
 				self.velocity = newdir * velspeed;
 			}
