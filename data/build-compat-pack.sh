@@ -391,6 +391,37 @@ COMPAT_FILES="
 	textures/fireball.tga
 	models/sphere/sphere.md3
 	models/sphere/sphere.tga
+	textures/nutsandbolts1_gloss.tga
+	textures/nutsandbolts1.tga
+	textures/nutsandbolts3_gloss.tga
+	textures/nutsandbolts3.tga
+	textures/nutsandbolts4_gloss.tga
+	textures/nutsandbolts4.tga
+	textures/nutsandbolts5_gloss.tga
+	textures/nutsandbolts5.tga
+	models/gibs/robo1.md3
+	models/gibs/robo1.md3_0.skin
+	models/gibs/robo1.md3_1.skin
+	models/gibs/robo2.md3
+	models/gibs/robo2.md3_0.skin
+	models/gibs/robo2.md3_1.skin
+	models/gibs/robo3.md3
+	models/gibs/robo3.md3_0.skin
+	models/gibs/robo3.md3_1.skin
+	models/gibs/robo4.md3
+	models/gibs/robo4.md3_0.skin
+	models/gibs/robo4.md3_1.skin
+	models/gibs/robo5.md3
+	models/gibs/robo6.md3
+	models/gibs/robo7.md3
+	models/gibs/robo7.md3_0.skin
+	models/gibs/robo7.md3_1.skin
+	models/gibs/robo8.md3
+	models/gibs/robo8.md3_0.skin
+	models/gibs/robo8.md3_1.skin
+	models/gibs/robo.md3
+	models/gibs/robo.md3_0.skin
+	models/gibs/robo.md3_1.skin
 "
 
 rm -rf pack
