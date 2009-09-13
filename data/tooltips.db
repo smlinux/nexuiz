@@ -213,6 +213,7 @@
 \sbar_color_bg_team\Team color saturation of the HUD background
 \cl_hidewaypoints\Show various gametype specific waypoints
 \g_waypointsprite_scale\Scale multiplier of the waypoints
+\g_waypointsprite_alpha\Control transparency of the waypoints
 \cl_shownames\Show the name of the player you are aiming at
 
 \crosshair_hittest\None: do not do hit tests for the crosshair; TrueAim: blur the crosshair when you would not hit the wall; Enemies: also enlarge the crosshair when you would hit an enemy
