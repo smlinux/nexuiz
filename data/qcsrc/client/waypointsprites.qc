@@ -156,7 +156,7 @@ void Draw_WaypointSprite()
 	dist = vlen(self.origin - view_origin);
 	
 	float a;
-	a = self.alpha;
+	a = self.alpha * sbar_alpha_fg;
 
 	if(self.maxdistance > waypointsprite_normdistance)
 		a *= pow(bound(0, (self.maxdistance - dist) / (self.maxdistance - waypointsprite_normdistance), 1), waypointsprite_distancealphaexponent);

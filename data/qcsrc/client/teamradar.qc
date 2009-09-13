@@ -115,17 +115,17 @@ void(vector coord3d, vector pangles, vector rgb) draw_teamradar_player =
 		rgb2 = '1 1 1';
 
 	R_BeginPolygon("", 0);
-	R_PolygonVertex(coord+v_forward*3, '0 0 0', rgb2, 1);
-	R_PolygonVertex(coord+v_right*4-v_forward*2.5, '0 1 0', rgb2, 1);
-	R_PolygonVertex(coord-v_forward*2, '1 0 0', rgb2, 1);
-	R_PolygonVertex(coord-v_right*4-v_forward*2.5, '1 1 0', rgb2, 1);
+	R_PolygonVertex(coord+v_forward*3, '0 0 0', rgb2, sbar_alpha_fg);
+	R_PolygonVertex(coord+v_right*4-v_forward*2.5, '0 1 0', rgb2, sbar_alpha_fg);
+	R_PolygonVertex(coord-v_forward*2, '1 0 0', rgb2, sbar_alpha_fg);
+	R_PolygonVertex(coord-v_right*4-v_forward*2.5, '1 1 0', rgb2, sbar_alpha_fg);
 	R_EndPolygon();
 
 	R_BeginPolygon("", 0);
-	R_PolygonVertex(coord+v_forward*2, '0 0 0', rgb, 1);
-	R_PolygonVertex(coord+v_right*3-v_forward*2, '0 1 0', rgb, 1);
-	R_PolygonVertex(coord-v_forward, '1 0 0', rgb, 1);
-	R_PolygonVertex(coord-v_right*3-v_forward*2, '1 1 0', rgb, 1);
+	R_PolygonVertex(coord+v_forward*2, '0 0 0', rgb, sbar_alpha_fg);
+	R_PolygonVertex(coord+v_right*3-v_forward*2, '0 1 0', rgb, sbar_alpha_fg);
+	R_PolygonVertex(coord-v_forward, '1 0 0', rgb, sbar_alpha_fg);
+	R_PolygonVertex(coord-v_right*3-v_forward*2, '1 1 0', rgb, sbar_alpha_fg);
 	R_EndPolygon();
 };
 
@@ -149,7 +149,7 @@ void draw_teamradar_icon(vector coord, float icon, entity pingdata, vector rgb, 
 			if(dt >= 1 || dt <= 0)
 				continue;
 			v = '2 2 0' * teamradar_size * dt;
-			drawpic(coord - 0.5 * v, "gfx/teamradar_ping", v, '1 1 1', 1 - dt, DRAWFLAG_ADDITIVE);
+			drawpic(coord - 0.5 * v, "gfx/teamradar_ping", v, '1 1 1', (1 - dt) * a, DRAWFLAG_ADDITIVE);
 		}
 	}
 }
@@ -170,10 +170,10 @@ void draw_teamradar_link(vector start, vector end, float colors)
 	c1 = colormapPaletteColor((colors & 0xF0) / 0x10, FALSE);
 
 	R_BeginPolygon("", 0);
-	R_PolygonVertex(start - norm, '0 0 0', c0, 1);
-	R_PolygonVertex(start + norm, '0 1 0', c0, 1);
-	R_PolygonVertex(end + norm, '1 1 0', c1, 1);
-	R_PolygonVertex(end - norm, '1 0 0', c1, 1);
+	R_PolygonVertex(start - norm, '0 0 0', c0, sbar_alpha_fg);
+	R_PolygonVertex(start + norm, '0 1 0', c0, sbar_alpha_fg);
+	R_PolygonVertex(end + norm, '1 1 0', c1, sbar_alpha_fg);
+	R_PolygonVertex(end - norm, '1 0 0', c1, sbar_alpha_fg);
 	R_EndPolygon();
 }
 
@@ -204,8 +204,8 @@ void teamradar_loadcvars()
 	else
 	{
 		cl_teamradar_scale = cvar("cl_teamradar_scale");
-		cl_teamradar_background_alpha = cvar("cl_teamradar_background_alpha") * (1 - cvar("_menu_alpha"));
-		cl_teamradar_foreground_alpha = cvar("cl_teamradar_foreground_alpha") * (1 - cvar("_menu_alpha"));
+		cl_teamradar_background_alpha = cvar("cl_teamradar_background_alpha") * sbar_alpha_fg;
+		cl_teamradar_foreground_alpha = cvar("cl_teamradar_foreground_alpha") * sbar_alpha_fg;
 		cl_teamradar_rotation = cvar("cl_teamradar_rotation");
 		cl_teamradar_size = stov(cvar_string("cl_teamradar_size"));
 		cl_teamradar_position = stov(cvar_string("cl_teamradar_position"));
@@ -214,8 +214,8 @@ void teamradar_loadcvars()
 		// others default to 0
 		// match this to defaultNexuiz.cfg!
 		if(!cl_teamradar_scale) cl_teamradar_scale = 4096;
-		if(!cl_teamradar_background_alpha) cl_teamradar_background_alpha = 0.4 * (1 - cvar("_menu_alpha"));
-		if(!cl_teamradar_foreground_alpha) cl_teamradar_foreground_alpha = 0.8 * (1 - cvar("_menu_alpha"));
+		if(!cl_teamradar_background_alpha) cl_teamradar_background_alpha = 0.4 * sbar_alpha_fg;
+		if(!cl_teamradar_foreground_alpha) cl_teamradar_foreground_alpha = 0.8 * sbar_alpha_fg;
 		if(!cl_teamradar_size_x) cl_teamradar_size_x = 128;
 		if(!cl_teamradar_size_y) cl_teamradar_size_y = cl_teamradar_size_x;
 
@@ -346,8 +346,8 @@ void() teamradar_view =
 		frame_origin_y = teamradar_origin2d_y - teamradar_size2d_y * 0.55859375;
 		frame_size_x = teamradar_size2d_x * 1.1171875;
 		frame_size_y = teamradar_size2d_y * 1.1171875;
-		drawpic(frame_origin, "gfx/ons-frame.tga", frame_size, '1 1 1', 1, 0);
-		drawpic(frame_origin, "gfx/ons-frame-team.tga", frame_size, rgb, 1, 0);
+		drawpic(frame_origin, "gfx/ons-frame.tga", frame_size, '1 1 1', sbar_alpha_fg, 0);
+		drawpic(frame_origin, "gfx/ons-frame-team.tga", frame_size, rgb, sbar_alpha_fg, 0);
 
 		drawsetcliparea(
 			teamradar_origin2d_x - teamradar_size2d_x * 0.5,
@@ -360,7 +360,7 @@ void() teamradar_view =
 	for(tm = world; (tm = find(tm, classname, "radarlink")); )
 		draw_teamradar_link(tm.origin, tm.velocity, tm.team);
 	for(tm = world; (tm = findflags(tm, teamradar_icon, 0xFFFFFF)); )
-		draw_teamradar_icon(tm.origin, tm.teamradar_icon, tm, tm.teamradar_color, tm.alpha);
+		draw_teamradar_icon(tm.origin, tm.teamradar_icon, tm, tm.teamradar_color, tm.alpha * sbar_alpha_fg);
 	for(tm = world; (tm = find(tm, classname, "entcs_receiver")); )
 	{
 		color2 = GetPlayerColor(tm.sv_entnum);
