@@ -191,8 +191,8 @@ void teamradar_loadcvars()
 	if(ons_showmap)
 	{
 		cl_teamradar_scale = 42; // dummy, not used (see zoommode)
-		cl_teamradar_background_alpha = 1;
-		cl_teamradar_foreground_alpha = 1;
+		cl_teamradar_background_alpha = 1 * (1 - cvar("_menu_alpha"));
+		cl_teamradar_foreground_alpha = 1 * (1 - cvar("_menu_alpha"));
 		cl_teamradar_rotation = cvar("cl_teamradar_rotation");
 		if(!cl_teamradar_rotation)
 			cl_teamradar_rotation = 4;
@@ -204,8 +204,8 @@ void teamradar_loadcvars()
 	else
 	{
 		cl_teamradar_scale = cvar("cl_teamradar_scale");
-		cl_teamradar_background_alpha = cvar("cl_teamradar_background_alpha");
-		cl_teamradar_foreground_alpha = cvar("cl_teamradar_foreground_alpha");
+		cl_teamradar_background_alpha = cvar("cl_teamradar_background_alpha") * (1 - cvar("_menu_alpha"));
+		cl_teamradar_foreground_alpha = cvar("cl_teamradar_foreground_alpha") * (1 - cvar("_menu_alpha"));
 		cl_teamradar_rotation = cvar("cl_teamradar_rotation");
 		cl_teamradar_size = stov(cvar_string("cl_teamradar_size"));
 		cl_teamradar_position = stov(cvar_string("cl_teamradar_position"));
@@ -214,8 +214,8 @@ void teamradar_loadcvars()
 		// others default to 0
 		// match this to defaultNexuiz.cfg!
 		if(!cl_teamradar_scale) cl_teamradar_scale = 4096;
-		if(!cl_teamradar_background_alpha) cl_teamradar_background_alpha = 0.4;
-		if(!cl_teamradar_foreground_alpha) cl_teamradar_foreground_alpha = 0.8;
+		if(!cl_teamradar_background_alpha) cl_teamradar_background_alpha = 0.4 * (1 - cvar("_menu_alpha"));
+		if(!cl_teamradar_foreground_alpha) cl_teamradar_foreground_alpha = 0.8 * (1 - cvar("_menu_alpha"));
 		if(!cl_teamradar_size_x) cl_teamradar_size_x = 128;
 		if(!cl_teamradar_size_y) cl_teamradar_size_y = cl_teamradar_size_x;
 

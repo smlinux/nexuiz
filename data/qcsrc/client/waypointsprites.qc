@@ -383,9 +383,9 @@ void WaypointSprite_Load()
 	waypointsprite_minalpha = cvar("g_waypointsprite_minalpha");
 	waypointsprite_distancealphaexponent = cvar("g_waypointsprite_distancealphaexponent");
 	waypointsprite_timealphaexponent = cvar("g_waypointsprite_timealphaexponent");
-	waypointsprite_scale = cvar("g_waypointsprite_scale");
+	waypointsprite_scale = cvar("g_waypointsprite_scale") * (1 - cvar("_menu_alpha"));
 	if(!waypointsprite_scale)
-		waypointsprite_scale = 1.0;
+		waypointsprite_scale = 1.0 * (1 - cvar("_menu_alpha"));
 
 	if(!waypointsprite_initialized)
 	{
