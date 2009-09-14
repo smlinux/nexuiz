@@ -1044,7 +1044,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 	{
 		next = targ.chain;
 		if (targ != inflictor)
-			if (ignore != targ)
+			if (ignore != targ) if(targ.takedamage)
 			{
 				// LordHavoc: measure distance to nearest point on target (not origin)
 				// (this guarentees 100% damage on a touch impact)
