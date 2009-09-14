@@ -1909,7 +1909,8 @@ void Sbar_ShowSpeed(void)
 	pos = cvar("cl_showspeed_position");
 	numsize_x = numsize_y = cvar("cl_showspeed_size");
 	pos = (vid_conheight - numsize_y) * pos;
-
+	
+	drawfont = sbar_bigfont;
 	drawstringcenter('1 0 0' + pos * '0 1 0', speed, numsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 }
 
