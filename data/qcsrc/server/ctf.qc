@@ -209,6 +209,7 @@ void RegenFlag(entity e)
 
 	setattachment(e, world, "");
 	e.damageforcescale = 0;
+	e.takedamage = DAMAGE_NO;
 	e.movetype = MOVETYPE_NONE;
 	if(!e.noalign)
 		e.movetype = MOVETYPE_TOSS;
@@ -296,6 +297,7 @@ void DropFlag(entity e, entity penalty_receiver, entity attacker)
 
 	setattachment(e, world, "");
 	e.damageforcescale = cvar("g_balance_ctf_damageforcescale");
+	e.takedamage = DAMAGE_YES;
 
 	if (p.flagcarried == e)
 		p.flagcarried = world;
@@ -618,6 +620,7 @@ void FlagTouch()
 			setorigin(self, FLAG_CARRY_POS);
 			setattachment(self, other, "");
 			self.damageforcescale = 0;
+			e.takedamage = DAMAGE_NO;
 			WaypointSprite_AttachCarrier("flagcarrier", other);
 			WaypointSprite_UpdateTeamRadar(other.waypointsprite_attachedforcarrier, RADARICON_FLAGCARRIER, '1 1 0');
 		}

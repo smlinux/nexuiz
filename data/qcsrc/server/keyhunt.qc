@@ -186,6 +186,7 @@ void kh_Key_Attach(entity key)  // runs when a player picks up a key and several
 	key.team = key.owner.team;
 	key.nextthink = time;
 	key.damageforcescale = 0;
+	key.takedamage = DAMAGE_NO;
 	key.modelindex = kh_key_carried;
 }
 
@@ -240,6 +241,7 @@ void kh_Key_Detach(entity key) // runs every time a key is dropped or lost. Runs
 	key.movetype = MOVETYPE_TOSS;
 	key.pain_finished = time + cvar("g_balance_keyhunt_delay_return");
 	key.damageforcescale = cvar("g_balance_keyhunt_damageforcescale");
+	key.takedamage = DAMAGE_YES;
 	// let key.team stay
 	key.modelindex = kh_key_dropped;
 	key.kh_previous_owner = key.owner;

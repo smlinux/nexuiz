@@ -9,6 +9,7 @@ void W_Plasma_Explode (void)
 						announce(self.owner, "announcer/male/electrobitch.wav");
 
 	self.event_damage = SUB_Null;
+	self.takedamage = DAMAGE_NO;
 	if (self.movetype == MOVETYPE_BOUNCE)
 	{
 		RadiusDamage (self, self.owner, cvar("g_balance_electro_secondary_damage"), cvar("g_balance_electro_secondary_edgedamage"), cvar("g_balance_electro_secondary_radius"), world, cvar("g_balance_electro_secondary_force"), self.projectiledeathtype, other);

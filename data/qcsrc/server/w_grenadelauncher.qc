@@ -8,6 +8,7 @@ void W_Grenade_Explode (void)
 						announce(self.owner, "announcer/male/airshot.wav");
 
 	self.event_damage = SUB_Null;
+	self.takedamage = DAMAGE_NO;
 	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_primary_damage"), cvar("g_balance_grenadelauncher_primary_edgedamage"), cvar("g_balance_grenadelauncher_primary_radius"), world, cvar("g_balance_grenadelauncher_primary_force"), self.projectiledeathtype, other);
 
 	remove (self);
@@ -22,6 +23,7 @@ void W_Grenade_Explode2 (void)
 					announce(self.owner, "announcer/male/airshot.wav");
 
 	self.event_damage = SUB_Null;
+	self.takedamage = DAMAGE_NO;
 	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_secondary_damage"), cvar("g_balance_grenadelauncher_secondary_edgedamage"), cvar("g_balance_grenadelauncher_secondary_radius"), world, cvar("g_balance_grenadelauncher_secondary_force"), self.projectiledeathtype, other);
 
 	remove (self);

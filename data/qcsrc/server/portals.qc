@@ -603,6 +603,7 @@ entity Portal_Spawn(entity own, vector org, vector ang)
 	portal.think = Portal_Think;
 	portal.nextthink = 0;
 	portal.portal_activatetime = time + 0.1;
+	portal.takedamage = DAMAGE_AIM;
 	portal.event_damage = Portal_Damage;
 	portal.fade_time = time + cvar("g_balance_portal_lifetime");
 	portal.health = cvar("g_balance_portal_health");

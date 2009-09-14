@@ -10,6 +10,7 @@ void W_Fireball_Explode (void)
 	float d;
 
 	self.event_damage = SUB_Null;
+	self.takedamage = DAMAGE_NO;
 
 	// 1. dist damage
 	d = (self.owner.health + self.owner.armorvalue);
