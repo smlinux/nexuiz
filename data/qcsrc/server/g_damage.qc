@@ -1079,7 +1079,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 						// test line of sight to multiple positions on box,
 						// and do damage if any of them hit
 						hits = 0;
-						total = ceil(bound(1, finaldmg, 50));
+						total = ceil(bound(1, finaldmg*0.2, 20));
 						hitloc = nearest;
 						c = 0;
 						while (c < total)
