@@ -1898,17 +1898,45 @@ void Sbar_DrawPressedKeys(void)
 void Sbar_ShowSpeed(void)
 {
 	vector numsize;
-	float pos;
-	string speed;
+	float pos, conversion_factor;
+	string speed, unit;
+
+	switch(cvar("cl_showspeed"))
+	{
+		default:
+		case 1:
+			unit = "";
+			conversion_factor = 1.0;
+			break;
+		case 2:
+			unit = " qu/s";
+			conversion_factor = 1.0;
+			break;
+		case 3:
+			unit = " m/s";
+			conversion_factor = 0.0254;
+			break;
+		case 4:
+			unit = " km/h";
+			conversion_factor = 0.0254 * 3.6;
+			break;
+		case 5:
+			unit = " mph";
+			conversion_factor = 0.0254 * 3.6 * 0.6213711922;
+			break;
+		case 6:
+			unit = " knots";
+			conversion_factor = 0.0254 * 1.943844492; // 1 m/s = 1.943844492 knots, because 1 knot = 1.852 km/h
+			break;
+	}
 
 	if (cvar("cl_showspeed_z") == 1)
-		speed = ftos(floor(vlen(pmove_vel) + 0.5));
+		speed = strcat(ftos(floor( vlen(pmove_vel) * conversion_factor + 0.5 )), unit);
 	else
-		speed = ftos(floor(vlen(pmove_vel - pmove_vel_z * '0 0 1') + 0.5));
+		speed = strcat(ftos(floor( vlen(pmove_vel - pmove_vel_z * '0 0 1') * conversion_factor + 0.5 )), unit);
 
-	pos = cvar("cl_showspeed_position");
 	numsize_x = numsize_y = cvar("cl_showspeed_size");
-	pos = (vid_conheight - numsize_y) * pos;
+	pos = (vid_conheight - numsize_y) * cvar("cl_showspeed_position");
 	
 	drawfont = sbar_bigfont;
 	drawstringcenter('1 0 0' + pos * '0 1 0', speed, numsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
