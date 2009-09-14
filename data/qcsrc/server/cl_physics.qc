@@ -417,6 +417,9 @@ void PM_Accelerate(vector wishdir, float wishspeed, float accel, float accelqw, 
 	float vel_z;
 	vector vel_perpend;
 	float addspeed;
+	float savespeed;
+
+	savespeed = self.velocity * self.velocity;
 
 	vel_straight = self.velocity * wishdir;
 	vel_z = self.velocity_z;
@@ -428,7 +431,18 @@ void PM_Accelerate(vector wishdir, float wishspeed, float accel, float accelqw, 
 	if(wishspeed > 0)
 		vel_straight = vel_straight + min(wishspeed, accel * frametime * wishspeed) * (1 - accelqw);
 
-	vel_perpend = vel_perpend * (1 - frametime * wishspeed * sidefric);
+	if(sidefric < 0 && (vel_perpend*vel_perpend))
+	{
+		float f, fmin;
+		f = (1 + frametime * wishspeed * sidefric);
+		fmin = (savespeed - vel_straight*vel_straight) / (vel_perpend*vel_perpend);
+		if(fmin <= 0)
+			vel_perpend = vel_perpend * f;
+		else
+			vel_perpend = vel_perpend * min(1, max(fmin, f));
+	}
+	else
+		vel_perpend = vel_perpend * (1 - frametime * wishspeed * sidefric);
 
 	self.velocity = vel_straight * wishdir + vel_z * '0 0 1' + vel_perpend;
 }
