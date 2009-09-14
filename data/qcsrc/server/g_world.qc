@@ -2490,6 +2490,7 @@ string GotoMap(string m)
 
 void EndFrame()
 {
+	float altime;
 	FOR_EACH_REALCLIENT(self)
 	{
 		if(self.classname == "spectator")
@@ -2507,15 +2508,17 @@ void EndFrame()
 				play2(self, "misc/hit.wav");
 		}
 	}
+	altime = time + frametime * (1 + cvar("g_antilag_nudge"));
+	// add 1 frametime because after this, engine SV_Physics
+	// increases time by a frametime and then networks the frame
+	// add another frametime because client shows everything with
+	// 1 frame of lag (cl_nolerp 0). The last +1 however should not be
+	// needed!
 	FOR_EACH_CLIENT(self)
 	{
 		self.hitsound = FALSE;
 		self.typehitsound = FALSE;
-		antilag_record(self, time + 2*frametime);
-		// add 1 frametime because after this, engine SV_Physics
-		// increases time by a frametime and then networks the frame
-		// add another frametime because client shows everything with
-		// 1 frame of lag (cl_nolerp 0).
+		antilag_record(self, altime);
 	}
 }
 
