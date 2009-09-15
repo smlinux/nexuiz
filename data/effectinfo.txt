@@ -1341,11 +1341,11 @@ airfriction 12
 // glowing vapor trail
 // used in qcsrc/client/projectile.qc:			trailparticles(self, particleeffectnum("TR_NEXUIZPLASMA"), from, to)
 effect TR_NEXUIZPLASMA
-trailspacing 2
+trailspacing 1
 type static
 color 0x283880 0x283880
 size 3 3
-tex 62 62
+tex 38 38
 alpha 256 256 968
 //velocityjitter 16 16 16
 lightradius 90
