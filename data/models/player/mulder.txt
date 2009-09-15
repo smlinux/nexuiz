@@ -2,7 +2,7 @@ Mulder
 models/player/mulder
 1
 models/player/nexus.zym
-species robot_shiny
+species robot_solid
 
 Nexuiz's Soldier
 

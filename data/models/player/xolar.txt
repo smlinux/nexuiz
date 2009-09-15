@@ -2,7 +2,7 @@ Xolar
 models/player/xolar
 2
 models/player/nexus.zym
-species robot_shiny
+species robot_solid
 
 Nexuiz's Soldier
 
