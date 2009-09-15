@@ -209,6 +209,7 @@ float zoomscript_caught;
 
 vector wcross_origin;
 entity trueaim;
+entity trueaim_rifle;
 
 #define SHOTTYPE_HITTEAM 1
 #define SHOTTYPE_HITOBSTRUCTION 2
@@ -220,6 +221,9 @@ void TrueAim_Init()
 	trueaim = spawn();
 	trueaim.classname = "trueaim";
 	trueaim.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE;
+	trueaim_rifle = spawn();
+	trueaim_rifle.classname = "trueaim_rifle";
+	trueaim_rifle.dphitcontentsmask = DPCONTENTS_BODY | DPCONTENTS_CORPSE;
 }
 
 float EnemyHitCheck()
@@ -279,7 +283,10 @@ float TrueAimCheck()
 
 	vecs = decompressShotOrigin(getstati(STAT_SHOTORG));
 
-	traceline(view_origin, view_origin + view_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, trueaim);
+	if(activeweapon == WEP_CAMPINGRIFLE)
+		traceline(view_origin, view_origin + view_forward * MAX_SHOT_DISTANCE, MOVE_NORMAL, trueaim_rifle);
+	else
+		traceline(view_origin, view_origin + view_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, trueaim);
 	trueaimpoint = trace_endpos;
 
 	if(vecs_x > 0)
