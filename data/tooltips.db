@@ -190,8 +190,10 @@
 \showtime\Show current time of day, useful on screenshots
 \showdate\Show current date, useful on screenshots
 \showfps\Show your rendered frames per second
-\showspeed\Show your current speed
-\showtopspeed\Show your top speed, kept on the screen for a maximum of 3 seconds
+\cl_showspeed\Show the speed of the player
+\cl_showspeed_unit\Select the unit used by the speedometer. qu/s = in/s
+\cl_showacceleration\Show the acceleration of the player
+\cl_showacceleration_scale\Excaggerate the accelerometer by this scale multiplier
 
 \NexuizSettingsDialog/Advanced settings...\Advanced settings where you can tweak every single variable of the game
 \g_friendlyfire\Percentage of damage dealt to teammates

@@ -1901,30 +1901,30 @@ void Sbar_ShowSpeed(void)
 	float pos, conversion_factor;
 	string speed, unit;
 
-	switch(cvar("cl_showspeed"))
+	switch(cvar("cl_showspeed_unit"))
 	{
 		default:
-		case 1:
+		case 0:
 			unit = "";
 			conversion_factor = 1.0;
 			break;
-		case 2:
+		case 1:
 			unit = " qu/s";
 			conversion_factor = 1.0;
 			break;
-		case 3:
+		case 2:
 			unit = " m/s";
 			conversion_factor = 0.0254;
 			break;
-		case 4:
+		case 3:
 			unit = " km/h";
 			conversion_factor = 0.0254 * 3.6;
 			break;
-		case 5:
+		case 4:
 			unit = " mph";
 			conversion_factor = 0.0254 * 3.6 * 0.6213711922;
 			break;
-		case 6:
+		case 5:
 			unit = " knots";
 			conversion_factor = 0.0254 * 1.943844492; // 1 m/s = 1.943844492 knots, because 1 knot = 1.852 km/h
 			break;
