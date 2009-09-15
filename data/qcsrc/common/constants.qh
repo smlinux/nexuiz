@@ -409,10 +409,11 @@ float PROJECTILE_FIREBALL = 20;
 float PROJECTILE_FIREMINE = 21;
 
 float SPECIES_HUMAN        =  0;
-float SPECIES_ANIMAL       =  1;
+float SPECIES_ROBOT_SOLID  =  1;
 float SPECIES_ALIEN        =  2;
-float SPECIES_ROBOT_RUSTY  =  3;
-float SPECIES_ROBOT_SHINY  =  4;
+float SPECIES_ANIMAL       =  3;
+float SPECIES_ROBOT_RUSTY  =  4;
+float SPECIES_ROBOT_SHINY  =  5;
 float SPECIES_RESERVED     = 15;
 
 // Deathtypes (weapon deathtypes are the IT_* constants below)

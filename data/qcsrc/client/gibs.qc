@@ -13,6 +13,7 @@ string species_prefix(float specnum)
 		case SPECIES_ALIEN:       return "alien_";
 		case SPECIES_ROBOT_SHINY: return "robot_";
 		case SPECIES_ROBOT_RUSTY: return "robot_"; // use the same effects, only different gibs
+		case SPECIES_ROBOT_SOLID: return "robot_"; // use the same effects, only different gibs
 		case SPECIES_ANIMAL:      return "animal_";
 		case SPECIES_RESERVED:    return "reserved_";
 		default:         return "";
@@ -25,17 +26,21 @@ void Gib_setmodel(entity gib, string mdlname, float specnum)
 	{
 		case SPECIES_ROBOT_RUSTY:
 		case SPECIES_ROBOT_SHINY:
-			if(mdlname == "models/gibs/bloodyskull.md3")
-				setmodel(gib, "models/gibs/robo.md3");
-			else
-				setmodel(gib, strcat("models/gibs/robo", ftos(floor(random() * 8) + 1), ".md3"));
-			if(specnum == SPECIES_ROBOT_SHINY)
+		case SPECIES_ROBOT_SOLID:
+			if(specnum != SPECIES_ROBOT_SOLID || mdlname == "models/gibs/chunk.mdl")
 			{
-				gib.skin = 1;
-				gib.colormod = '2 2 2';
+				if(mdlname == "models/gibs/bloodyskull.md3")
+					setmodel(gib, "models/gibs/robo.md3");
+				else
+					setmodel(gib, strcat("models/gibs/robo", ftos(floor(random() * 8) + 1), ".md3"));
+				if(specnum == SPECIES_ROBOT_SHINY)
+				{
+					gib.skin = 1;
+					gib.colormod = '2 2 2';
+				}
+				gib.scale = 1;
+				break;
 			}
-			gib.scale = 1;
-			break;
 		default:
 			setmodel(gib, mdlname);
 			gib.skin = specnum;
