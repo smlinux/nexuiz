@@ -50,6 +50,9 @@ void Projectile_DrawTrail(vector to)
 		case PROJECTILE_CRYLINK_BOUNCING:
 			trailparticles(self, particleeffectnum("TR_CRYLINKPLASMA"), from, to);
 			break;
+		case PROJECTILE_ELECTRO:
+			trailparticles(self, particleeffectnum("TR_NEXUIZPLASMA"), from, to);
+			break;
 		case PROJECTILE_ELECTRO_BEAM:
 			trailparticles(self, particleeffectnum("TR_NEXUIZPLASMA"), from, to);
 			break;
