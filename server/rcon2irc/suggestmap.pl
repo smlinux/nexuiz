@@ -6,8 +6,7 @@ sub out($$@);
 #read the suggest vote
 [ dp => q{:vote:suggested:(.+):(\d+)} => sub {
 	my ($map, $id) = @_;
-	my $nick = color_dp2irc $store{"playernick_byid_$id"};
-	$nick ||= '(console)';
+	my $nick = $store{"playernick_byid_$id"} || 'console';
 	out irc => 0, "PRIVMSG $config{irc_channel} :* map suggested: \00304$map\017 by $nick\017";
 	return 0;
 } ],
