@@ -110,6 +110,7 @@ float player_getspecies()
 					case "alien":       s = SPECIES_ALIEN;       break;
 					case "robot_shiny": s = SPECIES_ROBOT_SHINY; break;
 					case "robot_rusty": s = SPECIES_ROBOT_RUSTY; break;
+					case "robot_solid": s = SPECIES_ROBOT_SOLID; break;
 					case "animal":      s = SPECIES_ANIMAL;      break;
 					case "reserved":    s = SPECIES_RESERVED;    break;
 				}
