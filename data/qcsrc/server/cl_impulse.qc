@@ -461,7 +461,7 @@ void ImpulseCommands (void)
 			}
 		}
 	}
-	else if(imp >= 103 && imp <= 106)
+	else if(imp >= 103 && imp <= 107)
 	{
 		if(cvar("g_waypointeditor"))
 		{
@@ -485,6 +485,22 @@ void ImpulseCommands (void)
 					break;
 				case 106:
 					waypoint_saveall();
+					break;
+				case 107:
+					navigation_markroutes();
+					for(e = findchain(classname, "waypoint"); e; e = e.chain)
+					{
+						if(e.wpcost < 10000000)
+						{
+							e.colormod_x = 1;
+							e.effects &~= EF_NODEPTHTEST;
+						}
+						else
+						{
+							e.colormod_x = 0;
+							e.effects |= EF_NODEPTHTEST;
+						}
+					}
 					break;
 			}
 		}
