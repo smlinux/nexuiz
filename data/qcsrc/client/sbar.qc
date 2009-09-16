@@ -2633,46 +2633,106 @@ void Sbar_Draw (void)
 }
 
 // CTF HUD
+float redflag_prevframe, blueflag_prevframe; // status during previous frame
+float redflag_prevstatus, blueflag_prevstatus; // previous status, not = 0
+float redflag_statuschange_time, blueflag_statuschange_time; // time when the status changed
 void CSQC_ctf_hud(void)
 {
-	vector bottomleft, redflag_pos, blueflag_pos;
+	vector bottomleft, redflag_pos, blueflag_pos, size;
 	bottomleft_x = 0;
 	bottomleft_y = vid_conheight;
 	bottomleft_z = 0;
 
-	float redflag, blueflag;
+	float redflag, blueflag; // current status
+	float redflag_statuschange_elapsedtime, blueflag_statuschange_elapsedtime; // time since the status changed
 	float stat_items;
 
 	stat_items = getstati(STAT_ITEMS);
 	redflag = (stat_items/IT_RED_FLAG_TAKEN) & 3;
 	blueflag = (stat_items/IT_BLUE_FLAG_TAKEN) & 3;
 
-	if (myteam == COLOR_TEAM1) { // always draw own flag on left
-		redflag_pos = bottomleft - '-4 42 0';
-		blueflag_pos = bottomleft - '-68 42 0';
-	} else {
-		blueflag_pos = bottomleft - '-4 42 0';
-		redflag_pos = bottomleft - '-68 42 0';
+	if (redflag != redflag_prevframe) {
+		redflag_statuschange_time = time;
+		if (redflag)
+			redflag_prevstatus = redflag;
 	}
+	redflag_prevframe = redflag;
 
+	if (blueflag != blueflag_prevframe) {
+		blueflag_statuschange_time = time;
+		if (blueflag)
+			blueflag_prevstatus = blueflag;
+	}
+	blueflag_prevframe = blueflag;
+	
+	redflag_statuschange_elapsedtime = time - redflag_statuschange_time;
+	blueflag_statuschange_elapsedtime = time - blueflag_statuschange_time;
+
+	string red_icon, red_icon_prevstatus;
 	switch(redflag) {
-	case 1: drawpic(redflag_pos, "gfx/hud/sb_flag_red_taken", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
-	case 2: drawpic(redflag_pos, "gfx/hud/sb_flag_red_lost", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
-	case 3: drawpic(redflag_pos, "gfx/hud/sb_flag_red_carrying", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
-	default:
-		if(stat_items & IT_CTF_SHIELDED)
-			if(myteam == COLOR_TEAM2)
-				drawpic(redflag_pos, "gfx/hud/sb_flag_red_shielded", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
+		case 1: red_icon = "gfx/hud/sb_flag_red_taken"; break;
+		case 2: red_icon = "gfx/hud/sb_flag_red_lost"; break;
+		case 3: red_icon = "gfx/hud/sb_flag_red_carrying"; break;
+		default:
+			if((stat_items & IT_CTF_SHIELDED) && (myteam == COLOR_TEAM2))
+				red_icon = "gfx/hud/sb_flag_red_shielded"; break;
+	} switch(redflag_prevstatus) {
+		case 1: red_icon_prevstatus = "gfx/hud/sb_flag_red_taken"; break;
+		case 2: red_icon_prevstatus = "gfx/hud/sb_flag_red_lost"; break;
+		case 3: red_icon_prevstatus = "gfx/hud/sb_flag_red_carrying"; break;
+		default:
+			if((stat_items & IT_CTF_SHIELDED) && (myteam == COLOR_TEAM2))
+				red_icon_prevstatus = "gfx/hud/sb_flag_red_shielded"; break;
 	}
 
+	string blue_icon, blue_icon_prevstatus;
 	switch(blueflag) {
-	case 1: drawpic(blueflag_pos, "gfx/hud/sb_flag_blue_taken", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
-	case 2: drawpic(blueflag_pos, "gfx/hud/sb_flag_blue_lost", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
-	case 3: drawpic(blueflag_pos, "gfx/hud/sb_flag_blue_carrying", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
-	default:
-		if(stat_items & IT_CTF_SHIELDED)
-			if(myteam == COLOR_TEAM1)
-				drawpic(blueflag_pos, "gfx/hud/sb_flag_blue_shielded", '48 48 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL); break;
+		case 1: blue_icon = "gfx/hud/sb_flag_blue_taken"; break;
+		case 2: blue_icon = "gfx/hud/sb_flag_blue_lost"; break;
+		case 3: blue_icon = "gfx/hud/sb_flag_blue_carrying"; break;
+		default:
+			if((stat_items & IT_CTF_SHIELDED) && (myteam == COLOR_TEAM1))
+				blue_icon = "gfx/hud/sb_flag_blue_shielded"; break;
+	} switch(blueflag_prevstatus) {
+		case 1: blue_icon_prevstatus = "gfx/hud/sb_flag_blue_taken"; break;
+		case 2: blue_icon_prevstatus = "gfx/hud/sb_flag_blue_lost"; break;
+		case 3: blue_icon_prevstatus = "gfx/hud/sb_flag_blue_carrying"; break;
+		default:
+			if((stat_items & IT_CTF_SHIELDED) && (myteam == COLOR_TEAM1))
+				blue_icon_prevstatus = "gfx/hud/sb_flag_blue_shielded"; break;
+	}
+
+	if (myteam == COLOR_TEAM1) { // always draw own flag on left
+		redflag_pos = bottomleft - '-4 50 0';
+		blueflag_pos = bottomleft - '-62 50 0';
+	} else {
+		blueflag_pos = bottomleft - '-4 50 0';
+		redflag_pos = bottomleft - '-62 50 0';
+	}
+	
+	size = '52 52 0';
+	
+	// draw the icons
+	if (redflag_statuschange_elapsedtime > 1 && red_icon) // red flag status has not changed during the previous second
+		drawpic(redflag_pos, red_icon, size, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+	else { // red flag status HAS changed during the previous second
+		if (redflag == 0 && red_icon_prevstatus) // in this case, the status was lost so we have to use the value in prevstatus to determine which icon to fade out
+			drawpic_expanding(redflag_pos, red_icon_prevstatus, size, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, 
+			bound(0, redflag_statuschange_elapsedtime*2, 1));
+		else if (red_icon)
+			drawpic_expanding_two(redflag_pos, red_icon, size, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, 
+			bound(0, redflag_statuschange_elapsedtime*2, 1));
+	}
+	
+	if (blueflag_statuschange_elapsedtime > 1 && blue_icon) // blue flag status has not changed during the previous second
+		drawpic(blueflag_pos, blue_icon, size, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+	else { // blue flag status HAS changed during the previous second
+		if (blueflag == 0 && blue_icon_prevstatus) // in this case, the status was lost so we have to use the value in prevstatus to determine which icon to fade out
+			drawpic_expanding(blueflag_pos, blue_icon_prevstatus, size, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, 
+			bound(0, blueflag_statuschange_elapsedtime*2, 1));
+		else if (blue_icon)
+			drawpic_expanding_two(blueflag_pos, blue_icon, size, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, 
+			bound(0, blueflag_statuschange_elapsedtime*2, 1));
 	}
 }
 
