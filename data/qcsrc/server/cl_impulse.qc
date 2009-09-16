@@ -497,7 +497,7 @@ void ImpulseCommands (void)
 						}
 						else
 						{
-							e.colormod_x = 0;
+							e.colormod_x = 0.1;
 							e.effects |= EF_NODEPTHTEST;
 						}
 					}
