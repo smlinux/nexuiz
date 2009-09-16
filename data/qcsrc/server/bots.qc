@@ -359,58 +359,73 @@ float findtrajectorywithleading(vector org, vector m1, vector m2, entity targ, f
 
 
 
-// Lag simulation
-#define LAG_QUEUE_LENGTH 4
+// lag simulation
 
 .void(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, vector v4) lag_func;
 
-.float lag_time[LAG_QUEUE_LENGTH];
-.float lag_float1[LAG_QUEUE_LENGTH];
-.float lag_float2[LAG_QUEUE_LENGTH];
-.vector lag_vec1[LAG_QUEUE_LENGTH];
-.vector lag_vec2[LAG_QUEUE_LENGTH];
-.vector lag_vec3[LAG_QUEUE_LENGTH];
-.vector lag_vec4[LAG_QUEUE_LENGTH];
-.entity lag_entity1[LAG_QUEUE_LENGTH];
+// upto 5 queued messages
+.float lag1_time;
+.float lag1_float1;
+.float lag1_float2;
+.entity lag1_entity1;
+.vector lag1_vec1;
+.vector lag1_vec2;
+.vector lag1_vec3;
+.vector lag1_vec4;
+
+.float lag2_time;
+.float lag2_float1;
+.float lag2_float2;
+.entity lag2_entity1;
+.vector lag2_vec1;
+.vector lag2_vec2;
+.vector lag2_vec3;
+.vector lag2_vec4;
+
+.float lag3_time;
+.float lag3_float1;
+.float lag3_float2;
+.entity lag3_entity1;
+.vector lag3_vec1;
+.vector lag3_vec2;
+.vector lag3_vec3;
+.vector lag3_vec4;
+
+.float lag4_time;
+.float lag4_float1;
+.float lag4_float2;
+.entity lag4_entity1;
+.vector lag4_vec1;
+.vector lag4_vec2;
+.vector lag4_vec3;
+.vector lag4_vec4;
+
+.float lag5_time;
+.float lag5_float1;
+.float lag5_float2;
+.entity lag5_entity1;
+.vector lag5_vec1;
+.vector lag5_vec2;
+.vector lag5_vec3;
+.vector lag5_vec4;
 
 void lag_update()
 {
-	float i;
-	for(i=0;i<LAG_QUEUE_LENGTH;++i)
-	{
-		if (self.lag_time[i])
-		if (time > self.lag_time[i])
-		{
-			self.lag_func(
-				self.lag_time[i], self.lag_float1[i], self.lag_float2[i],
-				self.lag_entity1[i], self.lag_vec1[i], self.lag_vec2[i], self.lag_vec3[i],
-				self.lag_vec4[i]
-			);
-			// Clear this position on the queue
-			self.(lag_time[i]) = 0;
-		}
-	}
+	if (self.lag1_time) if (time > self.lag1_time) {self.lag_func(self.lag1_time, self.lag1_float1, self.lag1_float2, self.lag1_entity1, self.lag1_vec1, self.lag1_vec2, self.lag1_vec3, self.lag1_vec4);self.lag1_time = 0;}
+	if (self.lag2_time) if (time > self.lag2_time) {self.lag_func(self.lag2_time, self.lag2_float1, self.lag2_float2, self.lag2_entity1, self.lag2_vec1, self.lag2_vec2, self.lag2_vec3, self.lag2_vec4);self.lag2_time = 0;}
+	if (self.lag3_time) if (time > self.lag3_time) {self.lag_func(self.lag3_time, self.lag3_float1, self.lag3_float2, self.lag3_entity1, self.lag3_vec1, self.lag3_vec2, self.lag3_vec3, self.lag3_vec4);self.lag3_time = 0;}
+	if (self.lag4_time) if (time > self.lag4_time) {self.lag_func(self.lag4_time, self.lag4_float1, self.lag4_float2, self.lag4_entity1, self.lag4_vec1, self.lag4_vec2, self.lag4_vec3, self.lag4_vec4);self.lag4_time = 0;}
+	if (self.lag5_time) if (time > self.lag5_time) {self.lag_func(self.lag5_time, self.lag5_float1, self.lag5_float2, self.lag5_entity1, self.lag5_vec1, self.lag5_vec2, self.lag5_vec3, self.lag5_vec4);self.lag5_time = 0;}
 };
 
 float lag_additem(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, vector v4)
 {
-	float i;
-	for(i=0;i<LAG_QUEUE_LENGTH;++i)
-	{
-		// Find a free position on the queue
-		if (self.lag_time[i] == 0)
-		{
-			self.(lag_time[i]) = t;
-			self.(lag_vec1[i]) = v1;
-			self.(lag_vec2[i]) = v2;
-			self.(lag_vec3[i]) = v3;
-			self.(lag_vec4[i]) = v4;
-			self.(lag_float1[i]) = f1;
-			self.(lag_float2[i]) = f2;
-			self.(lag_entity1[i]) = e1;
-			return TRUE;
-		}
-	}
+	if (self.lag1_time == 0) {self.lag1_time = t;self.lag1_float1 = f1;self.lag1_float2 = f2;self.lag1_entity1 = e1;self.lag1_vec1 = v1;self.lag1_vec2 = v2;self.lag1_vec3 = v3;self.lag1_vec4 = v4;return TRUE;}
+	if (self.lag2_time == 0) {self.lag2_time = t;self.lag2_float1 = f1;self.lag2_float2 = f2;self.lag2_entity1 = e1;self.lag2_vec1 = v1;self.lag2_vec2 = v2;self.lag2_vec3 = v3;self.lag2_vec4 = v4;return TRUE;}
+	if (self.lag3_time == 0) {self.lag3_time = t;self.lag3_float1 = f1;self.lag3_float2 = f2;self.lag3_entity1 = e1;self.lag3_vec1 = v1;self.lag3_vec2 = v2;self.lag3_vec3 = v3;self.lag3_vec4 = v4;return TRUE;}
+	if (self.lag4_time == 0) {self.lag4_time = t;self.lag4_float1 = f1;self.lag4_float2 = f2;self.lag4_entity1 = e1;self.lag4_vec1 = v1;self.lag4_vec2 = v2;self.lag4_vec3 = v3;self.lag4_vec4 = v4;return TRUE;}
+	if (self.lag5_time == 0) {self.lag5_time = t;self.lag5_float1 = f1;self.lag5_float2 = f2;self.lag5_entity1 = e1;self.lag5_vec1 = v1;self.lag5_vec2 = v2;self.lag5_vec3 = v3;self.lag5_vec4 = v4;return TRUE;}
+	// no room for it (what is the best thing to do here??)
 	return FALSE;
 };
 
@@ -427,18 +442,28 @@ float lag_additem(float t, float f1, float f2, entity e1, vector v1, vector v2, 
 // itemscore = (howmuchmoreIwant / howmuchIcanwant) / itemdistance
 // waypointscore = 0.7 / waypointdistance
 
-#define MAX_WAYPOINTS_LINKS 32
+.entity wp00, wp01, wp02, wp03, wp04, wp05, wp06, wp07;
+.entity wp08, wp09, wp10, wp11, wp12, wp13, wp14, wp15;
+.entity wp16, wp17, wp18, wp19, wp20, wp21, wp22, wp23, wp24, wp25, wp26, wp27, wp28, wp29, wp30, wp31;
+.float wp00mincost, wp01mincost, wp02mincost, wp03mincost, wp04mincost, wp05mincost, wp06mincost, wp07mincost;
+.float wp08mincost, wp09mincost, wp10mincost, wp11mincost, wp12mincost, wp13mincost, wp14mincost, wp15mincost;
+.float wp16mincost, wp17mincost, wp18mincost, wp19mincost, wp20mincost, wp21mincost, wp22mincost, wp23mincost, wp24mincost, wp25mincost, wp26mincost, wp27mincost, wp28mincost, wp29mincost, wp30mincost, wp31mincost;
+.float wpfire, wpcost, wpconsidered;
+.float wpisbox;
+.float wpflags;
 .vector wpnearestpoint;
-.entity wlink[MAX_WAYPOINTS_LINKS];
-.float wpmincost[MAX_WAYPOINTS_LINKS];
-.float wpfire, wpcost, wpconsidered, wpisbox, wpflags, wplinked;
+.float wplinked;
 
 // stack of current goals (the last one of which may be an item or other
 // desirable object, the rest are typically waypoints to reach it)
-#define GOALSTACK_LENGTH 32
-.entity goalstack[GOALSTACK_LENGTH];
-.entity goalcurrent;
-
+.entity goalcurrent, goalstack01, goalstack02, goalstack03;
+.entity goalstack04, goalstack05, goalstack06, goalstack07;
+.entity goalstack08, goalstack09, goalstack10, goalstack11;
+.entity goalstack12, goalstack13, goalstack14, goalstack15;
+.entity goalstack16, goalstack17, goalstack18, goalstack19;
+.entity goalstack20, goalstack21, goalstack22, goalstack23;
+.entity goalstack24, goalstack25, goalstack26, goalstack27;
+.entity goalstack28, goalstack29, goalstack30, goalstack31;
 
 .entity nearestwaypoint;
 .float nearestwaypointtimeout;
@@ -466,25 +491,26 @@ float WAYPOINTFLAG_PERSONAL = 524288;
 // add a new link to the spawnfunc_waypoint, replacing the furthest link it already has
 void waypoint_addlink(entity from, entity to)
 {
-	local float c, i;
+	local float c;
 
 	if (from == to)
 		return;
-
 	if (from.wpflags & WAYPOINTFLAG_NORELINK)
 		return;
 
-	// return if already linked
-	for(i=0;i<MAX_WAYPOINTS_LINKS;++i)
-	{
-		if(from.wlink[i]==to)
-			return;
-	}
+	if (from.wp00 == to) return;if (from.wp01 == to) return;if (from.wp02 == to) return;if (from.wp03 == to) return;
+	if (from.wp04 == to) return;if (from.wp05 == to) return;if (from.wp06 == to) return;if (from.wp07 == to) return;
+	if (from.wp08 == to) return;if (from.wp09 == to) return;if (from.wp10 == to) return;if (from.wp11 == to) return;
+	if (from.wp12 == to) return;if (from.wp13 == to) return;if (from.wp14 == to) return;if (from.wp15 == to) return;
+	if (from.wp16 == to) return;if (from.wp17 == to) return;if (from.wp18 == to) return;if (from.wp19 == to) return;
+	if (from.wp20 == to) return;if (from.wp21 == to) return;if (from.wp22 == to) return;if (from.wp23 == to) return;
+	if (from.wp24 == to) return;if (from.wp25 == to) return;if (from.wp26 == to) return;if (from.wp27 == to) return;
+	if (from.wp28 == to) return;if (from.wp29 == to) return;if (from.wp30 == to) return;if (from.wp31 == to) return;
 
-	// if either is a box we have to find the nearest points on them to
-	// calculate the distance properly
 	if (to.wpisbox || from.wpisbox)
 	{
+		// if either is a box we have to find the nearest points on them to
+		// calculate the distance properly
 		local vector v1, v2, m1, m2;
 		v1 = from.origin;
 		m1 = to.absmin;
@@ -504,23 +530,39 @@ void waypoint_addlink(entity from, entity to)
 	else
 		c = vlen(to.origin - from.origin);
 
-	if (from.wpmincost[MAX_WAYPOINTS_LINKS - 1] < c)
-		return;
-
-	for(i=MAX_WAYPOINTS_LINKS - 2;i>0;--i)
-	{
-		if (from.wpmincost[i] < c)
-		{
-			from.(wlink[i]) = to;
-			from.(wpmincost[i]) = c;
-			return;
-		}
-		from.(wlink[i]) = from.wlink[i-1];
-		from.(wpmincost[i]) = from.wpmincost[i-1];
-	}
-	from.(wlink[0]) = to;
-	from.(wpmincost[0]) = c;
-	return;
+	if (from.wp31mincost < c) return;
+	if (from.wp30mincost < c) {from.wp31 = to;from.wp31mincost = c;return;} from.wp31 = from.wp30;from.wp31mincost = from.wp30mincost;
+	if (from.wp29mincost < c) {from.wp30 = to;from.wp30mincost = c;return;} from.wp30 = from.wp29;from.wp30mincost = from.wp29mincost;
+	if (from.wp28mincost < c) {from.wp29 = to;from.wp29mincost = c;return;} from.wp29 = from.wp28;from.wp29mincost = from.wp28mincost;
+	if (from.wp27mincost < c) {from.wp28 = to;from.wp28mincost = c;return;} from.wp28 = from.wp27;from.wp28mincost = from.wp27mincost;
+	if (from.wp26mincost < c) {from.wp27 = to;from.wp27mincost = c;return;} from.wp27 = from.wp26;from.wp27mincost = from.wp26mincost;
+	if (from.wp25mincost < c) {from.wp26 = to;from.wp26mincost = c;return;} from.wp26 = from.wp25;from.wp26mincost = from.wp25mincost;
+	if (from.wp24mincost < c) {from.wp25 = to;from.wp25mincost = c;return;} from.wp25 = from.wp24;from.wp25mincost = from.wp24mincost;
+	if (from.wp23mincost < c) {from.wp24 = to;from.wp24mincost = c;return;} from.wp24 = from.wp23;from.wp24mincost = from.wp23mincost;
+	if (from.wp22mincost < c) {from.wp23 = to;from.wp23mincost = c;return;} from.wp23 = from.wp22;from.wp23mincost = from.wp22mincost;
+	if (from.wp21mincost < c) {from.wp22 = to;from.wp22mincost = c;return;} from.wp22 = from.wp21;from.wp22mincost = from.wp21mincost;
+	if (from.wp20mincost < c) {from.wp21 = to;from.wp21mincost = c;return;} from.wp21 = from.wp20;from.wp21mincost = from.wp20mincost;
+	if (from.wp19mincost < c) {from.wp20 = to;from.wp20mincost = c;return;} from.wp20 = from.wp19;from.wp20mincost = from.wp19mincost;
+	if (from.wp18mincost < c) {from.wp19 = to;from.wp19mincost = c;return;} from.wp19 = from.wp18;from.wp19mincost = from.wp18mincost;
+	if (from.wp17mincost < c) {from.wp18 = to;from.wp18mincost = c;return;} from.wp18 = from.wp17;from.wp18mincost = from.wp17mincost;
+	if (from.wp16mincost < c) {from.wp17 = to;from.wp17mincost = c;return;} from.wp17 = from.wp16;from.wp17mincost = from.wp16mincost;
+	if (from.wp15mincost < c) {from.wp16 = to;from.wp16mincost = c;return;} from.wp16 = from.wp15;from.wp16mincost = from.wp15mincost;
+	if (from.wp14mincost < c) {from.wp15 = to;from.wp15mincost = c;return;} from.wp15 = from.wp14;from.wp15mincost = from.wp14mincost;
+	if (from.wp13mincost < c) {from.wp14 = to;from.wp14mincost = c;return;} from.wp14 = from.wp13;from.wp14mincost = from.wp13mincost;
+	if (from.wp12mincost < c) {from.wp13 = to;from.wp13mincost = c;return;} from.wp13 = from.wp12;from.wp13mincost = from.wp12mincost;
+	if (from.wp11mincost < c) {from.wp12 = to;from.wp12mincost = c;return;} from.wp12 = from.wp11;from.wp12mincost = from.wp11mincost;
+	if (from.wp10mincost < c) {from.wp11 = to;from.wp11mincost = c;return;} from.wp11 = from.wp10;from.wp11mincost = from.wp10mincost;
+	if (from.wp09mincost < c) {from.wp10 = to;from.wp10mincost = c;return;} from.wp10 = from.wp09;from.wp10mincost = from.wp09mincost;
+	if (from.wp08mincost < c) {from.wp09 = to;from.wp09mincost = c;return;} from.wp09 = from.wp08;from.wp09mincost = from.wp08mincost;
+	if (from.wp07mincost < c) {from.wp08 = to;from.wp08mincost = c;return;} from.wp08 = from.wp07;from.wp08mincost = from.wp07mincost;
+	if (from.wp06mincost < c) {from.wp07 = to;from.wp07mincost = c;return;} from.wp07 = from.wp06;from.wp07mincost = from.wp06mincost;
+	if (from.wp05mincost < c) {from.wp06 = to;from.wp06mincost = c;return;} from.wp06 = from.wp05;from.wp06mincost = from.wp05mincost;
+	if (from.wp04mincost < c) {from.wp05 = to;from.wp05mincost = c;return;} from.wp05 = from.wp04;from.wp05mincost = from.wp04mincost;
+	if (from.wp03mincost < c) {from.wp04 = to;from.wp04mincost = c;return;} from.wp04 = from.wp03;from.wp04mincost = from.wp03mincost;
+	if (from.wp02mincost < c) {from.wp03 = to;from.wp03mincost = c;return;} from.wp03 = from.wp02;from.wp03mincost = from.wp02mincost;
+	if (from.wp01mincost < c) {from.wp02 = to;from.wp02mincost = c;return;} from.wp02 = from.wp01;from.wp02mincost = from.wp01mincost;
+	if (from.wp00mincost < c) {from.wp01 = to;from.wp01mincost = c;return;} from.wp01 = from.wp00;from.wp01mincost = from.wp00mincost;
+	from.wp00 = to;from.wp00mincost = c;return;
 };
 
 // fields you can query using prvm_global server to get some statistics about waypoint linking culling
@@ -607,54 +649,50 @@ void waypoint_think()
 	self.wplinked = TRUE;
 };
 
-void waypoint_clearlinks(entity w)
+void waypoint_clearlinks(entity wp)
 {
 	// clear links to other waypoints
-	float f, i;
+	local float f;
 	f = 10000000;
-
-	for(i=0;i<MAX_WAYPOINTS_LINKS;++i)
-	{
-		w.(wlink[i]) = world;
-		w.(wpmincost[i]) = f;
-	}
-	w.wplinked = FALSE;
+	wp.wp00 = wp.wp01 = wp.wp02 = wp.wp03 = wp.wp04 = wp.wp05 = wp.wp06 = wp.wp07 = world;wp.wp00mincost = wp.wp01mincost = wp.wp02mincost = wp.wp03mincost = wp.wp04mincost = wp.wp05mincost = wp.wp06mincost = wp.wp07mincost = f;
+	wp.wp08 = wp.wp09 = wp.wp10 = wp.wp11 = wp.wp12 = wp.wp13 = wp.wp14 = wp.wp15 = world;wp.wp08mincost = wp.wp09mincost = wp.wp10mincost = wp.wp11mincost = wp.wp12mincost = wp.wp13mincost = wp.wp14mincost = wp.wp15mincost = f;
+	wp.wp16 = wp.wp17 = wp.wp18 = wp.wp19 = wp.wp20 = wp.wp21 = wp.wp22 = wp.wp23 = world;wp.wp16mincost = wp.wp17mincost = wp.wp18mincost = wp.wp19mincost = wp.wp20mincost = wp.wp21mincost = wp.wp22mincost = wp.wp23mincost = f;
+	wp.wp24 = wp.wp25 = wp.wp26 = wp.wp27 = wp.wp28 = wp.wp29 = wp.wp30 = wp.wp31 = world;wp.wp24mincost = wp.wp25mincost = wp.wp26mincost = wp.wp27mincost = wp.wp28mincost = wp.wp29mincost = wp.wp30mincost = wp.wp31mincost = f;
+	wp.wplinked = FALSE;
 };
 
 // tell a spawnfunc_waypoint to relink
-void waypoint_schedulerelink(entity w)
+void waypoint_schedulerelink(entity wp)
 {
-	if (w == world)
+	if (wp == world)
 		return;
-
 	// TODO: add some sort of visible box in edit mode for box waypoints
 	if (cvar("g_waypointeditor"))
 	{
 		local vector m1, m2;
-		m1 = w.mins;
-		m2 = w.maxs;
-		setmodel(w, "models/runematch/rune.mdl");
-		w.effects = EF_LOWPRECISION;
-		setsize(w, m1, m2);
-		if (w.wpflags & WAYPOINTFLAG_ITEM)
-			w.colormod = '1 0 0';
-		else if (w.wpflags & WAYPOINTFLAG_GENERATED)
-			w.colormod = '1 1 0';
+		m1 = wp.mins;
+		m2 = wp.maxs;
+		setmodel(wp, "models/runematch/rune.mdl"); wp.effects = EF_LOWPRECISION;
+		setsize(wp, m1, m2);
+		if (wp.wpflags & WAYPOINTFLAG_ITEM)
+			wp.colormod = '1 0 0';
+		else if (wp.wpflags & WAYPOINTFLAG_GENERATED)
+			wp.colormod = '1 1 0';
 		else
-			w.colormod = '1 1 1';
+			wp.colormod = '1 1 1';
 	}
 	else
-		w.model = "";
-	w.wpisbox = vlen(w.size) > 0;
-	w.enemy = world;
-	if (!(w.wpflags & WAYPOINTFLAG_PERSONAL))
-		w.owner = world;
-	if (!(w.wpflags & WAYPOINTFLAG_NORELINK))
-		waypoint_clearlinks(w);
+		wp.model = "";
+	wp.wpisbox = vlen(wp.size) > 0;
+	wp.enemy = world;
+	if (!(wp.wpflags & WAYPOINTFLAG_PERSONAL))
+		wp.owner = world;
+	if (!(wp.wpflags & WAYPOINTFLAG_NORELINK))
+		waypoint_clearlinks(wp);
 	// schedule an actual relink on next frame
-	w.think = waypoint_think;
-	w.nextthink = time;
-	w.effects = EF_LOWPRECISION;
+	wp.think = waypoint_think;
+	wp.nextthink = time;
+	wp.effects = EF_LOWPRECISION;
 }
 
 // create a new spawnfunc_waypoint and automatically link it to other waypoints, and link
@@ -783,15 +821,39 @@ void spawnfunc_waypoint()
 // remove a spawnfunc_waypoint, and schedule all neighbors to relink
 void waypoint_remove(entity e)
 {
-	float i;
-
 	// tell all linked waypoints that they need to relink
-	for(i=0;i<MAX_WAYPOINTS_LINKS;++i)
-	{
-		if(e.wlink[i])
-			waypoint_schedulerelink(e.wlink[i]);
-	}
-
+	waypoint_schedulerelink(e.wp00);
+	waypoint_schedulerelink(e.wp01);
+	waypoint_schedulerelink(e.wp02);
+	waypoint_schedulerelink(e.wp03);
+	waypoint_schedulerelink(e.wp04);
+	waypoint_schedulerelink(e.wp05);
+	waypoint_schedulerelink(e.wp06);
+	waypoint_schedulerelink(e.wp07);
+	waypoint_schedulerelink(e.wp08);
+	waypoint_schedulerelink(e.wp09);
+	waypoint_schedulerelink(e.wp10);
+	waypoint_schedulerelink(e.wp11);
+	waypoint_schedulerelink(e.wp12);
+	waypoint_schedulerelink(e.wp13);
+	waypoint_schedulerelink(e.wp14);
+	waypoint_schedulerelink(e.wp15);
+	waypoint_schedulerelink(e.wp16);
+	waypoint_schedulerelink(e.wp17);
+	waypoint_schedulerelink(e.wp18);
+	waypoint_schedulerelink(e.wp19);
+	waypoint_schedulerelink(e.wp20);
+	waypoint_schedulerelink(e.wp21);
+	waypoint_schedulerelink(e.wp22);
+	waypoint_schedulerelink(e.wp23);
+	waypoint_schedulerelink(e.wp24);
+	waypoint_schedulerelink(e.wp25);
+	waypoint_schedulerelink(e.wp26);
+	waypoint_schedulerelink(e.wp27);
+	waypoint_schedulerelink(e.wp28);
+	waypoint_schedulerelink(e.wp29);
+	waypoint_schedulerelink(e.wp30);
+	waypoint_schedulerelink(e.wp31);
 	// and now remove the spawnfunc_waypoint
 	remove(e);
 };
@@ -1039,9 +1101,45 @@ void waypoint_save_links()
 	w = findchain(classname, "waypoint");
 	while (w)
 	{
-		for(i=0;i<MAX_WAYPOINTS_LINKS;++i)
+		for(i=0;i<32;++i)
 		{
-			link = w.wlink[i];
+			// :S
+			switch(i)
+			{
+				//	for i in $(seq -w 0 31); do echo "case $i:link = w.wp$i; break;"; done;
+				case 00:link = w.wp00; break;
+				case 01:link = w.wp01; break;
+				case 02:link = w.wp02; break;
+				case 03:link = w.wp03; break;
+				case 04:link = w.wp04; break;
+				case 05:link = w.wp05; break;
+				case 06:link = w.wp06; break;
+				case 07:link = w.wp07; break;
+				case 08:link = w.wp08; break;
+				case 09:link = w.wp09; break;
+				case 10:link = w.wp10; break;
+				case 11:link = w.wp11; break;
+				case 12:link = w.wp12; break;
+				case 13:link = w.wp13; break;
+				case 14:link = w.wp14; break;
+				case 15:link = w.wp15; break;
+				case 16:link = w.wp16; break;
+				case 17:link = w.wp17; break;
+				case 18:link = w.wp18; break;
+				case 19:link = w.wp19; break;
+				case 20:link = w.wp20; break;
+				case 21:link = w.wp21; break;
+				case 22:link = w.wp22; break;
+				case 23:link = w.wp23; break;
+				case 24:link = w.wp24; break;
+				case 25:link = w.wp25; break;
+				case 26:link = w.wp26; break;
+				case 27:link = w.wp27; break;
+				case 28:link = w.wp28; break;
+				case 29:link = w.wp29; break;
+				case 30:link = w.wp30; break;
+				case 31:link = w.wp31; break;
+			}
 
 			if(link==world)
 				continue;
@@ -1209,8 +1307,8 @@ void waypoint_spawnforteleporter(entity e, vector destination, float timetaken)
 	w = waypoint_spawn(e.absmin, e.absmax, WAYPOINTFLAG_GENERATED | WAYPOINTFLAG_TELEPORT | WAYPOINTFLAG_NORELINK);
 	dw = waypoint_spawn(destination, destination, WAYPOINTFLAG_GENERATED);
 	// one way link to the destination
-	w.(wlink[0]) = dw;
-	w.(wpmincost[0]) = timetaken; // this is just for jump pads
+	w.wp00 = dw;
+	w.wp00mincost = timetaken; // this is just for jump pads
 	// the teleporter's nearest spawnfunc_waypoint is this one
 	// (teleporters are not goals, so this is probably useless)
 	e.nearestwaypoint = w;
@@ -1246,28 +1344,78 @@ entity waypoint_spawnpersonal(vector position)
 // completely empty the goal stack, used when deciding where to go
 void navigation_clearroute()
 {
-	float i;
-
 	//print("bot ", etos(self), " clear\n");
 	self.navigation_hasgoals = FALSE;
-
 	self.goalcurrent = world;
-
-	for(i=0; i<GOALSTACK_LENGTH; ++i)
-		self.(goalstack[i]) = world;
+	self.goalstack01 = world;
+	self.goalstack02 = world;
+	self.goalstack03 = world;
+	self.goalstack04 = world;
+	self.goalstack05 = world;
+	self.goalstack06 = world;
+	self.goalstack07 = world;
+	self.goalstack08 = world;
+	self.goalstack09 = world;
+	self.goalstack10 = world;
+	self.goalstack11 = world;
+	self.goalstack12 = world;
+	self.goalstack13 = world;
+	self.goalstack14 = world;
+	self.goalstack15 = world;
+	self.goalstack16 = world;
+	self.goalstack17 = world;
+	self.goalstack18 = world;
+	self.goalstack19 = world;
+	self.goalstack20 = world;
+	self.goalstack21 = world;
+	self.goalstack22 = world;
+	self.goalstack23 = world;
+	self.goalstack24 = world;
+	self.goalstack25 = world;
+	self.goalstack26 = world;
+	self.goalstack27 = world;
+	self.goalstack28 = world;
+	self.goalstack29 = world;
+	self.goalstack30 = world;
+	self.goalstack31 = world;
 };
 
 // add a new goal at the beginning of the stack
 // (in other words: add a new prerequisite before going to the later goals)
 void navigation_pushroute(entity e)
 {
-	float i;
-
 	//print("bot ", etos(self), " push ", etos(e), "\n");
-	for(i=GOALSTACK_LENGTH-1; i>0; --i)
-		self.(goalstack[i]) = self.goalstack[i-1];
-
-	self.(goalstack[0]) = self.goalcurrent;
+	self.goalstack31 = self.goalstack30;
+	self.goalstack30 = self.goalstack29;
+	self.goalstack29 = self.goalstack28;
+	self.goalstack28 = self.goalstack27;
+	self.goalstack27 = self.goalstack26;
+	self.goalstack26 = self.goalstack25;
+	self.goalstack25 = self.goalstack24;
+	self.goalstack24 = self.goalstack23;
+	self.goalstack23 = self.goalstack22;
+	self.goalstack22 = self.goalstack21;
+	self.goalstack21 = self.goalstack20;
+	self.goalstack20 = self.goalstack19;
+	self.goalstack19 = self.goalstack18;
+	self.goalstack18 = self.goalstack17;
+	self.goalstack17 = self.goalstack16;
+	self.goalstack16 = self.goalstack15;
+	self.goalstack15 = self.goalstack14;
+	self.goalstack14 = self.goalstack13;
+	self.goalstack13 = self.goalstack12;
+	self.goalstack12 = self.goalstack11;
+	self.goalstack11 = self.goalstack10;
+	self.goalstack10 = self.goalstack09;
+	self.goalstack09 = self.goalstack08;
+	self.goalstack08 = self.goalstack07;
+	self.goalstack07 = self.goalstack06;
+	self.goalstack06 = self.goalstack05;
+	self.goalstack05 = self.goalstack04;
+	self.goalstack04 = self.goalstack03;
+	self.goalstack03 = self.goalstack02;
+	self.goalstack02 = self.goalstack01;
+	self.goalstack01 = self.goalcurrent;
 	self.goalcurrent = e;
 };
 
@@ -1276,19 +1424,39 @@ void navigation_pushroute(entity e)
 // (used when a spawnfunc_waypoint is reached)
 void navigation_poproute()
 {
-	float i;
 	//print("bot ", etos(self), " pop\n");
-	self.goalcurrent = self.goalstack[0];
-
-	for(i=0; i<GOALSTACK_LENGTH-1; ++i)
-	{
-		if(self.goalstack[i])
-			self.(goalstack[i]) = self.goalstack[i+1];
-		else
-			return;
-	}
-
-	self.(goalstack[i]) = world;
+	self.goalcurrent = self.goalstack01;
+	self.goalstack01 = self.goalstack02;
+	self.goalstack02 = self.goalstack03;
+	self.goalstack03 = self.goalstack04;
+	self.goalstack04 = self.goalstack05;
+	self.goalstack05 = self.goalstack06;
+	self.goalstack06 = self.goalstack07;
+	self.goalstack07 = self.goalstack08;
+	self.goalstack08 = self.goalstack09;
+	self.goalstack09 = self.goalstack10;
+	self.goalstack10 = self.goalstack11;
+	self.goalstack11 = self.goalstack12;
+	self.goalstack12 = self.goalstack13;
+	self.goalstack13 = self.goalstack14;
+	self.goalstack14 = self.goalstack15;
+	self.goalstack15 = self.goalstack16;
+	self.goalstack16 = self.goalstack17;
+	self.goalstack17 = self.goalstack18;
+	self.goalstack18 = self.goalstack19;
+	self.goalstack19 = self.goalstack20;
+	self.goalstack20 = self.goalstack21;
+	self.goalstack21 = self.goalstack22;
+	self.goalstack22 = self.goalstack23;
+	self.goalstack23 = self.goalstack24;
+	self.goalstack24 = self.goalstack25;
+	self.goalstack25 = self.goalstack26;
+	self.goalstack26 = self.goalstack27;
+	self.goalstack27 = self.goalstack28;
+	self.goalstack28 = self.goalstack29;
+	self.goalstack29 = self.goalstack30;
+	self.goalstack30 = self.goalstack31;
+	self.goalstack31 = world;
 };
 
 // find the spawnfunc_waypoint near a dynamic goal such as a dropped weapon
@@ -1416,28 +1584,28 @@ float navigation_markroutes_nearestwaypoints(entity waylist, float maxdist)
 }
 
 // updates a path link if a spawnfunc_waypoint link is better than the current one
-void navigation_markroutes_checkwaypoint(entity w, entity w2, float cost2, vector p)
+void navigation_markroutes_checkwaypoint(entity w, entity wp, float cost2, vector p)
 {
 	local vector m1;
 	local vector m2;
 	local vector v;
-	if (w2.wpisbox)
+	if (wp.wpisbox)
 	{
-		m1 = w2.absmin;
-		m2 = w2.absmax;
+		m1 = wp.absmin;
+		m2 = wp.absmax;
 		v_x = bound(m1_x, p_x, m2_x);
 		v_y = bound(m1_y, p_y, m2_y);
 		v_z = bound(m1_z, p_z, m2_z);
 	}
 	else
-		v = w2.origin;
-	cost2 = cost2 + vlen(v);
-	if (w2.wpcost > cost2)
+		v = wp.origin;
+	cost2 = cost2 + vlen(v - p);
+	if (wp.wpcost > cost2)
 	{
-		w2.wpcost = cost2;
-		w2.enemy = w;
-		w2.wpfire = 1;
-		w2.wpnearestpoint = v;
+		wp.wpcost = cost2;
+		wp.enemy = w;
+		wp.wpfire = 1;
+		wp.wpnearestpoint = v;
 	}
 };
 
@@ -1487,20 +1655,39 @@ void navigation_markroutes()
 				w.wpfire = 0;
 				cost = w.wpcost;
 				p = w.wpnearestpoint;
-
-				for(i=0;i<MAX_WAYPOINTS_LINKS;++i)
-				{
-					wp = w.wlink[i];
-
-					if(wp)
-					{
-						cost2 = cost + wp.dmg;
-						if (wp.wpcost > cost2 + wp.wpmincost[i])
-							navigation_markroutes_checkwaypoint(w, wp, cost2, p);
-					}
-					else
-						break;
-				}
+				wp = w.wp00;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp00mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp01;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp01mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp02;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp02mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp03;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp03mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp04;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp04mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp05;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp05mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp06;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp06mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp07;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp07mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp08;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp08mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp09;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp09mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp10;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp10mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp11;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp11mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp12;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp12mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp13;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp13mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp14;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp14mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp15;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp15mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp16;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp16mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp17;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp17mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp18;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp18mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp19;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp19mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp20;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp20mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp21;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp21mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp22;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp22mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp23;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp23mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp24;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp24mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp25;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp25mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp26;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp26mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp27;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp27mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp28;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp28mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp29;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp29mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp30;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp30mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				wp = w.wp31;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp31mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
 			}
 			w = w.chain;
 		}
@@ -2637,8 +2824,6 @@ float botframe_waypointeditorlightningtime;
 void botframe_showwaypointlinks()
 {
 	local entity player, head, w;
-	float i;
-
 	if (time < botframe_waypointeditorlightningtime)
 		return;
 	botframe_waypointeditorlightningtime = time + 0.5;
@@ -2654,14 +2839,39 @@ void botframe_showwaypointlinks()
 			//navigation_testtracewalk = FALSE;
 			if (head)
 			{
-				te_lightning2(world, head.origin, player.origin);
-
-				for(i=0;i<MAX_WAYPOINTS_LINKS;++i)
-				{
-					w = head.wlink[i];
-					if (w)
-						te_lightning2(world, w.origin, head.origin);
-				}
+				w = head     ;if (w) te_lightning2(world, w.origin, player.origin);
+				w = head.wp00;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp01;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp02;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp03;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp04;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp05;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp06;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp07;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp08;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp09;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp10;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp11;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp12;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp13;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp14;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp15;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp16;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp17;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp18;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp19;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp20;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp21;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp22;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp23;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp24;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp25;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp26;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp27;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp28;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp29;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp30;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp31;if (w) te_lightning2(world, w.origin, head.origin);
 			}
 		}
 		player = find(player, classname, "player");
@@ -2863,8 +3073,8 @@ void bot_serverframe()
 		else
 		{
 			// TODO: Make this check cleaner
-			local entity w = findchain(classname, "waypoint");
-			if(time - w.nextthink > 10)
+			local entity wp = findchain(classname, "waypoint");
+			if(time - wp.nextthink > 10)
 				waypoint_save_links();
 		}
 	}
@@ -2911,15 +3121,3 @@ void bot_serverframe()
 		bot_cvar_nextthink = time + 5;
 	}
 };
-
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_time);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_float1);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_float2);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_vec1);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_vec2);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_vec3);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_vec4);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_entity1);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(wlink);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(wpmincost);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(goalstack);
