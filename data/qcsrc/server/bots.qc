@@ -1914,6 +1914,9 @@ float navigation_routetogoal(entity e, vector startposition)
 	// see if there are waypoints describing a path to the item
 	if(e.classname != "waypoint" || (e.wpflags & WAYPOINTFLAG_PERSONAL))
 		e = e.nearestwaypoint;
+	else
+		e = e.enemy; // we already have added it, so...
+
 	if(e == world)
 		return FALSE;
 
