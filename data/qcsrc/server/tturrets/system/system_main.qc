@@ -927,6 +927,7 @@ void turrets_manager_think()
 * (unless you have a very good reason not to)
 * if the return value is 0, the turret should be removed.
 */
+float turret_count;
 float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base, string head)
 {
 	entity e,ee;
@@ -1293,7 +1294,8 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
     else
         self.think     = turret_think;
 
-    self.nextthink = time + self.ticrate;
+    ++turret_count;
+    self.nextthink = time + self.ticrate + (turret_count * sys_ticrate);
 
     self.tur_head.team = self.team;
     self.view_ofs = '0 0 0';
