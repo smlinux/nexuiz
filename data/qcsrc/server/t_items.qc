@@ -43,47 +43,61 @@ string Item_CounterFieldName(float it)
 
 void Item_Show (entity e, float mode)
 {
+	e.effects &~= EF_ADDITIVE | EF_STARDUST | EF_FULLBRIGHT;
 	if (mode > 0)
 	{
 		// make the item look normal, and be touchable
 		e.model = e.mdl;
 		e.solid = SOLID_TRIGGER;
-		e.effects &~= EF_ADDITIVE;
 		//e.colormod = '0 0 0';
 		e.alpha = 0;
 
 		// special cases
-		if (e.strength_finished || e.invincible_finished)
-			e.effects = e.effects | EF_ADDITIVE | EF_FULLBRIGHT;
 		if (cvar("g_fullbrightitems"))
 			e.effects = e.effects | EF_FULLBRIGHT;
+
+		e.spawnshieldtime = 1;
 	}
 	else if (mode < 0)
 	{
 		// hide the item completely
 		e.model = string_null;
 		e.solid = SOLID_NOT;
-		e.effects &~= EF_ADDITIVE;
 		//e.colormod = '0 0 0';
 		e.alpha = 0;
+
+		e.spawnshieldtime = 1;
+	}
+	else if((e.flags & FL_WEAPON) && (g_weapon_stay == 3))
+	{
+		// make the item translucent green and not touchable
+		e.model = e.mdl;
+		e.solid = SOLID_TRIGGER; // can STILL be picked up!
+		e.effects |= EF_STARDUST;
+		//e.colormod = '0.2 1 0.2';
+		e.alpha = 0.5;
+
+		// special cases
+		if (cvar("g_fullbrightitems"))
+			e.effects = e.effects | EF_FULLBRIGHT;
+
+		e.spawnshieldtime = 0; // field indicates whether picking it up may give you anything other than the weapon
 	}
 	else
 	{
 		// make the item translucent green and not touchable
 		e.model = e.mdl;
 		e.solid = SOLID_NOT;
-		// e.effects |= EF_ADDITIVE;
-			// we need this to prevent weird display because of
-			// missing depth sorting - or maybe not
 		//e.colormod = '0.2 1 0.2';
 		e.alpha = 0.15;
 
-		// special cases
-		if (e.strength_finished || e.invincible_finished)
-			e.effects = e.effects | EF_ADDITIVE | EF_FULLBRIGHT;
-		if (cvar("g_fullbrightitems"))
-			e.effects = e.effects | EF_FULLBRIGHT;
+		e.spawnshieldtime = 1;
 	}
+
+	if (e.strength_finished || e.invincible_finished)
+		e.effects |= EF_ADDITIVE | EF_FULLBRIGHT;
+	if (cvar("g_fullbrightitems"))
+		e.effects |= EF_FULLBRIGHT;
 
 	// relink entity (because solid may have changed)
 	setorigin(e, e.origin);
@@ -204,80 +218,82 @@ float Item_GiveTo(entity item, entity player)
 
 	if (g_minstagib)
 	{
-		if (item.ammo_fuel)
-		if (player.ammo_fuel < g_pickup_fuel_max)
+		if(item.spawnshieldtime)
 		{
-			pickedup = TRUE;
-			player.ammo_fuel = min(player.ammo_fuel + item.ammo_fuel, g_pickup_fuel_max);
-			player.pauserotfuel_finished = max(player.pauserotfuel_finished, time + cvar("g_balance_pause_fuel_rot"));
-		}
-		if((it = (item.items - (item.items & player.items)) & IT_PICKUPMASK))
-		{
-			pickedup = TRUE;
-			player.items |= it;
-			sprint (player, strcat("You got the ^2", item.netname, "\n"));
-		}
-
-		_switchweapon = TRUE;
-		if (item.ammo_cells)
-		{
-			pickedup = TRUE;
-			// play some cool sounds ;)
-			centerprint(player, "\n");
-			if (clienttype(player) == CLIENTTYPE_REAL)
+			if (item.ammo_fuel)
+			if (player.ammo_fuel < g_pickup_fuel_max)
 			{
-				if(player.health <= 5)
-					play2(player, "announcer/robotic/lastsecond.wav");
-				else if(player.health < 50)
-					play2(player, "announcer/robotic/narrowly.wav");
+				pickedup = TRUE;
+				player.ammo_fuel = min(player.ammo_fuel + item.ammo_fuel, g_pickup_fuel_max);
+				player.pauserotfuel_finished = max(player.pauserotfuel_finished, time + cvar("g_balance_pause_fuel_rot"));
 			}
-			// sound not available
-			// else if(item.items == IT_CELLS)
-			//	play2(player, "announce/robotic/ammo.wav");
+			if((it = (item.items - (item.items & player.items)) & IT_PICKUPMASK))
+			{
+				pickedup = TRUE;
+				player.items |= it;
+				sprint (player, strcat("You got the ^2", item.netname, "\n"));
+			}
 
-			if (item.weapons & WEPBIT_MINSTANEX)
-				W_GiveWeapon (player, WEP_MINSTANEX, "Nex");
+			_switchweapon = TRUE;
 			if (item.ammo_cells)
-				player.ammo_cells = min (player.ammo_cells + cvar("g_minstagib_ammo_drop"), 999);
-			player.health = 100;
-		}
+			{
+				pickedup = TRUE;
+				// play some cool sounds ;)
+				centerprint(player, "\n");
+				if (clienttype(player) == CLIENTTYPE_REAL)
+				{
+					if(player.health <= 5)
+						play2(player, "announcer/robotic/lastsecond.wav");
+					else if(player.health < 50)
+						play2(player, "announcer/robotic/narrowly.wav");
+				}
+				// sound not available
+				// else if(item.items == IT_CELLS)
+				//	play2(player, "announce/robotic/ammo.wav");
 
-		// extralife powerup
-		if (item.max_health)
-		{
-			pickedup = TRUE;
-			// sound not available
-			// play2(player, "announce/robotic/extra.ogg\nplay2 announce/robotic/_lives.wav");
-			player.armorvalue = player.armorvalue + cvar("g_minstagib_extralives");
-			sprint(player, "^3You picked up some extra lives\n");
-		}
+				if (item.weapons & WEPBIT_MINSTANEX)
+					W_GiveWeapon (player, WEP_MINSTANEX, "Nex");
+				if (item.ammo_cells)
+					player.ammo_cells = min (player.ammo_cells + cvar("g_minstagib_ammo_drop"), 999);
+				player.health = 100;
+			}
 
-		// invis powerup
-		if (item.strength_finished)
-		{
-			pickedup = TRUE;
-			// sound not available
-			// play2(player, "announce/robotic/invisible.wav");
-			player.strength_finished = max(player.strength_finished, time) + cvar("g_balance_powerup_strength_time");
-		}
+			// extralife powerup
+			if (item.max_health)
+			{
+				pickedup = TRUE;
+				// sound not available
+				// play2(player, "announce/robotic/extra.ogg\nplay2 announce/robotic/_lives.wav");
+				player.armorvalue = player.armorvalue + cvar("g_minstagib_extralives");
+				sprint(player, "^3You picked up some extra lives\n");
+			}
 
-		// speed powerup
-		if (item.invincible_finished)
-		{
-			pickedup = TRUE;
-			// sound not available
-			// play2(player, "announce/robotic/speed.wav");
-			player.invincible_finished = max(player.invincible_finished, time) + cvar("g_balance_powerup_strength_time");
-		}
+			// invis powerup
+			if (item.strength_finished)
+			{
+				pickedup = TRUE;
+				// sound not available
+				// play2(player, "announce/robotic/invisible.wav");
+				player.strength_finished = max(player.strength_finished, time) + cvar("g_balance_powerup_strength_time");
+			}
 
-		if (item.ammo_fuel)
-		if (player.ammo_fuel < g_pickup_fuel_max)
-		{
-			pickedup = TRUE;
-			player.ammo_fuel = min(player.ammo_fuel + item.ammo_fuel, g_pickup_fuel_max);
-			player.pauserotfuel_finished = max(player.pauserotfuel_finished, time + cvar("g_balance_pause_fuel_rot"));
-		}
+			// speed powerup
+			if (item.invincible_finished)
+			{
+				pickedup = TRUE;
+				// sound not available
+				// play2(player, "announce/robotic/speed.wav");
+				player.invincible_finished = max(player.invincible_finished, time) + cvar("g_balance_powerup_strength_time");
+			}
 
+			if (item.ammo_fuel)
+			if (player.ammo_fuel < g_pickup_fuel_max)
+			{
+				pickedup = TRUE;
+				player.ammo_fuel = min(player.ammo_fuel + item.ammo_fuel, g_pickup_fuel_max);
+				player.pauserotfuel_finished = max(player.pauserotfuel_finished, time + cvar("g_balance_pause_fuel_rot"));
+			}
+		}
 	}
 	else
 	{
@@ -307,36 +323,39 @@ float Item_GiveTo(entity item, entity player)
 		if not(player.weapons & W_WeaponBit(player.switchweapon))
 			_switchweapon = TRUE;
 
-		if (item.ammo_shells)
-		if (player.ammo_shells < g_pickup_shells_max)
+		if(item.spawnshieldtime)
 		{
-			pickedup = TRUE;
-			player.ammo_shells = min (player.ammo_shells + item.ammo_shells, g_pickup_shells_max);
-		}
-		if (item.ammo_nails)
-		if (player.ammo_nails < g_pickup_nails_max)
-		{
-			pickedup = TRUE;
-			player.ammo_nails = min (player.ammo_nails + item.ammo_nails, g_pickup_nails_max);
-		}
-		if (item.ammo_rockets)
-		if (player.ammo_rockets < g_pickup_rockets_max)
-		{
-			pickedup = TRUE;
-			player.ammo_rockets = min (player.ammo_rockets + item.ammo_rockets, g_pickup_rockets_max);
-		}
-		if (item.ammo_cells)
-		if (player.ammo_cells < g_pickup_cells_max)
-		{
-			pickedup = TRUE;
-			player.ammo_cells = min (player.ammo_cells + item.ammo_cells, g_pickup_cells_max);
-		}
-		if (item.ammo_fuel)
-		if (player.ammo_fuel < g_pickup_fuel_max)
-		{
-			pickedup = TRUE;
-			player.ammo_fuel = min(player.ammo_fuel + item.ammo_fuel, g_pickup_fuel_max);
-			player.pauserotfuel_finished = max(player.pauserotfuel_finished, time + cvar("g_balance_pause_fuel_rot"));
+			if (item.ammo_shells)
+			if (player.ammo_shells < g_pickup_shells_max)
+			{
+				pickedup = TRUE;
+				player.ammo_shells = min (player.ammo_shells + item.ammo_shells, g_pickup_shells_max);
+			}
+			if (item.ammo_nails)
+			if (player.ammo_nails < g_pickup_nails_max)
+			{
+				pickedup = TRUE;
+				player.ammo_nails = min (player.ammo_nails + item.ammo_nails, g_pickup_nails_max);
+			}
+			if (item.ammo_rockets)
+			if (player.ammo_rockets < g_pickup_rockets_max)
+			{
+				pickedup = TRUE;
+				player.ammo_rockets = min (player.ammo_rockets + item.ammo_rockets, g_pickup_rockets_max);
+			}
+			if (item.ammo_cells)
+			if (player.ammo_cells < g_pickup_cells_max)
+			{
+				pickedup = TRUE;
+				player.ammo_cells = min (player.ammo_cells + item.ammo_cells, g_pickup_cells_max);
+			}
+			if (item.ammo_fuel)
+			if (player.ammo_fuel < g_pickup_fuel_max)
+			{
+				pickedup = TRUE;
+				player.ammo_fuel = min(player.ammo_fuel + item.ammo_fuel, g_pickup_fuel_max);
+				player.pauserotfuel_finished = max(player.pauserotfuel_finished, time + cvar("g_balance_pause_fuel_rot"));
+			}
 		}
 
 		if (item.flags & FL_WEAPON)
@@ -358,40 +377,43 @@ float Item_GiveTo(entity item, entity player)
 			sprint (player, strcat("You got the ^2", item.netname, "\n"));
 		}
 
-		if (item.strength_finished)
+		if(item.spawnshieldtime)
 		{
-			pickedup = TRUE;
-			player.strength_finished = max(player.strength_finished, time) + cvar("g_balance_powerup_strength_time");
-		}
-		if (item.invincible_finished)
-		{
-			pickedup = TRUE;
-			player.invincible_finished = max(player.invincible_finished, time) + cvar("g_balance_powerup_invincible_time");
-		}
-		//if (item.speed_finished)
-		//{
-		//	pickedup = TRUE;
-		//	player.speed_finished = max(player.speed_finished, time) + cvar("g_balance_powerup_speed_time");
-		//}
-		//if (item.slowmo_finished)
-		//{
-		//	pickedup = TRUE;
-		//	player.slowmo_finished = max(player.slowmo_finished, time) + (cvar("g_balance_powerup_slowmo_time") * cvar("g_balance_powerup_slowmo_speed"));
-		//}
+			if (item.strength_finished)
+			{
+				pickedup = TRUE;
+				player.strength_finished = max(player.strength_finished, time) + cvar("g_balance_powerup_strength_time");
+			}
+			if (item.invincible_finished)
+			{
+				pickedup = TRUE;
+				player.invincible_finished = max(player.invincible_finished, time) + cvar("g_balance_powerup_invincible_time");
+			}
+			//if (item.speed_finished)
+			//{
+			//	pickedup = TRUE;
+			//	player.speed_finished = max(player.speed_finished, time) + cvar("g_balance_powerup_speed_time");
+			//}
+			//if (item.slowmo_finished)
+			//{
+			//	pickedup = TRUE;
+			//	player.slowmo_finished = max(player.slowmo_finished, time) + (cvar("g_balance_powerup_slowmo_time") * cvar("g_balance_powerup_slowmo_speed"));
+			//}
 
-		if (item.health)
-		if (player.health < item.max_health)
-		{
-			pickedup = TRUE;
-			player.health = min(player.health + item.health, item.max_health);
-			player.pauserothealth_finished = max(player.pauserothealth_finished, time + cvar("g_balance_pause_health_rot"));
-		}
-		if (item.armorvalue)
-		if (player.armorvalue < item.max_armorvalue)
-		{
-			pickedup = TRUE;
-			player.armorvalue = min(player.armorvalue + item.armorvalue, item.max_armorvalue);
-			player.pauserotarmor_finished = max(player.pauserotarmor_finished, time + cvar("g_balance_pause_armor_rot"));
+			if (item.health)
+			if (player.health < item.max_health)
+			{
+				pickedup = TRUE;
+				player.health = min(player.health + item.health, item.max_health);
+				player.pauserothealth_finished = max(player.pauserothealth_finished, time + cvar("g_balance_pause_health_rot"));
+			}
+			if (item.armorvalue)
+			if (player.armorvalue < item.max_armorvalue)
+			{
+				pickedup = TRUE;
+				player.armorvalue = min(player.armorvalue + item.armorvalue, item.max_armorvalue);
+				player.pauserotarmor_finished = max(player.pauserotarmor_finished, time + cvar("g_balance_pause_armor_rot"));
+			}
 		}
 	}
 
@@ -437,7 +459,9 @@ void Item_Touch (void)
 
 	if (self.classname == "droppedweapon")
 		remove (self);
-	else if((self.flags & FL_WEAPON) && !(self.flags & FL_NO_WEAPON_STAY) && g_weapon_stay)
+	else if not(self.spawnshieldtime)
+		return;
+	else if((self.flags & FL_WEAPON) && !(self.flags & FL_NO_WEAPON_STAY) && (g_weapon_stay == 1 || g_weapon_stay == 2))
 		return;
 	else
 	{
@@ -522,7 +546,7 @@ float weapon_pickupevalfunc(entity player, entity item)
 	if(player.weapons & item.weapons == item.weapons)
 	{
 		// If I can pick it up
-		if(g_weapon_stay)
+		if(g_weapon_stay == 1 || g_weapon_stay == 2 || !item.spawnshieldtime)
 			c = 0;
 		else if(player.ammo_cells || player.ammo_shells || player.ammo_nails || player.ammo_rockets)
 		{
