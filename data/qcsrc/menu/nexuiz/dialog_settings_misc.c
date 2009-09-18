@@ -65,6 +65,10 @@ void fillNexuizMiscSettingsTab(entity me)
 			setDependent(e, "cl_showacceleration", 1, 1);
 	me.TR(me);
 	me.TR(me);
+		me.TDempty(me, 0.2);
+		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(0, "host_sleep", "Minimize input latency"));
+	me.TR(me);
+	me.TR(me);
 		me.TDempty(me, 0.5);
 		me.TD(me, 1, 2, e = makeNexuizButton("Advanced settings...", '0 0 0'));
 			e.onClick = DialogOpenButton_Click;
