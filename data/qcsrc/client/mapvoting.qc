@@ -160,7 +160,7 @@ void MapVote_Draw()
 	pos_y += 22;
 	pos_x = xmin;
 
-	drawfont = sbar_bigfont; // FIXME change this to sbar_font when it gets a SANE size later
+	drawfont = sbar_font;
 	
 	// base for multi-column stuff...
 	ymin = pos_y;
