@@ -411,13 +411,16 @@ void CPM_PM_Aircontrol(vector wishdir, float wishspeed)
 	self.velocity_z = zspeed;
 }
 
-void PM_Accelerate(vector wishdir, float wishspeed, float accel, float accelqw, float sidefric)
+void PM_Accelerate(vector wishdir, float wishspeed, float wishspeed0, float accel, float accelqw, float sidefric)
 {
 	float vel_straight;
 	float vel_z;
 	vector vel_perpend;
 	float addspeed;
 	float savespeed;
+
+	if(cvar("sv_gameplayfix_q2airaccelerate"))
+		wishspeed0 = wishspeed;
 
 	savespeed = self.velocity * self.velocity;
 
@@ -427,9 +430,9 @@ void PM_Accelerate(vector wishdir, float wishspeed, float accel, float accelqw, 
 
 	addspeed = wishspeed - vel_straight;
 	if(addspeed > 0)
-		vel_straight = vel_straight + min(addspeed, accel * frametime * wishspeed) * accelqw;
+		vel_straight = vel_straight + min(addspeed, accel * frametime * wishspeed0) * accelqw;
 	if(wishspeed > 0)
-		vel_straight = vel_straight + min(wishspeed, accel * frametime * wishspeed) * (1 - accelqw);
+		vel_straight = vel_straight + min(wishspeed, accel * frametime * wishspeed0) * (1 - accelqw);
 
 	if(sidefric < 0 && (vel_perpend*vel_perpend))
 	{
@@ -856,7 +859,7 @@ void SV_PlayerPhysics()
 		if (wishspeed > sv_maxspeed*maxspd_mod)
 			wishspeed = sv_maxspeed*maxspd_mod;
 		if (time >= self.teleport_time)
-			PM_Accelerate(wishdir, wishspeed, sv_accelerate*maxspd_mod, 1, 0);
+			PM_Accelerate(wishdir, wishspeed, wishspeed, sv_accelerate*maxspd_mod, 1, 0);
 	}
 	else if (self.waterlevel >= WATERLEVEL_SWIMMING)
 	{
@@ -879,7 +882,7 @@ void SV_PlayerPhysics()
 		self.velocity = self.velocity * (1 - frametime * sv_friction);
 
 		// water acceleration
-		PM_Accelerate(wishdir, wishspeed, sv_accelerate*maxspd_mod, 1, 0);
+		PM_Accelerate(wishdir, wishspeed, wishspeed, sv_accelerate*maxspd_mod, 1, 0);
 	}
 	else if (time < self.ladder_time)
 	{
@@ -922,7 +925,7 @@ void SV_PlayerPhysics()
 		if (time >= self.teleport_time)
 		{
 			// water acceleration
-			PM_Accelerate(wishdir, wishspeed, sv_accelerate*maxspd_mod, 1, 0);
+			PM_Accelerate(wishdir, wishspeed, wishspeed, sv_accelerate*maxspd_mod, 1, 0);
 		}
 	}
 	else if ((self.items & IT_JETPACK) && self.BUTTON_HOOK && (!cvar("g_jetpack_fuel") || self.ammo_fuel >= 0.01 || self.items & IT_UNLIMITED_WEAPON_AMMO))
@@ -1082,10 +1085,11 @@ void SV_PlayerPhysics()
 		if (self.crouch)
 			wishspeed = wishspeed * 0.5;
 		if (time >= self.teleport_time)
-			PM_Accelerate(wishdir, wishspeed, sv_accelerate*maxspd_mod, 1, 0);
+			PM_Accelerate(wishdir, wishspeed, wishspeed, sv_accelerate*maxspd_mod, 1, 0);
 	}
 	else
 	{
+		float wishspeed0;
 		// we get here if we ran out of ammo
 		if((self.items & IT_JETPACK) && self.BUTTON_HOOK && !(buttons_prev & 32))
 			sprint(self, "You don't have any fuel for the ^2Jetpack\n");
@@ -1105,7 +1109,9 @@ void SV_PlayerPhysics()
 		wishvel = v_forward * self.movement_x + v_right * self.movement_y;
 		// acceleration
 		wishdir = normalize(wishvel);
-		wishspeed = vlen(wishvel);
+		wishspeed = wishspeed0 = vlen(wishvel);
+		if (wishspeed0 > sv_maxspeed*maxspd_mod)
+			wishspeed0 = sv_maxspeed*maxspd_mod;
 		if (wishspeed > maxairspd)
 			wishspeed = maxairspd;
 		if (self.crouch)
@@ -1144,7 +1150,7 @@ void SV_PlayerPhysics()
 			if(sv_warsowbunny_turnaccel && accelerating && self.movement_y == 0 && self.movement_x != 0)
 				PM_AirAccelerate(wishdir, wishspeed);
 			else
-				PM_Accelerate(wishdir, wishspeed, airaccel, airaccelqw, sv_airaccel_sideways_friction / maxairspd);
+				PM_Accelerate(wishdir, wishspeed, wishspeed0, airaccel, airaccelqw, sv_airaccel_sideways_friction / maxairspd);
 
 			if(sv_aircontrol)
 				CPM_PM_Aircontrol(wishdir, wishspeed2);
