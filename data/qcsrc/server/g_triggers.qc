@@ -1247,7 +1247,7 @@ void spawnfunc_trigger_impulse()
 	EXACTTRIGGER_INIT;
     if(self.radius)
     {
-        if(!self.strength) self.strength = 2000;
+        if(!self.strength) self.strength = 2000 * cvar("g_triggerimpulse_radial_multiplier");
         setorigin(self, self.origin);
         setsize(self, '-1 -1 -1' * self.radius,'1 1 1' * self.radius);
         self.touch = trigger_impulse_touch3;
@@ -1256,12 +1256,13 @@ void spawnfunc_trigger_impulse()
     {
         if(self.target)
         {
-            if(!self.strength) self.strength = 950;
+            if(!self.strength) self.strength = 950 * cvar("g_triggerimpulse_directional_multiplier");
             self.touch = trigger_impulse_touch1;
         }
         else
         {
             if(!self.strength) self.strength = 0.9;
+			self.strength = pow(self.strength, cvar("g_triggerimpulse_accel_power")) * cvar("g_triggerimpulse_accel_multiplier");
             self.touch = trigger_impulse_touch2;
         }
     }
