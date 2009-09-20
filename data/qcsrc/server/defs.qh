@@ -620,3 +620,4 @@ float client_cefc_accumulatortime;
 .float restriction;
 
 .entity clientdata;
+.entity personal;

@@ -1,6 +1,3 @@
-.vector personal_v_angle; // view angles to restore on reset impulse for CTF speedrun
-.vector personal_velocity; // velocity to restore on reset impulse for CTF speedrun
-
 void CopyBody(float keepvelocity);
 
 // changes by LordHavoc on 03/30/04
@@ -195,8 +192,33 @@ void ImpulseCommands (void)
 					WaypointSprite_UpdateTeamRadar(wp, RADARICON_WAYPOINT, '0 1 1');
 					WaypointSprite_Ping(wp);
 				}
-				self.personal_v_angle = self.v_angle;
-				self.personal_velocity = self.velocity;
+				if(sv_cheats)
+				{
+					if(!self.personal)
+					{
+						self.personal = spawn();
+						self.personal.classname = "personal_wp";
+					}
+					self.personal.origin = self.origin;
+					self.personal.v_angle = self.v_angle;
+					self.personal.velocity = self.velocity;
+					self.personal.ammo_rockets = self.ammo_rockets;
+					self.personal.ammo_nails = self.ammo_nails;
+					self.personal.ammo_cells = self.ammo_cells;
+					self.personal.ammo_shells = self.ammo_shells;
+					self.personal.ammo_fuel = self.ammo_fuel;
+					self.personal.health = self.health;
+					self.personal.armorvalue = self.armorvalue;
+					self.personal.weapons = self.weapons;
+					self.personal.items = self.items;
+					self.personal.pauserotarmor_finished = self.pauserotarmor_finished;
+					self.personal.pauserothealth_finished = self.pauserothealth_finished;
+					self.personal.pauserotfuel_finished = self.pauserotfuel_finished;
+					self.personal.pauseregen_finished = self.pauseregen_finished;
+					self.personal.strength_finished = self.strength_finished;
+					self.personal.invincible_finished = self.invincible_finished;
+					self.personal.teleport_time = time;
+				}
 				sprint(self, "personal waypoint spawned at location\n");
 				break;
 			case 31:
@@ -206,8 +228,6 @@ void ImpulseCommands (void)
 					WaypointSprite_UpdateTeamRadar(wp, RADARICON_WAYPOINT, '0 1 1');
 					WaypointSprite_Ping(wp);
 				}
-				self.personal_v_angle = self.v_angle;
-				self.personal_velocity = '0 0 0';
 				sprint(self, "personal waypoint spawned at crosshair\n");
 				break;
 			case 32:
@@ -219,8 +239,6 @@ void ImpulseCommands (void)
 						WaypointSprite_UpdateTeamRadar(wp, RADARICON_WAYPOINT, '0 1 1');
 						WaypointSprite_Ping(wp);
 					}
-					self.personal_v_angle = self.v_angle;
-					self.personal_velocity = '0 0 0';
 					sprint(self, "personal waypoint spawned at death location\n");
 				}
 				break;
@@ -356,10 +374,10 @@ void ImpulseCommands (void)
 						}
 						break;
 					case 141:
-						if(self.waypointsprite_deployed_personal)
+						if(self.personal)
 						{
 							self.speedrunning = TRUE;
-							tracebox(self.waypointsprite_deployed_personal.origin, self.mins, self.maxs, self.waypointsprite_deployed_personal.origin, MOVE_WORLDONLY, self);
+							tracebox(self.personal.origin, self.mins, self.maxs, self.personal.origin, MOVE_WORLDONLY, self);
 							if(trace_startsolid)
 							{
 								sprint(self, "Cannot move there, cheater - only waypoints set using g_waypointsprite_personal work\n");
@@ -367,9 +385,9 @@ void ImpulseCommands (void)
 							else
 							{
 								// Abort speedrun, teleport back
-								setorigin(self, self.waypointsprite_deployed_personal.origin);
-								self.oldvelocity = self.velocity = self.personal_velocity;
-								self.angles = self.personal_v_angle;
+								setorigin(self, self.personal.origin);
+								self.oldvelocity = self.velocity = self.personal.velocity;
+								self.angles = self.personal.v_angle;
 								self.fixangle = TRUE;
 								if(self.flagcarried)
 								{
@@ -377,18 +395,41 @@ void ImpulseCommands (void)
 									ReturnFlag(self.flagcarried);
 								}
 							}
-							self.ammo_rockets = 999;
-							self.ammo_nails = 999;
-							self.ammo_cells = 999;
-							self.ammo_shells = 999;
-							self.ammo_fuel = 999;
-							self.health = start_health;
-							self.armorvalue = start_armorvalue;
-							self.weapons |= weaponsInMap;
-							self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
-							self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
-							self.pauserotfuel_finished = time + cvar("g_balance_pause_fuel_rot_spawn");
-							self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
+							if(g_ctf)
+							{
+								self.ammo_rockets = 999;
+								self.ammo_nails = 999;
+								self.ammo_cells = 999;
+								self.ammo_shells = 999;
+								self.ammo_fuel = 999;
+								self.health = start_health;
+								self.armorvalue = start_armorvalue;
+								self.weapons |= weaponsInMap;
+								self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
+								self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
+								self.pauserotfuel_finished = time + cvar("g_balance_pause_fuel_rot_spawn");
+								self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
+								self.strength_finished = 0;
+								self.invincible_finished = 0;
+							}
+							else
+							{
+								self.ammo_rockets = self.personal.ammo_rockets;
+								self.ammo_nails = self.personal.ammo_nails;
+								self.ammo_cells = self.personal.ammo_cells;
+								self.ammo_shells = self.personal.ammo_shells;
+								self.ammo_fuel = self.personal.ammo_fuel;
+								self.health = self.personal.health;
+								self.armorvalue = self.personal.armorvalue;
+								self.weapons = self.personal.weapons;
+								self.items = self.personal.items;
+								self.pauserotarmor_finished = time + self.personal.pauserotarmor_finished - self.personal.teleport_time;
+								self.pauserothealth_finished = time + self.personal.pauserothealth_finished - self.personal.teleport_time;
+								self.pauserotfuel_finished = time + self.personal.pauserotfuel_finished - self.personal.teleport_time;
+								self.pauseregen_finished = time + self.personal.pauseregen_finished - self.personal.teleport_time;
+								self.strength_finished = time + self.personal.strength_finished - self.personal.teleport_time;
+								self.invincible_finished = time + self.personal.invincible_finished - self.personal.teleport_time;
+							}
 						}
 						else if(self.deadflag != DEAD_NO)
 							sprint(self, "UR DEAD AHAHAH))\n");

@@ -1537,6 +1537,9 @@ void ClientDisconnect (void)
 
 	ClearPlayerSounds();
 
+	if(self.personal)
+		remove(self.personal);
+
 	self.playerid = 0;
 	ReadyCount();
 
@@ -2383,36 +2386,48 @@ void PlayerPreThink (void)
 		if (self.deadflag != DEAD_NO)
 		{
 			float button_pressed, force_respawn;
-			if(frametime)
-				player_anim();
-			button_pressed = (self.BUTTON_ATCK || self.BUTTON_JUMP || self.BUTTON_ATCK2 || self.BUTTON_HOOK || self.BUTTON_USE);
-			force_respawn = (g_lms || cvar("g_forced_respawn"));
-			if (self.deadflag == DEAD_DYING)
-			{
-				if(force_respawn)
-					self.deadflag = DEAD_RESPAWNING;
-				else if(!button_pressed)
-					self.deadflag = DEAD_DEAD;
-			}
-			else if (self.deadflag == DEAD_DEAD)
-			{
-				if(button_pressed)
-					self.deadflag = DEAD_RESPAWNABLE;
-			}
-			else if (self.deadflag == DEAD_RESPAWNABLE)
-			{
-				if(!button_pressed)
-					self.deadflag = DEAD_RESPAWNING;
-			}
-			else if (self.deadflag == DEAD_RESPAWNING)
+			if(self.personal)
 			{
 				if(time > self.death_time)
 				{
 					self.death_time = time + 1; // only retry once a second
 					respawn();
+					self.impulse = 141;
 				}
 			}
-			ShowRespawnCountdown();
+			else
+			{
+				if(frametime)
+					player_anim();
+				button_pressed = (self.BUTTON_ATCK || self.BUTTON_JUMP || self.BUTTON_ATCK2 || self.BUTTON_HOOK || self.BUTTON_USE);
+				force_respawn = (g_lms || cvar("g_forced_respawn"));
+				if (self.deadflag == DEAD_DYING)
+				{
+					if(force_respawn)
+						self.deadflag = DEAD_RESPAWNING;
+					else if(!button_pressed)
+						self.deadflag = DEAD_DEAD;
+				}
+				else if (self.deadflag == DEAD_DEAD)
+				{
+					if(button_pressed)
+						self.deadflag = DEAD_RESPAWNABLE;
+				}
+				else if (self.deadflag == DEAD_RESPAWNABLE)
+				{
+					if(!button_pressed)
+						self.deadflag = DEAD_RESPAWNING;
+				}
+				else if (self.deadflag == DEAD_RESPAWNING)
+				{
+					if(time > self.death_time)
+					{
+						self.death_time = time + 1; // only retry once a second
+						respawn();
+					}
+				}
+				ShowRespawnCountdown();
+			}
 			return;
 		}
 
