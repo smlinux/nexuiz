@@ -1,71 +1,151 @@
-.void() havocbot_role;
-void() havocbot_chooserole;
-.float havocbot_keyboardskill;
-.float facingwalltime, ignoregoaltime;
-.entity ignoregoal;
-.float lastfiredweapon;
-.float lastcombotime;
-.float havocbot_blockhead;
+#include "havocbot.qh"
+#include "role_ctf.qc"
+#include "role_onslaught.qc"
+#include "role_keyhunt.qc"
+#include "roles.qc"
 
-#ifdef DEBUG_BOT_GOALSTACK
-void debuggoalstack();
-#endif
-
-vector havocbot_dodge()
+void havocbot_ai()
 {
-	// LordHavoc: disabled because this is too expensive
-	return '0 0 0';
-	/*
-	local entity head;
-	local vector dodge, v, n;
-	local float danger, bestdanger, vl, d;
-	dodge = '0 0 0';
-	bestdanger = -20;
-	// check for dangerous objects near bot or approaching bot
-	head = findchainfloat(bot_dodge, TRUE);
-	while(head)
+	if(self.draggedby)
+		return;
+
+	if(bot_execute_commands())
+		return;
+
+	if (bot_strategytoken == self)
+	if (!bot_strategytoken_taken)
 	{
-		if (head.owner != self)
+		if(self.havocbot_blockhead)
 		{
-			vl = vlen(head.velocity);
-			if (vl > sv_maxspeed * 0.3)
+			self.havocbot_blockhead = FALSE;
+		}
+		else
+		{
+			self.havocbot_role();
+		}
+
+		// TODO: tracewalk() should take care of this job (better path finding under water)
+		// if we don't have a goal and we're under water look for a waypoint near the "shore" and push it
+		if(self.deadflag != DEAD_NO)
+		if(self.goalcurrent==world)
+		if(self.waterlevel==WATERLEVEL_SWIMMING || self.aistatus & AI_STATUS_OUT_WATER)
+		{
+			// Look for the closest waypoint out of water
+			local entity newgoal, head;
+			local float bestdistance, distance;
+
+			newgoal = world;
+			bestdistance = 10000;
+			for (head = findchain(classname, "waypoint"); head; head = head.chain)
 			{
-				n = normalize(head.velocity);
-				v = self.origin - head.origin;
-				d = v * n;
-				if (d > (0 - head.bot_dodgerating))
-				if (d < (vl * 0.2 + head.bot_dodgerating))
+				distance = vlen(head.origin - self.origin);
+				if(distance>10000)
+					continue;
+
+				if(head.origin_z < self.origin_z)
+					continue;
+
+				if(head.origin_z - self.origin_z - self.view_ofs_z > 100)
+					continue;
+
+				if (pointcontents(head.origin + head.maxs + '0 0 1') != CONTENT_EMPTY)
+					continue;
+
+				traceline(self.origin + self.view_ofs , head.origin, TRUE, head);
+
+				if(trace_fraction<1)
+					continue;
+
+				if(distance<bestdistance)
 				{
-					// calculate direction and distance from the flight path, by removing the forward axis
-					v = v - (n * (v * n));
-					danger = head.bot_dodgerating - vlen(v);
-					if (bestdanger < danger)
-					{
-						bestdanger = danger;
-						// dodge to the side of the object
-						dodge = normalize(v);
-					}
+					newgoal = head;
+					bestdistance = distance;
 				}
+			}
+
+			if(newgoal)
+			{
+			//	te_wizspike(newgoal.origin);
+				navigation_pushroute(newgoal);
+			}
+		}
+
+		// token has been used this frame
+		bot_strategytoken_taken = TRUE;
+	}
+
+	if(self.deadflag != DEAD_NO)
+		return;
+
+	havocbot_chooseenemy();
+	if (self.bot_chooseweapontime < time )
+	{
+		self.bot_chooseweapontime = time + cvar("bot_ai_chooseweaponinterval");
+		havocbot_chooseweapon();
+	}
+	havocbot_aim();
+	lag_update();
+	if (self.bot_aimtarg)
+	{
+		self.aistatus |= AI_STATUS_ATTACKING;
+		self.aistatus &~= AI_STATUS_ROAMING;
+
+		if(self.weapons)
+		{
+			weapon_action(self.weapon, WR_AIM);
+			if (cvar("bot_nofire") || IS_INDEPENDENT_PLAYER(self))
+			{
+				self.BUTTON_ATCK = FALSE;
+				self.BUTTON_ATCK2 = FALSE;
 			}
 			else
 			{
-				danger = head.bot_dodgerating - vlen(head.origin - self.origin);
-				if (bestdanger < danger)
-				{
-					bestdanger = danger;
-					dodge = normalize(self.origin - head.origin);
-				}
+				if(self.BUTTON_ATCK||self.BUTTON_ATCK2)
+					self.lastfiredweapon = self.weapon;
 			}
 		}
-		head = head.chain;
+		else
+		{
+			if(self.bot_aimtarg.classname=="player")
+				bot_aimdir(self.bot_aimtarg.origin + self.bot_aimtarg.view_ofs - self.origin - self.view_ofs , -1);
+		}
 	}
-	return dodge;
-	*/
+	else if (self.goalcurrent)
+	{
+		self.aistatus |= AI_STATUS_ROAMING;
+		self.aistatus &~= AI_STATUS_ATTACKING;
+
+		local vector now,v,next;//,heading;
+		local float aimdistance,skillblend,distanceblend,blend;
+		next = now = self.goalcurrent.origin - (self.origin + self.view_ofs);
+		aimdistance = vlen(now);
+		//heading = self.velocity;
+		//dprint(self.goalstack01.classname,etos(self.goalstack01),"\n");
+		if(
+			self.goalstack01 != self && self.goalstack01 != world && self.aistatus & AI_STATUS_RUNNING == 0 &&
+			!(self.goalcurrent.wpflags & WAYPOINTFLAG_TELEPORT)
+		)
+			next = self.goalstack01.origin - (self.origin + self.view_ofs);
+
+		skillblend=bound(0,(skill-2.5)*0.5,1); //lower skill player can't preturn
+		distanceblend=bound(0,aimdistance/cvar("bot_ai_keyboard_distance"),1);
+		blend = skillblend * (1-distanceblend);
+		//v = (now * (distanceblend) + next * (1-distanceblend)) * (skillblend) + now * (1-skillblend);
+		//v = now * (distanceblend) * (skillblend) + next * (1-distanceblend) * (skillblend) + now * (1-skillblend);
+		//v = now * ((1-skillblend) + (distanceblend) * (skillblend)) + next * (1-distanceblend) * (skillblend);
+		v = now + blend * (next - now);
+		//dprint(etos(self), " ");
+		//dprint(vtos(now), ":", vtos(next), "=", vtos(v), " (blend ", ftos(blend), ")\n");
+		//v = now * (distanceblend) + next * (1-distanceblend);
+		if (self.waterlevel < WATERLEVEL_SWIMMING)
+			v_z = 0;
+		//dprint("walk at:", vtos(v), "\n");
+		//te_lightning2(world, self.origin, self.goalcurrent.origin);
+		bot_aimdir(v, -1);
+	}
+	havocbot_movetogoal();
 };
 
-.float havocbot_keyboardtime;
-.float havocbot_ducktime;
-.vector havocbot_keyboard;
 void havocbot_keyboard_movement(vector destorg)
 {
 	local vector keyboard;
@@ -138,9 +218,6 @@ void havocbot_keyboard_movement(vector destorg)
 	self.movement = self.movement + (keyboard - self.movement) * blend;
 };
 
-.entity bot_lastseengoal;
-.float bot_timelastseengoal;
-.float bot_canruntogoal;
 void havocbot_bunnyhop(vector dir)
 {
 	local float bunnyhopdistance;
@@ -282,13 +359,6 @@ void havocbot_bunnyhop(vector dir)
 	}
 };
 
-//.float havocbotignoretime;
-//.vector bot_dodgevector;
-//.float bot_dodgevector_time;
-//.float bot_dodgevector_jumpbutton;
-.float ladder_time;
-.entity ladder_entity;
-.float rocketjumptime;
 void havocbot_movetogoal()
 {
 	local vector destorg;
@@ -741,8 +811,6 @@ void havocbot_movetogoal()
 	if (((dodge * v_up) < 0) && random()*frametime >= 0.5*bound(0,(10-skill)*0.1,1)) self.havocbot_ducktime=time+0.3/bound(0.1,skill,10);
 };
 
-.float havocbot_chooseenemy_finished;
-.float havocbot_stickenemy;
 void havocbot_chooseenemy()
 {
 	local entity head, best, head2;
@@ -835,8 +903,6 @@ void havocbot_chooseenemy()
 	self.havocbot_stickenemy = TRUE;
 };
 
-.float bot_chooseweapontime;
-float(entity e) w_getbestweapon;
 void havocbot_chooseweapon()
 {
 	local float i;
@@ -1079,7 +1145,6 @@ void havocbot_chooseweapon()
 #endif
 };
 
-.float nextaim;
 void havocbot_aim()
 {
 	local vector selfvel, enemyvel;
@@ -1102,151 +1167,6 @@ void havocbot_aim()
 		lag_additem(time + self.ping, 0, 0, world, self.origin, selfvel, self.goalcurrent.origin, '0 0 0');
 };
 
-.entity draggedby;
-void havocbot_ai()
-{
-	if(self.draggedby)
-		return;
-
-	if(bot_execute_commands())
-		return;
-
-	if (bot_strategytoken == self)
-	if (!bot_strategytoken_taken)
-	{
-		if(self.havocbot_blockhead)
-		{
-			self.havocbot_blockhead = FALSE;
-		}
-		else
-		{
-			self.havocbot_role();
-		}
-
-		// TODO: tracewalk() should take care of this job (better path finding under water)
-		// if we don't have a goal and we're under water look for a waypoint near the "shore" and push it
-		if(self.deadflag != DEAD_NO)
-		if(self.goalcurrent==world)
-		if(self.waterlevel==WATERLEVEL_SWIMMING || self.aistatus & AI_STATUS_OUT_WATER)
-		{
-			// Look for the closest waypoint out of water
-			local entity newgoal, head;
-			local float bestdistance, distance;
-
-			newgoal = world;
-			bestdistance = 10000;
-			for (head = findchain(classname, "waypoint"); head; head = head.chain)
-			{
-				distance = vlen(head.origin - self.origin);
-				if(distance>10000)
-					continue;
-
-				if(head.origin_z < self.origin_z)
-					continue;
-
-				if(head.origin_z - self.origin_z - self.view_ofs_z > 100)
-					continue;
-
-				if (pointcontents(head.origin + head.maxs + '0 0 1') != CONTENT_EMPTY)
-					continue;
-
-				traceline(self.origin + self.view_ofs , head.origin, TRUE, head);
-
-				if(trace_fraction<1)
-					continue;
-
-				if(distance<bestdistance)
-				{
-					newgoal = head;
-					bestdistance = distance;
-				}
-			}
-
-			if(newgoal)
-			{
-			//	te_wizspike(newgoal.origin);
-				navigation_pushroute(newgoal);
-			}
-		}
-
-		// token has been used this frame
-		bot_strategytoken_taken = TRUE;
-	}
-
-	if(self.deadflag != DEAD_NO)
-		return;
-
-	havocbot_chooseenemy();
-	if (self.bot_chooseweapontime < time )
-	{
-		self.bot_chooseweapontime = time + cvar("bot_ai_chooseweaponinterval");
-		havocbot_chooseweapon();
-	}
-	havocbot_aim();
-	lag_update();
-	if (self.bot_aimtarg)
-	{
-		self.aistatus |= AI_STATUS_ATTACKING;
-		self.aistatus &~= AI_STATUS_ROAMING;
-
-		if(self.weapons)
-		{
-			weapon_action(self.weapon, WR_AIM);
-			if (cvar("bot_nofire") || IS_INDEPENDENT_PLAYER(self))
-			{
-				self.BUTTON_ATCK = FALSE;
-				self.BUTTON_ATCK2 = FALSE;
-			}
-			else
-			{
-				if(self.BUTTON_ATCK||self.BUTTON_ATCK2)
-					self.lastfiredweapon = self.weapon;
-			}
-		}
-		else
-		{
-			if(self.bot_aimtarg.classname=="player")
-				bot_aimdir(self.bot_aimtarg.origin + self.bot_aimtarg.view_ofs - self.origin - self.view_ofs , -1);
-		}
-	}
-	else if (self.goalcurrent)
-	{
-		self.aistatus |= AI_STATUS_ROAMING;
-		self.aistatus &~= AI_STATUS_ATTACKING;
-
-		local vector now,v,next;//,heading;
-		local float aimdistance,skillblend,distanceblend,blend;
-		next = now = self.goalcurrent.origin - (self.origin + self.view_ofs);
-		aimdistance = vlen(now);
-		//heading = self.velocity;
-		//dprint(self.goalstack01.classname,etos(self.goalstack01),"\n");
-		if(
-			self.goalstack01 != self && self.goalstack01 != world && self.aistatus & AI_STATUS_RUNNING == 0 &&
-			!(self.goalcurrent.wpflags & WAYPOINTFLAG_TELEPORT)
-		)
-			next = self.goalstack01.origin - (self.origin + self.view_ofs);
-
-		skillblend=bound(0,(skill-2.5)*0.5,1); //lower skill player can't preturn
-		distanceblend=bound(0,aimdistance/cvar("bot_ai_keyboard_distance"),1);
-		blend = skillblend * (1-distanceblend);
-		//v = (now * (distanceblend) + next * (1-distanceblend)) * (skillblend) + now * (1-skillblend);
-		//v = now * (distanceblend) * (skillblend) + next * (1-distanceblend) * (skillblend) + now * (1-skillblend);
-		//v = now * ((1-skillblend) + (distanceblend) * (skillblend)) + next * (1-distanceblend) * (skillblend);
-		v = now + blend * (next - now);
-		//dprint(etos(self), " ");
-		//dprint(vtos(now), ":", vtos(next), "=", vtos(v), " (blend ", ftos(blend), ")\n");
-		//v = now * (distanceblend) + next * (1-distanceblend);
-		if (self.waterlevel < WATERLEVEL_SWIMMING)
-			v_z = 0;
-		//dprint("walk at:", vtos(v), "\n");
-		//te_lightning2(world, self.origin, self.goalcurrent.origin);
-		bot_aimdir(v, -1);
-	}
-	havocbot_movetogoal();
-};
-
-.entity havocbot_personal_waypoint;
-.float havocbot_personal_waypoint_searchtime;
 float havocbot_moveto_refresh_route()
 {
 	// Refresh path to goal if necessary
@@ -1258,7 +1178,6 @@ float havocbot_moveto_refresh_route()
 	return self.navigation_hasgoals;
 }
 
-.float havocbot_personal_waypoint_failcounter;
 float havocbot_moveto(vector pos)
 {
 	local entity wp;
@@ -1372,72 +1291,58 @@ void havocbot_setupbot()
 
 	// will be updated by think code
 	//Generate some random skill levels
-	self.havocbot_keyboardskill=random()-0.5;
+	self.havocbot_keyboardskill = random() - 0.5;
 	havocbot_chooserole();
 }
 
-
-#ifdef DEBUG_BOT_GOALSTACK
-
-.float goalcounter;
-.vector lastposition;
-
-// Debug the goal stack visually
-void debuggoalstack()
+vector havocbot_dodge()
 {
-	local entity target;
-	local vector org;
-
-	if(self.goalcounter==0)target=self.goalcurrent;
-	else if(self.goalcounter==1)target=self.goalstack01;
-	else if(self.goalcounter==2)target=self.goalstack02;
-	else if(self.goalcounter==3)target=self.goalstack03;
-	else if(self.goalcounter==4)target=self.goalstack04;
-	else if(self.goalcounter==5)target=self.goalstack05;
-	else if(self.goalcounter==6)target=self.goalstack06;
-	else if(self.goalcounter==7)target=self.goalstack07;
-	else if(self.goalcounter==8)target=self.goalstack08;
-	else if(self.goalcounter==9)target=self.goalstack09;
-	else if(self.goalcounter==10)target=self.goalstack10;
-	else if(self.goalcounter==11)target=self.goalstack11;
-	else if(self.goalcounter==12)target=self.goalstack12;
-	else if(self.goalcounter==13)target=self.goalstack13;
-	else if(self.goalcounter==14)target=self.goalstack14;
-	else if(self.goalcounter==15)target=self.goalstack15;
-	else if(self.goalcounter==16)target=self.goalstack16;
-	else if(self.goalcounter==17)target=self.goalstack17;
-	else if(self.goalcounter==18)target=self.goalstack18;
-	else if(self.goalcounter==19)target=self.goalstack19;
-	else if(self.goalcounter==20)target=self.goalstack20;
-	else if(self.goalcounter==21)target=self.goalstack21;
-	else if(self.goalcounter==22)target=self.goalstack22;
-	else if(self.goalcounter==23)target=self.goalstack23;
-	else if(self.goalcounter==24)target=self.goalstack24;
-	else if(self.goalcounter==25)target=self.goalstack25;
-	else if(self.goalcounter==26)target=self.goalstack26;
-	else if(self.goalcounter==27)target=self.goalstack27;
-	else if(self.goalcounter==28)target=self.goalstack28;
-	else if(self.goalcounter==29)target=self.goalstack29;
-	else if(self.goalcounter==30)target=self.goalstack30;
-	else if(self.goalcounter==31)target=self.goalstack31;
-
-	if(target==world)
+	// LordHavoc: disabled because this is too expensive
+	return '0 0 0';
+	/*
+	local entity head;
+	local vector dodge, v, n;
+	local float danger, bestdanger, vl, d;
+	dodge = '0 0 0';
+	bestdanger = -20;
+	// check for dangerous objects near bot or approaching bot
+	head = findchainfloat(bot_dodge, TRUE);
+	while(head)
 	{
-		self.goalcounter = 0;
-		self.lastposition='0 0 0';
-		return;
+		if (head.owner != self)
+		{
+			vl = vlen(head.velocity);
+			if (vl > sv_maxspeed * 0.3)
+			{
+				n = normalize(head.velocity);
+				v = self.origin - head.origin;
+				d = v * n;
+				if (d > (0 - head.bot_dodgerating))
+				if (d < (vl * 0.2 + head.bot_dodgerating))
+				{
+					// calculate direction and distance from the flight path, by removing the forward axis
+					v = v - (n * (v * n));
+					danger = head.bot_dodgerating - vlen(v);
+					if (bestdanger < danger)
+					{
+						bestdanger = danger;
+						// dodge to the side of the object
+						dodge = normalize(v);
+					}
+				}
+			}
+			else
+			{
+				danger = head.bot_dodgerating - vlen(head.origin - self.origin);
+				if (bestdanger < danger)
+				{
+					bestdanger = danger;
+					dodge = normalize(self.origin - head.origin);
+				}
+			}
+		}
+		head = head.chain;
 	}
-
-	if(self.lastposition=='0 0 0')
-		org = self.origin;
-	else
-		org = self.lastposition;
-
-
-	te_lightning2(world, org, target.origin);
-	self.lastposition = target.origin;
-
-	self.goalcounter++;
-}
-
-#endif
+	return dodge;
+	*/
+};

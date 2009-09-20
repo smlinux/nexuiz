@@ -25,9 +25,9 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_enemyplay
 .entity ctf_worldflagnext;
 .entity basewaypoint;
 
+entity ctf_worldflaglist;
 vector havocbot_ctf_middlepoint;
 float havocbot_ctf_middlepoint_radius;
-entity ctf_worldflaglist;
 
 entity havocbot_ctf_find_flag(entity bot)
 {

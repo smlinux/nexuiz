@@ -1,0 +1,71 @@
+/*
+ * Globals and Fields
+ */
+
+entity tracetossent;
+entity tracetossfaketarget;
+vector findtrajectory_velocity;
+
+// Lag simulation
+#define LAG_QUEUE_LENGTH 4
+
+.float lag_time[LAG_QUEUE_LENGTH];
+.float lag_float1[LAG_QUEUE_LENGTH];
+.float lag_float2[LAG_QUEUE_LENGTH];
+.vector lag_vec1[LAG_QUEUE_LENGTH];
+.vector lag_vec2[LAG_QUEUE_LENGTH];
+.vector lag_vec3[LAG_QUEUE_LENGTH];
+.vector lag_vec4[LAG_QUEUE_LENGTH];
+.entity lag_entity1[LAG_QUEUE_LENGTH];
+
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_time);
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_float1);
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_float2);
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_vec1);
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_vec2);
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_vec3);
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_vec4);
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_entity1);
+
+vector shotorg;
+vector shotdir;
+
+//
+
+.float bot_badaimtime;
+.float bot_aimthinktime;
+.float bot_prevaimtime;
+.float bot_firetimer;
+.float bot_aimlatency;
+
+.vector bot_mouseaim;
+.vector bot_badaimoffset;
+.vector bot_1st_order_aimfilter;
+.vector bot_2nd_order_aimfilter;
+.vector bot_3th_order_aimfilter;
+.vector bot_4th_order_aimfilter;
+.vector bot_5th_order_aimfilter;
+.vector bot_olddesiredang;
+
+.vector bot_aimselforigin;
+.vector bot_aimselfvelocity;
+.vector bot_aimtargorigin;
+.vector bot_aimtargvelocity;
+
+.entity bot_aimtarg;
+
+/*
+ * Functions
+ */
+
+void lag_update();
+void bot_lagfunc(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, vector v4);
+
+float bot_shouldattack(entity e);
+float bot_aimdir(vector v, float maxfiredeviation);
+float bot_aim(float shotspeed, float shotspeedupward, float maxshottime, float applygravity);
+float findtrajectorywithleading(vector org, vector m1, vector m2, entity targ, float shotspeed, float shotspeedupward, float maxtime, float shotdelay, entity ignore);
+
+vector bot_shotlead(vector targorigin, vector targvelocity, float shotspeed, float shotdelay);
+
+.void(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, vector v4) lag_func;

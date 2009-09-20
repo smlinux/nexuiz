@@ -1,10 +1,9 @@
 
+.float max_armorvalue;
 .float havocbot_role_timeout;
+
 .void() havocbot_previous_role;
 .void() havocbot_role;
-float bot_ignore_bots;
-
-.float max_armorvalue;
 
 void havocbot_goalrating_items(float ratingscale, vector org, float sradius)
 {
@@ -144,23 +143,6 @@ void havocbot_goalrating_controlpoints(float ratingscale, vector org, float srad
 		head = head.chain;
 	}
 };
-
-/*
-// LordHavoc: this function was already unused, but for waypoints to be a
-// useful goal the bots would have to seek out the least-recently-visited
-// ones, not the closest
-void havocbot_goalrating_waypoints(float ratingscale, vector org, float sradius)
-{
-	local entity head;
-	head = findchain(classname, "waypoint");
-	while (head)
-	{
-		if (vlen(head.origin - org) < sradius && vlen(head.origin - org) > 100)
-			navigation_routerating(head, ratingscale, 2000);
-		head = head.chain;
-	}
-};
-*/
 
 void havocbot_goalrating_enemyplayers(float ratingscale, vector org, float sradius)
 {
@@ -307,222 +289,6 @@ void havocbot_chooserole_dom()
 	self.havocbot_role = havocbot_role_dom;
 };
 
-
-
-
-
-
-entity kh_worldkeylist;
-.entity kh_worldkeynext;
-void havocbot_goalrating_kh(float ratingscale_team, float ratingscale_dropped, float ratingscale_enemy)
-{
-	local entity head;
-	for (head = kh_worldkeylist; head; head = head.kh_worldkeynext)
-	{
-		if(head.owner == self)
-			continue;
-		if(!kh_tracking_enabled)
-		{
-			// if it's carried by our team we know about it
-			// otherwise we have to see it to know about it
-			if(!head.owner || head.team != self.team)
-			{
-				traceline(self.origin + self.view_ofs, head.origin, MOVE_NOMONSTERS, self);
-				if (trace_fraction < 1 && trace_ent != head)
-					continue; // skip what I can't see
-			}
-		}
-		if(!head.owner)
-			navigation_routerating(head, ratingscale_dropped * BOT_PICKUP_RATING_HIGH, 100000);
-		else if(head.team == self.team)
-			navigation_routerating(head.owner, ratingscale_team * BOT_PICKUP_RATING_HIGH, 100000);
-		else
-			navigation_routerating(head.owner, ratingscale_enemy * BOT_PICKUP_RATING_HIGH, 100000);
-	}
-
-	havocbot_goalrating_items(1, self.origin, 10000);
-};
-
-void() havocbot_role_kh_carrier;
-void() havocbot_role_kh_defense;
-void() havocbot_role_kh_offense;
-void() havocbot_role_kh_freelancer;
-void havocbot_role_kh_carrier()
-{
-	if(self.deadflag != DEAD_NO)
-		return;
-
-	if (!(self.kh_next))
-	{
-		dprint("changing role to freelancer\n");
-		self.havocbot_role = havocbot_role_kh_freelancer;
-		self.havocbot_role_timeout = 0;
-		return;
-	}
-
-	if (self.bot_strategytime < time)
-	{
-		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
-		navigation_goalrating_start();
-
-		if(kh_Key_AllOwnedByWhichTeam() == self.team)
-			havocbot_goalrating_kh(10, 0.1, 0.1); // bring home
-		else
-			havocbot_goalrating_kh(4, 4, 1); // play defensively
-
-		navigation_goalrating_end();
-	}
-}
-
-void havocbot_role_kh_defense()
-{
-	if(self.deadflag != DEAD_NO)
-		return;
-
-	if (self.kh_next)
-	{
-		dprint("changing role to carrier\n");
-		self.havocbot_role = havocbot_role_kh_carrier;
-		self.havocbot_role_timeout = 0;
-		return;
-	}
-
-	if (!self.havocbot_role_timeout)
-		self.havocbot_role_timeout = time + random() * 10 + 20;
-	if (time > self.havocbot_role_timeout)
-	{
-		dprint("changing role to freelancer\n");
-		self.havocbot_role = havocbot_role_kh_freelancer;
-		self.havocbot_role_timeout = 0;
-		return;
-	}
-
-	if (self.bot_strategytime < time)
-	{
-		float key_owner_team;
-		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
-		navigation_goalrating_start();
-
-		key_owner_team = kh_Key_AllOwnedByWhichTeam();
-		if(key_owner_team == self.team)
-			havocbot_goalrating_kh(10, 0.1, 0.1); // defend key carriers
-		else if(key_owner_team == -1)
-			havocbot_goalrating_kh(4, 1, 0.1); // play defensively
-		else
-			havocbot_goalrating_kh(0.1, 0.1, 10); // ATTACK ANYWAY
-
-		navigation_goalrating_end();
-	}
-};
-
-void havocbot_role_kh_offense()
-{
-	if(self.deadflag != DEAD_NO)
-		return;
-
-	if (self.kh_next)
-	{
-		dprint("changing role to carrier\n");
-		self.havocbot_role = havocbot_role_kh_carrier;
-		self.havocbot_role_timeout = 0;
-		return;
-	}
-
-	if (!self.havocbot_role_timeout)
-		self.havocbot_role_timeout = time + random() * 10 + 20;
-	if (time > self.havocbot_role_timeout)
-	{
-		dprint("changing role to freelancer\n");
-		self.havocbot_role = havocbot_role_kh_freelancer;
-		self.havocbot_role_timeout = 0;
-		return;
-	}
-
-	if (self.bot_strategytime < time)
-	{
-		float key_owner_team;
-
-		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
-		navigation_goalrating_start();
-
-		key_owner_team = kh_Key_AllOwnedByWhichTeam();
-		if(key_owner_team == self.team)
-			havocbot_goalrating_kh(10, 0.1, 0.1); // defend anyway
-		else if(key_owner_team == -1)
-			havocbot_goalrating_kh(0.1, 1, 4); // play offensively
-		else
-			havocbot_goalrating_kh(0.1, 0.1, 10); // ATTACK! EMERGENCY!
-
-		navigation_goalrating_end();
-	}
-};
-
-void havocbot_role_kh_freelancer()
-{
-	if(self.deadflag != DEAD_NO)
-		return;
-
-	if (self.kh_next)
-	{
-		dprint("changing role to carrier\n");
-		self.havocbot_role = havocbot_role_kh_carrier;
-		self.havocbot_role_timeout = 0;
-		return;
-	}
-
-	if (!self.havocbot_role_timeout)
-		self.havocbot_role_timeout = time + random() * 10 + 10;
-	if (time > self.havocbot_role_timeout)
-	{
-		if (random() < 0.5)
-		{
-			dprint("changing role to offense\n");
-			self.havocbot_role = havocbot_role_kh_offense;
-		}
-		else
-		{
-			dprint("changing role to defense\n");
-			self.havocbot_role = havocbot_role_kh_defense;
-		}
-		self.havocbot_role_timeout = 0;
-		return;
-	}
-
-	if (self.bot_strategytime < time)
-	{
-		float key_owner_team;
-
-		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
-		navigation_goalrating_start();
-
-		key_owner_team = kh_Key_AllOwnedByWhichTeam();
-		if(key_owner_team == self.team)
-			havocbot_goalrating_kh(10, 0.1, 0.1); // defend anyway
-		else if(key_owner_team == -1)
-			havocbot_goalrating_kh(1, 10, 4); // prefer dropped keys
-		else
-			havocbot_goalrating_kh(0.1, 0.1, 10); // ATTACK ANYWAY
-
-		navigation_goalrating_end();
-	}
-};
-
-void havocbot_chooserole_kh()
-{
-	local float r;
-
-	if(self.deadflag != DEAD_NO)
-		return;
-
-	r = random() * 3;
-	if (r < 1)
-		self.havocbot_role = havocbot_role_kh_offense;
-	else if (r < 2)
-		self.havocbot_role = havocbot_role_kh_defense;
-	else
-		self.havocbot_role = havocbot_role_kh_freelancer;
-};
-
 void havocbot_chooserole()
 {
 	dprint("choosing a role...\n");
@@ -541,4 +307,3 @@ void havocbot_chooserole()
 	else // assume anything else is deathmatch
 		havocbot_chooserole_dm();
 };
-
