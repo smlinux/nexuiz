@@ -297,6 +297,8 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 // Bringed back weapon frame
 void W_WeaponFrame()
 {
+	vector fo, ri, up;
+
 	if((arena_roundbased && time < warmup) || ((time < game_starttime) && !cvar("sv_ready_restart_after_countdown")))
 		return;
 
@@ -313,6 +315,9 @@ void W_WeaponFrame()
 	}
 
 	makevectors(self.v_angle);
+	fo = v_forward; // save them in case the weapon think functions change it
+	ri = v_right;
+	up = v_up;
 
 	// Change weapon
 	if (self.weapon != self.switchweapon)
@@ -362,11 +367,21 @@ void W_WeaponFrame()
 			wb = 0;
 		}
 		if(wb)
+		{
+			v_forward = fo;
+			v_right = ri;
+			v_up = up;
 			weapon_action(self.weapon, WR_THINK);
+		}
 		if (time + frametime * 0.5 >= self.weapon_nextthink)
 		{
 			if(self.weapon_think)
+			{
+				v_forward = fo;
+				v_right = ri;
+				v_up = up;
 				self.weapon_think();
+			}
 			else
 				bprint("\{1}^1ERROR: undefined weapon think function for ", self.netname, "\n");
 		}
