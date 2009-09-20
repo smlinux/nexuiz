@@ -14,6 +14,12 @@ void W_Rocket_Explode (void)
 {
 	W_Rocket_Unregister();
 
+	if(other.takedamage == DAMAGE_AIM)
+		if(other.classname == "player")
+			if(IsDifferentTeam(self.owner, other))
+				if(IsFlying(other))
+					announce(self.owner, "announcer/male/airshot.wav");
+
 	self.event_damage = SUB_Null;
 	self.takedamage = DAMAGE_NO;
 	RadiusDamage (self, self.owner, cvar("g_balance_rocketlauncher_damage"), cvar("g_balance_rocketlauncher_edgedamage"), cvar("g_balance_rocketlauncher_radius"), world, cvar("g_balance_rocketlauncher_force"), self.projectiledeathtype, other);
