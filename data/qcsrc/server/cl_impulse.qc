@@ -317,10 +317,20 @@ void ImpulseCommands (void)
 				break;
 			case 47:
 				WaypointSprite_ClearPersonal();
+				if(self.personal)
+				{
+					remove(self.personal);
+					self.personal = world;
+				}
 				sprint(self, "personal waypoint cleared\n");
 				break;
 			case 48:
 				WaypointSprite_ClearOwned();
+				if(self.personal)
+				{
+					remove(self.personal);
+					self.personal = world;
+				}
 				sprint(self, "all waypoints cleared\n");
 				break;
 		}
