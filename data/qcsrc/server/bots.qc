@@ -359,76 +359,60 @@ float findtrajectorywithleading(vector org, vector m1, vector m2, entity targ, f
 
 
 
-// lag simulation
+// Lag simulation
+#define LAG_QUEUE_LENGTH 4
 
 .void(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, vector v4) lag_func;
 
-// upto 5 queued messages
-.float lag1_time;
-.float lag1_float1;
-.float lag1_float2;
-.entity lag1_entity1;
-.vector lag1_vec1;
-.vector lag1_vec2;
-.vector lag1_vec3;
-.vector lag1_vec4;
+.float lag_time[LAG_QUEUE_LENGTH];
+.float lag_float1[LAG_QUEUE_LENGTH];
+.float lag_float2[LAG_QUEUE_LENGTH];
+.vector lag_vec1[LAG_QUEUE_LENGTH];
+.vector lag_vec2[LAG_QUEUE_LENGTH];
+.vector lag_vec3[LAG_QUEUE_LENGTH];
+.vector lag_vec4[LAG_QUEUE_LENGTH];
+.entity lag_entity1[LAG_QUEUE_LENGTH];
 
-.float lag2_time;
-.float lag2_float1;
-.float lag2_float2;
-.entity lag2_entity1;
-.vector lag2_vec1;
-.vector lag2_vec2;
-.vector lag2_vec3;
-.vector lag2_vec4;
+ void lag_update()
+ {
+	float i;
+	for(i=0;i<LAG_QUEUE_LENGTH;++i)
+	{
+		if (self.lag_time[i])
+		if (time > self.lag_time[i])
+		{
+			self.lag_func(
+				self.lag_time[i], self.lag_float1[i], self.lag_float2[i],
+				self.lag_entity1[i], self.lag_vec1[i], self.lag_vec2[i], self.lag_vec3[i],
+				self.lag_vec4[i]
+			);
+			// Clear this position on the queue
+			self.(lag_time[i]) = 0;
+		}
+	}
+ };
 
-.float lag3_time;
-.float lag3_float1;
-.float lag3_float2;
-.entity lag3_entity1;
-.vector lag3_vec1;
-.vector lag3_vec2;
-.vector lag3_vec3;
-.vector lag3_vec4;
-
-.float lag4_time;
-.float lag4_float1;
-.float lag4_float2;
-.entity lag4_entity1;
-.vector lag4_vec1;
-.vector lag4_vec2;
-.vector lag4_vec3;
-.vector lag4_vec4;
-
-.float lag5_time;
-.float lag5_float1;
-.float lag5_float2;
-.entity lag5_entity1;
-.vector lag5_vec1;
-.vector lag5_vec2;
-.vector lag5_vec3;
-.vector lag5_vec4;
-
-void lag_update()
-{
-	if (self.lag1_time) if (time > self.lag1_time) {self.lag_func(self.lag1_time, self.lag1_float1, self.lag1_float2, self.lag1_entity1, self.lag1_vec1, self.lag1_vec2, self.lag1_vec3, self.lag1_vec4);self.lag1_time = 0;}
-	if (self.lag2_time) if (time > self.lag2_time) {self.lag_func(self.lag2_time, self.lag2_float1, self.lag2_float2, self.lag2_entity1, self.lag2_vec1, self.lag2_vec2, self.lag2_vec3, self.lag2_vec4);self.lag2_time = 0;}
-	if (self.lag3_time) if (time > self.lag3_time) {self.lag_func(self.lag3_time, self.lag3_float1, self.lag3_float2, self.lag3_entity1, self.lag3_vec1, self.lag3_vec2, self.lag3_vec3, self.lag3_vec4);self.lag3_time = 0;}
-	if (self.lag4_time) if (time > self.lag4_time) {self.lag_func(self.lag4_time, self.lag4_float1, self.lag4_float2, self.lag4_entity1, self.lag4_vec1, self.lag4_vec2, self.lag4_vec3, self.lag4_vec4);self.lag4_time = 0;}
-	if (self.lag5_time) if (time > self.lag5_time) {self.lag_func(self.lag5_time, self.lag5_float1, self.lag5_float2, self.lag5_entity1, self.lag5_vec1, self.lag5_vec2, self.lag5_vec3, self.lag5_vec4);self.lag5_time = 0;}
-};
-
-float lag_additem(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, vector v4)
-{
-	if (self.lag1_time == 0) {self.lag1_time = t;self.lag1_float1 = f1;self.lag1_float2 = f2;self.lag1_entity1 = e1;self.lag1_vec1 = v1;self.lag1_vec2 = v2;self.lag1_vec3 = v3;self.lag1_vec4 = v4;return TRUE;}
-	if (self.lag2_time == 0) {self.lag2_time = t;self.lag2_float1 = f1;self.lag2_float2 = f2;self.lag2_entity1 = e1;self.lag2_vec1 = v1;self.lag2_vec2 = v2;self.lag2_vec3 = v3;self.lag2_vec4 = v4;return TRUE;}
-	if (self.lag3_time == 0) {self.lag3_time = t;self.lag3_float1 = f1;self.lag3_float2 = f2;self.lag3_entity1 = e1;self.lag3_vec1 = v1;self.lag3_vec2 = v2;self.lag3_vec3 = v3;self.lag3_vec4 = v4;return TRUE;}
-	if (self.lag4_time == 0) {self.lag4_time = t;self.lag4_float1 = f1;self.lag4_float2 = f2;self.lag4_entity1 = e1;self.lag4_vec1 = v1;self.lag4_vec2 = v2;self.lag4_vec3 = v3;self.lag4_vec4 = v4;return TRUE;}
-	if (self.lag5_time == 0) {self.lag5_time = t;self.lag5_float1 = f1;self.lag5_float2 = f2;self.lag5_entity1 = e1;self.lag5_vec1 = v1;self.lag5_vec2 = v2;self.lag5_vec3 = v3;self.lag5_vec4 = v4;return TRUE;}
-	// no room for it (what is the best thing to do here??)
-	return FALSE;
-};
-
+ float lag_additem(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, vector v4)
+ {
+	float i;
+	for(i=0;i<LAG_QUEUE_LENGTH;++i)
+	{
+		// Find a free position on the queue
+		if (self.lag_time[i] == 0)
+		{
+			self.(lag_time[i]) = t;
+			self.(lag_vec1[i]) = v1;
+			self.(lag_vec2[i]) = v2;
+			self.(lag_vec3[i]) = v3;
+			self.(lag_vec4[i]) = v4;
+			self.(lag_float1[i]) = f1;
+			self.(lag_float2[i]) = f2;
+			self.(lag_entity1[i]) = e1;
+			return TRUE;
+		}
+	}
+ 	return FALSE;
+ };
 
 // Random skill system
 .float bot_thinkskill;
@@ -3124,3 +3108,12 @@ void bot_serverframe()
 		bot_cvar_nextthink = time + 5;
 	}
 };
+
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_time);
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_float1);
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_float2);
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_vec1);
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_vec2);
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_vec3);
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_vec4);
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_entity1);
