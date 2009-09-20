@@ -2386,7 +2386,7 @@ void PlayerPreThink (void)
 		if (self.deadflag != DEAD_NO)
 		{
 			float button_pressed, force_respawn;
-			if(self.personal)
+			if(self.personal && g_race_qualifying)
 			{
 				if(time > self.death_time)
 				{
