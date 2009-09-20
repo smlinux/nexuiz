@@ -815,57 +815,69 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		if(!targ.deadflag)
 		if(targ.takedamage == DAMAGE_AIM)
 		if(targ != attacker)
-		if(targ.classname == "player")
 		{
-			if(IsDifferentTeam(targ, attacker))
+			if(targ.classname == "player")
 			{
-				if(damage > 0)
+				// HEAD SHOT:
+				// find height of hit on player axis
+				// if above view_ofs and below maxs, and also in the middle half of the bbox, it is head shot
+				vector headmins, headmaxs, org;
+				org = antilag_takebackorigin(targ, time - ANTILAG_LATENCY(attacker));
+				headmins = org + '0.7 0 0' * targ.mins_x + '0 0.7 0' * targ.mins_y + '0 0 1' * (1.5 * targ.view_ofs_z - 0.5 * targ.maxs_z);
+				headmaxs = org + '0.7 0 0' * targ.maxs_x + '0 0.7 0' * targ.maxs_y + '0 0 1' * targ.maxs_z;
+				if(trace_hits_box(railgun_start, railgun_end, headmins, headmaxs))
 				{
-					if(targ.BUTTON_CHAT)
-						attacker.typehitsound += 1;
-					else
-						attacker.hitsound += 1;
+					deathtype |= HITTYPE_HEADSHOT;
+				}
+			}
+			else if(targ.classname == "turret_head")
+			{
+				deathtype |= HITTYPE_HEADSHOT;
+			}
+			if(deathtype & HITTYPE_HEADSHOT)
+				damage *= 1 + damage_headshotbonus;
 
-					damage_goodhits += 1;
-					damage_gooddamage += damage;
-
-					if not(DEATH_ISSPECIAL(deathtype))
+			if(targ.classname == "player")
+			{
+				if(IsDifferentTeam(targ, attacker))
+				{
+					if(damage > 0)
 					{
-						if(!g_minstagib)
-						if(IsFlying(targ))
-							yoda = 1;
+						if(targ.BUTTON_CHAT)
+							attacker.typehitsound += 1;
+						else
+							attacker.hitsound += 1;
 
-						if(g_minstagib)
-						if(targ.items & IT_STRENGTH)
-							yoda = 1;
+						damage_goodhits += 1;
+						damage_gooddamage += damage;
 
-						// HEAD SHOT:
-						// find height of hit on player axis
-						// if above view_ofs and below maxs, and also in the middle half of the bbox, it is head shot
-						vector headmins, headmaxs, org;
-						org = antilag_takebackorigin(targ, time - ANTILAG_LATENCY(attacker));
-						headmins = org + '0.7 0 0' * targ.mins_x + '0 0.7 0' * targ.mins_y + '0 0 1' * (1.5 * targ.view_ofs_z - 0.5 * targ.maxs_z);
-						headmaxs = org + '0.7 0 0' * targ.maxs_x + '0 0.7 0' * targ.maxs_y + '0 0 1' * targ.maxs_z;
-						if(trace_hits_box(railgun_start, railgun_end, headmins, headmaxs))
+						if not(DEATH_ISSPECIAL(deathtype))
 						{
-							damage *= 1 + damage_headshotbonus;
-							headshot = 1;
-							deathtype |= HITTYPE_HEADSHOT;
+							if(!g_minstagib)
+							if(IsFlying(targ))
+								yoda = 1;
+
+							if(g_minstagib)
+							if(targ.items & IT_STRENGTH)
+								yoda = 1;
+
+							if(deathtype & HITTYPE_HEADSHOT)
+								headshot = 1;
 						}
 					}
 				}
-			}
-			else
-			{
-				if(deathtype != DEATH_FIRE)
-					attacker.typehitsound += 1;
-				if(mirrordamage > 0)
-					if(time > attacker.teamkill_complain)
-					{
-						attacker.teamkill_complain = time + 5;
-						attacker.teamkill_soundtime = time + 0.4;
-						attacker.teamkill_soundsource = targ;
-					}
+				else
+				{
+					if(deathtype != DEATH_FIRE)
+						attacker.typehitsound += 1;
+					if(mirrordamage > 0)
+						if(time > attacker.teamkill_complain)
+						{
+							attacker.teamkill_complain = time + 5;
+							attacker.teamkill_soundtime = time + 0.4;
+							attacker.teamkill_soundsource = targ;
+						}
+				}
 			}
 		}
 	}
