@@ -1538,7 +1538,7 @@ sub cond($)
 				my $sep = ' ';
 				for(@t)
 				{
-					$scores_string .= $sep . sprintf "\003%02d\%d\017", $color_team2irc_table{$_->{team}}, $_->{score};
+					$scores_string .= $sep . "\003" . $color_team2irc_table{$_->{team}}. "\002\002" . $_->{score} . "\017";
 					$sep = ':';
 				}
 			}
