@@ -457,7 +457,7 @@ float w_rlauncher(float req)
 		{
 			if (self.BUTTON_ATCK)
 			{
-				if(self.rl_release)
+				if(self.rl_release || cvar("g_balance_rocketlauncher_guidestop"))
 				if(weapon_prepareattack(0, cvar("g_balance_rocketlauncher_refire")))
 				{
 					W_Rocket_Attack();
