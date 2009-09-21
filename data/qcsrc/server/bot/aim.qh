@@ -6,31 +6,57 @@ entity tracetossent;
 entity tracetossfaketarget;
 vector findtrajectory_velocity;
 
-// Lag simulation
-#define LAG_QUEUE_LENGTH 4
 
-.float lag_time[LAG_QUEUE_LENGTH];
-.float lag_float1[LAG_QUEUE_LENGTH];
-.float lag_float2[LAG_QUEUE_LENGTH];
-.vector lag_vec1[LAG_QUEUE_LENGTH];
-.vector lag_vec2[LAG_QUEUE_LENGTH];
-.vector lag_vec3[LAG_QUEUE_LENGTH];
-.vector lag_vec4[LAG_QUEUE_LENGTH];
-.entity lag_entity1[LAG_QUEUE_LENGTH];
-
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_time);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_float1);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_float2);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_vec1);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_vec2);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_vec3);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_vec4);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(lag_entity1);
 
 vector shotorg;
 vector shotdir;
 
-//
+// lag simulation
+// upto 5 queued messages
+.float lag1_time;
+.float lag1_float1;
+.float lag1_float2;
+.entity lag1_entity1;
+.vector lag1_vec1;
+.vector lag1_vec2;
+.vector lag1_vec3;
+.vector lag1_vec4;
+
+.float lag2_time;
+.float lag2_float1;
+.float lag2_float2;
+.entity lag2_entity1;
+.vector lag2_vec1;
+.vector lag2_vec2;
+.vector lag2_vec3;
+.vector lag2_vec4;
+
+.float lag3_time;
+.float lag3_float1;
+.float lag3_float2;
+.entity lag3_entity1;
+.vector lag3_vec1;
+.vector lag3_vec2;
+.vector lag3_vec3;
+.vector lag3_vec4;
+
+.float lag4_time;
+.float lag4_float1;
+.float lag4_float2;
+.entity lag4_entity1;
+.vector lag4_vec1;
+.vector lag4_vec2;
+.vector lag4_vec3;
+.vector lag4_vec4;
+
+.float lag5_time;
+.float lag5_float1;
+.float lag5_float2;
+.entity lag5_entity1;
+.vector lag5_vec1;
+.vector lag5_vec2;
+.vector lag5_vec3;
+.vector lag5_vec4;
 
 .float bot_badaimtime;
 .float bot_aimthinktime;
