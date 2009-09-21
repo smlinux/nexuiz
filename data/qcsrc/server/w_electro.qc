@@ -63,7 +63,10 @@ void W_Plasma_Damage (entity inflictor, entity attacker, float damage, float dea
 			self.nextthink = time + vlen(self.origin - inflictor.origin) / cvar("g_balance_electro_combo_speed"); // delay combo chains, looks cooler
 		}
 		else
-			self.think = W_Plasma_Explode;
+		{
+			self.use = W_Plasma_Explode;
+			self.think = adaptor_think2use;
+		}
 	}
 }
 
