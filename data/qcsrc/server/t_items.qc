@@ -48,7 +48,7 @@ float Item_Customize()
 	if(self.weapons != (self.weapons & other.weapons))
 		self.alpha = 0.5;
 	else
-		self.alpha = 0.1;
+		self.alpha = 0.13;
 	return TRUE;
 }
 
@@ -95,7 +95,7 @@ void Item_Show (entity e, float mode)
 		e.model = e.mdl;
 		e.solid = SOLID_NOT;
 		//e.colormod = '0.2 1 0.2';
-		e.alpha = 0.1;
+		e.alpha = 0.13;
 		e.customizeentityforclient = func_null;
 
 		e.spawnshieldtime = 1;
