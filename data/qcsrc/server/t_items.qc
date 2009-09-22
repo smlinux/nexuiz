@@ -41,6 +41,17 @@ string Item_CounterFieldName(float it)
 
 .float max_armorvalue;
 
+float Item_Customize()
+{
+	if(self.spawnshieldtime)
+		return TRUE;
+	if(self.weapons != (self.weapons & other.weapons))
+		self.alpha = 0.5;
+	else
+		self.alpha = 0.1;
+	return TRUE;
+}
+
 void Item_Show (entity e, float mode)
 {
 	e.effects &~= EF_ADDITIVE | EF_STARDUST | EF_FULLBRIGHT;
@@ -51,10 +62,7 @@ void Item_Show (entity e, float mode)
 		e.solid = SOLID_TRIGGER;
 		//e.colormod = '0 0 0';
 		e.alpha = 0;
-
-		// special cases
-		if (cvar("g_fullbrightitems"))
-			e.effects = e.effects | EF_FULLBRIGHT;
+		e.customizeentityforclient = func_null;
 
 		e.spawnshieldtime = 1;
 	}
@@ -65,6 +73,7 @@ void Item_Show (entity e, float mode)
 		e.solid = SOLID_NOT;
 		//e.colormod = '0 0 0';
 		e.alpha = 0;
+		e.customizeentityforclient = func_null;
 
 		e.spawnshieldtime = 1;
 	}
@@ -76,10 +85,7 @@ void Item_Show (entity e, float mode)
 		e.effects |= EF_STARDUST;
 		//e.colormod = '0.2 1 0.2';
 		e.alpha = 0.5;
-
-		// special cases
-		if (cvar("g_fullbrightitems"))
-			e.effects = e.effects | EF_FULLBRIGHT;
+		e.customizeentityforclient = Item_Customize;
 
 		e.spawnshieldtime = 0; // field indicates whether picking it up may give you anything other than the weapon
 	}
@@ -89,7 +95,8 @@ void Item_Show (entity e, float mode)
 		e.model = e.mdl;
 		e.solid = SOLID_NOT;
 		//e.colormod = '0.2 1 0.2';
-		e.alpha = 0.15;
+		e.alpha = 0.1;
+		e.customizeentityforclient = func_null;
 
 		e.spawnshieldtime = 1;
 	}
