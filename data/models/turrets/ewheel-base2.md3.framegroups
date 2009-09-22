@@ -1,0 +1,5 @@
+1   1   1  0 // stop
+1   29  15 1 // forward slow
+1   29  30 1 // forward fast
+30  59  15 1 // back slow
+30  59  15 1 // back fast
