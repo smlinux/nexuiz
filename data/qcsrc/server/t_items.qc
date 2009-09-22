@@ -46,10 +46,20 @@ float Item_Customize()
 	if(self.spawnshieldtime)
 		return TRUE;
 	if(self.weapons != (self.weapons & other.weapons))
-		self.alpha = 0.5;
+	{
+		self.alpha = 0.5 + 0.5 * g_ghost_items; // halfway more alpha
+		return TRUE;
+	}
 	else
-		self.alpha = 0.13;
-	return TRUE;
+	{
+		if(g_ghost_items)
+		{
+			self.alpha = g_ghost_items;
+			return TRUE;
+		}
+		else
+			return FALSE;
+	}
 }
 
 void Item_Show (entity e, float mode)
@@ -84,18 +94,29 @@ void Item_Show (entity e, float mode)
 		e.solid = SOLID_TRIGGER; // can STILL be picked up!
 		e.effects |= EF_STARDUST;
 		//e.colormod = '0.2 1 0.2';
-		e.alpha = 0.5;
+		//e.alpha = 0.5; // will be overridden by CEFC though...
 		e.customizeentityforclient = Item_Customize;
 
 		e.spawnshieldtime = 0; // field indicates whether picking it up may give you anything other than the weapon
 	}
-	else
+	else if(g_ghost_items)
 	{
 		// make the item translucent green and not touchable
 		e.model = e.mdl;
 		e.solid = SOLID_NOT;
 		//e.colormod = '0.2 1 0.2';
-		e.alpha = 0.13;
+		e.alpha = g_ghost_items;
+		e.customizeentityforclient = func_null;
+
+		e.spawnshieldtime = 1;
+	}
+	else
+	{
+		// hide the item completely
+		e.model = string_null;
+		e.solid = SOLID_NOT;
+		//e.colormod = '0 0 0';
+		e.alpha = 0;
 		e.customizeentityforclient = func_null;
 
 		e.spawnshieldtime = 1;
