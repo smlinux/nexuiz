@@ -226,6 +226,7 @@ void W_Rocket_Think (void)
 				newdir = rocket_steerto(olddir, normalize(goal - self.origin), cos(cvar("g_balance_rocketlauncher_guiderate") * f * frametime * PI / 180));
 
 				self.velocity = newdir * velspeed;
+				self.angles = vectoangles(self.velocity);
 			}
 
 			if(self.rl_detonate_later)
