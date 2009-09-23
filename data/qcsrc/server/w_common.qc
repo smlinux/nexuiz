@@ -288,7 +288,7 @@ float W_BallisticBullet_LeaveSolid(entity e, vector vel, float constant)
 	// maxdist = 0.5 * v0 * v0 / constant
 	// dprint("max dist = ", ftos(maxdist), "\n");
 
-	if(maxdist <= 0.5)
+	if(maxdist <= cvar("g_ballistics_mindistance"))
 		return 0;
 
 	traceline_inverted (self.origin, self.origin + normalize(vel) * maxdist, MOVE_NORMAL, self);
