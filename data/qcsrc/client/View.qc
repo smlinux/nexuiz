@@ -718,6 +718,11 @@ void CSQC_UpdateView(float w, float h)
 		cvar_set("vid_conwidth", w0);
 		cvar_set("vid_conheight", h0);
 	}
+
+	// be safe against triggerbots until everyone has the fixed engine
+	// this call is meant to overwrite the trace globals by something
+	// unsuspicious
+	traceline('0 0 0', '0 0 0', MOVE_WORLDONLY, world);
 }
 
 void Sbar_Draw();
