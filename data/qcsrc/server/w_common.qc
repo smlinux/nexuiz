@@ -99,7 +99,7 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 	// Find all non-hit players the beam passed close by
 	if(deathtype == WEP_MINSTANEX || deathtype == WEP_NEX)
 	{
-		FOR_EACH_REALCLIENT(msg_entity) if(msg_entity != self) if(!msg_entity.railgunhit) // we use realclient, so spectators can hear the whoosh too
+		FOR_EACH_REALCLIENT(msg_entity) if(msg_entity != self) if(!msg_entity.railgunhit) if not(msg_entity.classname == "spectator" && msg_entity.enemy == self) // we use realclient, so spectators can hear the whoosh too
 		{
 			// nearest point on the beam
 			beampos = start + dir * bound(0, (msg_entity.origin - start) * dir, length);
