@@ -1022,13 +1022,15 @@ float weapon_prepareattack(float secondary, float attacktime)
 	if(self.switchweapon != self.weapon)
 		return FALSE;
 
-	// don't fire if previous attack is not finished
 	if(attacktime >= 0)
+	{
+		// don't fire if previous attack is not finished
 		if (ATTACK_FINISHED(self) > time + frametime * 0.5)
 			return FALSE;
-	// don't fire while changing weapon
-	if (self.weaponentity.state != WS_READY)
-		return FALSE;
+		// don't fire while changing weapon
+		if (self.weaponentity.state != WS_READY)
+			return FALSE;
+	}
 	self.weaponentity.state = WS_INUSE;
 
 	self.spawnshieldtime = min(self.spawnshieldtime, time); // kill spawn shield when you fire

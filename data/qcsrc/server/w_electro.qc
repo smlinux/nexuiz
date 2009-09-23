@@ -1,3 +1,4 @@
+.float electro_count;
 
 void W_Plasma_Explode (void)
 {
@@ -158,6 +159,21 @@ void spawnfunc_weapon_electro (void)
 	weapon_defaultspawnfunc(WEP_ELECTRO);
 }
 
+void w_electro_checkattack()
+{
+	if(self.electro_count > 1)
+	if(self.BUTTON_ATCK2)
+	if(weapon_prepareattack(1, -1))
+	{
+		W_Electro_Attack2();
+		self.electro_count -= 1;
+		weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_electro_secondary_animtime"), w_electro_checkattack);
+		return;
+	}
+
+	w_ready();
+}
+
 .float bot_secondary_electromooth;
 float w_electro(float req)
 {
@@ -196,7 +212,8 @@ float w_electro(float req)
 		if (weapon_prepareattack(1, cvar("g_balance_electro_secondary_refire")))
 		{
 			W_Electro_Attack2();
-			weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_electro_secondary_animtime"), w_ready);
+			self.electro_count = cvar("g_balance_electro_secondary_count");
+			weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_electro_secondary_animtime"), w_electro_checkattack);
 		}
 	}
 	else if (req == WR_PRECACHE)
