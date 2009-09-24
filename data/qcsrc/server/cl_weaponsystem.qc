@@ -1243,7 +1243,7 @@ vector W_CalculateProjectileVelocity(vector pvelocity, vector mvelocity)
 			//dprint("impossible shot, adjusting\n");
 		}
 
-		outspeed = bound(mspeed * 0.7, outspeed, mspeed * 5.0);
+		outspeed = bound(mspeed * cvar("g_projectiles_newton_style_2_minfactor"), outspeed, mspeed * cvar("g_projectiles_newton_style_2_maxfactor"));
 		outvelocity = mdirection * outspeed;
 	}
 	else if(nstyle == 3)
