@@ -2643,7 +2643,7 @@ float ExponentialFalloff(float mindist, float maxdist, float halflifedist, float
 	if(halflifedist > 0)
 		return pow(0.5, (bound(mindist, d, maxdist) - mindist) / halflifedist);
 	else if(halflifedist < 0)
-		return pow(0.5, (maxdist - bound(mindist, d, maxdist)) / halflifedist);
+		return pow(0.5, (bound(mindist, d, maxdist) - maxdist) / halflifedist);
 	else
 		return 1;
 }

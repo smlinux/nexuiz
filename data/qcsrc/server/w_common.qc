@@ -137,8 +137,8 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 		if(ent.team == self.team)
 			did_hit = 0;
 
-		f = ExponentialFalloff(mindist, maxdist, halflifedist, (msg_entity.origin - start) * dir);
-		ffs = ExponentialFalloff(mindist, maxdist, forcehalflifedist, (msg_entity.origin - start) * dir);
+		f = ExponentialFalloff(mindist, maxdist, halflifedist, (ent.origin - start) * dir);
+		ffs = ExponentialFalloff(mindist, maxdist, forcehalflifedist, (ent.origin - start) * dir);
 
 		// apply the damage
 		if (ent.takedamage)
