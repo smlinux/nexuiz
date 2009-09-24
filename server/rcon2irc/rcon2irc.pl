@@ -201,10 +201,10 @@ sub color_dp2irc($)
 			my $oldcolor = $color;
 			$color = $color_dp2irc_table[$data];
 
-			$color == $oldcolor        ? '' :
-			$color < 0                 ? "\017" :
-			index '0123456789,', $next ? "\003$color\002\002" :
-			                             "\003$color";
+			$color == $oldcolor               ? '' :
+			$color < 0                        ? "\017" :
+			(index '0123456789,', $next) >= 0 ? "\003$color\002\002" :
+			                                    "\003$color";
 		} :
 			die "Invalid type";
 	}

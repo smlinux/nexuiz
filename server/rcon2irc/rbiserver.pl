@@ -93,12 +93,19 @@ sub markmap($$$$;$)
 	out irc => 0, "PRIVMSG $config{irc_channel} :\001ACTION thinks $nick refuses to tell us which file is modified\001";
 	return 0;
 } ],
+[ dp => q{pure: \*DETAIL_CVAR (.*) (\S+) (.*)$} => sub {
+	my ($nick, $cvar, $value) = @_;
+	$nick = color_dp2irc $nick;
+	out irc => 0, "PRIVMSG $config{irc_channel} :\001ACTION thinks $nick has changed $cvar to $value\001";
+	return 0;
+} ],
 [ dp => q{:recordset:(\d+):.*} => sub {
 	my ($id) = @_;
 	my $ip = $store{"playerip_byid_$id"};
 	my $slot = $store{"playerslot_byid_$id"};
 	my $name = $config{irc_nick};
 	$name =~ s/Nex//; # haggerNexCTF -> haggerCTF
+	$name =~ s/^rm/hagger/g; # rmRace -> haggerRace
 	my $map = $store{map};
 	$map =~ s/^[a-z]*_//;
 	$ip =~ s/\./-/g;
