@@ -10,7 +10,7 @@ void W_MinstaNex_Attack (void)
 	yoda = 0;
 	damage_goodhits = 0;
 	headshot = 0;
-	FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, 10000, 800, 0, 0, 0, WEP_MINSTANEX);
+	FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, 10000, 800, 0, 0, 0, 0, WEP_MINSTANEX);
 
 	if(g_minstagib)
 	{

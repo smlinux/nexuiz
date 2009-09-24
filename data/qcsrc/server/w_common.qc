@@ -27,7 +27,7 @@ void W_GiveWeapon (entity e, float wep, string name)
 	self = oldself;
 }
 
-void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, float mindist, float maxdist, float halflifedist, float deathtype)
+void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, float mindist, float maxdist, float halflifedist, float forcehalflifedist, float deathtype)
 {
 	local vector hitloc, force, endpoint, dir;
 	local entity ent, endent;
@@ -38,7 +38,7 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 	vector beampos;
 	string snd;
 	entity pseudoprojectile;
-	float f;
+	float f, ffs;
 
 	did_hit = 0;
 
@@ -138,10 +138,11 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 			did_hit = 0;
 
 		f = ExponentialFalloff(mindist, maxdist, halflifedist, (msg_entity.origin - start) * dir);
+		ffs = ExponentialFalloff(mindist, maxdist, forcehalflifedist, (msg_entity.origin - start) * dir);
 
 		// apply the damage
 		if (ent.takedamage)
-			Damage (ent, self, self, bdamage * f, deathtype, hitloc, force * f);
+			Damage (ent, self, self, bdamage * f, deathtype, hitloc, force * ffs);
 
 		// create a small explosion to throw gibs around (if applicable)
 		//setorigin (explosion, hitloc);
