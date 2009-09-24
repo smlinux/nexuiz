@@ -18,7 +18,7 @@ void W_Nex_Attack (void)
 	W_SetupShot (self, TRUE, 5, "weapons/nexfire.wav", cvar("g_balance_nex_damage"));
 
 	yoda = 0;
-	FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, cvar("g_balance_nex_damage"), cvar("g_balance_nex_force"), WEP_NEX);
+	FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, cvar("g_balance_nex_damage"), cvar("g_balance_nex_force"), cvar("g_balance_nex_damagefalloff_mindist"), cvar("g_balance_nex_damagefalloff_maxdist"), cvar("g_balance_nex_damagefalloff_halflife"), WEP_NEX);
 
 	if(yoda && flying)
 		announce(self, "announcer/male/yoda.wav");

@@ -2637,3 +2637,13 @@ void randombit_test(float bits, float iter)
 		--iter;
 	}
 }
+
+float ExponentialFalloff(float mindist, float maxdist, float halflifedist, float d)
+{
+	if(halflifedist > 0)
+		return pow(0.5, (bound(mindist, d, maxdist) - mindist) / halflifedist);
+	else if(halflifedist < 0)
+		return pow(0.5, (maxdist - bound(mindist, d, maxdist)) / halflifedist);
+	else
+		return 1;
+}

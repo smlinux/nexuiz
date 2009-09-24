@@ -838,7 +838,7 @@ void spawnfunc_func_snow()
 };
 
 
-void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, float deathtype);
+void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, float mindist, float maxdist, float halflifedist, float deathtype);
 
 .float modelscale;
 void misc_laser_aim()
@@ -914,9 +914,9 @@ void misc_laser_think()
 	if(self.dmg)
 	{
 		if(self.dmg < 0)
-			FireRailgunBullet(self.origin, o, 100000, 0, DEATH_HURTTRIGGER);
+			FireRailgunBullet(self.origin, o, 100000, 0, 0, 0, 0, DEATH_HURTTRIGGER);
 		else
-			FireRailgunBullet(self.origin, o, self.dmg * frametime, 0, DEATH_HURTTRIGGER);
+			FireRailgunBullet(self.origin, o, self.dmg * frametime, 0, 0, 0, 0, DEATH_HURTTRIGGER);
 	}
 
 	if(self.enemy.target != "") // DETECTOR laser

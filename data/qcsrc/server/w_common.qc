@@ -24,11 +24,10 @@ void W_GiveWeapon (entity e, float wep, string name)
 		sprint (other, "\n");
 	}
 
-
 	self = oldself;
 }
 
-void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, float deathtype)
+void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, float mindist, float maxdist, float halflifedist, float deathtype)
 {
 	local vector hitloc, force, endpoint, dir;
 	local entity ent, endent;
@@ -138,9 +137,11 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 		if(ent.team == self.team)
 			did_hit = 0;
 
+		f = ExponentialFalloff(mindist, maxdist, halflifedist, (msg_entity.origin - start) * dir);
+
 		// apply the damage
-		if (ent.takedamage || ent.classname == "case")
-			Damage (ent, self, self, bdamage, deathtype, hitloc, force);
+		if (ent.takedamage)
+			Damage (ent, self, self, bdamage * f, deathtype, hitloc, force * f);
 
 		// create a small explosion to throw gibs around (if applicable)
 		//setorigin (explosion, hitloc);
