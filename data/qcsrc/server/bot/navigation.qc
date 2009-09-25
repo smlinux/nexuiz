@@ -332,8 +332,8 @@ entity navigation_findnearestwaypoint(entity ent, float walkfromwp)
 	local entity waylist, w, best;
 	local float dist, bestdist;
 	local vector v, org, pm1, pm2;
-	pm1 = ent.origin + PL_MIN;
-	pm2 = ent.origin + PL_MAX;
+	pm1 = ent.origin + ent.mins;
+	pm2 = ent.origin + ent.maxs;
 	waylist = findchain(classname, "waypoint");
 
 	// do two scans, because box test is cheaper
@@ -347,7 +347,9 @@ entity navigation_findnearestwaypoint(entity ent, float walkfromwp)
 		w = w.chain;
 	}
 
-	org = ent.origin + (ent.mins_z - PL_MIN_z) * '0 0 1';
+	org = ent.origin + 0.5 * (ent.mins + ent.maxs);
+	org_z = ent.origin_z + ent.mins_z - PL_MIN_z; // player height
+	// TODO possibly make other code have the same support for bboxes
 	if(ent.tag_entity)
 		org = org + ent.tag_entity.origin;
 	if (navigation_testtracewalk)
@@ -719,7 +721,11 @@ void navigation_routerating(entity e, float f, float rangebias)
 	{
 		if (time > e.nearestwaypointtimeout)
 		{
-			e.nearestwaypoint = navigation_findnearestwaypoint(e, TRUE);
+			nwp = navigation_findnearestwaypoint(e, TRUE);
+			if(nwp)
+				e.nearestwaypoint = nwp;
+			else
+				print("FAILED to find a nearest waypoint to ", etos(e), "\n");
 
 			// TODO: Cleaner solution, probably handling this timeout from ctf.qc
 			if(e.classname=="item_flag_team")

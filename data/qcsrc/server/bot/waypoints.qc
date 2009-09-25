@@ -765,17 +765,20 @@ float waypoint_loadall()
 	return cwp + cwb;
 };
 
+vector waypoint_fixorigin(vector position)
+{
+	tracebox(trace_endpos + '0 0 1' * (-1 - PL_MIN_z), PL_MIN, PL_MAX, trace_endpos + '0 0 -512', MOVE_NOMONSTERS, world);
+	if(trace_fraction < 1)
+		position = trace_endpos;
+	return position;
+}
+
 void waypoint_spawnforitem_force(entity e, vector org)
 {
 	local entity w;
 
 	// Fix the waypoint altitude if necessary
-	traceline(org, org + '0 0 -65535', TRUE, e);
-	if(
-		org_z - trace_endpos_z > PL_MAX_z - PL_MIN_z + 10 // If middle of entiy is above player heigth
-		|| org_z - trace_endpos_z < (PL_MAX_z - PL_MIN_z) * 0.5 // or below half player height
-	)
-		org_z = trace_endpos_z + PL_MAX_z - PL_MIN_z;
+	org = waypoint_fixorigin(org);
 
 	// don't spawn an item spawnfunc_waypoint if it already exists
 	w = findchain(classname, "waypoint");
@@ -832,10 +835,7 @@ entity waypoint_spawnpersonal(vector position)
 	// drop the waypoint to a proper location:
 	//   first move it up by a player height
 	//   then move it down to hit the floor with player bbox size
-	traceline(position, position + '0 0 1' * (PL_MAX_z - PL_MIN_z), MOVE_NOMONSTERS, world);
-	tracebox(trace_endpos, PL_MIN, PL_MAX, trace_endpos + '0 0 -1024', MOVE_NOMONSTERS, world);
-	if(trace_fraction < 1)
-		position = trace_endpos;
+	position = waypoint_fixorigin(position);
 
 	w = waypoint_spawn(position, position, WAYPOINTFLAG_GENERATED | WAYPOINTFLAG_PERSONAL);
 	w.nearestwaypoint = world;
