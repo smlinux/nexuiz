@@ -32,12 +32,18 @@ entity waypoint_spawn(vector m1, vector m2, float f)
 		{
 			if(!(f & WAYPOINTFLAG_GENERATED))
 			{
-				dprint("Killed a waypoint that was stuck in solid at ", vtos(org), "\n");
+				dprint("Killed a waypoint that was stuck in solid at ", vtos(w.origin), "\n");
 				remove(w);
 				return world;
 			}
 			else
-				dprint("A generated waypoint is stuck in solid at ", vtos(org), "\n");
+			{
+				if(cvar("developer"))
+				{
+					print("A generated waypoint is stuck in solid at ", vtos(w.origin), "\n");
+					backtrace("Waypoint stuck");
+				}
+			}
 		}
 		setsize(w, '0 0 0', '0 0 0');
 	}

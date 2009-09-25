@@ -546,6 +546,7 @@ void ImpulseCommands (void)
 					e2 = navigation_findnearestwaypoint(self, FALSE);
 					navigation_markroutes(e2);
 					i = 0;
+					m = 0;
 					for(e = findchain(classname, "waypoint"); e; e = e.chain)
 					{
 						if(e.wpcost >= 10000000)
@@ -554,6 +555,7 @@ void ImpulseCommands (void)
 							e.colormod_x = 0.1;
 							e.effects |= EF_NODEPTHTEST | EF_BLUE;
 							++i;
+							++m;
 						}
 					}
 					if(i)
@@ -566,12 +568,16 @@ void ImpulseCommands (void)
 						{
 							print("cannot reach me: ", etos(e), " ", vtos(e.origin), "\n");
 							e.colormod_x = 0.1;
+							if not(e.effects & EF_NODEPTHTEST) // not already reported before
+								++m;
 							e.effects |= EF_NODEPTHTEST | EF_RED;
 							++i;
 						}
 					}
 					if(i)
 						print(ftos(i), " waypoints cannot walk to here in any way (marked with red light)\n");
+					if(m && i && i != m)
+						print(ftos(m), " waypoints have been marked total\n");
 					i = 0;
 					for(e = findchain(classname, "info_player_deathmatch"); e; e = e.chain)
 					{
