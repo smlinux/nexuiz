@@ -2026,9 +2026,10 @@ void Sbar_DrawAccuracyStats()
 
 	left_border = col_margin + 11 * sbar_fontsize_x;
 
+	drawfont = sbar_font;
+
 	if(warmup_stage)
 	{
-		drawfont = sbar_font;
 		pos_y += 40;
 		if(mod(time, 1) >= 0.4)
 			drawstringcenter(pos, "Stats are not tracked during warmup stage", sbar_fontsize, '1 1 0', sbar_alpha_fg, DRAWFLAG_NORMAL);
@@ -2041,8 +2042,6 @@ void Sbar_DrawAccuracyStats()
 
 	float top_border_splash = SCOREBOARD_OFFSET + 175;  // position where the splash row starts: pixels down the screen
 	Sbar_DrawAccuracyStats_Description_Splash('1 0 0' * col_margin + '0 1 0' * top_border_splash);
-
-	drawfont = sbar_font;
 
 	for(i = WEP_FIRST; i <= WEP_LAST; ++i)
 	{
