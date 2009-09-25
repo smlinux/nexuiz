@@ -620,6 +620,8 @@ void navigation_routerating(entity e, float f, float rangebias)
 	if (!e)
 		return;
 
+	//print("routerating ", etos(e), " = ", ftos(f), " - ", ftos(rangebias), "\n");
+
 	// Evaluate path using jetpack
 	if(g_jetpack)
 	if(self.items & IT_JETPACK)
@@ -767,6 +769,7 @@ float navigation_routetogoal(entity e, vector startposition)
 	self.navigation_hasgoals = TRUE;
 
 	// put the entity on the goal stack
+	//print("routetogoal ", etos(e), "\n");
 	navigation_pushroute(e);
 
 	if(g_jetpack)

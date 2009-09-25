@@ -667,11 +667,11 @@ float commodity_pickupevalfunc(entity player, entity item)
 	if (player.ammo_cells < g_pickup_cells_max)
 		c = c + max(0, 1 - player.ammo_cells / g_pickup_cells_max);
 	if (item.armorvalue)
-	if (player.armorvalue < item.max_armorvalue*0.5)
-		c = c + max(0, 1 - player.armorvalue / (item.max_armorvalue*0.5));
+	if (player.armorvalue < item.max_armorvalue)
+		c = c + max(0, 1 - player.armorvalue / item.max_armorvalue);
 	if (item.health)
-	if (player.health < item.max_health*0.5)
-		c = c + max(0, 1 - player.health / (item.max_health*0.5));
+	if (player.health < item.max_health)
+		c = c + max(0, 1 - player.health / item.max_health);
 
 	return item.bot_pickupbasevalue * c;
 };
