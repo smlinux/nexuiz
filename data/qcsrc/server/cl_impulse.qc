@@ -512,7 +512,7 @@ void ImpulseCommands (void)
 			}
 		}
 	}
-	else if(imp >= 103 && imp <= 108)
+	else if(imp >= 103 && imp <= 107)
 	{
 		if(cvar("g_waypointeditor"))
 		{
@@ -538,36 +538,38 @@ void ImpulseCommands (void)
 					waypoint_saveall();
 					break;
 				case 107:
-					navigation_markroutes(navigation_findnearestwaypoint(self, FALSE));
 					for(e = findchain(classname, "waypoint"); e; e = e.chain)
 					{
-						if(e.wpcost < 10000000)
-						{
-							e.colormod_x = 1;
-							e.effects &~= EF_NODEPTHTEST;
-						}
-						else
-						{
-							e.colormod_x = 0.1;
-							e.effects |= EF_NODEPTHTEST;
-						}
+						e.colormod_x = 1;
+						e.effects &~= EF_NODEPTHTEST | EF_RED | EF_BLUE;
 					}
-					break;
-				case 108:
-					navigation_markroutes_inverted(navigation_findnearestwaypoint(self, FALSE));
+					e2 = navigation_findnearestwaypoint(self, FALSE);
+					navigation_markroutes(e2);
+					i = 0;
 					for(e = findchain(classname, "waypoint"); e; e = e.chain)
 					{
-						if(e.wpcost < 10000000)
-						{
-							e.colormod_x = 1;
-							e.effects &~= EF_NODEPTHTEST;
-						}
-						else
+						if(e.wpcost >= 10000000)
 						{
 							e.colormod_x = 0.1;
-							e.effects |= EF_NODEPTHTEST;
+							e.effects |= EF_NODEPTHTEST | EF_BLUE;
+							++i;
 						}
 					}
+					if(i)
+						print(ftos(i), " waypoints cannot be reached from here in any way (marked with blue light)\n");
+					navigation_markroutes_inverted(e2);
+					i = 0;
+					for(e = findchain(classname, "waypoint"); e; e = e.chain)
+					{
+						if(e.wpcost >= 10000000)
+						{
+							e.colormod_x = 0.1;
+							e.effects |= EF_NODEPTHTEST | EF_RED;
+							++i;
+						}
+					}
+					if(i)
+						print(ftos(i), " waypoints cannot walk to here in any way (marked with red light)\n");
 					break;
 			}
 		}

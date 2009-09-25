@@ -58,7 +58,7 @@ clean:
 csprogs.dat: qcsrc/client/*.* qcsrc/common/*.*
 	cd qcsrc/client && $(FTEQCC) $(FTEQCCFLAGS) $(QCFLAGS_CSPROGS)
 
-progs.dat: qcsrc/server/*.* qcsrc/common/*.*
+progs.dat: qcsrc/server/*.* qcsrc/common/*.* qcsrc/server/*/*.* qcsrc/server/*/*/*.*
 	cd qcsrc/server && $(FTEQCC) $(FTEQCCFLAGS) $(QCFLAGS_PROGS)
 
 menu.dat: qcsrc/menu/*.* qcsrc/menu/*/*.* qcsrc/common/*.*
