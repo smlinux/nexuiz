@@ -576,7 +576,7 @@ void ImpulseCommands (void)
 					}
 					if(i)
 						print(ftos(i), " waypoints cannot walk to here in any way (marked with red light)\n");
-					if(m && i && i != m)
+					if(m)
 						print(ftos(m), " waypoints have been marked total\n");
 					i = 0;
 					for(e = findchain(classname, "info_player_deathmatch"); e; e = e.chain)
