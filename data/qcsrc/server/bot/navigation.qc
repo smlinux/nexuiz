@@ -249,6 +249,10 @@ void navigation_clearroute()
 
 // add a new goal at the beginning of the stack
 // (in other words: add a new prerequisite before going to the later goals)
+// NOTE: when a waypoint is added, the WP gets pushed first, then the
+// next-closest WP on the shortest path to the WP
+// That means, if the stack overflows, the bot will know how to do the FIRST 32
+// steps to the goal, and then recalculate the path.
 void navigation_pushroute(entity e)
 {
 	//print("bot ", etos(self), " push ", etos(e), "\n");
@@ -479,7 +483,7 @@ void navigation_markroutes_checkwaypoint(entity w, entity wp, float cost2, vecto
 };
 
 // queries the entire spawnfunc_waypoint network for pathes leading away from the bot
-void navigation_markroutes()
+void navigation_markroutes(entity fixed_source_waypoint)
 {
 	local entity w, wp, waylist;
 	local float searching, cost, cost2;
@@ -495,21 +499,32 @@ void navigation_markroutes()
 		w = w.chain;
 	}
 
-	// try a short range search for the nearest waypoints, and expand the search repeatedly if none are found
-	// as this search is expensive we will use lower values if the bot is on the air
-	local float i, increment, maxdistance;
-	if(self.flags & FL_ONGROUND)
+	if(fixed_source_waypoint)
 	{
-		increment = 750;
-		maxdistance = 50000;
+		fixed_source_waypoint.wpconsidered = TRUE;
+		fixed_source_waypoint.wpnearestpoint = fixed_source_waypoint.origin + 0.5 * (fixed_source_waypoint.mins + fixed_source_waypoint.maxs);
+		fixed_source_waypoint.wpcost = fixed_source_waypoint.dmg;
+		fixed_source_waypoint.wpfire = 1;
+		fixed_source_waypoint.enemy = world;
 	}
 	else
 	{
-		increment = 500;
-		maxdistance = 1500;
-	}
+		// try a short range search for the nearest waypoints, and expand the search repeatedly if none are found
+		// as this search is expensive we will use lower values if the bot is on the air
+		local float i, increment, maxdistance;
+		if(self.flags & FL_ONGROUND)
+		{
+			increment = 750;
+			maxdistance = 50000;
+		}
+		else
+		{
+			increment = 500;
+			maxdistance = 1500;
+		}
 
-	for(i=increment;!navigation_markroutes_nearestwaypoints(waylist, i)&&i<maxdistance;i+=increment);
+		for(i=increment;!navigation_markroutes_nearestwaypoints(waylist, i)&&i<maxdistance;i+=increment);
+	}
 
 	searching = TRUE;
 	while (searching)
@@ -557,6 +572,69 @@ void navigation_markroutes()
 				wp = w.wp30;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp30mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
 				wp = w.wp31;if (wp){cost2 = cost + wp.dmg;if (wp.wpcost > cost2 + w.wp31mincost) navigation_markroutes_checkwaypoint(w, wp, cost2, p);
 				}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+			}
+			w = w.chain;
+		}
+	}
+};
+
+// queries the entire spawnfunc_waypoint network for pathes leading to the bot
+void navigation_markroutes_inverted(entity fixed_source_waypoint)
+{
+	local entity w, wp, waylist;
+	local float searching, cost, cost2;
+	local vector p;
+	w = waylist = findchain(classname, "waypoint");
+	while (w)
+	{
+		w.wpconsidered = FALSE;
+		w.wpnearestpoint = '0 0 0';
+		w.wpcost = 10000000;
+		w.wpfire = 0;
+		w.enemy = world;
+		w = w.chain;
+	}
+
+	if(fixed_source_waypoint)
+	{
+		fixed_source_waypoint.wpconsidered = TRUE;
+		fixed_source_waypoint.wpnearestpoint = fixed_source_waypoint.origin + 0.5 * (fixed_source_waypoint.mins + fixed_source_waypoint.maxs);
+		fixed_source_waypoint.wpcost = fixed_source_waypoint.dmg; // the cost to get from X to fixed_source_waypoint
+		fixed_source_waypoint.wpfire = 1;
+		fixed_source_waypoint.enemy = world;
+	}
+	else
+	{
+		error("need to start with a waypoint\n");
+	}
+
+	searching = TRUE;
+	while (searching)
+	{
+		searching = FALSE;
+		w = waylist;
+		while (w)
+		{
+			if (w.wpfire)
+			{
+				searching = TRUE;
+				w.wpfire = 0;
+				cost = w.wpcost; // cost to walk from w to home
+				p = w.wpnearestpoint;
+				for(wp = waylist; wp; wp = wp.chain)
+				{
+					if(w != wp.wp00) if(w != wp.wp01) if(w != wp.wp02) if(w != wp.wp03)
+					if(w != wp.wp04) if(w != wp.wp05) if(w != wp.wp06) if(w != wp.wp07)
+					if(w != wp.wp08) if(w != wp.wp09) if(w != wp.wp10) if(w != wp.wp11)
+					if(w != wp.wp12) if(w != wp.wp13) if(w != wp.wp14) if(w != wp.wp15)
+					if(w != wp.wp16) if(w != wp.wp17) if(w != wp.wp18) if(w != wp.wp19)
+					if(w != wp.wp20) if(w != wp.wp21) if(w != wp.wp22) if(w != wp.wp23)
+					if(w != wp.wp24) if(w != wp.wp25) if(w != wp.wp26) if(w != wp.wp27)
+					if(w != wp.wp28) if(w != wp.wp29) if(w != wp.wp30) if(w != wp.wp31)
+						continue;
+					cost2 = cost + wp.dmg;
+					navigation_markroutes_checkwaypoint(w, wp, cost2, p);
+				}
 			}
 			w = w.chain;
 		}
@@ -895,7 +973,7 @@ void navigation_goalrating_start()
 	navigation_bestrating = -1;
 	self.navigation_hasgoals = FALSE;
 	navigation_bestgoals_reset();
-	navigation_markroutes();
+	navigation_markroutes(world);
 };
 
 // ends a goal selection session (updates goal stack to the best goal)

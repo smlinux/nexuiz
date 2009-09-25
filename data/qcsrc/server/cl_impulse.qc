@@ -512,7 +512,7 @@ void ImpulseCommands (void)
 			}
 		}
 	}
-	else if(imp >= 103 && imp <= 107)
+	else if(imp >= 103 && imp <= 108)
 	{
 		if(cvar("g_waypointeditor"))
 		{
@@ -538,7 +538,23 @@ void ImpulseCommands (void)
 					waypoint_saveall();
 					break;
 				case 107:
-					navigation_markroutes();
+					navigation_markroutes(navigation_findnearestwaypoint(self, FALSE));
+					for(e = findchain(classname, "waypoint"); e; e = e.chain)
+					{
+						if(e.wpcost < 10000000)
+						{
+							e.colormod_x = 1;
+							e.effects &~= EF_NODEPTHTEST;
+						}
+						else
+						{
+							e.colormod_x = 0.1;
+							e.effects |= EF_NODEPTHTEST;
+						}
+					}
+					break;
+				case 108:
+					navigation_markroutes_inverted(navigation_findnearestwaypoint(self, FALSE));
 					for(e = findchain(classname, "waypoint"); e; e = e.chain)
 					{
 						if(e.wpcost < 10000000)
