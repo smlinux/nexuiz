@@ -767,9 +767,11 @@ float waypoint_loadall()
 
 vector waypoint_fixorigin(vector position)
 {
-	tracebox(position + '0 0 1' * (-1 - PL_MIN_z), PL_MIN, PL_MAX, position + '0 0 -512', MOVE_NOMONSTERS, world);
+	tracebox(position + '0 0 1' * (1 - PL_MIN_z), PL_MIN, PL_MAX, position + '0 0 -512', MOVE_NOMONSTERS, world);
 	if(trace_fraction < 1)
 		position = trace_endpos;
+	//traceline(position, position + '0 0 -512', MOVE_NOMONSTERS, world);
+	//print("position is ", ftos(trace_endpos_z - position_z), " above solid\n");
 	return position;
 }
 
