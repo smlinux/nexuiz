@@ -24,70 +24,22 @@ entity waypoint_spawn(vector m1, vector m2, float f)
 	setsize(w, m1 - w.origin, m2 - w.origin);
 	if (vlen(w.size) > 0)
 		w.wpisbox = TRUE;
-
-	if(!(f & WAYPOINTFLAG_GENERATED))
+	
 	if(!w.wpisbox)
 	{
-		traceline(w.origin + '0 0 1', w.origin + PL_MIN_z * '0 0 1' - '0 0 1', MOVE_NOMONSTERS, w);
-		if (trace_fraction < 1)
-			setorigin(w, trace_endpos - PL_MIN_z * '0 0 1');
-
-		// check if the start position is stuck
-		tracebox(w.origin, PL_MIN + '-1 -1 -1', PL_MAX + '1 1 1', w.origin, MOVE_NOMONSTERS, w);
-		if (trace_startsolid)
+		setsize(w, PL_MIN - '1 1 0', PL_MAX + '1 1 0');
+		if(!move_out_of_solid(w))
 		{
-			org = w.origin + '0 0 26';
-			tracebox(org, PL_MIN, PL_MAX, w.origin, MOVE_WORLDONLY, w);
-			if(trace_startsolid)
+			if(!(f & WAYPOINTFLAG_GENERATED))
 			{
-				org = w.origin + '2 2 2';
-				tracebox(org, PL_MIN, PL_MAX, w.origin, MOVE_WORLDONLY, w);
-				if(trace_startsolid)
-				{
-					org = w.origin + '-2 -2 2';
-					tracebox(org, PL_MIN, PL_MAX, w.origin, MOVE_WORLDONLY, w);
-					if(trace_startsolid)
-					{
-						org = w.origin + '-2 2 2';
-						tracebox(org, PL_MIN, PL_MAX, w.origin, MOVE_WORLDONLY, w);
-						if(trace_startsolid)
-						{
-							org = w.origin + '2 -2 2';
-							tracebox(org, PL_MIN, PL_MAX, w.origin, MOVE_WORLDONLY, w);
-							if(trace_startsolid)
-							{
-								// this WP is in solid, refuse it
-								dprint("Killed a waypoint that was stuck in solid at ", vtos(org), "\n");
-								remove(w);
-								return world;
-							}
-						}
-					}
-				}
-			}
-			setorigin(w, org * 0.05 + trace_endpos * 0.95); // don't trust the trace fully
-		}
-
-		tracebox(w.origin, PL_MIN, PL_MAX, w.origin - '0 0 128', MOVE_WORLDONLY, w);
-		if(trace_startsolid)
-		{
-			dprint("Killed a waypoint that was stuck in solid ", vtos(w.origin), "\n");
-			remove(w);
-			return world;
-		}
-		if (!trace_inwater)
-		{
-			if(trace_fraction == 1)
-			{
-				dprint("Killed a waypoint that was stuck in air at ", vtos(w.origin), "\n");
+				dprint("Killed a waypoint that was stuck in solid at ", vtos(org), "\n");
 				remove(w);
 				return world;
 			}
-			trace_endpos_z += 0.1; // don't trust the trace fully
-//			dprint("Moved waypoint at ", vtos(w.origin), " by ", ftos(vlen(w.origin - trace_endpos)));
-//			dprint(" direction: ", vtos((trace_endpos - w.origin)), "\n");
-			setorigin(w, trace_endpos);
+			else
+				dprint("A generated waypoint is stuck in solid at ", vtos(org), "\n");
 		}
+		setsize(w, '0 0 0', '0 0 0');
 	}
 
 	waypoint_clearlinks(w);
