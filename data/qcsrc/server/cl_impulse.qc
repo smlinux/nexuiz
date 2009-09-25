@@ -575,13 +575,17 @@ void ImpulseCommands (void)
 					i = 0;
 					for(e = findchain(classname, "info_player_deathmatch"); e; e = e.chain)
 					{
+						tracebox(e.origin, PL_MIN, PL_MAX, e.origin - '0 0 512', MOVE_NOMONSTERS, world);
+						setorigin(e, trace_endpos);
 						if(navigation_findnearestwaypoint(e, FALSE))
 						{
+							setorigin(e, org);
 							e.effects &~= EF_NODEPTHTEST;
 							e.model = "";
 						}
 						else
 						{
+							setorigin(e, org);
 							print("spawn without waypoint: ", etos(e), " ", vtos(e.origin), "\n");
 							e.effects |= EF_NODEPTHTEST;
 							setmodel(e, self.model);
