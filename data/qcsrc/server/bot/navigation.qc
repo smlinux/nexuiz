@@ -805,7 +805,7 @@ void navigation_routerating(entity e, float f, float rangebias)
 			if(nwp)
 				e.nearestwaypoint = nwp;
 			else
-				print("FAILED to find a nearest waypoint to ", etos(e), "\n");
+				dprint("FAILED to find a nearest waypoint to '", e.classname, "' #", etos(e), "\n");
 
 			// TODO: Cleaner solution, probably handling this timeout from ctf.qc
 			if(e.classname=="item_flag_team")
