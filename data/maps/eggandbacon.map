@@ -1008,7 +1008,7 @@
 }
 // entity 99
 {
-"classname" "weapon_seeker"
+"classname" "weapon_tuba"
 "origin" "1376 256 96"
 "angle" "180"
 }
@@ -1019,7 +1019,7 @@
 }
 // entity 101
 {
-"classname" "weapon_seeker"
+"classname" "weapon_tuba"
 "origin" "-1376 -256 96"
 }
 // entity 102
@@ -1064,6 +1064,7 @@
 "origin" "0 0 512"
 "noalign" "1"
 "team" "3"
+"cnt" "2"
 }
 // entity 109
 {
@@ -1071,6 +1072,7 @@
 "origin" "0 0 512"
 "noalign" "1"
 "team" "3"
+"cnt" "1"
 }
 // entity 110
 {
