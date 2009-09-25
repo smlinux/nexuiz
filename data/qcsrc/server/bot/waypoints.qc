@@ -4,7 +4,6 @@
 entity waypoint_spawn(vector m1, vector m2, float f)
 {
 	local entity w;
-	local vector org;
 	w = find(world, classname, "waypoint");
 
 	if not(f & WAYPOINTFLAG_PERSONAL)
