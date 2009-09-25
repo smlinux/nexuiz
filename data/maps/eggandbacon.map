@@ -877,10 +877,6 @@
 "classname" "info_player_team2"
 "origin" "-1536 480 88"
 }
-// entity 80
-{
-"classname" "trigger_push"
-}
 // entity 81
 {
 "classname" "target_push"
