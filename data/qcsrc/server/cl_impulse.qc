@@ -550,7 +550,7 @@ void ImpulseCommands (void)
 					{
 						if(e.wpcost >= 10000000)
 						{
-							print("unreachable: ", vtos(e.origin), "\n");
+							print("unreachable: ", etos(e), " ", vtos(e.origin), "\n");
 							e.colormod_x = 0.1;
 							e.effects |= EF_NODEPTHTEST | EF_BLUE;
 							++i;
@@ -564,7 +564,7 @@ void ImpulseCommands (void)
 					{
 						if(e.wpcost >= 10000000)
 						{
-							print("cannot reach me: ", vtos(e.origin), "\n");
+							print("cannot reach me: ", etos(e), " ", vtos(e.origin), "\n");
 							e.colormod_x = 0.1;
 							e.effects |= EF_NODEPTHTEST | EF_RED;
 							++i;
