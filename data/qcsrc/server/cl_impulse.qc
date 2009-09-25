@@ -572,6 +572,27 @@ void ImpulseCommands (void)
 					}
 					if(i)
 						print(ftos(i), " waypoints cannot walk to here in any way (marked with red light)\n");
+					i = 0;
+					for(e = findchain(classname, "info_player_deathmatch"); e; e = e.chain)
+					{
+						if(navigation_findnearestwaypoint(e, FALSE))
+						{
+							e.effects &~= EF_NODEPTHTEST;
+							e.model = "";
+						}
+						else
+						{
+							print("spawn without waypoint: ", etos(e), " ", vtos(e.origin), "\n");
+							e.effects |= EF_NODEPTHTEST;
+							setmodel(e, self.model);
+							e.frame = self.frame;
+							e.skin = self.skin;
+							setsize(e, '0 0 0', '0 0 0');
+							++i;
+						}
+					}
+					if(i)
+						print(ftos(i), " spawnpoints have no nearest waypoint (marked by player model)\n");
 					break;
 			}
 		}
