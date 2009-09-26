@@ -239,6 +239,24 @@ void Draw_WaypointSprite()
 	else
 		spriteimage = strcat("models/sprites/", spriteimage, "_frame", ftos(mod(floor((max(0, time - self.spawntime)) * 2), t)));
 
+	float edgefadealpha = cvar("g_waypointsprite_edgefadealpha");
+	float edgefadescale = cvar("g_waypointsprite_edgefadescale");
+	float edgefadedistance = cvar("g_waypointsprite_edgefadedistance");
+	float edgedistance_min = min4(o_y, o_x,vid_conwidth - o_x, vid_conheight - o_y);
+
+	float crosshairfadealpha = cvar("g_waypointsprite_crosshairfadealpha");
+        float crosshairfadescale = cvar("g_waypointsprite_crosshairfadescale");
+	float crosshairfadedistance = cvar("g_waypointsprite_crosshairfadedistance");
+	float crosshairdistance; // current distance from waypoint to crosshair
+	crosshairdistance = sqrt( pow(o_x - vid_conwidth/2, 2) + pow(o_y - vid_conheight/2, 2) );
+
+	if (edgedistance_min < edgefadedistance) {
+		a = a * bound(edgefadealpha, edgedistance_min/edgefadedistance, 1);
+		vidscale = vidscale * bound(edgefadescale, edgedistance_min/edgefadedistance, 1);
+	} else if (crosshairdistance < crosshairfadedistance) {
+		a = a * bound(crosshairfadealpha, crosshairdistance/crosshairfadedistance, 1);
+		vidscale = vidscale * bound(crosshairfadescale, crosshairdistance/crosshairfadedistance, 1);
+	}
 	drawrotpic(o, rot * 90 * DEG2RAD, spriteimage, SPRITE_SIZE * waypointsprite_scale * vidscale, SPRITE_HOTSPOT * waypointsprite_scale * vidscale, '1 1 1', a, DRAWFLAG_MIPMAP);
 
 	if(self.build_finished)
