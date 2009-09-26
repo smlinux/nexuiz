@@ -2,7 +2,7 @@ float weaponstats_buffer;
 
 void WeaponStats_Init()
 {
-	if(cvar_string("g_weaponstats_killfile") != "" || cvar_string("g_weaponstats_damagefile") != "")
+	if(cvar_string("sv_weaponstats_killfile") != "" || cvar_string("sv_weaponstats_damagefile") != "")
 		weaponstats_buffer = buf_create();
 	else
 		weaponstats_buffer = -1;
@@ -18,9 +18,9 @@ void WeaponStats_Shutdown()
 	if(weaponstats_buffer < 0)
 		return;
 	prefix = strcat(cvar_string("hostname"), "\t", GetGametype(), "_", GetMapname(), "\t");
-	if(cvar_string("g_weaponstats_killfile") != "")
+	if(cvar_string("sv_weaponstats_killfile") != "")
 	{
-		fh = fopen(cvar_string("g_weaponstats_killfile"), FILE_APPEND);
+		fh = fopen(cvar_string("sv_weaponstats_killfile"), FILE_APPEND);
 		if(fh >= 0)
 		{
 			fputs(fh, "#begin killfile\n");
@@ -39,9 +39,9 @@ void WeaponStats_Shutdown()
 			print("Weapon kill stats written\n");
 		}
 	}
-	if(cvar_string("g_weaponstats_damagefile") != "")
+	if(cvar_string("sv_weaponstats_damagefile") != "")
 	{
-		fh = fopen(cvar_string("g_weaponstats_damagefile"), FILE_APPEND);
+		fh = fopen(cvar_string("sv_weaponstats_damagefile"), FILE_APPEND);
 		if(fh >= 0)
 		{
 			fputs(fh, "#begin damagefile\n");
