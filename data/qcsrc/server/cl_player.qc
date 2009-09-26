@@ -74,7 +74,7 @@ void WeaponStats_LogItem(float awep, float vwep, vector item)
 	if(awep > WEP_LAST || vwep > WEP_LAST)
 		return;
 	idx = WEAPONSTATS_GETINDEX(awep,vwep);
-	bufstr_set(weaponstats_buffer, 2*idx, vtos(stov(bufstr_get(weaponstats_buffer, 2*idx)) + item));
+	bufstr_set(weaponstats_buffer, idx, vtos(stov(bufstr_get(weaponstats_buffer, idx)) + item));
 }
 void WeaponStats_LogDamage(float awep, float vwep, float damage)
 {
