@@ -2263,6 +2263,7 @@ void Sbar_Draw (void)
 
 	if(spectatee_status && !intermission)
 	{
+		drawfont = sbar_bigfont;
 		if(spectatee_status == -1)
 			s = "^1Observing";
 		else
@@ -2272,6 +2273,7 @@ void Sbar_Draw (void)
 		pos_y = bottom_y - 50 - sbar_fontsize_spec_y;
 		s = textShortenToWidth(s, vid_conwidth/2.5/sbar_fontsize_spec_x, stringwidth_colors);
 		drawcolorcodedstring(pos, s, sbar_fontsize_spec, sbar_alpha_fg, DRAWFLAG_NORMAL);
+		drawfont = sbar_font;
 
 		// spectator text in the upper right corner
 		if(spectatee_status == -1)
