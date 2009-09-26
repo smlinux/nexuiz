@@ -24,6 +24,7 @@ sub load($)
 	while(<$fh>)
 	{
 		chomp;
+		/^#/ and next;
 		my ($addr, $map, $attackerweapon, $targweapon, $value) = split /\t/, $_;
 		$targweapon = int $self->weaponid_from_name($targweapon)
 			if $targweapon ne int $targweapon;
