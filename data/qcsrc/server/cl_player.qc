@@ -1,3 +1,91 @@
+float weaponstats_buffer;
+
+void WeaponStats_Init()
+{
+	if(cvar_string("g_weaponstats_killfile") != "" || cvar_string("g_weaponstats_damagefile") != "")
+		weaponstats_buffer = buf_create();
+	else
+		weaponstats_buffer = -1;
+}
+
+#define WEAPONSTATS_GETINDEX(awep,vwep) ((vwep) + (awep) * (WEP_LAST - WEP_FIRST + 1) - (WEP_FIRST + WEP_FIRST * (WEP_LAST - WEP_FIRST + 1)))
+
+void WeaponStats_Shutdown()
+{
+	float i, j, idx, f;
+	float fh;
+	string prefix;
+	if(weaponstats_buffer < 0)
+		return;
+	prefix = strcat(cvar_string("hostname"), "\t", GetGametype(), "_", GetMapname(), "\t");
+	if(cvar_string("g_weaponstats_killfile") != "")
+	{
+		fh = fopen(cvar_string("g_weaponstats_killfile"), FILE_APPEND);
+		if(fh >= 0)
+		{
+			fputs(fh, "#begin killfile\n");
+			fputs(fh, strcat("#date ", strftime(TRUE, "%a %b %e %H:%M:%S %Z %Y"), "\n"));
+			fputs(fh, strcat("#config ", ftos(crc16(FALSE, cvar_changes)), "\n"));
+			for(i = WEP_FIRST; i <= WEP_LAST; ++i)
+				for(j = WEP_FIRST; j <= WEP_LAST; ++j)
+				{
+					idx = WEAPONSTATS_GETINDEX(i, j);
+					f = stov(bufstr_get(weaponstats_buffer, idx)) * '0 1 0';
+					if(f != 0)
+						fputs(fh, strcat(prefix, "\t", ftos(i), "\t", ftos(j), "\t", ftos(f), "\n"));
+				}
+			fputs(fh, "#end\n\n");
+			fclose(fh);
+			print("Weapon kill stats written\n");
+		}
+	}
+	if(cvar_string("g_weaponstats_damagefile") != "")
+	{
+		fh = fopen(cvar_string("g_weaponstats_damagefile"), FILE_APPEND);
+		if(fh >= 0)
+		{
+			fputs(fh, "#begin damagefile\n");
+			fputs(fh, strcat("#date ", strftime(TRUE, "%a %b %e %H:%M:%S %Z %Y"), "\n"));
+			fputs(fh, strcat("#config ", ftos(crc16(FALSE, cvar_changes)), "\n"));
+			for(i = WEP_FIRST; i <= WEP_LAST; ++i)
+				for(j = WEP_FIRST; j <= WEP_LAST; ++j)
+				{
+					idx = WEAPONSTATS_GETINDEX(i, j);
+					f = stov(bufstr_get(weaponstats_buffer, idx)) * '1 0 0';
+					if(f != 0)
+						fputs(fh, strcat(prefix, "\t", ftos(i), "\t", ftos(j), "\t", ftos(f), "\n"));
+				}
+			fputs(fh, "#end\n\n");
+			fclose(fh);
+			print("Weapon damage stats written\n");
+		}
+	}
+	buf_del(weaponstats_buffer);
+	weaponstats_buffer = -1;
+}
+
+void WeaponStats_LogItem(float awep, float vwep, vector item)
+{
+	float idx;
+	if(weaponstats_buffer < 0)
+		return;
+	if(awep < WEP_FIRST || vwep > WEP_FIRST)
+		return;
+	if(awep > WEP_LAST || vwep > WEP_LAST)
+		return;
+	idx = WEAPONSTATS_GETINDEX(awep,vwep);
+	bufstr_set(weaponstats_buffer, 2*idx, vtos(stov(bufstr_get(weaponstats_buffer, 2*idx)) + item));
+}
+void WeaponStats_LogDamage(float awep, float vwep, float damage)
+{
+	if(damage < 0)
+		error("negative damage?");
+	WeaponStats_LogItem(awep, vwep, '1 0 0' * damage);
+}
+void WeaponStats_LogKill(float awep, float vwep)
+{
+	WeaponStats_LogItem(awep, vwep, '0 1 0');
+}
 
 // changes by LordHavoc on 03/29/04 and 03/30/04 at Vermeulen's request
 // merged player_run and player_stand to player_anim
@@ -342,8 +430,12 @@ void ClientKill_Now_TeamChange();
 
 void PlayerDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
-	local float take, save, waves, sdelay;
+	local float take, save, waves, sdelay, dh, da;
 	vector v;
+	float valid_damage_for_weaponstats;
+
+	dh = max(self.health, 0);
+	da = max(self.armorvalue, 0);
 
 	if(!DEATH_ISSPECIAL(deathtype))
 	{
@@ -484,10 +576,28 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	else
 		self.pushltime = 0;
 
+	valid_damage_for_weaponstats = 0;
+	if(clienttype(self) == CLIENTTYPE_REAL)
+	if(clienttype(attacker) == CLIENTTYPE_REAL)
+	if(self != attacker)
+	if(!DEATH_ISSPECIAL(deathtype))
+	if(IsDifferentTeam(self, attacker))
+		valid_damage_for_weaponstats = 1;
+	
+	if(valid_damage_for_weaponstats)
+	{
+		dh = dh - max(self.health, 0);
+		da = da - max(self.armorvalue, 0);
+		WeaponStats_LogDamage(DEATH_WEAPONOF(deathtype), self.weapon, dh + da);
+	}
+
 	if (self.health < 1)
 	{
 		float defer_ClientKill_Now_TeamChange;
 		defer_ClientKill_Now_TeamChange = FALSE;
+
+		if(valid_damage_for_weaponstats)
+			WeaponStats_LogKill(DEATH_WEAPONOF(deathtype), self.weapon);
 
 		if(sv_gentle < 1) // TODO make a "gentle" version?
 		if(sound_allowed(MSG_BROADCAST, attacker))

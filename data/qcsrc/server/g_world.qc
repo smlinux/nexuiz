@@ -375,6 +375,8 @@ float world_already_spawned;
 void RegisterWeapons();
 void Nagger_Init();
 void ClientInit_Spawn();
+void WeaponStats_Init();
+void WeaponStats_Shutdown();
 void spawnfunc_worldspawn (void)
 {
 	float fd, l, i, j, n;
@@ -585,6 +587,8 @@ void spawnfunc_worldspawn (void)
 			fclose(fd);
 		}
 	}
+
+	WeaponStats_Init();
 
 	addstat(STAT_WEAPONS, AS_INT, weapons);
 	addstat(STAT_SWITCHWEAPON, AS_INT, switchweapon);
@@ -2585,6 +2589,7 @@ void RestoreGame()
 	MapInfo_Shutdown();
 	MapInfo_Enumerate();
 	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), MapInfo_RequiredFlags(), MapInfo_ForbiddenFlags(), 1);
+	WeaponStats_Init();
 }
 
 void SV_Shutdown()
@@ -2609,6 +2614,7 @@ void SV_Shutdown()
 		// tell the bot system the game is ending now
 		bot_endgame();
 
+		WeaponStats_Shutdown();
 		MapInfo_Shutdown();
 	}
 	else if(world_initialized == 0)
