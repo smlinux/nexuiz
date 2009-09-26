@@ -32,7 +32,7 @@ void WeaponStats_Shutdown()
 					idx = WEAPONSTATS_GETINDEX(i, j);
 					f = stov(bufstr_get(weaponstats_buffer, idx)) * '0 1 0';
 					if(f != 0)
-						fputs(fh, strcat(prefix, "\t", ftos(i), "\t", ftos(j), "\t", ftos(f), "\n"));
+						fputs(fh, strcat(prefix, ftos(i), "\t", ftos(j), "\t", ftos(f), "\n"));
 				}
 			fputs(fh, "#end\n\n");
 			fclose(fh);
@@ -53,7 +53,7 @@ void WeaponStats_Shutdown()
 					idx = WEAPONSTATS_GETINDEX(i, j);
 					f = stov(bufstr_get(weaponstats_buffer, idx)) * '1 0 0';
 					if(f != 0)
-						fputs(fh, strcat(prefix, "\t", ftos(i), "\t", ftos(j), "\t", ftos(f), "\n"));
+						fputs(fh, strcat(prefix, ftos(i), "\t", ftos(j), "\t", ftos(f), "\n"));
 				}
 			fputs(fh, "#end\n\n");
 			fclose(fh);
