@@ -1,23 +1,22 @@
 #!/bin/sh
 
+balance_cfgs="balanceHavoc.cfg balance25.cfg balanceSamual.cfg"
+
 countd=`awk '/^seta? g_/ { print $2; }' defaultNexuiz.cfg | sort -u | tr -d '\r' | md5sum | cut -c 1-32`
 countw=`awk '/^seta? g_/ { print $2; }' balance.cfg       | sort -u | tr -d '\r' | md5sum | cut -c 1-32`
-counth=`awk '/^seta? g_/ { print $2; }' balanceHavoc.cfg  | sort -u | tr -d '\r' | md5sum | cut -c 1-32`
-countl=`awk '/^seta? g_/ { print $2; }' balance25.cfg     | sort -u | tr -d '\r' | md5sum | cut -c 1-32`
-
-if [ "$countw" != "$counth" ]; then
-	echo "Mismatch between balance.cfg and balanceHavoc.cfg. Aborting."
-	exit 1
-fi
-if [ "$countw" != "$countl" ]; then
-	echo "Mismatch between balance.cfg and balanceHavoc.cfg. Aborting."
-	exit 1
-fi
+for b in $balance_cfgs; do
+	countb=`awk '/^seta? g_/ { print $2; }' "$b"  | sort -u | tr -d '\r' | md5sum | cut -c 1-32`
+	if [ "$countw" != "$countb" ]; then
+		echo "Mismatch between balance.cfg and $b. Aborting."
+		exit 1
+	fi
+done
 
 sed -i -e "s/^set cvar_check_default .*/set cvar_check_default $countd/" defaultNexuiz.cfg
 sed -i -e "s/^set cvar_check_balance .*/set cvar_check_balance $countw/" balance.cfg
-sed -i -e "s/^set cvar_check_balance .*/set cvar_check_balance $countw/" balanceHavoc.cfg
-sed -i -e "s/^set cvar_check_balance .*/set cvar_check_balance $countw/" balance25.cfg
+for b in $balance_cfgs; do
+	sed -i -e "s/^set cvar_check_balance .*/set cvar_check_balance $countw/" "$b"
+done
 
 sed -e "
 	s/^string CVAR_CHECK_DEFAULT = .*/string CVAR_CHECK_DEFAULT = \"$countd\";/;
