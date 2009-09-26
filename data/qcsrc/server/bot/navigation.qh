@@ -2,17 +2,14 @@
  * Globals and Fields
  */
 
-float bestgoalswindex;
-float bestgoalsrindex;
 float navigation_bestrating;
 float bot_navigation_movemode;
 float navigation_testtracewalk;
 
 vector stepheightvec;
-entity botframe_dangerwaypoint;
 
-#define MAX_BESTGOALS 3
-entity navigation_bestgoals[MAX_BESTGOALS];
+entity botframe_dangerwaypoint;
+entity navigation_bestgoal;
 
 // stack of current goals (the last one of which may be an item or other
 // desirable object, the rest are typically waypoints to reach it)
@@ -65,15 +62,11 @@ void navigation_poproute();
 void navigation_markroutes_checkwaypoint(entity w, entity wp, float cost2, vector p);
 void navigation_markroutes(entity fixed_source_waypoint);
 void navigation_markroutes_inverted(entity fixed_source_waypoint);
-void navigation_bestgoals_reset();
-void navigation_add_bestgoal(entity goal);
 void navigation_routerating(entity e, float f, float rangebias);
-void navigation_routetogoals();
 void navigation_poptouchedgoals();
 void navigation_goalrating_start();
 void navigation_goalrating_end();
 
 void botframe_updatedangerousobjects(float maxupdate);
 
-entity navigation_get_bestgoal();
 entity navigation_findnearestwaypoint(entity ent, float walkfromwp);

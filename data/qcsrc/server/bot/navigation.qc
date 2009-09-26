@@ -641,56 +641,6 @@ void navigation_markroutes_inverted(entity fixed_source_waypoint)
 	}
 };
 
-void navigation_bestgoals_reset()
-{
-	local float i;
-
-	bestgoalswindex = 0;
-	bestgoalsrindex = 0;
-
-	for(i=0;i>MAX_BESTGOALS-1;++i)
-	{
-		navigation_bestgoals[i] = world;
-	}
-}
-
-void navigation_add_bestgoal(entity goal)
-{
-	if(bestgoalsrindex>0)
-	{
-		++bestgoalsrindex;
-
-		if(bestgoalsrindex==MAX_BESTGOALS)
-			bestgoalsrindex = 0;
-	}
-
-	if(bestgoalswindex==MAX_BESTGOALS)
-	{
-		bestgoalswindex=0;
-		if(bestgoalsrindex==0)
-			bestgoalsrindex=1;
-	}
-
-	navigation_bestgoals[bestgoalswindex] = goal;
-
-	++bestgoalswindex;
-}
-
-entity navigation_get_bestgoal()
-{
-	local entity ent;
-
-	ent = navigation_bestgoals[bestgoalsrindex];
-	navigation_bestgoals[bestgoalsrindex] = world;
-
-	++bestgoalsrindex;
-
-	if(bestgoalsrindex==MAX_BESTGOALS)
-		bestgoalsrindex = 0;
-
-	return ent;
-}
-
 // updates the best goal according to a weighted calculation of travel cost and item value of a new proposed item
 void navigation_routerating(entity e, float f, float rangebias)
 {
@@ -780,7 +730,7 @@ void navigation_routerating(entity e, float f, float rangebias)
 				{
 			//		dprint("jetpack path: added goal", e.classname, " (with rating ", ftos(f), ")\n");
 					navigation_bestrating = f;
-					navigation_add_bestgoal(e);
+					navigation_bestgoal = e;
 					self.navigation_jetpack_goal = e;
 					self.navigation_jetpack_point = pointb;
 				}
@@ -829,7 +779,7 @@ void navigation_routerating(entity e, float f, float rangebias)
 		{
 		//	dprint("ground path: added goal ", e.classname, " (with rating ", ftos(f), ")\n");
 			navigation_bestrating = f;
-			navigation_add_bestgoal(e);
+			navigation_bestgoal = e;
 		}
 	}
 	//dprint("\n");
@@ -879,37 +829,6 @@ float navigation_routetogoal(entity e, vector startposition)
 
 	return FALSE;
 };
-
-void navigation_routetogoals()
-{
-	entity g1, g2;
-
-	navigation_clearroute();
-
-	g1 = navigation_get_bestgoal();
-	for(;;)
-	{
-		if(g2==world)
-			g2 = navigation_get_bestgoal();
-
-		if(g2==world)
-		{
-			navigation_routetogoal(g1, self.origin);
-			return;
-		}
-
-		if(navigation_routetogoal(g1, g2.origin))
-		{
-			g1 = g2;
-			g2 = world;
-			continue;
-		}
-
-		navigation_clearroute();
-		g1 = g2;
-		g2 = world;
-	}
-}
 
 // removes any currently touching waypoints from the goal stack
 // (this is how bots detect if they reached a goal)
@@ -972,14 +891,14 @@ void navigation_goalrating_start()
 	self.navigation_jetpack_goal = world;
 	navigation_bestrating = -1;
 	self.navigation_hasgoals = FALSE;
-	navigation_bestgoals_reset();
+	navigation_bestgoal = world;
 	navigation_markroutes(world);
 };
 
 // ends a goal selection session (updates goal stack to the best goal)
 void navigation_goalrating_end()
 {
-	navigation_routetogoals();
+	navigation_routetogoal(navigation_bestgoal, self.origin);
 //	dprint("best goal ", self.goalcurrent.classname , "\n");
 
 	// Hack: if it can't walk to any goal just move blindly to the first visible waypoint
