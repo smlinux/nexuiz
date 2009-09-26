@@ -69,7 +69,7 @@ void WeaponStats_LogItem(float awep, float vwep, vector item)
 	float idx;
 	if(weaponstats_buffer < 0)
 		return;
-	if(awep < WEP_FIRST || vwep > WEP_FIRST)
+	if(awep < WEP_FIRST || vwep < WEP_FIRST)
 		return;
 	if(awep > WEP_LAST || vwep > WEP_LAST)
 		return;
