@@ -134,7 +134,7 @@ void TossGib (string mdlname, vector org, vector vconst, vector vrand, float spe
 	RubbleLimit("gib", cvar_or("cl_gibs_maxcount",100), Gib_Delete);
 }
 
-void Ent_GibSplash()
+void Ent_GibSplash(float isNew)
 {
 	float amount, type, specnum;
 	vector org, vel;
@@ -173,7 +173,7 @@ void Ent_GibSplash()
 	if(cvar("ekg"))
 		amount *= 5;
 
-	if(amount <= 0)
+	if(amount <= 0 || !isNew)
 		return;
 
 	self.origin = org; // for the sounds

@@ -70,7 +70,7 @@ void Casing_Damage(float thisdmg, float hittype, vector org, vector thisforce)
 	self.move_flags &~= FL_ONGROUND;
 }
 
-void Ent_Casing()
+void Ent_Casing(float isNew)
 {
 	entity casing;
 
@@ -86,7 +86,7 @@ void Ent_Casing()
 	casing.angles_y = ReadByte() * 360 / 256;
 	casing.angles_z = ReadByte() * 360 / 256;
 
-	if(cvar("cl_casings")) {
+	if(cvar("cl_casings") && isNew) {
 		casing.draw = Casing_Draw;
 		casing.move_origin = casing.origin;
 		casing.move_velocity = casing.velocity + 2 * prandomvec();

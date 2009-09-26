@@ -1,6 +1,6 @@
 .float silent;
 
-void Ent_DamageInfo()
+void Ent_DamageInfo(float isNew)
 {
 	float hittype, dmg, rad, edge, thisdmg, forcemul;
 	float issilent;
@@ -23,6 +23,9 @@ void Ent_DamageInfo()
 	edge = ReadByte();
 	force = decompressShortVector(ReadShort());
 
+	if not(isNew)
+		return;
+
 	if(rad < 0)
 	{
 		rad = -rad;
@@ -30,7 +33,7 @@ void Ent_DamageInfo()
 	}
 	else
 		forcemul = 1;
-
+	
 	for(self = findradius(org, rad); self; self = self.chain)
 	{
 		if(rad)

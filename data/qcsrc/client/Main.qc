@@ -796,6 +796,7 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		{
 			print("A CSQC entity changed its type!\n");
 			Ent_Remove();
+			bIsNewEntity = 1;
 		}
 #endif
 	self.enttype = t;
@@ -811,16 +812,16 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		case ENT_CLIENT_WAYPOINT: Ent_WaypointSprite(); break;
 		case ENT_CLIENT_RADARLINK: Ent_RadarLink(); break;
 		case ENT_CLIENT_PROJECTILE: Ent_Projectile(); break;
-		case ENT_CLIENT_GIBSPLASH: Ent_GibSplash(); break;
-		case ENT_CLIENT_DAMAGEINFO: Ent_DamageInfo(); break;
-		case ENT_CLIENT_CASING: Ent_Casing(); break;
+		case ENT_CLIENT_GIBSPLASH: Ent_GibSplash(bIsNewEntity); break;
+		case ENT_CLIENT_DAMAGEINFO: Ent_DamageInfo(bIsNewEntity); break;
+		case ENT_CLIENT_CASING: Ent_Casing(bIsNewEntity); break;
 		case ENT_CLIENT_INIT: Ent_Init(); break;
 		case ENT_CLIENT_SCORES_INFO: Ent_ScoresInfo(); break;
 		case ENT_CLIENT_MAPVOTE: Ent_MapVote(); break;
 		case ENT_CLIENT_CLIENTDATA: Ent_ClientData(); break;
 		case ENT_CLIENT_RANDOMSEED: Ent_RandomSeed(); break;
 		case ENT_CLIENT_WALL: Ent_Wall(); break;
-		case ENT_CLIENT_MODELEFFECT: Ent_ModelEffect(); break;
+		case ENT_CLIENT_MODELEFFECT: Ent_ModelEffect(bIsNewEntity); break;
 		default:
 			error(strcat("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n"));
 			break;

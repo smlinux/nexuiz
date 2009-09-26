@@ -19,7 +19,7 @@ void ModelEffect_Draw()
 	R_AddEntity(self);
 }
 
-void Ent_ModelEffect()
+void Ent_ModelEffect(float isNew)
 {
 	float f;
 	entity e;
@@ -64,4 +64,7 @@ void Ent_ModelEffect()
 	e.cnt = ReadByte() / 255.0; // actually alpha
 
 	e.draw = ModelEffect_Draw;
+
+	if(!isNew)
+		remove(e); // yes, this IS stupid, but I don't need to duplicate all the read* stuff then
 }
