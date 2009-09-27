@@ -4460,7 +4460,7 @@ effect rocket_guide
 type alphastatic
 notunderwater
 tex 0 8
-count 10
+count 5
 size 10 20
 sizeincrease 17
 alpha 300 550 556
@@ -4468,11 +4468,11 @@ velocityjitter 128 128 128
 airfriction 5
 color 0x000000 0x111111
 bounce 6
-velocitymultiplier -0.3
+velocitymultiplier -0.1
 // underwater bubbles
 effect rocket_guide
 underwater
-count 8
+count 4
 type bubble
 tex 62 62
 color 0x404040 0x808080
@@ -4483,7 +4483,7 @@ bounce 1.5
 liquidfriction 0.25
 originjitter 8 8 8
 velocityjitter 48 48 48
-velocitymultiplier -0.3
+velocitymultiplier -0.1
 // bouncing sparks
 effect rocket_guide
 notunderwater
@@ -4499,4 +4499,4 @@ bounce 1.5
 liquidfriction 0.8
 velocityoffset 0 0 80
 velocityjitter 256 256 256
-velocitymultiplier -0.3
+velocitymultiplier -0.1
