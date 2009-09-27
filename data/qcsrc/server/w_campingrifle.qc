@@ -150,16 +150,16 @@ float w_campingrifle(float req)
 		else
 		{
 			self.campingrifle_accumulator = bound(time - cvar("g_balance_campingrifle_bursttime"), self.campingrifle_accumulator, time);
-			if (time >= self.campingrifle_accumulator + cvar("g_balance_campingrifle_primary_burstcost"))
 			if (self.BUTTON_ATCK)
+			if (time >= self.campingrifle_accumulator + cvar("g_balance_campingrifle_primary_burstcost"))
 			if (weapon_prepareattack(0, cvar("g_balance_campingrifle_primary_refire")))
 			{
 				W_CampingRifle_Attack();
 				weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_campingrifle_primary_animtime"), W_CampingRifle_CheckReloadAndReady);
 				self.campingrifle_accumulator += cvar("g_balance_campingrifle_primary_burstcost");
 			}
-			if (time >= self.campingrifle_accumulator + cvar("g_balance_campingrifle_secondary_burstcost"))
 			if (self.BUTTON_ATCK2)
+			if (time >= self.campingrifle_accumulator + cvar("g_balance_campingrifle_secondary_burstcost"))
 			if (weapon_prepareattack(1, cvar("g_balance_campingrifle_secondary_refire")))
 			{
 				W_CampingRifle_Attack2();
