@@ -738,7 +738,10 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 
 		// reset fields the weapons may use just in case
         for (j = WEP_FIRST; j <= WEP_LAST; ++j)
+		{
             weapon_action(j, WR_RESETPLAYER);
+			ATTACK_FINISHED_FOR(self, j) = 0;
+		}
 	}
 }
 

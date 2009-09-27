@@ -393,10 +393,11 @@ float bot_waypoints_for_items;
 .float	attack_finished_for[WEP_COUNT];
 .float attack_finished_single;
 #ifdef INDEPENDENT_ATTACK_FINISHED
-#define ATTACK_FINISHED(ent) ((ent).(attack_finished_for[(ent).weapon]))
+#define ATTACK_FINISHED_FOR(ent,w) ((ent).(attack_finished_for[(w) - WEP_FIRST]))
 #else
-#define ATTACK_FINISHED(ent) ((ent).attack_finished_single)
+#define ATTACK_FINISHED_FOR(ent,w) ((ent).attack_finished_single)
 #endif
+#define ATTACK_FINISHED(ent) ATTACK_FINISHED_FOR(ent,(ent).weapon)
 
 // assault game mode: Which team is attacking in this round?
 float assault_attacker_team;
