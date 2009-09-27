@@ -1,5 +1,31 @@
 .float electro_count;
 
+void W_Plasma_Explode_Combo (void);
+
+void W_Plasma_TriggerCombo(vector org, float rad, entity own)
+{
+	local entity e;
+	e = findradius(org, rad);
+	while (e)
+	{
+		if (e.classname == "plasma")
+		{
+			// see if there is line of sight to the combo ball
+			traceline(org, e.origin, MOVE_NOMONSTERS, e);
+			if (trace_fraction == 1 || trace_ent == e)
+			{
+				// change owner to whoever caused the combo explosion
+				e.owner = own;
+				e.takedamage = DAMAGE_NO;
+				e.classname = "plasma_chain";
+				e.think = W_Plasma_Explode_Combo;
+				e.nextthink = time + vlen(e.origin - org) / cvar("g_balance_electro_combo_speed"); // delay combo chains, looks cooler
+			}
+		}
+		e = e.chain;
+	}
+}
+
 void W_Plasma_Explode (void)
 {
 	if(other.takedamage == DAMAGE_AIM)
@@ -8,6 +34,8 @@ void W_Plasma_Explode (void)
 				if(other.deadflag == DEAD_NO)
 					if(IsFlying(other))
 						announce(self.owner, "announcer/male/electrobitch.wav");
+
+	W_Plasma_TriggerCombo(self.origin, cvar("g_balance_electro_primary_comboradius"), self.owner);
 
 	self.event_damage = SUB_Null;
 	self.takedamage = DAMAGE_NO;
@@ -23,7 +51,11 @@ void W_Plasma_Explode (void)
 	remove (self);
 }
 
-void W_Plasma_Explode_Combo (void) {
+void W_Plasma_Explode_Combo (void)
+{
+
+	W_Plasma_TriggerCombo(self.origin, cvar("g_balance_electro_combo_comboradius"), self.owner);
+
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_electro_combo_damage"), cvar("g_balance_electro_combo_edgedamage"), cvar("g_balance_electro_combo_radius"), world, cvar("g_balance_electro_combo_force"), WEP_ELECTRO | HITTYPE_BOUNCE, world); // use THIS type for a combo because primary can't bounce
 	remove (self);
@@ -50,6 +82,7 @@ void W_Plasma_Damage (entity inflictor, entity attacker, float damage, float dea
 {
 	if(self.health <= 0)
 		return;
+	// note: combos are usually triggered by W_Plasma_TriggerCombo, not damage
 	self.health = self.health - damage;
 	if (self.health <= 0)
 	{
