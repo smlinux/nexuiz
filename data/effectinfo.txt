@@ -1225,59 +1225,59 @@ effect grenade_explode
 countabsolute 1
 type decal
 tex 8 16
-size 72 72
+size 48 48
 alpha 256 256 0
 originjitter 40 40 40
-lightradius 400
-lightradiusfade 750
+lightradius 250
+lightradiusfade 400
 lightcolor 8 4 1
-// fire effect
+// fire effect which expands then slows
 effect grenade_explode
 notunderwater
-count 64
+count 80
 type static
 tex 48 55
-color 0x8f0d00 0xff5a00
-size 33 44
-sizeincrease 45
-alpha 200 256 512
-bounce 1.5
+color 0xe03f00 0x5e0000
+size 16 26
+sizeincrease 20
+alpha 128 228 356
+bounce 4.5
 airfriction 8
 liquidfriction 8
 originjitter 8 8 8
-velocityjitter 512 512 512
-// fire effect 2
+velocityjitter 256 256 256
+// fire effect which make brigt dot inside
 effect grenade_explode
 notunderwater
-count 28
-type smoke
+count 30
+type static
 tex 48 55
-color 0xea691b 0xeed05a
-size 33 44
-sizeincrease 55
-alpha 200 256 612
-bounce 2.5
-airfriction 19
-liquidfriction 19
+color 0xe03f00 0xffdf92
+size 6 16
+sizeincrease 40
+alpha 228 328 756
+bounce 1
+airfriction 8
+liquidfriction 8
 originjitter 8 8 8
-velocityjitter 912 912 912
+velocityjitter 256 256 256
 // smoke
 effect grenade_explode
 type alphastatic
 notunderwater
 tex 0 8
-count 64
+count 20
 size 20 40
-sizeincrease 44
-alpha 200 450 456
-velocityjitter 444 444 444
+sizeincrease 34
+alpha 300 550 556
+velocityjitter 256 256 256
 airfriction 5
 color 0x000000 0x111111
-bounce 2
+bounce 6
 // underwater bubbles
 effect grenade_explode
 underwater
-count 64
+count 32
 type bubble
 tex 62 62
 color 0x404040 0x808080
@@ -1287,24 +1287,22 @@ gravity -0.125
 bounce 1.5
 liquidfriction 0.25
 originjitter 16 16 16
-velocityjitter 144 144 144
+velocityjitter 96 96 96
 // bouncing sparks
 effect grenade_explode
 notunderwater
-count 64
+count 16
 type spark
+color 0x903010 0xFFD030
+size 2 2
 tex 40 40
-color 0xffa800 0xffedaf
-size 1 1
-sizeincrease 2
-alpha 44 256 384
+alpha 256 256 384
 gravity 1
-airfriction -1
+airfriction 0.2
 bounce 1.5
 liquidfriction 0.8
 velocityoffset 0 0 80
-originjitter 16 16 16
-velocityjitter 224 224 324
+velocityjitter 256 256 256
 
 
 
@@ -1979,63 +1977,69 @@ velocityjitter 100 100 100
 velocitymultiplier -0.31
 
 // rocket explosion (bigger than mortar and hagar)
+// decal
+// used in qcsrc/server/cl_impulse.qc:							pointparticles(particleeffectnum("rocket_explode"), org, '0 0 0', 1)
+// used in qcsrc/server/cl_player.qc:				pointparticles(particleeffectnum("rocket_explode"), self.origin, '0 0 0', 1)
+// used in qcsrc/server/portals.qc:		pointparticles(particleeffectnum("rocket_explode"), portal.origin + v_forward * 16, v_forward * 1024, 4)
+// used in qcsrc/server/steerlib.qc:	pointparticles(particleeffectnum("rocket_explode"), self.origin, '0 0 0', 1)
+// used in qcsrc/client/damage.qc:				pointparticles(particleeffectnum("rocket_explode"), org2, '0 0 0', 1)
 effect rocket_explode
 countabsolute 1
 type decal
 tex 8 16
-size 48 48
+size 72 72
 alpha 256 256 0
 originjitter 40 40 40
-lightradius 250
-lightradiusfade 400
+lightradius 400
+lightradiusfade 750
 lightcolor 8 4 1
-// fire effect which expands then slows
+// fire effect
 effect rocket_explode
 notunderwater
-count 80
+count 64
 type static
 tex 48 55
-color 0xe03f00 0x5e0000
-size 16 26
-sizeincrease 20
-alpha 128 228 356
-bounce 4.5
+color 0x8f0d00 0xff5a00
+size 33 44
+sizeincrease 45
+alpha 200 256 512
+bounce 1.5
 airfriction 8
 liquidfriction 8
 originjitter 8 8 8
-velocityjitter 256 256 256
-// fire effect which make brigt dot inside
+velocityjitter 512 512 512
+// fire effect 2
 effect rocket_explode
 notunderwater
-count 30
-type static
+count 28
+type smoke
 tex 48 55
-color 0xe03f00 0xffdf92
-size 6 16
-sizeincrease 40
-alpha 228 328 756
-bounce 1
-airfriction 8
-liquidfriction 8
+color 0xea691b 0xeed05a
+size 33 44
+sizeincrease 55
+alpha 200 256 612
+bounce 2.5
+airfriction 19
+liquidfriction 19
 originjitter 8 8 8
-velocityjitter 256 256 256
+velocityjitter 912 912 912
 // smoke
 effect rocket_explode
 type alphastatic
 notunderwater
 tex 0 8
-count 20
+count 64
 size 20 40
-sizeincrease 34
-alpha 300 550 556
-velocityjitter 256 256 256
+sizeincrease 44
+alpha 200 450 456
+velocityjitter 444 444 444
 airfriction 5
 color 0x000000 0x111111
-bounce 6
+bounce 2
 // underwater bubbles
 effect rocket_explode
 underwater
-count 32
+count 64
 type bubble
 tex 62 62
 color 0x404040 0x808080
@@ -2045,22 +2049,24 @@ gravity -0.125
 bounce 1.5
 liquidfriction 0.25
 originjitter 16 16 16
-velocityjitter 96 96 96
+velocityjitter 144 144 144
 // bouncing sparks
 effect rocket_explode
 notunderwater
-count 16
+count 64
 type spark
-color 0x903010 0xFFD030
-size 2 2
 tex 40 40
-alpha 256 256 384
+color 0xffa800 0xffedaf
+size 1 1
+sizeincrease 2
+alpha 44 256 384
 gravity 1
-airfriction 0.2
+airfriction -1
 bounce 1.5
 liquidfriction 0.8
 velocityoffset 0 0 80
-velocityjitter 256 256 256
+originjitter 16 16 16
+velocityjitter 224 224 324
 
 
 
