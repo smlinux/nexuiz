@@ -551,5 +551,9 @@ float w_rlauncher(float req)
 		else
 			w_deathtypestring = "ate #'s rocket";
 	}
+	else if (req == WR_RESETPLAYER)
+	{
+		self.rl_release = 0;
+	}
 	return TRUE;
 };

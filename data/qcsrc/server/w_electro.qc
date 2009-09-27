@@ -294,5 +294,9 @@ float w_electro(float req)
 				w_deathtypestring = "was blasted by #'s blue beam";
 		}
 	}
+	else if (req == WR_RESETPLAYER)
+	{
+		self.electro_secondarytime = time;
+	}
 	return TRUE;
 };

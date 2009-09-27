@@ -792,6 +792,7 @@ void PutClientInServer (void)
 
 	if(self.classname == "player") {
 		entity spot, oldself;
+		float j;
 
 		if(self.team < 0)
 			JoinBestTeam(self, FALSE, TRUE);
@@ -806,7 +807,6 @@ void PutClientInServer (void)
 		}
 
 		RemoveGrapplingHook(self); // Wazat's Grappling Hook
-		self.campingrifle_bulletcounter = cvar("g_balance_campingrifle_magazinecapacity");
 
 		self.classname = "player";
 		self.wasplayer = TRUE;
@@ -981,13 +981,16 @@ void PutClientInServer (void)
 
 		target_voicescript_clear(self);
 
+		// reset fields the weapons may use
+        for (j = WEP_FIRST; j <= WEP_LAST; ++j)
+            weapon_action(j, WR_RESETPLAYER);
+
 		oldself = self;
 		self = spot;
 			activator = oldself;
 				SUB_UseTargets();
 			activator = world;
 		self = oldself;
-
 	} else if(self.classname == "observer") {
 		PutObserverInServer ();
 	}

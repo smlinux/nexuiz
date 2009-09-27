@@ -430,7 +430,7 @@ void ClientKill_Now_TeamChange();
 
 void PlayerDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
-	local float take, save, waves, sdelay, dh, da;
+	local float take, save, waves, sdelay, dh, da, j;
 	vector v;
 	float valid_damage_for_weaponstats;
 
@@ -735,6 +735,10 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 			// remove corpse
 			PlayerCorpseDamage (inflictor, attacker, 100.0, deathtype, hitloc, force);
 		}
+
+		// reset fields the weapons may use just in case
+        for (j = WEP_FIRST; j <= WEP_LAST; ++j)
+            weapon_action(j, WR_RESETPLAYER);
 	}
 }
 

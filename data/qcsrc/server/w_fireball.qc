@@ -382,5 +382,9 @@ float w_fireball(float req)
 				w_deathtypestring = "fatefully ignored #'s firemine";
 		}
 	}
+	else if (req == WR_RESETPLAYER)
+	{
+		self.fireball_secondarytime = time;
+	}
 	return TRUE;
 };

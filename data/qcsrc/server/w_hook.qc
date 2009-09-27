@@ -239,5 +239,9 @@ float w_hook(float req)
 		w_deathtypestring = "did the impossible";
 	else if (req == WR_KILLMESSAGE)
 		w_deathtypestring = "has run into #'s gravity bomb";
+	else if (req == WR_RESETPLAYER)
+	{
+		self.hook_refire = time;
+	}
 	return TRUE;
 };

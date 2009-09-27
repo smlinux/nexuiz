@@ -269,5 +269,9 @@ float w_porto(float req)
 		w_deathtypestring = "did the impossible";
 	else if (req == WR_KILLMESSAGE)
 		w_deathtypestring = "felt # doing the impossible to him";
+	else if (req == WR_RESETPLAYER)
+	{
+		self.porto_current = world;
+	}
 	return TRUE;
 };

@@ -226,5 +226,11 @@ float w_campingrifle(float req)
 	{
 		W_CampingRifle_Reload();
 	}
+	else if (req == WR_RESETPLAYER)
+	{
+		self.campingrifle_accumulator = time - cvar("g_balance_campingrifle_bursttime");
+		self.campingrifle_bulletcounter = cvar("g_balance_campingrifle_magazinecapacity");
+		W_CampingRifle_CheckMaxBullets();
+	}
 	return TRUE;
 };

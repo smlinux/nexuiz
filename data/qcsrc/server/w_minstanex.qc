@@ -224,5 +224,9 @@ float w_minstanex(float req)
 		w_deathtypestring = "did the impossible";
 	else if (req == WR_KILLMESSAGE)
 		w_deathtypestring = "has been vaporized by";
+	else if (req == WR_RESETPLAYER)
+	{
+		self.minstanex_lasthit = 0;
+	}
 	return TRUE;
 };
