@@ -387,7 +387,7 @@ float GameCommand_Generic(string command)
 					}
 					else
 					{
-						print("rpn: empty cvar name for 'def'");
+						print("rpn: empty cvar name for 'def'\n");
 						rpn_error = TRUE;
 					}
 				} else if(rpncmd == "defs" || rpncmd == "@") {
@@ -412,7 +412,7 @@ float GameCommand_Generic(string command)
 					}
 					else
 					{
-						print("rpn: empty cvar name for 'defs'");
+						print("rpn: empty cvar name for 'defs'\n");
 						rpn_error = TRUE;
 					}
 				} else if(rpncmd == "load") {
