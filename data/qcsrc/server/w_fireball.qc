@@ -1,5 +1,6 @@
 .float bot_secondary_fireballmooth; // whatever a mooth is
 .vector fireball_impactvec;
+.float fireball_secondarytime;
 
 void W_Fireball_Explode (void)
 {
@@ -323,9 +324,11 @@ float w_fireball(float req)
 			weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_fireball_primary_animtime"), w_ready);
 		}
 		if (self.BUTTON_ATCK2)
+		if (time >= self.fireball_secondarytime)
 		if (weapon_prepareattack(1, cvar("g_balance_fireball_secondary_refire")))
 		{
 			W_Fireball_Attack2_Frame0();
+			self.fireball_secondarytime = time + cvar("g_balance_fireball_secondary_refire2");
 		}
 	}
 	else if (req == WR_PRECACHE)

@@ -1,4 +1,5 @@
 .float electro_count;
+.float electro_secondarytime;
 
 void W_Plasma_Explode_Combo (void);
 
@@ -241,11 +242,13 @@ float w_electro(float req)
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_electro_primary_animtime"), w_ready);
 		}
 		if (self.BUTTON_ATCK2)
+		if (time >= self.electro_secondarytime)
 		if (weapon_prepareattack(1, cvar("g_balance_electro_secondary_refire")))
 		{
 			W_Electro_Attack2();
 			self.electro_count = cvar("g_balance_electro_secondary_count");
 			weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_electro_secondary_animtime"), w_electro_checkattack);
+			self.electro_secondarytime = time + cvar("g_balance_electro_secondary_refire2");
 		}
 	}
 	else if (req == WR_PRECACHE)
