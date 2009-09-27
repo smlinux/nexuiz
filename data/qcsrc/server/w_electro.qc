@@ -35,8 +35,6 @@ void W_Plasma_Explode (void)
 					if(IsFlying(other))
 						announce(self.owner, "announcer/male/electrobitch.wav");
 
-	W_Plasma_TriggerCombo(self.origin, cvar("g_balance_electro_primary_comboradius"), self.owner);
-
 	self.event_damage = SUB_Null;
 	self.takedamage = DAMAGE_NO;
 	if (self.movetype == MOVETYPE_BOUNCE)
@@ -45,6 +43,7 @@ void W_Plasma_Explode (void)
 	}
 	else
 	{
+		W_Plasma_TriggerCombo(self.origin, cvar("g_balance_electro_primary_comboradius"), self.owner);
 		RadiusDamage (self, self.owner, cvar("g_balance_electro_primary_damage"), cvar("g_balance_electro_primary_edgedamage"), cvar("g_balance_electro_primary_radius"), world, cvar("g_balance_electro_primary_force"), self.projectiledeathtype, other);
 	}
 
