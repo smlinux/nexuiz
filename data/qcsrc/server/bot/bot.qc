@@ -321,6 +321,7 @@ void bot_clientdisconnect()
 	self.netname_freeme = string_null;
 	self.playermodel_freeme = string_null;
 	self.playerskin_freeme = string_null;
+	remove(self.bot_cmd_current);
 }
 
 void bot_clientconnect()
