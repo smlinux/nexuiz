@@ -210,7 +210,7 @@ float _Movetype_PushEntity(vector push, float failonstartsolid) // SV_PushEntity
 	return trace_fraction;
 }
 
-#define MAX_CLIP_PLANES 32
+#define MAX_CLIP_PLANES 5
 void _Movetype_Physics_Toss(float dt) // SV_Physics_Toss
 {
 	if(self.move_flags & FL_ONGROUND)
