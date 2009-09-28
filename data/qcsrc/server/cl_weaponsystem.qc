@@ -645,7 +645,7 @@ void CL_Weaponentity_Think()
 	self.angles = '0 0 0';
 	local float f;
 	f = 0;
-	if (self.state == WS_RAISE)
+	if (self.state == WS_RAISE && !intermission_running)
 	{
 		f = (self.owner.weapon_nextthink - time) * g_weaponratefactor / cvar("g_balance_weaponswitchdelay");
 		self.angles_x = -90 * f * f;
@@ -655,7 +655,7 @@ void CL_Weaponentity_Think()
 			setorigin(self, QCWEAPONANIMATION_ORIGIN(self));
 		}
 	}
-	else if (self.state == WS_DROP)
+	else if (self.state == WS_DROP && !intermission_running)
 	{
 		f = 1 - (self.owner.weapon_nextthink - time) * g_weaponratefactor / cvar("g_balance_weaponswitchdelay");
 		self.angles_x = -90 * f * f;
