@@ -213,7 +213,7 @@ float bot_aimdir(vector v, float maxfiredeviation)
 		+ (self.bot_4th_order_aimfilter - self.bot_5th_order_aimfilter) * bound(0, cvar("bot_ai_aimskill_order_filter_5th"),1);
 
 	//blend = (bound(0,skill,10)*0.1)*pow(1-bound(0,skill,10)*0.05,2.5)*5.656854249; //Plot formule before changing !
-	blend = bound(0,skill,10)*0.1;
+	blend = bound(0,skill+self.bot_aimskill,10)*0.1;
 	desiredang = desiredang + blend *
 	(
 		  self.bot_1st_order_aimfilter * cvar("bot_ai_aimskill_order_mix_1st")
@@ -234,7 +234,7 @@ float bot_aimdir(vector v, float maxfiredeviation)
 	if (time >= self.bot_aimthinktime)
 	{
 		self.bot_aimthinktime = max(self.bot_aimthinktime + 0.5 - 0.05*(skill+self.bot_thinkskill), time);
-		self.bot_mouseaim = self.bot_mouseaim + diffang * (1-random()*0.1*bound(1,10-skill,10));
+		self.bot_mouseaim = self.bot_mouseaim + diffang * (1-random()*0.1*bound(1,10-(skill+self.bot_thinkskill),10));
 	}
 
 	//self.v_angle = self.v_angle + diffang * bound(0, r * frametime * (skill * 0.5 + 2), 1);
@@ -291,8 +291,8 @@ float bot_aimdir(vector v, float maxfiredeviation)
 	// note the maxfiredeviation is in degrees so this has to convert to radians first
 	//if ((normalize(v) * shotdir) >= cos(maxfiredeviation * (3.14159265358979323846 / 180)))
 	if ((normalize(v) * shotdir) >= cos(maxfiredeviation * (3.14159265358979323846 / 180)))
-	if (vlen(trace_endpos-shotorg) < 500+500*bound(0, skill, 10) || random()*random()>bound(0,skill*0.05,1))
-		self.bot_firetimer = time + bound(0.1, 0.5-skill*0.05, 0.5);
+	if (vlen(trace_endpos-shotorg) < 500+500*bound(0, skill+self.bot_aggresskill, 10) || random()*random()>bound(0,(skill+self.bot_aggresskill)*0.05,1))
+		self.bot_firetimer = time + bound(0.1, 0.5-(skill+self.bot_aggresskill)*0.05, 0.5);
 	//traceline(shotorg,shotorg+shotdir*1000,FALSE,world);
 	//dprint(ftos(maxfiredeviation),"\n");
 	//dprint(" diff:", vtos(diffang), "\n");

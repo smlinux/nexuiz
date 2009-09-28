@@ -127,7 +127,7 @@ void havocbot_ai()
 		)
 			next = self.goalstack01.origin - (self.origin + self.view_ofs);
 
-		skillblend=bound(0,(skill-2.5)*0.5,1); //lower skill player can't preturn
+		skillblend=bound(0,(skill+self.bot_moveskill-2.5)*0.5,1); //lower skill player can't preturn
 		distanceblend=bound(0,aimdistance/cvar("bot_ai_keyboard_distance"),1);
 		blend = skillblend * (1-distanceblend);
 		//v = (now * (distanceblend) + next * (1-distanceblend)) * (skillblend) + now * (1-skillblend);
@@ -150,6 +150,9 @@ void havocbot_keyboard_movement(vector destorg)
 {
 	local vector keyboard;
 	local float blend, maxspeed;
+	float sk;
+
+	sk = skill + self.bot_moveskill;
 
 	maxspeed = cvar("sv_maxspeed");
 
@@ -159,13 +162,13 @@ void havocbot_keyboard_movement(vector destorg)
 	self.havocbot_keyboardtime =
 		max(
 			self.havocbot_keyboardtime
-				+ bound(0,0.05/(skill+self.havocbot_keyboardskill),0.05)
+				+ bound(0,0.05/(sk+self.havocbot_keyboardskill),0.05)
 				+random()*bound(0,0.025/(skill+self.havocbot_keyboardskill),100)
 		, time);
 	keyboard = self.movement * (1.0 / maxspeed);
 
 	local float trigger, trigger1;
-	blend = bound(0,skill*0.1,1);
+	blend = bound(0,sk*0.1,1);
 	trigger = cvar("bot_ai_keyboard_treshold");
 	trigger1 = 0 - trigger;
 
@@ -177,22 +180,22 @@ void havocbot_keyboard_movement(vector destorg)
 	if (keyboard_x > trigger)
 	{
 		keyboard_x = 1;
-		if (skill < 2.5)
+		if (sk < 2.5)
 			keyboard_y = 0;
 	}
-	else if (keyboard_x < trigger1 && skill > 1.5)
+	else if (keyboard_x < trigger1 && sk > 1.5)
 	{
 		keyboard_x = -1;
-		if (skill < 4.5)
+		if (sk < 4.5)
 			keyboard_y = 0;
 	}
 	else
 	{
 		keyboard_x = 0;
-		if (skill < 1.5)
+		if (sk < 1.5)
 			keyboard_y = 0;
 	}
-	if (skill < 4.5)
+	if (sk < 4.5)
 		keyboard_z = 0;
 
 	if (keyboard_y > trigger)
@@ -765,11 +768,11 @@ void havocbot_movetogoal()
 		}
 
 		dodge = havocbot_dodge();
-		dodge = dodge * bound(0,3+skill*0.1,1);
-		evadelava = evadelava * bound(1,3-skill,3); //Noobs fear lava a lot and take more distance from it
+		dodge = dodge * bound(0,0.5+(skill+self.bot_dodgeskill)*0.1,1);
+		evadelava = evadelava * bound(1,3-(skill+self.bot_dodgeskill),3); //Noobs fear lava a lot and take more distance from it
 		traceline(self.origin, self.enemy.origin, TRUE, world);
 		if(trace_ent.classname == "player")
-			dir = dir * bound(0,skill/7,1);
+			dir = dir * bound(0,(skill+self.bot_dodgeskill)/7,1);
 
 		dir = normalize(dir + dodge + evadeobstacle + evadelava);
 	//	self.bot_dodgevector = dir;
@@ -803,12 +806,12 @@ void havocbot_movetogoal()
 
 	// Bunnyhop!
 //	if(self.aistatus & AI_STATUS_ROAMING)
-	if(skill >= cvar("bot_ai_bunnyhop_skilloffset"))
+	if(skill+self.bot_moveskill >= cvar("bot_ai_bunnyhop_skilloffset"))
 		havocbot_bunnyhop(dir);
 
 	if ((dir * v_up) >= cvar("sv_jumpvelocity")*0.5 && (self.flags & FL_ONGROUND)) self.BUTTON_JUMP=1;
-	if (((dodge * v_up) > 0) && random()*frametime >= 0.2*bound(0,(10-skill)*0.1,1)) self.BUTTON_JUMP=TRUE;
-	if (((dodge * v_up) < 0) && random()*frametime >= 0.5*bound(0,(10-skill)*0.1,1)) self.havocbot_ducktime=time+0.3/bound(0.1,skill,10);
+	if (((dodge * v_up) > 0) && random()*frametime >= 0.2*bound(0,(10-skill-self.bot_dodgeskill)*0.1,1)) self.BUTTON_JUMP=TRUE;
+	if (((dodge * v_up) < 0) && random()*frametime >= 0.5*bound(0,(10-skill-self.bot_dodgeskill)*0.1,1)) self.havocbot_ducktime=time+0.3/bound(0.1,skill+self.bot_dodgeskill,10);
 };
 
 void havocbot_chooseenemy()
@@ -966,7 +969,7 @@ void havocbot_chooseweapon()
 
 	// Bots with no skill will be 4 times more slower than "godlike" bots when doing weapon combos
 	// Ideally this 4 should be calculated as longest_weapon_refire / bot_ai_weapon_combo_threshold
-	combo_time = time + ct + (ct * ((-0.3*skill)+3));
+	combo_time = time + ct + (ct * ((-0.3*(skill+self.bot_weaponskill))+3));
 
 	combo = FALSE;
 
@@ -977,6 +980,8 @@ void havocbot_chooseweapon()
 		combo = TRUE;
 		self.lastcombotime = time;
 	}
+
+	distance *= pow(2, self.bot_rangepreference);
 
 	// Custom weapon list based on distance to the enemy
 	if(bot_custom_weapon){
@@ -995,7 +1000,7 @@ void havocbot_chooseweapon()
 		}
 
 		// Choose weapons for mid distance
-		if ( distance > bot_distance_close ) {
+		if ( distance > bot_distance_close) {
 			for(i=0; i < WEP_COUNT && bot_weapons_mid[i] != -1 ; ++i){
 				w = bot_weapons_mid[i];
 				if ( client_hasweapon(self, w, TRUE, FALSE) ){
@@ -1289,9 +1294,6 @@ void havocbot_setupbot()
 	self.cmd_moveto = havocbot_moveto;
 	self.cmd_resetgoal = havocbot_resetgoal;
 
-	// will be updated by think code
-	//Generate some random skill levels
-	self.havocbot_keyboardskill = random() - 0.5;
 	havocbot_chooserole();
 }
 

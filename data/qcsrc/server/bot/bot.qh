@@ -20,10 +20,24 @@ float AI_STATUS_JETPACK_LANDING			= 1024;
 // Skill system
 float skill;
 float autoskill_nextthink;
-.float bot_thinkskill;
-.float bot_mouseskill;
-.float bot_predictionskill;
-.float bot_offsetskill;
+
+// havocbot_keyboardskill // keyboard movement
+.float bot_moveskill; // moving technique
+.float bot_dodgeskill; // dodging
+
+.float bot_pingskill; // ping offset
+
+.float bot_weaponskill; // weapon usage skill (combos, e.g.)
+.float bot_aggresskill; // aggressivity, controls "think before fire" behaviour
+.float bot_rangepreference; // weapon choice offset for range (>0 = prefer long range earlier "sniper", <0 = prefer short range "spammer")
+
+.float bot_aimskill; // aim accuracy
+.float bot_offsetskill; // aim breakage
+.float bot_mouseskill; // mouse "speed"
+
+.float bot_thinkskill; // target choice
+.float bot_aiskill; // strategy choice
+
 .float totalfrags_lastcheck;
 
 // Custom weapon priorities

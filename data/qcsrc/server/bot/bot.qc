@@ -36,7 +36,7 @@ void bot_think()
 	if(cvar("bot_god"))
 		self.flags |= FL_GODMODE;
 
-	self.bot_nextthink = self.bot_nextthink + cvar("bot_ai_thinkinterval");
+	self.bot_nextthink = self.bot_nextthink + cvar("bot_ai_thinkinterval") * pow(0.5, self.bot_aiskill);
 	//if (self.bot_painintensity > 0)
 	//	self.bot_painintensity = self.bot_painintensity - (skill + 1) * 40 * frametime;
 
@@ -64,7 +64,7 @@ void bot_think()
 	// (simulated network latency + naturally delayed reflexes)
 	//self.ping = 0.7 - bound(0, 0.05 * skill, 0.5); // moved the reflexes to bot_aimdir (under the name 'think')
 	// minimum ping 20+10 random
-	self.ping = bound(0,0.07 - bound(0, skill * 0.005,0.05)+random()*0.01,0.65); // Now holds real lag to server, and higer skill players take a less laggy server
+	self.ping = bound(0,0.07 - bound(0, (skill + self.bot_pingskill) * 0.005,0.05)+random()*0.01,0.65); // Now holds real lag to server, and higer skill players take a less laggy server
 	// skill 10 = ping 0.2 (adrenaline)
 	// skill 0 = ping 0.7 (slightly drunk)
 
@@ -165,6 +165,28 @@ void bot_setnameandstuff()
 	else bot_pants = ftos(floor(random() * 15));
 
 	self.bot_forced_team = stof(argv(5));
+
+	prio = 6;
+#define READSKILL(f,w,r) if(argv(prio) != "") self.f = stof(argv(prio)) * (w); else self.f = (!cvar("g_campaign")) * (2 * random() - 1) * (r) * (w); ++prio
+	//print(bot_name, ": ping=", argv(9), "\n");
+
+	READSKILL(havocbot_keyboardskill, 1, 0.5); // keyboards kill
+	READSKILL(bot_moveskill, 2, 0); // moves kill
+	READSKILL(bot_dodgeskill, 1, 0); // dodges kill
+
+	READSKILL(bot_pingskill, 0.5, 0); // pings kill
+
+	READSKILL(bot_weaponskill, 2, 0); // weapons kill
+	READSKILL(bot_aggresskill, 1, 0); // aggres kill
+	READSKILL(bot_rangepreference, 1, 0); // reads kill
+
+	READSKILL(bot_aimskill, 1, 0); // aims kill
+	READSKILL(bot_offsetskill, 2, 0.5); // offsets kill
+	READSKILL(bot_mouseskill, 0.5, 0.5); // mouses kill
+
+	READSKILL(bot_thinkskill, 0.5, 0.5); // thinks kill
+	READSKILL(bot_aiskill, 2, 0); // "ai"s kill
+
 	self.bot_config_loaded = TRUE;
 
 	// this is really only a default, JoinBestTeam is called later
@@ -349,10 +371,6 @@ void bot_clientconnect()
 		JoinBestTeam(self, FALSE, TRUE);
 
 	havocbot_setupbot();
-	self.bot_mouseskill=random()-0.5;
-	self.bot_thinkskill=random()-0.5;
-	self.bot_predictionskill=random()-0.5;
-	self.bot_offsetskill=random()-0.5;
 };
 
 void bot_removefromlargestteam()
