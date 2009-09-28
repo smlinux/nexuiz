@@ -336,12 +336,25 @@ void SV_OnEntityPreSpawnFunction()
 				if(cvar_string(k) == v)
 					goto cvar_fail;
 			}
+			else if(substring(s, 0, 1) == "!")
+			{
+				k = substring(s, 1, -1);
+				if(cvar(k))
+					goto cvar_fail;
+			}
+			else
+			{
+				k = s;
+				if not(cvar(k))
+					goto cvar_fail;
+			}
 		}
 		inv = !inv;
 :cvar_fail
 		// now inv is 1 if we want to keep the item, and 0 if we want to get rid of it
 		if not(inv)
 		{
+			//print("cvarfilter fail\n");
 			remove(self);
 			return;
 		}
