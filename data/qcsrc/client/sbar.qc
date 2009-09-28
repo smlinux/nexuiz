@@ -2640,7 +2640,7 @@ float redflag_prevstatus, blueflag_prevstatus; // previous status, not = 0
 float redflag_statuschange_time, blueflag_statuschange_time; // time when the status changed
 void CSQC_ctf_hud(void)
 {
-	vector bottomleft, redflag_pos, blueflag_pos, size;
+	vector bottomleft, redflag_pos, blueflag_pos, sz;
 	bottomleft_x = 0;
 	bottomleft_y = vid_conheight;
 	bottomleft_z = 0;
@@ -2712,28 +2712,28 @@ void CSQC_ctf_hud(void)
 		redflag_pos = bottomleft - '-62 50 0';
 	}
 	
-	size = '52 52 0';
+	sz = '52 52 0';
 	
 	// draw the icons
 	if (redflag_statuschange_elapsedtime > 1 && red_icon) // red flag status has not changed during the previous second
-		drawpic(redflag_pos, red_icon, size, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+		drawpic(redflag_pos, red_icon, sz, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 	else { // red flag status HAS changed during the previous second
 		if (redflag == 0 && red_icon_prevstatus) // in this case, the status was lost so we have to use the value in prevstatus to determine which icon to fade out
-			drawpic_expanding(redflag_pos, red_icon_prevstatus, size, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, 
+			drawpic_expanding(redflag_pos, red_icon_prevstatus, sz, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, 
 			bound(0, redflag_statuschange_elapsedtime*2, 1));
 		else if (red_icon)
-			drawpic_expanding_two(redflag_pos, red_icon, size, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, 
+			drawpic_expanding_two(redflag_pos, red_icon, sz, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, 
 			bound(0, redflag_statuschange_elapsedtime*2, 1));
 	}
 	
 	if (blueflag_statuschange_elapsedtime > 1 && blue_icon) // blue flag status has not changed during the previous second
-		drawpic(blueflag_pos, blue_icon, size, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+		drawpic(blueflag_pos, blue_icon, sz, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 	else { // blue flag status HAS changed during the previous second
 		if (blueflag == 0 && blue_icon_prevstatus) // in this case, the status was lost so we have to use the value in prevstatus to determine which icon to fade out
-			drawpic_expanding(blueflag_pos, blue_icon_prevstatus, size, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, 
+			drawpic_expanding(blueflag_pos, blue_icon_prevstatus, sz, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, 
 			bound(0, blueflag_statuschange_elapsedtime*2, 1));
 		else if (blue_icon)
-			drawpic_expanding_two(blueflag_pos, blue_icon, size, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, 
+			drawpic_expanding_two(blueflag_pos, blue_icon, sz, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, 
 			bound(0, blueflag_statuschange_elapsedtime*2, 1));
 	}
 }
