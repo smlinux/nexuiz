@@ -170,9 +170,9 @@ void bot_setnameandstuff()
 #define READSKILL(f,w,r) if(argv(prio) != "") self.f = stof(argv(prio)) * (w); else self.f = (!cvar("g_campaign")) * (2 * random() - 1) * (r) * (w); ++prio
 	//print(bot_name, ": ping=", argv(9), "\n");
 
-	READSKILL(havocbot_keyboardskill, 1, 0.5); // keyboards kill
+	READSKILL(havocbot_keyboardskill, 0.5, 0.5); // keyboards kill
 	READSKILL(bot_moveskill, 2, 0); // moves kill
-	READSKILL(bot_dodgeskill, 1, 0); // dodges kill
+	READSKILL(bot_dodgeskill, 2, 0); // dodges kill
 
 	READSKILL(bot_pingskill, 0.5, 0); // pings kill
 
@@ -180,11 +180,11 @@ void bot_setnameandstuff()
 	READSKILL(bot_aggresskill, 1, 0); // aggres kill
 	READSKILL(bot_rangepreference, 1, 0); // reads kill
 
-	READSKILL(bot_aimskill, 1, 0); // aims kill
+	READSKILL(bot_aimskill, 2, 0); // aims kill
 	READSKILL(bot_offsetskill, 2, 0.5); // offsets kill
-	READSKILL(bot_mouseskill, 0.5, 0.5); // mouses kill
+	READSKILL(bot_mouseskill, 1, 0.5); // mouses kill
 
-	READSKILL(bot_thinkskill, 0.5, 0.5); // thinks kill
+	READSKILL(bot_thinkskill, 1, 0.5); // thinks kill
 	READSKILL(bot_aiskill, 2, 0); // "ai"s kill
 
 	self.bot_config_loaded = TRUE;
