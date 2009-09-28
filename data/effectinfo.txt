@@ -1804,7 +1804,7 @@ tex 8 16
 size 28 38
 alpha 256 256 0
 originjitter 40 40 40
-lightradius 250
+lightradius 120
 lightradiusfade 400
 lightcolor 8 4 1
 // fire effect which make bright dot inside
