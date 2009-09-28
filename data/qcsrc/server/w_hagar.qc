@@ -90,7 +90,7 @@ void W_Hagar_Attack2 (void)
 	missile.cnt = 0;
 	missile.use = W_Hagar_Explode;
 	missile.think = adaptor_think2use;
-	missile.nextthink = time + cvar("g_balance_hagar_secondary_lifetime");
+	missile.nextthink = time + cvar("g_balance_hagar_secondary_lifetime_min") + random() * cvar("g_balance_hagar_secondary_lifetime_rand");
 	PROJECTILE_MAKETRIGGER(missile);
 	missile.projectiledeathtype = WEP_HAGAR | HITTYPE_SECONDARY;
 	setorigin (missile, w_shotorg);

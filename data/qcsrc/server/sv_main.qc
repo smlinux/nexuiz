@@ -241,6 +241,7 @@ void StartFrame (void)
 .vector anglesjitter;
 .float anglejitter;
 .string gametypefilter;
+.string cvarfilter;
 void SV_OnEntityPreSpawnFunction()
 {
 	if(self.gametypefilter != "")
@@ -248,6 +249,102 @@ void SV_OnEntityPreSpawnFunction()
 	{
 		remove(self);
 		return;
+	}
+	if(self.cvarfilter != "")
+	{
+		float n, i, o, inv;
+		string s, k, v;
+		inv = 0;
+
+		s = self.cvarfilter;
+		if(substring(s, 0, 1) == "+")
+		{
+			s = substring(s, 1, -1);
+		}
+		else if(substring(s, 0, 1) == "-")
+		{
+			inv = 1;
+			s = substring(s, 1, -1);
+		}
+
+		n = tokenize(s);
+		for(i = 0; i < n; ++i)
+		{
+			s = argv(i);
+			// syntax:
+			// var>x
+			// var<x
+			// var>=x
+			// var<=x
+			// var==x
+			// var!=x
+			// var===x
+			// var!==x
+			if((o = strstrofs(s, ">=", 0)) >= 0)
+			{
+				k = substring(s, 0, o);
+				v = substring(s, o+2, -1);
+				if(cvar(k) < stof(v))
+					goto cvar_fail;
+			}
+			else if((o = strstrofs(s, "<=", 0)) >= 0)
+			{
+				k = substring(s, 0, o);
+				v = substring(s, o+2, -1);
+				if(cvar(k) > stof(v))
+					goto cvar_fail;
+			}
+			else if((o = strstrofs(s, ">", 0)) >= 0)
+			{
+				k = substring(s, 0, o);
+				v = substring(s, o+1, -1);
+				if(cvar(k) <= stof(v))
+					goto cvar_fail;
+			}
+			else if((o = strstrofs(s, "<", 0)) >= 0)
+			{
+				k = substring(s, 0, o);
+				v = substring(s, o+1, -1);
+				if(cvar(k) >= stof(v))
+					goto cvar_fail;
+			}
+			else if((o = strstrofs(s, "==", 0)) >= 0)
+			{
+				k = substring(s, 0, o);
+				v = substring(s, o+2, -1);
+				if(cvar(k) != stof(v))
+					goto cvar_fail;
+			}
+			else if((o = strstrofs(s, "!=", 0)) >= 0)
+			{
+				k = substring(s, 0, o);
+				v = substring(s, o+2, -1);
+				if(cvar(k) == stof(v))
+					goto cvar_fail;
+			}
+			else if((o = strstrofs(s, "===", 0)) >= 0)
+			{
+				k = substring(s, 0, o);
+				v = substring(s, o+2, -1);
+				if(cvar_string(k) != v)
+					goto cvar_fail;
+			}
+			else if((o = strstrofs(s, "!==", 0)) >= 0)
+			{
+				k = substring(s, 0, o);
+				v = substring(s, o+2, -1);
+				if(cvar_string(k) == v)
+					goto cvar_fail;
+			}
+		}
+		inv = !inv;
+:cvar_fail
+		// now inv is 1 if we want to keep the item, and 0 if we want to get rid of it
+		if not(inv)
+		{
+			remove(self);
+			return;
+		}
 	}
 
 	// support special -1 and -2 angle from radiant
