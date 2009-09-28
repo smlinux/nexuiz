@@ -182,6 +182,8 @@ void GameType_ConfigureSliders(entity e, entity l, entity l2, string pLabel, flo
 {
 	if(pCvar == "")
 	{
+		e.configureNexuizSlider(e, pMin, pMax, pStep, string_null);
+		l.setText(l, pLabel);
 		e.disabled = l.disabled = l2.disabled = TRUE;
 	}
 	else
