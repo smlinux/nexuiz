@@ -2636,11 +2636,12 @@ void Sbar_Draw (void)
 
 // CTF HUD
 float redflag_prevframe, blueflag_prevframe; // status during previous frame
-float redflag_prevstatus, blueflag_prevstatus; // previous status, not = 0
+float redflag_prevstatus, blueflag_prevstatus; // last remembered status
 float redflag_statuschange_time, blueflag_statuschange_time; // time when the status changed
 void CSQC_ctf_hud(void)
 {
 	vector bottomleft, redflag_pos, blueflag_pos, sz;
+	float f; // every function should have that
 	bottomleft_x = 0;
 	bottomleft_y = vid_conheight;
 	bottomleft_z = 0;
@@ -2653,55 +2654,87 @@ void CSQC_ctf_hud(void)
 	redflag = (stat_items/IT_RED_FLAG_TAKEN) & 3;
 	blueflag = (stat_items/IT_BLUE_FLAG_TAKEN) & 3;
 
-	if (redflag != redflag_prevframe) {
+	// when status CHANGES, set old status into prevstatus and current status into status
+	if (redflag != redflag_prevframe)
+	{
 		redflag_statuschange_time = time;
-		if (redflag)
-			redflag_prevstatus = redflag;
+		redflag_prevstatus = redflag_prevframe;
+		redflag_prevframe = redflag;
 	}
-	redflag_prevframe = redflag;
 
-	if (blueflag != blueflag_prevframe) {
+	if (blueflag != blueflag_prevframe)
+	{
 		blueflag_statuschange_time = time;
-		if (blueflag)
-			blueflag_prevstatus = blueflag;
+		blueflag_prevstatus = blueflag_prevframe;
+		blueflag_prevframe = blueflag;
 	}
-	blueflag_prevframe = blueflag;
 	
 	redflag_statuschange_elapsedtime = time - redflag_statuschange_time;
 	blueflag_statuschange_elapsedtime = time - blueflag_statuschange_time;
 
+	float BLINK_FACTOR = 0.15;
+	float BLINK_BASE = 0.85;
+	// note:
+	//   RMS = sqrt(BLINK_BASE^2 + 0.5 * BLINK_FACTOR^2)
+	// thus
+	//   BLINK_BASE = sqrt(RMS^2 - 0.5 * BLINK_FACTOR^2)
+	// ensure RMS == 1
+	float BLINK_FREQ = 5; // circle frequency, = 2*pi*frequency in hertz
+
 	string red_icon, red_icon_prevstatus;
+	float red_alpha, red_alpha_prevstatus;
+	red_alpha = red_alpha_prevstatus = 1;
 	switch(redflag) {
 		case 1: red_icon = "gfx/hud/sb_flag_red_taken"; break;
 		case 2: red_icon = "gfx/hud/sb_flag_red_lost"; break;
-		case 3: red_icon = "gfx/hud/sb_flag_red_carrying"; break;
+		case 3: red_icon = "gfx/hud/sb_flag_red_carrying"; red_alpha = BLINK_BASE + BLINK_FACTOR * cos(time * BLINK_FREQ); break;
 		default:
 			if((stat_items & IT_CTF_SHIELDED) && (myteam == COLOR_TEAM2))
-				red_icon = "gfx/hud/sb_flag_red_shielded"; break;
-	} switch(redflag_prevstatus) {
+				red_icon = "gfx/hud/sb_flag_red_shielded";
+			else
+				red_icon = string_null;
+			break;
+	}
+	switch(redflag_prevstatus) {
 		case 1: red_icon_prevstatus = "gfx/hud/sb_flag_red_taken"; break;
 		case 2: red_icon_prevstatus = "gfx/hud/sb_flag_red_lost"; break;
-		case 3: red_icon_prevstatus = "gfx/hud/sb_flag_red_carrying"; break;
+		case 3: red_icon_prevstatus = "gfx/hud/sb_flag_red_carrying"; red_alpha_prevstatus = BLINK_BASE + BLINK_FACTOR * cos(time * BLINK_FREQ); break;
 		default:
-			if((stat_items & IT_CTF_SHIELDED) && (myteam == COLOR_TEAM2))
-				red_icon_prevstatus = "gfx/hud/sb_flag_red_shielded"; break;
+			if(redflag == 3)
+				red_icon_prevstatus = "gfx/hud/sb_flag_red_carrying"; // make it more visible
+			else if((stat_items & IT_CTF_SHIELDED) && (myteam == COLOR_TEAM2))
+				red_icon_prevstatus = "gfx/hud/sb_flag_red_shielded";
+			else
+				red_icon_prevstatus = string_null;
+			break;
 	}
 
 	string blue_icon, blue_icon_prevstatus;
+	float blue_alpha, blue_alpha_prevstatus;
+	blue_alpha = blue_alpha_prevstatus = 1;
 	switch(blueflag) {
 		case 1: blue_icon = "gfx/hud/sb_flag_blue_taken"; break;
 		case 2: blue_icon = "gfx/hud/sb_flag_blue_lost"; break;
-		case 3: blue_icon = "gfx/hud/sb_flag_blue_carrying"; break;
+		case 3: blue_icon = "gfx/hud/sb_flag_blue_carrying"; blue_alpha = BLINK_BASE + BLINK_FACTOR * cos(time * BLINK_FREQ); break;
 		default:
 			if((stat_items & IT_CTF_SHIELDED) && (myteam == COLOR_TEAM1))
-				blue_icon = "gfx/hud/sb_flag_blue_shielded"; break;
-	} switch(blueflag_prevstatus) {
+				blue_icon = "gfx/hud/sb_flag_blue_shielded";
+			else
+				blue_icon = string_null;
+			break;
+	}
+	switch(blueflag_prevstatus) {
 		case 1: blue_icon_prevstatus = "gfx/hud/sb_flag_blue_taken"; break;
 		case 2: blue_icon_prevstatus = "gfx/hud/sb_flag_blue_lost"; break;
-		case 3: blue_icon_prevstatus = "gfx/hud/sb_flag_blue_carrying"; break;
+		case 3: blue_icon_prevstatus = "gfx/hud/sb_flag_blue_carrying"; blue_alpha_prevstatus = BLINK_BASE + BLINK_FACTOR * cos(time * BLINK_FREQ); break;
 		default:
-			if((stat_items & IT_CTF_SHIELDED) && (myteam == COLOR_TEAM1))
-				blue_icon_prevstatus = "gfx/hud/sb_flag_blue_shielded"; break;
+			if(blueflag == 3)
+				blue_icon_prevstatus = "gfx/hud/sb_flag_blue_carrying"; // make it more visible
+			else if((stat_items & IT_CTF_SHIELDED) && (myteam == COLOR_TEAM1))
+				blue_icon_prevstatus = "gfx/hud/sb_flag_blue_shielded";
+			else
+				blue_icon_prevstatus = string_null;
+			break;
 	}
 
 	if (myteam == COLOR_TEAM1) { // always draw own flag on left
@@ -2714,28 +2747,17 @@ void CSQC_ctf_hud(void)
 	
 	sz = '52 52 0';
 	
-	// draw the icons
-	if (redflag_statuschange_elapsedtime > 1 && red_icon) // red flag status has not changed during the previous second
-		drawpic(redflag_pos, red_icon, sz, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
-	else { // red flag status HAS changed during the previous second
-		if (redflag == 0 && red_icon_prevstatus) // in this case, the status was lost so we have to use the value in prevstatus to determine which icon to fade out
-			drawpic_expanding(redflag_pos, red_icon_prevstatus, sz, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, 
-			bound(0, redflag_statuschange_elapsedtime*2, 1));
-		else if (red_icon)
-			drawpic_expanding_two(redflag_pos, red_icon, sz, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, 
-			bound(0, redflag_statuschange_elapsedtime*2, 1));
-	}
-	
-	if (blueflag_statuschange_elapsedtime > 1 && blue_icon) // blue flag status has not changed during the previous second
-		drawpic(blueflag_pos, blue_icon, sz, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
-	else { // blue flag status HAS changed during the previous second
-		if (blueflag == 0 && blue_icon_prevstatus) // in this case, the status was lost so we have to use the value in prevstatus to determine which icon to fade out
-			drawpic_expanding(blueflag_pos, blue_icon_prevstatus, sz, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, 
-			bound(0, blueflag_statuschange_elapsedtime*2, 1));
-		else if (blue_icon)
-			drawpic_expanding_two(blueflag_pos, blue_icon, sz, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, 
-			bound(0, blueflag_statuschange_elapsedtime*2, 1));
-	}
+	f = bound(0, redflag_statuschange_elapsedtime*2, 1);
+	if(red_icon_prevstatus && f < 1)
+		drawpic_expanding(redflag_pos, red_icon_prevstatus, sz, '1 1 1', sbar_alpha_fg * red_alpha_prevstatus, DRAWFLAG_NORMAL, f);
+	if(red_icon)
+		drawpic(redflag_pos, red_icon, sz, '1 1 1', sbar_alpha_fg * red_alpha * f, DRAWFLAG_NORMAL);
+
+	f = bound(0, blueflag_statuschange_elapsedtime*2, 1);
+	if(blue_icon_prevstatus && f < 1)
+		drawpic_expanding(blueflag_pos, blue_icon_prevstatus, sz, '1 1 1', sbar_alpha_fg * blue_alpha_prevstatus, DRAWFLAG_NORMAL, f);
+	if(blue_icon)
+		drawpic(blueflag_pos, blue_icon, sz, '1 1 1', sbar_alpha_fg * blue_alpha * f, DRAWFLAG_NORMAL);
 }
 
 // Keyhunt HUD
