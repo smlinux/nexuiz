@@ -76,12 +76,12 @@ void Sbar_DrawWeapon(float nr, float fade, float active, float wc)
 	color_x = color_y = color_z = value;
 
 	// width = 300, height = 100
-	const float w_width = 25, w_height = 12, w_space = 2, font_size = 8;
+	const float w_width = 24, w_height = 12, w_space = 2, font_size = 8;
 
 	sp = weaponspace[idx] + 1;
 	weaponspace[idx] = sp;
 
-	pos_x = (vid_conwidth + 10 - w_width * 9) * 0.5 + w_width * idx;
+	pos_x = (vid_conwidth + 6 - w_width * 9) * 0.5 + w_width * idx;
 	pos_y = (vid_conheight - w_height * sp) - 38; // move 38 pixels up
 	pos_z = 0;
 	vsize_x = w_width;
