@@ -2006,6 +2006,7 @@ spectate mode routines
 ======================
 */
 void SpectateCopy(entity spectatee) {
+	self.kh_state = spectatee.kh_state;
 	self.armortype = spectatee.armortype;
 	self.armorvalue = spectatee.armorvalue;
 	self.ammo_cells = spectatee.ammo_cells;
@@ -2543,7 +2544,6 @@ void PlayerPreThink (void)
 			minstagib_ammocheck();
 
 		ctf_setstatus();
-		kh_setstatus();
 		nexball_setstatus();
 
 		self.dmg_team = max(0, self.dmg_team - cvar("g_teamdamage_resetspeed") * frametime);

@@ -1,3 +1,4 @@
+.float kh_state;
 float kh_teams;
 float kh_tracking_enabled;
 .entity kh_next, kh_prev;
@@ -6,7 +7,7 @@ void kh_Scores_Event(entity player, entity key, string what, float frags_player,
 void kh_Key_Attach(entity key);
 void kh_Key_Detach(entity key);
 void kh_Key_AssignTo(entity key, entity player);
-void kh_Key_Spawn(entity initial_owner, float angle);
+void kh_Key_Spawn(entity initial_owner, float angle, float idx);
 void kh_Key_Remove(entity key);
 void kh_Key_Collect(entity key, entity player);
 void kh_Key_DropAll(entity player, float suicide);
@@ -21,11 +22,10 @@ void kh_init();
 void kh_finalize();
 float kh_KeyCarrier_waypointsprite_visible_for_player(entity e);
 float kh_Key_waypointsprite_visible_for_player(entity e);
-void kh_setstatus();
 float kh_HandleFrags(entity attacker, entity targ, float f);
 float kh_Key_AllOwnedByWhichTeam();
 
-void kh_show_temp();  // added by victim
+void kh_update_state();
 
 #define STR_ITEM_KH_KEY "item_kh_key"
 typedef void(void) kh_Think_t;

@@ -25,8 +25,10 @@ string kh_Controller_Waitmsg;
 float kh_no_radar_circles;
 
 // kh_state
-//     bits 0-7: player's key status
-//     bits 8-15: general key status
+//     bits  0- 4: team of key 1, or 0 for no such key, or 30 for dropped, or 31 for self
+//     bits  5- 9: team of key 2, or 0 for no such key, or 30 for dropped, or 31 for self
+//     bits 10-14: team of key 3, or 0 for no such key, or 30 for dropped, or 31 for self
+//     bits 15-19: team of key 4, or 0 for no such key, or 30 for dropped, or 31 for self
 .float kh_state;
 .float siren_time;  //  time delay the siren
 //.float stuff_time;  //  time delay to stuffcmd a cvar
@@ -192,23 +194,6 @@ void kh_Key_Attach(entity key)  // runs when a player picks up a key and several
 
 void kh_Key_Detach(entity key) // runs every time a key is dropped or lost. Runs several times times when all the keys are captured
 {
-	float i;
-	i = test[key.owner.playerid];
-		if(key.netname == "^1red key")
-			i -= 1;
-		if(key.netname == "^4blue key")
-			i -= 2;
-		if(key.netname == "^3yellow key")
-			i -= 4;
-		if(key.netname == "^6pink key")
-			i -= 8;
-	test[key.owner.playerid] = i;
-
-	kh_show_temp();
-	if(key.owner)
-		key.owner.kh_state = (key.owner.kh_state | 255) - 255 + test[key.owner.playerid];
-	//key.owner.kh_state += test[key.owner.playerid];
-
 #ifdef KH_PLAYER_USE_ATTACHMENT
 	entity first;
 	first = key.owner.kh_next;
@@ -323,9 +308,7 @@ void kh_Key_AssignTo(entity key, entity player)  // runs every time a key is pic
 	}
 
 	// moved that here, also update if there's no player
-	kh_show_temp();
-	if(key.owner)
-		key.owner.kh_state = (key.owner.kh_state | 255) - 255 + test[key.owner.playerid];
+	kh_update_state();
 
 	key.pusher = world;
 
@@ -375,10 +358,11 @@ void key_reset()
 	kh_Key_Remove(self);
 }
 
-void kh_Key_Spawn(entity initial_owner, float angle)  // runs every time a new flag is created, ie after all the keys have been collected
+void kh_Key_Spawn(entity initial_owner, float angle, float i)  // runs every time a new flag is created, ie after all the keys have been collected
 {
 	entity key;
 	key = spawn();
+	key.count = i;
 	key.classname = STR_ITEM_KH_KEY;
 	key.touch = kh_Key_Touch;
 	key.think = kh_Key_Think;
@@ -456,6 +440,8 @@ void kh_Key_Remove(entity key)  // runs after when all the keys have been collec
 	}
 
 	remove(key);
+
+	kh_update_state();
 }
 
 // -1 when no team completely owns all keys yet
@@ -548,15 +534,6 @@ void kh_Key_Think()  // runs all the time
 
 	if(intermission_running)
 		return;
-	/*
-	if(time > self.stuff_time)
-	{
-		FOR_EACH_PLAYER(player)
-			player.kh_state = test[0]*256 + (player.kh_state&255);
-
-		self.stuff_time = time + 1;  // repeat in 1 second
-	}
-	*/
 
 #ifdef KH_KEY_ATTACHMENT_DEBUG
 	if(self.kh_prev == self.owner)
@@ -880,26 +857,11 @@ void kh_StartRound()  // runs at the start of each round
 						if(random() * players <= 1)
 							my_player = player;
 					}
-		kh_Key_Spawn(my_player, 360 * i / kh_teams);
-		//kh_Key_Spawn(my_player, 360 * i / kh_teams);
-		//kh_Key_Spawn(my_player, 360 * i / kh_teams);
+		kh_Key_Spawn(my_player, 360 * i / kh_teams, i);
 	}
 
 	kh_tracking_enabled = FALSE;
 	kh_Controller_SetThink(cvar("g_balance_keyhunt_delay_tracking"), "Scanning frequency range...", kh_EnableTrackingDevice);
-}
-
-void kh_setstatus()  // runs all the time
-{
-	if(kh_teams)
-	{
-		float kh_KEY;
-		kh_KEY = (IT_RED_FLAG_TAKEN | IT_RED_FLAG_LOST | IT_BLUE_FLAG_TAKEN | IT_BLUE_FLAG_LOST);  // the one impossible combination
-		if(self.kh_next)
-			self.items = self.items | kh_KEY;
-		else
-			self.items = self.items - (self.items & kh_KEY);
-	}
 }
 
 void kh_EnableTrackingDevice()  // runs after each round
@@ -1014,23 +976,32 @@ void kh_finalize()
 	kh_controller = world;
 }
 
-/**
- * kh_show_temp originally by victim.
- * changed it to use the kh_state stat var
- * Updates the general key stat bits for each player
- */
-void kh_show_temp()
+void kh_update_state()
 {
 	entity player;
-	float i, j;
+	entity key;
+	float s;
+	float f;
 
-	j = 0;  // reset/blank j
-	for(i=1; i<17; ++i)  // replace 17 with cvar("maxplayers"); !!!!!!!!!
-		j += test[i];
+	s = 0;
+	FOR_EACH_KH_KEY(key)
+	{
+		if(key.owner)
+			f = key.team;
+		else
+			f = 30;
+		s |= pow(32, key.count) * f;
+	}
 
-	test[0] = j;
+	FOR_EACH_CLIENT(player)
+	{
+		player.kh_state = s;
+	}
 
-	j *= 256;
-	FOR_EACH_PLAYER(player)
-		player.kh_state = j + (player.kh_state & 255); // update the general key bits
+	FOR_EACH_KH_KEY(key)
+	{
+		if(key.owner)
+			key.owner.kh_state |= pow(32, key.count) * 31;
+	}
+	//print(ftos((nextent(world)).kh_state), "\n");
 }

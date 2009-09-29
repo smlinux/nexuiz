@@ -2763,8 +2763,8 @@ void CSQC_ctf_hud(void)
 // Keyhunt HUD
 void CSQC_kh_hud(void)
 {
-	float kh_keys, kh_keys_status, kh_teams_set;
-	vector red_pos, blue_pos, yellow_pos, pink_pos, kh_size;
+	float kh_keys;
+	vector red_pos, kh_size;
 
 	vector bottomleft;
 	bottomleft_x = 0;
@@ -2775,48 +2775,77 @@ void CSQC_kh_hud(void)
 	red_pos_y = vid_conheight - 35 - 6;
 	red_pos_z = 0;
 
-	blue_pos_x = 6 + (24 * 1);
-	blue_pos_y = vid_conheight - 35 - 6;
-	blue_pos_z = 0;
-
-	yellow_pos_x = 6 + (24 * 2);
-	yellow_pos_y = vid_conheight - 35 - 6;
-	yellow_pos_z = 0;
-
-	pink_pos_x = 6 + (24 * 3);
-	pink_pos_y = vid_conheight - 35 - 6;
-	pink_pos_z = 0;
-
 	kh_keys = getstati(STAT_KH_KEYS);
-	kh_keys_status = kh_keys / 256;
-	kh_teams_set = cvar("_teams_available");  // set in keyhunt.qc
 
 	kh_size = '22 35 0';
 
-	if (kh_keys_status & 1)  // red
-		drawpic (red_pos, "gfx/hud/sb_kh_red", kh_size, '1 1 1', 0.3, DRAWFLAG_NORMAL);  // show 30% alpha key
-	if (kh_keys & 1)
-		drawpic (red_pos, "gfx/hud/sb_kh_red", kh_size, '1 1 1', 1.0, DRAWFLAG_NORMAL);  // show solid key 100% alpha
+	float key1, key2, key3, key4;
+	key1 = kh_keys & 31;
+	key2 = floor(kh_keys / 32) & 31;
+	key3 = floor(kh_keys / 1024) & 31;
+	key4 = floor(kh_keys / 32768) & 31;
 
-	if (kh_keys_status & 2)  // blue
-		drawpic (blue_pos, "gfx/hud/sb_kh_blue", kh_size, '1 1 1', 0.3, DRAWFLAG_NORMAL);
-	if (kh_keys & 2)
-		drawpic (blue_pos, "gfx/hud/sb_kh_blue", kh_size, '1 1 1', 1.0, DRAWFLAG_NORMAL);
-
-	if (kh_teams_set & 4)  // yellow
+	float i, key;
+	vector p;
+	p = red_pos;
+	for(i = 0; i < 4; ++i)
 	{
-		if (kh_keys_status & 4)
-			drawpic (yellow_pos, "gfx/hud/sb_kh_yellow", kh_size, '1 1 1', 0.3, DRAWFLAG_NORMAL);
-		if (kh_keys & 4)
-			drawpic (yellow_pos, "gfx/hud/sb_kh_yellow", kh_size, '1 1 1', 1.0, DRAWFLAG_NORMAL);
-	}
-
-	if (kh_teams_set & 8)  // pink
-	{
-		if (kh_keys_status & 8)
-			drawpic (pink_pos, "gfx/hud/sb_kh_pink", kh_size, '1 1 1', 0.3, DRAWFLAG_NORMAL);
-		if (kh_keys & 8)
-			drawpic (pink_pos, "gfx/hud/sb_kh_pink", kh_size, '1 1 1', 1.0, DRAWFLAG_NORMAL);
+		key = floor(kh_keys / pow(32, i)) & 31;
+		switch(key-1)
+		{
+			case COLOR_TEAM1:
+				drawpic (p, "gfx/hud/sb_kh_red", kh_size, '1 1 1', 0.7, DRAWFLAG_NORMAL);  // show 30% alpha key
+				break;
+			case COLOR_TEAM2:
+				drawpic (p, "gfx/hud/sb_kh_blue", kh_size, '1 1 1', 0.7, DRAWFLAG_NORMAL);  // show 30% alpha key
+				break;
+			case COLOR_TEAM3:
+				drawpic (p, "gfx/hud/sb_kh_yellow", kh_size, '1 1 1', 0.7, DRAWFLAG_NORMAL);  // show 30% alpha key
+				break;
+			case COLOR_TEAM4:
+				drawpic (p, "gfx/hud/sb_kh_pink", kh_size, '1 1 1', 0.7, DRAWFLAG_NORMAL);  // show 30% alpha key
+				break;
+			default:
+			case 29:
+				switch(i)
+				{
+					case 0:
+						drawpic (p, "gfx/hud/sb_kh_red", kh_size, '1 1 1', 0.2, DRAWFLAG_NORMAL);  // show 30% alpha key
+						break;
+					case 1:
+						drawpic (p, "gfx/hud/sb_kh_blue", kh_size, '1 1 1', 0.2, DRAWFLAG_NORMAL);  // show 30% alpha key
+						break;
+					case 2:
+						drawpic (p, "gfx/hud/sb_kh_yellow", kh_size, '1 1 1', 0.2, DRAWFLAG_NORMAL);  // show 30% alpha key
+						break;
+					default:
+					case 3:
+						drawpic (p, "gfx/hud/sb_kh_pink", kh_size, '1 1 1', 0.2, DRAWFLAG_NORMAL);  // show 30% alpha key
+						break;
+				}
+				break;
+			case 30:
+				switch(myteam)
+				{
+					case COLOR_TEAM1:
+						drawpic (p, "gfx/hud/sb_kh_red", kh_size, '1 1 1', 1, DRAWFLAG_NORMAL);  // show 30% alpha key
+						break;
+					case COLOR_TEAM2:
+						drawpic (p, "gfx/hud/sb_kh_blue", kh_size, '1 1 1', 1, DRAWFLAG_NORMAL);  // show 30% alpha key
+						break;
+					case COLOR_TEAM3:
+						drawpic (p, "gfx/hud/sb_kh_yellow", kh_size, '1 1 1', 1, DRAWFLAG_NORMAL);  // show 30% alpha key
+						break;
+					default:
+					case COLOR_TEAM4:
+						drawpic (p, "gfx/hud/sb_kh_pink", kh_size, '1 1 1', 1, DRAWFLAG_NORMAL);  // show 30% alpha key
+						break;
+				}
+				break;
+			case -1:
+				break;
+		}
+		p_x += 24;
 	}
 }
 
