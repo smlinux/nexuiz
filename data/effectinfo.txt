@@ -889,7 +889,7 @@ type decal
 tex 47 47
 size 24 24
 alpha 256 256 0
-originjitter 16 16 16
+originjitter 14 14 14
 lightradius 200
 lightradiusfade 500
 lightcolor 8 0.4 0.4
@@ -969,7 +969,7 @@ type decal
 tex 56 59
 size 3 3
 alpha 256 256 0
-originjitter 6 6 6
+originjitter 10 10 10
 //lightradius 30
 //lightradiusfade 90
 //lightcolor 1 1 1
@@ -1052,7 +1052,7 @@ type decal
 tex 56 59
 size 5 5
 alpha 256 256 0
-originjitter 6 6 6
+originjitter 10 10 10
 lightradius 80
 lightradiusfade 800
 lightcolor 6 3.6 0.6
@@ -1227,7 +1227,7 @@ type decal
 tex 8 16
 size 72 72
 alpha 256 256 0
-originjitter 40 40 40
+originjitter 23 23 23
 lightradius 400
 lightradiusfade 750
 lightcolor 8 4 1
@@ -1378,7 +1378,7 @@ type decal
 tex 59 59
 size 32 32
 alpha 256 256 0
-originjitter 20 20 20
+originjitter 17 17 17
 lightradius 250
 lightradiusfade 250
 lightcolor 3.125 4.375 10
@@ -1425,7 +1425,7 @@ type decal
 tex 59 59
 size 32 32
 alpha 256 256 0
-originjitter 20 20 20
+originjitter 17 17 17
 lightradius 250
 lightradiusfade 250
 lightcolor 3.125 4.375 10
@@ -1470,7 +1470,7 @@ type decal
 tex 59 59
 size 64 64
 alpha 256 256 0
-originjitter 34 34 34
+originjitter 17 17 17
 lightradius 400
 lightradiusfade 300
 lightcolor 4 5 6
@@ -1685,7 +1685,7 @@ type decal
 tex 47 47
 size 24 24
 alpha 256 256 0
-originjitter 16 16 16
+originjitter 14 14 14
 lightradius 200
 lightradiusfade 250
 lightcolor 4 6 8
@@ -1803,7 +1803,7 @@ type decal
 tex 8 16
 size 28 38
 alpha 256 256 0
-originjitter 40 40 40
+originjitter 14 14 14
 lightradius 120
 lightradiusfade 400
 lightcolor 8 4 1
@@ -1985,7 +1985,7 @@ type decal
 tex 8 16
 size 48 48
 alpha 256 256 0
-originjitter 40 40 40
+originjitter 26 26 26
 lightradius 250
 lightradiusfade 400
 lightcolor 8 4 1
@@ -4249,7 +4249,7 @@ type decal
 tex 8 16
 size 72 72
 alpha 256 256 0
-originjitter 40 40 40
+originjitter 56 56 56
 lightradius 500
 lightradiusfade 500
 lightcolor 4 2 0.5
