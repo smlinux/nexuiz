@@ -2873,7 +2873,7 @@ void CSQC_kh_hud(void)
 				default:
 					break;
 			}
-			switch(i)
+			switch(i) // YAY! switch(i) inside a for loop for i. DailyWTF, here we come!
 			{
 				case 0:
 					drawpic (p, "gfx/hud/sb_kh_red", kh_size, '1 1 1', a, DRAWFLAG_NORMAL);  // show 30% alpha key
