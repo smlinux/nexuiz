@@ -806,7 +806,7 @@ void havocbot_movetogoal()
 
 	// Bunnyhop!
 //	if(self.aistatus & AI_STATUS_ROAMING)
-	if(Self.goalcurrent)
+	if(self.goalcurrent)
 	if(skill+self.bot_moveskill >= cvar("bot_ai_bunnyhop_skilloffset"))
 		havocbot_bunnyhop(dir);
 
