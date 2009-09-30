@@ -23,7 +23,9 @@ float ts_primary, ts_secondary;
 vector color;
 float SCOREBOARD_OFFSET = 50;
 
+void CSQC_kh_hudreset();
 void CSQC_kh_hud();
+void CSQC_ctf_hudreset();
 void CSQC_ctf_hud();
 void CSQC_nb_hud();
 void MapVote_Draw();
@@ -2423,6 +2425,8 @@ void Sbar_Draw (void)
 		}
   		else
 			Sbar_FinaleOverlay();
+
+		goto reset;
 	}
 	else if (sb_showscores_force || getstati(STAT_HEALTH) <= 0 || intermission == 1)
 	{
@@ -2432,6 +2436,8 @@ void Sbar_Draw (void)
 			Sbar_DrawScoreboard();
 		Sbar_Score();
 		Sbar_Timer();
+
+		goto reset;
   	}
 	else
 	{
@@ -2632,12 +2638,26 @@ void Sbar_Draw (void)
 		else if(gametype == GAME_NEXBALL)
 			CSQC_nb_hud();
 	}
+	return;
+
+:reset
+	// draw gametype specific icons
+	if(gametype == GAME_KEYHUNT)
+		CSQC_kh_hudreset();
+	else if(gametype == GAME_CTF)
+		CSQC_ctf_hudreset();
 }
 
 // CTF HUD
 float redflag_prevframe, blueflag_prevframe; // status during previous frame
 float redflag_prevstatus, blueflag_prevstatus; // last remembered status
 float redflag_statuschange_time, blueflag_statuschange_time; // time when the status changed
+
+void CSQC_ctf_hudreset(void)
+{
+	redflag_prevstatus = blueflag_prevstatus = redflag_prevframe = blueflag_prevframe = redflag_statuschange_time = blueflag_statuschange_time = 0;
+}
+
 void CSQC_ctf_hud(void)
 {
 	vector bottomleft, redflag_pos, blueflag_pos, sz;
@@ -2761,91 +2781,116 @@ void CSQC_ctf_hud(void)
 }
 
 // Keyhunt HUD
+float kh_runheretime;
+
+void CSQC_kh_hudreset(void)
+{
+	kh_runheretime = 0;
+}
+
 void CSQC_kh_hud(void)
 {
 	float kh_keys;
-	vector red_pos, kh_size;
+	float keyteam;
+	float a, aa;
+	vector p, pa, kh_size, kh_asize;
 
 	vector bottomleft;
 	bottomleft_x = 0;
 	bottomleft_y = vid_conheight;
 	bottomleft_z = 0;
 
-	red_pos_x = 6;
-	red_pos_y = vid_conheight - 35 - 6;
-	red_pos_z = 0;
+	p_x = 6;
+	p_y = vid_conheight - 34 - 3;
+	p_z = 0;
 
 	kh_keys = getstati(STAT_KH_KEYS);
 
-	kh_size = '22 35 0';
-
-	float key1, key2, key3, key4;
-	key1 = kh_keys & 31;
-	key2 = floor(kh_keys / 32) & 31;
-	key3 = floor(kh_keys / 1024) & 31;
-	key4 = floor(kh_keys / 32768) & 31;
+	kh_size = '19 34 0';
+	kh_asize = '19 10 0';
+	pa = p + '0 -10 0';
 
 	float i, key;
-	vector p;
-	p = red_pos;
+
+	float keycount;
+	keycount = 0;
 	for(i = 0; i < 4; ++i)
 	{
 		key = floor(kh_keys / pow(32, i)) & 31;
-		switch(key-1)
+		keyteam = key - 1;
+		if(keyteam == 30 && keycount <= 4)
+			keycount += 4;
+		if(keyteam == myteam || keyteam == -1 || keyteam == 30)
+			keycount += 1;
+	}
+	// this yields 8 exactly if "RUN HERE" shows
+
+	if(keycount == 8)
+	{
+		if(!kh_runheretime)
+			kh_runheretime = time;
+		pa_y -= fabs(sin((time - kh_runheretime) * 3.5)) * 6; // make the arrows jump in case of RUN HERE
+	}
+	else
+		kh_runheretime = 0;
+
+	for(i = 0; i < 4; ++i)
+	{
+		key = floor(kh_keys / pow(32, i)) & 31;
+		keyteam = key - 1;
+		switch(keyteam)
 		{
-			case COLOR_TEAM1:
-				drawpic (p, "gfx/hud/sb_kh_red", kh_size, '1 1 1', 0.7, DRAWFLAG_NORMAL);  // show 30% alpha key
+			case 30: // my key
+				keyteam = myteam;
+				a = 1;
+				aa = 1;
 				break;
-			case COLOR_TEAM2:
-				drawpic (p, "gfx/hud/sb_kh_blue", kh_size, '1 1 1', 0.7, DRAWFLAG_NORMAL);  // show 30% alpha key
+			case -1: // no key
+				a = 0;
+				aa = 0;
 				break;
-			case COLOR_TEAM3:
-				drawpic (p, "gfx/hud/sb_kh_yellow", kh_size, '1 1 1', 0.7, DRAWFLAG_NORMAL);  // show 30% alpha key
-				break;
-			case COLOR_TEAM4:
-				drawpic (p, "gfx/hud/sb_kh_pink", kh_size, '1 1 1', 0.7, DRAWFLAG_NORMAL);  // show 30% alpha key
-				break;
-			default:
-			case 29:
-				switch(i)
-				{
-					case 0:
-						drawpic (p, "gfx/hud/sb_kh_red", kh_size, '1 1 1', 0.2, DRAWFLAG_NORMAL);  // show 30% alpha key
-						break;
-					case 1:
-						drawpic (p, "gfx/hud/sb_kh_blue", kh_size, '1 1 1', 0.2, DRAWFLAG_NORMAL);  // show 30% alpha key
-						break;
-					case 2:
-						drawpic (p, "gfx/hud/sb_kh_yellow", kh_size, '1 1 1', 0.2, DRAWFLAG_NORMAL);  // show 30% alpha key
-						break;
-					default:
-					case 3:
-						drawpic (p, "gfx/hud/sb_kh_pink", kh_size, '1 1 1', 0.2, DRAWFLAG_NORMAL);  // show 30% alpha key
-						break;
-				}
-				break;
-			case 30:
-				switch(myteam)
-				{
-					case COLOR_TEAM1:
-						drawpic (p, "gfx/hud/sb_kh_red", kh_size, '1 1 1', 1, DRAWFLAG_NORMAL);  // show 30% alpha key
-						break;
-					case COLOR_TEAM2:
-						drawpic (p, "gfx/hud/sb_kh_blue", kh_size, '1 1 1', 1, DRAWFLAG_NORMAL);  // show 30% alpha key
-						break;
-					case COLOR_TEAM3:
-						drawpic (p, "gfx/hud/sb_kh_yellow", kh_size, '1 1 1', 1, DRAWFLAG_NORMAL);  // show 30% alpha key
-						break;
-					default:
-					case COLOR_TEAM4:
-						drawpic (p, "gfx/hud/sb_kh_pink", kh_size, '1 1 1', 1, DRAWFLAG_NORMAL);  // show 30% alpha key
-						break;
-				}
-				break;
-			case -1:
+			default: // owned or dropped
+				a = 0.2;
+				aa = 0.5;
 				break;
 		}
+		if(a > 0)
+		{
+			switch(keyteam)
+			{
+				case COLOR_TEAM1:
+					drawpic (pa, "gfx/hud/sb_kh_redarrow", kh_asize, '1 1 1', aa, DRAWFLAG_NORMAL);  // show 30% alpha key
+					break;
+				case COLOR_TEAM2:
+					drawpic (pa, "gfx/hud/sb_kh_bluearrow", kh_asize, '1 1 1', aa, DRAWFLAG_NORMAL);  // show 30% alpha key
+					break;
+				case COLOR_TEAM3:
+					drawpic (pa, "gfx/hud/sb_kh_yellowarrow", kh_asize, '1 1 1', aa, DRAWFLAG_NORMAL);  // show 30% alpha key
+					break;
+				case COLOR_TEAM4:
+					drawpic (pa, "gfx/hud/sb_kh_pinkarrow", kh_asize, '1 1 1', aa, DRAWFLAG_NORMAL);  // show 30% alpha key
+					break;
+				default:
+					break;
+			}
+			switch(i)
+			{
+				case 0:
+					drawpic (p, "gfx/hud/sb_kh_red", kh_size, '1 1 1', a, DRAWFLAG_NORMAL);  // show 30% alpha key
+					break;
+				case 1:
+					drawpic (p, "gfx/hud/sb_kh_blue", kh_size, '1 1 1', a, DRAWFLAG_NORMAL);  // show 30% alpha key
+					break;
+				case 2:
+					drawpic (p, "gfx/hud/sb_kh_yellow", kh_size, '1 1 1', a, DRAWFLAG_NORMAL);  // show 30% alpha key
+					break;
+				case 3:
+					drawpic (p, "gfx/hud/sb_kh_pink", kh_size, '1 1 1', a, DRAWFLAG_NORMAL);  // show 30% alpha key
+					break;
+			}
+		}
 		p_x += 24;
+		pa_x += 24;
 	}
 }
 
