@@ -187,7 +187,7 @@ void W_BallisticBullet_Hit (void)
 	f = pow(bound(0, vlen(self.velocity) / vlen(self.oldvelocity), 1), 2); // energy multiplier
 
 	if(other.solid == SOLID_BSP)
-		Damage_DamageInfo(self.origin, self.dmg * f, 0, 0, self.dmg_force * normalize(self.velocity) * f, self.projectiledeathtype, self);
+		Damage_DamageInfo(self.origin, self.dmg * f, 0, 0, max(1, self.dmg_force) * normalize(self.velocity) * f, self.projectiledeathtype, self);
 
 	if(other && other != self.enemy)
 	{
@@ -254,7 +254,7 @@ void W_BallisticBullet_LeaveSolid_think()
 	{
 		float f;
 		f = pow(bound(0, vlen(self.velocity) / vlen(self.oldvelocity), 1), 2); // energy multiplier
-		Damage_DamageInfo(self.origin, 0, 0, 0, self.dmg_force * normalize(self.velocity) * -f, self.projectiledeathtype, self);
+		Damage_DamageInfo(self.origin, 0, 0, 0, max(1, self.dmg_force) * normalize(self.velocity) * -f, self.projectiledeathtype, self);
 	}
 
 	UpdateCSQCProjectile(self);
@@ -512,7 +512,7 @@ void fireBullet (vector start, vector dir, float spread, float damage, float for
 	{
 		pointparticles(particleeffectnum("TE_KNIGHTSPIKE"),end,trace_plane_normal * 2500,1);
 		if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
-			Damage_DamageInfo(trace_endpos, damage, 0, 0, dir * force, dtype, self);
+			Damage_DamageInfo(trace_endpos, damage, 0, 0, dir * max(1, force), dtype, self);
 		Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * force);
 		//void(float effectnum, vector org, vector vel, float howmany) pointparticles = #337; // same as in CSQC
 	}
