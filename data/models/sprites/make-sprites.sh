@@ -144,6 +144,7 @@ sprite as-defend          "Defend"        0080ff 000000 0.0
 sprite bluebase           "Blue Base"     0050ff 000000 0.0
 sprite danger             "DANGER"        ff0000 ffff00 0.0
 sprite flagcarrier        "Flag carrier"  ffff00 000000 0.0
+sprite flagdropped        "Dropped flag"  00ffff 000000 0.0
 sprite helpme             "Help me!"      ffff00 ff0000 0.0
 sprite here               "Here"          00ff00 000000 0.0
 sprite key-dropped        "Dropped key"   00ffff 000000 0.0
