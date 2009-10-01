@@ -143,6 +143,7 @@ void havocbot_ai()
 		//te_lightning2(world, self.origin, self.goalcurrent.origin);
 		bot_aimdir(v, -1);
 	}
+	havocbot_movetogoal();
 };
 
 void havocbot_keyboard_movement(vector destorg)
