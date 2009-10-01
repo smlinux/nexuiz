@@ -2209,6 +2209,15 @@ string GetAmmoPicture(float i)
 	}
 }
 
+void Sbar_Reset (void)
+{
+	// reset gametype specific icons
+	if(gametype == GAME_KEYHUNT)
+		CSQC_kh_hudreset();
+	else if(gametype == GAME_CTF)
+		CSQC_ctf_hudreset();
+}
+
 void Sbar_Draw (void)
 {
 	// vectors for top right, bottom right, bottom and bottom left corners
@@ -2426,7 +2435,7 @@ void Sbar_Draw (void)
   		else
 			Sbar_FinaleOverlay();
 
-		goto reset;
+		Sbar_Reset();
 	}
 	else if (sb_showscores_force || getstati(STAT_HEALTH) <= 0 || intermission == 1)
 	{
@@ -2437,7 +2446,7 @@ void Sbar_Draw (void)
 		Sbar_Score();
 		Sbar_Timer();
 
-		goto reset;
+		Sbar_Reset();
   	}
 	else
 	{
@@ -2639,13 +2648,6 @@ void Sbar_Draw (void)
 			CSQC_nb_hud();
 	}
 	return;
-
-:reset
-	// draw gametype specific icons
-	if(gametype == GAME_KEYHUNT)
-		CSQC_kh_hudreset();
-	else if(gametype == GAME_CTF)
-		CSQC_ctf_hudreset();
 }
 
 // CTF HUD
