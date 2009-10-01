@@ -7,6 +7,8 @@
 ===========================================================================
 */
 
+.float weapon_frametime;
+
 float W_WeaponRateFactor()
 {
 	float t;
@@ -1025,7 +1027,7 @@ float weapon_prepareattack(float secondary, float attacktime)
 	if(attacktime >= 0)
 	{
 		// don't fire if previous attack is not finished
-		if (ATTACK_FINISHED(self) > time + frametime * 0.5)
+		if (ATTACK_FINISHED(self) > time + self.weapon_frametime * 0.5)
 			return FALSE;
 		// don't fire while changing weapon
 		if (self.weaponentity.state != WS_READY)
@@ -1038,7 +1040,7 @@ float weapon_prepareattack(float secondary, float attacktime)
 	// if the weapon hasn't been firing continuously, reset the timer
 	if(attacktime >= 0)
 	{
-		if (ATTACK_FINISHED(self) < time - frametime * 1.5)
+		if (ATTACK_FINISHED(self) < time - self.weapon_frametime * 1.5)
 		{
 			ATTACK_FINISHED(self) = time;
 			//dprint("resetting attack finished to ", ftos(time), "\n");
@@ -1168,7 +1170,7 @@ void weapon_thinkf(float fr, float t, void() func)
 		self.weapon_nextthink = time;
 		//dprint("started firing at ", ftos(time), "\n");
 	}
-	if (self.weapon_nextthink < time - frametime * 1.5 || self.weapon_nextthink > time + frametime * 1.5)
+	if (self.weapon_nextthink < time - self.weapon_frametime * 1.5 || self.weapon_nextthink > time + self.weapon_frametime * 1.5)
 	{
 		self.weapon_nextthink = time;
 		//dprint("reset weapon animation timer at ", ftos(time), "\n");

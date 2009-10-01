@@ -299,6 +299,9 @@ void W_WeaponFrame()
 {
 	vector fo, ri, up;
 
+	if (frametime)
+		self.weapon_frametime = frametime;
+
 	if((arena_roundbased && time < warmup) || ((time < game_starttime) && !cvar("sv_ready_restart_after_countdown")))
 		return;
 
@@ -335,7 +338,7 @@ void W_WeaponFrame()
 		else if (self.weaponentity.state == WS_READY)
 		{
 #ifndef INDEPENDENT_ATTACK_FINISHED
-			if(ATTACK_FINISHED(self) <= time + frametime * 0.5)
+			if(ATTACK_FINISHED(self) <= time + self.weapon_frametime * 0.5)
 			{
 #endif
 			// UGLY WORKAROUND: play this on CHAN_WEAPON2 so it can't cut off fire sounds
@@ -349,6 +352,10 @@ void W_WeaponFrame()
 #endif
 		}
 	}
+
+	// LordHavoc: network timing test code
+	//if (self.button0)
+	//	print(ftos(frametime), " ", ftos(time), " >= ", ftos(ATTACK_FINISHED(self)), " >= ", ftos(self.weapon_nextthink), "\n");
 
 	float wb;
 	wb = W_WeaponBit(self.weapon);
@@ -373,7 +380,7 @@ void W_WeaponFrame()
 			v_up = up;
 			weapon_action(self.weapon, WR_THINK);
 		}
-		if (time + frametime * 0.5 >= self.weapon_nextthink)
+		if (time + self.weapon_frametime * 0.5 >= self.weapon_nextthink)
 		{
 			if(self.weapon_think)
 			{

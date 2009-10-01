@@ -2522,7 +2522,8 @@ void PlayerPreThink (void)
 
 		GrapplingHookFrame();
 
-		if(frametime)
+		// LordHavoc: allow firing on move frames (sub-ticrate), this gives better timing on slow servers
+		//if(frametime)
 		{
 			self.items &~= self.items_added;
 
