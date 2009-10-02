@@ -407,7 +407,15 @@ sub join_commands($@)
 sub send($$$)
 {
 	my ($self, $line, $nothrottle) = @_;
-	if($self->{secure})
+	if($self->{secure} > 1)
+	{
+		$self->{connector}->send("\377\377\377\377getchallenge");
+		my $c = $self->recvchallenge();
+		return 0 if not defined $c;
+		my $key = Digest::HMAC::hmac("$c $line", $self->{password}, \&Digest::MD4::md4);
+		return $self->{connector}->send("\377\377\377\377srcon HMAC-MD4 CHALLENGE $key $c $line");
+	}
+	elsif($self->{secure})
 	{
 		my $t = sprintf "%ld.%06d", time(), int rand 1000000;
 		my $key = Digest::HMAC::hmac("$t $line", $self->{password}, \&Digest::MD4::md4);
@@ -427,6 +435,38 @@ sub quote($$)
 	$data =~ s/([\\"])/\\$1/g;
 	$data =~ s/\$/\$\$/g;
 	return $data;
+}
+
+sub recvchallenge($)
+{
+	my ($self) = @_;
+
+	my $sel = IO::Select->new($self->fds());
+	my $endtime_max = Time::HiRes::time() + 1;
+	my $endtime = $endtime_max;
+
+	while((my $dt = $endtime - Time::HiRes::time()) > 0)
+	{
+		if($sel->can_read($dt))
+		{
+			for(;;)
+			{
+				my $s = $self->{connector}->recv();
+				die "read error\n"
+					if not defined $s;
+				length $s
+					or last;
+				if($s =~ /^\377\377\377\377challenge (.*)$/s)
+				{
+					return $1;
+				}
+				next
+					if $s !~ /^\377\377\377\377n(.*)$/s;
+				$self->{recvbuf} .= $1;
+			}
+		}
+	}
+	return undef;
 }
 
 sub recv($)
