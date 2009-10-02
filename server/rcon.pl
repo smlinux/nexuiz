@@ -386,12 +386,13 @@ use Digest::MD4;
 #   my $chan = new Channel::QW($connection, "password");
 sub new($$$)
 {
-	my ($class, $conn, $password, $secure) = @_;
+	my ($class, $conn, $password, $secure, $timeout) = @_;
 	my $you = {
 		connector => $conn,
 		password => $password,
 		recvbuf => "",
 		secure => $secure,
+		timeout => $timeout,
 	};
 	return
 		bless $you, 'Channel::QW';
@@ -442,7 +443,7 @@ sub recvchallenge($)
 	my ($self) = @_;
 
 	my $sel = IO::Select->new($self->fds());
-	my $endtime_max = Time::HiRes::time() + 1;
+	my $endtime_max = Time::HiRes::time() + $self->{timeout};
 	my $endtime = $endtime_max;
 
 	while((my $dt = $endtime - Time::HiRes::time()) > 0)
@@ -516,12 +517,13 @@ sub default($$)
 	return $default;
 }
 
-my $server   = default '',    $ENV{rcon_address};
-my $password = default '',    $ENV{rcon_password};
-my $secure   = default '1',   $ENV{rcon_secure};
-my $timeout  = default '5',   $ENV{rcon_timeout};
-my $timeouti = default '0.2', $ENV{rcon_timeout_inter};
-my $colors   = default '0',   $ENV{rcon_colorcodes_raw};
+my $server   = default '',       $ENV{rcon_address};
+my $password = default '',       $ENV{rcon_password};
+my $secure   = default '1',      $ENV{rcon_secure};
+my $timeout  = default '5',      $ENV{rcon_timeout};
+my $timeouti = default '0.2',    $ENV{rcon_timeout_inter};
+my $timeoutc = default $timeout, $ENV{rcon_timeout_challenge};
+my $colors   = default '0',      $ENV{rcon_colorcodes_raw};
 
 if(!length $server)
 {
@@ -534,7 +536,7 @@ if(!length $server)
 }
 
 my $connection = Connection::Socket->new("udp", "", $server, 26000);
-my $rcon = Channel::QW->new($connection, $password, $secure);
+my $rcon = Channel::QW->new($connection, $password, $secure, $timeoutc);
 
 if(!$rcon->send($rcon->join_commands(@ARGV)))
 {
