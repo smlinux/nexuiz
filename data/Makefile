@@ -56,10 +56,10 @@ clean:
 	rm -f progs.dat menu.dat csprogs.dat
 
 csprogs.dat: qcsrc/client/*.* qcsrc/common/*.*
-	cd qcsrc/client && $(FTEQCC) $(FTEQCCFLAGS) $(QCFLAGS_CSPROGS)
+	cd qcsrc/client && $(FTEQCC) $(FTEQCCFLAGS) $(FTEQCCFLAGS_CSPROGS)
 
 progs.dat: qcsrc/server/*.* qcsrc/common/*.* qcsrc/server/*/*.* qcsrc/server/*/*/*.*
-	cd qcsrc/server && $(FTEQCC) $(FTEQCCFLAGS) $(QCFLAGS_PROGS)
+	cd qcsrc/server && $(FTEQCC) $(FTEQCCFLAGS) $(FTEQCCFLAGS_PROGS)
 
 menu.dat: qcsrc/menu/*.* qcsrc/menu/*/*.* qcsrc/common/*.*
 	cd qcsrc/menu && $(FTEQCC) $(FTEQCCFLAGS) $(FTEQCCFLAGS_MENU)
