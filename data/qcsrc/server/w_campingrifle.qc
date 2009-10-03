@@ -4,14 +4,15 @@
 
 .float campingrifle_accumulator;
 
-float W_CampingRifle_CheckMaxBullets()
+float W_CampingRifle_CheckMaxBullets(float checkammo)
 {
 	float maxbulls;
 	maxbulls = cvar("g_balance_campingrifle_magazinecapacity");
 	if(!maxbulls)
-		maxbulls = 8;
-	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
-		maxbulls = min(maxbulls, floor(self.ammo_nails / min(cvar("g_balance_campingrifle_primary_ammo"), cvar("g_balance_campingrifle_secondary_ammo"))));
+		maxbulls = 8; // match HUD
+	if(checkammo)
+		if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
+			maxbulls = min(maxbulls, floor(self.ammo_nails / min(cvar("g_balance_campingrifle_primary_ammo"), cvar("g_balance_campingrifle_secondary_ammo"))));
 	if(self.campingrifle_bulletcounter > maxbulls || !cvar("g_balance_campingrifle_magazinecapacity"))
 		self.campingrifle_bulletcounter = maxbulls;
 	return (self.campingrifle_bulletcounter == maxbulls);
@@ -21,7 +22,7 @@ void W_CampingRifle_ReloadedAndReady()
 {
 	float t;
 	self.campingrifle_bulletcounter = cvar("g_balance_campingrifle_magazinecapacity");
-	W_CampingRifle_CheckMaxBullets();
+	W_CampingRifle_CheckMaxBullets(TRUE);
 	t = ATTACK_FINISHED(self) - cvar("g_balance_campingrifle_reloadtime") - 1;
 	ATTACK_FINISHED(self) = t;
 	w_ready();
@@ -31,7 +32,7 @@ void W_CampingRifle_Reload()
 {
 	float t;
 
-	W_CampingRifle_CheckMaxBullets();
+	W_CampingRifle_CheckMaxBullets(TRUE);
 	if (self.campingrifle_bulletcounter >= cvar("g_balance_campingrifle_magazinecapacity"))
 		return;
 
@@ -94,7 +95,7 @@ void W_CampingRifle_FireBullet(float pSpread, float pDamage, float pHeadshotAdde
 		SpawnCasing (((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 70) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 3, self);
 	
 	self.campingrifle_bulletcounter = self.campingrifle_bulletcounter - 1;
-	W_CampingRifle_CheckMaxBullets();
+	W_CampingRifle_CheckMaxBullets(TRUE);
 }
 
 void W_CampingRifle_Attack()
@@ -181,7 +182,7 @@ float w_campingrifle(float req)
 	{
 		weapon_setup(WEP_CAMPINGRIFLE);
 
-		full = W_CampingRifle_CheckMaxBullets();
+		full = W_CampingRifle_CheckMaxBullets(TRUE);
 		if(cvar("g_balance_campingrifle_auto_reload_after_changing_weapons"))
 			if(!full)
 				self.campingrifle_bulletcounter = -1;
@@ -230,7 +231,7 @@ float w_campingrifle(float req)
 	{
 		self.campingrifle_accumulator = time - cvar("g_balance_campingrifle_bursttime");
 		self.campingrifle_bulletcounter = cvar("g_balance_campingrifle_magazinecapacity");
-		W_CampingRifle_CheckMaxBullets();
+		W_CampingRifle_CheckMaxBullets(FALSE);
 	}
 	return TRUE;
 };
