@@ -340,11 +340,11 @@ case "$versiontag" in
 	test)
 		# these builds are public
 		ssh atoffload "sh clean-builds.sh"
-		rsync -vaSHP "$zipdir/nexuiz"*"-$date$ext.zip" "$zipdir/nexuiz"*"-$newest.zip" atoffload:offload.alientrap.org/nexuiz/builds/
+		rsync -vaSHP "$zipdir/nexuiz"*"$date$ext.zip" "$zipdir/nexuiz"*"-$newest.zip" atoffload:offload.alientrap.org/nexuiz/builds/
 		;;
 	*)
 		ssh atoffload "sh clean-builds.sh"
-		rsync -vaSHP "$zipdir/nexuiz"*"-$date$ext.zip" "$zipdir/nexuiz"*"-$newest.zip" atoffload:offload.alientrap.org/nexuiz/builds.versioned/
+		rsync -vaSHP "$zipdir/nexuiz"*"$date$ext.zip" "$zipdir/nexuiz"*"-$newest.zip" atoffload:offload.alientrap.org/nexuiz/builds.versioned/
 		cat <<'EOF'
 
 NOTE: This is a RELEASE BUILD.
