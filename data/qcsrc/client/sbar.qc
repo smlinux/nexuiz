@@ -2856,6 +2856,8 @@ void CSQC_kh_hud(void)
 				aa = 0.5;
 				break;
 		}
+		a = a * sbar_alpha_fg;
+		aa = aa * sbar_alpha_fg;
 		if(a > 0)
 		{
 			switch(keyteam)
