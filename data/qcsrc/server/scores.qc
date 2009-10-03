@@ -460,9 +460,6 @@ void WinningConditionHelper()
 		WinningConditionHelper_secondteam = -1; // no teamplay
 	}
 
-	if(teamscores_flags_primary & SFL_TIME)
-		WinningConditionHelper_topscore /= 10;
-
 	if(WinningConditionHelper_topscore == 0)
 	{
 		if(scores_flags_primary & SFL_ZERO_IS_WORST)
