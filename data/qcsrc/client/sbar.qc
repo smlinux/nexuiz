@@ -2527,8 +2527,8 @@ void Sbar_Draw (void)
 					Sbar_DrawXNum_Colored(armor_pos, x, 24, sbar_alpha_fg);
 				}
 				else {
-					drawpic(armor_pos + '78 -4.5 0', "gfx/hud/sb_armor", '32 32 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
-					Sbar_DrawXNum_Colored(armor_pos, x, 24, (x+10)/55 * sbar_alpha_fg);
+					drawpic(armor_pos + '78 -4.5 0', "gfx/hud/sb_armor", '32 32 0', '1 1 1', (x+10)/55 * sbar_alpha_fg, DRAWFLAG_NORMAL);
+					Sbar_DrawXNum_Colored(armor_pos, x, 24, sbar_alpha_fg);
 				}
 			}
 
