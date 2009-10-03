@@ -2538,19 +2538,6 @@ void Sbar_Draw (void)
 			Sbar_DrawXNum_Colored(health_pos, x, 24, sbar_alpha_fg);
 		}
 
-		// weapon icons
-		x = 1.0;
-		Sbar_DrawWeapon_Clear();
-		for(i = 1; i <= 24; ++i)
-		{
-			if(weaponimpulse[i-1] >= 0)
-			if(stat_weapons & x)
-			{
-				Sbar_DrawWeapon(i-1, fade, (i == activeweapon), i);
-			}
-			x *= 2;
-		}
-
 		// ammo
 		float a; // i will be the ammo type (already declared), a will contain how much ammo there is of type i
 
@@ -2638,7 +2625,20 @@ void Sbar_Draw (void)
 
 		// draw strength/invincibility icon and timer
 		CSQC_Strength_Timer();
-		
+
+		// weapon icons
+                if(cvar("sbar_showweaponicons")) {
+			x = 1.0;
+               		Sbar_DrawWeapon_Clear();
+                	for(i = 1; i <= 24; ++i)
+                	{
+                        	if(weaponimpulse[i-1] >= 0)
+                       		if(stat_weapons & x)
+					Sbar_DrawWeapon(i-1, fade, (i == activeweapon), i);
+                	        x *= 2;
+                	}
+		}
+
 		// draw gametype specific icons
 		if(gametype == GAME_KEYHUNT)
 			CSQC_kh_hud();
