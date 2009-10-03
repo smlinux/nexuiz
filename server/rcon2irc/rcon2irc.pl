@@ -443,12 +443,13 @@ use Digest::MD4;
 #   my $chan = new Channel::QW($connection, "password");
 sub new($$$)
 {
-	my ($class, $conn, $password, $secure) = @_;
+	my ($class, $conn, $password, $secure, $timeout) = @_;
 	my $you = {
 		connector => $conn,
 		password => $password,
 		recvbuf => "",
 		secure => $secure,
+		timeout => $timeout,
 	};
 	return
 		bless $you, 'Channel::QW';
@@ -464,7 +465,15 @@ sub join_commands($@)
 sub send($$$)
 {
 	my ($self, $line, $nothrottle) = @_;
-	if($self->{secure})
+	if($self->{secure} > 1)
+	{
+		$self->{connector}->send("\377\377\377\377getchallenge");
+		my $c = $self->recvchallenge();
+		return 0 if not defined $c;
+		my $key = Digest::HMAC::hmac("$c $line", $self->{password}, \&Digest::MD4::md4);
+		return $self->{connector}->send("\377\377\377\377srcon HMAC-MD4 CHALLENGE $key $c $line");
+	}
+	elsif($self->{secure})
 	{
 		my $t = sprintf "%ld.%06d", time(), int rand 1000000;
 		my $key = Digest::HMAC::hmac("$t $line", $self->{password}, \&Digest::MD4::md4);
@@ -484,6 +493,38 @@ sub quote($$)
 	$data =~ s/([\\"])/\\$1/g;
 	$data =~ s/\$/\$\$/g;
 	return $data;
+}
+
+sub recvchallenge($)
+{
+	my ($self) = @_;
+
+	my $sel = IO::Select->new($self->fds());
+	my $endtime_max = Time::HiRes::time() + $self->{timeout};
+	my $endtime = $endtime_max;
+
+	while((my $dt = $endtime - Time::HiRes::time()) > 0)
+	{
+		if($sel->can_read($dt))
+		{
+			for(;;)
+			{
+				my $s = $self->{connector}->recv();
+				die "read error\n"
+					if not defined $s;
+				length $s
+					or last;
+				if($s =~ /^\377\377\377\377challenge (.*)$/s)
+				{
+					return $1;
+				}
+				next
+					if $s !~ /^\377\377\377\377n(.*)$/s;
+				$self->{recvbuf} .= $1;
+			}
+		}
+	}
+	return undef;
 }
 
 sub recv($)
@@ -669,6 +710,7 @@ our %config = (
 
 	dp_server => undef,
 	dp_secure => 1,
+	dp_secure_challengetimeout => 1,
 	dp_listen => "", 
 	dp_password => undef,
 	dp_status_delay => 30,
@@ -750,7 +792,7 @@ $SIG{TERM} = sub {
 # Create the two channels to gateway between...
 
 $channels{irc} = new Channel::Line(new Connection::Socket(tcp => $config{irc_local} => $config{irc_server} => 6667));
-$channels{dp} = new Channel::QW(my $dpsock = new Connection::Socket(udp => $config{dp_listen} => $config{dp_server} => 26000), $config{dp_password}, $config{dp_secure});
+$channels{dp} = new Channel::QW(my $dpsock = new Connection::Socket(udp => $config{dp_listen} => $config{dp_server} => 26000), $config{dp_password}, $config{dp_secure}, $config{dp_secure_challengetimeout});
 $config{dp_listen} = $dpsock->sockname();
 print "Listening on $config{dp_listen}\n";
 

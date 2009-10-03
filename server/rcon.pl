@@ -200,10 +200,10 @@ sub color_dp2irc($)
 			my $oldcolor = $color;
 			$color = $color_dp2irc_table[$data];
 
-			$color == $oldcolor ? '' :
-			$color < 0          ? "\017" :
-			$next eq ','        ? "\003$color\002\002" :
-			                      sprintf "\003%02d", $color;
+			$color == $oldcolor               ? '' :
+			$color < 0                        ? "\017" :
+			(index '0123456789,', $next) >= 0 ? "\003$color\002\002" :
+			                                    "\003$color";
 		} :
 			die "Invalid type";
 	}
@@ -304,7 +304,7 @@ sub new($$)
 		(length($local) ? (LocalAddr => $local) : ()),
 		PeerAddr => $remote,
 		PeerPort => $defaultport
-	) or die "socket $proto/$local/$remote: $!";
+	) or die "socket $proto/$local/$remote/$defaultport: $!";
 	$sock->blocking(0);
 	my $you = {
 		# Mortal fool! Release me from this wretched tomb! I must be set free
@@ -530,6 +530,7 @@ if(!length $server)
 	print STDERR "Usage: rcon_address=SERVERIP:PORT rcon_password=PASSWORD $0 rconcommands...\n";
 	print STDERR "Optional: rcon_timeout=... (default: 5)\n";
 	print STDERR "          rcon_timeout_inter=... (default: 0.2)\n";
+	print STDERR "          rcon_timeout_challenge=... (default: 5)\n";
 	print STDERR "          rcon_colorcodes_raw=1 (to disable color codes translation)\n";
 	print STDERR "          rcon_secure=0 (to allow connecting to older servers not supporting secure rcon)\n";
 	exit 0;
