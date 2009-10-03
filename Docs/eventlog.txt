@@ -39,6 +39,15 @@ ______________
    :ctf:return:<flagcolor>:<ID of defender>
    :ctf:returned:<flagcolor>
    :dom:taken:<previouscolor>:<ID of player>
+   :keyhunt:capture:<ID of player>:<points for player>:<ID of key owner>:<points for key owner>:<name of key>
+   :keyhunt:carrierfrag:<ID of player>:<points for player>:<ID of key owner>:<points for key owner>:<name of key>
+   :keyhunt:collect:<ID of player>:<points for player>:<ID of key owner>:<points for key owner>:<name of key>
+   :keyhunt:destroyed:<ID of player>:<points for player>:<ID of key owner>:<points for key owner>:<name of key>
+   :keyhunt:destroyed_holdingkey:<ID of player>:<points for player>:<ID of key owner>:<points for key owner>:<name of key>
+   :keyhunt:dropkey:<ID of player>:<points for player>:<ID of key owner>:<points for key owner>:<name of key>
+   :keyhunt:losekey:<ID of player>:<points for player>:<ID of key owner>:<points for key owner>:<name of key>
+   :keyhunt:push:<ID of player>:<points for player>:<ID of key owner>:<points for key owner>:<name of key>
+   :keyhunt:pushed:<ID of player>:<points for player>:<ID of key owner>:<points for key owner>:<name of key>
    :scores:<gametype>_<mapname>:<map runtime>
    :labels:player:<head1><flags>,<head2><flags>,...
    :player:see-labels:<score1>,<score2>,...:<playtime>:<team>:<ID>:<nickname>
