@@ -339,6 +339,7 @@ ln -snf nexuizdebug$date$ext.zip "$zipdir/nexuizdebug-$newest.zip"
 case "$versiontag" in
 	test)
 		# these builds are public
+		ssh atoffload "sh clean-builds.sh"
 		rsync -vaSHP "$zipdir/nexuiz"*"-$date$ext.zip" "$zipdir/nexuiz"*"-$newest.zip" atoffload:offload.alientrap.org/nexuiz/builds/
 		;;
 	*)
