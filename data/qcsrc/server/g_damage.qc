@@ -885,6 +885,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	// apply push
 	if (self.damageforcescale)
 	if (vlen(force))
+	if (self.damage != "player" || time > self.spawnshieldtime)
 	{
 		self.velocity = self.velocity + self.damageforcescale * force;
 		self.flags &~= FL_ONGROUND;
