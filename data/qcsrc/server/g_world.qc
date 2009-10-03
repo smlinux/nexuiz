@@ -1394,7 +1394,7 @@ float WINNING_YES = 1; // winner found
 float WINNING_NEVER = 2; // no winner, enter overtime if time limit is reached
 float WINNING_STARTSUDDENDEATHOVERTIME = 3; // no winner, enter suddendeath overtime NOW
 
-void InitiateOvertime()
+float InitiateSuddenDeath()
 {
 	// Check first whether normal overtimes could be added before initiating suddendeath mode
 	// - for this timelimit_overtime needs to be >0 of course
@@ -1402,26 +1402,7 @@ void InitiateOvertime()
 	//   again, if at the point at which timelimit would be extended again, still no winner was found
 	if ((checkrules_overtimesadded >= 0) && (checkrules_overtimesadded < cvar("timelimit_overtimes")) && cvar("timelimit_overtime") && !(g_race && !g_race_qualifying))
 	{
-		++checkrules_overtimesadded;
-		//add one more overtime by simply extending the timelimit
-		float tl;
-		tl = cvar("timelimit");
-		tl += cvar("timelimit_overtime");
-		cvar_set("timelimit", ftos(tl));
-		string minutesPlural;
-		if (cvar("timelimit_overtime") == 1)
-			minutesPlural = " ^3minute";
-		else
-			minutesPlural = " ^3minutes";
-
-		bcenterprint(
-			strcat(
-				"^3Now playing ^1OVERTIME^3!\n\n^3Added ^1",
-				ftos(cvar("timelimit_overtime")),
-				minutesPlural,
-				" to the game!"
-			)
-		);
+		return 1; // need to call InitiateOvertime later
 	}
 	else
 	{
@@ -1431,7 +1412,32 @@ void InitiateOvertime()
 			if(g_race && !g_race_qualifying)
 				race_StartCompleting();
 		}
+		return 0;
 	}
+}
+
+void InitiateOvertime() // ONLY call this if InitiateSuddenDeath returned true
+{
+	++checkrules_overtimesadded;
+	//add one more overtime by simply extending the timelimit
+	float tl;
+	tl = cvar("timelimit");
+	tl += cvar("timelimit_overtime");
+	cvar_set("timelimit", ftos(tl));
+	string minutesPlural;
+	if (cvar("timelimit_overtime") == 1)
+		minutesPlural = " ^3minute";
+	else
+		minutesPlural = " ^3minutes";
+
+	bcenterprint(
+		strcat(
+			"^3Now playing ^1OVERTIME^3!\n\n^3Added ^1",
+			ftos(cvar("timelimit_overtime")),
+			minutesPlural,
+			" to the game!"
+		)
+	);
 }
 
 float GetWinningCode(float fraglimitreached, float equality)
@@ -1896,6 +1902,9 @@ void CheckRules_World()
 		return;
 	}
 
+	float wantovertime;
+	wantovertime = 0;
+
 	if(checkrules_suddendeathend)
 	{
 		if(!checkrules_suddendeathwarning)
@@ -1936,10 +1945,10 @@ void CheckRules_World()
 					return;
 				}
 				else
-					InitiateOvertime();
+					wantovertime |= InitiateSuddenDeath();
 			}
 			else
-				InitiateOvertime();
+				wantovertime |= InitiateSuddenDeath();
 		}
 	}
 
@@ -1987,12 +1996,20 @@ void CheckRules_World()
 	{
 		checkrules_status = WINNING_NEVER;
 		checkrules_overtimesadded = -1;
-		InitiateOvertime();
+		wantovertime |= InitiateSuddenDeath();
 	}
 
 	if(checkrules_status == WINNING_NEVER)
 		// equality cases! Nobody wins if the overtime ends in a draw.
 		ClearWinners();
+
+	if(wantovertime)
+	{
+		if(checkrules_status == WINNING_NEVER)
+			InitiateOvertime();
+		else
+			checkrules_status = WINNING_YES;
+	}
 
 	if(checkrules_suddendeathend)
 		if(checkrules_status != WINNING_NEVER || time >= checkrules_suddendeathend)
