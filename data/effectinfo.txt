@@ -4430,7 +4430,7 @@ velocitymultiplier 0.7
 effect tr_rifle
 notunderwater
 tex 0 8
-trailspacing 2
+trailspacing 8
 type static
 color 0x202020 0x404040
 size 2 2
@@ -4441,7 +4441,7 @@ velocityjitter 4 4 4
 type smoke
 effect tr_rifle
 underwater
-trailspacing 8
+trailspacing 32
 type bubble
 tex 62 62
 color 0x404040 0x808080
