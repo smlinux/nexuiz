@@ -10,9 +10,9 @@ set -e
 base=`pwd`
 
 # customizable specific stuff
-netradiant_release=1.5.0-svn389
+netradiant_release=1.5.0-svn402
 basepk3=$base/data20090403.pk3 # 2.5
-hotbasepk3=$base=data20091001.pk3 # hotfix
+hotbasepk3=$base/data20091001.pk3 # hotfix
 nexdir=$base/nexuiz
 havocdir=$base/nexuiz/havoc
 dpdir=$base/darkplaces
