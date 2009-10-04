@@ -1313,7 +1313,7 @@ velocityjitter 224 224 324
 effect electro_muzzleflash
 count 1
 type smoke
-color 0x202020 0x404040
+color 0x283880 0x283880 // 0x202020 0x404040
 tex 0 8
 size 5 5
 alpha 256 256 512
@@ -1322,7 +1322,7 @@ velocityjitter 6 6 6
 velocitymultiplier 0.01
 lightradius 200
 lightradiusfade 2000
-lightcolor 2 1.5 0.2
+lightcolor 1.5 3 6
 effect electro_muzzleflash
 count 30
 type spark
