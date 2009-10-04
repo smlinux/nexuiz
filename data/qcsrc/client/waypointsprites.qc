@@ -15,6 +15,7 @@ float waypointsprite_crosshairfadedistance;
 float waypointsprite_distancefadealpha;
 float waypointsprite_distancefadescale;
 float waypointsprite_distancefadedistance;
+float waypointsprite_alpha;
 
 .float rule;
 .string netname; // primary picture
@@ -254,6 +255,7 @@ void Draw_WaypointSprite()
 	crosshairdistance = sqrt( pow(o_x - vid_conwidth/2, 2) + pow(o_y - vid_conheight/2, 2) );
 
 	t = waypointsprite_scale * vidscale;
+	a *= waypointsprite_alpha;
 
 	{
 		a = a * (1 - (1 - waypointsprite_distancefadealpha) * (bound(0, dist/waypointsprite_distancefadedistance, 1)));
@@ -413,7 +415,7 @@ void WaypointSprite_Load()
 	waypointsprite_minalpha = cvar("g_waypointsprite_minalpha");
 	waypointsprite_distancealphaexponent = cvar("g_waypointsprite_distancealphaexponent");
 	waypointsprite_timealphaexponent = cvar("g_waypointsprite_timealphaexponent");
-	waypointsprite_scale = cvar_or("g_waypointsprite_scale", 1) * (1 - cvar("_menu_alpha"));
+	waypointsprite_scale = cvar_or("g_waypointsprite_scale", 1);
 	waypointsprite_edgefadealpha = cvar_or("g_waypointsprite_edgefadealpha", 1);
 	waypointsprite_edgefadescale = cvar_or("g_waypointsprite_edgefadescale", 1);
 	waypointsprite_edgefadedistance = cvar("g_waypointsprite_edgefadedistance");
@@ -423,6 +425,7 @@ void WaypointSprite_Load()
 	waypointsprite_distancefadealpha = cvar_or("g_waypointsprite_distancefadealpha", 1);
 	waypointsprite_distancefadescale = cvar_or("g_waypointsprite_distancefadescale", 1);
 	waypointsprite_distancefadedistance = vlen(mi_max - mi_min) * cvar_or("g_waypointsprite_distancefadedistancemultiplier", 1);
+	waypointsprite_alpha = cvar_or("g_waypointsprite_alpha", 1) * (1 - cvar("_menu_alpha"));
 
 	if(!waypointsprite_initialized)
 	{
