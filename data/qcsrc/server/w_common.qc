@@ -488,6 +488,8 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 	}
 
 	if(tracereffects & EF_RED)
+		CSQCProjectile(proj, TRUE, PROJECTILE_BULLET_GLOWING_TRACER, TRUE);
+	else if(tracereffects & EF_BLUE)
 		CSQCProjectile(proj, TRUE, PROJECTILE_BULLET_GLOWING, TRUE);
 	else
 		CSQCProjectile(proj, TRUE, PROJECTILE_BULLET, TRUE);

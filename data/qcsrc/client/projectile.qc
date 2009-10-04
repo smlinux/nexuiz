@@ -84,6 +84,9 @@ void Projectile_DrawTrail(vector to)
 			trailparticles(self, particleeffectnum("tr_bullet"), from, to);
 			break;
 		case PROJECTILE_BULLET_GLOWING:
+			trailparticles(self, particleeffectnum("tr_bullet"), from, to);
+			break;
+		case PROJECTILE_BULLET_GLOWING_TRACER:
 			trailparticles(self, particleeffectnum("tr_rifle"), from, to);
 			break;
 		case PROJECTILE_FIREMINE:
@@ -177,11 +180,10 @@ void Projectile_Draw()
 
 	switch(self.cnt)
 	{
-		/*
 		case PROJECTILE_BULLET_GLOWING:
+		case PROJECTILE_BULLET_GLOWING_TRACER:
 			R_AddDynamicLight(self.origin, 50, '1 1 0');
 			break;
-		*/
 		default:
 			break;
 	}
