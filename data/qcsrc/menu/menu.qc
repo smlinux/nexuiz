@@ -40,9 +40,9 @@ void() m_init =
 	}
 }
 
+float conwidth_s, conheight_s;
 void UpdateConWidthHeight()
 {
-	float conwidth_s, conheight_s;
 	conwidth_s = conwidth;
 	conheight_s = conheight;
 	conwidth = cvar("vid_conwidth");
