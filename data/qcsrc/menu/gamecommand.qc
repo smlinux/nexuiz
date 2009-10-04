@@ -68,10 +68,22 @@ void GameCommand(string theCommand)
 		return;
 	}
 
+	if(argv(0) == "videosettings")
+	{
+		m_goto_video_settings();
+		return;
+	}
+
 	if(argv(0) == "dumptree")
 	{
 		_dumptree_space = "";
 		depthfirst(main, parent, firstChild, nextSibling, _dumptree_open, _dumptree_close, NULL);
+		return;
+	}
+
+	if(argv(0) == "setresolution")
+	{
+		updateConwidths();
 		return;
 	}
 

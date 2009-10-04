@@ -5,6 +5,7 @@ CLASS(NexuizVideoSettingsTab) EXTENDS(NexuizTab)
 	ATTRIB(NexuizVideoSettingsTab, intendedWidth, float, 0.9)
 	ATTRIB(NexuizVideoSettingsTab, rows, float, 17)
 	ATTRIB(NexuizVideoSettingsTab, columns, float, 6.5)
+	ATTRIB(NexuizVideoSettingsTab, name, string, "videosettings")
 ENDCLASS(NexuizVideoSettingsTab)
 entity makeNexuizVideoSettingsTab();
 #endif
@@ -24,6 +25,19 @@ void fillNexuizVideoSettingsTab(entity me)
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Resolution:"));
 		me.TD(me, 1, 2, e = makeNexuizResolutionSlider());
+	me.TR(me);
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Font/UI size:"));
+		me.TD(me, 1, 2, e = makeNexuizTextSlider("menu_vid_scale"));
+			e.addValue(e, "Unreadable", "-1");
+			e.addValue(e, "Tiny", "-0.75");
+			e.addValue(e, "Little", "-0.5");
+			e.addValue(e, "Small", "-0.25");
+			e.addValue(e, "Medium", "0");
+			e.addValue(e, "Large", "0.25");
+			e.addValue(e, "Huge", "0.5");
+			e.addValue(e, "Gigantic", "0.75");
+			e.addValue(e, "Colossal", "1");
+			e.configureNexuizTextSliderValues(e);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Color depth:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(16, 32, 16, "vid_bitsperpixel"));
@@ -93,6 +107,6 @@ void fillNexuizVideoSettingsTab(entity me)
 		me.TD(me, 1, 2, e = makeNexuizSlider(0.5, 2.0, 0.05, "r_hdr_scenebrightness"));
 
 	me.gotoRC(me, me.rows - 1, 0);
-		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "vid_conwidth $menu_vid_conwidth; vid_conheight $menu_vid_conheight; vid_restart", COMMANDBUTTON_APPLY));
+		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "menu_cmd setresolution; vid_restart; menu_restart; togglemenu; defer 0.1 \"menu_cmd videosettings\"", COMMANDBUTTON_APPLY));
 }
 #endif
