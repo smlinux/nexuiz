@@ -338,6 +338,7 @@ float sv_clforceplayermodels;
 float sv_loddistance1;
 float sv_loddistance2;
 .float cvar_cl_gunalign;
+.float cvar_cl_noantilag;
 
 .float version_nagtime;
 

@@ -411,7 +411,7 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 			lag = 0;
 		if(clienttype(self) != CLIENTTYPE_REAL)
 			lag = 0;
-		if(cvar("g_antilag") == 0)
+		if(cvar("g_antilag") == 0 || self.cvar_cl_noantilag)
 			lag = 0; // only do hitscan, but no antilag
 
 		if(lag)

@@ -360,13 +360,13 @@ void traceline_antilag_force (entity source, vector v1, vector v2, float nomonst
 }
 void traceline_antilag (entity source, vector v1, vector v2, float nomonst, entity forent, float lag)
 {
-	if (cvar("g_antilag") != 2)
+	if (cvar("g_antilag") != 2 || source.cvar_cl_noantilag)
 		lag = 0;
 	traceline_antilag_force(source, v1, v2, nomonst, forent, lag);
 }
 void tracebox_antilag (entity source, vector v1, vector mi, vector ma, vector v2, float nomonst, entity forent, float lag)
 {
-	if (cvar("g_antilag") != 2)
+	if (cvar("g_antilag") != 2 || source.cvar_cl_noantilag)
 		lag = 0;
 	tracebox_antilag_force(source, v1, mi, ma, v2, nomonst, forent, lag);
 }
