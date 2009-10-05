@@ -27,7 +27,7 @@
 		</div>
 			<!-- Downloads -->
 			<a href="downloads.php" title="Nexuiz Downloads (Game, Maps)"><img src="htmlfiles/img/headers/downloads.gif" alt="Downloads" width="145" height="15" border="0" class="imgHeader" title="Downloads" /></a>
-			<a id="download_nexuiz" href="http://www.sourceforge.net/nexuiz/" title="Download Nexuiz from Source Forge - Left Click">&nbsp;</a>
+			<a id="download_nexuiz" href="http://www.sourceforge.net/projects/nexuiz/" title="Download Nexuiz from Source Forge - Left Click">&nbsp;</a>
 			<!--<a id="download_q3_mappack" href="http://downloads.sourceforge.net/nexuiz/nexmappack_r2.zip" title="Download Nexuiz Q3 Mappack from Source
 			Forge - Left Click">&nbsp;</a>-->
 			<h2 class="page"><a href="http://nexuiz.com/downloads.php" title="Nexuiz Download Mirrors">Mirrors -&gt;</a></h2>
