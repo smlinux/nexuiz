@@ -6,7 +6,7 @@ CLASS(NexuizRadarDialog) EXTENDS(NexuizDialog)
 	ATTRIB(NexuizRadarDialog, title, string, "Radar, HUD & Waypoints")
 	ATTRIB(NexuizRadarDialog, color, vector, SKINCOLOR_DIALOG_RADAR)
 	ATTRIB(NexuizRadarDialog, intendedWidth, float, 0.7)
-	ATTRIB(NexuizRadarDialog, rows, float, 18)
+	ATTRIB(NexuizRadarDialog, rows, float, 19)
 	ATTRIB(NexuizRadarDialog, columns, float, 4)
 ENDCLASS(NexuizRadarDialog)
 #endif
