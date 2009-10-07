@@ -18,14 +18,22 @@ void W_Laser_Attack (float issecondary)
 	local entity missile;
 	vector s_forward;
 	float a;
+	float nodamage;
 
-	if (issecondary)
+	if(issecondary == 2) // minstanex shot
+		nodamage = g_minstagib;
+	else
+		nodamage = FALSE;
+
+	if (issecondary == 1)
 		a = cvar("g_balance_laser_secondary_shotangle");
 	else
 		a = cvar("g_balance_laser_primary_shotangle");
 	s_forward = v_forward * cos(a * DEG2RAD) + v_up * sin(a * DEG2RAD);
 
-	if(issecondary)
+	if(nodamage)
+		W_SetupShot_Dir (self, s_forward, FALSE, 3, "weapons/lasergun_fire.wav", 0);
+	else if(issecondary == 1)
 		W_SetupShot_Dir (self, s_forward, FALSE, 3, "weapons/lasergun_fire.wav", cvar("g_balance_laser_secondary_damage"));
 	else
 		W_SetupShot_Dir (self, s_forward, FALSE, 3, "weapons/lasergun_fire.wav", cvar("g_balance_laser_primary_damage"));
@@ -34,23 +42,26 @@ void W_Laser_Attack (float issecondary)
 	missile = spawn ();
 	missile.owner = self;
 	missile.classname = "laserbolt";
-	missile.dmg = issecondary;
-	missile.bot_dodge = TRUE;
-	if (issecondary)
-		missile.bot_dodgerating = cvar("g_balance_laser_secondary_damage");
-	else
-		missile.bot_dodgerating = cvar("g_balance_laser_primary_damage");
+	missile.dmg = (issecondary == 1);
+	if(!nodamage)
+	{
+		missile.bot_dodge = TRUE;
+		if (issecondary == 1)
+			missile.bot_dodgerating = cvar("g_balance_laser_secondary_damage");
+		else
+			missile.bot_dodgerating = cvar("g_balance_laser_primary_damage");
+	}
 
 	missile.movetype = MOVETYPE_FLY;
 	PROJECTILE_MAKETRIGGER(missile);
 	missile.projectiledeathtype = WEP_LASER;
-	if(issecondary)
+	if(issecondary == 1)
 		missile.projectiledeathtype |= HITTYPE_SECONDARY;
 
 	setorigin (missile, w_shotorg);
 	setsize(missile, '0 0 0', '0 0 0');
 
-	if (issecondary)
+	if (issecondary == 1)
 		missile.velocity = w_shotdir * cvar("g_balance_laser_secondary_speed");
 	else
 		missile.velocity = w_shotdir * cvar("g_balance_laser_primary_speed");
@@ -60,7 +71,7 @@ void W_Laser_Attack (float issecondary)
 	//missile.glow_size = 120;
 	missile.touch = W_Laser_Touch;
 	missile.think = SUB_Remove;
-	if (issecondary)
+	if (issecondary == 1)
 		missile.nextthink = time + cvar("g_balance_laser_secondary_lifetime");
 	else
 		missile.nextthink = time + cvar("g_balance_laser_primary_lifetime");
@@ -98,7 +109,7 @@ float w_laser(float req)
 		if (self.BUTTON_ATCK)
 		if (weapon_prepareattack(0, cvar("g_balance_laser_primary_refire")))
 		{
-			W_Laser_Attack(FALSE);
+			W_Laser_Attack(0);
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_laser_primary_animtime"), w_ready);
 		}
 		if (self.BUTTON_ATCK2)
@@ -107,7 +118,7 @@ float w_laser(float req)
 			{
 				if (weapon_prepareattack(0, cvar("g_balance_laser_secondary_refire")))
 				{
-					W_Laser_Attack(TRUE);
+					W_Laser_Attack(1);
 					weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_laser_secondary_animtime"), w_ready);
 				}
 			}

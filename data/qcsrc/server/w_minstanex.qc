@@ -190,7 +190,13 @@ float w_minstanex(float req)
 			if (self.jump_interval <= time)
 			{
 				self.jump_interval = time + 0.9 * W_WeaponRateFactor();
-				W_Laser_Attack(FALSE);
+
+				// ugly minstagib hack to reuse the fire mode of the laser
+				float w;
+				w = self.weapon;
+				self.weapon = WEP_LASER;
+				W_Laser_Attack(2);
+				self.weapon = w;
 			}
 		}
 	}
