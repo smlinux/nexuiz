@@ -13,9 +13,14 @@ float sbar_alpha_bg;
 float sbar_color_bg_team;
 float sbar_border_thickness;
 float sbar_scoreboard_alpha_bg;
+float sbar_scoreboard_alpha_fg;
 float sbar_scoreboard_highlight;
+float sbar_scoreboard_highlight_alpha;
+float sbar_scoreboard_highlight_alpha_self;
 float sbar_hudselector;
 float sbar_hud_accuracy;
+float sbar_scoreboard_alpha_name;
+float sbar_scoreboard_alpha_name_self;
 
 float ps_primary, ps_secondary;
 float ts_primary, ts_secondary;
@@ -833,7 +838,8 @@ string Sbar_FixScoreboardColumnWidth(float i, string str)
 
 void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float pl_number)
 {
-	vector tmp;
+	vector tmp, plteamrgb;
+	plteamrgb = GetTeamRGB(pl.team); 
 	string str;
 	float i, field;
 	float is_spec;
@@ -846,12 +852,12 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float pl_num
 
 	// alternated rows highlighting
 	if (is_self)
-		drawfill(pos - '1 1 0', tmp + '2 0 0', '1 1 1', 0.25, DRAWFLAG_NORMAL);
+		drawfill(pos - '1 1 0', tmp + '2 0 0', plteamrgb, sbar_scoreboard_highlight_alpha_self, DRAWFLAG_NORMAL);
 	else
 	{
 		if (sbar_scoreboard_highlight)
 			if(!mod(pl_number,2))
-				drawfill(pos - '1 1 0', tmp + '2 0 0', '1 1 1', 0.09, DRAWFLAG_NORMAL);
+				drawfill(pos - '1 1 0', tmp + '2 0 0', plteamrgb, sbar_scoreboard_highlight_alpha, DRAWFLAG_NORMAL);
 	}
 
 	tmp_y = 0;
@@ -873,19 +879,34 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float pl_num
 
 		if(field == SP_NAME) {
 			tmp_x = sbar_fontsize_x*(sbar_size[i] - sbar_fixscoreboardcolumnwidth_iconlen - sbar_fixscoreboardcolumnwidth_marginlen) + sbar_fontsize_x;
-			drawcolorcodedstring(pos - tmp, str, sbar_fontsize, 1, DRAWFLAG_NORMAL);
+			if (is_self)
+				drawcolorcodedstring(pos - tmp, str, sbar_fontsize, sbar_scoreboard_alpha_name_self, DRAWFLAG_NORMAL);
+			else
+				drawcolorcodedstring(pos - tmp, str, sbar_fontsize, sbar_scoreboard_alpha_name, DRAWFLAG_NORMAL);
 		} else {
 			tmp_x = sbar_fixscoreboardcolumnwidth_len*sbar_fontsize_x + sbar_fontsize_x;
-			drawstring(pos - tmp, str, sbar_fontsize, sbar_field_rgb, 1, DRAWFLAG_NORMAL);
+			if (is_self)
+				drawstring(pos - tmp, str, sbar_fontsize, sbar_field_rgb, sbar_scoreboard_alpha_name_self, DRAWFLAG_NORMAL);
+			else
+				drawstring(pos - tmp, str, sbar_fontsize, sbar_field_rgb, sbar_scoreboard_alpha_name, DRAWFLAG_NORMAL);
 		}
 
 		tmp_x = sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
 		if(sbar_field_icon0 != "")
-			drawpic(pos - tmp, sbar_field_icon0, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon1_rgb, sbar_field_icon0_alpha, DRAWFLAG_NORMAL);
+			if (is_self)
+				drawpic(pos - tmp, sbar_field_icon0, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon1_rgb, sbar_field_icon0_alpha * sbar_scoreboard_alpha_name_self, DRAWFLAG_NORMAL);
+			else
+				drawpic(pos - tmp, sbar_field_icon0, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon1_rgb, sbar_field_icon0_alpha * sbar_scoreboard_alpha_name, DRAWFLAG_NORMAL);
 		if(sbar_field_icon1 != "")
-			drawpic(pos - tmp, sbar_field_icon1, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon1_rgb, sbar_field_icon1_alpha, DRAWFLAG_NORMAL);
+			if (is_self)
+				drawpic(pos - tmp, sbar_field_icon1, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon1_rgb, sbar_field_icon1_alpha * sbar_scoreboard_alpha_name_self, DRAWFLAG_NORMAL);
+			else
+				drawpic(pos - tmp, sbar_field_icon1, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon1_rgb, sbar_field_icon1_alpha * sbar_scoreboard_alpha_name, DRAWFLAG_NORMAL);
 		if(sbar_field_icon2 != "")
-			drawpic(pos - tmp, sbar_field_icon2, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon2_rgb, sbar_field_icon2_alpha, DRAWFLAG_NORMAL);
+			if (is_self)
+				drawpic(pos - tmp, sbar_field_icon2, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon2_rgb, sbar_field_icon2_alpha * sbar_scoreboard_alpha_name_self, DRAWFLAG_NORMAL);
+			else
+				drawpic(pos - tmp, sbar_field_icon2, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon2_rgb, sbar_field_icon2_alpha * sbar_scoreboard_alpha_name, DRAWFLAG_NORMAL);
 	}
 
 	if(sbar_field[i] == SP_SEPARATOR)
@@ -907,20 +928,34 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float pl_num
 
 			if(field == SP_NAME) {
 				tmp_x = sbar_fontsize_x*sbar_fixscoreboardcolumnwidth_len; // left or right aligned? let's put it right...
-				drawcolorcodedstring(pos - tmp, str, sbar_fontsize, 1, DRAWFLAG_NORMAL);
+				if(is_self)
+					drawcolorcodedstring(pos - tmp, str, sbar_fontsize, sbar_scoreboard_alpha_name_self, DRAWFLAG_NORMAL);
+				else
+					drawcolorcodedstring(pos - tmp, str, sbar_fontsize, sbar_scoreboard_alpha_name, DRAWFLAG_NORMAL);
 			} else {
 				tmp_x = sbar_fontsize_x*sbar_fixscoreboardcolumnwidth_len;
-				drawstring(pos - tmp, str, sbar_fontsize, sbar_field_rgb, 1, DRAWFLAG_NORMAL);
+				if(is_self)
+					drawstring(pos - tmp, str, sbar_fontsize, sbar_field_rgb, sbar_scoreboard_alpha_name_self, DRAWFLAG_NORMAL);
+				else
+					drawstring(pos - tmp, str, sbar_fontsize, sbar_field_rgb, sbar_scoreboard_alpha_name, DRAWFLAG_NORMAL);
 			}
 
 			tmp_x = sbar_fontsize_x*sbar_size[i];
 			if(sbar_field_icon0 != "")
-				drawpic(pos - tmp, sbar_field_icon0, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon1_rgb, sbar_field_icon0_alpha, DRAWFLAG_NORMAL);
+				if (is_self)
+					drawpic(pos - tmp, sbar_field_icon0, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon1_rgb, sbar_field_icon0_alpha * sbar_scoreboard_alpha_name_self, DRAWFLAG_NORMAL);
+				else
+					drawpic(pos - tmp, sbar_field_icon0, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon1_rgb, sbar_field_icon0_alpha * sbar_scoreboard_alpha_name, DRAWFLAG_NORMAL);
 			if(sbar_field_icon1 != "")
-				drawpic(pos - tmp, sbar_field_icon1, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon1_rgb, sbar_field_icon1_alpha, DRAWFLAG_NORMAL);
+				if (is_self)
+					drawpic(pos - tmp, sbar_field_icon1, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon1_rgb, sbar_field_icon1_alpha * sbar_scoreboard_alpha_name_self, DRAWFLAG_NORMAL);
+				else
+					drawpic(pos - tmp, sbar_field_icon1, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon1_rgb, sbar_field_icon1_alpha * sbar_scoreboard_alpha_name, DRAWFLAG_NORMAL);
 			if(sbar_field_icon2 != "")
-				drawpic(pos - tmp, sbar_field_icon2, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon2_rgb, sbar_field_icon2_alpha, DRAWFLAG_NORMAL);
-
+				if (is_self)
+					drawpic(pos - tmp, sbar_field_icon2, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon2_rgb, sbar_field_icon2_alpha * sbar_scoreboard_alpha_name_self, DRAWFLAG_NORMAL);
+				else
+					drawpic(pos - tmp, sbar_field_icon2, '0 1 0' * sbar_fontsize_y + '1 0 0' * sbar_fontsize_x * sbar_fixscoreboardcolumnwidth_iconlen, sbar_field_icon2_rgb, sbar_field_icon2_alpha * sbar_scoreboard_alpha_name, DRAWFLAG_NORMAL);
 			pos_x -= sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
 		}
 	}
@@ -991,7 +1026,7 @@ vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, vector rgb, vector bg_si
 			if (mod(i,2))
 				drawfill(pos - '0 1 0' - sbar_fontsize_x / 2 * '1 0 0', column_dim, '0 0 0', sbar_scoreboard_alpha_bg * 0.2, DRAWFLAG_NORMAL);
 		}
-		drawstring(pos, sbar_title[i], sbar_fontsize, rgb, 1, DRAWFLAG_NORMAL);
+		drawstring(pos, sbar_title[i], sbar_fontsize, rgb, sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
 		pos_x += column_dim_x;
 	}
 	if(sbar_field[i] == SP_SEPARATOR)
@@ -1019,7 +1054,7 @@ vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, vector rgb, vector bg_si
 
 			tmp_x = stringwidth(sbar_title[i], FALSE);
 			tmp_x = (sbar_size[i] - tmp_x) * sbar_fontsize_x;
-			drawstring(pos + tmp, sbar_title[i], sbar_fontsize, rgb, 1, DRAWFLAG_NORMAL);
+			drawstring(pos + tmp, sbar_title[i], sbar_fontsize, rgb, sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
 			pos_x -= sbar_fontsize_x;
 		}
 	}
@@ -1084,7 +1119,7 @@ void Sbar_DrawScoreboard()
 
 	// Heading
 	drawfont = sbar_bigfont;
-	drawstringcenter('0 1 0' * ymin, "Scoreboard", '24 24 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawstringcenter('0 1 0' * ymin, "Scoreboard", '24 24 0', '1 1 1', sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
 
 	pos_y += 24 + 4;
 	pos_y += sbar_fontsize_y;
@@ -1103,11 +1138,10 @@ void Sbar_DrawScoreboard()
 				continue;
 
 			rgb = GetTeamRGB(tm.team);
-
-			Sbar_DrawXNum(pos - '6.5 0 0' * sbar_fontsize_y + '0 1 0' * sbar_fontsize_y, tm.(teamscores[ts_primary]), 4, 0, sbar_fontsize_y * 1.5, rgb, 0, 1, 1, DRAWFLAG_NORMAL);
-
+			Sbar_DrawXNum(pos - '6.5 0 0' * sbar_fontsize_y + '0 1 0' * sbar_fontsize_y, tm.(teamscores[ts_primary]), 4, 0, sbar_fontsize_y * 1.5, rgb, 0, 1, sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
+				
 			if(ts_primary != ts_secondary)
-				Sbar_DrawXNum(pos - '4.5 0 0' * sbar_fontsize_y + '0 2.5 0' * sbar_fontsize_y, tm.(teamscores[ts_secondary]), 4, 0, sbar_fontsize_y * 1, rgb, 0, 1, 1, DRAWFLAG_NORMAL);
+				Sbar_DrawXNum(pos - '4.5 0 0' * sbar_fontsize_y + '0 2.5 0' * sbar_fontsize_y, tm.(teamscores[ts_secondary]), 4, 0, sbar_fontsize_y * 1, rgb, 0, 1, sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
 
 			pos = Sbar_Scoreboard_MakeTable(pos, tm, rgb, bg_size);
 		}
@@ -1143,7 +1177,7 @@ void Sbar_DrawScoreboard()
 	}
 
 	if(specs)
-		drawstring(tmp, "Spectators", sbar_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
+		drawstring(tmp, "Spectators", sbar_fontsize, '1 1 1', sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
 
 	// Print info string
 	string str;
@@ -1215,7 +1249,7 @@ void Sbar_DrawScoreboard()
 
 
 	pos_y += 1.2 * sbar_fontsize_y;
-	drawcolorcodedstring(pos + '0.5 0 0' * (sbwidth - sbar_fontsize_x * stringwidth(str, TRUE)), str, sbar_fontsize, 0.8, DRAWFLAG_NORMAL);
+	drawcolorcodedstring(pos + '0.5 0 0' * (sbwidth - sbar_fontsize_x * stringwidth(str, TRUE)), str, sbar_fontsize, sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
 
 	scoreboard_bottom = pos_y + 2 * sbar_fontsize_y;
 }
@@ -2247,7 +2281,12 @@ void Sbar_Draw (void)
 	sbar_border_thickness = bound(0, cvar("sbar_border_thickness"), 5);
 	sbar_color_bg_team = cvar("sbar_color_bg_team");
 	sbar_scoreboard_alpha_bg = cvar("sbar_scoreboard_alpha_bg");
+	sbar_scoreboard_alpha_fg = cvar("sbar_scoreboard_alpha_fg");
 	sbar_scoreboard_highlight = cvar("sbar_scoreboard_highlight");
+	sbar_scoreboard_highlight_alpha = cvar("sbar_scoreboard_highlight_alpha");
+	sbar_scoreboard_highlight_alpha_self = cvar("sbar_scoreboard_highlight_alpha_self");
+	sbar_scoreboard_alpha_name = cvar("sbar_scoreboard_alpha_name");
+	sbar_scoreboard_alpha_name_self = cvar("sbar_scoreboard_alpha_name_self");
 
 	float i;
 	float weapon_stats;
