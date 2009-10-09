@@ -1,5 +1,5 @@
-string CVAR_CHECK_DEFAULT = "5d48426c72cdfbf78480870c75601f89";
-string CVAR_CHECK_BALANCE = "7f0cddd65617fa39bd3efb7942dceea9";
+string CVAR_CHECK_DEFAULT = "37cc3aae4b042acd9cf2b71135034bcf";
+string CVAR_CHECK_BALANCE = "1e423b95c67bac7998289473abe8feb1";
 
 float	FALSE					= 0;
 float	TRUE					= 1;
