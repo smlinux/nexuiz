@@ -111,6 +111,50 @@ string strcat1(string s) = #115; // FRIK_FILE
 float logfile_open;
 float logfile;
 
+string GetAdvancedDeathReports(entity enPlayer) // Extra fragmessage information
+{
+	local float nPlayerHealth = rint(enPlayer.health);
+	local float nPlayerArmor = rint(enPlayer.armorvalue);
+	local float nPlayerHandicap = enPlayer.cvar_cl_handicap;
+	local float nPlayerPing = rint(enPlayer.ping);
+	local string strPlayerPingColor;
+	local string strMessage;
+	if(nPlayerPing >= 150)
+		strPlayerPingColor = "^1";
+	else
+		strPlayerPingColor = "^2";
+		
+	if((cvar("sv_fragmessage_information_typefrag")) && (enPlayer.classname == "player") && (enPlayer.BUTTON_CHAT))
+		strMessage = strcat(strMessage, " ^1(typefrag)");
+	if((cvar("sv_fragmessage_information_stats")) && (nPlayerHealth >= 1))
+		strMessage = strcat(strMessage, "\n^7(Health ^1", ftos(nPlayerHealth), "^7 / Armor ^2", ftos(nPlayerArmor), "^7)");
+		
+	if(cvar("sv_fragmessage_information_ping")) {
+		if(clienttype(enPlayer) == CLIENTTYPE_BOT) // Bots have no ping
+			strMessage = strcat(strMessage, "\n^7(^2Bot");
+		else
+			strMessage = strcat(strMessage, "\n^7(Ping ", strPlayerPingColor, ftos(nPlayerPing), "ms");
+		if(cvar("sv_fragmessage_information_handicap"))
+			if(cvar("sv_fragmessage_information_handicap") == 2)
+				if(nPlayerHandicap <= 1)
+					strMessage = strcat(strMessage, "^7 / Handicap ^2Off^7)");
+				else 
+					strMessage = strcat(strMessage, "^7 / Handicap ^2", ftos(nPlayerHandicap), "^7)");
+			else if not(nPlayerHandicap <= 1)
+				strMessage = strcat(strMessage, "^7 / Handicap ^2", ftos(nPlayerHandicap), "^7)");
+		else
+			strMessage = strcat(strMessage, "^7)");
+	} else if(cvar("sv_fragmessage_information_handicap")) {
+		if(cvar("sv_fragmessage_information_handicap") == 2)
+			if(nPlayerHandicap <= 1)
+				strMessage = strcat(strMessage, "\n^7(Handicap ^2Off^7)");
+			else 
+				strMessage = strcat(strMessage, "\n^7(Handicap ^2", ftos(nPlayerHandicap), "^7)");
+		else if(nPlayerHandicap > 1)
+			strMessage = strcat(strMessage, "\n^7(Handicap ^2", ftos(nPlayerHandicap), "^7)");
+	}
+	return strMessage;
+}
 void bcenterprint(string s)
 {
     // TODO replace by MSG_ALL (would show it to spectators too, though)?

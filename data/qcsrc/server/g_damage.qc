@@ -371,11 +371,11 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 				}
 
 				if(sv_gentle > 0) {
-					centerprint(attacker, strcat(DAMAGE_CENTERPRINT_SPACER, "^4You scored against ^7", s));
-					centerprint(targ, strcat(DAMAGE_CENTERPRINT_SPACER, a,"^1 scored against you ^7"));
+					centerprint(attacker, strcat(DAMAGE_CENTERPRINT_SPACER, blood_message, "^4You scored against ^7", s, GetAdvancedDeathReports(targ)));
+					centerprint(targ, strcat(DAMAGE_CENTERPRINT_SPACER, a,"^1 scored against you ^7", GetAdvancedDeathReports(attacker)));
 				} else {
-					centerprint(attacker, strcat(DAMAGE_CENTERPRINT_SPACER, blood_message, "^4You fragged ^7", s));
-					centerprint(targ, strcat(DAMAGE_CENTERPRINT_SPACER, victim_message, "^1You were fragged by ^7", a));
+					centerprint(attacker, strcat(DAMAGE_CENTERPRINT_SPACER, blood_message, "^4You fragged ^7", s, GetAdvancedDeathReports(targ)));
+					centerprint(targ, strcat(DAMAGE_CENTERPRINT_SPACER, victim_message, "^1You were fragged by ^7", a, GetAdvancedDeathReports(attacker)));
 					attacker.taunt_soundtime = time + 1;
 				}
 
