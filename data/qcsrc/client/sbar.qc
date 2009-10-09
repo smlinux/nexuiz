@@ -1091,10 +1091,51 @@ vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, vector rgb, vector bg_si
 	return pos;
 }
 
+float Sbar_WouldDrawScoreboard() {
+	if (sb_showscores)
+		return 1;
+	else if (intermission == 1)
+		return 1;
+	else if (intermission == 2)
+		return 1;
+	else if (getstati(STAT_HEALTH) <= 0 && cvar("cl_deathscoreboard"))
+		return 1;
+	else if(sb_showscores_force)
+		return 1;
+	return 0;
+}
+
 float lastpingstime;
 float scoreboard_bottom;
+float sbar_scoreboard_fade_alpha;
+float sbar_woulddrawscoreboard_prev;
+float sbar_woulddrawscoreboard_change; // "time" at which Sbar_WouldDrawScoreboard() changed
 void Sbar_DrawScoreboard()
 {
+	float sbar_woulddrawscoreboard; 
+	sbar_woulddrawscoreboard = Sbar_WouldDrawScoreboard();
+	if(sbar_woulddrawscoreboard != sbar_woulddrawscoreboard_prev) {
+		sbar_woulddrawscoreboard_change = time;
+		sbar_woulddrawscoreboard_prev = sbar_woulddrawscoreboard;
+	}
+
+	float scoreboard_fadeinspeed = 10;
+	float scoreboard_fadeoutspeed = 5;
+	if(sbar_woulddrawscoreboard)
+		sbar_scoreboard_fade_alpha = bound (0, (time - sbar_woulddrawscoreboard_change) * scoreboard_fadeinspeed, 1);
+	else
+		sbar_scoreboard_fade_alpha = bound (0, (1/scoreboard_fadeoutspeed - (time - sbar_woulddrawscoreboard_change)) * scoreboard_fadeoutspeed, 1);
+
+	if not(sbar_scoreboard_fade_alpha)
+		return;
+	sbar_scoreboard_alpha_bg = cvar("sbar_scoreboard_alpha_bg") * sbar_scoreboard_fade_alpha;
+	sbar_scoreboard_alpha_fg = cvar("sbar_scoreboard_alpha_fg") * sbar_scoreboard_fade_alpha;
+	sbar_scoreboard_highlight = cvar("sbar_scoreboard_highlight");
+	sbar_scoreboard_highlight_alpha = cvar("sbar_scoreboard_highlight_alpha") * sbar_scoreboard_fade_alpha;
+	sbar_scoreboard_highlight_alpha_self = cvar("sbar_scoreboard_highlight_alpha_self") * sbar_scoreboard_fade_alpha;
+	sbar_scoreboard_alpha_name = cvar("sbar_scoreboard_alpha_name") * sbar_scoreboard_fade_alpha;
+	sbar_scoreboard_alpha_name_self = cvar("sbar_scoreboard_alpha_name_self") * sbar_scoreboard_fade_alpha;
+
 	vector rgb, pos, tmp;
 	entity pl, tm;
 
@@ -1620,20 +1661,6 @@ void Sbar_Timer()
 	Sbar_DrawXNum(topright - '36 0 0' - '3 0 0' + '0 2 0', seconds, -2, 0, 18, timer_color, 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 }
 
-float Sbar_WouldDrawScoreboard() {
-	if (sb_showscores)
-		return 1;
-	else if (intermission == 1)
-		return 1;
-	else if (intermission == 2)
-		return 1;
-	else if (getstati(STAT_HEALTH) <= 0 && cvar("cl_deathscoreboard"))
-		return 1;
-	else if(sb_showscores_force)
-		return 1;
-	return 0;
-}
-
 void CSQC_Strength_Timer() {
 	vector pos;
 	vector bottom;
@@ -2040,6 +2067,9 @@ void Sbar_DrawAccuracyStats_Description_Splash(vector position)
 	drawstring(position + '0 9 0' * sbar_fontsize_y, "Damage wasted:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 }
 
+float sbar_accuracystats_fade_alpha;
+float sbar_woulddrawscoreboard_prev;
+float sbar_woulddrawscoreboard_change; // "time" at which Sbar_WouldDrawScoreboard() changed
 void Sbar_DrawAccuracyStats()
 {
 	float i, count_hitscan, count_splash, row;  // count is the number of 'colums'
@@ -2255,7 +2285,6 @@ void Sbar_Reset (void)
 void Sbar_Draw (void)
 {
 	// vectors for top right, bottom right, bottom and bottom left corners
-
 	vector topright;
 	vector bottom;
 	vector bottomright;
@@ -2280,13 +2309,6 @@ void Sbar_Draw (void)
 	sbar_alpha_bg = cvar("sbar_alpha_bg") * (1 - cvar("_menu_alpha"));
 	sbar_border_thickness = bound(0, cvar("sbar_border_thickness"), 5);
 	sbar_color_bg_team = cvar("sbar_color_bg_team");
-	sbar_scoreboard_alpha_bg = cvar("sbar_scoreboard_alpha_bg");
-	sbar_scoreboard_alpha_fg = cvar("sbar_scoreboard_alpha_fg");
-	sbar_scoreboard_highlight = cvar("sbar_scoreboard_highlight");
-	sbar_scoreboard_highlight_alpha = cvar("sbar_scoreboard_highlight_alpha");
-	sbar_scoreboard_highlight_alpha_self = cvar("sbar_scoreboard_highlight_alpha_self");
-	sbar_scoreboard_alpha_name = cvar("sbar_scoreboard_alpha_name");
-	sbar_scoreboard_alpha_name_self = cvar("sbar_scoreboard_alpha_name_self");
 
 	float i;
 	float weapon_stats;
@@ -2458,20 +2480,19 @@ void Sbar_Draw (void)
 	}
 
 	Sbar_UpdatePlayerTeams();
-
 	if (intermission == 2) // map voting screen
 	{
-		if(sb_showscores) {
-			Sbar_DrawScoreboard();
-			Sbar_Score();
-			Sbar_Timer();
-		}
-		else if(sb_showaccuracy) {
+		if(sb_showaccuracy) {
 			Sbar_DrawAccuracyStats();
 			Sbar_Score();
 			Sbar_Timer();
 		}
-  		else
+		else if(sb_showscores) {
+              		Sbar_DrawScoreboard();
+                        Sbar_Score();
+                        Sbar_Timer();
+                }
+		else
 			Sbar_FinaleOverlay();
 
 		Sbar_Reset();
@@ -2489,11 +2510,10 @@ void Sbar_Draw (void)
   	}
 	else
 	{
-		if (sb_showscores)
-			Sbar_DrawScoreboard();
-		else if(sb_showaccuracy)
+		if(sb_showaccuracy)
 			Sbar_DrawAccuracyStats();
-
+		else
+			Sbar_DrawScoreboard();
 		float armor, health;
 		armor = getstati(STAT_ARMOR);
 		health = getstati(STAT_HEALTH);
