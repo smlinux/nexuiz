@@ -1119,12 +1119,19 @@ void Sbar_DrawScoreboard()
 		sbar_woulddrawscoreboard_prev = sbar_woulddrawscoreboard;
 	}
 
-	float scoreboard_fadeinspeed = 10;
-	float scoreboard_fadeoutspeed = 5;
-	if(sbar_woulddrawscoreboard)
-		sbar_scoreboard_fade_alpha = bound (0, (time - sbar_woulddrawscoreboard_change) * scoreboard_fadeinspeed, 1);
+	float scoreboard_fadeinspeed = cvar("sbar_scoreboard_fadeinspeed");
+	float scoreboard_fadeoutspeed = cvar("sbar_scoreboard_fadeoutspeed");
+	if(sbar_woulddrawscoreboard) {
+		if (scoreboard_fadeinspeed)
+			sbar_scoreboard_fade_alpha = bound (0, (time - sbar_woulddrawscoreboard_change) * scoreboard_fadeinspeed, 1);
+		else
+			sbar_scoreboard_fade_alpha = 1;
+	}
 	else
-		sbar_scoreboard_fade_alpha = bound (0, (1/scoreboard_fadeoutspeed - (time - sbar_woulddrawscoreboard_change)) * scoreboard_fadeoutspeed, 1);
+		if (scoreboard_fadeoutspeed)
+			sbar_scoreboard_fade_alpha = bound (0, (1/scoreboard_fadeoutspeed - (time - sbar_woulddrawscoreboard_change)) * scoreboard_fadeoutspeed, 1);
+		else
+			sbar_scoreboard_fade_alpha = 0;
 
 	if not(sbar_scoreboard_fade_alpha)
 		return;
