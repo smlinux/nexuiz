@@ -124,11 +124,9 @@ string GetAdvancedDeathReports(entity enPlayer) // Extra fragmessage information
 	else
 		strPlayerPingColor = "^2";
 		
-	if((cvar("sv_fragmessage_information_typefrag")) && (enPlayer.classname == "player") && (enPlayer.BUTTON_CHAT))
-		strMessage = strcat(strMessage, " ^1(typefrag)");
-	if((cvar("sv_fragmessage_information_stats")) && (nPlayerHealth >= 1))
+	if((cvar("sv_fragmessage_information_stats")) && (enPlayer.health >= 1))
 		strMessage = strcat(strMessage, "\n^7(Health ^1", ftos(nPlayerHealth), "^7 / Armor ^2", ftos(nPlayerArmor), "^7)");
-		
+			
 	if(cvar("sv_fragmessage_information_ping")) {
 		if(clienttype(enPlayer) == CLIENTTYPE_BOT) // Bots have no ping
 			strMessage = strcat(strMessage, "\n^7(^2Bot");
