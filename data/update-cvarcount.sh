@@ -1,6 +1,6 @@
 #!/bin/sh
 
-balance_cfgs="balanceHavoc.cfg balance25.cfg balanceSamual.cfg"
+balance_cfgs="balanceHavoc.cfg balance25.cfg balanceSamual.cfg balanceNexrun.cfg"
 
 countd=`awk '/^seta? g_/ { print $2; }' defaultNexuiz.cfg | sort -u | tr -d '\r' | md5sum | cut -c 1-32`
 countw=`awk '/^seta? g_/ { print $2; }' balance.cfg       | sort -u | tr -d '\r' | md5sum | cut -c 1-32`
