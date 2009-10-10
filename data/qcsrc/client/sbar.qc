@@ -1136,13 +1136,34 @@ void Sbar_DrawScoreboard()
 
 	if not(sbar_scoreboard_fade_alpha)
 		return;
+		
 	sbar_scoreboard_alpha_bg = cvar("sbar_scoreboard_alpha_bg") * sbar_scoreboard_fade_alpha;
-	sbar_scoreboard_alpha_fg = cvar("sbar_scoreboard_alpha_fg") * sbar_scoreboard_fade_alpha;
+	if(cvar("sbar_scoreboard_alpha_fg"))
+		sbar_scoreboard_alpha_fg = cvar("sbar_scoreboard_alpha_fg") * sbar_scoreboard_fade_alpha;
+	else 
+		sbar_scoreboard_alpha_fg = 1;
+	
 	sbar_scoreboard_highlight = cvar("sbar_scoreboard_highlight");
-	sbar_scoreboard_highlight_alpha = cvar("sbar_scoreboard_highlight_alpha") * sbar_scoreboard_fade_alpha;
-	sbar_scoreboard_highlight_alpha_self = cvar("sbar_scoreboard_highlight_alpha_self") * sbar_scoreboard_fade_alpha;
-	sbar_scoreboard_alpha_name = cvar("sbar_scoreboard_alpha_name") * sbar_scoreboard_fade_alpha;
-	sbar_scoreboard_alpha_name_self = cvar("sbar_scoreboard_alpha_name_self") * sbar_scoreboard_fade_alpha;
+	
+	if(cvar("sbar_scoreboard_highlight_alpha"))
+		sbar_scoreboard_highlight_alpha = cvar("sbar_scoreboard_highlight_alpha") * sbar_scoreboard_fade_alpha;
+	else
+		sbar_scoreboard_highlight_alpha = 0.10;
+		
+	if(cvar("sbar_scoreboard_highlight_alpha_self"))
+		sbar_scoreboard_highlight_alpha_self = cvar("sbar_scoreboard_highlight_alpha_self") * sbar_scoreboard_fade_alpha;
+	else
+		sbar_scoreboard_highlight_alpha_self = 0.25;
+		
+	if(cvar("sbar_scoreboard_alpha_name"))
+		sbar_scoreboard_alpha_name = cvar("sbar_scoreboard_alpha_name") * sbar_scoreboard_fade_alpha;
+	else
+		sbar_scoreboard_alpha_name = 0.9;
+		
+	if(cvar("sbar_scoreboard_alpha_name_self"))
+		sbar_scoreboard_alpha_name_self = cvar("sbar_scoreboard_alpha_name_self") * sbar_scoreboard_fade_alpha;
+	else 
+		sbar_scoreboard_alpha_name_self = 1;
 
 	vector rgb, pos, tmp;
 	entity pl, tm;
