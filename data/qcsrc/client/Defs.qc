@@ -221,6 +221,7 @@ float announcer_5min;
 
 // database for misc stuff
 float tempdb;
+float ClientProgsDB;
 vector hook_shotorigin;
 
 #ifdef BLURTEST

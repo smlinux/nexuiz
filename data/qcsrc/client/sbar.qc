@@ -33,6 +33,7 @@ void CSQC_kh_hud();
 void CSQC_ctf_hudreset();
 void CSQC_ctf_hud();
 void CSQC_nb_hud();
+void CSQC_race_hud();
 void MapVote_Draw();
 void Sbar_FinaleOverlay()
 {
@@ -2712,6 +2713,8 @@ void Sbar_Draw (void)
 			CSQC_ctf_hud();
 		else if(gametype == GAME_NEXBALL)
 			CSQC_nb_hud();
+		else if(gametype == GAME_CTS || gametype == GAME_RACE)
+			CSQC_race_hud();
 	}
 	return;
 }
@@ -3013,4 +3016,33 @@ void CSQC_nb_hud(void)
 
 	if (stat_items & IT_KEY1)
 		drawpic(pos, "gfx/hud/sb_nexball_carrying", '80 34 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+}
+
+void CSQC_race_hud(void) 
+{
+	entity me;
+	me = (spectatee_status > 0) ? playerslots[spectatee_status - 1] : playerslots[player_localentnum - 1];
+	float crecordtime, score;
+	score = me.(scores[ps_primary]);
+
+	string rr;
+	if(gametype == GAME_CTS)
+		rr = CTS_RECORD;
+	else
+		rr = RACE_RECORD;
+	crecordtime = stof(db_get(ClientProgsDB, strcat(shortmapname, rr, "time")));
+
+	if(score && score < crecordtime || !crecordtime)
+		db_put(ClientProgsDB, strcat(shortmapname, rr, "time"), ftos(score));
+
+	vector pos;
+	pos_x = 4;
+	pos_y = vid_conheight - 46;
+
+	float pmin, psec, pmsec;
+	pmin = floor(crecordtime/(60 * TIME_FACTOR));
+	psec = floor((crecordtime - pmin*(60 * TIME_FACTOR))/TIME_FACTOR);
+	pmsec = crecordtime - pmin*60*TIME_FACTOR - psec*TIME_FACTOR;
+
+	drawstring(pos, strcat("Personal best: ", ftos(pmin),":", ftos(psec),":",ftos(pmsec)), '12 12 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 }

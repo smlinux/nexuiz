@@ -65,6 +65,7 @@ void CSQC_Init(void)
 
 	binddb = db_create();
 	tempdb = db_create();
+	ClientProgsDB = db_load("client.db");
 	compressShortVector_init();
 
 	drawfont = 0;
@@ -167,6 +168,8 @@ void CSQC_Shutdown(void)
 	remove(players);
 	db_close(binddb);
 	db_close(tempdb);
+	db_save(ClientProgsDB, "client.db");
+	db_close(ClientProgsDB);
 
 	cvar_clientsettemp_restore();
 
