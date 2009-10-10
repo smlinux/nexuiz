@@ -2075,9 +2075,6 @@ void Sbar_DrawAccuracyStats_Description_Splash(vector position)
 	drawstring(position + '0 9 0' * sbar_fontsize_y, "Damage wasted:", sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 }
 
-float sbar_accuracystats_fade_alpha;
-float sbar_woulddrawscoreboard_prev;
-float sbar_woulddrawscoreboard_change; // "time" at which Sbar_WouldDrawScoreboard() changed
 void Sbar_DrawAccuracyStats()
 {
 	float i, count_hitscan, count_splash, row;  // count is the number of 'colums'
@@ -3036,13 +3033,14 @@ void CSQC_race_hud(void)
 		db_put(ClientProgsDB, strcat(shortmapname, rr, "time"), ftos(score));
 
 	vector pos;
-	pos_x = 4;
-	pos_y = vid_conheight - 46;
+	pos_x = 2;
+	pos_y = vid_conheight - 48;
 
 	float pmin, psec, pmsec;
 	pmin = floor(crecordtime/(60 * TIME_FACTOR));
 	psec = floor((crecordtime - pmin*(60 * TIME_FACTOR))/TIME_FACTOR);
 	pmsec = crecordtime - pmin*60*TIME_FACTOR - psec*TIME_FACTOR;
 
-	drawstring(pos, strcat("Personal best: ", ftos(pmin),":", ftos(psec),":",ftos(pmsec)), '12 12 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+	drawstring(pos, "Personal best ", '10 10 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+	drawstring(pos + '0 10 0', strcat(ftos(pmin),":", ftos(psec),":",ftos(pmsec)),'14 14 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 }
