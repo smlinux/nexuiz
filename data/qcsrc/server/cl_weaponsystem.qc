@@ -737,6 +737,7 @@ void CL_Weaponentity_Think()
 void CL_ExteriorWeaponentity_Think()
 {
 	float tag_found;
+	vector ang;
 	self.nextthink = time;
 	if (self.owner.exteriorweaponentity != self)
 	{
@@ -776,6 +777,26 @@ void CL_ExteriorWeaponentity_Think()
 		self.alpha = self.owner.alpha;
 	else
 		self.alpha = 1;
+
+	ang_x = bound(cvar("sv_pitch_min"), self.owner.v_angle_x, cvar("sv_pitch_max"));
+	ang_y = 0;
+	ang_z = 0;
+
+#ifdef OUR_MODELS_ARE_SANE
+	ang_x = -/* don't ask */ang_x;
+	self.angles = ang;
+#else
+	ang_y = self.owner.v_angle_y;
+	makevectors(ang);
+	var vector v = v_forward;
+	gettaginfo(self.tag_entity, self.tag_index);
+	// untransform v according to this coordinate space
+	vector w;
+	w_x = v_forward * v;
+	w_y = -v_right * v;
+	w_z = v_up * v;
+	self.angles = vectoangles(w);
+#endif
 
 	self.colormap = self.owner.colormap;
 };
