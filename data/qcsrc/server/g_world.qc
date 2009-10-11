@@ -2477,6 +2477,26 @@ void MapVote_Think()
 
 	if(!mapvote_initialized)
 	{
+		if(cvar("rescan_pending") == 1)
+		{
+			cvar_set("rescan_pending", "2");
+			localcmd("fs_rescan\nrescan_pending 3\n");
+			return;
+		}
+		else if(cvar("rescan_pending") == 2)
+		{
+			return;
+		}
+		else if(cvar("rescan_pending") == 3)
+		{
+			// now build missing mapinfo files
+			if(!MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), MapInfo_RequiredFlags(), MapInfo_ForbiddenFlags(), 1))
+				return;
+
+			// we're done, start the timer
+			cvar_set("rescan_pending", "0");
+		}
+
 		mapvote_initialized = TRUE;
 		if(DoNextMapOverride())
 			return;
