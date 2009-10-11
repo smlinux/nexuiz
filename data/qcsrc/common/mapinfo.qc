@@ -538,8 +538,36 @@ float MapInfo_Type_FromString(string t)
 void _MapInfo_Parse_Settemp(string pFilename, string acl, string s, float recurse)
 {
 	string t;
-	float fh;
+	float fh, o;
 	t = car(s); s = cdr(s);
+
+	// limited support of "" and comments
+	//   remove trailing and leading " of t
+	if(substring(t, 0, 1) == "\"")
+	{
+		if(substring(t, -1, 1) == "\"")
+			t = substring(t, 1, -2);
+	}
+
+	//   remove leading " of s
+	if(substring(s, 0, 1) == "\"")
+	{
+		s = substring(s, 1, -1);
+	}
+	//   remove trailing " of s, and all that follows (cvar description)
+	o = strstrofs(s, "\"", 0);
+	if(o >= 0)
+		s = substring(s, 0, o);
+	
+	//   remove // comments
+	o = strstrofs(s, "//", 0);
+	if(o >= 0)
+		s = substring(s, 0, o);
+	
+	//   remove trailing spaces
+	while(substring(s, -1, 1) == " ")
+		s = substring(s, 0, -2);
+
 	if(t == "#include")
 	{
 		if(recurse > 0)
@@ -563,6 +591,11 @@ void _MapInfo_Parse_Settemp(string pFilename, string acl, string s, float recurs
 						continue;
 					if(substring(s, 0, 1) == "_")  // q3map style
 						continue;
+
+					if(substring(s, 0, 4) == "set ")
+						s = substring(s, 4, -1);
+					if(substring(s, 0, 5) == "seta ")
+						s = substring(s, 5, -1);
 
 					_MapInfo_Parse_Settemp(pFilename, acl, s, recurse - 1);
 				}
