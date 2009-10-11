@@ -3043,7 +3043,7 @@ float srecordtime_change_time; // time when srecordtime last changed
 void CSQC_race_hud(void) 
 {
 	entity me;
-	me = (spectatee_status > 0) ? playerslots[spectatee_status - 1] : playerslots[player_localentnum - 1];
+	me = playerslots[player_localentnum - 1];
 	float crecordtime, srecordtime, score;
 	float f; // yet another function has this
 	score = me.(scores[ps_primary]);
