@@ -3048,6 +3048,9 @@ void CSQC_race_hud(void)
 	float f; // yet another function has this
 	score = me.(scores[ps_primary]);
 
+	if not((scores_flags[ps_primary] & SFL_TIME) && !teamplay) // race/cts record display on HUD
+		return; // no records in the actual race
+
 	drawfont = sbar_bigfont;
 	vector pos;
 	pos_x = 2;
