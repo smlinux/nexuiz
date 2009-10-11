@@ -3036,11 +3036,14 @@ void CSQC_nb_hud(void)
 		drawpic(pos, "gfx/hud/sb_nexball_carrying", '80 34 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 }
 
+float crecordtime_prev; // last remembered crecordtime
+float crecordtime_change_time; // time when crecordtime last changed
 void CSQC_race_hud(void) 
 {
 	entity me;
 	me = (spectatee_status > 0) ? playerslots[spectatee_status - 1] : playerslots[player_localentnum - 1];
 	float crecordtime, score;
+	float f; // yet another function has this
 	score = me.(scores[ps_primary]);
 
 	string rr;
@@ -3053,6 +3056,12 @@ void CSQC_race_hud(void)
 	if(score && score < crecordtime || !crecordtime)
 		db_put(ClientProgsDB, strcat(shortmapname, rr, "time"), ftos(score));
 
+	if(crecordtime != crecordtime_prev) {
+		crecordtime_prev = crecordtime;
+		crecordtime_change_time = time;
+	}
+	f = time - crecordtime_change_time;
+
 	vector pos;
 	pos_x = 2;
 	pos_y = vid_conheight - 48;
@@ -3061,7 +3070,18 @@ void CSQC_race_hud(void)
 	pmin = floor(crecordtime/(60 * TIME_FACTOR));
 	psec = floor((crecordtime - pmin*(60 * TIME_FACTOR))/TIME_FACTOR);
 	pmsec = crecordtime - pmin*60*TIME_FACTOR - psec*TIME_FACTOR;
+	drawfont = sbar_bigfont;
 
-	drawstring(pos, "Personal best ", '10 10 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
-	drawstring(pos + '0 10 0', strcat(ftos(pmin),":", ftos(psec),":",ftos(pmsec)),'14 14 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+	if (f > 1) {
+		drawstring(pos, "Personal best ", '10 10 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+		drawstring(pos + '0 10 0', strcat(ftos(pmin),":", ftos(psec),":",ftos(pmsec)),'14 14 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+	} else {
+		drawstring(pos, "Personal best ", '10 10 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+		drawstring(pos + '0 10 0', strcat(ftos(pmin),":", ftos(psec),":",ftos(pmsec)),'14 14 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+
+		// expanding
+		drawstring(pos - '0 50 0' * f, "Personal best ", '10 10 0' + '30 30 0' * f, '1 1 1', sbar_alpha_fg * (1 - f), DRAWFLAG_NORMAL);
+		drawstring(pos + '0 10 0' - '0 30 0' * f, strcat(ftos(pmin),":", ftos(psec),":",ftos(pmsec)),'14 14 0' + '42 42 0' * f, '1 1 1', sbar_alpha_fg * (1 - f), DRAWFLAG_NORMAL);
+	}
+	drawfont = sbar_font;
 }
