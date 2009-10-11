@@ -882,16 +882,20 @@ void cvar_settemp_restore()
 #else
 void cvar_settemp(string pKey, string pValue)
 {
+	float i;
+	string settemp_var;
 	if(cvar_string(pKey) == pValue)
 		return;
-	cvar_set("settemp_list", strcat("1 ", pKey, " ", cvar_string("settemp_var"), " ", cvar_string("settemp_list")));
+	i = cvar("settemp_idx");
+	cvar_set("settemp_idx", ftos(i+1));
+	settemp_var = strcat("_settemp_x", ftos(i));
 #ifdef MENUQC
-	registercvar(cvar_string("settemp_var"), "", 0);
+	registercvar(settemp_var, "", 0);
 #else
-	registercvar(cvar_string("settemp_var"), "");
+	registercvar(settemp_var, "");
 #endif
-	cvar_set(cvar_string("settemp_var"), cvar_string(pKey));
-	cvar_set("settemp_var", strcat(cvar_string("settemp_var"), "x"));
+	cvar_set("settemp_list", strcat("1 ", pKey, " ", settemp_var, " ", cvar_string("settemp_list")));
+	cvar_set(settemp_var, cvar_string(pKey));
 	cvar_set(pKey, pValue);
 }
 
