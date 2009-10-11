@@ -1,3 +1,5 @@
+void race_send_recordtime();
+
 float ClientData_Send(entity to, float sf)
 {
 	if(to != self.owner)
@@ -1282,6 +1284,9 @@ void ClientConnect (void)
 {
 	local string s;
 	float t;
+
+	if(g_race || g_cts)
+		race_send_recordtime();
 
 	if(self.flags & FL_CLIENT)
 	{

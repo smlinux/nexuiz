@@ -192,6 +192,7 @@ float race_penaltyaccumulator; // qualifying: total penalty time in tenths
 float race_penaltyeventtime; // time when the player got the penalty
 float race_penaltytime; // duration of penalty time, in tenths
 string race_penaltyreason; // reason for penalty
+float race_server_record; // server record
 
 // RACE
 float race_mycheckpoint;

@@ -18,6 +18,8 @@ entity race_checkpoint_lastplayers[MAX_CHECKPOINTS];
 float race_highest_checkpoint;
 float race_timed_checkpoint;
 
+void race_send_recordtime();
+
 float race_NextCheckpoint(float f)
 {
 	if(f >= race_highest_checkpoint)
@@ -138,7 +140,6 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 
 	float recordtime;
 	string recordholder;
-
 	if(g_race_qualifying)
 	{
 		if(tvalid)
@@ -174,6 +175,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "time"), ftos(t));
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname"), e.netname);
 						write_recordmarker(e, time - TIME_DECODE(t), TIME_DECODE(t));
+						race_send_recordtime();
 					}
 					else if(t < grecordtime)
 					{
@@ -184,6 +186,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "time"), ftos(t));
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname"), e.netname);
 						write_recordmarker(e, time - TIME_DECODE(t), TIME_DECODE(t));
+						race_send_recordtime();
 					}
 					else
 					{
@@ -763,4 +766,20 @@ void spawnfunc_trigger_race_penalty()
 		self.race_penalty_reason = "missing a checkpoint";
 	if (!self.race_penalty)
 		self.race_penalty = 5;
+}
+
+void race_send_recordtime()
+{
+	float grecordtime;
+	string rr;
+	if(g_cts)
+		rr = CTS_RECORD;
+	else
+		rr = RACE_RECORD;
+	grecordtime = stof(db_get(ServerProgsDB, strcat(GetMapname(), rr, "time")));
+	// send the server best time
+	WriteByte(MSG_ONE, SVC_TEMPENTITY);
+	WriteByte(MSG_ONE, TE_CSQC_RACE);
+	WriteByte(MSG_ONE, RACE_NET_SERVER_RECORD);
+	WriteInt24_t(MSG_ONE, grecordtime);
 }

@@ -1027,6 +1027,10 @@ void Net_ReadRace()
 				strunzone(race_penaltyreason);
 			race_penaltyreason = strzone(ReadString());
 			break;
+
+		case RACE_NET_SERVER_RECORD:
+			race_server_record = ReadInt24_t();
+			break;
 	}
 }
 

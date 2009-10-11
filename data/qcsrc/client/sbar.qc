@@ -3038,14 +3038,22 @@ void CSQC_nb_hud(void)
 
 float crecordtime_prev; // last remembered crecordtime
 float crecordtime_change_time; // time when crecordtime last changed
+float srecordtime_prev; // last remembered srecordtime
+float srecordtime_change_time; // time when srecordtime last changed
 void CSQC_race_hud(void) 
 {
 	entity me;
 	me = (spectatee_status > 0) ? playerslots[spectatee_status - 1] : playerslots[player_localentnum - 1];
-	float crecordtime, score;
+	float crecordtime, srecordtime, score;
 	float f; // yet another function has this
 	score = me.(scores[ps_primary]);
 
+	drawfont = sbar_bigfont;
+	vector pos;
+	pos_x = 2;
+	pos_y = vid_conheight - 48;
+
+	// clientside personal record
 	string rr;
 	if(gametype == GAME_CTS)
 		rr = CTS_RECORD;
@@ -3062,26 +3070,47 @@ void CSQC_race_hud(void)
 	}
 	f = time - crecordtime_change_time;
 
-	vector pos;
-	pos_x = 2;
-	pos_y = vid_conheight - 48;
-
-	float pmin, psec, pmsec;
-	pmin = floor(crecordtime/(60 * TIME_FACTOR));
-	psec = floor((crecordtime - pmin*(60 * TIME_FACTOR))/TIME_FACTOR);
-	pmsec = crecordtime - pmin*60*TIME_FACTOR - psec*TIME_FACTOR;
-	drawfont = sbar_bigfont;
+	float cmin, csec, cmsec;
+	cmin = floor(crecordtime/(60 * TIME_FACTOR));
+	csec = floor((crecordtime - cmin*(60 * TIME_FACTOR))/TIME_FACTOR);
+	cmsec = crecordtime - cmin*60*TIME_FACTOR - csec*TIME_FACTOR;
 
 	if (f > 1) {
 		drawstring(pos, "Personal best ", '10 10 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
-		drawstring(pos + '0 10 0', strcat(ftos(pmin),":", ftos(psec),":",ftos(pmsec)),'14 14 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+		drawstring(pos + '0 10 0', strcat(ftos(cmin),":", ftos(csec),":",ftos(cmsec)),'14 14 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 	} else {
 		drawstring(pos, "Personal best ", '10 10 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
-		drawstring(pos + '0 10 0', strcat(ftos(pmin),":", ftos(psec),":",ftos(pmsec)),'14 14 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+		drawstring(pos + '0 10 0', strcat(ftos(cmin),":", ftos(csec),":",ftos(cmsec)),'14 14 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 		// expanding
 		drawstring(pos - '0 50 0' * f, "Personal best ", '10 10 0' + '30 30 0' * f, '1 1 1', sbar_alpha_fg * (1 - f), DRAWFLAG_NORMAL);
-		drawstring(pos + '0 10 0' - '0 30 0' * f, strcat(ftos(pmin),":", ftos(psec),":",ftos(pmsec)),'14 14 0' + '42 42 0' * f, '1 1 1', sbar_alpha_fg * (1 - f), DRAWFLAG_NORMAL);
+		drawstring(pos + '0 10 0' - '0 30 0' * f, strcat(ftos(cmin),":", ftos(csec),":",ftos(cmsec)),'14 14 0' + '42 42 0' * f, '1 1 1', sbar_alpha_fg * (1 - f), DRAWFLAG_NORMAL);
+	}
+
+	// server record
+	pos_y += 26;
+	srecordtime = race_server_record;
+	if(srecordtime != srecordtime_prev) {
+		srecordtime_prev = srecordtime;
+		srecordtime_change_time = time;
+	}
+	f = time - srecordtime_change_time;
+
+	float smin, ssec, smsec;
+	smin = floor(srecordtime/(60 * TIME_FACTOR));
+	ssec = floor((srecordtime - smin*(60 * TIME_FACTOR))/TIME_FACTOR);
+	smsec = srecordtime - smin*60*TIME_FACTOR - ssec*TIME_FACTOR;
+
+	if (f > 1) {
+		drawstring(pos, "Server best ", '10 10 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+		drawstring(pos + '0 10 0', strcat(ftos(smin),":", ftos(ssec),":",ftos(smsec)),'14 14 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+	} else {
+		drawstring(pos, "Server best ", '10 10 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+		drawstring(pos + '0 10 0', strcat(ftos(smin),":", ftos(ssec),":",ftos(smsec)),'14 14 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+
+		// expanding
+		drawstring(pos - '0 50 0' * f, "Server best ", '10 10 0' + '30 30 0' * f, '1 1 1', sbar_alpha_fg * (1 - f), DRAWFLAG_NORMAL);
+		drawstring(pos + '0 10 0' - '0 30 0' * f, strcat(ftos(smin),":", ftos(ssec),":",ftos(smsec)),'14 14 0' + '42 42 0' * f, '1 1 1', sbar_alpha_fg * (1 - f), DRAWFLAG_NORMAL);
 	}
 	drawfont = sbar_font;
 }
