@@ -347,7 +347,7 @@ void GoalTouch (void)
 	if        (ball.team == self.team) //owngoal (regular goals)
 	{
 		LogNB("owngoal", ball.pusher);
-		bprint("Boo! ", pname, "^7 scored a goal against his own team!\n");
+		bprint("Boo! ", pname, "^7 scored a goal against their own team!\n");
 		pscore = -1;
 	} else if (self.team == GOAL_FAULT) {
 		LogNB("fault", ball.pusher);

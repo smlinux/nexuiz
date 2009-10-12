@@ -271,7 +271,7 @@ float w_electro(float req)
 	else if (req == WR_SUICIDEMESSAGE)
 	{
 		if(w_deathtype & HITTYPE_SECONDARY)
-			w_deathtypestring = "could not remember where he put plasma";
+			w_deathtypestring = "could not remember where they put plasma";
 		else
 			w_deathtypestring = "played with plasma";
 	}

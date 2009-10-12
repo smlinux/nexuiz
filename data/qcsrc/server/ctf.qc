@@ -467,7 +467,7 @@ void FlagTouch()
 			h0 = db_get(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"));
 			h1 = other.netname;
 			if(h0 == h1)
-				h0 = "his";
+				h0 = "their";
 			else
 				h0 = strcat(h0, "^7's"); // h0: display text for previous netname
 			if (flagcaptimerecord == 0)

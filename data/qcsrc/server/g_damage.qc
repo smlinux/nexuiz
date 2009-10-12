@@ -274,11 +274,11 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 
 			if(sv_gentle) {
 				if (deathtype == DEATH_CAMP)
-					bprint ("^1",s, "^1 thought he found a nice camping ground\n");
+					bprint ("^1",s, "^1 thought they found a nice camping ground\n");
 				else if (deathtype == DEATH_MIRRORDAMAGE)
 					bprint ("^1",s, "^1 didn't become friends with the Lord of Teamplay\n");
 				else
-					bprint ("^1",s, "^1 will be reinserted into the game due to his own actions\n");
+					bprint ("^1",s, "^1 will be reinserted into the game due to their own actions\n");
 
 				if(deathtype != DEATH_TEAMCHANGE)
 				{
@@ -303,11 +303,11 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 				else if (deathtype == DEATH_NOAMMO)
 					bprint ("^7",s, "^7 committed suicide. What's the point of living without ammo?\n");
 				else if (deathtype == DEATH_CAMP)
-					bprint ("^1",s, "^1 thought he found a nice camping ground\n");
+					bprint ("^1",s, "^1 thought they found a nice camping ground\n");
 				else if (deathtype == DEATH_MIRRORDAMAGE)
 					bprint ("^1",s, "^1 didn't become friends with the Lord of Teamplay\n");
 				else if (deathtype == DEATH_CHEAT)
-					bprint ("^1",s, "^1 unfairly eliminated himself\n");
+					bprint ("^1",s, "^1 unfairly eliminated themself\n");
 				else if (deathtype == DEATH_FIRE)
 					bprint ("^1",s, "^1 burned to death\n");
 				else if (deathtype != DEATH_TEAMCHANGE)

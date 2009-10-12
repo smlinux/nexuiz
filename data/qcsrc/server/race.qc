@@ -180,7 +180,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 					else if(t < grecordtime)
 					{
 						if(grecordholder == "")
-							bprint(e.netname, "^7 broke his all-time fastest lap record with ", TIME_ENCODED_TOSTRING(t), "\n");
+							bprint(e.netname, "^7 broke their all-time fastest lap record with ", TIME_ENCODED_TOSTRING(t), "\n");
 						else
 							bprint(e.netname, "^7 broke ", grecordholder, "^7's all-time fastest lap record with ", TIME_ENCODED_TOSTRING(t), "\n");
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "time"), ftos(t));
@@ -191,7 +191,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 					else
 					{
 						if(grecordholder == "")
-							bprint(e.netname, "^7's new fastest lap could not break his all-time fastest lap record of ", TIME_ENCODED_TOSTRING(grecordtime), "\n");
+							bprint(e.netname, "^7's new fastest lap could not break their all-time fastest lap record of ", TIME_ENCODED_TOSTRING(grecordtime), "\n");
 						else
 							bprint(e.netname, "^7's new fastest lap could not break ", grecordholder, "^7's all-time fastest lap record of ", TIME_ENCODED_TOSTRING(grecordtime), "\n");
 					}

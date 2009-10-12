@@ -194,9 +194,9 @@ float w_campingrifle(float req)
 	else if (req == WR_SUICIDEMESSAGE)
 	{
 		if(w_deathtype & HITTYPE_SECONDARY)
-			w_deathtypestring = "shot himself automatically";
+			w_deathtypestring = "shot themself automatically";
 		else
-			w_deathtypestring = "sniped himself somehow";
+			w_deathtypestring = "sniped themself somehow";
 	}
 	else if (req == WR_KILLMESSAGE)
 	{

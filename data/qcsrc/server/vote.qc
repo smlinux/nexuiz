@@ -221,7 +221,7 @@ float GameCommand_Vote(string s, entity e) {
 				} else if(VoteCheckNasty(dovote)) {
 					print_to(e, "Syntax error in command. See 'vhelp' for more info.");
 				} else if(RemapVote(dovote, "vdo", e)) { // strcat seems to be necessary
-					bprint("\{1}^2* ^3", VoteNetname(e), "^2 used his ^3master^2 status to do \"^2", RemapVote_display, "^2\".\n");
+					bprint("\{1}^2* ^3", VoteNetname(e), "^2 used their ^3master^2 status to do \"^2", RemapVote_display, "^2\".\n");
 					if(cvar("sv_eventlog"))
 						GameLogEcho(strcat(":vote:vdo:", ftos(e.playerid), ":", RemapVote_display));
 					localcmd(strcat(RemapVote_vote, "\n"));

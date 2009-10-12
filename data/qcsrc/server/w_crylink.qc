@@ -241,7 +241,7 @@ float w_crylink(float req)
 		return self.ammo_cells >= cvar("g_balance_crylink_secondary_ammo");
 	else if (req == WR_SUICIDEMESSAGE)
 	{
-		w_deathtypestring = "succeeded at self-destructing himself with the Crylink";
+		w_deathtypestring = "succeeded at self-destructing themself with the Crylink";
 	}
 	else if (req == WR_KILLMESSAGE)
 	{
