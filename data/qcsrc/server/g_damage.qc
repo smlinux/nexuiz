@@ -374,7 +374,7 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 					centerprint(targ, strcat(DAMAGE_CENTERPRINT_SPACER, a,"^1 scored against you ^7", GetAdvancedDeathReports(attacker)));
 				} else {
 					if((cvar("sv_fragmessage_information_typefrag")) && (targ.BUTTON_CHAT)) {
-						centerprint(attacker, strcat(DAMAGE_CENTERPRINT_SPACER, blood_message, "^4You ^1typefragged ^7", s, GetAdvancedDeathReports(targ)));
+						centerprint(attacker, strcat(DAMAGE_CENTERPRINT_SPACER, blood_message, "^1You typefragged ^7", s, GetAdvancedDeathReports(targ)));
 						centerprint(targ, strcat(DAMAGE_CENTERPRINT_SPACER, victim_message, "^1You were typefragged by ^7", a, GetAdvancedDeathReports(attacker)));
 					} else { 
 						centerprint(attacker, strcat(DAMAGE_CENTERPRINT_SPACER, blood_message, "^4You fragged ^7", s, GetAdvancedDeathReports(targ)));
