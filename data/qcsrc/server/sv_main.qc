@@ -128,6 +128,10 @@ StartFrame
 Called before each frame by the server
 =============
 */
+
+float game_delay;
+float game_delay_last;
+
 void RuneMatchGivePoints();
 float RedirectionThink();
 entity SelectSpawnPoint (float anypoint);
@@ -206,6 +210,17 @@ void StartFrame (void)
 	skill = cvar("skill");
 
 	Spawnqueue_Check();
+
+
+	// detect when the pre-game countdown (if any) has ended and the game has started
+	game_delay = (time < game_starttime) ? TRUE : FALSE;
+
+	if(game_delay_last == TRUE)
+	if(game_delay == FALSE)
+	if(cvar("sv_eventlog"))
+			GameLogEcho(":startdelay_ended");
+
+	game_delay_last = game_delay;
 
 	// if in warmup stage and limit for warmup is hit start match
 	if (inWarmupStage)
