@@ -1120,8 +1120,8 @@ void Sbar_DrawScoreboard()
 		sbar_woulddrawscoreboard_prev = sbar_woulddrawscoreboard;
 	}
 
-	float scoreboard_fadeinspeed = cvar("sbar_scoreboard_fadeinspeed");
-	float scoreboard_fadeoutspeed = cvar("sbar_scoreboard_fadeoutspeed");
+	float scoreboard_fadeinspeed = cvar_or("sbar_scoreboard_fadeinspeed", 10);
+	float scoreboard_fadeoutspeed = cvar_or("sbar_scoreboard_fadeoutspeed", 5);
 	if(sbar_woulddrawscoreboard) {
 		if (scoreboard_fadeinspeed)
 			sbar_scoreboard_fade_alpha = bound (0, (time - sbar_woulddrawscoreboard_change) * scoreboard_fadeinspeed, 1);
@@ -1138,38 +1138,17 @@ void Sbar_DrawScoreboard()
 		return;
 		
 	sbar_scoreboard_alpha_bg = cvar("sbar_scoreboard_alpha_bg") * sbar_scoreboard_fade_alpha;
-	if(cvar("sbar_scoreboard_alpha_fg"))
-		sbar_scoreboard_alpha_fg = cvar("sbar_scoreboard_alpha_fg") * sbar_scoreboard_fade_alpha;
-	else 
-		sbar_scoreboard_alpha_fg = 1;
-	
+	sbar_scoreboard_alpha_fg = cvar_or("sbar_scoreboard_alpha_fg", 1.0) * sbar_scoreboard_fade_alpha;
 	sbar_scoreboard_highlight = cvar("sbar_scoreboard_highlight");
+	sbar_scoreboard_highlight_alpha = cvar_or("sbar_scoreboard_highlight_alpha", 0.10) * sbar_scoreboard_alpha_fg;
+	sbar_scoreboard_highlight_alpha_self = cvar_or("sbar_scoreboard_highlight_alpha_self", 0.25) * sbar_scoreboard_alpha_fg;
+	sbar_scoreboard_alpha_name = cvar_or("sbar_scoreboard_alpha_name", 0.9) * sbar_scoreboard_alpha_fg;
+	sbar_scoreboard_alpha_name_self = cvar_or("sbar_scoreboard_alpha_name_self", 1) * sbar_scoreboard_alpha_fg;
 	
-	if(cvar("sbar_scoreboard_highlight_alpha"))
-		sbar_scoreboard_highlight_alpha = cvar("sbar_scoreboard_highlight_alpha") * sbar_scoreboard_fade_alpha;
-	else
-		sbar_scoreboard_highlight_alpha = 0.10;
-		
-	if(cvar("sbar_scoreboard_highlight_alpha_self"))
-		sbar_scoreboard_highlight_alpha_self = cvar("sbar_scoreboard_highlight_alpha_self") * sbar_scoreboard_fade_alpha;
-	else
-		sbar_scoreboard_highlight_alpha_self = 0.25;
-		
-	if(cvar("sbar_scoreboard_alpha_name"))
-		sbar_scoreboard_alpha_name = cvar("sbar_scoreboard_alpha_name") * sbar_scoreboard_fade_alpha;
-	else
-		sbar_scoreboard_alpha_name = 0.9;
-		
-	if(cvar("sbar_scoreboard_alpha_name_self"))
-		sbar_scoreboard_alpha_name_self = cvar("sbar_scoreboard_alpha_name_self") * sbar_scoreboard_fade_alpha;
-	else 
-		sbar_scoreboard_alpha_name_self = 1;
-
 	vector rgb, pos, tmp;
 	entity pl, tm;
 
-	if(time > lastpingstime + 10)
-	{
+	if(time > lastpingstime + bound(1, cvar_or("sbar_pingrefreshinterval", 10), 60)) {
 		localcmd("pings\n");
 		lastpingstime = time;
 	}
