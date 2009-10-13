@@ -1,4 +1,4 @@
-void race_send_recordtime();
+void race_send_recordtime(float t);
 
 float ClientData_Send(entity to, float sf)
 {
@@ -1285,9 +1285,6 @@ void ClientConnect (void)
 	local string s;
 	float t;
 
-	if(g_race || g_cts)
-		race_send_recordtime();
-
 	if(self.flags & FL_CLIENT)
 	{
 		print("Warning: ClientConnect, but already connected!\n");
@@ -1459,6 +1456,17 @@ void ClientConnect (void)
 	}
 	else
 		self.hitplotfh = -1;
+
+	if(g_race || g_cts) {
+		string rr;
+		if(g_cts)
+			rr = CTS_RECORD;
+		else
+			rr = RACE_RECORD;
+		t = stof(db_get(ServerProgsDB, strcat(GetMapname(), rr, "time")));
+
+		race_send_recordtime(t);
+	}
 }
 
 /*

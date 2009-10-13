@@ -18,8 +18,6 @@ entity race_checkpoint_lastplayers[MAX_CHECKPOINTS];
 float race_highest_checkpoint;
 float race_timed_checkpoint;
 
-void race_send_recordtime();
-
 float race_NextCheckpoint(float f)
 {
 	if(f >= race_highest_checkpoint)
@@ -93,6 +91,17 @@ void race_InitSpectator()
 	if(g_race_qualifying)
 		if(msg_entity.enemy.race_laptime)
 			race_SendNextCheckpoint(msg_entity.enemy, 1);
+}
+
+void race_send_recordtime(float t)
+{
+	// send the server best time
+	WRITESPECTATABLE_MSG_ONE({
+	WriteByte(MSG_ONE, SVC_TEMPENTITY);
+	WriteByte(MSG_ONE, TE_CSQC_RACE);
+	WriteByte(MSG_ONE, RACE_NET_SERVER_RECORD);
+	WriteInt24_t(MSG_ONE, t);
+	});
 }
 
 void race_SendTime(entity e, float cp, float t, float tvalid)
@@ -175,18 +184,18 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "time"), ftos(t));
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname"), e.netname);
 						write_recordmarker(e, time - TIME_DECODE(t), TIME_DECODE(t));
-						race_send_recordtime();
+						race_send_recordtime(t);
 					}
 					else if(t < grecordtime)
 					{
 						if(grecordholder == "")
-							bprint(e.netname, "^7 broke their all-time fastest lap record with ", TIME_ENCODED_TOSTRING(t), "\n");
+							bprint(e.netname, "^7 broke their all-time fastest lap record ", TIME_ENCODED_TOSTRING(grecordtime), " with ", TIME_ENCODED_TOSTRING(t), "\n");
 						else
-							bprint(e.netname, "^7 broke ", grecordholder, "^7's all-time fastest lap record with ", TIME_ENCODED_TOSTRING(t), "\n");
+							bprint(e.netname, "^7 broke ", grecordholder, "^7's all-time fastest lap record ", TIME_ENCODED_TOSTRING(grecordtime), " with ", TIME_ENCODED_TOSTRING(t), "\n");
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "time"), ftos(t));
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname"), e.netname);
 						write_recordmarker(e, time - TIME_DECODE(t), TIME_DECODE(t));
-						race_send_recordtime();
+						race_send_recordtime(t);
 					}
 					else
 					{
@@ -766,20 +775,4 @@ void spawnfunc_trigger_race_penalty()
 		self.race_penalty_reason = "missing a checkpoint";
 	if (!self.race_penalty)
 		self.race_penalty = 5;
-}
-
-void race_send_recordtime()
-{
-	float grecordtime;
-	string rr;
-	if(g_cts)
-		rr = CTS_RECORD;
-	else
-		rr = RACE_RECORD;
-	grecordtime = stof(db_get(ServerProgsDB, strcat(GetMapname(), rr, "time")));
-	// send the server best time
-	WriteByte(MSG_ONE, SVC_TEMPENTITY);
-	WriteByte(MSG_ONE, TE_CSQC_RACE);
-	WriteByte(MSG_ONE, RACE_NET_SERVER_RECORD);
-	WriteInt24_t(MSG_ONE, grecordtime);
 }
