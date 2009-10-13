@@ -2439,7 +2439,7 @@ void Sbar_Draw (void)
 	}
 	if(vote_waiting)
 	{
-		s = strcat("^2A vote has been called for ^1", vote_called_vote);
+		s = strcat("^2A vote has been called for ^1",  textShortenToWidth(vote_called_vote, vid_conwidth/2/sbar_fontsize_x, stringwidth_colors));
 		o = Sbar_DrawNoteLine(o, s);
 
 		if(vote_waiting_for_me)
