@@ -512,6 +512,22 @@ void SpecialCommand()
 #endif
 }
 
+float speedaward_speed;
+string speedaward_holder;
+void race_send_speedaward()
+{
+	// send the best speed of the round
+	WRITESPECTATABLE_MSG_ONE({
+	WriteByte(MSG_ONE, SVC_TEMPENTITY);
+	WriteByte(MSG_ONE, TE_CSQC_RACE);
+	WriteByte(MSG_ONE, RACE_NET_SPEED_AWARD);
+	WriteShort(MSG_ONE, floor(speedaward_speed+0.5));
+	WriteString(MSG_ONE, speedaward_holder);
+});
+}
+
+float speedaward_lastupdate;
+float speedaward_lastsent;
 void SV_PlayerPhysics()
 {
 	local vector wishvel, wishdir, v;
@@ -1157,6 +1173,17 @@ void SV_PlayerPhysics()
 		}
 	}
 
+	if(g_cts && self.classname != "observer") {
+		if(vlen(self.velocity - self.velocity_z * '0 0 1') > speedaward_speed) {
+			speedaward_speed = vlen(self.velocity - self.velocity_z * '0 0 1');
+			speedaward_holder = self.netname;
+			speedaward_lastupdate = time;
+		}
+		if(speedaward_speed > speedaward_lastsent && time - speedaward_lastupdate > 1) {
+			race_send_speedaward();
+			speedaward_lastsent = speedaward_speed;
+		}
+	}
 :end
 	if(self.flags & FL_ONGROUND)
 		self.lastground = time;

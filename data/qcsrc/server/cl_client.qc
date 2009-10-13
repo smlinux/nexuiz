@@ -1466,6 +1466,8 @@ void ClientConnect (void)
 		t = stof(db_get(ServerProgsDB, strcat(GetMapname(), rr, "time")));
 
 		race_send_recordtime(t);
+		if (g_cts)
+			race_send_speedaward();
 	}
 }
 

@@ -1210,9 +1210,14 @@ void Sbar_DrawScoreboard()
 		}
 	}
 
+	if(gametype == GAME_CTS && race_speed_award) {
+		drawcolorcodedstring(pos, strcat("Speed award: ", ftos(race_speed_award), " (", race_speed_award_holder, ")"), sbar_fontsize, sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
+		pos_y += 1.25 * sbar_fontsize_y;	
+	}
+
 	tmp = pos + '0 1.5 0' * sbar_fontsize_y;
 	pos_y += 3 * sbar_fontsize_y;
-	
+
 	// List spectators
 	float specs;
 	specs = 0;

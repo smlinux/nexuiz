@@ -60,6 +60,7 @@ const float RACE_NET_CHECKPOINT_NEXT_SPEC_QUALIFYING = 5; // byte nextcheckpoint
 const float RACE_NET_PENALTY_RACE = 6; // byte penaltytime, string reason
 const float RACE_NET_PENALTY_QUALIFYING = 7; // byte penaltytime, string reason
 const float RACE_NET_SERVER_RECORD = 8; // server record, sent to client
+const float RACE_NET_SPEED_AWARD = 9; // speed award, sent to client
 
 const float ENT_CLIENT = 0;
 const float ENT_CLIENT_DEAD = 1;
