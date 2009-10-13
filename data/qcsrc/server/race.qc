@@ -168,7 +168,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 				if(cp == race_timed_checkpoint)
 				{
 					float grecordtime;
-					string grecordholder;
+					string grecordholder, recorddifference;
 					string rr;
 					if(g_cts)
 						rr = CTS_RECORD;
@@ -188,10 +188,11 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 					}
 					else if(t < grecordtime)
 					{
+						recorddifference = strcat("^2", " [-", TIME_ENCODED_TOSTRING(grecordtime-t), "]");
 						if(grecordholder == "")
-							bprint(e.netname, "^7 broke their all-time fastest lap record ", TIME_ENCODED_TOSTRING(grecordtime), " with ", TIME_ENCODED_TOSTRING(t), "\n");
+							bprint(e.netname, strcat("^7 broke their all-time fastest lap record ", TIME_ENCODED_TOSTRING(grecordtime), " with ", TIME_ENCODED_TOSTRING(t), recorddifference), "\n");
 						else
-							bprint(e.netname, "^7 broke ", grecordholder, "^7's all-time fastest lap record ", TIME_ENCODED_TOSTRING(grecordtime), " with ", TIME_ENCODED_TOSTRING(t), "\n");
+							bprint(e.netname, strcat("^7 broke ", grecordholder, "^7's all-time fastest lap record ", TIME_ENCODED_TOSTRING(grecordtime), " with ", TIME_ENCODED_TOSTRING(t), recorddifference), "\n");
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "time"), ftos(t));
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname"), e.netname);
 						write_recordmarker(e, time - TIME_DECODE(t), TIME_DECODE(t));
@@ -199,10 +200,11 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 					}
 					else
 					{
+						recorddifference = strcat("^1", " [+", TIME_ENCODED_TOSTRING(t-grecordtime), "]");
 						if(grecordholder == "")
-							bprint(e.netname, "^7's new fastest lap could not break their all-time fastest lap record of ", TIME_ENCODED_TOSTRING(grecordtime), "\n");
+							bprint(e.netname, strcat("^7's new fastest lap ", TIME_ENCODED_TOSTRING(t), " could not break their all-time fastest lap record of ", TIME_ENCODED_TOSTRING(grecordtime), recorddifference), "\n");
 						else
-							bprint(e.netname, "^7's new fastest lap could not break ", grecordholder, "^7's all-time fastest lap record of ", TIME_ENCODED_TOSTRING(grecordtime), "\n");
+							bprint(e.netname, strcat("^7's new fastest lap ", TIME_ENCODED_TOSTRING(t), " could not break ", grecordholder, "^7's all-time fastest lap record of ", TIME_ENCODED_TOSTRING(grecordtime), recorddifference), "\n");
 					}
 				}
 
