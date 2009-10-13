@@ -45,7 +45,7 @@ void updateConwidths()
 		f = 1 + (minfactor - 1) * sz;
 	else
 		f = 1;
-	c *= f;
+	c = c * f; // fteqcc fail
 
 	cvar_set("vid_width", ftos(rint(r_x)));
 	cvar_set("vid_height", ftos(rint(r_y)));
