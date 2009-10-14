@@ -983,7 +983,7 @@ vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, vector rgb, vector bg_si
 	tmp_y = 1.25 * sbar_fontsize_y;
 
 	// rounded header
-	drawpic(pos, "gfx/hud/sb_scoreboard_tableheader", tmp, '0.5 0.5 0.5', sbar_scoreboard_alpha_bg, DRAWFLAG_NORMAL);
+	drawpic(pos, "gfx/hud/sb_scoreboard_tableheader", tmp, (rgb * sbar_color_bg_team) + '0.5 0.5 0.5', sbar_scoreboard_alpha_bg, DRAWFLAG_NORMAL);
 
 	// table border
 	tmp_y += sbar_border_thickness;
