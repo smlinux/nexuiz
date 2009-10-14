@@ -208,7 +208,7 @@ vector GetCurrentFov(float fov)
 float zoomscript_caught;
 
 vector wcross_origin;
-float wcross_sizefloat, wcross_alpha;
+float wcross_sizefloat_prev, wcross_alpha_prev;
 entity trueaim;
 entity trueaim_rifle;
 
@@ -618,13 +618,13 @@ void CSQC_UpdateView(float w, float h)
 			if (wcross_style != "0") {
 				vector wcross_color, wcross_size;
 				string wcross_wep, wcross_name;
-				float wcross_alpha_initial, wcross_alpha_old, wcross_sizefloat_initial;
+				float wcross_alpha, wcross_sizefloat;
 
 				wcross_color_x = cvar("crosshair_color_red");
 				wcross_color_y = cvar("crosshair_color_green");
 				wcross_color_z = cvar("crosshair_color_blue");
-				wcross_alpha_initial = cvar("crosshair_color_alpha") * (1-cvar("_menu_alpha"));
-				wcross_sizefloat_initial = cvar("crosshair_size") * (1-cvar("_menu_alpha"));
+				wcross_alpha = cvar("crosshair_color_alpha");
+				wcross_sizefloat = cvar("crosshair_size");
 				if (cvar("crosshair_per_weapon")) {
 					e = get_weaponinfo(activeweapon);
 					if (e && e.netname != "")
@@ -649,18 +649,29 @@ void CSQC_UpdateView(float w, float h)
 				wcross_name = strcat("gfx/crosshair", wcross_style);
 
 				if(shottype == SHOTTYPE_HITENEMY)
-					wcross_sizefloat_initial *= cvar("crosshair_hittest"); // is not queried if hittest is 0
+					wcross_sizefloat *= cvar("crosshair_hittest"); // is not queried if hittest is 0
 				if(shottype == SHOTTYPE_HITTEAM)
-					wcross_sizefloat_initial /= cvar("crosshair_hittest"); // is not queried if hittest is 0
+					wcross_sizefloat /= cvar("crosshair_hittest"); // is not queried if hittest is 0
 
-				if(cvar("crosshair_effect_speed") <= 0 || 1-cvar("_menu_alpha") != 1)
-					wcross_sizefloat = wcross_sizefloat_initial;
-				else if(wcross_sizefloat < (wcross_sizefloat_initial - cvar("crosshair_effect_speed")))
-					wcross_sizefloat += cvar("crosshair_effect_speed");
-				else if(wcross_sizefloat > (wcross_sizefloat_initial + cvar("crosshair_effect_speed")))
-					wcross_sizefloat -= cvar("crosshair_effect_speed");
-				else
-					wcross_sizefloat = wcross_sizefloat_initial;
+				f = cvar("crosshair_effect_speed");
+				if(f <= 0)
+				{
+					f *= frametime;
+					wcross_sizefloat = bound(wcross_sizefloat_old - f, wcross_sizefloat, wcross_sizefloat_old + f);
+				}
+
+				f = cvar("crosshair_effect_speed") * 1.5; // no idea why taoki wants alpha to fade faster, but here we go
+				if(f <= 0)
+				{
+					f *= frametime;
+					wcross_alpha = bound(wcross_alpha_old - f, wcross_alpha, wcross_alpha_old + f);
+				}
+
+				wcross_size_prev = wcross_sizefloat;
+				wcross_alpha_prev = wcross_alpha;
+
+				wcross_sizefloat *= 1 - cvar("_menu_alpha");
+				wcross_alpha *= 1 - cvar("_menu_alpha");
 
 				wcross_size = drawgetimagesize(wcross_name);
 				wcross_size_x *= wcross_sizefloat;
@@ -677,8 +688,7 @@ void CSQC_UpdateView(float w, float h)
 
 				if(shottype == SHOTTYPE_HITTEAM || (shottype == SHOTTYPE_HITOBSTRUCTION && cvar("crosshair_hittest_blur") && !cvar("chase_active")))
 				{
-					wcross_alpha_old = wcross_alpha;
-					wcross_alpha = wcross_alpha_initial * 0.04 * 0.75;
+					wcross_alpha = wcross_alpha * 0.04 * 0.75;
 					for(i = -2; i <= 2; ++i)
 						for(j = -2; j <= 2; ++j)
 						{
@@ -686,23 +696,19 @@ void CSQC_UpdateView(float w, float h)
 								drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x * ring_scale + i) - '0 0.5 0' * (wcross_size_y * ring_scale + j), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
 							drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x + i) - '0 0.5 0' * (wcross_size_y + j), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
 						}
-					wcross_alpha = wcross_alpha_old;
 				}
 				else
 				{
-					if(cvar("crosshair_effect_speed") <= 0 || 1-cvar("_menu_alpha") != 1)
-						wcross_alpha = wcross_alpha_initial;
-					else if(wcross_alpha < (wcross_alpha_initial - cvar("crosshair_effect_speed") * 1.5))
-						wcross_alpha += cvar("crosshair_effect_speed") * 1.5;
-					else if(wcross_alpha > (wcross_alpha_initial + cvar("crosshair_effect_speed") * 1.5))
-						wcross_alpha -= cvar("crosshair_effect_speed") * 1.5;
-					else
-						wcross_alpha = wcross_alpha_initial;
 					if (bullets)
 						drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x * ring_scale) - '0 0.5 0' * (wcross_size_y * ring_scale), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
 					drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x) - '0 0.5 0' * ( wcross_size_y), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
 				}
 			}
+		}
+		else
+		{
+			wcross_sizefloat_prev = 0;
+			wcross_alpha_prev = 0;
 		}
 	}
 
