@@ -839,27 +839,28 @@ string Sbar_FixScoreboardColumnWidth(float i, string str)
 
 void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float pl_number)
 {
-	vector tmp, plteamrgb;
-	plteamrgb = GetTeamRGB(pl.team); 
+	vector tmp, rgb;
+	rgb = GetTeamRGB(pl.team);
 	string str;
 	float i, field;
 	float is_spec;
 	is_spec = (GetPlayerColor(pl.sv_entnum) == COLOR_SPECTATOR);
-
+	
+	if((rgb == '1 1 1') && (!is_spec)) {
+		rgb_x = cvar("sbar_color_bg_r") + 0.5;
+		rgb_y = cvar("sbar_color_bg_g") + 0.5;
+		rgb_z = cvar("sbar_color_bg_b") + 0.5; }
+		
 	// Layout:
 	tmp_x = sbwidth;
 	tmp_y = sbar_fontsize_y * 1.25;
 	tmp_z = 0;
 
 	// alternated rows highlighting
-	if (is_self)
-		drawfill(pos - '1 1 0', tmp + '2 0 0', plteamrgb, sbar_scoreboard_highlight_alpha_self, DRAWFLAG_NORMAL);
-	else
-	{
-		if (sbar_scoreboard_highlight)
-			if(!mod(pl_number,2))
-				drawfill(pos - '1 1 0', tmp + '2 0 0', plteamrgb, sbar_scoreboard_highlight_alpha, DRAWFLAG_NORMAL);
-	}
+	if(is_self)
+		drawfill(pos - '1 1 0', tmp + '2 0 0', rgb, sbar_scoreboard_highlight_alpha_self, DRAWFLAG_NORMAL);
+	else if((sbar_scoreboard_highlight) && (!mod(pl_number,2)))
+		drawfill(pos - '1 1 0', tmp + '2 0 0', rgb, sbar_scoreboard_highlight_alpha, DRAWFLAG_NORMAL);
 
 	tmp_y = 0;
 
