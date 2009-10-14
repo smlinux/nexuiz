@@ -278,10 +278,10 @@ void draw_ClearClip()
 
 string draw_TextShortenToWidth(string theText, float maxWidth, float ICanHasKallerz)
 {
-	if(draw_TextWidth(theText, ICanHasKallerz) <= maxWidth)
-		return theText;
+	if(ICanHasKallerz)
+		return textShortenToWidth(theText, maxWidth, draw_TextWidth_WithColors);
 	else
-		return strcat(substring(theText, 0, draw_TextLengthUpToWidth(theText, maxWidth - draw_TextWidth("...", ICanHasKallerz), ICanHasKallerz)), "...");
+		return textShortenToWidth(theText, maxWidth, draw_TextWidth_WithoutColors);
 }
 
 float draw_TextWidth_WithColors(string s)

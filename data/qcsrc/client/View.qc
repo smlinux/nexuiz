@@ -208,7 +208,7 @@ vector GetCurrentFov(float fov)
 float zoomscript_caught;
 
 vector wcross_origin;
-float wcross_sizefloat_prev, wcross_alpha_prev;
+float wcross_sizefloat_prev, wcross_alpha_prev, wcross_blur_prev;
 entity trueaim;
 entity trueaim_rifle;
 
@@ -618,7 +618,7 @@ void CSQC_UpdateView(float w, float h)
 			if (wcross_style != "0") {
 				vector wcross_color, wcross_size;
 				string wcross_wep, wcross_name;
-				float wcross_alpha, wcross_sizefloat;
+				float wcross_alpha, wcross_sizefloat, wcross_blur;
 
 				wcross_color_x = cvar("crosshair_color_red");
 				wcross_color_y = cvar("crosshair_color_green");
@@ -641,8 +641,8 @@ void CSQC_UpdateView(float w, float h)
 							wcross_color_z = cvar(strcat("crosshair_", wcross_wep, "_color_blue"));
 						}
 
-						wcross_alpha_initial *= cvar(strcat("crosshair_", wcross_wep, "_color_alpha"));
-						wcross_sizefloat_initial *= cvar(strcat("crosshair_", wcross_wep, "_size"));
+						wcross_alpha *= cvar(strcat("crosshair_", wcross_wep, "_color_alpha"));
+						wcross_sizefloat *= cvar(strcat("crosshair_", wcross_wep, "_size"));
 					}
 				}
 
@@ -652,23 +652,42 @@ void CSQC_UpdateView(float w, float h)
 					wcross_sizefloat *= cvar("crosshair_hittest"); // is not queried if hittest is 0
 				if(shottype == SHOTTYPE_HITTEAM)
 					wcross_sizefloat /= cvar("crosshair_hittest"); // is not queried if hittest is 0
+				if(shottype == SHOTTYPE_HITTEAM || (shottype == SHOTTYPE_HITOBSTRUCTION && cvar("crosshair_hittest_blur") && !cvar("chase_active")))
+				{
+					wcross_alpha *= 0.75;
+					wcross_blur = 1;
+				}
+				else
+					wcross_blur = 0;
 
 				f = cvar("crosshair_effect_speed");
-				if(f <= 0)
+				if(f > 0)
 				{
 					f *= frametime;
-					wcross_sizefloat = bound(wcross_sizefloat_old - f, wcross_sizefloat, wcross_sizefloat_old + f);
+					wcross_sizefloat = bound(wcross_sizefloat_prev - f, wcross_sizefloat, wcross_sizefloat_prev + f);
 				}
 
 				f = cvar("crosshair_effect_speed") * 1.5; // no idea why taoki wants alpha to fade faster, but here we go
-				if(f <= 0)
+				if(f > 0)
 				{
 					f *= frametime;
-					wcross_alpha = bound(wcross_alpha_old - f, wcross_alpha, wcross_alpha_old + f);
+					wcross_alpha = bound(wcross_alpha_prev - f, wcross_alpha, wcross_alpha_prev + f);
 				}
 
-				wcross_size_prev = wcross_sizefloat;
+#if 0
+				f = cvar("crosshair_effect_speed");
+				if(f > 0)
+				{
+					f *= frametime;
+					wcross_blur = bound(wcross_blur_prev - f, wcross_blur, wcross_blur_prev + f);
+				}
+				else
+					wcross_blur = 0;
+#endif
+
+				wcross_sizefloat_prev = wcross_sizefloat;
 				wcross_alpha_prev = wcross_alpha;
+				wcross_blur_prev = wcross_blur;
 
 				wcross_sizefloat *= 1 - cvar("_menu_alpha");
 				wcross_alpha *= 1 - cvar("_menu_alpha");
@@ -686,15 +705,15 @@ void CSQC_UpdateView(float w, float h)
 				else
 					bullets = 0;
 
-				if(shottype == SHOTTYPE_HITTEAM || (shottype == SHOTTYPE_HITOBSTRUCTION && cvar("crosshair_hittest_blur") && !cvar("chase_active")))
+				if(wcross_blur > 0)
 				{
-					wcross_alpha = wcross_alpha * 0.04 * 0.75;
+					wcross_alpha = wcross_alpha * 0.04;
 					for(i = -2; i <= 2; ++i)
 						for(j = -2; j <= 2; ++j)
 						{
 							if (bullets)
-								drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x * ring_scale + i) - '0 0.5 0' * (wcross_size_y * ring_scale + j), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
-							drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x + i) - '0 0.5 0' * (wcross_size_y + j), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
+								drawpic(wcross_origin - ('0.5 0 0' * (wcross_size_x * ring_scale + i * wcross_blur) + '0 0.5 0' * (wcross_size_y * ring_scale + j * wcross_blur)), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
+							drawpic(wcross_origin - ('0.5 0 0' * (wcross_size_x + i * wcross_blur) + '0 0.5 0' * (wcross_size_y + j * wcross_blur)), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
 						}
 				}
 				else
@@ -709,6 +728,7 @@ void CSQC_UpdateView(float w, float h)
 		{
 			wcross_sizefloat_prev = 0;
 			wcross_alpha_prev = 0;
+			wcross_blur_prev = 0;
 		}
 	}
 
@@ -815,7 +835,6 @@ void CSQC_spider_HUD()
 }
 void CSQC_common_hud(void)
 {
-
 	// Sbar_SortFrags(); done in Sbar_Draw
 	float hud;
 	hud = getstati(STAT_HUD);
@@ -831,9 +850,6 @@ void CSQC_common_hud(void)
 			CSQC_spider_HUD();
 			break;
 	}
-
-	if (getstati(STAT_HEALTH) <= 0)
-		wcross_sizefloat = wcross_alpha = 0;
 }
 
 
