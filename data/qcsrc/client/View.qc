@@ -153,9 +153,9 @@ vector GetCurrentFov(float fov)
 	{
 		if(spectatorbutton_zoom)
 			zoomdir = 0 + !zoomdir;
-			// do not even THINK about removing this 0
-			// _I_ know what I am doing
-			// fteqcc does not
+		// do not even THINK about removing this 0
+		// _I_ know what I am doing
+		// fteqcc does not
 	}
 
 	if(zoomdir)
@@ -238,8 +238,8 @@ float EnemyHitCheck()
 		return SHOTTYPE_HITWORLD;
 	t = GetPlayerColor(trace_networkentity - 1);
 	if(teamplay)
-	if(t == myteam)
-		return SHOTTYPE_HITTEAM;
+		if(t == myteam)
+			return SHOTTYPE_HITTEAM;
 	if(t == COLOR_SPECTATOR)
 		return SHOTTYPE_HITWORLD;
 	return SHOTTYPE_HITENEMY;
@@ -306,7 +306,7 @@ float TrueAimCheck()
 	shottype = EnemyHitCheck();
 	if(shottype != SHOTTYPE_HITWORLD)
 		return shottype;
-	
+
 #if 0
 	// FIXME WHY DOES THIS NOT WORK FOR THE ROCKET LAUNCHER?
 	// or rather, I know why, but see no fix
@@ -314,7 +314,7 @@ float TrueAimCheck()
 		// yes, this is an ugly hack... but it seems good enough to find out whether the test hits the same place as the initial trace
 		return SHOTTYPE_HITOBSTRUCTION;
 #endif
-	
+
 	return SHOTTYPE_HITWORLD;
 }
 
@@ -392,11 +392,11 @@ void CSQC_UpdateView(float w, float h)
 		PostInit();
 
 	if(intermission && !isdemo() && !(calledhooks & HOOK_END))
-	if(calledhooks & HOOK_START)
-	{
-		localcmd("\ncl_hook_gameend;");
-		calledhooks |= HOOK_END;
-	}
+		if(calledhooks & HOOK_START)
+		{
+			localcmd("\ncl_hook_gameend;");
+			calledhooks |= HOOK_END;
+		}
 
 	CheckForGamestartChange();
 	maptimeAnnouncer();
@@ -493,10 +493,10 @@ void CSQC_UpdateView(float w, float h)
 
 	// Update the mouse position
 	/*
-	mousepos_x = vid_conwidth;
-	mousepos_y = vid_conheight;
-	mousepos = mousepos*0.5 + getmousepos();
-	*/
+	   mousepos_x = vid_conwidth;
+	   mousepos_y = vid_conheight;
+	   mousepos = mousepos*0.5 + getmousepos();
+	 */
 
 	e = self;
 	for(self = world; (self = nextent(self)); )
@@ -524,9 +524,9 @@ void CSQC_UpdateView(float w, float h)
 		menu_show();
 
 	/*if(gametype == GAME_CTF)
-	{
-		ctf_view();
-	} else */
+	  {
+	  ctf_view();
+	  } else */
 
 	// draw 2D entities
 	e = self;
@@ -537,67 +537,67 @@ void CSQC_UpdateView(float w, float h)
 
 	// draw radar
 	if(
-		ons_showmap
-		||
-		(
-			!scoreboard_active
-			&&
-			cvar_string("cl_teamradar") != "0"
-			&&
+			ons_showmap
+			||
 			(
-				cvar("cl_teamradar") == 2
-				||
-				teamplay
+			 !scoreboard_active
+			 &&
+			 cvar_string("cl_teamradar") != "0"
+			 &&
+			 (
+			  cvar("cl_teamradar") == 2
+			  ||
+			  teamplay
+			 )
 			)
-		)
-	)
+	  )
 		teamradar_view();
 
 	// draw sbar
- 	if(cvar("r_letterbox") == 0) {
+	if(cvar("r_letterbox") == 0) {
 		if (cvar("cl_showpressedkeys")) { // draw pressed keys when spectating and playing
 			if(spectatee_status > 0 || cvar("cl_showpressedkeys") >= 2)
 				Sbar_DrawPressedKeys();
 		}
-		
+
 		if (cvar("cl_showspeed"))
 			Sbar_ShowSpeed();
 		if (cvar("cl_showacceleration"))
 			Sbar_ShowAcceleration();
-		
- 		Sbar_DrawCenterPrint(); // draw centerprint messages even if viewsize >= 120
+
+		Sbar_DrawCenterPrint(); // draw centerprint messages even if viewsize >= 120
 	}
 
-    float hud;
-    hud = getstati(STAT_HUD);
-    if(hud == HUD_SPIDERBOT)
-    {
-        vector sz;
-        CSQC_spider_HUD();
-        sz = drawgetimagesize(SPIDER_CROSS);
-        sz_x *= cvar_or("cl_vehicle_spiderbot_cross_size",1);
-        sz_y *= cvar_or("cl_vehicle_spiderbot_cross_size",1);
-        drawpic('0.5 0 0' * (vid_conwidth - sz_x) + '0 0.5 0' * (vid_conheight - sz_y), SPIDER_CROSS, sz, '1 1 1', cvar_or("cl_vehicle_spiderbot_cross_alpha",0.6), DRAWFLAG_NORMAL);
-    }
-    else
-    {
-        if(cvar("r_letterbox") == 0)
-            if(cvar("viewsize") < 120)
-                CSQC_common_hud();
+	float hud;
+	hud = getstati(STAT_HUD);
+	if(hud == HUD_SPIDERBOT)
+	{
+		vector sz;
+		CSQC_spider_HUD();
+		sz = drawgetimagesize(SPIDER_CROSS);
+		sz_x *= cvar_or("cl_vehicle_spiderbot_cross_size",1);
+		sz_y *= cvar_or("cl_vehicle_spiderbot_cross_size",1);
+		drawpic('0.5 0 0' * (vid_conwidth - sz_x) + '0 0.5 0' * (vid_conheight - sz_y), SPIDER_CROSS, sz, '1 1 1', cvar_or("cl_vehicle_spiderbot_cross_alpha",0.6), DRAWFLAG_NORMAL);
+	}
+	else
+	{
+		if(cvar("r_letterbox") == 0)
+			if(cvar("viewsize") < 120)
+				CSQC_common_hud();
 
-        // crosshair goes VERY LAST
-        if(!scoreboard_active && !ons_showmap && !camera_active) {
+		// crosshair goes VERY LAST
+		if(!scoreboard_active && !ons_showmap && !camera_active) {
 			// TrueAim check
 			float shottype;
 			float bullets, ring_scale;
 			// wcross_origin = '0.5 0 0' * vid_conwidth + '0 0.5 0' * vid_conheight;
 			wcross_origin = project_3d_to_2d(view_origin + MAX_SHOT_DISTANCE * view_forward);
 			wcross_origin_z = 0;
-            if(cvar("crosshair_hittest"))
+			if(cvar("crosshair_hittest"))
 			{
 				vector wcross_oldorigin;
 				wcross_oldorigin = wcross_origin;
-                shottype = TrueAimCheck();
+				shottype = TrueAimCheck();
 				if(shottype == SHOTTYPE_HITWORLD)
 				{
 					v = wcross_origin - wcross_oldorigin;
@@ -609,44 +609,44 @@ void CSQC_UpdateView(float w, float h)
 				if(!cvar("crosshair_hittest_showimpact"))
 					wcross_origin = wcross_oldorigin;
 			}
-            else
-                shottype = SHOTTYPE_HITWORLD;
+			else
+				shottype = SHOTTYPE_HITWORLD;
 
-            string wcross_style;
-            wcross_style = cvar_string("crosshair");
+			string wcross_style;
+			wcross_style = cvar_string("crosshair");
 
-            if (wcross_style != "0") {
-                vector wcross_color, wcross_size;
-                string wcross_wep, wcross_name;
-                float wcross_alpha_initial, wcross_alpha_old, wcross_sizefloat_initial;
+			if (wcross_style != "0") {
+				vector wcross_color, wcross_size;
+				string wcross_wep, wcross_name;
+				float wcross_alpha_initial, wcross_alpha_old, wcross_sizefloat_initial;
 
-                wcross_color_x = cvar("crosshair_color_red");
-                wcross_color_y = cvar("crosshair_color_green");
-                wcross_color_z = cvar("crosshair_color_blue");
-                wcross_alpha_initial = cvar("crosshair_color_alpha") * (1-cvar("_menu_alpha"));
-                wcross_sizefloat_initial = cvar("crosshair_size") * (1-cvar("_menu_alpha"));
-                if (cvar("crosshair_per_weapon")) {
-                    e = get_weaponinfo(activeweapon);
-                    if (e && e.netname != "")
-                    {
-                        wcross_wep = e.netname;
-                        wcross_style = cvar_string(strcat("crosshair_", wcross_wep));
-                        if(wcross_style == "")
-                            wcross_style = e.netname;
+				wcross_color_x = cvar("crosshair_color_red");
+				wcross_color_y = cvar("crosshair_color_green");
+				wcross_color_z = cvar("crosshair_color_blue");
+				wcross_alpha_initial = cvar("crosshair_color_alpha") * (1-cvar("_menu_alpha"));
+				wcross_sizefloat_initial = cvar("crosshair_size") * (1-cvar("_menu_alpha"));
+				if (cvar("crosshair_per_weapon")) {
+					e = get_weaponinfo(activeweapon);
+					if (e && e.netname != "")
+					{
+						wcross_wep = e.netname;
+						wcross_style = cvar_string(strcat("crosshair_", wcross_wep));
+						if(wcross_style == "")
+							wcross_style = e.netname;
 
-                        if(!cvar("crosshair_color_override"))
-                        {
-                            wcross_color_x = cvar(strcat("crosshair_", wcross_wep, "_color_red"));
-                            wcross_color_y = cvar(strcat("crosshair_", wcross_wep, "_color_green"));
-                            wcross_color_z = cvar(strcat("crosshair_", wcross_wep, "_color_blue"));
-                        }
+						if(!cvar("crosshair_color_override"))
+						{
+							wcross_color_x = cvar(strcat("crosshair_", wcross_wep, "_color_red"));
+							wcross_color_y = cvar(strcat("crosshair_", wcross_wep, "_color_green"));
+							wcross_color_z = cvar(strcat("crosshair_", wcross_wep, "_color_blue"));
+						}
 
-                        wcross_alpha_initial *= cvar(strcat("crosshair_", wcross_wep, "_color_alpha"));
-                        wcross_sizefloat_initial *= cvar(strcat("crosshair_", wcross_wep, "_size"));
-                    }
-                }
+						wcross_alpha_initial *= cvar(strcat("crosshair_", wcross_wep, "_color_alpha"));
+						wcross_sizefloat_initial *= cvar(strcat("crosshair_", wcross_wep, "_size"));
+					}
+				}
 
-                wcross_name = strcat("gfx/crosshair", wcross_style);
+				wcross_name = strcat("gfx/crosshair", wcross_style);
 
 				if(shottype == SHOTTYPE_HITENEMY)
 					wcross_sizefloat_initial *= cvar("crosshair_hittest"); // is not queried if hittest is 0
@@ -662,10 +662,10 @@ void CSQC_UpdateView(float w, float h)
 				else
 					wcross_sizefloat = wcross_sizefloat_initial;
 
-                wcross_size = drawgetimagesize(wcross_name);
-                wcross_size_x *= wcross_sizefloat;
-                wcross_size_y *= wcross_sizefloat;
-				
+				wcross_size = drawgetimagesize(wcross_name);
+				wcross_size_x *= wcross_sizefloat;
+				wcross_size_y *= wcross_sizefloat;
+
 				// ring around crosshair representing bullets left in camping rifle clip
 				if (activeweapon == WEP_CAMPINGRIFLE)
 				{
@@ -674,22 +674,22 @@ void CSQC_UpdateView(float w, float h)
 				}
 				else
 					bullets = 0;
-				
-                if(shottype == SHOTTYPE_HITTEAM || (shottype == SHOTTYPE_HITOBSTRUCTION && cvar("crosshair_hittest_blur") && !cvar("chase_active")))
-                {
+
+				if(shottype == SHOTTYPE_HITTEAM || (shottype == SHOTTYPE_HITOBSTRUCTION && cvar("crosshair_hittest_blur") && !cvar("chase_active")))
+				{
 					wcross_alpha_old = wcross_alpha;
-                    wcross_alpha = wcross_alpha_initial * 0.04 * 0.75;
-                    for(i = -2; i <= 2; ++i)
-                        for(j = -2; j <= 2; ++j)
+					wcross_alpha = wcross_alpha_initial * 0.04 * 0.75;
+					for(i = -2; i <= 2; ++i)
+						for(j = -2; j <= 2; ++j)
 						{
 							if (bullets)
 								drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x * ring_scale + i) - '0 0.5 0' * (wcross_size_y * ring_scale + j), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
-                            drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x + i) - '0 0.5 0' * (wcross_size_y + j), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
+							drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x + i) - '0 0.5 0' * (wcross_size_y + j), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
 						}
 					wcross_alpha = wcross_alpha_old;
-                }
-                else
-                {
+				}
+				else
+				{
 					if(cvar("crosshair_effect_speed") <= 0 || 1-cvar("_menu_alpha") != 1)
 						wcross_alpha = wcross_alpha_initial;
 					else if(wcross_alpha < (wcross_alpha_initial - cvar("crosshair_effect_speed") * 1.5))
@@ -700,11 +700,11 @@ void CSQC_UpdateView(float w, float h)
 						wcross_alpha = wcross_alpha_initial;
 					if (bullets)
 						drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x * ring_scale) - '0 0.5 0' * (wcross_size_y * ring_scale), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
-                    drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x) - '0 0.5 0' * ( wcross_size_y), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
-                }
-            }
-        }
-    }
+					drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x) - '0 0.5 0' * ( wcross_size_y), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
+				}
+			}
+		}
+	}
 
 	if(NextFrameCommand)
 	{
@@ -748,57 +748,57 @@ void CSQC_UpdateView(float w, float h)
 void Sbar_Draw();
 void CSQC_spider_HUD()
 {
-    float rockets,reload,heat,hp,shield,i;
-    vector p,pp;
+	float rockets,reload,heat,hp,shield,i;
+	vector p,pp;
 
-    rockets = getstati(STAT_SPIDERBOT_ROCKETS);
-    heat    = min(getstatf(STAT_SPIDERBOT_HEAT),1);
-    reload  = min(getstatf(STAT_SPIDERBOT_RELOAD),1);
-    hp      = min(getstatf(STAT_SPIDERBOT_HEALTH),1);
-    shield  = min(getstatf(STAT_SPIDERBOT_SHIELD),1);
+	rockets = getstati(STAT_SPIDERBOT_ROCKETS);
+	heat    = min(getstatf(STAT_SPIDERBOT_HEAT),1);
+	reload  = min(getstatf(STAT_SPIDERBOT_RELOAD),1);
+	hp      = min(getstatf(STAT_SPIDERBOT_HEALTH),1);
+	shield  = min(getstatf(STAT_SPIDERBOT_SHIELD),1);
 
-    // Draw health bar
-    p = '0.5 0 0' * (vid_conwidth - (rkt_size * 8));
-    p = p + '0 1 0' * vid_conheight - '0 32 0';
-    //pp = ('0 1 0' * hp) + ('1 0 0' * (1-hp));
-    drawfill(p, '256 0 0' * shield + '0 8 0' , '0.5 0.5 1', 0.75, DRAWFLAG_NORMAL);
-    p_y += 8;
-    drawfill(p, '256 0 0' * hp + '0 8 0' , '0 1 0', 0.75, DRAWFLAG_NORMAL);
-    p_x += 256 * hp;
-    drawfill(p, '256 0 0' * (1-hp) + '0 8 0' , '0 0 0', 0.75, DRAWFLAG_NORMAL);
+	// Draw health bar
+	p = '0.5 0 0' * (vid_conwidth - (rkt_size * 8));
+	p = p + '0 1 0' * vid_conheight - '0 32 0';
+	//pp = ('0 1 0' * hp) + ('1 0 0' * (1-hp));
+	drawfill(p, '256 0 0' * shield + '0 8 0' , '0.5 0.5 1', 0.75, DRAWFLAG_NORMAL);
+	p_y += 8;
+	drawfill(p, '256 0 0' * hp + '0 8 0' , '0 1 0', 0.75, DRAWFLAG_NORMAL);
+	p_x += 256 * hp;
+	drawfill(p, '256 0 0' * (1-hp) + '0 8 0' , '0 0 0', 0.75, DRAWFLAG_NORMAL);
 
-    // Draw minigun heat indicator
-    p = '0.5 0 0' * (vid_conwidth - 256);
-    p = p + '0 1 0' * vid_conheight - '0 34  0';
-    drawfill(p, '256 0 0' * (1-heat) + '0 2 0' ,'0 0 1', 0.5, DRAWFLAG_NORMAL);
-    p_x += 256 * (1-heat);
-    drawfill(p, '256 0 0' * heat  + '0 2 0' , '1 0 0', 0.5, DRAWFLAG_NORMAL);
+	// Draw minigun heat indicator
+	p = '0.5 0 0' * (vid_conwidth - 256);
+	p = p + '0 1 0' * vid_conheight - '0 34  0';
+	drawfill(p, '256 0 0' * (1-heat) + '0 2 0' ,'0 0 1', 0.5, DRAWFLAG_NORMAL);
+	p_x += 256 * (1-heat);
+	drawfill(p, '256 0 0' * heat  + '0 2 0' , '1 0 0', 0.5, DRAWFLAG_NORMAL);
 
-    // Draw rocket icons for loaded/empty tubes.
-    pp = '0.5 0 0' * (vid_conwidth - (rkt_size * 8));
-    pp += '0 1 0' * vid_conheight - '0 64 0';
-    for(i = 0; i < 8; ++i)
-    {
-        p = pp + '1 0 0' * (rkt_size * i);
-        if(rockets == 8)
-        {
-            if(floor(reload * 8) == i)
-            {
-                drawpic(p, spider_rocket_icon, '1 1 0' * rkt_size, '1 0 0' + '0 1 0' * ((reload*8)-i), 0.75 , DRAWFLAG_NORMAL);
-            }
-            else if(i < reload * 8)
-                drawpic(p, spider_rocket_icon, '1 1 0' * rkt_size, '1 1 0', 0.75 , DRAWFLAG_NORMAL);
-            else
-                drawpic(p, spider_rocket_icon, '1 1 0' * rkt_size, '0.5 0.5 0.5', 0.75, DRAWFLAG_NORMAL);
-        }
-        else
-        {
-            if(i < rockets)
-                drawpic(p, spider_rocket_icon, '1 1 0' * rkt_size, '0 0 0', 0.25, DRAWFLAG_NORMAL);
-            else
-                drawpic(p, spider_rocket_icon, '1 1 0' * rkt_size, '0 1 0' * reload, 0.75, DRAWFLAG_NORMAL);
-        }
-    }
+	// Draw rocket icons for loaded/empty tubes.
+	pp = '0.5 0 0' * (vid_conwidth - (rkt_size * 8));
+	pp += '0 1 0' * vid_conheight - '0 64 0';
+	for(i = 0; i < 8; ++i)
+	{
+		p = pp + '1 0 0' * (rkt_size * i);
+		if(rockets == 8)
+		{
+			if(floor(reload * 8) == i)
+			{
+				drawpic(p, spider_rocket_icon, '1 1 0' * rkt_size, '1 0 0' + '0 1 0' * ((reload*8)-i), 0.75 , DRAWFLAG_NORMAL);
+			}
+			else if(i < reload * 8)
+				drawpic(p, spider_rocket_icon, '1 1 0' * rkt_size, '1 1 0', 0.75 , DRAWFLAG_NORMAL);
+			else
+				drawpic(p, spider_rocket_icon, '1 1 0' * rkt_size, '0.5 0.5 0.5', 0.75, DRAWFLAG_NORMAL);
+		}
+		else
+		{
+			if(i < rockets)
+				drawpic(p, spider_rocket_icon, '1 1 0' * rkt_size, '0 0 0', 0.25, DRAWFLAG_NORMAL);
+			else
+				drawpic(p, spider_rocket_icon, '1 1 0' * rkt_size, '0 1 0' * reload, 0.75, DRAWFLAG_NORMAL);
+		}
+	}
 
 	if (sb_showscores)
 	{
@@ -811,20 +811,20 @@ void CSQC_common_hud(void)
 {
 
 	// Sbar_SortFrags(); done in Sbar_Draw
-    float hud;
-    hud = getstati(STAT_HUD);
+	float hud;
+	hud = getstati(STAT_HUD);
 
-    //hud = 10;
-    switch(hud)
-    {
-        case HUD_NORMAL:
-            Sbar_Draw();
-            break;
+	//hud = 10;
+	switch(hud)
+	{
+		case HUD_NORMAL:
+			Sbar_Draw();
+			break;
 
-        case HUD_SPIDERBOT:
-            CSQC_spider_HUD();
-            break;
-    }
+		case HUD_SPIDERBOT:
+			CSQC_spider_HUD();
+			break;
+	}
 
 	if (getstati(STAT_HEALTH) <= 0)
 		wcross_sizefloat = wcross_alpha = 0;
