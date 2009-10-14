@@ -93,15 +93,13 @@ void race_InitSpectator()
 			race_SendNextCheckpoint(msg_entity.enemy, 1);
 }
 
-void race_send_recordtime(float t)
+void race_send_recordtime(float t, float msg)
 {
 	// send the server best time
-	WRITESPECTATABLE_MSG_ONE({
-	WriteByte(MSG_ONE, SVC_TEMPENTITY);
-	WriteByte(MSG_ONE, TE_CSQC_RACE);
-	WriteByte(MSG_ONE, RACE_NET_SERVER_RECORD);
-	WriteInt24_t(MSG_ONE, t);
-	});
+	WriteByte(msg, SVC_TEMPENTITY);
+	WriteByte(msg, TE_CSQC_RACE);
+	WriteByte(msg, RACE_NET_SERVER_RECORD);
+	WriteInt24_t(msg, t);
 }
 
 void race_SendTime(entity e, float cp, float t, float tvalid)
@@ -184,7 +182,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "time"), ftos(t));
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname"), e.netname);
 						write_recordmarker(e, time - TIME_DECODE(t), TIME_DECODE(t));
-						race_send_recordtime(t);
+						race_send_recordtime(t, MSG_ALL);
 					}
 					else if(t < grecordtime)
 					{
@@ -196,7 +194,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "time"), ftos(t));
 						db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname"), e.netname);
 						write_recordmarker(e, time - TIME_DECODE(t), TIME_DECODE(t));
-						race_send_recordtime(t);
+						race_send_recordtime(t, MSG_ALL);
 					}
 					else
 					{

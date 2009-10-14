@@ -1211,9 +1211,15 @@ void Sbar_DrawScoreboard()
 		}
 	}
 
-	if(gametype == GAME_CTS && race_speed_award) {
-		drawcolorcodedstring(pos, strcat("Speed award: ", ftos(race_speed_award), " (", race_speed_award_holder, ")"), sbar_fontsize, sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
-		pos_y += 1.25 * sbar_fontsize_y;	
+	if(gametype == GAME_CTS || gametype == GAME_RACE) {
+		if(race_speedaward) {
+			drawcolorcodedstring(pos, strcat("Speed award: ", ftos(race_speedaward), " (", race_speedaward_holder, ")"), sbar_fontsize, sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
+			pos_y += 1.25 * sbar_fontsize_y;
+		}
+		if(race_speedaward_alltimebest) {
+			drawcolorcodedstring(pos, strcat("All-time fastest: ", ftos(race_speedaward_alltimebest), " (", race_speedaward_alltimebest_holder, ")"), sbar_fontsize, sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
+			pos_y += 1.25 * sbar_fontsize_y;
+		}
 	}
 
 	tmp = pos + '0 1.5 0' * sbar_fontsize_y;

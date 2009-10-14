@@ -1032,8 +1032,12 @@ void Net_ReadRace()
 			race_server_record = ReadInt24_t();
 			break;
 		case RACE_NET_SPEED_AWARD:
-			race_speed_award = ReadShort();
-			race_speed_award_holder = strzone(ReadString());
+			race_speedaward = ReadShort();
+			race_speedaward_holder = strzone(ReadString());
+			break;
+		case RACE_NET_SPEED_AWARD_BEST:
+			race_speedaward_alltimebest = ReadShort();
+			race_speedaward_alltimebest_holder = strzone(ReadString());
 			break;
 	}
 }

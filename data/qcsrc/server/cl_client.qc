@@ -1,4 +1,4 @@
-void race_send_recordtime(float t);
+void race_send_recordtime(float t, float msg);
 
 float ClientData_Send(entity to, float sf)
 {
@@ -1465,9 +1465,12 @@ void ClientConnect (void)
 			rr = RACE_RECORD;
 		t = stof(db_get(ServerProgsDB, strcat(GetMapname(), rr, "time")));
 
-		race_send_recordtime(t);
-		if (g_cts)
-			race_send_speedaward();
+		race_send_recordtime(t, MSG_ONE);
+		race_send_speedaward(MSG_ONE);
+
+		speedaward_alltimebest = stof(db_get(ServerProgsDB, strcat(GetMapname(), "bestspeed")));
+		speedaward_alltimebest_holder = db_get(ServerProgsDB, strcat(GetMapname(), "bestspeed_holder"));
+		race_send_speedaward_alltimebest(MSG_ONE);
 	}
 }
 
