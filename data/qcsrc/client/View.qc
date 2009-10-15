@@ -209,6 +209,8 @@ float zoomscript_caught;
 
 vector wcross_origin;
 float wcross_sizefloat_prev, wcross_alpha_prev, wcross_blur_prev;
+float wcross_sizefloat_goal_prev, wcross_alpha_goal_prev, wcross_blur_goal_prev;
+float wcross_lastchangetime;
 entity trueaim;
 entity trueaim_rifle;
 
@@ -660,30 +662,29 @@ void CSQC_UpdateView(float w, float h)
 				else
 					wcross_blur = 0;
 
-				f = cvar("crosshair_effect_speed");
-				if(f > 0)
+				if(wcross_blur != wcross_blur_goal_prev || wcross_sizefloat != wcross_sizefloat_goal_prev || wcross_alpha != wcross_alpha_goal_prev)
 				{
-					f *= frametime;
-					wcross_sizefloat = bound(wcross_sizefloat_prev - f, wcross_sizefloat, wcross_sizefloat_prev + f);
+					f = cvar("crosshair_effect_speed");
+					if(f < 0)
+						wcross_lastchangetime = time - f * 2 * g_weaponswitchdelay;
+					else
+						wcross_lastchangetime = time + f;
 				}
 
-				f = cvar("crosshair_effect_speed") * 1.5; // no idea why taoki wants alpha to fade faster, but here we go
-				if(f > 0)
-				{
-					f *= frametime;
-					wcross_alpha = bound(wcross_alpha_prev - f, wcross_alpha, wcross_alpha_prev + f);
-				}
+				wcross_sizefloat_goal_prev = wcross_sizefloat;
+				wcross_alpha_goal_prev = wcross_alpha;
+				wcross_blur_goal_prev = wcross_blur;
 
-#if 0
-				f = cvar("crosshair_effect_speed");
-				if(f > 0)
+				// *_prev is at time-frametime
+				// * is at wcross_lastchangetime+f
+				// what do we have at time?
+				if(time < wcross_lastchangetime)
 				{
-					f *= frametime;
-					wcross_blur = bound(wcross_blur_prev - f, wcross_blur, wcross_blur_prev + f);
+					f = frametime / (wcross_lastchangetime - time + frametime);
+					wcross_sizefloat = f * wcross_sizefloat + (1 - f) * wcross_sizefloat_prev;
+					wcross_alpha = f * wcross_alpha + (1 - f) * wcross_alpha_prev;
+					//wcross_blur = (frametime / f) * wcross_blur + (1 - frametime / f) * wcross_blur_prev;
 				}
-				else
-					wcross_blur = 0;
-#endif
 
 				wcross_sizefloat_prev = wcross_sizefloat;
 				wcross_alpha_prev = wcross_alpha;
@@ -729,6 +730,9 @@ void CSQC_UpdateView(float w, float h)
 			wcross_sizefloat_prev = 0;
 			wcross_alpha_prev = 0;
 			wcross_blur_prev = 0;
+			wcross_sizefloat_goal_prev = 0;
+			wcross_alpha_goal_prev = 0;
+			wcross_blur_goal_prev = 0;
 		}
 	}
 

@@ -1017,6 +1017,7 @@ float ClientInit_SendEntity(entity to, float sf)
 	else
 		WriteString(MSG_ENTITY, "");
 	WriteByte(MSG_ENTITY, cvar("g_balance_armor_blockpercent") * 255.0);
+	WriteByte(MSG_ENTITY, cvar("g_balance_weaponswitchdelay") * 255.0);
 	return TRUE;
 }
 

@@ -152,6 +152,7 @@ void centerprint(string strMessage);
 #define ALPHA_MIN_VISIBLE 0.003
 
 float armorblockpercent;
+float g_weaponswitchdelay;
 
 //hooks
 float calledhooks;

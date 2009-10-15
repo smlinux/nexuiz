@@ -938,6 +938,8 @@ void Ent_Init()
 
 	armorblockpercent = ReadByte() / 255.0;
 
+	g_weaponswitchdelay = ReadByte() / 255.0;
+
 	if(!postinit)
 		PostInit();
 }
