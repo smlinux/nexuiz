@@ -968,13 +968,13 @@ float weapon_prepareattack(float secondary, float attacktime)
 	if (!weapon_action(self.weapon, WR_CHECKAMMO1 + secondary))
 	{
 		// hack to ensure it switches to an OTHER weapon (in case the other fire mode still has ammo, we want that anyway)
-		float w;
+		float w, ww;
 		w = W_WeaponBit(self.weapon);
 		self.weapons &~= w;
-		if(w_getbestweapon(self) == 0)
-			self.weapons |= w; // if we have nothing ELSE, stay
-		W_SwitchWeapon_Force(self, w_getbestweapon(self));
+		ww = w_getbestweapon(self);
 		self.weapons |= w;
+		if(ww)
+			W_SwitchWeapon_Force(self, ww);
 		return FALSE;
 	}
 
