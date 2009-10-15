@@ -1191,13 +1191,18 @@ void SV_PlayerPhysics()
 			speedaward_lastupdate = time;
 		}
 		if(speedaward_speed > speedaward_lastsent && time - speedaward_lastupdate > 1) {
+			string rr;
+			if(g_cts)
+				rr = CTS_RECORD;
+			else
+				rr = RACE_RECORD;
 			race_send_speedaward(MSG_ALL);
 			speedaward_lastsent = speedaward_speed;
 			if (speedaward_speed > speedaward_alltimebest) {
 				speedaward_alltimebest = speedaward_speed;
 				speedaward_alltimebest_holder = speedaward_holder;
-				db_put(ServerProgsDB, strcat(GetMapname(), "bestspeed"), ftos(speedaward_alltimebest));
-				db_put(ServerProgsDB, strcat(GetMapname(), "bestspeed_holder"), speedaward_alltimebest_holder);
+				db_put(ServerProgsDB, strcat(GetMapname(), rr, "speed/speed"), ftos(speedaward_alltimebest));
+				db_put(ServerProgsDB, strcat(GetMapname(), rr, "speed/netname"), speedaward_alltimebest_holder);
 				race_send_speedaward_alltimebest(MSG_ALL);
 			}
 		}
