@@ -971,6 +971,8 @@ float weapon_prepareattack(float secondary, float attacktime)
 		float w;
 		w = W_WeaponBit(self.weapon);
 		self.weapons &~= w;
+		if(w_getbestweapon(self) == 0)
+			self.weapons |= w; // if we have nothing ELSE, stay
 		W_SwitchWeapon_Force(self, w_getbestweapon(self));
 		self.weapons |= w;
 		return FALSE;
