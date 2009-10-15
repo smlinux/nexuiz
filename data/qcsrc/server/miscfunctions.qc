@@ -7,6 +7,14 @@ void() spawnfunc_info_player_deathmatch; // needed for the other spawnpoints
 void() spawnpoint_use;
 string ColoredTeamName(float t);
 
+string admin_name(void)
+{
+	if(cvar_string("sv_adminnick") != "")
+		return cvar_string("sv_adminnick");
+	else
+		return "SERVER ADMIN";
+}
+
 float DistributeEvenly_amount;
 float DistributeEvenly_totalweight;
 void DistributeEvenly_Init(float amount, float totalweight)
@@ -653,6 +661,7 @@ string Team_ColorCode(float teamid)
     else
         return "^7";
 }
+
 string Team_ColorName(float t)
 {
     // fixme: Search for team entities and get their .netname's!
@@ -666,6 +675,7 @@ string Team_ColorName(float t)
         return "Pink";
     return "Neutral";
 }
+
 string Team_ColorNameLowerCase(float t)
 {
     // fixme: Search for team entities and get their .netname's!

@@ -669,20 +669,27 @@ void GameCommand(string command)
 		return;
 	}
 
-	if(argv(0) == "adminmsg") if(argc == 3)
+	if(argv(0) == "adminmsg")
+	if(argc == 3)
 	{
 		entno = stof(argv(1));
-		client = world;
-		if(entno <= maxclients)
-			client = edict_num(entno);
+
+		if((entno < 1) | (entno > maxclients)) {
+			print("Player ", argv(1), " doesn't exist\n");
+			return;
+		}
+
+		client = edict_num(entno);
+
 		if(client.flags & FL_CLIENT)
 		{
-			centerprint_atprio(client, CENTERPRIO_ADMIN, strcat("^3SERVER ADMIN:\n\n^7", argv(2)));
-			sprint(client, strcat("\{1}\{13}^3SERVER ADMIN^7: ", argv(2), "\n"));
+			centerprint_atprio(client, CENTERPRIO_ADMIN, strcat("^3", admin_name(), ":\n\n^7", argv(2)));
+			sprint(client, strcat("\{1}\{13}^3", admin_name(), "^7: ", argv(2), "\n"));
 			print("Message sent to ", client.netname, "\n");
 		}
 		else
 			print("Client not found\n");
+
 		return;
 	}
 
@@ -707,6 +714,7 @@ void GameCommand(string command)
 		print("DB loaded.\n");
 		return;
 	}
+
 	if (argv(0) == "nospectators")
 	{
 		blockSpectators = 1;
@@ -722,6 +730,7 @@ void GameCommand(string command)
 		bprint(strcat("^7All spectators will be automatically kicked when not joining the game after ", ftos(cvar("g_maxplayers_spectator_blocktime")), " seconds!\n"));
 		return;
 	}
+
 	if (argv(0) == "lockteams")
 	{
 		if(teams_matter)
@@ -733,6 +742,7 @@ void GameCommand(string command)
 			bprint("That command can only be used in a team-based gamemode.\n");
 		return;
 	}
+
 	if (argv(0) == "unlockteams")
 	{
 		if(teams_matter)
