@@ -210,7 +210,10 @@ float zoomscript_caught;
 vector wcross_origin;
 float wcross_sizefloat_prev, wcross_alpha_prev, wcross_blur_prev;
 float wcross_sizefloat_goal_prev, wcross_alpha_goal_prev, wcross_blur_goal_prev;
-float wcross_lastchangetime;
+float wcross_changedonetime;
+string wcross_name_goal_prev, wcross_name_goal_prev_prev;
+float wcross_name_changestarttime, wcross_name_changedonetime;
+float wcross_name_alpha_goal_prev, wcross_name_alpha_goal_prev_prev;
 entity trueaim;
 entity trueaim_rifle;
 
@@ -662,13 +665,22 @@ void CSQC_UpdateView(float w, float h)
 				else
 					wcross_blur = 0;
 
+				f = cvar("crosshair_effect_speed");
+				if(f < 0)
+					f *= -2 * g_weaponswitchdelay;
 				if(wcross_blur != wcross_blur_goal_prev || wcross_sizefloat != wcross_sizefloat_goal_prev || wcross_alpha != wcross_alpha_goal_prev)
 				{
-					f = cvar("crosshair_effect_speed");
-					if(f < 0)
-						wcross_lastchangetime = time - f * 2 * g_weaponswitchdelay;
-					else
-						wcross_lastchangetime = time + f;
+					wcross_changedonetime = time + f;
+				}
+				if(wcross_name != wcross_name_goal_prev)
+				{
+					wcross_name_changestarttime = time;
+					wcross_name_changedonetime = time + f;
+					if(wcross_name_goal_prev_prev)
+						strunzone(wcross_name_goal_prev_prev);
+					wcross_name_goal_prev_prev = wcross_name_goal_prev;
+					wcross_name_goal_prev = strzone(wcross_name);
+					wcross_name_alpha_goal_prev_prev = wcross_name_alpha_goal_prev;
 				}
 
 				wcross_sizefloat_goal_prev = wcross_sizefloat;
@@ -676,11 +688,11 @@ void CSQC_UpdateView(float w, float h)
 				wcross_blur_goal_prev = wcross_blur;
 
 				// *_prev is at time-frametime
-				// * is at wcross_lastchangetime+f
+				// * is at wcross_changedonetime+f
 				// what do we have at time?
-				if(time < wcross_lastchangetime)
+				if(time < wcross_changedonetime)
 				{
-					f = frametime / (wcross_lastchangetime - time + frametime);
+					f = frametime / (wcross_changedonetime - time + frametime);
 					wcross_sizefloat = f * wcross_sizefloat + (1 - f) * wcross_sizefloat_prev;
 					wcross_alpha = f * wcross_alpha + (1 - f) * wcross_alpha_prev;
 					//wcross_blur = (frametime / f) * wcross_blur + (1 - frametime / f) * wcross_blur_prev;
@@ -706,23 +718,49 @@ void CSQC_UpdateView(float w, float h)
 				else
 					bullets = 0;
 
-				if(wcross_blur > 0)
+#define CROSSHAIR_DRAW_RING(i,j,dummy1,dummy2) \
+				drawpic(wcross_origin - ('0.5 0 0' * (wcross_size_x * ring_scale + i * wcross_blur) + '0 0.5 0' * (wcross_size_y * ring_scale + j * wcross_blur)), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL)
+
+#define CROSSHAIR_DO_BLUR(M,a,b) \
+				do \
+				{ \
+					if(wcross_blur > 0) \
+					{ \
+						wcross_alpha = wcross_alpha * 0.04; \
+						for(i = -2; i <= 2; ++i) \
+							for(j = -2; j <= 2; ++j) \
+								M(i,j,a,b); \
+					} \
+					else \
+					{ \
+						M(0,0,a,b); \
+					} \
+				} \
+				while(0)
+
+#define CROSSHAIR_DRAW_SINGLE(i,j,wcross_name,wcross_alpha) \
+				drawpic(wcross_origin - ('0.5 0 0' * (wcross_size_x + i * wcross_blur) + '0 0.5 0' * (wcross_size_y + j * wcross_blur)), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL)
+
+#define CROSSHAIR_DRAW(wcross_name,wcross_alpha) \
+				CROSSHAIR_DO_BLUR(CROSSHAIR_DRAW_SINGLE,wcross_name,wcross_alpha)
+
+				if(bullets)
 				{
-					wcross_alpha = wcross_alpha * 0.04;
-					for(i = -2; i <= 2; ++i)
-						for(j = -2; j <= 2; ++j)
-						{
-							if (bullets)
-								drawpic(wcross_origin - ('0.5 0 0' * (wcross_size_x * ring_scale + i * wcross_blur) + '0 0.5 0' * (wcross_size_y * ring_scale + j * wcross_blur)), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
-							drawpic(wcross_origin - ('0.5 0 0' * (wcross_size_x + i * wcross_blur) + '0 0.5 0' * (wcross_size_y + j * wcross_blur)), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
-						}
+					CROSSHAIR_DO_BLUR(CROSSHAIR_DRAW_RING, 0, 0);
+				}
+
+				if(time < wcross_name_changedonetime && wcross_name != wcross_name_goal_prev_prev && wcross_name_goal_prev_prev)
+				{
+					f = (wcross_name_changedonetime - time) / (wcross_name_changedonetime - wcross_name_changestarttime);
+					CROSSHAIR_DRAW(wcross_name_goal_prev_prev, wcross_alpha * f * wcross_name_alpha_goal_prev_prev);
+					f = 1 - f;
 				}
 				else
 				{
-					if (bullets)
-						drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x * ring_scale) - '0 0.5 0' * (wcross_size_y * ring_scale), strcat("gfx/hud/rifle_ring_", ftos(bullets)), wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
-					drawpic(wcross_origin - '0.5 0 0' * (wcross_size_x) - '0 0.5 0' * ( wcross_size_y), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
+					f = 1;
 				}
+				CROSSHAIR_DRAW(wcross_name, wcross_alpha * f);
+				wcross_name_alpha_goal_prev = f;
 			}
 		}
 		else
@@ -733,6 +771,17 @@ void CSQC_UpdateView(float w, float h)
 			wcross_sizefloat_goal_prev = 0;
 			wcross_alpha_goal_prev = 0;
 			wcross_blur_goal_prev = 0;
+			wcross_changedonetime = 0;
+			if(wcross_name_goal_prev)
+				strunzone(wcross_name_goal_prev);
+			wcross_name_goal_prev = string_null;
+			if(wcross_name_goal_prev_prev)
+				strunzone(wcross_name_goal_prev_prev);
+			wcross_name_goal_prev_prev = string_null;
+			wcross_name_changestarttime = 0;
+			wcross_name_changedonetime = 0;
+			wcross_name_alpha_goal_prev = 0;
+			wcross_name_alpha_goal_prev_prev = 0;
 		}
 	}
 
