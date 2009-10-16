@@ -1656,7 +1656,7 @@ string trigger_magicear_processmessage(entity ear, entity source, float teamsay,
 
 	magicear_matched = FALSE;
 
-	dotrigger = ((self.classname == "player") && ((ear.radius == 0) || (vlen(source.origin - ear.origin) <= ear.radius)));
+	dotrigger = ((self.classname == "player") && (self.deadflag == DEAD_NO) && ((ear.radius == 0) || (vlen(source.origin - ear.origin) <= ear.radius)));
 	domatch = ((ear.spawnflags & 32) || dotrigger);
 	if not(domatch)
 		return msgin;
