@@ -1786,7 +1786,7 @@ void spawnfunc_trigger_magicear()
 	//   4 = ignore tell
 	//   8 = ignore tell to unknown player
 	//   16 = let netname replace the whole message (otherwise, netname is a word replacement if set)
-	//   32 = perform the replacement even if outside the radius
+	//   32 = perform the replacement even if outside the radius or dead
 	//   64 = continue replacing/triggering even if this one matched
 	// message: either
 	//   *pattern*
