@@ -103,11 +103,16 @@ void makeCallback(entity e, entity cbent, void(entity, entity) cbfunc)
 .float op_setDependent;
 .string cvarString_setDependent;
 .string cvarValue_setDependent;
+.float(entity) func_setDependent;
 void setDependent_Check(entity e)
 {
 	float f;
 	string s;
-	if(e.cvarString_setDependent)
+	if(e.func_setDependent)
+	{
+		e.disabled = !(e.func_setDependent(e));
+	}
+	else if(e.cvarString_setDependent)
 	{
 		s = cvar_string(e.cvarString_setDependent);
 		e.disabled = (cvar_string(e.cvarString_setDependent) == e.cvarValue_setDependent);
@@ -153,6 +158,7 @@ void setDependent(entity e, string theCvarName, float theCvarMin, float theCvarM
 	e.cvarMax_setDependent = theCvarMax;
 	e.cvar2_setDependent = string_null;
 	e.cvar3_setDependent = string_null;
+	e.func_setDependent = func_null;
 	e.draw = setDependent_Draw;
 	setDependent_Check(e);
 }
@@ -164,6 +170,7 @@ void setDependentStringNotEqual(entity e, string theCvarName, string theCvarValu
 	e.cvar_setDependent = string_null;
 	e.cvar2_setDependent = string_null;
 	e.cvar3_setDependent = string_null;
+	e.func_setDependent = func_null;
 	e.draw = setDependent_Draw;
 	setDependent_Check(e);
 }
@@ -178,6 +185,7 @@ void setDependentAND(entity e, string theCvarName, float theCvarMin, float theCv
 	e.cvar2Max_setDependent = theCvar2Max;
 	e.cvar3_setDependent = string_null;
 	e.op_setDependent = 0;
+	e.func_setDependent = func_null;
 	e.draw = setDependent_Draw;
 	setDependent_Check(e);
 }
@@ -192,6 +200,7 @@ void setDependentOR(entity e, string theCvarName, float theCvarMin, float theCva
 	e.cvar2Max_setDependent = theCvar2Max;
 	e.cvar3_setDependent = string_null;
 	e.op_setDependent = 1;
+	e.func_setDependent = func_null;
 	e.draw = setDependent_Draw;
 	setDependent_Check(e);
 }
@@ -208,6 +217,14 @@ void setDependentAND3(entity e, string theCvarName, float theCvarMin, float theC
 	e.cvar3Min_setDependent = theCvar3Min;
 	e.cvar3Max_setDependent = theCvar3Max;
 	e.op_setDependent = 0;
+	e.func_setDependent = func_null;
+	e.draw = setDependent_Draw;
+	setDependent_Check(e);
+}
+void setDependentWeird(entity e, float(entity) func)
+{
+	e.draw_setDependent = e.draw;
+	e.func_setDependent = func;
 	e.draw = setDependent_Draw;
 	setDependent_Check(e);
 }

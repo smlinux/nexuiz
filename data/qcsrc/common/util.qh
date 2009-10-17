@@ -194,3 +194,7 @@ float ReadInt24_t();
 void WriteInt24_t(float dest, float val);
 #endif
 #endif
+
+// the NULL function
+const var void func_null(void);
+const var string string_null;

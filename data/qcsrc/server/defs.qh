@@ -47,8 +47,6 @@ float sv_gentle;
 float sv_foginterval;
 
 entity	activator;
-string	string_null;
-const var void(void)	func_null;
 
 float player_count;
 float currentbots;

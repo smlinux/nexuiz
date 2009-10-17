@@ -5,7 +5,6 @@
 
 // constants
 
-const string string_null;
 const vector eX = '1 0 0';
 const vector eY = '0 1 0';
 const vector eZ = '0 0 1';

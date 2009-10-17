@@ -18,6 +18,17 @@ entity makeNexuizEffectsSettingsTab()
 	return me;
 }
 
+float someShadowCvarIsEnabled(entity box)
+{
+	if(cvar("r_shadow_realtime_dlight"))
+		if(cvar("r_shadow_realtime_dlight_shadows"))
+			return TRUE;
+	if(cvar("r_shadow_realtime_world"))
+		if(cvar("r_shadow_realtime_world_shadows"))
+			return TRUE;
+	return FALSE;
+}
+
 void fillNexuizEffectsSettingsTab(entity me)
 {
 	entity e;
@@ -138,8 +149,10 @@ void fillNexuizEffectsSettingsTab(entity me)
 			setDependent(e, "r_shadow_realtime_world", 1, 1);
 	me.TR(me);
 		me.TDempty(me, 0.2);
-		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(0, "r_shadow_usenormalmap", "Use normal maps"));
+		me.TD(me, 1, 1.8, e = makeNexuizCheckBox(0, "r_shadow_usenormalmap", "Use normal maps"));
 			setDependentOR(e, "r_shadow_realtime_dlight", 1, 1, "r_shadow_realtime_world", 1, 1);
+		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "r_shadow_shadowmapping", "Soft shadows"));
+			setDependentWeird(e, someShadowCvarIsEnabled);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "r_coronas", "Coronas"));
 	me.TR(me);
@@ -158,6 +171,6 @@ void fillNexuizEffectsSettingsTab(entity me)
 			setDependent(e, "r_motionblur", 0, 1);
 	
 	me.gotoRC(me, me.rows - 1, 0);
-		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "vid_conwidth $menu_vid_conwidth; vid_conheight $menu_vid_conheight; vid_restart", COMMANDBUTTON_APPLY));
+		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "vid_restart", COMMANDBUTTON_APPLY));
 }
 #endif
