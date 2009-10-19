@@ -260,8 +260,12 @@ float TrueAimCheck()
 	vector vecs, trueaimpoint, w_shotorg;
 	vector mi, ma, dv;
 	float shottype;
+	entity ta;
+	float mv;
 
 	mi = ma = '0 0 0';
+	ta = trueaim;
+	mv = MOVE_NOMONSTERS;
 
 	switch(activeweapon)
 	{
@@ -270,10 +274,16 @@ float TrueAimCheck()
 		case WEP_HOOK: // no trueaim
 		case WEP_GRENADE_LAUNCHER: // toss curve
 			return SHOTTYPE_HITWORLD;
+		case WEP_NEX:
+		case WEP_MINSTANEX:
+			mv = MOVE_NORMAL;
+			break;
 		case WEP_CAMPINGRIFLE:
+			ta = trueaim_rifle;
+			mv = MOVE_NORMAL;
 			if(zoomscript_caught)
 			{
-				tracebox(view_origin, '0 0 0', '0 0 0', view_origin + view_forward * MAX_SHOT_DISTANCE, MOVE_NORMAL, trueaim);
+				tracebox(view_origin, '0 0 0', '0 0 0', view_origin + view_forward * MAX_SHOT_DISTANCE, mv, ta);
 				return EnemyHitCheck();
 			}
 			break;
@@ -293,10 +303,7 @@ float TrueAimCheck()
 
 	vecs = decompressShotOrigin(getstati(STAT_SHOTORG));
 
-	if(activeweapon == WEP_CAMPINGRIFLE)
-		traceline(view_origin, view_origin + view_forward * MAX_SHOT_DISTANCE, MOVE_NORMAL, trueaim_rifle);
-	else
-		traceline(view_origin, view_origin + view_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, trueaim);
+	traceline(view_origin, view_origin + view_forward * MAX_SHOT_DISTANCE, mv, ta);
 	trueaimpoint = trace_endpos;
 
 	if(vecs_x > 0)
@@ -308,10 +315,10 @@ float TrueAimCheck()
 	w_shotorg = view_origin + dv;
 
 	// now move the vecs forward as much as requested if possible
-	tracebox(w_shotorg, mi, ma, w_shotorg + view_forward * (vecs_x + nudge), MOVE_NORMAL, trueaim); // FIXME this MOVE_NORMAL part will misbehave a little in csqc
+	tracebox(w_shotorg, mi, ma, w_shotorg + view_forward * (vecs_x + nudge), MOVE_NORMAL, ta); // FIXME this MOVE_NORMAL part will misbehave a little in csqc
 	w_shotorg = trace_endpos - view_forward * nudge;
 
-	tracebox(w_shotorg, mi, ma, trueaimpoint, MOVE_NORMAL, trueaim);
+	tracebox(w_shotorg, mi, ma, trueaimpoint, MOVE_NORMAL, ta);
 	shottype = EnemyHitCheck();
 	if(shottype != SHOTTYPE_HITWORLD)
 		return shottype;
@@ -732,22 +739,21 @@ void CSQC_UpdateView(float w, float h)
 				else
 					bullets = 0;
 
-#define CROSSHAIR_DRAW_RING(i,j,sz,dummy1,dummy2) \
+#define CROSSHAIR_DRAW_RING(i,j,sz,wcross_name,wcross_alpha) \
 				drawpic(wcross_origin - ('0.5 0 0' * (sz * wcross_size_x * ring_scale + i * wcross_blur) + '0 0.5 0' * (sz * wcross_size_y * ring_scale + j * wcross_blur)), strcat("gfx/hud/rifle_ring_", ftos(bullets)), sz * wcross_size * ring_scale, wcross_color, wcross_alpha, DRAWFLAG_NORMAL)
 
-#define CROSSHAIR_DO_BLUR(M,sz,a,b) \
+#define CROSSHAIR_DO_BLUR(M,sz,wcross_name,wcross_alpha) \
 				do \
 				{ \
 					if(wcross_blur > 0) \
 					{ \
-						wcross_alpha = wcross_alpha * 0.04; \
 						for(i = -2; i <= 2; ++i) \
 							for(j = -2; j <= 2; ++j) \
-								M(i,j,sz,a,b); \
+								M(i,j,sz,wcross_name,wcross_alpha*0.04); \
 					} \
 					else \
 					{ \
-						M(0,0,sz,a,b); \
+						M(0,0,sz,wcross_name,wcross_alpha); \
 					} \
 				} \
 				while(0)

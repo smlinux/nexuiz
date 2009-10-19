@@ -293,6 +293,7 @@ void Ent_Projectile()
 			case PROJECTILE_ROCKET: setmodel(self, "models/rocket.md3"); self.scale = 2; break;
 			case PROJECTILE_BULLET: setmodel(self, "models/tracer.mdl"); break;
 			case PROJECTILE_BULLET_GLOWING: setmodel(self, "models/tracer.mdl"); break;
+			case PROJECTILE_BULLET_GLOWING_TRACER: setmodel(self, "models/tracer.mdl"); break;
 			case PROJECTILE_CRYLINK: setmodel(self, "models/plasmatrail.mdl"); break;
 			case PROJECTILE_CRYLINK_BOUNCING: setmodel(self, "models/plasmatrail.mdl"); break;
 			case PROJECTILE_ELECTRO_BEAM: setmodel(self, "models/elaser.mdl"); break;
