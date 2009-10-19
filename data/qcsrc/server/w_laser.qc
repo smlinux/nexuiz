@@ -13,6 +13,17 @@ void W_Laser_Touch (void)
 	remove (self);
 }
 
+void W_Laser_Think()
+{
+	self.movetype = MOVETYPE_FLY;
+	self.think = SUB_Remove;
+	if (self.dmg)
+		self.nextthink = time + cvar("g_balance_laser_secondary_lifetime");
+	else
+		self.nextthink = time + cvar("g_balance_laser_primary_lifetime");
+	CSQCProjectile(self, TRUE, PROJECTILE_LASER, TRUE);
+}
+
 void W_Laser_Attack (float issecondary)
 {
 	local entity missile;
@@ -52,7 +63,6 @@ void W_Laser_Attack (float issecondary)
 			missile.bot_dodgerating = cvar("g_balance_laser_primary_damage");
 	}
 
-	missile.movetype = MOVETYPE_FLY;
 	PROJECTILE_MAKETRIGGER(missile);
 	missile.projectiledeathtype = WEP_LASER;
 	if(issecondary == 1)
@@ -70,15 +80,22 @@ void W_Laser_Attack (float issecondary)
 	//missile.glow_color = 250; // 244, 250
 	//missile.glow_size = 120;
 	missile.touch = W_Laser_Touch;
-	missile.think = SUB_Remove;
-	if (issecondary == 1)
-		missile.nextthink = time + cvar("g_balance_laser_secondary_lifetime");
-	else
-		missile.nextthink = time + cvar("g_balance_laser_primary_lifetime");
 
 	missile.flags = FL_PROJECTILE;
 
-	CSQCProjectile(missile, TRUE, PROJECTILE_LASER, TRUE);
+	missile.think = W_Laser_Think;
+	if (issecondary == 1)
+		missile.nextthink = time + cvar("g_balance_laser_secondary_delay");
+	else
+		missile.nextthink = time + cvar("g_balance_laser_primary_delay");
+	if(time >= missile.nextthink)
+	{
+		entity oldself;
+		oldself = self;
+		self = missile;
+		self.think();
+		self = oldself;
+	}
 }
 
 void spawnfunc_weapon_laser (void)
