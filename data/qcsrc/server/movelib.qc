@@ -53,7 +53,7 @@ vector movelib_inertmove(vector new_vel,float new_bias)
 }
 
 .float  movelib_lastupdate;
-void movelib_move(vector force,float max_velocity,float drag,float mass,float breakforce)
+void movelib_move(vector force,float max_velocity,float drag,float theMass,float breakforce)
 {
     float deltatime;
     float acceleration;
@@ -67,8 +67,8 @@ void movelib_move(vector force,float max_velocity,float drag,float mass,float br
 
     mspeed = vlen(self.velocity);
 
-    if (mass)
-        acceleration = vlen(force) / mass;
+    if (theMass)
+        acceleration = vlen(force) / theMass;
     else
         acceleration = vlen(force);
 
@@ -76,7 +76,7 @@ void movelib_move(vector force,float max_velocity,float drag,float mass,float br
     {
         if (breakforce)
         {
-            breakvec = (normalize(self.velocity) * (breakforce / mass) * deltatime);
+            breakvec = (normalize(self.velocity) * (breakforce / theMass) * deltatime);
             self.velocity = self.velocity - breakvec;
         }
 
@@ -102,7 +102,7 @@ void movelib_move(vector force,float max_velocity,float drag,float mass,float br
 }
 
 /*
-.float mass;
+.float theMass;
 .float side_friction;
 .float ground_friction;
 .float air_friction;
@@ -137,9 +137,9 @@ void movelib_update(vector dir,float force)
     old_speed    = vlen(self.velocity);
     old_dir      = normalize(self.velocity);
 
-    //ggravity      =  (sv_gravity / self.mass) * '0 0 100';
-    acceleration =  (force / self.mass) * dir;
-    //acceleration -= old_dir * (old_speed / self.mass);
+    //ggravity      =  (sv_gravity / self.theMass) * '0 0 100';
+    acceleration =  (force / self.theMass) * dir;
+    //acceleration -= old_dir * (old_speed / self.theMass);
     acceleration -= ggravity;
 
     if(self.waterlevel > 1)
