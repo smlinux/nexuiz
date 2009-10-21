@@ -2675,6 +2675,7 @@ void Drag_Finish(entity dragger)
 		case MOVETYPE_FLYMISSILE:
 		case MOVETYPE_BOUNCE:
 		case MOVETYPE_BOUNCEMISSILE:
+		case MOVETYPE_PHYSICS:
 			break;
 		default:
 			draggee.velocity = '0 0 0';

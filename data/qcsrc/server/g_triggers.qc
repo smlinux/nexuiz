@@ -1419,7 +1419,11 @@ void follow_init()
 		return;
 	}
 
-	if(self.spawnflags & 1)
+	if(self.jointtype)
+	{
+		// already done :P entity must stay
+	}
+	else if(self.spawnflags & 1)
 	{
 		// attach
 		if(self.spawnflags & 2)
@@ -1430,6 +1434,8 @@ void follow_init()
 		{
 			attach_sameorigin(dst, src, self.message);
 		}
+
+		remove(self);
 	}
 	else
 	{
@@ -1445,9 +1451,9 @@ void follow_init()
 		{
 			follow_sameorigin(dst, src);
 		}
-	}
 
-	remove(self);
+		remove(self);
+	}
 }
 
 void spawnfunc_misc_follow()

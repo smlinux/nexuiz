@@ -2159,3 +2159,4 @@ float SOLID_PHYSICS_SPHERE = 33;
 float SOLID_PHYSICS_CAPSULE = 34;
 float MOVETYPE_PHYSICS = 32;
 .float mass;
+.float jointtype; // TO BE DOCUMENTED
