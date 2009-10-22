@@ -1422,6 +1422,8 @@ void follow_init()
 	if(self.jointtype)
 	{
 		// already done :P entity must stay
+		self.aiment = src;
+		self.enemy = dst;
 	}
 	else if(self.spawnflags & 1)
 	{
