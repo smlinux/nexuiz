@@ -755,7 +755,7 @@ void GetTeamCounts(entity ignore)
 // NOTE: Assumes CheckAllowedTeams has already been called!
 float FindSmallestTeam(entity pl, float ignore_pl)
 {
-	float totalteams, smallestteam, smallestteam_count, smallestteam_score, balance_type;
+	float totalteams, balance_type, maxc;
 	totalteams = 0;
 
 	// find out what teams are available
@@ -795,10 +795,6 @@ float FindSmallestTeam(entity pl, float ignore_pl)
 	// c1...c4 now have counts of each team
 	// figure out which is smallest, giving priority to the team the player is already on as a tie-breaker
 
-	smallestteam = 0;
-	smallestteam_count = 999999999;
-	smallestteam_score = 999999999;
-
 	// 2 gives priority to what team you're already on, 1 goes in order
 	// 2 doesn't seem to work though...
 	balance_type = 1;
@@ -807,68 +803,39 @@ float FindSmallestTeam(entity pl, float ignore_pl)
 	//if(pl.classname != "player")
 	if(clienttype(pl) != CLIENTTYPE_BOT)
 	{
-		c1 -= cb1 * 255.0/256;
-		c2 -= cb2 * 255.0/256;
-		c3 -= cb3 * 255.0/256;
-		c4 -= cb4 * 255.0/256;
+		c1 -= cb1 * 255.0/256.0;
+		c2 -= cb2 * 255.0/256.0;
+		c3 -= cb3 * 255.0/256.0;
+		c4 -= cb4 * 255.0/256.0;
 	}
+	maxc = max4(c1, c2, c3, c4);
 
+	RandomSelection_Init();
 	if(balance_type == 1)
 	{
-		if(c1 >= 0 && (c1 < smallestteam_count || (c1 <= smallestteam_count && team1_score < smallestteam_score)))
-		{
-			smallestteam = 1;
-			smallestteam_count = c1;
-			smallestteam_score = team1_score;
-		}
-		if(c2 >= 0 && (c2 < smallestteam_count || (c2 <= smallestteam_count && team2_score < smallestteam_score)))
-		{
-			smallestteam = 2;
-			smallestteam_count = c2;
-			smallestteam_score = team2_score;
-		}
-		if(c3 >= 0 && (c3 < smallestteam_count || (c3 <= smallestteam_count && team3_score < smallestteam_score)))
-		{
-			smallestteam = 3;
-			smallestteam_count = c3;
-			smallestteam_score = team3_score;
-		}
-		if(c4 >= 0 && (c4 < smallestteam_count || (c4 <= smallestteam_count && team4_score < smallestteam_score)))
-		{
-			smallestteam = 4;
-			smallestteam_count = c4;
-			smallestteam_score = team4_score;
-		}
+		// 1: use team count, then score (note: can only use 8 significant bits of score)
+		if(c1 >= 0) RandomSelection_Add(world, 1, string_null, 1, (maxc - c1) + float2range01(-team1_score) / 256.0);
+		if(c2 >= 0) RandomSelection_Add(world, 2, string_null, 1, (maxc - c2) + float2range01(-team2_score) / 256.0);
+		if(c3 >= 0) RandomSelection_Add(world, 3, string_null, 1, (maxc - c3) + float2range01(-team3_score) / 256.0);
+		if(c4 >= 0) RandomSelection_Add(world, 4, string_null, 1, (maxc - c4) + float2range01(-team4_score) / 256.0);
 	}
-	else
+	else if(balance_type == 2)
 	{
-		if(c1 >= 0 && (c1 < smallestteam_count ||
-					(c1 == smallestteam_count && self.team == COLOR_TEAM1) ) )
-		{
-			smallestteam = 1;
-			smallestteam_count = c1;
-		}
-		if(c2 >= 0 && c2 < (c2 < smallestteam_count ||
-					(c2 == smallestteam_count && self.team == COLOR_TEAM2) ) )
-		{
-			smallestteam = 2;
-			smallestteam_count = c2;
-		}
-		if(c3 >= 0 && c3 < (c3 < smallestteam_count ||
-					(c3 == smallestteam_count && self.team == COLOR_TEAM3) ) )
-		{
-			smallestteam = 3;
-			smallestteam_count = c3;
-		}
-		if(c4 >= 0 && c4 < (c4 < smallestteam_count ||
-					(c4 == smallestteam_count && self.team == COLOR_TEAM4) ) )
-		{
-			smallestteam = 4;
-			smallestteam_count = c4;
-		}
+		// 1: use team count, if equal prefer own team
+		if(c1 >= 0) RandomSelection_Add(world, 1, string_null, 1, (maxc - c1) + (self.team == COLOR_TEAM1) / 512.0);
+		if(c2 >= 0) RandomSelection_Add(world, 1, string_null, 1, (maxc - c1) + (self.team == COLOR_TEAM2) / 512.0);
+		if(c3 >= 0) RandomSelection_Add(world, 1, string_null, 1, (maxc - c1) + (self.team == COLOR_TEAM3) / 512.0);
+		if(c4 >= 0) RandomSelection_Add(world, 1, string_null, 1, (maxc - c1) + (self.team == COLOR_TEAM4) / 512.0);
 	}
-
-	return smallestteam;
+	else if(balance_type == 3)
+	{
+		// 1: use team count, then score, if equal prefer own team (probably fails due to float accuracy problems)
+		if(c1 >= 0) RandomSelection_Add(world, 1, string_null, 1, (maxc - c1) + float2range01(-team1_score + 0.5 * (self.team == COLOR_TEAM1)) / 256.0);
+		if(c2 >= 0) RandomSelection_Add(world, 2, string_null, 1, (maxc - c2) + float2range01(-team2_score + 0.5 * (self.team == COLOR_TEAM2)) / 256.0);
+		if(c3 >= 0) RandomSelection_Add(world, 3, string_null, 1, (maxc - c3) + float2range01(-team3_score + 0.5 * (self.team == COLOR_TEAM3)) / 256.0);
+		if(c4 >= 0) RandomSelection_Add(world, 4, string_null, 1, (maxc - c4) + float2range01(-team4_score + 0.5 * (self.team == COLOR_TEAM4)) / 256.0);
+	}
+	return RandomSelection_chosen_float;
 }
 
 float JoinBestTeam(entity pl, float only_return_best, float forcebestteam)
