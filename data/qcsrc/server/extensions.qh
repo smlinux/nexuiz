@@ -631,6 +631,14 @@ float FIELD_FUNCTION = 6;
 //getentityfieldstring returns data as would be written to a savegame, eg... "0.05" (float), "0 0 1" (vector), or "Hello World!" (string). Function names can also be returned.
 //putentityfieldstring puts the data returned by getentityfieldstring back into the entity.
 
+//DP_QC_ENTITYSTRING
+void(string s) loadfromdata = #529;
+void(string s) loadfromfile = #530;
+void(string s) callfunction = #605;
+void(float fh, entity e) writetofile = #606;
+float(string s) isfunction = #607;
+void(entity e, string s) parseentitydata = #608;
+
 //DP_QC_ETOS
 //idea: id Software
 //darkplaces implementation: id Software
@@ -2193,3 +2201,8 @@ float JOINTTYPE_HINGE2 = 5;
 // .vector origin; // hinge2 anchor
 // .vector angles; // hinge2 first axis (as angles)
 // .vector velocity; // hinge2 second axis (as vector)
+
+
+
+
+
