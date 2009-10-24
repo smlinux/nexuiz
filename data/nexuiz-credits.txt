@@ -70,6 +70,9 @@ Fabien "H. Reaper" Tschirhart
 KadaverJack
 *Programmer
 
+William Libert
+* Level Designer
+
 MauveBib
 *Bot Programmer
 
@@ -90,26 +93,63 @@ Garth "Zombie" Hendy
 
 
 
+**Special Thanks:
+*In alphabetical order
+*(nickname or surname)
+
+Robert "ai" Kuroto
+*Various models
+
+Chris "amethyst7" Matz
+*Level design
+
+blkrbt
+*Music
+
+Gerd "Elysis" Raudenbusch
+*Music
+
+Rasmus "FruitieX" Eskola
+*Artist and Programmer
+
+Marius "GreEn`mArine" Shekow
+*Programmer
+
+Braden "meoblast001" Walters
+*Music
+
+Alexander "motorsep" Zubov
+*Weapon animation
+
+Eric "Munyul Verminard" Sambach
+*Level design
+
+Severin "sev" Meyer
+*Artist
+
+Simon O'Callaghan
+*egyptsoc texture set
+
+Michael "Tenshihan" Quinn
+*Sound effects
+
+Amos "torus" Dudley
+*Announcer voices
+
+Mattrew "Tronyn" Rye
+*Level design
+
+Henning "Tymo" Janssen
+*Level design
+
+Kevin "Tyrann" Shanahan
+*Level design
+
+William "Willis" Weilep
+*Master server host
+
+
 **Thanks:
-
-Robert "ai" Kuroto - Various models
-Chris "amethyst7" Matz - Level design
-blkrbt - Music
-Gerd "Elysis" Raudenbusch - Music
-Rasmus "FruitieX" Eskola - Artist
-Braden "meoblast001" Walters - Music
-Alexander "motorsep" Zubov - Weapon animation
-Eric "Munyul Verminard" Sambach - Level design
-Severin "sev" Meyer - Artist
-Simon O'Callaghan - "egyptsoc" texture set
-Michael "Tenshihan" Quinn - Sound effects
-Amos "torus" Dudley - Announcer voices
-Mattrew "Tronyn" Rye - Level design
-Henning "Tymo" Janssen - Level design
-Kevin "Tyrann" Shanahan - Level design
-William "Willis" Weilep - Master server host
-
-
 
 Attila "WW3" Houtkooper
 BigMac
@@ -122,7 +162,6 @@ Dustin Geeraert
 Edgenetwork
 Edward "Ed" Holness
 FrikaC
-GreEn`mArine
 Jitspoe
 Jody Gallagher
 Juergen "LowDragon" Timm

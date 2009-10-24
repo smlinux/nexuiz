@@ -1,6 +1,6 @@
 title CyberParcour01
 description
-author sev
+author Severin Meyer
 type cts 20 5
 has weapons
 settemp_for_type cts g_start_weapon_shotgun 0
