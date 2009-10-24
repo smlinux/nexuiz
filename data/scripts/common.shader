@@ -117,7 +117,13 @@ textures/common/hint // should NOT use surfaceparm hint.. strange but true
 
 textures/common/invisible // solid, transparent polygons, casts shadows
 {
-	surfaceparm nolightmap			
+	surfaceparm nolightmap
+        {
+		map textures/common/invisible.tga
+		alphaFunc GE128
+		depthWrite
+		rgbGen vertex
+	}	
 }
 
 textures/common/mirror1
