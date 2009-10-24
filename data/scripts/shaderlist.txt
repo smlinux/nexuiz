@@ -36,6 +36,9 @@ liquids
 mandelbrotsky
 mflag
 morphed
+newsky_asteroids
+newsky_nebulae
+newsky_planets
 nexdm18_rmx
 official_cmp1
 onslaught
