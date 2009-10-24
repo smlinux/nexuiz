@@ -2159,4 +2159,37 @@ float SOLID_PHYSICS_SPHERE = 33;
 float SOLID_PHYSICS_CAPSULE = 34;
 float MOVETYPE_PHYSICS = 32;
 .float mass;
-.float jointtype; // TO BE DOCUMENTED
+
+.float jointtype;
+// common joint properties:
+// .entity aiment, enemy; // connected objects
+// .vector movedir;
+//   for a spring:
+//     movedir_x = spring constant (force multiplier, must be > 0)
+//     movedir_y = spring dampening constant to prevent oscillation (must be > 0)
+//     movedir_z = spring stop position (+/-)
+//   for a motor:
+//     movedir_x = desired motor velocity
+//     movedir_y = -1 * max motor force to use
+//     movedir_z = stop position (+/-), set to 0 for no stop
+//   note that ODE does not support both in one anyway
+//   motor properties only make sense for hinge and slider!
+
+float JOINTTYPE_POINT = 1;
+// .vector origin; // point anchor
+
+float JOINTTYPE_HINGE = 2;
+// .vector origin; // hinge anchor
+// .vector angles; // hinge axis
+
+float JOINTTYPE_SLIDER = 3;
+// .vector angles; // slider axis
+
+float JOINTTYPE_UNIVERSAL = 4;
+// .vector origin; // universal anchor
+// .vector angles; // universal axis1 and axis2 (axis1 is forward, axis2 is up)
+
+float JOINTTYPE_HINGE2 = 5;
+// .vector origin; // hinge2 anchor
+// .vector angles; // hinge2 first axis (as angles)
+// .vector velocity; // hinge2 second axis (as vector)
