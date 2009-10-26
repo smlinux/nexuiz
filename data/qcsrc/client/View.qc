@@ -766,7 +766,7 @@ void CSQC_UpdateView(float w, float h)
 
 				if(bullets)
 				{
-					CROSSHAIR_DO_BLUR(CROSSHAIR_DRAW_RING, wcross_resolution, 0, 0);
+					CROSSHAIR_DO_BLUR(CROSSHAIR_DRAW_RING, wcross_resolution, wcross_name, wcross_alpha);
 				}
 
 				if(time < wcross_name_changedonetime && wcross_name != wcross_name_goal_prev_prev && wcross_name_goal_prev_prev)
