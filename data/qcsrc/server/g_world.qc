@@ -1776,7 +1776,7 @@ float WinningCondition_RanOutOfSpawns()
 {
 	entity head;
 
-	if(!have_team_spawns)
+	if(have_team_spawns <= 0)
 		return WINNING_NO;
 
 	if(!some_spawn_has_been_used)

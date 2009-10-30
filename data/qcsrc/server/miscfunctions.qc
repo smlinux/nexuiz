@@ -263,7 +263,7 @@ void relocate_spawnpoint()
     if (!self.cnt)
         self.cnt = 1;
 
-    if (g_ctf || g_assault || g_onslaught || g_domination || g_nexball)
+    if (have_team_spawns != 0)
         if (self.team)
             have_team_spawns = 1;
 

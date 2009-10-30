@@ -92,7 +92,7 @@ void spawnfunc_info_player_deathmatch (void)
 void spawnpoint_use()
 {
 	if(teams_matter)
-	if(have_team_spawns)
+	if(have_team_spawns > 0)
 	{
 		self.team = activator.team;
 		some_spawn_has_been_used = 1;
@@ -293,7 +293,7 @@ entity SelectSpawnPoint (float anypoint)
 
 	teamcheck = 0;
 
-	if(!anypoint && have_team_spawns)
+	if(!anypoint && have_team_spawns > 0)
 		teamcheck = self.team;
 
 	// get the list of players

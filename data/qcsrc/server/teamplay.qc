@@ -219,6 +219,8 @@ void InitGameplayMode()
 		gamemode_name = "Team Deathmatch";
 		ActivateTeamplay();
 		tdm_init();
+		if(cvar("g_tdm_team_spawns"))
+			have_team_spawns = -1; // request team spawns
 	}
 
 	if(g_domination)
@@ -229,6 +231,7 @@ void InitGameplayMode()
 		fraglimit_override = cvar("g_domination_point_limit");
 		leadlimit_override = cvar("g_domination_point_leadlimit");
 		dom_init();
+		have_team_spawns = -1; // request team spawns
 	}
 
 	if(g_ctf)
@@ -252,6 +255,7 @@ void InitGameplayMode()
 			leadlimit_override = cvar("captureleadlimit_override");
 		}
 		ctf_init();
+		have_team_spawns = -1; // request team spawns
 	}
 
 	if(g_runematch)
@@ -306,6 +310,7 @@ void InitGameplayMode()
 		gamemode_name = "Assault";
 		ActivateTeamplay();
 		ScoreRules_assault();
+		have_team_spawns = -1; // request team spawns
 	}
 
 	if(g_onslaught)
@@ -313,6 +318,7 @@ void InitGameplayMode()
 		game = GAME_ONSLAUGHT;
 		gamemode_name = "Onslaught";
 		ActivateTeamplay();
+		have_team_spawns = -1; // request team spawns
 	}
 
 	if(g_race)
@@ -324,6 +330,7 @@ void InitGameplayMode()
 		{
 			ActivateTeamplay();
 			race_teams = bound(2, cvar("g_race_teams"), 4);
+			have_team_spawns = -1; // request team spawns
 		}
 		else
 			race_teams = 0;
@@ -350,6 +357,7 @@ void InitGameplayMode()
 		leadlimit_override = cvar("g_nexball_goalleadlimit");
 		ActivateTeamplay();
 		nb_init();
+		have_team_spawns = -1; // request team spawns
 	}
 
 	if(teams_matter)
