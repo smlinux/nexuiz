@@ -41,6 +41,8 @@ CLASS(NexuizMapList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizMapList, typeToSearchTime, float, 0)
 
 	METHOD(NexuizMapList, destroy, void(entity))
+
+	ATTRIB(NexuizListBox, alphaBG, float, 0)
 ENDCLASS(NexuizMapList)
 entity makeNexuizMapList();
 void MapList_All(entity btn, entity me);

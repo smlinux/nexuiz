@@ -32,6 +32,8 @@ CLASS(ListBox) EXTENDS(Item)
 	ATTRIB(ListBox, scrollbarWidth, float, 0) // pixels
 	ATTRIB(ListBox, nItems, float, 42)
 	ATTRIB(ListBox, itemHeight, float, 0)
+	ATTRIB(ListBox, colorBG, vector, '0 0 0')
+	ATTRIB(ListBox, alphaBG, float, 0)
 	METHOD(ListBox, drawListBoxItem, void(entity, float, vector, float)) // item number, width/height, selected
 	METHOD(ListBox, clickListBoxItem, void(entity, float, vector)) // item number, relative clickpos
 	METHOD(ListBox, setSelected, void(entity, float))
@@ -239,11 +241,14 @@ void updateControlTopBottomListBox(entity me)
 void drawListBox(entity me)
 {
 	float i;
-	vector absSize;
+	vector absSize, fillSize;
 	vector oldshift, oldscale;
 	if(me.pressed == 2)
 		me.mouseDrag(me, me.dragScrollPos); // simulate mouseDrag event
 	me.updateControlTopBottom(me);
+	fillSize_x = (1 - me.controlWidth);
+	if(me.alphaBG)
+		draw_Fill('0 0 0', '0 1 0' + fillSize, me.colorBG, me.alphaBG);
 	if(me.controlWidth)
 	{
 		draw_VertButtonPicture(eX * (1 - me.controlWidth), strcat(me.src, "_s"), eX * me.controlWidth + eY, me.color2, 1);
