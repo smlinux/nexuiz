@@ -718,9 +718,9 @@ void FixPlayermodel()
 		oldskin = self.skinindex;
 		self.skinindex = defaultskin;
 	} else {
-		if (self.playermodel != self.model)
+		if (self.playermodel != self.model || self.playermodel == "")
 		{
-			self.playermodel = CheckPlayerModel(self.playermodel);
+			self.playermodel = CheckPlayerModel(self.playermodel); // this is never "", so no endless loop
 			m1 = self.mins;
 			m2 = self.maxs;
 			setmodel_lod (self, self.playermodel);
