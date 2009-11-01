@@ -491,6 +491,10 @@ string formatmessage(string msg)
             else
                 replacement = "(nobody)";
         }
+	else if (escape == "s")
+		replacement = ftos(vlen(self.velocity - self.velocity_z * '0 0 1'));
+	else if (escape == "S")
+		replacement = ftos(vlen(self.velocity));
         msg = strcat(substring(msg, 0, p), replacement, substring(msg, p+2, strlen(msg) - (p+2)));
         p = p + strlen(replacement);
     }
