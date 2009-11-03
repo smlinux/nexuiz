@@ -180,12 +180,12 @@ void OnlineBanList_Think()
 	float i, n;
 	
 	if(cvar_string("g_ban_sync_uri") == "")
-		return;
+		goto killme;
 	if(cvar("g_ban_sync_interval") == 0) // < 0 is okay, it means "sync on level start only"
-		return;
+		goto killme;
 	argc = tokenize_console(cvar_string("g_ban_sync_trusted_servers"));
 	if(argc == 0)
-		return;
+		goto killme;
 
 	if(OnlineBanList_Servers)
 		strunzone(OnlineBanList_Servers);
@@ -212,6 +212,12 @@ void OnlineBanList_Think()
 	
 	if(cvar("g_ban_sync_interval") > 0)
 		self.nextthink = time + max(60, cvar("g_ban_sync_interval") * 60);
+	else
+		goto killme;
+	return;
+
+:killme
+	remove(self);
 }
 
 #define BAN_MAX 64
