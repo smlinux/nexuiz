@@ -12,6 +12,8 @@ CLASS(NexuizCreditsList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizCreditsList, realUpperMargin, float, 0)
 	ATTRIB(NexuizCreditsList, bufferIndex, float, 0)
 	ATTRIB(NexuizCreditsList, scrolling, float, 0)
+
+	ATTRIB(NexuizListBox, alphaBG, float, 0)
 ENDCLASS(NexuizCreditsList)
 entity makeNexuizCreditsList();
 #endif
