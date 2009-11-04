@@ -11,11 +11,13 @@ vector steerlib_pull(vector point)
 /**
     Uniform push from a point
 **/
+#define steerlib_push(point) normalize(self.origin - point)
+/*
 vector steerlib_push(vector point)
 {
     return normalize(self.origin - point);
 }
-
+*/
 /**
     Pull toward a point, The further away, the stronger the pull.
 **/
@@ -156,6 +158,8 @@ vector steerlib_dodge(vector point,vector dodge_dir,float min_distance)
     float distance;
 
     distance = max(vlen(self.origin - point),min_distance);
+    if (min_distance < distance)
+        return '0 0 0';
 
     return dodge_dir * (min_distance/distance);
 }
@@ -184,6 +188,36 @@ vector steerlib_flock(float radius, float standoff,float separation_force,float 
         flock_member = flock_member.chain;
     }
     return push + (pull* (1 / ccount));
+}
+
+/**
+    flocking by .flock_id
+    Group will move towards the unified direction while keeping close to eachother.
+    xy only version (for ground movers).
+**/
+vector steerlib_flock2d(float radius, float standoff,float separation_force,float flock_force)
+{
+    entity flock_member;
+    vector push,pull;
+    float ccount;
+
+    flock_member = findradius(self.origin,radius);
+    while(flock_member)
+    {
+        if(flock_member != self)
+        if(flock_member.flock_id == self.flock_id)
+        {
+            ++ccount;
+            push = push + (steerlib_repell(flock_member.origin, standoff) * separation_force);
+            pull = pull + (steerlib_arrive(flock_member.origin + flock_member.velocity, radius) * flock_force);
+        }
+        flock_member = flock_member.chain;
+    }
+
+    push_z = 0;
+    pull_z = 0;
+
+    return push + (pull * (1 / ccount));
 }
 
 /**
@@ -220,6 +254,7 @@ vector steerlib_swarm(float radius, float standoff,float separation_force,float 
 /**
     Steer towards the direction least obstructed.
     Run four tracelines in a forward funnel, bias each diretion negative if something is found there.
+    You need to call makevectors() (or equivalent) before this function to set v_forward and v_right
 **/
 vector steerlib_traceavoid(float pitch,float length)
 {
@@ -227,6 +262,7 @@ vector steerlib_traceavoid(float pitch,float length)
     float fup_left,fup_right,fdown_left,fdown_right;
     vector upwish,downwish,leftwish,rightwish;
     vector v_left,v_down;
+
 
     v_left = v_right * -1;
     v_down = v_up * -1;
@@ -254,7 +290,6 @@ vector steerlib_traceavoid(float pitch,float length)
     fdown_right = trace_fraction;
 
     //te_lightning1(world,self.origin, trace_endpos);
-
     upwish    = v_up    * (fup_left   + fup_right);
     downwish  = v_down  * (fdown_left + fdown_right);
     leftwish  = v_left  * (fup_left   + fdown_left);
@@ -266,7 +301,7 @@ vector steerlib_traceavoid(float pitch,float length)
 
 /**
     Steer towards the direction least obstructed.
-    Run two tracelines in a forward trident, bias each diretion negative if something is found there.
+    Run tracelines in a forward trident, bias each direction negative if something is found there.
 **/
 vector steerlib_traceavoid_flat(float pitch, float length, vector vofs)
 {
@@ -339,6 +374,7 @@ float beamsweep_badpoint(vector point,float waterok)
     return 1;
 }
 
+//#define BEAMSTEER_VISUAL
 float beamsweep(vector from, vector dir,float length, float step,float step_up, float step_down)
 {
     float i;
@@ -369,10 +405,10 @@ float beamsweep(vector from, vector dir,float length, float step,float step_up, 
 
         if(beamsweep_badpoint(trace_endpos,0))
             return i / length;
-
-        //te_lightning1(world,a+u,b+u);
-        //te_lightning1(world,b+u,b-d);
-
+#ifdef BEAMSTEER_VISUAL
+        te_lightning1(world,a+u,b+u);
+        te_lightning1(world,b+u,b-d);
+#endif
         a = trace_endpos;
     }
 
@@ -386,7 +422,17 @@ vector steerlib_beamsteer(vector dir, float length, float step, float step_up, f
 
     dir_z *= 0.15;
     vr = vectoangles(dir);
-    vr_x *= -1;
+    //vr_x *= -1;
+
+    tracebox(self.origin , self.mins,self.maxs,self.origin +  (dir * length) ,MOVE_NOMONSTERS,self);
+    if(trace_fraction == 1.0)
+    {
+        //te_lightning1(self,self.origin,self.origin +  (dir * length));
+        return dir;
+    }
+
+
+
 
     makevectors(vr);
     bm_forward = beamsweep(self.origin, v_forward, length, step, step_up, step_down);

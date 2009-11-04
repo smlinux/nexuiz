@@ -2,9 +2,12 @@
 .entity verbs_idle;
 .entity verbs_attack;
 .entity verbs_move;
+//.entity vchain;
 
 /// This global gets set to the verb in question each time the stack manager calls verb_call
 entity verb;
+//.entity current_verb;
+//.float verb_done;
 
 /// Execure this verb
 #define VCM_DO     0
@@ -31,6 +34,54 @@ entity verb;
 /// verb_call(VCM_DO) returns this when a verb should be deleted by the stack manager
 #define VS_CALL_REMOVE    -3
 
+/*
+void verbstack_updatechain(entity stack)
+{
+    entity vrb, v;
+    if not (stack)
+        return;
+
+    dprint("verbstack_updatechain\n");
+
+    vrb = findchainentity(verbstack, stack);
+    if not (vrb)
+    {
+        stack.vchain = world;
+        return;
+    }
+
+    stack.vchain = vrb;
+    v = vrb;
+
+    while(vrb)
+    {
+        vrb = vrb.chain;
+
+
+    }
+}
+
+void verbstack_remove(entity vverb)
+{
+    entity vstack;
+    dprint("verbstack_remove\n");
+
+    vstack = verb.verbstack;
+    remove(vverb);
+    vverb.verbstack = world;
+    verbstack_updatechain(vstack);
+
+    //vverb.think = SUB_Remove;
+    //vverb.nextthink = time;
+}
+
+void verbstack_thinkremove()
+{
+    dprint("verbstack_thinkremove\n");
+    verbstack_remove(self);
+}
+*/
+
 /**
     Push a new verb onto the specified stack. Set vrb_life to make it time-limited.
 **/
@@ -50,11 +101,17 @@ entity verbstack_push(entity stack, float(float eval) vrb_call, float val_static
     vrb.verb_call         = vrb_call;
     vrb.verb_static_value = val_static;
 
+    vrb.classname         = "verb";
+    stack.classname       = "verbstack";
+
     if(vrb_life)
     {
+        //vrb.think     = verbstack_thinkremove;
         vrb.think     = SUB_Remove;
         vrb.nextthink = time + vrb_life;
     }
+
+    //verbstack_updatechain(stack);
 
     return vrb;
 }
@@ -71,8 +128,11 @@ float verbstack_pop(entity stack)
     oldself = self;
 
     vrb = findchainentity(verbstack,stack);
+    //vrb = stack.vchain;
+    //dprint("owner:", stack.owner.classname, " vsn:", stack.classname,"\n");
     while(vrb)
     {
+        //dprint("vn:", vrb.classname,"\n");
         verb  = vrb;
         vrb   = vrb.chain;
         self  = verb.owner;
@@ -151,7 +211,7 @@ entity verbstack_pull(entity stack)
         vrb   = vrb.chain;
         value = verb.verb_call(VCM_EVAL);
 
-        if(value > 0)
+        if(value < 0)
         {
             if(value == VS_CALL_REMOVE)
                 remove(verb);
@@ -197,4 +257,18 @@ void verbstack_flush(entity stack)
     }
 
     self = oldself;
+
+    //stack.vchain = world;
+}
+
+void verbstack_doverb(entity vrb)
+{
+    float value;
+
+    verb  = vrb;
+    self  = verb.owner;
+    value = verb.verb_call(VCM_DO);
+
+    if(value == VS_CALL_REMOVE)
+        remove(vrb);
 }
