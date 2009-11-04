@@ -5,6 +5,8 @@
 #define rld_size_x 256
 #define rld_size_y 16
 
+void CSQC_WAKIZASHI_HUD();
+
 entity porto;
 vector polyline[16];
 float trace_dphitcontents;
@@ -588,13 +590,10 @@ void CSQC_UpdateView(float w, float h)
 	hud = getstati(STAT_HUD);
 	if(hud == HUD_SPIDERBOT)
 	{
-		vector sz;
 		CSQC_spider_HUD();
-		sz = drawgetimagesize(SPIDER_CROSS);
-		sz_x *= cvar_or("cl_vehicle_spiderbot_cross_size",1);
-		sz_y *= cvar_or("cl_vehicle_spiderbot_cross_size",1);
-		drawpic('0.5 0 0' * (vid_conwidth - sz_x) + '0 0.5 0' * (vid_conheight - sz_y), SPIDER_CROSS, sz, '1 1 1', cvar_or("cl_vehicle_spiderbot_cross_alpha",0.6), DRAWFLAG_NORMAL);
 	}
+	else if(hud == HUD_WAKIZASHI)
+        CSQC_WAKIZASHI_HUD();
 	else
 	{
 		if(cvar("r_letterbox") == 0)
@@ -850,11 +849,16 @@ void CSQC_spider_HUD()
 	float rockets,reload,heat,hp,shield,i;
 	vector p,pp;
 
-	rockets = getstati(STAT_SPIDERBOT_ROCKETS);
-	heat    = min(getstatf(STAT_SPIDERBOT_HEAT),1);
-	reload  = min(getstatf(STAT_SPIDERBOT_RELOAD),1);
-	hp      = min(getstatf(STAT_SPIDERBOT_HEALTH),1);
-	shield  = min(getstatf(STAT_SPIDERBOT_SHIELD),1);
+    p = drawgetimagesize(SPIDER_CROSS);
+    p_x *= cvar_or("cl_vehicle_spiderbot_cross_size", 1);
+    p_y *= cvar_or("cl_vehicle_spiderbot_cross_size", 1);
+    drawpic('0.5 0 0' * (vid_conwidth - p_x) + '0 0.5 0' * (vid_conheight - p_y), SPIDER_CROSS, p, '1 1 1', cvar_or("cl_vehicle_spiderbot_cross_alpha",0.6), DRAWFLAG_NORMAL);
+
+    hp      = bound(0,getstatf(STAT_VEHICLESTAT_HEALTH), 1);
+	shield  = bound(0,getstatf(STAT_VEHICLESTAT_SHIELD), 1);
+	heat    = min(getstatf(STAT_VEHICLESTAT_RELOAD1), 1);
+	rockets =     getstati(STAT_VEHICLESTAT_AMMO2);
+	reload  = min(getstatf(STAT_VEHICLESTAT_RELOAD2), 1);
 
 	// Draw health bar
 	p = '0.5 0 0' * (vid_conwidth - (rkt_size * 8));
@@ -906,6 +910,84 @@ void CSQC_spider_HUD()
 	}
 
 }
+
+void CSQC_WAKIZASHI_HUD()
+{
+	// 0--1 floats. 1 = 100%, 0.6 = 50%.
+	float health, shield, energy, rockets;
+
+    float i;
+	vector p, pp;
+
+    p = drawgetimagesize(SPIDER_CROSS);
+    p_x *= cvar_or("cl_vehicle_spiderbot_cross_size", 1);
+    p_y *= cvar_or("cl_vehicle_spiderbot_cross_size", 1);
+    drawpic('0.5 0 0' * (vid_conwidth - p_x) + '0 0.5 0' * (vid_conheight - p_y), SPIDER_CROSS, p, '1 1 1', cvar_or("cl_vehicle_spiderbot_cross_alpha",0.6), DRAWFLAG_NORMAL);
+
+/*
+const float STAT_VEHICLESTAT_HEALTH  = 60;
+const float STAT_VEHICLESTAT_SHIELD  = 61;
+const float STAT_VEHICLESTAT_ENERGY  = 62;
+const float STAT_VEHICLESTAT_AMMO1   = 63;
+const float STAT_VEHICLESTAT_RELAOD1 = 64;
+const float STAT_VEHICLESTAT_AMMO2   = 65;
+const float STAT_VEHICLESTAT_RELOAD2 = 66;
+*/
+    health  = min(getstatf(STAT_VEHICLESTAT_HEALTH),  1);
+	shield  = min(getstatf(STAT_VEHICLESTAT_SHIELD),  1);
+	energy  = min(getstatf(STAT_VEHICLESTAT_ENERGY),  1);
+	rockets = bound(0,getstatf(STAT_VEHICLESTAT_RELOAD1), 1);
+
+
+	p = '0.5 0 0' * (vid_conwidth - (rkt_size * 8));
+	p = p + '0 1 0' * vid_conheight - '0 32 0';
+
+	// Draw health bar
+	p_y += 8;
+	drawfill(p, '256 0 0' * health + '0 8 0' , '0 0.7 0', 0.75, DRAWFLAG_NORMAL);
+	p_x += 256 * health;
+	drawfill(p, '256 0 0' * (1 - health) + '0 8 0' , '0 0 0', 0.75, DRAWFLAG_NORMAL);
+
+	// Draw shiled bar
+	p_x -= 256 * health;
+	p_y += 4;
+	drawfill(p, '256 0 0' * shield + '0 4 0' , '0.25 0.25 1', 0.5, DRAWFLAG_NORMAL);
+
+	// Draw energy
+	//p_x -= 256 * health;
+	p_y -= 8;
+	drawfill(p, '256 0 0' * energy + '0 4 0' , '1 1 1', 0.75, DRAWFLAG_NORMAL);
+
+	// Draw rockets bar
+	p_y += 12;
+	drawfill(p, '256 0 0' * rockets + '0 4 0' , '1 0 0', 0.75, DRAWFLAG_NORMAL);
+
+
+	/*
+	// Draw energy bar
+	p = '0.5 0 0' * (vid_conwidth - 256);
+	p = p + '0 1 0' * vid_conheight - '0 34  0';
+	drawfill(p, '256 0 0' * (1 - energy) + '0 2 0' ,'0 0 1', 0.5, DRAWFLAG_NORMAL);
+	p_x += 256 * (1 - energy);
+	drawfill(p, '256 0 0' * energy  + '0 2 0' , '1 0 0', 0.5, DRAWFLAG_NORMAL);
+
+	// Draw rockets bar
+	p_y += 8;
+	drawfill(p, '256 0 0' * rockets + '0 8 0' , '1 0 0', 0.75, DRAWFLAG_NORMAL);
+	p_x += 256 * health;
+	drawfill(p, '256 0 0' * (1 - rockets) + '0 8 0' , '0 0 0', 0.75, DRAWFLAG_NORMAL);
+    */
+
+
+	if (sb_showscores)
+	{
+		Sbar_DrawScoreboard();
+		Sbar_DrawCenterPrint();
+	}
+
+}
+
+
 void CSQC_common_hud(void)
 {
 	// Sbar_SortFrags(); done in Sbar_Draw
@@ -921,6 +1003,10 @@ void CSQC_common_hud(void)
 
 		case HUD_SPIDERBOT:
 			CSQC_spider_HUD();
+			break;
+
+		case HUD_WAKIZASHI:
+			CSQC_WAKIZASHI_HUD();
 			break;
 	}
 }

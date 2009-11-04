@@ -148,6 +148,10 @@ death type:
 	 10014 = mirror damage
 	 10015 = g_touchexplode
 	 10100 = turret
+	10150 = spiderbot miniguns
+	10151 = spiderbot rocket
+	10152 = spiderbot, cushed by
+	10300 = custom deathmessage
 
    weapon death flags are:
        256 = secondary fire

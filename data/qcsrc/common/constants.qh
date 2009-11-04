@@ -282,13 +282,6 @@ const float STAT_VEHICLESTAT_RELOAD1 = 64;
 const float STAT_VEHICLESTAT_AMMO2   = 65;
 const float STAT_VEHICLESTAT_RELOAD2 = 66;
 
-const float STAT_SPIDERBOT_HEALTH  = 60;
-const float STAT_SPIDERBOT_ROCKETS = 61;
-const float STAT_SPIDERBOT_HEAT    = 62;
-const float STAT_SPIDERBOT_RELOAD  = 63;
-const float STAT_SPIDERBOT_ENERGY  = 64;
-const float STAT_SPIDERBOT_SHIELD  = 65;
-
 //const float STAT_SPIDERBOT_AIM     53 // compressShotOrigin
 //const float STAT_SPIDERBOT_TARGET  54 // compressShotOrigin
 

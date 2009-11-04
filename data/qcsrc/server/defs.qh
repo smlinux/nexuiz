@@ -622,3 +622,5 @@ float client_cefc_accumulatortime;
 
 .entity clientdata;
 .entity personal;
+
+string deathmessage;

@@ -547,7 +547,11 @@ void SV_PlayerPhysics()
 	float buttons_prev;
 	float not_allowed_to_move;
 	string c;
-	
+
+    if(self.PlayerPhysplug)
+        if(self.PlayerPhysplug())
+            return;
+
 	if(g_race || g_cts)
 	{
 		// if record times matter
@@ -631,10 +635,6 @@ void SV_PlayerPhysics()
 	}
 	else if(self.specialcommand_pos && (c != substring(specialcommand, self.specialcommand_pos - 1, 1)))
 		self.specialcommand_pos = 0;
-	
-    if(self.PlayerPhysplug)
-        if(self.PlayerPhysplug())
-            return;
 
 	if(!sv_maxidle_spectatorsareidle || self.movetype == MOVETYPE_WALK)
 	{
