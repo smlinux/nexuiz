@@ -1,15 +1,18 @@
 //--// Some support routines //--//
 
 #define anglemodss(a) (a - floor(a / 360) * 360)
+
 float(float v) anglemods =
 {
 	v = v - 360 * floor(v / 360);
 	return v;
-};
+}
+
 float safeangle(float a)
 {
-    if((a > -361) && (a < 361))
+    if((a >= -360) && (a <= 360))
         return a;
+
 
     a -= (360 * floor(a / 360));
 

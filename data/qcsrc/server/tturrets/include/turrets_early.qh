@@ -5,6 +5,8 @@
 
 #message "with tZork turrets"
 
+float turret_count;
+
 vector real_origin(entity ent);
 
 /// Map time control over pain inflicted

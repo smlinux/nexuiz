@@ -168,7 +168,7 @@ void  ewheel_move_enemy()
             movelib_move_simple(v_forward,cvar("g_turrets_unit_ewheel_speed_slower"),0.4);
         }
     }
-    else if (self.tur_dist_enemy < self.target_range_optimal - 10)
+    else if (self.tur_dist_enemy < self.target_range_optimal * 0.5)
     {
         self.frame = ewheel_amin_bck_slow;
         movelib_move_simple(v_forward * -1,cvar("g_turrets_unit_ewheel_speed_slow"),0.4);

@@ -866,7 +866,7 @@ void walker_respawnhook()
     vector vtmp;
     entity e;
 
-    self.origin = self.wkr_spawn.origin;
+    setorigin(self,self.wkr_spawn.origin);
 
     self.angles = self.wkr_spawn.angles;
     vtmp = self.wkr_spawn.origin;
@@ -891,6 +891,7 @@ void walker_respawnhook()
         }
     }
 }
+
 void walker_diehook()
 {
     turret_trowgib2(self.origin,self.velocity + v_up * 200,'-0.6 -0.2 -02',self,time + random() * 1);

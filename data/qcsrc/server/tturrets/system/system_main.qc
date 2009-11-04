@@ -927,10 +927,10 @@ void turrets_manager_think()
 * (unless you have a very good reason not to)
 * if the return value is 0, the turret should be removed.
 */
-float turret_count;
 float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base, string head)
 {
 	entity e,ee;
+
 
     e = find(world, classname, "turret_manager");
     if not (e)
@@ -960,7 +960,6 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
     if (self.spawnflags & TSF_TERRAINBASE)
     {
         entity tb;
-        //precache_model("models/turrets/terrainbase.md3");
         tb = spawn();
         setmodel(tb,"models/turrets/terrainbase.md3");
         setorigin(tb,self.origin);
@@ -1295,7 +1294,8 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
         self.think     = turret_think;
 
     ++turret_count;
-    self.nextthink = time + self.ticrate + (turret_count * sys_ticrate);
+    self.nextthink = time + 1;
+    self.nextthink +=  turret_count * sys_ticrate;
 
     self.tur_head.team = self.team;
     self.view_ofs = '0 0 0';
