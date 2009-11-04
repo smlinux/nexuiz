@@ -236,6 +236,7 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 			s = "A corpse";
 		else
 			s = targ.netname;
+
 		a = attacker.netname;
 
 		if (targ == attacker)
@@ -376,7 +377,7 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 					if((cvar("sv_fragmessage_information_typefrag")) && (targ.BUTTON_CHAT)) {
 						centerprint(attacker, strcat(DAMAGE_CENTERPRINT_SPACER, blood_message, "^1You typefragged ^7", s, GetAdvancedDeathReports(targ)));
 						centerprint(targ, strcat(DAMAGE_CENTERPRINT_SPACER, victim_message, "^1You were typefragged by ^7", a, GetAdvancedDeathReports(attacker)));
-					} else { 
+					} else {
 						centerprint(attacker, strcat(DAMAGE_CENTERPRINT_SPACER, blood_message, "^4You fragged ^7", s, GetAdvancedDeathReports(targ)));
 						centerprint(targ, strcat(DAMAGE_CENTERPRINT_SPACER, victim_message, "^1You were fragged by ^7", a, GetAdvancedDeathReports(attacker)));
 					}
@@ -420,6 +421,22 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 						else
 							bprint("^1", s, "^1 ", substring(inflictor.message2, 0, p), a, "^1", substring(inflictor.message2, p+1, strlen(inflictor.message2) - (p+1)), "\n");
 					}
+					else if(deathtype == DEATH_SBCRUSH)
+                        bprint ("^1",s, "^1 was crushed by ^1", a, "\n");
+					else if(deathtype == DEATH_SBMINIGUN)
+                        bprint ("^1",s, "^1 got shredded by ^1", a, "\n");
+					else if(deathtype == DEATH_SBROCKET)
+                        bprint ("^1",s, "^1 was blased to bits by ^1", a, "\n");
+					else if(deathtype == DEATH_SBBLOWUP)
+                        bprint ("^1",s, "^1 got cought in the destruction of ^1", a, "'s vehicle\n");
+
+					else if(deathtype == DEATH_WAKIGUN)
+                        bprint ("^1",s, "^1 was bolted down by ^1", a, "\n");
+					else if(deathtype == DEATH_WAKIROCKET)
+                        bprint ("^1",s, "^1 could find no shelter from ^1", a, "'s rockets\n");
+					else if(deathtype == DEATH_WAKIBLOWUP)
+                        bprint ("^1",s, "^1 dies when ^1", a, "'s wakizashi dies.\n");
+
 					else if(deathtype == DEATH_TURRET)
 						bprint ("^1",s, "^1 was pushed into the line of fire by ^1", a, "\n");
 					else if(deathtype == DEATH_TOUCHEXPLODE)
@@ -427,7 +444,9 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 					else if(deathtype == DEATH_CHEAT)
 						bprint ("^1",s, "^1 was unfairly eliminated by ^1", a, "\n");
 					else if (deathtype == DEATH_FIRE)
-						bprint ("^1",s, "^1 was burnt to death by ^1", a, "\n");
+					bprint ("^1",s, "^1 was burnt to death by ^1", a, "\n");
+					else if (deathtype == DEATH_CUSTOM)
+						bprint ("^1",s, "^1 ", deathmessage, " by ^1", a, "\n");
 					else
 						bprint ("^1",s, "^1 was fragged by ", a, "\n");
 				}
@@ -555,6 +574,8 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 					bprint ("^1",s, "^1 is now conserved for centuries to come\n");
 			else if(deathtype == DEATH_TURRET)
 				bprint ("^1",s, "^1 was mowed down by a turret \n");
+            else if (deathtype == DEATH_CUSTOM)
+                bprint ("^1",s, "^1 ", deathmessage, "\n");
 			else if(deathtype == DEATH_TOUCHEXPLODE)
 				bprint ("^1",s, "^1 died in an accident\n");
 			else if(deathtype == DEATH_CHEAT)
@@ -582,9 +603,11 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 
 			LogDeath("accident", deathtype, targ, targ);
 		}
+
 		targ.death_origin = targ.origin;
 		if(targ != attacker)
 			targ.killer_origin = attacker.origin;
+
 		// FIXME: this should go in PutClientInServer
 		if (targ.killcount)
 			targ.killcount = 0;

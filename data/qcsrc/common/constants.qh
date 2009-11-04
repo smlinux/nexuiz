@@ -272,6 +272,15 @@ const float CTF_STATE_COMMANDER = 3;
 const float STAT_HUD = 50;
 const float HUD_NORMAL = 0;
 const float HUD_SPIDERBOT = 10;
+const float HUD_WAKIZASHI = 11;
+
+const float STAT_VEHICLESTAT_HEALTH  = 60;
+const float STAT_VEHICLESTAT_SHIELD  = 61;
+const float STAT_VEHICLESTAT_ENERGY  = 62;
+const float STAT_VEHICLESTAT_AMMO1   = 63;
+const float STAT_VEHICLESTAT_RELOAD1 = 64;
+const float STAT_VEHICLESTAT_AMMO2   = 65;
+const float STAT_VEHICLESTAT_RELOAD2 = 66;
 
 const float STAT_SPIDERBOT_HEALTH  = 60;
 const float STAT_SPIDERBOT_ROCKETS = 61;
@@ -281,7 +290,6 @@ const float STAT_SPIDERBOT_ENERGY  = 64;
 const float STAT_SPIDERBOT_SHIELD  = 65;
 
 //const float STAT_SPIDERBOT_AIM     53 // compressShotOrigin
-
 //const float STAT_SPIDERBOT_TARGET  54 // compressShotOrigin
 
 
@@ -441,7 +449,19 @@ float DEATH_MIRRORDAMAGE = 10014;
 float DEATH_TOUCHEXPLODE = 10015;
 float DEATH_CHEAT = 10016;
 float DEATH_FIRE = 10017;
-float DEATH_TURRET = 10100;
+float DEATH_TURRET = 10020;
+
+float DEATH_SBMINIGUN = 10030;
+float DEATH_SBROCKET  = 10031;
+float DEATH_SBCRUSH   = 10032;
+float DEATH_SBBLOWUP  = 10033;
+
+float DEATH_WAKIGUN    = 10040;
+float DEATH_WAKIROCKET = 10041;
+float DEATH_WAKIBLOWUP = 10042;
+
+float DEATH_CUSTOM = 10300;
+
 
 float DEATH_WEAPONMASK = 0xFF;
 float DEATH_HITTYPEMASK = 0x1F00; // which is WAY below 10000 used for normal deaths
