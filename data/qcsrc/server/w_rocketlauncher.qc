@@ -210,7 +210,8 @@ void W_Rocket_Think (void)
 		else
 		{
 			if(self == self.owner.lastrocket)
-			if(!self.owner.rl_release)
+			if not(self.owner.rl_release)
+			if not(self.BUTTON_ATCK2)
 			if(cvar("g_balance_rocketlauncher_guiderate"))
 			if(time > self.pushltime)
 			if(self.owner.deadflag == DEAD_NO)
