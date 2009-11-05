@@ -1,3 +1,5 @@
+#message I can spam the compiler output too - and fteqcc sucks and always cuts off the last character
+
 #define FOR_EACH_KH_KEY(v) for(v = kh_worldkeylist; v; v = v.kh_worldkeynext )
 
 // #define KH_PLAYER_USE_ATTACHMENT
