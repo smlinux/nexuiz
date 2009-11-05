@@ -61,6 +61,9 @@ void W_Fireball_LaserPlay(float dt, float dist, float damage, float edgedamage, 
 	float d;
 	vector p;
 
+	if(damage <= 0)
+		return;
+
 	RandomSelection_Init();
 	for(e = findradius(self.origin, dist); e; e = e.chain)
 	if(e != self.owner) if(e.takedamage == DAMAGE_AIM) if(e.classname != "player" || !self.owner || IsDifferentTeam(e, self))
