@@ -198,4 +198,5 @@ void WriteInt24_t(float dest, float val);
 // the NULL function
 const var void func_null(void);
 const var string string_null;
+float float2range11(float f);
 float float2range01(float f);

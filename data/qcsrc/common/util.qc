@@ -1651,11 +1651,14 @@ void WriteInt24_t(float dest, float val)
 #endif
 #endif
 
+float float2range11(float f)
+{
+	// continuous function mapping all reals into -1..1
+	return f / (fabs(f) + 1);
+}
+
 float float2range01(float f)
 {
 	// continuous function mapping all reals into 0..1
-	if(f >= 0)
-		return 1.0 - 0.5 / (1.0 + f);
-	else
-		return 0.0 + 0.5 / (1.0 - f);
+	return 0.5 + 0.5 * float2range11(f);
 }
