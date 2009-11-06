@@ -134,10 +134,10 @@ float atan2(float y, float x)
 	v = vectoangles(v);
 	return v_y * 0.01745329251994329576;
 }
-
+float avgspeed;
 vector GetCurrentFov(float fov)
 {
-	float zoomsensitivity, zoomspeed, zoomfactor, zoomdir;
+	float zoomsensitivity, zoomspeed, zoomfactor, zoomdir, velocityzoom;
 
 	zoomsensitivity = cvar("cl_zoomsensitivity");
 	zoomfactor = cvar("cl_zoomfactor");
@@ -196,9 +196,15 @@ vector GetCurrentFov(float fov)
 		setsensitivityscale(pow(current_viewzoom, 1 - zoomsensitivity));
 	else
 		setsensitivityscale(1);
-
+		
+	velocityzoom = bound(0, drawframetime / max(0.000000001, cvar_or("cl_velocityzoomtime", 0.3)), 1);
+	avgspeed = avgspeed * (1 - velocityzoom) + (vlen(pmove_vel) / 1000) * velocityzoom;
+	velocityzoom = pow(2.718281828459, float2range11(avgspeed * -cvar_or("cl_velocityzoom", 0) / 1) * 1);
+	
+	//print(ftos(avgspeed), " avgspeed, ", ftos(cvar_or("cl_velocityzoom", 0)), " cvar, ", ftos(velocityzoom), " return\n"); // for debugging
+	
 	float frustumx, frustumy, fovx, fovy;
-	frustumy = tan(fov * 0.00872664625997164788) * 0.75 * current_viewzoom;
+	frustumy = tan(fov * 0.00872664625997164788) * 0.75 * current_viewzoom * velocityzoom;
 	frustumx = frustumy * vid_width / vid_height / vid_pixelheight;
 	fovx = atan2(frustumx, 1) / 0.00872664625997164788;
 	fovy = atan2(frustumy, 1) / 0.00872664625997164788;
