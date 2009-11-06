@@ -1,4 +1,4 @@
-#define VEHICLES_ENABLED
+//#define VEHICLES_ENABLED
 #ifdef VEHICLES_ENABLED
 
 #message "with tZork vehicles (experimental)"
