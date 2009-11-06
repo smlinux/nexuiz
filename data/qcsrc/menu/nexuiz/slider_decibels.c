@@ -11,6 +11,9 @@ entity makeNexuizDecibelsSlider(float, float, float, string);
 
 float exp(float x)
 {
+	return pow(2.718281828459045, x);
+
+	/* wtf did I do here?
 	float i;
 	float t, s;
 
@@ -24,6 +27,7 @@ float exp(float x)
 	}
 
 	return s;
+	*/
 }
 
 float ln(float x)
