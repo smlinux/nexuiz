@@ -120,7 +120,7 @@ float log(float x)
 		return 2 * log(sqrt(x)); // faster
 	r = 1;
 	r0 = 0;
-	for(i = 1; fabs(r - r0) >= 0.0000001; ++i)
+	for(i = 1; fabs(r - r0) >= 0.00001; ++i)
 	{
 		// Newton iteration on exp(r) = x:
 		//   r <- r - (exp(r) - x) / (exp(r))
@@ -128,7 +128,6 @@ float log(float x)
 		r0 = r;
 		r = r0 - 1 + x / exp(r0);
 	}
-	print(ftos(i), "\n");
 	return r;
 }
 float log10(float x)

@@ -58,9 +58,7 @@ void W_HLAC_Attack (void)
 	setorigin (missile, w_shotorg);
 	setsize(missile, '0 0 0', '0 0 0');
 
-    missile.velocity = (w_shotdir + randomvec() * spread) * cvar("g_balance_hlac_primary_speed");
-
-	W_SetupProjectileVelocity(missile);
+	W_SetupProjectileVelocity(missile, cvar("g_balance_hlac_primary_speed"), spread);
 	missile.angles = vectoangles (missile.velocity);
 
 	missile.touch = W_HLAC_Touch;
@@ -102,9 +100,7 @@ void W_HLAC_Attack2f (void)
 	setorigin (missile, w_shotorg);
 	setsize(missile, '0 0 0', '0 0 0');
 
-    missile.velocity = (w_shotdir + randomvec() * spread) * cvar("g_balance_hlac_secondary_speed");
-
-	W_SetupProjectileVelocity(missile);
+	W_SetupProjectileVelocity(missile, cvar("g_balance_hlac_secondary_speed"), spread);
 	missile.angles = vectoangles (missile.velocity);
 
 	missile.touch = W_HLAC_Touch2;

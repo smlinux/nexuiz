@@ -127,8 +127,7 @@ void W_Electro_Attack()
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_electro_primary_ammo");
 	proj.movetype = MOVETYPE_FLY;
-	proj.velocity = w_shotdir * cvar("g_balance_electro_primary_speed");
-	W_SetupProjectileVelocity(proj);
+	W_SETUPPROJECTILEVELOCITY(proj, g_balance_electro_primary);
 	proj.angles = vectoangles(proj.velocity);
 	proj.touch = W_Plasma_TouchExplode;
 	setsize(proj, '0 0 -3', '0 0 -3');
@@ -166,8 +165,7 @@ void W_Electro_Attack2()
 	//proj.glow_size = 50;
 	//proj.glow_color = 45;
 	proj.movetype = MOVETYPE_BOUNCE;
-	proj.velocity = (w_shotdir + randomvec() * cvar("g_balance_electro_secondary_spread")) * cvar("g_balance_electro_secondary_speed") + v_up * cvar("g_balance_electro_secondary_speed_up");
-	W_SetupProjectileVelocity(proj);
+	W_SETUPPROJECTILEVELOCITY_UP(proj, g_balance_electro_secondary);
 	proj.touch = W_Plasma_Touch;
 	setsize(proj, '0 0 -3', '0 0 -3');
 	proj.takedamage = DAMAGE_YES;

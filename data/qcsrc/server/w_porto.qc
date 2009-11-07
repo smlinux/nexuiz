@@ -179,10 +179,10 @@ void W_Porto_Attack (void)
 	gren.nextthink = time + cvar("g_balance_porto_primary_lifetime");
 	gren.think = W_Porto_Think;
 	gren.touch = W_Porto_Touch;
-	gren.velocity = w_shotdir * cvar("g_balance_porto_primary_speed");
 	if(self.items & IT_STRENGTH)
-		gren.velocity = gren.velocity * cvar("g_balance_powerup_strength_force");
-	W_SetupProjectileVelocity(gren);
+		W_SetupProjectileVelocity(gren, cvar("g_balance_porto_primary_speed") * cvar("g_balance_powerup_strength_force"), 0);
+	else
+		W_SetupProjectileVelocity(gren, cvar("g_balance_porto_primary_speed"), 0);
 
 	gren.angles = vectoangles (gren.velocity);
 	gren.flags = FL_PROJECTILE;

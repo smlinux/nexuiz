@@ -72,10 +72,9 @@ void W_Laser_Attack (float issecondary)
 	setsize(missile, '0 0 0', '0 0 0');
 
 	if (issecondary == 1)
-		missile.velocity = w_shotdir * cvar("g_balance_laser_secondary_speed");
+		W_SETUPPROJECTILEVELOCITY(missile, g_balance_laser_secondary);
 	else
-		missile.velocity = w_shotdir * cvar("g_balance_laser_primary_speed");
-	W_SetupProjectileVelocity(missile);
+		W_SETUPPROJECTILEVELOCITY(missile, g_balance_laser_primary);
 	missile.angles = vectoangles (missile.velocity);
 	//missile.glow_color = 250; // 244, 250
 	//missile.glow_size = 120;

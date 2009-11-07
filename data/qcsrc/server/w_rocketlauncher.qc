@@ -319,10 +319,9 @@ void W_Rocket_Attack (void)
 
 	setorigin (missile, w_shotorg - v_forward * 3); // move it back so it hits the wall at the right point
 	if(g_laserguided_missile && self.laser_on)
-		missile.velocity = w_shotdir * cvar("g_balance_rocketlauncher_laserguided_speedstart") * g_weaponspeedfactor;
+		W_SetupProjectileVelocity(missile, cvar("g_balance_rocketlauncher_laserguided_speedstart"), 0);
 	else
-		missile.velocity = w_shotdir * cvar("g_balance_rocketlauncher_speedstart") * g_weaponspeedfactor;
-	W_SetupProjectileVelocity(missile);
+		W_SetupProjectileVelocity(missile, cvar("g_balance_rocketlauncher_speedstart"), 0);
 	missile.angles = vectoangles (missile.velocity);
 
 	missile.touch = W_Rocket_Touch;

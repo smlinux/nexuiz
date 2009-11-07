@@ -361,8 +361,7 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 		proj.movetype = MOVETYPE_FLY;
 	proj.think = SUB_Remove;
 	proj.nextthink = time + lifetime; // min(pLifetime, vlen(world.maxs - world.mins) / pSpeed);
-	proj.velocity = (dir + randomvec() * spread) * pSpeed;
-	W_SetupProjectileVelocity(proj);
+	W_SetupProjectileVelocityEx(proj, dir, v_up, pSpeed, 0, spread);
 	proj.angles = vectoangles(proj.velocity);
 	proj.dmg_radius = cvar("g_ballistics_materialconstant") / bulletconstant;
 	// so: bulletconstant = bullet mass / area of bullet circle

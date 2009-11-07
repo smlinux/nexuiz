@@ -1228,14 +1228,6 @@ vector W_CalculateProjectileVelocity(vector pvelocity, vector mvelocity)
 	return outvelocity;
 }
 
-void W_SetupProjectileVelocity(entity missile)
-{
-	if(missile.owner == world)
-		error("Unowned missile");
-
-	missile.velocity = W_CalculateProjectileVelocity(missile.owner.velocity, missile.velocity);
-}
-
 void W_AttachToShotorg(entity flash, vector offset)
 {
 	entity xflash;
@@ -1268,3 +1260,92 @@ void W_AttachToShotorg(entity flash, vector offset)
 		}
 	}
 }
+
+vector cliptoplane(vector v, vector p)
+{
+	return v - (v * p) * p;
+}
+
+vector findperpendicular(vector v)
+{
+	vector p;
+	p_x = v_z;
+	p_y = -v_x;
+	p_z = v_y;
+	return normalize(cliptoplane(p, v));
+}
+
+vector W_CalculateProjectileSpread(vector forward, float spread)
+{
+	float sigma;
+	vector v1, v2;
+	float dx, dy;
+	float sstyle;
+	if(spread <= 0)
+		return forward;
+	sstyle = cvar("g_projectiles_spread_style");
+	if(sstyle == 0)
+	{
+		// this is the baseline for the spread value!
+		// standard deviation: sqrt(2/5)
+		return forward + randomvec() * spread;
+	}
+	else if(sstyle == 1)
+	{
+		// same thing, basically
+		return normalize(forward + cliptoplane(randomvec() * spread, forward));
+	}
+	else if(sstyle == 2)
+	{
+		// circle spread... has at sigma=1 a standard deviation of sqrt(1/2)
+		sigma = spread * 0.89442719099991587855; // match baseline stddev
+		v1 = findperpendicular(forward);
+		v2 = cross(forward, v1);
+		do
+		{
+			dx = -1 + 2 * random();
+			dy = -1 + 2 * random();
+		}
+		while(dx * dx + dy * dy >= 1);
+		return normalize(forward + (v1 * dx + v2 * dy) * sigma);
+	}
+	else if(sstyle == 3)
+	{
+		sigma = spread * 0.63245553203368; // match baseline stddev
+		v1 = forward;
+		v1_x += gsl_ran_gaussian(sigma);
+		v1_y += gsl_ran_gaussian(sigma);
+		v1_z += gsl_ran_gaussian(sigma);
+		return v1;
+	}
+	else if(sstyle == 4)
+	{
+		sigma = spread * 0.51639777949433; // match baseline stddev
+		v1_x = gsl_ran_gaussian(sigma);
+		v1_y = gsl_ran_gaussian(sigma);
+		v1_z = gsl_ran_gaussian(sigma);
+		return normalize(forward + cliptoplane(v1, forward));
+	}
+	else
+		error("g_projectiles_spread_style must be 0 (sphere), 1 (flattened sphere), 2 (circle), 3 (gauss 3D), 4 (gauss plane)!");
+	return '0 0 0';
+}
+
+void W_SetupProjectileVelocityEx(entity missile, vector dir, vector upDir, float pSpeed, float pUpSpeed, float spread)
+{
+	if(missile.owner == world)
+		error("Unowned missile");
+
+	dir = dir + upDir * (pUpSpeed / pSpeed);
+	pSpeed *= vlen(dir);
+	dir = normalize(dir);
+	missile.velocity = W_CalculateProjectileVelocity(missile.owner.velocity, pSpeed * W_CalculateProjectileSpread(dir, spread));
+}
+
+void W_SetupProjectileVelocity(entity missile, float pSpeed, float spread)
+{
+	W_SetupProjectileVelocityEx(missile, w_shotdir, v_up, pSpeed, 0, spread);
+}
+
+#define W_SETUPPROJECTILEVELOCITY_UP(m,s) W_SetupProjectileVelocityEx(m, w_shotdir, v_up, cvar(#s "_speed"), cvar(#s "_speed_up"), cvar(#s "_spread"))
+#define W_SETUPPROJECTILEVELOCITY(m,s) W_SetupProjectileVelocityEx(m, w_shotdir, v_up, cvar(#s "_speed"), 0, cvar(#s "_spread"))

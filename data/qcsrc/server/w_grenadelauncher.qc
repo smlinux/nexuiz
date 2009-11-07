@@ -99,8 +99,7 @@ void W_Grenade_Attack (void)
 	gren.think = adaptor_think2use;
 	gren.use = W_Grenade_Explode;
 	gren.touch = W_Grenade_Touch1;
-	gren.velocity = w_shotdir * cvar("g_balance_grenadelauncher_primary_speed") + v_up * cvar("g_balance_grenadelauncher_primary_speed_up");
-	W_SetupProjectileVelocity(gren);
+	W_SETUPPROJECTILEVELOCITY_UP(gren, g_balance_grenadelauncher_primary);
 
 	gren.angles = vectoangles (gren.velocity);
 	gren.flags = FL_PROJECTILE;
@@ -138,8 +137,7 @@ void W_Grenade_Attack2 (void)
 	gren.health = cvar("g_balance_grenadelauncher_secondary_health");
 	gren.damageforcescale = cvar("g_balance_grenadelauncher_secondary_damageforcescale");
 	gren.event_damage = W_Grenade_Damage;
-	gren.velocity = w_shotdir * cvar("g_balance_grenadelauncher_secondary_speed") + v_up * cvar("g_balance_grenadelauncher_secondary_speed_up");
-	W_SetupProjectileVelocity(gren);
+	W_SETUPPROJECTILEVELOCITY_UP(gren, g_balance_grenadelauncher_secondary);
 
 	gren.angles = vectoangles (gren.velocity);
 	gren.flags = FL_PROJECTILE;

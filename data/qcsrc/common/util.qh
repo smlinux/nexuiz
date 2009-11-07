@@ -200,3 +200,5 @@ const var void func_null(void); FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(func_nu
 const var string string_null;
 float float2range11(float f);
 float float2range01(float f);
+
+float gsl_ran_gaussian(float sigma);
