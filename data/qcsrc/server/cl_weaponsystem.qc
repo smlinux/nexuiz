@@ -1279,7 +1279,7 @@ vector W_CalculateProjectileSpread(vector forward, float spread)
 {
 	float sigma;
 	vector v1, v2;
-	float dx, dy;
+	float dx, dy, r, t;
 	float sstyle;
 	if(spread <= 0)
 		return forward;
@@ -1326,8 +1326,30 @@ vector W_CalculateProjectileSpread(vector forward, float spread)
 		v1_z = gsl_ran_gaussian(sigma);
 		return normalize(forward + cliptoplane(v1, forward));
 	}
+	else if(sstyle == 5)
+	{
+		sigma = spread * 1.154700538379252; // match baseline stddev
+		v1 = findperpendicular(forward);
+		v2 = cross(forward, v1);
+		do
+		{
+			dx = -1 + 2 * random();
+			dy = -1 + 2 * random();
+		}
+		while(dx * dx + dy * dy >= 1);
+		// now we want a LINEAR falloff, though...
+		// i.e. radius X has a multiplied-in probability multiplier of 1-X
+		r = sqrt(dx * dx + dy * dy);
+		if(r > 0)
+		{
+			t = 1 - sqrt(1 - r);
+			dx *= t/r;
+			dy *= t/r;
+		}
+		return normalize(forward + (v1 * dx + v2 * dy) * sigma);
+	}
 	else
-		error("g_projectiles_spread_style must be 0 (sphere), 1 (flattened sphere), 2 (circle), 3 (gauss 3D), 4 (gauss plane)!");
+		error("g_projectiles_spread_style must be 0 (sphere), 1 (flattened sphere), 2 (circle), 3 (gauss 3D), 4 (gauss plane), 5 (linear falloff)!");
 	return '0 0 0';
 }
 
