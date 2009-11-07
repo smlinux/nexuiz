@@ -260,16 +260,6 @@ void W_BallisticBullet_LeaveSolid_think()
 	UpdateCSQCProjectile(self);
 }
 
-// a fake logarithm function
-float log(float x)
-{
-	if(x < 0.0001)
-		return 0;
-	if(x > 0.9 && x < 1.1)
-		return x - 1;
-	return 2 * log(sqrt(x));
-}
-
 float W_BallisticBullet_LeaveSolid(entity e, vector vel, float constant)
 {
 	// move the entity along its velocity until it's out of solid, then let it resume
