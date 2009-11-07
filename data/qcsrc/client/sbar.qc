@@ -2703,7 +2703,7 @@ void Sbar_Draw (void)
 		CSQC_Strength_Timer();
 
 		// weapon icons
-                if(cvar("sbar_showweaponicons")) {
+                if(cvar_or("sbar_showweaponicons", 1)) {
 			x = 1.0;
                		Sbar_DrawWeapon_Clear();
                 	for(i = 1; i <= 24; ++i)
