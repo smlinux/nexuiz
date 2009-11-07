@@ -12,13 +12,14 @@ float sbar_alpha_fg;
 float sbar_alpha_bg;
 float sbar_color_bg_team;
 float sbar_border_thickness;
+float sbar_accuracy_border_thickness;
 float sbar_scoreboard_alpha_bg;
 float sbar_scoreboard_alpha_fg;
 float sbar_scoreboard_highlight;
 float sbar_scoreboard_highlight_alpha;
 float sbar_scoreboard_highlight_alpha_self;
 float sbar_hudselector;
-float sbar_hud_accuracy;
+float sbar_accuracy_hud;
 float sbar_scoreboard_alpha_name;
 float sbar_scoreboard_alpha_name_self;
 
@@ -46,6 +47,26 @@ void Sbar_FinaleOverlay()
 
 	//drawstring(pos, "END", sbar_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
 	MapVote_Draw();
+}
+
+vector Sbar_AccuracyColor(float accuracy)
+{
+	vector color;
+	float yellow_accuracy = cvar("sbar_accuracy_yellow"); // value at which this function returns yellow
+	if(accuracy >= 100) {
+		color_x = 0;
+		color_y = 1;
+	}
+	else if(accuracy > yellow_accuracy) {
+		color_x = 1 - (accuracy-yellow_accuracy)/(100-yellow_accuracy); // red value between 1 -> 0
+		color_y = 1;
+	}
+	else {
+		color_x = 1;
+		color_y = accuracy/yellow_accuracy; // green value between 0 -> 1
+	}
+	color_z = 0;
+	return color;
 }
 
 float weaponspace[10];
@@ -84,7 +105,7 @@ void Sbar_DrawWeapon(float nr, float fade, float active, float wc)
 	color_x = color_y = color_z = value;
 
 	// width = 300, height = 100
-	const float w_width = 24, w_height = 12, w_space = 2, font_size = 8;
+	const float w_width = 24, w_height = 12, w_space = 2, font_size = 8, accuracybar_height = 3;
 
 	sp = weaponspace[idx] + 1;
 	weaponspace[idx] = sp;
@@ -106,12 +127,12 @@ void Sbar_DrawWeapon(float nr, float fade, float active, float wc)
 	drawstring(pos, ftos(imp), vsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 	// draw the weapon accuracy on the HUD
-	if(sbar_hud_accuracy)
+	if(sbar_accuracy_hud)
  	{
  		weapon_stats = rint(100*weapon_hit/weapon_damage);
- 		fill_colour_x = 1 - 0.015 * weapon_stats;
- 		fill_colour_y = 1 - 0.015 * (100 - weapon_stats);
- 		drawstringright(pos + '22 0 0', strcat(ftos(weapon_stats),"%"), '6 6 0', fill_colour, sbar_alpha_fg, 0);
+		fill_colour = Sbar_AccuracyColor(weapon_stats);
+		if(weapon_damage)
+			drawpic(pos - '2 0 0' + '0 1 0' * (w_height - accuracybar_height), "gfx/hud/sb_accuracy_bar.tga", '1 0 0' * w_width + '0 1 0' * accuracybar_height, fill_colour, sbar_alpha_fg, DRAWFLAG_NORMAL);
  	}
 }
 
@@ -1107,6 +1128,118 @@ float Sbar_WouldDrawScoreboard() {
 	return 0;
 }
 
+float Sbar_AccuracyStatsExist() {
+	float i;
+	for(i = WEP_FIRST; i <= WEP_LAST; ++i) {
+		if(weapon_fired[i])
+			return TRUE;
+	}
+	return FALSE;
+}
+
+float average_accuracy;
+vector Sbar_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
+{
+	float i, count_hitscan, count_splash, row;  // count is the number of 'colums'
+	float weapon_hit, weapon_damage, weapon_stats;
+	float fontsize = 40 * 1/3;
+	float weapon_cnt = 12;
+	float rows ;
+	if(cvar("sbar_accuracy_doublerows"))
+		rows = 2;
+	else
+		rows = 1;
+	float height = 40;
+
+	if(Sbar_AccuracyStatsExist() == FALSE)
+		return pos;
+	if(warmup_stage)
+	{
+		pos_y += 40;
+		if(mod(time, 1) >= 0.4)
+			drawstringcenter(pos, "Stats are not tracked during warmup stage", sbar_fontsize, '1 1 0', sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
+
+		return pos;
+	}
+
+	drawstring(pos, strcat("Accuracy stats (average ", ftos(average_accuracy), "%)"), sbar_fontsize, '1 1 1', sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
+	pos_y += 18;
+	vector tmp;
+	tmp_x = sbwidth;
+	tmp_y = height * rows;
+
+	drawpic_tiled(pos, "gfx/hud/sb_scoreboard_bg", bg_size, tmp, rgb * sbar_color_bg_team, sbar_scoreboard_alpha_bg, DRAWFLAG_NORMAL);
+	drawborderlines(sbar_accuracy_border_thickness, pos, tmp, '0 0 0', sbar_scoreboard_alpha_bg * 0.75, DRAWFLAG_NORMAL);
+
+	// row highlighting
+	for(i = 0; i < rows; ++i)
+	{
+		drawfill(pos + '0 1 0' * height * (2/3) + '0 1 0' * height * i, '1 0 0' * sbwidth + '0 1 0' * fontsize, '1 1 1', sbar_scoreboard_highlight_alpha, DRAWFLAG_NORMAL);
+		
+	}
+
+	// column highlighting
+	for(i = 0; i < weapon_cnt/rows; ++i)
+	{
+		if(!mod(i, 2))
+			drawfill(pos + '1 0 0' * (sbwidth/weapon_cnt) * rows * i, '0 1 0' * height * rows + '1 0 0' * (sbwidth/weapon_cnt) * rows, '0 0 0', sbar_scoreboard_alpha_bg * 0.2, DRAWFLAG_NORMAL);
+	}
+
+	drawfont = sbar_bigfont;
+	average_accuracy = 0;
+	float weapons_with_stats;
+	weapons_with_stats = 0;
+	if(rows == 2)
+		pos_x += sbwidth/weapon_cnt / 2;
+	for(i = WEP_FIRST; i <= WEP_LAST; ++i)
+	{
+		if (i == 10 || i == 11 || i == 14 || i == 16) // skip port-o-launch, minstanex, tuba and fireball
+			continue;
+		weapon_hit = weapon_hits[i];
+		weapon_damage = weapon_fired[i];
+		weapon_stats = bound(0, rint(100 * weapon_hit / weapon_damage), 100);
+		self = get_weaponinfo(i);
+		float weapon_alpha;
+
+		if(weapon_damage)
+			weapon_alpha = sbar_scoreboard_alpha_fg;
+		else
+			weapon_alpha = 0.2 * sbar_scoreboard_alpha_fg;
+
+		// weapon icon
+		drawpic(pos, strcat("gfx/hud/inv_weapon", ftos(i-1)), '1 0 0' * sbwidth * (1/weapon_cnt) + '0 1 0' * height * (2/3), '1 1 1', weapon_alpha, DRAWFLAG_NORMAL);
+		// the accuracy
+		if(weapon_damage) {
+			weapons_with_stats += 1;
+			average_accuracy += weapon_stats; // store sum of all accuracies in average_accuracy
+
+			string s;
+			s = strcat(ftos(weapon_stats),"%");
+
+			float padding;
+			padding = ((sbwidth/weapon_cnt) - stringwidth(s, FALSE) * fontsize) / 2; // center the accuracy value
+
+			vector color;
+			color = Sbar_AccuracyColor(weapon_stats);
+			drawstring(pos + '1 0 0' * padding + '0 1 0' * height * (2/3), s, '1 1 0' * fontsize, color, sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
+		}
+		pos_x += sbwidth/weapon_cnt * rows;
+		if(rows == 2 && i == 6) {
+			pos_x -= sbwidth;
+			pos_y += height;
+		}
+	}
+	drawfont = sbar_font;
+
+	average_accuracy = floor(average_accuracy / weapons_with_stats);
+
+	if(rows == 2)
+		pos_x -= sbwidth/weapon_cnt / 2;
+	pos_x -= sbwidth;
+	pos_y += height;
+	return pos;
+}
+
 float lastpingstime;
 float scoreboard_bottom;
 float sbar_scoreboard_fade_alpha;
@@ -1175,7 +1308,7 @@ void Sbar_DrawScoreboard()
 	pos_y += sbar_fontsize_y;
 
 	drawfont = sbar_font;
-	
+
 	// Draw the scoreboard
 	vector bg_size;
 	bg_size = drawgetimagesize("gfx/hud/sb_scoreboard_bg");
@@ -1221,6 +1354,9 @@ void Sbar_DrawScoreboard()
 			pos_y += 1.25 * sbar_fontsize_y;
 		}
 	}
+	else if(cvar("sbar_accuracy"))
+		pos = Sbar_DrawScoreboardAccuracyStats(pos, rgb, bg_size);
+
 
 	tmp = pos + '0 1.5 0' * sbar_fontsize_y;
 	pos_y += 3 * sbar_fontsize_y;
@@ -2325,6 +2461,7 @@ void Sbar_Draw (void)
 
 	sbar_alpha_bg = cvar("sbar_alpha_bg") * (1 - cvar("_menu_alpha"));
 	sbar_border_thickness = bound(0, cvar("sbar_border_thickness"), 5);
+	sbar_accuracy_border_thickness = bound(0, cvar_or("sbar_accuracy_border_thickness", 1), 5);
 	sbar_color_bg_team = cvar("sbar_color_bg_team");
 
 	float i;
