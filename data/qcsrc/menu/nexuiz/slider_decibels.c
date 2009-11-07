@@ -9,49 +9,6 @@ entity makeNexuizDecibelsSlider(float, float, float, string);
 
 #ifdef IMPLEMENTATION
 
-float exp(float x)
-{
-	return pow(2.718281828459045, x);
-
-	/* wtf did I do here?
-	float i;
-	float t, s;
-
-	s = 1;
-	t = 1;
-	for(i = 1; i < 100; ++i)
-	{
-		t *= x;
-		t /= i;
-		s += t;
-	}
-
-	return s;
-	*/
-}
-
-float ln(float x)
-{
-	float i;
-	float r, r0;
-
-	r = 1;
-	r0 = 0;
-	for(i = 1; fabs(r - r0) >= 0.05; ++i)
-	{
-		// Newton iteration on exp(r) = x:
-		//   r <- r - (exp(r) - x) / (exp(r))
-		//   r <- r - 1 + x / exp(r)
-		r0 = r;
-		r = r0 - 1 + x / exp(r0);
-	}
-	dprint("ln: ", ftos(i), " iterations\n");
-
-	return r;
-}
-
-#define LOG10 2.302585093
-
 entity makeNexuizDecibelsSlider(float theValueMin, float theValueMax, float theValueStep, string theCvar)
 {
 	entity me;
@@ -72,7 +29,7 @@ void loadCvarsNexuizDecibelsSlider(entity me)
 	else if(v < 0.0005)
 		me.value = -1000000;
 	else
-		me.value = 0.1 * floor(0.5 + 10.0 * ln(cvar(me.cvarName)) * 10 / LOG10);
+		me.value = 0.1 * floor(0.5 + 10.0 * log10(cvar(me.cvarName)) * 10);
 }
 void saveCvarsNexuizDecibelsSlider(entity me)
 {
@@ -84,7 +41,7 @@ void saveCvarsNexuizDecibelsSlider(entity me)
 	if(me.value < -33)
 		cvar_set(me.cvarName, "0");
 	else
-		cvar_set(me.cvarName, ftos(exp(me.value / 10 * LOG10)));
+		cvar_set(me.cvarName, ftos(pow(10, me.value / 10)));
 }
 
 string valueToTextNexuizDecibelsSlider(entity me, float v)

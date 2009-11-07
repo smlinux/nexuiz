@@ -4,6 +4,7 @@ config.qh
 ../common/util-pre.qh
 msys.qh
 mbuiltin.qh
+../common/mathlib.qh
 ../common/util.qh
 
 oo/base.h
@@ -38,3 +39,5 @@ nexuiz/util.qc
 ../common/campaign_setup.qc
 ../common/mapinfo.qc
 ../common/items.qc
+
+../common/mathlib.qc

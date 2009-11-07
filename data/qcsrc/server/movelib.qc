@@ -4,13 +4,13 @@
     Simulate drag
     self.velocity = movelib_dragvec(self.velocity,0.02,0.5);
 **/
-vector movelib_dragvec(float drag, float exp)
+vector movelib_dragvec(float drag, float exp_)
 {
     float lspeed,ldrag;
 
     lspeed = vlen(self.velocity);
     ldrag = lspeed * drag;
-    ldrag = ldrag * (drag * exp);
+    ldrag = ldrag * (drag * exp_);
     ldrag = 1 - (ldrag / lspeed);
 
     return self.velocity * ldrag;
@@ -20,12 +20,12 @@ vector movelib_dragvec(float drag, float exp)
     Simulate drag
     self.velocity *= movelib_dragflt(somespeed,0.01,0.7);
 **/
-float movelib_dragflt(float fspeed,float drag,float exp)
+float movelib_dragflt(float fspeed,float drag,float exp_)
 {
     float ldrag;
 
     ldrag = fspeed * drag;
-    ldrag = ldrag * ldrag * exp;
+    ldrag = ldrag * ldrag * exp_;
     ldrag = 1 - (ldrag / fspeed);
 
     return ldrag;

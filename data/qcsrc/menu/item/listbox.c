@@ -223,16 +223,16 @@ void updateControlTopBottomListBox(entity me)
 		me.controlTop = max(0, me.scrollPos / (me.nItems * me.itemHeight));
 		me.controlBottom = min((me.scrollPos + 1) / (me.nItems * me.itemHeight), 1);
 
-		float fmin;
-		fmin = 1 * me.controlWidth / me.size_y * me.size_x;
+		float minfactor;
+		minfactor = 1 * me.controlWidth / me.size_y * me.size_x;
 		f = me.controlBottom - me.controlTop;
-		if(f < fmin) // FIXME good default?
+		if(f < minfactor) // FIXME good default?
 		{
-			// f * X + 1 * (1-X) = fmin
-			// (f - 1) * X + 1 = fmin
-			// (f - 1) * X = fmin - 1
-			// X = (fmin - 1) / (f - 1)
-			f = (fmin - 1) / (f - 1);
+			// f * X + 1 * (1-X) = minfactor
+			// (f - 1) * X + 1 = minfactor
+			// (f - 1) * X = minfactor - 1
+			// X = (minfactor - 1) / (f - 1)
+			f = (minfactor - 1) / (f - 1);
 			me.controlTop = me.controlTop * f + 0 * (1 - f);
 			me.controlBottom = me.controlBottom * f + 1 * (1 - f);
 		}

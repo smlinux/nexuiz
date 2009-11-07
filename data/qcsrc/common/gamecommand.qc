@@ -767,6 +767,10 @@ float GameCommand_Generic(string command)
 							rpn_setf(0);
 						}
 					}
+				} else if(rpncmd == "log") {
+					rpn_setf(log(rpn_getf()));
+				} else if(rpncmd == "exp") {
+					rpn_setf(exp(rpn_getf()));
 				} else if(rpncmd == "localtime") {
 					rpn_set(strftime(TRUE, rpn_get()));
 				} else if(rpncmd == "gmtime") {

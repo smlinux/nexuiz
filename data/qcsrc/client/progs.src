@@ -6,6 +6,7 @@ Defs.qc
 csqc_constants.qc
 ../common/constants.qh
 csqc_builtins.qc
+../common/mathlib.qh
 ../common/util.qh
 ../common/items.qh
 
@@ -54,3 +55,5 @@ bgmscript.qc
 ../common/gamecommand.qc
 ../common/mapinfo.qc
 ../common/items.qc
+
+../common/mathlib.qc

@@ -6,6 +6,7 @@ pre-builtins.qh
 builtins.qh
 extensions.qh
 post-builtins.qh
+../common/mathlib.qh
 constants.qh
 ../common/constants.qh
 ../common/util.qh
@@ -167,3 +168,5 @@ monsters/ai.qc
 monsters/m_monsters.qc
 monsters/monster_zombie.qc
 csqcprojectile.qc
+
+../common/mathlib.qc

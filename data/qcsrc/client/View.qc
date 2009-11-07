@@ -922,8 +922,7 @@ void CSQC_WAKIZASHI_HUD()
 	// 0--1 floats. 1 = 100%, 0.6 = 50%.
 	float health, shield, energy, rockets;
 
-    float i;
-	vector p, pp;
+	vector p;
 
     p = drawgetimagesize(SPIDER_CROSS);
     p_x *= cvar_or("cl_vehicle_spiderbot_cross_size", 1);

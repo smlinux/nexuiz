@@ -196,7 +196,7 @@ void WriteInt24_t(float dest, float val);
 #endif
 
 // the NULL function
-const var void func_null(void);
+const var void func_null(void); FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(func_null)
 const var string string_null;
 float float2range11(float f);
 float float2range01(float f);
