@@ -1128,15 +1128,6 @@ float Sbar_WouldDrawScoreboard() {
 	return 0;
 }
 
-float Sbar_AccuracyStatsExist() {
-	float i;
-	for(i = WEP_FIRST; i <= WEP_LAST; ++i) {
-		if(weapon_fired[i])
-			return TRUE;
-	}
-	return FALSE;
-}
-
 float average_accuracy;
 vector Sbar_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 {
@@ -1151,8 +1142,6 @@ vector Sbar_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 		rows = 1;
 	float height = 40;
 
-	if(Sbar_AccuracyStatsExist() == FALSE)
-		return pos;
 	if(warmup_stage)
 	{
 		pos_y += 40;
