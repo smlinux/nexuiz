@@ -1289,6 +1289,20 @@ vector W_CalculateProjectileSpread(vector forward, float spread)
 		// this is the baseline for the spread value!
 		// standard deviation: sqrt(2/5)
 		return forward + randomvec() * spread;
+		/*
+		(%i1) integrate(r^2 * 2*%pi*r * sqrt(1-r^2), r, 0, 1);
+											 4 %pi
+		(%o1)                                -----
+											  15
+		(%i2) integrate(2*%pi*r * sqrt(1-r^2), r, 0, 1);
+											 2 %pi
+		(%o2)                                -----
+											   3
+		(%i3) %o1/%o2;
+											   2
+		(%o3)                                  -
+											   5
+		*/
 	}
 	else if(sstyle == 1)
 	{
@@ -1308,6 +1322,18 @@ vector W_CalculateProjectileSpread(vector forward, float spread)
 		}
 		while(dx * dx + dy * dy >= 1);
 		return normalize(forward + (v1 * dx + v2 * dy) * sigma);
+		/*
+		(%i4) integrate(r^2 * 2*%pi*r, r, 0, 1);
+											  %pi
+		(%o4)                                 ---
+											   2
+		(%i5) integrate(2*%pi*r, r, 0, 1);
+		(%o5)                                 %pi
+		(%i6) %o4 / %o5;
+											   1
+		(%o6)                                  -
+											   2
+		*/
 	}
 	else if(sstyle == 3)
 	{
@@ -1320,7 +1346,7 @@ vector W_CalculateProjectileSpread(vector forward, float spread)
 	}
 	else if(sstyle == 4)
 	{
-		sigma = spread * 0.51639777949433; // match baseline stddev
+		sigma = spread * 0.63245553203368; // match baseline stddev
 		v1_x = gsl_ran_gaussian(sigma);
 		v1_y = gsl_ran_gaussian(sigma);
 		v1_z = gsl_ran_gaussian(sigma);
@@ -1347,6 +1373,20 @@ vector W_CalculateProjectileSpread(vector forward, float spread)
 			dy *= t/r;
 		}
 		return normalize(forward + (v1 * dx + v2 * dy) * sigma);
+		/*
+		(%i7) integrate(r^2 * 2*%pi*r * (1-r), r, 0, 1);
+											  %pi
+		(%o7)                                 ---
+											  10
+		(%i8) integrate(2*%pi*r * (1-r), r, 0, 1);
+											  %pi
+		(%o8)                                 ---
+											   3
+		(%i9) %o7 / %o8;
+											  3
+		(%o9)                                 --
+											  10
+		*/
 	}
 	else
 		error("g_projectiles_spread_style must be 0 (sphere), 1 (flattened sphere), 2 (circle), 3 (gauss 3D), 4 (gauss plane), 5 (linear falloff)!");
