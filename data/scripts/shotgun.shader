@@ -1,4 +1,4 @@
-shotgun_sight
+textures/shotgun_sight
 {
 	surfaceparm trans
 

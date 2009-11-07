@@ -1,4 +1,4 @@
-electro_plasma
+textures/electro_plasma
 {
  {
 	map textures/electro_plasma.tga
@@ -6,7 +6,7 @@ electro_plasma
  }
 }
 
-electro_plasma_hull
+textures/electro_plasma_hull
 {
         {
 	map textures/electro_plasma_hull.tga
