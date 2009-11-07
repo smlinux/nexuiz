@@ -165,8 +165,6 @@ float hypot(float x, float y)
 {
 	return sqrt(x*x + y*y);
 }
-//float pow(float x, float y);
-//float sqrt(float x, float y);
 
 float erf(float x)
 {
@@ -211,14 +209,10 @@ float tgamma(float x)
 	return exp(v_x) * v_y;
 }
 
-//float ceil(float x);
-//float floor(float x);
 float nearbyint(float x)
 {
 	return rint(x);
 }
-//float rint(float x);
-//float round(float x);
 float trunc(float x)
 {
 	return (x>=0) ? floor(x) : ceil(x);

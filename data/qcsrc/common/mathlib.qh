@@ -22,6 +22,9 @@ SOFTWARE.
 
 // <math.h>
 
+// The commented-out functions need no implementation because DarkPlaces offers
+// them as builtins. They are listed here anyway for completeness sake.
+
 #define int float
 
 #define FP_NAN 0
