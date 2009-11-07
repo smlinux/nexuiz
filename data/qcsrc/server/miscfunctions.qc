@@ -606,6 +606,7 @@ void GetCvars(float f)
 	GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[8], "cl_weaponpriority8", W_FixWeaponOrder_AllowIncomplete);
 	GetCvars_handleString_Fixup(s, f, cvar_cl_weaponpriorities[9], "cl_weaponpriority9", W_FixWeaponOrder_AllowIncomplete);
 	GetCvars_handleFloat(s, f, cvar_cl_autotaunt, "cl_autotaunt");
+	GetCvars_handleFloat(s, f, cvar_cl_noantilag, "cl_noantilag");
 	GetCvars_handleFloat(s, f, cvar_cl_voice_directional, "cl_voice_directional");
 	GetCvars_handleFloat(s, f, cvar_cl_voice_directional_taunt_attenuation, "cl_voice_directional_taunt_attenuation");
 	GetCvars_handleFloat(s, f, cvar_cl_hitsound, "cl_hitsound");
@@ -614,7 +615,6 @@ void GetCvars(float f)
 	GetCvars_handleFloat(s, f, cvar_cl_forceplayermodelsfromnexuiz, "cl_forceplayermodelsfromnexuiz");
 #endif
 	GetCvars_handleFloatOnce(s, f, cvar_cl_gunalign, "cl_gunalign");
-	GetCvars_handleFloatOnce(s, f, cvar_cl_noantilag, "cl_noantilag");
 
 
 	// fixup of switchweapon (needed for LMS or when spectating is disabled, as PutClientInServer comes too early)
