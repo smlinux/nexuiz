@@ -1501,20 +1501,6 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/weapons/g_hlac.md3"
 */
 
-/*QUAKED weapon_seeker (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
-Placing this entity on a map kills your dog, voids the warranty on your car, and makes your map an unenjoyable noobs' paradise.
-the T.A.G. Seeker.
--------- KEYS --------
-ammo_rockets: initial rockets of the weapon (if unset, g_pickup_rockets is used)
-respawntime: time till it respawns (default: 30)
-team: out of items with the same value here, only one (random one) will spawn. Useful to put multiple items on one spot.
-cnt: weight of this item for random selection using "team". Set to a lower value for items you want to see less likely.
--------- SPAWNFLAGS --------
-FLOATING: the item will float in air, instead of aligning to the floor by falling
--------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
-model="models/weapons/g_seeker.md3"
-*/
-
 /*QUAKED weapon_hook (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
 the on-hand Grappling Hook.
 -------- KEYS --------
