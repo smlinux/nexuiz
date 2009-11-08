@@ -1,3 +1,44 @@
+// checkextension wrapper for log
+float sqrt(float f); // declared later
+float exp(float f); // declared later
+float pow(float f, float e); // declared later
+float checkextension(string s); // declared later
+float log_synth(float f)
+{
+	float p, l;
+	if(f < 0)
+		return sqrt(-1); // nan? -inf?
+	if(f == 0)
+		return sqrt(-1); // ACTUALLY this should rather be -inf, but we cannot create a +inf in QC
+	if(f + f == f)
+		return l; // +inf
+	if(f < 1)
+	{
+		f = 1 / f;
+		p = -1;
+	}
+	else
+		p = 1;
+	while(f > 2)
+	{
+		f = sqrt(f);
+		p *= 2;
+	}
+	// two steps are good enough
+	l = ((6-f) * f - 5) / 4.32808512266689022212;
+	l += exp(-l) * f - 1;
+	l += exp(-l) * f - 1;
+	print(ftos(l), " ", ftos(p), "\n");
+	return l * p;
+}
+float log(float f)
+{
+	if(checkextension("DP_QC_LOG"))
+		return log_builtin(f);
+	else
+		return log_synth(f);
+}
+
 string wordwrap_buffer;
 
 void wordwrap_buffer_put(string s)
