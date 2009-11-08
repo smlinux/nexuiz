@@ -180,7 +180,7 @@ vector lgamma(float x)
 {
 	// TODO improve accuracy
 	if(!isfinite(x))
-		return fabs(x);
+		return fabs(x) * '1 0 0' + copysign(1, x) * '0 1 0';
 	if(x < 1 && x == floor(x))
 		return nan("gamma") * '1 1 1';
 	if(x < 0.1)
