@@ -1416,9 +1416,36 @@ vector W_CalculateProjectileSpread(vector forward, float spread)
 		r = sqrt(1 - r);
 		return normalize(forward + (v1 * dx + v2 * dy) * r * sigma);
 	}
+	else if(sstyle == 7) // (1-r) (2-r)
+	{
+		sigma = spread * 1.224744871391589; // match baseline stddev
+		v1 = findperpendicular(forward);
+		v2 = cross(forward, v1);
+		// random point on unit circle
+		dx = random() * 2 * M_PI;
+		dy = sin(dx);
+		dx = cos(dx);
+		// radius in our dist function
+		r = random();
+		r = 1 - sqrt(r);
+		r = 1 - sqrt(r);
+		return normalize(forward + (v1 * dx + v2 * dy) * r * sigma);
+	}
 	else
-		error("g_projectiles_spread_style must be 0 (sphere), 1 (flattened sphere), 2 (circle), 3 (gauss 3D), 4 (gauss plane), 5 (linear falloff), 6 (quadratic falloff)!");
+		error("g_projectiles_spread_style must be 0 (sphere), 1 (flattened sphere), 2 (circle), 3 (gauss 3D), 4 (gauss plane), 5 (linear falloff), 6 (quadratic falloff), 7 (stronger falloff)!");
 	return '0 0 0';
+	/*
+	 * how to derive falloff functions:
+	 * rho(r) := (2-r) * (1-r);
+	 * a : 0;
+	 * b : 1;
+	 * rhor(r) := r * rho(r);
+	 * cr(t) := integrate(rhor(r), r, a, t);
+	 * scr(t) := integrate(rhor(r) * r^2, r, a, t);
+	 * variance : scr(b) / cr(b);
+	 * solve(cr(r) = rand * cr(b), r), programmmode:false;
+	 * sqrt(0.4 / variance), numer;
+	 */
 }
 
 void W_SetupProjectileVelocityEx(entity missile, vector dir, vector upDir, float pSpeed, float pUpSpeed, float spread)
