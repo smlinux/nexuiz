@@ -601,14 +601,15 @@ float spiderbot_customizeentityforclient()
     return TRUE;
 }
 
-//void spiderbot_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force);
 void spiderbot_spawn()
 {
     self.frame = 5;
     self.think = spiderbot_think;
     self.nextthink = time;
 
-    self.velocity = '0 0 -2000';
+    setsize(self,spiderbot_MIN,spiderbot_MAX);
+
+    self.velocity = '0 0 0';
     self.vehicle_health = CCVAR("_health");
     self.vehicle_shield = CCVAR("_shield");
     self.event_damage = vehicle_stdproc_damage;
@@ -624,7 +625,7 @@ void spiderbot_spawn()
 	self.deadflag    = DEAD_NO;
     self.bot_attack = TRUE;
     self.flags      |= FL_NOTARGET;
-    setsize(self,spiderbot_MIN,spiderbot_MAX);
+    self.vehicle_hudmodel.viewmodelforclient = self;
 
     setorigin(self,self.spiderbot_spawnpnt.origin);
     self.angles = self.spiderbot_spawnpnt.angles;
@@ -647,7 +648,7 @@ void spiderbot_blowup()
     sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
     pointparticles(particleeffectnum("rocket_explode"), findbetterlocation (self.origin, 16), '0 0 0', 1);
 
-    RadiusDamage (self, self, 250, 15, 250, world, 250, DEATH_TURRET, world);
+    RadiusDamage (self, self, 250, 15, 250, world, 250, DEATH_SBBLOWUP, world);
 
     self.alpha = self.tur_head.alpha = self.gun1.alpha = self.gun2.alpha = -1;
     self.nextthink  = time + cvar("g_vehicle_spiderbot_respawntime");
