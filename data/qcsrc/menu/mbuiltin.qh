@@ -6,7 +6,7 @@
 //#define PROFILESTRZONE
 //#define FIXEDFOPEN
 
-void 	checkextension(string ext) = #1;
+float 	checkextension(string ext) = #1;
 
 // error cmds
 void 	error(string err,...) 	= #2;
