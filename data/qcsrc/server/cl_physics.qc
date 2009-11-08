@@ -587,13 +587,13 @@ void SV_PlayerPhysics()
 			{
 				// diagonal
 				if(self.movement_x > 0)
-					self.movement_x = 0.70710678118654752440 * wishspeed;
+					self.movement_x = M_SQRT1_2 * wishspeed;
 				else
-					self.movement_x = -0.70710678118654752440 * wishspeed;
+					self.movement_x = -M_SQRT1_2 * wishspeed;
 				if(self.movement_y > 0)
-					self.movement_y = 0.70710678118654752440 * wishspeed;
+					self.movement_y = M_SQRT1_2 * wishspeed;
 				else
-					self.movement_y = -0.70710678118654752440 * wishspeed;
+					self.movement_y = -M_SQRT1_2 * wishspeed;
 			}
 		}
 	}
