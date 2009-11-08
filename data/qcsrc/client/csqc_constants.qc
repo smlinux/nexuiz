@@ -136,7 +136,6 @@ const float		TE_GUNSHOTQUAD					= 57;
 const float		TE_EXPLOSIONQUAD 				= 70;
 
 // Math Constants
-const float 	M_PI 							= 3.14159265358979323846;
 const float 	EXTRA_LOW 						= -99999999;
 const float 	EXTRA_HIGH 						= 99999999;
 
