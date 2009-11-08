@@ -105,31 +105,6 @@ float ldexp(float x, int e)
 {
 	return x * pow(2, e);
 }
-float log(float x)
-{
-	// TODO improve speed
-	float i;
-	float r, r0;
-	if(x <= 0)
-		return nan("log");
-	if(!isfinite(x))
-		return x;
-	if(x >= 8)
-		return -log(1 / x); // faster
-	if(x < 0.0009765625)
-		return 2 * log(sqrt(x)); // faster
-	r = 1;
-	r0 = 0;
-	for(i = 1; fabs(r - r0) >= 0.00001; ++i)
-	{
-		// Newton iteration on exp(r) = x:
-		//   r <- r - (exp(r) - x) / (exp(r))
-		//   r <- r - 1 + x / exp(r)
-		r0 = r;
-		r = r0 - 1 + x / exp(r0);
-	}
-	return r;
-}
 float log10(float x)
 {
 	return log(x) * M_LOG10E;

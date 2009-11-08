@@ -800,6 +800,13 @@ float GETTIME_CDTRACK = 4;
 //description:
 //returns the playing time of the current cdtrack when passed to gettime()
 
+//DP_QC_LOG
+//darkplaces implementation: div0
+//builtin definitions:
+float log(float f) = #532;
+//description:
+//logarithm
+
 //DP_QC_MINMAXBOUND
 //idea: LordHavoc
 //darkplaces implementation: LordHavoc

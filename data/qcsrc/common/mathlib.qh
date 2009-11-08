@@ -61,7 +61,7 @@ float expm1(float x);
 vector frexp(float x); // returns mantissa as _x, exponent as _y
 int ilogb(float x);
 float ldexp(float x, int e);
-float log(float x);
+//float log(float x);
 float log10(float x);
 float log1p(float x);
 float log2(float x);
