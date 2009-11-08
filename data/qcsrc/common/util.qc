@@ -1668,7 +1668,7 @@ float gsl_ran_gaussian_lastvalue;
 float gsl_ran_gaussian_lastvalue_set;
 float gsl_ran_gaussian(float sigma)
 {
-	float x, y, r2;
+	float a, b;
 	if(gsl_ran_gaussian_lastvalue_set)
 	{
 		gsl_ran_gaussian_lastvalue_set = 0;
@@ -1676,16 +1676,10 @@ float gsl_ran_gaussian(float sigma)
 	}
 	else
 	{
-		do
-		{
-			x = -1 + 2 * random();
-			y = -1 + 2 * random();
-			r2 = x * x + y * y;
-		}
-		while(r2 > 1 || r2 == 0);
-		r2 = sqrt(-2 * log(r2) / r2);
-		gsl_ran_gaussian_lastvalue = x * r2;
+		a = random() * 2 * M_PI;
+		b = sqrt(-2 * log(random()));
+		gsl_ran_gaussian_lastvalue = cos(a) * b;
 		gsl_ran_gaussian_lastvalue_set = 1;
-		return sigma * y * r2;
+		return sigma * sin(a) * b;
 	}
 }
