@@ -1744,7 +1744,7 @@ void player_powerups (void)
 		self.modelflags &~= MF_ROCKET;
 	}
 
-	self.effects &~= (EF_RED | EF_BLUE | EF_ADDITIVE | EF_FULLBRIGHT | EF_FLAME);
+	self.effects &~= (EF_RED | EF_BLUE | EF_ADDITIVE | EF_FULLBRIGHT | EF_FLAME | EF_NODEPTHTEST);
 
 	if(!self.modelindex || self.deadflag) // don't apply the flags if the player is gibbed
 		return;
@@ -1835,7 +1835,10 @@ void player_powerups (void)
 		}
 	}
 
-	if (cvar("g_fullbrightplayers"))
+	if(cvar("g_nodepthtestplayers"))
+		self.effects = self.effects | EF_NODEPTHTEST;
+
+	if(cvar("g_fullbrightplayers"))
 		self.effects = self.effects | EF_FULLBRIGHT;
 
 	// midair gamemode: damage only while in the air
