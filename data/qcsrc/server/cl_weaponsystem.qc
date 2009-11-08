@@ -1266,6 +1266,64 @@ vector cliptoplane(vector v, vector p)
 	return v - (v * p) * p;
 }
 
+vector solve_cubic_pq(float p, float q)
+{
+	float D, u, v, a;
+	D = q*q/4.0 + p*p*p/27.0;
+	if(D < 0)
+	{
+		// irreducibilis
+		a = 1.0/3.0 * acos(-q/2.0 * sqrt(-27.0/(p*p*p)));
+		u = sqrt(-4.0/3.0 * p);
+		// a in range 0..pi/3
+		// cos(a)
+		// cos(a + 2pi/3)
+		// cos(a + 4pi/3)
+		return
+			u *
+			(
+				'1 0 0' * cos(a + 2.0/3.0*M_PI)
+				+
+				'0 1 0' * cos(a + 4.0/3.0*M_PI)
+				+
+				'0 0 1' * cos(a)
+			);
+	}
+	else if(D == 0)
+	{
+		// simple
+		if(p == 0)
+			return '0 0 0';
+		u = 3*q/p;
+		v = -u/2;
+		if(u >= v)
+			return '1 1 0' * v + '0 0 1' * u;
+		else
+			return '0 1 1' * v + '1 0 0' * u;
+	}
+	else
+	{
+		// cardano
+		u = cbrt(-q/2.0 + sqrt(D));
+		v = cbrt(-q/2.0 - sqrt(D));
+		return '1 1 1' * (u + v);
+	}
+}
+vector solve_cubic_abcd(float a, float b, float c, float d)
+{
+	// y = 3*a*x + b
+	// x = (y - b) / 3a
+	float p, q;
+	vector v;
+	p = (9*a*c - 3*b*b);
+	q = (27*a*a*d - 9*a*b*c + 2*b*b*b);
+	v = solve_cubic_pq(p, q);
+	v = (v -  b * '1 1 1') * (1.0 / (3.0 * a));
+	if(a < 0)
+		v += '1 0 -1' * (v_z - v_x); // swap x, z
+	return v;
+}
+
 vector findperpendicular(vector v)
 {
 	vector p;
@@ -1279,30 +1337,18 @@ vector W_CalculateProjectileSpread(vector forward, float spread)
 {
 	float sigma;
 	vector v1, v2;
-	float dx, dy, r, t;
+	float dx, dy, r;
 	float sstyle;
 	if(spread <= 0)
 		return forward;
 	sstyle = cvar("g_projectiles_spread_style");
+	
 	if(sstyle == 0)
 	{
 		// this is the baseline for the spread value!
 		// standard deviation: sqrt(2/5)
+		// density function: sqrt(1-r^2)
 		return forward + randomvec() * spread;
-		/*
-		(%i1) integrate(r^2 * 2*%pi*r * sqrt(1-r^2), r, 0, 1);
-											 4 %pi
-		(%o1)                                -----
-											  15
-		(%i2) integrate(2*%pi*r * sqrt(1-r^2), r, 0, 1);
-											 2 %pi
-		(%o2)                                -----
-											   3
-		(%i3) %o1/%o2;
-											   2
-		(%o3)                                  -
-											   5
-		*/
 	}
 	else if(sstyle == 1)
 	{
@@ -1315,27 +1361,16 @@ vector W_CalculateProjectileSpread(vector forward, float spread)
 		sigma = spread * 0.89442719099991587855; // match baseline stddev
 		v1 = findperpendicular(forward);
 		v2 = cross(forward, v1);
-		do
-		{
-			dx = -1 + 2 * random();
-			dy = -1 + 2 * random();
-		}
-		while(dx * dx + dy * dy >= 1);
-		return normalize(forward + (v1 * dx + v2 * dy) * sigma);
-		/*
-		(%i4) integrate(r^2 * 2*%pi*r, r, 0, 1);
-											  %pi
-		(%o4)                                 ---
-											   2
-		(%i5) integrate(2*%pi*r, r, 0, 1);
-		(%o5)                                 %pi
-		(%i6) %o4 / %o5;
-											   1
-		(%o6)                                  -
-											   2
-		*/
+		// random point on unit circle
+		dx = random() * 2 * M_PI;
+		dy = sin(dx);
+		dx = cos(dx);
+		// radius in our dist function
+		r = random();
+		r = sqrt(r);
+		return normalize(forward + (v1 * dx + v2 * dy) * r * sigma);
 	}
-	else if(sstyle == 3)
+	else if(sstyle == 3) // gauss 3d
 	{
 		sigma = spread * 0.63245553203368; // match baseline stddev
 		v1 = forward;
@@ -1344,7 +1379,7 @@ vector W_CalculateProjectileSpread(vector forward, float spread)
 		v1_z += gsl_ran_gaussian(sigma);
 		return v1;
 	}
-	else if(sstyle == 4)
+	else if(sstyle == 4) // gauss 2d
 	{
 		sigma = spread * 0.63245553203368; // match baseline stddev
 		v1_x = gsl_ran_gaussian(sigma);
@@ -1352,44 +1387,37 @@ vector W_CalculateProjectileSpread(vector forward, float spread)
 		v1_z = gsl_ran_gaussian(sigma);
 		return normalize(forward + cliptoplane(v1, forward));
 	}
-	else if(sstyle == 5)
+	else if(sstyle == 5) // 1-r
 	{
 		sigma = spread * 1.154700538379252; // match baseline stddev
 		v1 = findperpendicular(forward);
 		v2 = cross(forward, v1);
-		do
-		{
-			dx = -1 + 2 * random();
-			dy = -1 + 2 * random();
-		}
-		while(dx * dx + dy * dy >= 1);
-		// now we want a LINEAR falloff, though...
-		// i.e. radius X has a multiplied-in probability multiplier of 1-X
-		r = sqrt(dx * dx + dy * dy);
-		if(r > 0)
-		{
-			t = 1 - sqrt(1 - r);
-			dx *= t/r;
-			dy *= t/r;
-		}
-		return normalize(forward + (v1 * dx + v2 * dy) * sigma);
-		/*
-		(%i7) integrate(r^2 * 2*%pi*r * (1-r), r, 0, 1);
-											  %pi
-		(%o7)                                 ---
-											  10
-		(%i8) integrate(2*%pi*r * (1-r), r, 0, 1);
-											  %pi
-		(%o8)                                 ---
-											   3
-		(%i9) %o7 / %o8;
-											  3
-		(%o9)                                 --
-											  10
-		*/
+		// random point on unit circle
+		dx = random() * 2 * M_PI;
+		dy = sin(dx);
+		dx = cos(dx);
+		// radius in our dist function
+		r = random();
+		r = solve_cubic_abcd(-2, 3, 0, -r) * '0 1 0';
+		return normalize(forward + (v1 * dx + v2 * dy) * r * sigma);
+	}
+	else if(sstyle == 6) // 1-r^2
+	{
+		sigma = spread * 1.095445115010332; // match baseline stddev
+		v1 = findperpendicular(forward);
+		v2 = cross(forward, v1);
+		// random point on unit circle
+		dx = random() * 2 * M_PI;
+		dy = sin(dx);
+		dx = cos(dx);
+		// radius in our dist function
+		r = random();
+		r = sqrt(1 - r);
+		r = sqrt(1 - r);
+		return normalize(forward + (v1 * dx + v2 * dy) * r * sigma);
 	}
 	else
-		error("g_projectiles_spread_style must be 0 (sphere), 1 (flattened sphere), 2 (circle), 3 (gauss 3D), 4 (gauss plane), 5 (linear falloff)!");
+		error("g_projectiles_spread_style must be 0 (sphere), 1 (flattened sphere), 2 (circle), 3 (gauss 3D), 4 (gauss plane), 5 (linear falloff), 6 (quadratic falloff)!");
 	return '0 0 0';
 }
 

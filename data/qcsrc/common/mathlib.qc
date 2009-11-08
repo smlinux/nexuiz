@@ -158,7 +158,7 @@ float scalbn(float x, int n)
 
 float cbrt(float x)
 {
-	return pow(x, 1.0/3.0);
+	return copysign(pow(fabs(x), 1.0/3.0), x);
 }
 float hypot(float x, float y)
 {
