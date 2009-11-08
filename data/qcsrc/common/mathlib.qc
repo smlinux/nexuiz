@@ -93,13 +93,13 @@ vector frexp(float x)
 {
 	vector v;
 	v_z = 0;
-	v_y = ilogb(x);
+	v_y = ilogb(x) + 1;
 	v_x = x / exp2(v_y);
 	return v;
 }
 int ilogb(float x)
 {
-	return floor(log2(x));
+	return floor(log2(fabs(x)));
 }
 float ldexp(float x, int e)
 {
@@ -144,7 +144,7 @@ float log2(float x)
 }
 float logb(float x)
 {
-	return floor(log2(x));
+	return floor(log2(fabs(x)));
 }
 vector modf(float f)
 {
@@ -179,6 +179,8 @@ float erfc(float x)
 vector lgamma(float x)
 {
 	// TODO improve accuracy
+	if(!isfinite(x))
+		return fabs(x);
 	if(x < 1 && x == floor(x))
 		return nan("gamma") * '1 1 1';
 	if(x < 0.1)
