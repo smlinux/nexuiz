@@ -1372,7 +1372,8 @@ vector W_CalculateProjectileSpread(vector forward, float spread)
 	}
 	else if(sstyle == 3) // gauss 3d
 	{
-		sigma = spread * 0.63245553203368; // match baseline stddev
+		sigma = spread * 0.44721359549996; // match baseline stddev
+		// note: 2D gaussian has sqrt(2) times the stddev of 1D, so this factor is right
 		v1 = forward;
 		v1_x += gsl_ran_gaussian(sigma);
 		v1_y += gsl_ran_gaussian(sigma);
@@ -1381,7 +1382,8 @@ vector W_CalculateProjectileSpread(vector forward, float spread)
 	}
 	else if(sstyle == 4) // gauss 2d
 	{
-		sigma = spread * 0.63245553203368; // match baseline stddev
+		sigma = spread * 0.44721359549996; // match baseline stddev
+		// note: 2D gaussian has sqrt(2) times the stddev of 1D, so this factor is right
 		v1_x = gsl_ran_gaussian(sigma);
 		v1_y = gsl_ran_gaussian(sigma);
 		v1_z = gsl_ran_gaussian(sigma);
