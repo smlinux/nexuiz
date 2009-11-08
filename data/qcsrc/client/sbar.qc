@@ -1128,14 +1128,15 @@ float Sbar_WouldDrawScoreboard() {
 	return 0;
 }
 
+float g_minstagib;
 float average_accuracy;
 vector Sbar_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 {
-	float i, count_hitscan, count_splash, row;  // count is the number of 'colums'
+	float i;
 	float weapon_hit, weapon_damage, weapon_stats;
 	float fontsize = 40 * 1/3;
 	float weapon_cnt = 12;
-	float rows ;
+	float rows;
 	if(cvar("sbar_accuracy_doublerows"))
 		rows = 2;
 	else
@@ -1180,9 +1181,13 @@ vector Sbar_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 	weapons_with_stats = 0;
 	if(rows == 2)
 		pos_x += sbwidth/weapon_cnt / 2;
+
+	if(getstati(STAT_SWITCHWEAPON) == WEP_MINSTANEX)
+		g_minstagib = 1; // TODO: real detection for minstagib?
+
 	for(i = WEP_FIRST; i <= WEP_LAST; ++i)
 	{
-		if (i == 10 || i == 11 || i == 14 || i == 16) // skip port-o-launch, minstanex, tuba and fireball
+		if ((i == WEP_NEX && g_minstagib) || i == WEP_PORTO || (i == WEP_MINSTANEX && !g_minstagib) || i == WEP_TUBA || i == WEP_FIREBALL) // skip port-o-launch, nex || minstanex, tuba and fireball
 			continue;
 		weapon_hit = weapon_hits[i];
 		weapon_damage = weapon_fired[i];
@@ -1343,9 +1348,12 @@ void Sbar_DrawScoreboard()
 			pos_y += 1.25 * sbar_fontsize_y;
 		}
 	}
-	else if(cvar("sbar_accuracy"))
-		pos = Sbar_DrawScoreboardAccuracyStats(pos, rgb, bg_size);
-
+	else if(cvar("sbar_accuracy")) {
+		if(teamplay)
+			pos = Sbar_DrawScoreboardAccuracyStats(pos, GetTeamRGB(myteam), bg_size);
+		else
+			pos = Sbar_DrawScoreboardAccuracyStats(pos, rgb, bg_size);
+	}
 
 	tmp = pos + '0 1.5 0' * sbar_fontsize_y;
 	pos_y += 3 * sbar_fontsize_y;
