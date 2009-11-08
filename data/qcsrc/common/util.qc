@@ -28,7 +28,6 @@ float log_synth(float f)
 	l = ((6-f) * f - 5) / 4.32808512266689022212;
 	l += exp(-l) * f - 1;
 	l += exp(-l) * f - 1;
-	print(ftos(l), " ", ftos(p), "\n");
 	return l * p;
 }
 float log(float f)
