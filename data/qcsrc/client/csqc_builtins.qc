@@ -285,3 +285,12 @@ float(float timer) gettime = #519;
 float(string s) tokenize_console = #514;
 float(float i) argv_start_index = #515;
 float(float i) argv_end_index = #516;
+
+float(float s) asin = #471; // returns angle in radians for a given sin() value, the result is in the range -PI*0.5 to PI*0.5
+float(float c) acos = #472; // returns angle in radians for a given cos() value, the result is in the range 0 to PI
+float(float t) atan = #473; // returns angle in radians for a given tan() value, the result is in the range -PI*0.5 to PI*0.5
+float(float c, float s) atan2 = #474; // returns angle in radians for a given cos() and sin() value pair, the result is in the range -PI to PI (this is identical to vectoyaw except it returns radians rather than degrees)
+float(float a) tan = #475; // returns tangent value (which is simply sin(a)/cos(a)) for the given angle in radians, the result is in the range -infinity to +infinity
+float DEG2RAD = 0.0174532925199432957692369076848861271344287188854172545609719144;
+float RAD2DEG = 57.2957795130823208767981548141051703324054724665643215491602438612;
+float PI      = 3.1415926535897932384626433832795028841971693993751058209749445923;

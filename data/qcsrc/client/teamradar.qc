@@ -342,10 +342,10 @@ void() teamradar_view =
 		vector frame_origin, frame_size;
 		frame_origin = frame_size = '0 0 0';
 
-		frame_origin_x = teamradar_origin2d_x - teamradar_size2d_x * 0.55859375;
-		frame_origin_y = teamradar_origin2d_y - teamradar_size2d_y * 0.55859375;
-		frame_size_x = teamradar_size2d_x * 1.1171875;
-		frame_size_y = teamradar_size2d_y * 1.1171875;
+		frame_origin_x = teamradar_origin2d_x - teamradar_size2d_x * 0.55859375; // matches the picture
+		frame_origin_y = teamradar_origin2d_y - teamradar_size2d_y * 0.55859375; // matches the picture
+		frame_size_x = teamradar_size2d_x * 1.1171875; // matches the picture
+		frame_size_y = teamradar_size2d_y * 1.1171875; // matches the picture
 		drawpic(frame_origin, "gfx/ons-frame.tga", frame_size, '1 1 1', sbar_alpha_fg, 0);
 		drawpic(frame_origin, "gfx/ons-frame-team.tga", frame_size, rgb, sbar_alpha_fg, 0);
 

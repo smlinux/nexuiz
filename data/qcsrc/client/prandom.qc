@@ -5,7 +5,7 @@ float prandom_seed;
 float prandom()
 {
 	float c;
-	c = crc16(FALSE, strcat(ftos(prandom_seed), ftos(prandom_seed + 3.1415926535)));
+	c = crc16(FALSE, strcat(ftos(prandom_seed), ftos(prandom_seed + M_PI)));
 	prandom_seed = c;
 
 #ifdef USE_PRANDOM_DEBUG
