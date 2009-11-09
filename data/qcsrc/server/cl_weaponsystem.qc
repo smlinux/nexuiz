@@ -561,7 +561,9 @@ void CL_Weaponentity_Think()
 	self.effects &~= EF_TELEPORT_BIT;
 	self.effects |= tb;
 
-	if(self.owner.alpha != 0)
+	if(self.owner.alpha == default_player_alpha)
+		self.alpha = default_weapon_alpha;
+	else if(self.owner.alpha != 0)
 		self.alpha = self.owner.alpha;
 	else
 		self.alpha = 1;
@@ -773,7 +775,9 @@ void CL_ExteriorWeaponentity_Think()
 	}
 	self.effects = self.owner.effects | EF_LOWPRECISION;
 	self.effects = self.effects & EFMASK_CHEAP; // eat performance
-	if(self.owner.alpha != 0)
+	if(self.owner.alpha == default_player_alpha)
+		self.alpha = default_weapon_alpha;
+	else if(self.owner.alpha != 0)
 		self.alpha = self.owner.alpha;
 	else
 		self.alpha = 1;
@@ -1450,6 +1454,11 @@ vector W_CalculateProjectileSpread(vector forward, float spread)
 	 */
 }
 
+#if 0
+float mspercallsum;
+float mspercallsstyle;
+float mspercallcount;
+#endif
 void W_SetupProjectileVelocityEx(entity missile, vector dir, vector upDir, float pSpeed, float pUpSpeed, float spread)
 {
 	if(missile.owner == world)
@@ -1458,7 +1467,21 @@ void W_SetupProjectileVelocityEx(entity missile, vector dir, vector upDir, float
 	dir = dir + upDir * (pUpSpeed / pSpeed);
 	pSpeed *= vlen(dir);
 	dir = normalize(dir);
-	missile.velocity = W_CalculateProjectileVelocity(missile.owner.velocity, pSpeed * W_CalculateProjectileSpread(dir, spread));
+
+#if 0
+	if(cvar("g_projectiles_spread_style") != mspercallsstyle)
+	{
+		mspercallsum = mspercallcount = 0;
+		mspercallsstyle = cvar("g_projectiles_spread_style");
+	}
+	mspercallsum -= gettime(GETTIME_HIRES);
+	dir = W_CalculateProjectileSpread(dir, spread);
+	mspercallsum += gettime(GETTIME_HIRES);
+	mspercallcount += 1;
+	print("avg: ", ftos(mspercallcount / mspercallsum), " per sec\n");
+#endif
+
+	missile.velocity = W_CalculateProjectileVelocity(missile.owner.velocity, pSpeed * dir);
 }
 
 void W_SetupProjectileVelocity(entity missile, float pSpeed, float spread)
