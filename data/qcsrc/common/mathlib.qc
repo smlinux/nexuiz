@@ -40,7 +40,7 @@ int isinf(float x)
 }
 int isnan(float x)
 {
-	return isunordered(x, x);
+	return !(x == x);
 }
 int isnormal(float x)
 {
