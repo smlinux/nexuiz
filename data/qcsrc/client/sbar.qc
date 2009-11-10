@@ -129,7 +129,8 @@ void Sbar_DrawWeapon(float nr, float fade, float active, float wc)
 	// draw the weapon accuracy on the HUD
 	if(sbar_accuracy_hud)
  	{
- 		weapon_stats = rint(100*weapon_hit/weapon_damage);
+		if(weapon_damage)
+ 			weapon_stats = rint(100*weapon_hit/weapon_damage);
 		fill_colour = Sbar_AccuracyColor(weapon_stats);
 		if(weapon_damage)
 			drawpic(pos - '2 0 0' + '0 1 0' * (w_height - accuracybar_height), "gfx/hud/sb_accuracy_bar.tga", '1 0 0' * w_width + '0 1 0' * accuracybar_height, fill_colour, sbar_alpha_fg, DRAWFLAG_NORMAL);
@@ -1186,7 +1187,8 @@ vector Sbar_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 			continue;
 		weapon_hit = weapon_hits[i];
 		weapon_damage = weapon_fired[i];
-		weapon_stats = bound(0, rint(100 * weapon_hit / weapon_damage), 100);
+		if(weapon_damage)
+			weapon_stats = bound(0, rint(100 * weapon_hit / weapon_damage), 100);
 		self = get_weaponinfo(i);
 		float weapon_alpha;
 
