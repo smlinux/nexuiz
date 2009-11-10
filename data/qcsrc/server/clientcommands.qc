@@ -257,6 +257,8 @@ void SV_ParseClientCommand(string s) {
 			kh_Key_DropAll(self, TRUE);
 			WaypointSprite_PlayerDead();
 			self.classname = "observer";
+			if(g_ca)
+				self.caplayer = 0;
 			if(blockSpectators)
 				sprint(self, strcat("^7You have to become a player within the next ", ftos(cvar("g_maxplayers_spectator_blocktime")), " seconds, otherwise you will be kicked, because spectators aren't allowed at this time!\n"));
 			PutClientInServer();
@@ -269,6 +271,8 @@ void SV_ParseClientCommand(string s) {
 		{
 			if(isJoinAllowed()) {
 				self.classname = "player";
+				if(g_ca)
+					self.caplayer = 1;
 				PlayerScore_Clear(self);
 				bprint ("^4", self.netname, "^4 is playing now\n");
 				PutClientInServer();
@@ -813,7 +817,8 @@ void ReadyRestartForce()
 void ReadyRestart()
 {
 	// no arena, assault support yet...
-	if(g_arena | g_assault | gameover | intermission_running | race_completing)
+	// TODO: CA support
+	if(g_arena | g_ca | g_assault | gameover | intermission_running | race_completing)
 		localcmd("restart\n");
 	else
 		localcmd("\nsv_hook_gamerestart;");

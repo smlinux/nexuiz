@@ -93,6 +93,7 @@ void WriteGameCvars()
 	cvar_set("g_runematch", ftos(g_runematch));
 	cvar_set("g_lms", ftos(g_lms));
 	cvar_set("g_arena", ftos(g_arena));
+	cvar_set("g_ca", ftos(g_ca));
 	cvar_set("g_keyhunt", ftos(g_keyhunt));
 	cvar_set("g_assault", ftos(g_assault));
 	cvar_set("g_onslaught", ftos(g_onslaught));
@@ -118,6 +119,7 @@ void ReadGameCvars()
 		found += (g_runematch = (!found && (prev != GAME_RUNEMATCH) && cvar("g_runematch")));
 		found += (g_lms = (!found && (prev != GAME_LMS) && cvar("g_lms")));
 		found += (g_arena = (!found && (prev != GAME_ARENA) && cvar("g_arena")));
+		found += (g_ca = (!found && (prev != GAME_CA) && cvar("g_ca")));
 		found += (g_keyhunt = (!found && (prev != GAME_KEYHUNT) && cvar("g_keyhunt")));
 		found += (g_assault = (!found && (prev != GAME_ASSAULT) && cvar("g_assault")));
 		found += (g_onslaught = (!found && (prev != GAME_ONSLAUGHT) && cvar("g_onslaught")));
@@ -282,10 +284,12 @@ void InitGameplayMode()
 		ScoreRules_lms();
 	}
 
-	if(g_arena)
+	if(g_arena || g_ca)
 	{
 		game = GAME_ARENA;
 		gamemode_name = "Arena";
+		if(g_ca)
+			ActivateTeamplay();
 		fraglimit_override = cvar("g_arena_point_limit");
 		leadlimit_override = cvar("g_arena_point_leadlimit");
 		maxspawned = cvar("g_arena_maxspawned");

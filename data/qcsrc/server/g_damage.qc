@@ -121,7 +121,7 @@ void GiveFrags (entity attacker, entity targ, float f)
 
 	PlayerScore_Add(targ, SP_DEATHS, 1);
 
-	if(g_arena)
+	if(g_arena || g_ca)
 		if(cvar("g_arena_roundbased"))
 			return;
 

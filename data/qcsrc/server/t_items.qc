@@ -1270,7 +1270,7 @@ void spawnfunc_item_health_mega (void) {
 	if(!cvar("g_powerup_superhealth"))
 		return;
 
-	if(g_arena && !cvar("g_arena_powerups"))
+	if((g_arena || g_ca) && !cvar("g_arena_powerups"))
 		return;
 
 	if(g_minstagib) {
@@ -1295,7 +1295,7 @@ void spawnfunc_item_strength (void) {
 	if(!cvar("g_powerup_strength"))
 		return;
 
-	if(g_arena && !cvar("g_arena_powerups"))
+	if((g_arena || g_ca) && !cvar("g_arena_powerups"))
 		return;
 
 	if(g_minstagib) {
@@ -1311,7 +1311,7 @@ void spawnfunc_item_invincible (void) {
 	if(!cvar("g_powerup_shield"))
 		return;
 
-	if(g_arena && !cvar("g_arena_powerups"))
+	if((g_arena || g_ca) && !cvar("g_arena_powerups"))
 		return;
 
 	if(g_minstagib) {

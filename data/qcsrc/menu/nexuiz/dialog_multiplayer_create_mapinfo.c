@@ -22,6 +22,7 @@ CLASS(NexuizMapInfoDialog) EXTENDS(NexuizDialog)
 	ATTRIB(NexuizMapInfoDialog, typeDominationLabel, entity, NULL)
 	ATTRIB(NexuizMapInfoDialog, typeKeyHuntLabel, entity, NULL)
 	ATTRIB(NexuizMapInfoDialog, typeCTFLabel, entity, NULL)
+	ATTRIB(NexuizMapInfoDialog, typeCALabel, entity, NULL)
 	ATTRIB(NexuizMapInfoDialog, typeAssaultLabel, entity, NULL)
 	ATTRIB(NexuizMapInfoDialog, typeOnslaughtLabel, entity, NULL)
 	ATTRIB(NexuizMapInfoDialog, typeRaceLabel, entity, NULL)
@@ -76,6 +77,7 @@ void loadMapInfoNexuizMapInfoDialog(entity me, float i, entity mlb)
 	me.typeRuneLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_RUNEMATCH);
 	me.typeKeyHuntLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_KEYHUNT);
 	me.typeCTFLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_CTF);
+	me.typeCALabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_CA);
 	me.typeAssaultLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ASSAULT);
 	me.typeOnslaughtLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ONSLAUGHT);
 	me.typeRaceLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_RACE);
@@ -132,6 +134,8 @@ void fillNexuizMapInfoDialog(entity me)
 			me.typeKeyHuntLabel = e;
 		me.TD(me, 1, wgt, e = makeNexuizTextLabel(0, "CTF"));
 			me.typeCTFLabel = e;
+		me.TD(me, 1, wgt, e = makeNexuizTextLabel(0, "CA"));
+			me.typeCALabel = e;
 		me.TD(me, 1, wgt, e = makeNexuizTextLabel(0, "Assault"));
 			me.typeAssaultLabel = e;
 		me.TD(me, 1, wgt, e = makeNexuizTextLabel(0, "Onslaught"));

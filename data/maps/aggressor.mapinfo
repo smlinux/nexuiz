@@ -13,3 +13,4 @@ type arena 10 20
 type kh 1000 20 3
 type rc 20 5 10 20
 cdtrack 4
+type ca 10 20

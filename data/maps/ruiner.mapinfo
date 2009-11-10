@@ -12,3 +12,4 @@ type arena 10 20
 cdtrack 11
 clientsettemp_for_type all r_shadow_glossexponent 96
 clientsettemp_for_type all r_shadow_glossintensity 2
+type ca 10 20

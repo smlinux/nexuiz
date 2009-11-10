@@ -1,5 +1,10 @@
 void race_send_recordtime(float t, float msg);
 
+void send_CSQC_teamnagger() {
+	WriteByte(0, SVC_TEMPENTITY);
+	WriteByte(0, TE_CSQC_TEAMNAGGER);
+}
+
 float ClientData_Send(entity to, float sf)
 {
 	if(to != self.owner)
@@ -316,7 +321,7 @@ entity SelectSpawnPoint (float anypoint)
 		// there is 50/50 chance of choosing a random spot or the furthest spot
 		// (this means that roughly every other spawn will be furthest, so you
 		// usually won't get fragged at spawn twice in a row)
-		if (arena_roundbased)
+		if (arena_roundbased && !g_ca)
 		{
 			firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, 800, teamcheck);
 			if(firstspot_new)
@@ -638,7 +643,11 @@ void PutObserverInServer (void)
 	if(sv_loddistance1)
 		SetCustomizer(self, Client_customizeentityforclient, Client_uncustomizeentityforclient);
 
-	self.team = -1;
+	if(g_ca) {
+		// do nothing
+	}
+	else
+		self.team = -1;
 
 	if(g_arena)
 	{
@@ -785,14 +794,14 @@ void PutClientInServer (void)
 			self.classname = "observer";
 	}
 
-	if(g_arena)
+	if(g_arena || (g_ca && !allowed_to_spawn))
 	if(!self.spawned)
 		self.classname = "observer";
 
 	if(gameover)
 		self.classname = "observer";
 
-	if(self.classname == "player") {
+	if(self.classname == "player" && (!g_ca || (g_ca && allowed_to_spawn))) {
 		entity spot, oldself;
 		float j;
 
@@ -936,6 +945,9 @@ void PutClientInServer (void)
 			Spawnqueue_Mark(self);
 		}
 
+		else if(g_ca)
+			self.caplayer = 1;
+
 		self.event_damage = PlayerDamage;
 
 		self.bot_attack = TRUE;
@@ -993,7 +1005,7 @@ void PutClientInServer (void)
 				SUB_UseTargets();
 			activator = world;
 		self = oldself;
-	} else if(self.classname == "observer") {
+	} else if(self.classname == "observer" || (g_ca && !allowed_to_spawn)) {
 		PutObserverInServer ();
 	}
 
@@ -1406,10 +1418,11 @@ void ClientConnect (void)
 
 	stuffcmd(self, strcat("set gametype ", ftos(game), "\n"));
 
-	if(g_arena)
+	if(g_arena || g_ca)
 	{
 		self.classname = "observer";
-		Spawnqueue_Insert(self);
+		if(g_arena)
+			Spawnqueue_Insert(self);
 	}
 	/*else if(g_ctf)
 	{
@@ -1473,6 +1486,8 @@ void ClientConnect (void)
 		speedaward_alltimebest_holder = db_get(ServerProgsDB, strcat(GetMapname(), rr, "speed/netname"));
 		race_send_speedaward_alltimebest(MSG_ONE);
 	}
+	else if(cvar("sv_teamnagger"))
+		send_CSQC_teamnagger();
 }
 
 /*
@@ -2140,7 +2155,10 @@ void LeaveSpectatorMode()
 				centerprint(self,""); // clear MOTD
 			return;
 		} else {
-			stuffcmd(self,"menu_showteamselect\n");
+			if (g_ca && self.caplayer) {
+			}	// do nothing
+			else
+				stuffcmd(self,"menu_showteamselect\n");
 			return;
 		}
 	}
@@ -2430,7 +2448,7 @@ void PlayerPreThink (void)
 				if(frametime)
 					player_anim();
 				button_pressed = (self.BUTTON_ATCK || self.BUTTON_JUMP || self.BUTTON_ATCK2 || self.BUTTON_HOOK || self.BUTTON_USE);
-				force_respawn = (g_lms || cvar("g_forced_respawn"));
+				force_respawn = (g_lms || (g_ca) || cvar("g_forced_respawn"));
 				if (self.deadflag == DEAD_DYING)
 				{
 					if(force_respawn)

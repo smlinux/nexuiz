@@ -10,3 +10,4 @@ type rune 200 20
 type lms 9 20
 type arena 10 20
 cdtrack 4
+type ca 10 20

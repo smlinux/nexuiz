@@ -11,3 +11,4 @@ type lms 9 20
 type arena 10 20
 type tdm 50 20 2
 cdtrack 5
+type ca 10 20

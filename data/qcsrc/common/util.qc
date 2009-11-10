@@ -462,6 +462,7 @@ string GametypeNameFromType(float g)
 	else if (g == GAME_RUNEMATCH) return "rune";
 	else if (g == GAME_LMS) return "lms";
 	else if (g == GAME_ARENA) return "arena";
+	else if (g == GAME_CA) return "ca";
 	else if (g == GAME_KEYHUNT) return "kh";
 	else if (g == GAME_ONSLAUGHT) return "ons";
 	else if (g == GAME_ASSAULT) return "as";

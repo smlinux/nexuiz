@@ -9,3 +9,4 @@ type dm 30 20
 type lms 16 20
 type arena 10 20
 type ctf 300 20
+type ca 10 20

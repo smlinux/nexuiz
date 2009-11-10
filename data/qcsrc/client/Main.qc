@@ -1050,6 +1050,11 @@ void Net_ReadSpawn()
 	current_viewzoom = 0.6;
 }
 
+void Net_TeamNagger()
+{
+	teamnagger = 1;
+}
+
 // CSQC_Parse_TempEntity : Handles all temporary entity network data in the CSQC layer.
 // You must ALWAYS first acquire the temporary ID, which is sent as a byte.
 // Return value should be 1 if CSQC handled the temporary entity, otherwise return 0 to have the engine process the event.
@@ -1086,6 +1091,10 @@ float CSQC_Parse_TempEntity()
 			break;
 		case TE_CSQC_NEXGUNBEAMPARTICLE:
 			Net_ReadNexgunBeamParticle();
+			bHandled = true;
+			break;
+		case TE_CSQC_TEAMNAGGER:
+			Net_TeamNagger();
 			bHandled = true;
 			break;
         case TE_CSQC_LIGHTNINGARC:

@@ -243,6 +243,7 @@ void cvar_changes_init()
 		BADCVAR("timelimit");
 		BADCVAR("fraglimit");
 		BADCVAR("g_arena");
+		BADCVAR("g_ca");
 		BADCVAR("g_assault");
 		BADCVAR("g_ctf");
 		BADCVAR("g_dm");
@@ -1205,7 +1206,7 @@ void DumpStats(float final)
 		{
 			s = strcat(":player:see-labels:", GetPlayerScoreString(other, 0), ":");
 			s = strcat(s, ftos(rint(time - other.jointime)), ":");
-			if(other.classname == "player" || g_arena || g_lms)
+			if(other.classname == "player" || g_arena || g_ca || g_lms)
 				s = strcat(s, ftos(other.team), ":");
 			else
 				s = strcat(s, "spectator:");
@@ -1702,7 +1703,7 @@ float WinningCondition_Scores(float limit, float leadlimit)
 	if(WinningConditionHelper_zeroisworst)
 		leadlimit = 0; // not supported in this mode
 
-	if(g_dm || g_tdm || g_arena || (g_race && !g_race_qualifying) || g_nexball)
+	if(g_dm || g_tdm || g_arena || g_ca || (g_race && !g_race_qualifying) || g_nexball)
 	// these modes always score in increments of 1, thus this makes sense
 	{
 		if(leaderfrags != WinningConditionHelper_topscore)

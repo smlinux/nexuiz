@@ -11,3 +11,4 @@ type lms 9 20
 type arena 10 20
 type kh 1000 20 3
 cdtrack 9
+type ca 10 20

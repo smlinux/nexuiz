@@ -1,6 +1,8 @@
 void drawstringright(vector, string, vector, vector, float, float);
 void drawstringcenter(vector, string, vector, vector, float, float);
 
+float teamnagger;
+
 float weapon_hits[WEP_COUNT];
 float weapon_fired[WEP_COUNT];
 float weapon_number;
@@ -2598,7 +2600,7 @@ void Sbar_Draw (void)
 			o = Sbar_DrawNoteLine(o, s);
 		}
 	}
-	if(teamplay && !intermission && !spectatee_status)
+	if(teamplay && !intermission && !spectatee_status && gametype != GAME_CA && teamnagger)
 	{
 		entity tm;
 		float ts_min, ts_max;

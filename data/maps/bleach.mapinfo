@@ -11,3 +11,4 @@ type rune 200 20
 type lms 9 20
 type kh 1000 20 3
 cdtrack 8
+type ca 10 20

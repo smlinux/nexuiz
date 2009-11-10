@@ -11,3 +11,4 @@ type lms 9 20
 type arena 10 20
 cdtrack 5
 size -1536 -832 -576 896 1152 768
+type ca 10 20

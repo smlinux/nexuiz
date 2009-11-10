@@ -9,6 +9,9 @@ entity spawnqueue_first;
 entity spawnqueue_last;
 entity champion;
 float warmup;
+float allowed_to_spawn;
+float player_cnt;
+.float caplayer;
 
 void PutObserverInServer();
 void PutClientInServer();
@@ -29,9 +32,12 @@ void reset_map(float dorespawn)
 	entity oldself;
 	oldself = self;
 
-	if(g_arena)
+	if(g_arena || g_ca)
 	if(cvar("g_arena_warmup"))
 		warmup = time + cvar("g_arena_warmup");
+
+	if(g_ca)
+		allowed_to_spawn = 1;
 
 	lms_lowest_lives = 999;
 	lms_next_place = player_count;
@@ -81,6 +87,10 @@ void reset_map(float dorespawn)
 				else
 					PutObserverInServer();
 			}
+			else if(g_ca && self.caplayer) {
+				self.classname = "player";
+				PutClientInServer();
+			}
 			else
 			{
 				/*
@@ -111,8 +121,8 @@ void reset_map(float dorespawn)
 	if(g_keyhunt)
 		kh_Controller_SetThink(cvar("g_balance_keyhunt_delay_round")+(game_starttime - time), "", kh_StartRound);
 
-	if(g_arena)
-	if(champion)
+	if(g_arena || g_ca)
+	if(champion && champion.classname == "player" && player_cnt > 1)
 		UpdateFrags(champion, +1);
 
 	self = oldself;
@@ -175,50 +185,73 @@ void Spawnqueue_Mark(entity e)
  * 
  * Called in PlayerPostThink()
  */
+float roundStartTime_prev; // prevent networkspam
 void Arena_Warmup()
 {
 	float f;
 	string msg;
 
-	if(!g_arena || !arena_roundbased || (time < game_starttime))
+	if((!g_arena && !g_ca) || !arena_roundbased || (time < game_starttime))
 		return;
 
-	f = rint(warmup - time);
+	f = floor(warmup - time + 1);
+
+	allowed_to_spawn = 0;
+
+	if(g_ca && player_cnt < 2)
+		allowed_to_spawn = 1;
 
 	msg = NEWLINES;
-	if(time < warmup && self.spawned)
+	if(time < warmup)
 	{
-		if(champion)
-			msg = strcat(msg, "The Champion is ", champion.netname, "^7\n");
+		if (g_ca)
+			allowed_to_spawn = 1;
+		if(champion && !(g_ca))
+			centerprint(self, strcat(msg, "The Champion is ", champion.netname, "^7\n"));
 
-		if(f)
-			msg = strcat(msg, "Round will start in ", ftos(f),"\n");
-		else
-		{
-			if(self.spawned)
-				msg = strcat(msg, "^1Fight!\n");
+		if(f != roundStartTime_prev) {
+			centerprint(self, strcat("Round will start in ", ftos(f),"\n"));
+			roundStartTime_prev = f;
+			if(f == 5)
+				play2all("announcer/robotic/prepareforbattle.wav");
+			else if(f == 3)
+				play2all("announcer/robotic/3.wav");
+			else if(f == 2)
+				play2all("announcer/robotic/2.wav");
+			else if(f == 1)
+				play2all("announcer/robotic/1.wav");
 		}
 
-		centerprint(self, msg);
+		if (!g_ca) {
+			if(self.spawned)
+				self.movetype = MOVETYPE_NONE;
 
-		if(self.spawned)
-			self.movetype = MOVETYPE_NONE;
-
-		self.velocity = '0 0 0';
-		self.avelocity = '0 0 0';
-		self.movement = '0 0 0';
-		//self.fixangle = TRUE;
+			self.velocity = '0 0 0';
+			self.avelocity = '0 0 0';
+			self.movement = '0 0 0';
+			//self.fixangle = TRUE;
+		}
 	}
-	else if(self.movetype == MOVETYPE_NONE)
+
+	else if((!g_ca && self.movetype == MOVETYPE_NONE) || ((g_ca && f > -1 && f != roundStartTime_prev)))
 	{
-		self.movetype = MOVETYPE_WALK;
-		centerprint(self, "\n");
-	}
+		if(self.classname == "player")
+			self.movetype = MOVETYPE_WALK;
+		centerprint(self, "^1Fight!\n");	
+		roundStartTime_prev = f;
+		play2all("announcer/robotic/begin.wav");
 
+		player_cnt = 0;
+
+		FOR_EACH_CLIENT(self) {
+			if (self.classname == "player") {
+				player_cnt += 1;
+			}
+		}		
+	}
 }
 
 float next_round;
-
 /**
  * This function finds out whether an arena round is over 1 player is left.
  * It determines the last player who's still alive and saves it's entity reference
@@ -231,34 +264,83 @@ void Spawnqueue_Check()
 	if(time < warmup + 1)
 		return;
 
-	//extend next_round if it isn't set yet and only 1 player is spawned
-	if(!next_round)
-	if(numspawned < 2)
-		next_round = time + 3;
-
-	if(!arena_roundbased || (next_round && next_round < time && player_count > 1))
-	{
-		next_round = 0;
-
-		if(arena_roundbased)
-		{
-			champion = find(world, classname, "player");
-			while(champion && champion.deadflag)
-				champion = find(champion, classname, "player");
-			reset_map(TRUE);
+	if(g_ca) {
+		// check the amount of spawned players in each team
+		float redspawned, bluespawned;
+		FOR_EACH_CLIENT(self) {
+			if (self.classname == "player") {
+				if (self.team == COLOR_TEAM1) redspawned += 1;
+				else if (self.team == COLOR_TEAM2) bluespawned += 1;
+			}
 		}
 
-		while(numspawned < maxspawned && spawnqueue_first)
+		if(player_cnt < 2 && (redspawned && bluespawned)) {
+			reset_map(TRUE);
+		}
+		else if(player_cnt < 2) {
+			FOR_EACH_CLIENT(self) 
+			if(self.classname == "player")
+				centerprint(self, strcat("^1Need at least 2 players to play CA", "^7\n"));
+
+			allowed_to_spawn = 1;
+			return;
+		}
+		else if(!next_round)
+			if((redspawned && bluespawned == 0) || (bluespawned && redspawned == 0)) {
+				next_round = time + 5;
+
+				champion = find(world, classname, "player");
+				string champion_team;
+				if(champion.team == COLOR_TEAM1) {
+					champion_team = "^1Red team";
+					play2all("ctf/red_capture.wav");
+				}
+				else if(champion.team == COLOR_TEAM2) {
+					champion_team = "^4Blue team";
+					play2all("ctf/blue_capture.wav");
+				}
+				FOR_EACH_CLIENT(self) centerprint(self, strcat(champion_team, "^7 wins the round.", "^7\n"));	
+			else if(!redspawned && !bluespawned) {
+				FOR_EACH_CLIENT(self) centerprint(self, strcat("^7Round tied.", "^7\n"));
+				next_round = time + 5;
+			}
+		}
+
+		if((next_round && next_round < time))
 		{
-			self = spawnqueue_first;
+			next_round = 0;
+			reset_map(TRUE);
+		}
+	} else { // arena
+		//extend next_round if it isn't set yet and only 1 player is spawned
+		if(!next_round)
+		if(numspawned < 2)
+			next_round = time + 3;
 
-			bprint ("^4", self.netname, "^4 is the next challenger\n");
+		if(!arena_roundbased || (next_round && next_round < time && player_count > 1))
+		{
+			next_round = 0;
 
-			Spawnqueue_Remove(self);
-			Spawnqueue_Mark(self);
+			if(arena_roundbased)
+			{
+				champion = find(world, classname, "player");
+				while(champion && champion.deadflag)
+					champion = find(champion, classname, "player");
+				reset_map(TRUE);
+			}
 
-			self.classname = "player";
-			PutClientInServer();
+			while(numspawned < maxspawned && spawnqueue_first)
+			{
+				self = spawnqueue_first;
+
+				bprint ("^4", self.netname, "^4 is the next challenger\n");
+
+				Spawnqueue_Remove(self);
+				Spawnqueue_Mark(self);
+
+				self.classname = "player";
+				PutClientInServer();
+			}
 		}
 	}
 }
