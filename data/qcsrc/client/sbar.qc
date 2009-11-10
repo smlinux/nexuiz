@@ -1222,7 +1222,8 @@ vector Sbar_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 	}
 	drawfont = sbar_font;
 
-	average_accuracy = floor(average_accuracy / weapons_with_stats);
+	if(weapons_with_stats)
+		average_accuracy = floor(average_accuracy / weapons_with_stats);
 
 	if(rows == 2)
 		pos_x -= sbwidth/weapon_cnt / 2;
