@@ -1,5 +1,7 @@
-#define TUBA_NOTE(n) strcat("weapons/tuba_note", ftos(n), ".wav")
+//#define TUBA_NOTE(n) strcat("weapons/tuba_note", ftos(n), ".wav")
 .float tuba_notecount;
+.entity tuba_note;
+.float tuba_smoketime;
 
 float Tuba_GetNote(entity pl, float hittype)
 {
@@ -68,10 +70,29 @@ float Tuba_GetNote(entity pl, float hittype)
 	return note;
 }
 
+float W_Tuba_NoteSendEntity(entity to, float sf)
+{
+	WriteByte(MSG_ENTITY, ENT_CLIENT_TUBANOTE);
+	WriteByte(MSG_ENTITY, (sf & 1) | ((self.cnt + 42) * 2));
+	if(sf & 1)
+	{
+		WriteCoord(MSG_ENTITY, self.origin_x);
+		WriteCoord(MSG_ENTITY, self.origin_y);
+		WriteCoord(MSG_ENTITY, self.origin_z);
+	}
+	return TRUE;
+}
+
+void W_Tuba_NoteThink()
+{
+	self.owner.tuba_note = world;
+	remove(self);
+}
+
 void W_Tuba_Attack(float hittype)
 {
 	vector o;
-	float c;
+	float c, n;
 	W_SetupShot(self, FALSE, 2, "", cvar("g_balance_tuba_damage"));
 	if(self.tuba_notecount)
 	{
@@ -83,11 +104,47 @@ void W_Tuba_Attack(float hittype)
 		self.tuba_notecount = TRUE;
 		c = CHAN_WEAPON2;
 	}
-	sound(self, c, TUBA_NOTE(Tuba_GetNote(self, hittype)), bound(0, VOL_BASE * cvar("g_balance_tuba_volume"), 1), cvar("g_balance_tuba_attenuation"));
+
+	n = Tuba_GetNote(self, hittype);
+
+	if(self.tuba_note)
+	{
+		if(self.tuba_note.cnt != n)
+		{
+			/*
+			self.tuba_note.cnt = n;
+			self.tuba_note.SendFlags |= 2;
+			*/
+			remove(self.tuba_note);
+			self.tuba_note = world;
+		}
+	}
+
+	if not(self.tuba_note)
+	{
+		self.tuba_note = spawn();
+		self.tuba_note.owner = self;
+		self.tuba_note.cnt = n;
+		self.tuba_note.think = W_Tuba_NoteThink;
+		Net_LinkEntity(self.tuba_note, FALSE, 0, W_Tuba_NoteSendEntity);
+	}
+
+	self.tuba_note.nextthink = time + cvar("g_balance_tuba_refire") * 2; // so it can get prolonged safely
+	if(self.origin != self.tuba_note.origin)
+	{
+		setorigin(self.tuba_note, self.origin);
+		self.tuba_note.SendFlags |= 1;
+	}
+
+	//sound(self, c, TUBA_NOTE(n), bound(0, VOL_BASE * cvar("g_balance_tuba_volume"), 1), cvar("g_balance_tuba_attenuation"));
 	RadiusDamage(self, self, cvar("g_balance_tuba_damage"), cvar("g_balance_tuba_edgedamage"), cvar("g_balance_tuba_radius"), world, cvar("g_balance_tuba_force"), hittype | WEP_TUBA, world);
 
 	o = gettaginfo(self.exteriorweaponentity, 0);
-	pointparticles(particleeffectnum("smoke_ring"), o + v_up * 45 + v_right * -6 + v_forward * 8, v_up * 100, 1);
+	if(time > self.tuba_smoketime)
+	{
+		pointparticles(particleeffectnum("smoke_ring"), o + v_up * 45 + v_right * -6 + v_forward * 8, v_up * 100, 1);
+		self.tuba_smoketime = time + 0.25;
+	}
 }
 
 void spawnfunc_weapon_tuba (void)
@@ -121,13 +178,23 @@ float w_tuba(float req)
 		if (weapon_prepareattack(0, cvar("g_balance_tuba_refire")))
 		{
 			W_Tuba_Attack(0);
-			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_tuba_animtime"), w_ready);
+			//weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_tuba_animtime"), w_ready);
+			weapon_thinkf(WFRAME_IDLE, cvar("g_balance_tuba_animtime"), w_ready);
 		}
 		if (self.BUTTON_ATCK2)
 		if (weapon_prepareattack(1, cvar("g_balance_tuba_refire")))
 		{
 			W_Tuba_Attack(HITTYPE_SECONDARY);
-			weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_tuba_animtime"), w_ready);
+			//weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_tuba_animtime"), w_ready);
+			weapon_thinkf(WFRAME_IDLE, cvar("g_balance_tuba_animtime"), w_ready);
+		}
+		if(self.tuba_note)
+		{
+			if(!self.BUTTON_ATCK && !self.BUTTON_ATCK2)
+			{
+				remove(self.tuba_note);
+				self.tuba_note = world;
+			}
 		}
 	}
 	else if (req == WR_PRECACHE)
@@ -136,9 +203,9 @@ float w_tuba(float req)
 		precache_model ("models/weapons/v_tuba.md3");
 		precache_model ("models/weapons/h_tuba.dpm");
 
-		float i;
-		for(i = -18; i <= +27; ++i)
-			precache_sound(TUBA_NOTE(i));
+		//float i;
+		//for(i = -18; i <= +27; ++i)
+		//	precache_sound(TUBA_NOTE(i));
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_TUBA);

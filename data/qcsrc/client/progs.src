@@ -40,6 +40,7 @@ casings.qc
 effects.qc
 wall.qc
 modeleffects.qc
+tuba.qc
 
 //vehicles/spiderbot.qc
 Main.qc
