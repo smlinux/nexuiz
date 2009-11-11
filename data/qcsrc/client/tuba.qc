@@ -11,7 +11,10 @@ void Ent_TubaNote_UpdateSound()
 
 void Ent_TubaNote_StopSound()
 {
-	sound(self, CHAN_PROJECTILE, TUBA_STOPNOTE(self.cnt), bound(0, VOL_BASE * cvar("g_balance_tuba_volume"), 1), cvar("g_balance_tuba_attenuation"));
+	string s;
+	s = TUBA_STOPNOTE(self.cnt);
+	if(s != "")
+		sound(self, CHAN_PROJECTILE, s, bound(0, VOL_BASE * cvar("g_balance_tuba_volume"), 1), cvar("g_balance_tuba_attenuation"));
 }
 
 void Ent_TubaNote(float bIsNew)
@@ -42,6 +45,7 @@ void Tuba_Precache()
 	for(i = -18; i <= +27; ++i)
 	{
 		precache_sound(TUBA_STARTNOTE(i));
-		//precache_sound(TUBA_STOPNOTE(i));
+		if(TUBA_STOPNOTE(i) != "")
+			precache_sound(TUBA_STOPNOTE(i));
 	}
 }
