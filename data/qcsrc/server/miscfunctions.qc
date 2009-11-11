@@ -935,7 +935,7 @@ void readplayerstartcvars()
     }
     else
     {
-        if (g_lms)
+        if (g_lms || g_ca)
         {
             start_ammo_shells = cvar("g_lms_start_ammo_shells");
             start_ammo_nails = cvar("g_lms_start_ammo_nails");
@@ -973,7 +973,7 @@ void readplayerstartcvars()
 
             if (t < 0) // "default" weapon selection
             {
-                if (g_lms)
+                if (g_lms || g_ca)
                     t = (e.spawnflags & WEPSPAWNFLAG_NORMAL);
                 else if (g_race || g_cts)
                     t = (i == WEP_LASER);

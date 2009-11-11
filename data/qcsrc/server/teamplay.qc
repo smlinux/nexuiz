@@ -284,12 +284,10 @@ void InitGameplayMode()
 		ScoreRules_lms();
 	}
 
-	if(g_arena || g_ca)
+	if(g_arena)
 	{
 		game = GAME_ARENA;
 		gamemode_name = "Arena";
-		if(g_ca)
-			ActivateTeamplay();
 		fraglimit_override = cvar("g_arena_point_limit");
 		leadlimit_override = cvar("g_arena_point_leadlimit");
 		maxspawned = cvar("g_arena_maxspawned");
@@ -298,6 +296,14 @@ void InitGameplayMode()
 		arena_roundbased = cvar("g_arena_roundbased");
 	}
 
+	if(g_ca)
+	{
+		game = GAME_CA;
+		gamemode_name = "Clan Arena";
+		ActivateTeamplay();
+		fraglimit_override = cvar("g_ca_point_limit");
+		leadlimit_override = cvar("g_ca_point_leadlimit");
+	}
 	if(g_keyhunt)
 	{
 		game = GAME_KEYHUNT;

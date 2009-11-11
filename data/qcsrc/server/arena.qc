@@ -32,12 +32,12 @@ void reset_map(float dorespawn)
 	entity oldself;
 	oldself = self;
 
-	if(g_arena || g_ca)
-	if(cvar("g_arena_warmup"))
+	if(g_arena && cvar("g_arena_warmup"))
 		warmup = time + cvar("g_arena_warmup");
-
-	if(g_ca)
+	else if(g_ca) {
+		warmup = time + cvar("g_ca_warmup");
 		allowed_to_spawn = 1;
+	}
 
 	lms_lowest_lives = 999;
 	lms_next_place = player_count;
@@ -191,7 +191,7 @@ void Arena_Warmup()
 	float f;
 	string msg;
 
-	if((!g_arena && !g_ca) || !arena_roundbased || (time < game_starttime))
+	if((!g_arena && !g_ca) || (g_arena && !arena_roundbased) || (time < game_starttime))
 		return;
 
 	f = floor(warmup - time + 1);

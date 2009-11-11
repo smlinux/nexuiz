@@ -1966,10 +1966,10 @@ void player_regen (void)
 	limita = limita * limit_mod;
 	//limitf = limitf * limit_mod;
 
-	if(g_lms)
+	if(g_lms && g_ca)
 		rot_mod = 0;
 
-	if (!g_minstagib && (!g_lms || cvar("g_lms_regenerate")))
+	if (!g_minstagib && !g_ca && (!g_lms || cvar("g_lms_regenerate")))
 	{
 		self.armorvalue = CalcRotRegen(self.armorvalue, mina, cvar("g_balance_armor_regen"), cvar("g_balance_armor_regenlinear"), regen_mod * frametime * (time > self.pauseregen_finished), maxa, cvar("g_balance_armor_rot"), cvar("g_balance_armor_rotlinear"), rot_mod * frametime * (time > self.pauserotarmor_finished), limita);
 		self.health = CalcRotRegen(self.health, minh, cvar("g_balance_health_regen"), cvar("g_balance_health_regenlinear"), regen_mod * frametime * (time > self.pauseregen_finished), maxh, cvar("g_balance_health_rot"), cvar("g_balance_health_rotlinear"), rot_mod * frametime * (time > self.pauserothealth_finished), limith);

@@ -302,7 +302,7 @@ void W_WeaponFrame()
 	if (frametime)
 		self.weapon_frametime = frametime;
 
-	if((arena_roundbased && time < warmup) || ((time < game_starttime) && !cvar("sv_ready_restart_after_countdown")))
+	if(((arena_roundbased || g_ca) && time < warmup) || ((time < game_starttime) && !cvar("sv_ready_restart_after_countdown")))
 		return;
 
 	if (!self.weaponentity || self.health < 1)

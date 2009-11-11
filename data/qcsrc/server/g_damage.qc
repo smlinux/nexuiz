@@ -702,7 +702,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 						{
 							teamdamage0 = max(attacker.dmg_team, cvar("g_teamdamage_threshold"));
 							attacker.dmg_team = attacker.dmg_team + damage;
-							if(attacker.dmg_team > teamdamage0)
+							if(attacker.dmg_team > teamdamage0 && !g_ca)
 								mirrordamage = cvar("g_mirrordamage") * (attacker.dmg_team - teamdamage0);
 							mirrorforce = cvar("g_mirrordamage") * vlen(force);
 							if(g_minstagib)
@@ -710,7 +710,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 								if(cvar("g_friendlyfire") == 0)
 									damage = 0;
 							}
-							else
+							else if(!g_ca)
 								damage = cvar("g_friendlyfire") * damage;
 							// mirrordamage will be used LATER
 						}
@@ -792,7 +792,12 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			damage = damage * cvar("g_balance_powerup_invincible_takedamage");
 
 		if (targ == attacker)
-			damage = damage * cvar("g_balance_selfdamagepercent");	// Partial damage if the attacker hits himself
+		{
+			if(g_ca)
+				damage = 0;
+			else
+				damage = damage * cvar("g_balance_selfdamagepercent");	// Partial damage if the attacker hits himself
+		}
 
 		// CTF: reduce damage/force
 		if(g_ctf)

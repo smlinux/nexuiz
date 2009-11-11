@@ -788,7 +788,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 
 		weaponsInMap |= weaponid;
 
-		if(g_lms)
+		if(g_lms || g_ca)
 		{
 			startitem_failed = TRUE;
 			remove(self);
