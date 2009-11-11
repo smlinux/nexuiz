@@ -1,7 +1,7 @@
 //#define TUBA_STARTNOTE(n) strcat("weapons/tuba_startnote", ftos(n), ".wav")
 //#define TUBA_STOPNOTE(n) strcat("weapons/tuba_stopnote", ftos(n), ".wav")
 #define TUBA_STARTNOTE(n) strcat("weapons/tuba_note", ftos(n), ".wav")
-#define TUBA_STOPNOTE(n) ""
+#define TUBA_STOPNOTE(n) "" // this will be ignored (for actually stopping, use misc/null.wav)
 .float cnt; // note
 
 void Ent_TubaNote_UpdateSound()
