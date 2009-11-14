@@ -710,7 +710,9 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 								if(cvar("g_friendlyfire") == 0)
 									damage = 0;
 							}
-							else if(!g_ca)
+							else if(g_ca)
+								damage = 0;
+							else
 								damage = cvar("g_friendlyfire") * damage;
 							// mirrordamage will be used LATER
 						}
