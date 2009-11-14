@@ -660,7 +660,7 @@ string(entity ent) etos = #65;
 //idea: div0
 //darkplaces implementation: div0
 //builtin definitions:
-string getextresponse(void) getextresponse = #624;
+string(void) getextresponse = #624;
 //description:
 //returns a string of the form "\"ipaddress:port\" data...", or the NULL string
 //if no packet was found. Packets can be queued into the client/server by
