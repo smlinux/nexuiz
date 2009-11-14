@@ -469,6 +469,15 @@ void(entity e, entity tagentity, string tagname) setattachment = #443; // attach
 //self.button7 = (bits & 64) != 0;
 //self.button8 = (bits & 128) != 0;
 
+// DP_LIGHTSTYLE_STATICVALUE
+// idea: VorteX
+// darkplaces implementation: VorteX
+// description: allows alternative 'static' lightstyle syntax : "=value"
+// examples: "=0.5", "=2.0", "=2.75"
+// could be used to control switchable lights or making styled lights with brightness > 2
+// Warning: this extension is experimental. It safely works in CSQC, but SVQC use is limited by the fact 
+// that other engines (which do not support this extension) could connect to a game and misunderstand this kind of lightstyle syntax
+
 //DP_LITSPRITES
 //idea: LordHavoc
 //darkplaces implementation: LordHavoc
