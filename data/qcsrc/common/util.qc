@@ -1531,11 +1531,20 @@ float compressShotOrigin(vector v)
 	y = rint(v_y * 4) + 128;
 	z = rint(v_z * 4) + 128;
 	if(x > 255 || x < 0)
-		error("shot origin x out of bounds");
+	{
+		print("shot origin ", vtos(v), " x out of bounds\n");
+		x = bound(0, x, 255);
+	}
 	if(y > 255 || y < 0)
-		error("shot origin y out of bounds");
+	{
+		print("shot origin ", vtos(v), " y out of bounds\n");
+		y = bound(0, y, 255);
+	}
 	if(z > 255 || z < 0)
-		error("shot origin z out of bounds");
+	{
+		print("shot origin ", vtos(v), " z out of bounds\n");
+		z = bound(0, z, 255);
+	}
 	return x * 0x10000 + y * 0x100 + z;
 }
 vector decompressShotOrigin(float f)
