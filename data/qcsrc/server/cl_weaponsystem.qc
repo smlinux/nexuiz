@@ -1475,7 +1475,9 @@ void W_SetupProjectileVelocityEx(entity missile, vector dir, vector upDir, float
 		mspercallsstyle = cvar("g_projectiles_spread_style");
 	}
 	mspercallsum -= gettime(GETTIME_HIRES);
+#endif
 	dir = W_CalculateProjectileSpread(dir, spread);
+#if 0
 	mspercallsum += gettime(GETTIME_HIRES);
 	mspercallcount += 1;
 	print("avg: ", ftos(mspercallcount / mspercallsum), " per sec\n");
