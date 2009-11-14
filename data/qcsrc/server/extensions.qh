@@ -653,9 +653,10 @@ string(entity ent) etos = #65;
 //builtin definitions:
 string getextresponse(void) getextresponse = #624;
 //description:
-//returns a string of the form "'ipaddress:port' data...", or the NULL string if
-//no packet was found. Packets can be queued into the client/server by sending
-//a packet starting with "\xFF\xFF\xFF\xFFextResponse " to the listening port.
+//returns a string of the form "\"ipaddress:port\" data...", or the NULL string
+//if no packet was found. Packets can be queued into the client/server by
+//sending a packet starting with "\xFF\xFF\xFF\xFFextResponse " to the
+//listening port.
 
 //DP_QC_FINDCHAIN
 //idea: LordHavoc
