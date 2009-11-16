@@ -132,7 +132,8 @@ void Sbar_DrawWeapon(float nr, float fade, float active, float wc)
 	if(sbar_accuracy_hud)
  	{
 		if(weapon_damage)
- 			weapon_stats = rint(100*weapon_hit/weapon_damage);
+ 			weapon_stats = floor(100 * weapon_hit / weapon_damage);
+
 		fill_colour = Sbar_AccuracyColor(weapon_stats);
 		if(weapon_damage)
 			drawpic(pos - '2 0 0' + '0 1 0' * (w_height - accuracybar_height), "gfx/hud/sb_accuracy_bar.tga", '1 0 0' * w_width + '0 1 0' * accuracybar_height, fill_colour, sbar_alpha_fg, DRAWFLAG_NORMAL);
@@ -1190,7 +1191,7 @@ vector Sbar_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 		weapon_hit = weapon_hits[i];
 		weapon_damage = weapon_fired[i];
 		if(weapon_damage)
-			weapon_stats = bound(0, rint(100 * weapon_hit / weapon_damage), 100);
+			weapon_stats = bound(0, floor(100 * weapon_hit / weapon_damage), 100);
 		self = get_weaponinfo(i);
 		float weapon_alpha;
 
@@ -2227,6 +2228,7 @@ void Sbar_DrawAccuracyStats()
 	float left_border;  // position where the weapons start, the description is in the border
 	vector fill_colour, fill_size;
 	vector pos;
+	vector border_colour;
 
 	float col_margin = 20;  // pixels between the columns
 	float row_margin = 20;  // pixels between the rows
@@ -2264,11 +2266,11 @@ void Sbar_DrawAccuracyStats()
 		weapon_hit = weapon_hits[i];
 		weapon_damage = weapon_fired[i];
 		self = get_weaponinfo(i);
+		border_colour = (i == activeweapon) ? '1 1 1' : '0 0 0';  // white or black border
 
-		//if ((weapon_number != 42))  // print them all :)
 		if (weapon_damage) {
 			if (self.weapon_type == WEP_TYPE_SPLASH) {
-				weapon_stats = bound(0, rint(100 * weapon_hit / weapon_damage), 100);
+				weapon_stats = bound(0, floor(100 * weapon_hit / weapon_damage), 100);
 
 				fill_colour_x = 1 - 0.015 * weapon_stats;
 				fill_colour_y = 1 - 0.015 * (100 - weapon_stats);
@@ -2299,7 +2301,7 @@ void Sbar_DrawAccuracyStats()
 
 				// background
 				drawpic(pos, "gfx/hud/sb_accuracy", fill_size , fill_colour, sbar_alpha_bg, DRAWFLAG_NORMAL);
-				drawborderlines(sbar_border_thickness, pos, fill_size, '0 0 0', sbar_alpha_bg, DRAWFLAG_NORMAL);
+				drawborderlines(sbar_border_thickness, pos, fill_size, border_colour, sbar_alpha_bg, DRAWFLAG_NORMAL);
 
 				// the weapon
 				drawpic(pos, strcat("gfx/hud/inv_weapon", ftos(i-1)), '1 0.5 0' * fill_size_x , '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
@@ -2317,8 +2319,8 @@ void Sbar_DrawAccuracyStats()
 				drawstringright(pos + '4.5 0 0' * sbar_fontsize_x + '0 9 0' * sbar_fontsize_y, ftos(max(0, weapon_damage - weapon_hit)), sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 				++count_splash;
-			} else if ((self.weapon_type == WEP_TYPE_HITSCAN) && (weapon_damage)) {
-				weapon_stats = bound(0, rint(100 * weapon_hit / weapon_damage), 100);
+			} else if (self.weapon_type == WEP_TYPE_HITSCAN) {
+				weapon_stats = bound(0, floor(100 * weapon_hit / weapon_damage), 100);
 
 				fill_colour_x = 1 - 0.015 * weapon_stats;
 				fill_colour_y = 1 - 0.015 * (100 - weapon_stats);
@@ -2349,7 +2351,7 @@ void Sbar_DrawAccuracyStats()
 
 				// background
 				drawpic(pos, "gfx/hud/sb_accuracy", fill_size , fill_colour, sbar_alpha_bg, DRAWFLAG_NORMAL);
-				drawborderlines(sbar_border_thickness, pos, fill_size, '0 0 0', sbar_alpha_bg, DRAWFLAG_NORMAL);
+				drawborderlines(sbar_border_thickness, pos, fill_size, border_colour, sbar_alpha_bg, DRAWFLAG_NORMAL);
 
 				// the weapon
 				drawpic(pos, strcat("gfx/hud/inv_weapon", ftos(i-1)), '1 0.5 0' * fill_size_x , '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
@@ -2467,12 +2469,12 @@ void Sbar_Draw (void)
 	float stat_items, stat_weapons;
 
 	weapon_stats = getstati(STAT_DAMAGE_HITS);
- 	weapon_number = weapon_stats & 63;
- 	weapon_hits[weapon_number] = rint(weapon_stats / 64);
+	weapon_number = weapon_stats & 63;
+	weapon_hits[weapon_number] = floor(weapon_stats / 64);
 
- 	weapon_stats = getstati(STAT_DAMAGE_FIRED);
- 	weapon_number = weapon_stats & 63;
- 	weapon_fired[weapon_number] = rint(weapon_stats / 64);
+	weapon_stats = getstati(STAT_DAMAGE_FIRED);
+	weapon_number = weapon_stats & 63;
+	weapon_fired[weapon_number] = floor(weapon_stats / 64);
 
 	vector o; o = '1 0 0' * vid_conwidth;
 	o_y = 28; // move spectator text slightly down to prevent overlapping the timer

@@ -720,6 +720,13 @@ void Ent_ClientData()
 
 	if(newspectatee_status != spectatee_status)
 	{
+		float i;
+		// clear the weapon accuracy stats
+		for(i = WEP_FIRST; i <= WEP_LAST; ++i) {
+			weapon_hits[i] = 0;
+			weapon_fired[i] = 0;
+		}
+
 		// clear race stuff
 		race_laptime = 0;
 		race_checkpointtime = 0;

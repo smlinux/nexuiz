@@ -389,7 +389,7 @@ void centerprint(entity e, string s);
 
 float bot_waypoints_for_items;
 
-.float	attack_finished_for[WEP_COUNT];
+.float attack_finished_for[WEP_COUNT];
 .float attack_finished_single;
 #ifdef INDEPENDENT_ATTACK_FINISHED
 #define ATTACK_FINISHED_FOR(ent,w) ((ent).(attack_finished_for[(w) - WEP_FIRST]))
@@ -598,7 +598,16 @@ string matchid;
 .float hitplotfh;
 .string noise4;
 
-.float damage_hits, maxdamage_fired;
+.float stat_hit;
+.float stat_fired;
+.float stat_count;
+
+.float stats_hit[WEP_LAST - WEP_FIRST + 1];  // for hitscan bullets hit
+.float stats_fired[WEP_LAST - WEP_FIRST + 1];  // for hitscan bullets fired
+
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(stats_hit);
+FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(stats_fired);
+
 .float maycheat;
 .float stat_leadlimit;
 
@@ -624,3 +633,8 @@ float client_cefc_accumulatortime;
 .entity personal;
 
 string deathmessage;
+
+
+
+.float cvar_cl_accuracy_data_share;
+.float cvar_cl_accuracy_data_receive;

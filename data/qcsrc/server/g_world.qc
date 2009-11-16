@@ -601,8 +601,8 @@ void spawnfunc_worldspawn (void)
 	addstat(STAT_INVINCIBLE_FINISHED, AS_FLOAT, invincible_finished);
 	addstat(STAT_PRESSED_KEYS, AS_FLOAT, pressedkeys);
 	addstat(STAT_FUEL, AS_INT, ammo_fuel);
-	addstat(STAT_DAMAGE_HITS, AS_INT, damage_hits);
- 	addstat(STAT_DAMAGE_FIRED, AS_INT, maxdamage_fired);
+	addstat(STAT_DAMAGE_HITS, AS_INT, stat_hit);
+	addstat(STAT_DAMAGE_FIRED, AS_INT, stat_fired);
 	addstat(STAT_SHOTORG, AS_INT, stat_shotorg);
 	addstat(STAT_LEADLIMIT, AS_FLOAT, stat_leadlimit);
 	addstat(STAT_BULLETS_LOADED, AS_INT, campingrifle_bulletcounter);
@@ -1297,10 +1297,7 @@ only called if a time or frag limit has expired
 */
 void NextLevel()
 {
-	float minTotalFrags;
-	float maxTotalFrags;
-	float score;
-	float f;
+	float i;
 
 	gameover = TRUE;
 
@@ -1330,31 +1327,51 @@ void NextLevel()
 
 	GameLogClose();
 
-	FOR_EACH_CLIENT(other)
-	{
-		FixIntermissionClient(other);
+// TO DO
 
-		if(other.winning)
-			bprint(other.netname, " ^7wins.\n");
-	}
+// save the stats to a text file on the client
+// stuffcmd(other, log_stats "stats/file_name");
+// bprint stats
+// stuffcmd(other, log_stats "");
+// use a filename similar to the demo name
+	// string file_name;
+	// file_name = strcat("\nlog_file \"stats/", strftime(TRUE, "%Y-%m-%d_%H-%M"), "_", mapname, ".txt\"");  // open the log file
 
-	minTotalFrags = 0;
-	maxTotalFrags = 0;
-	FOR_EACH_PLAYER(other)
-	{
-		if(maxTotalFrags < other.totalfrags)
-			maxTotalFrags = other.totalfrags;
-		if(minTotalFrags > other.totalfrags)
-			minTotalFrags = other.totalfrags;
-	}
+// write a stats parser for the menu
 
-	if(!currentbots)
-	{
-		FOR_EACH_PLAYER(other)
-		{
-			score = (other.totalfrags - minTotalFrags) / max(maxTotalFrags - minTotalFrags, 1);
-			f = bound(0, other.play_time / max(time, 1), 1);
-			// store some statistics?
+	if(cvar("sv_accuracy_data_send")) {
+		string stats_to_send;
+
+		FOR_EACH_PLAYER(other) {  // make the string to send
+			FixIntermissionClient(other);
+
+			if(other.cvar_cl_accuracy_data_share) {
+				stats_to_send = strcat(stats_to_send, ":hits:", other.netname);
+
+				for(i = WEP_FIRST; i <= WEP_LAST; ++i)
+					stats_to_send = strcat(stats_to_send, ":", ftos(other.stats_hit[i-1]));
+
+				stats_to_send = strcat(stats_to_send, "\n:fired:", other.netname);
+
+				for(i = WEP_FIRST; i <= WEP_LAST; ++i)
+					stats_to_send = strcat(stats_to_send, ":", ftos(other.stats_fired[i-1]));
+
+				stats_to_send = strcat(stats_to_send, "\n");
+			}
+		}
+
+		FOR_EACH_PLAYER(other) {  // send the stats string to all the willing clients
+			Score_NicePrint(other);  // print the score
+
+			if(other.cvar_cl_accuracy_data_receive)
+				bprint(stats_to_send);
+		}
+	} else { // ye olde message
+		FOR_EACH_PLAYER(other) {
+			FixIntermissionClient(other);
+
+			if(other.winning)
+				bprint(other.netname, " ^7wins.\n");
 		}
 	}
 
@@ -1362,9 +1379,7 @@ void NextLevel()
 		CampaignPreIntermission();
 
 	localcmd("\nsv_hook_gameend;");
-
-	// WriteByte (MSG_ALL, SVC_INTERMISSION);
-};
+}
 
 /*
 ============

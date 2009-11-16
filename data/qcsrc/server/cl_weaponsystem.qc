@@ -147,11 +147,14 @@ void W_SetupShot_Dir_ProjectileSize(entity ent, vector s_forward, vector mi, vec
 	ent.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE;
 	trueaimpoint = trace_endpos;
 
-	// Track max damage and set the stat to be sent later in g_world.qc
-	if not(inWarmupStage)
-	{
-		ent.max_damage[ent.weapon] += maxdamage;
-		ent.maxdamage_fired = ent.weapon + 64 * rint(ent.max_damage[ent.weapon]);
+	// track max damage
+	if not(inWarmupStage) {
+		entity w;
+		w = get_weaponinfo(ent.weapon);
+		if(w.weapon_type == WEP_TYPE_SPLASH) {  // splash damage
+			ent.stats_fired[ent.weapon - 1] += maxdamage;
+			ent.stat_fired = ent.weapon + 64 * floor(ent.stats_fired[ent.weapon - 1]);
+		}
 	}
 
 	W_HitPlotAnalysis(ent, v_forward, v_right, v_up);

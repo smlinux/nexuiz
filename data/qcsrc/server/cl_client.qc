@@ -2037,12 +2037,33 @@ void GetPressedKeys(void) {
 		self.pressedkeys &~= KEY_CROUCH;
 }
 
+void update_stats (float number, float hit, float fired) {
+// self.stat_hit   = number + ((number==0) ? 1 : 64) * hit   * sv_accuracy_data_share;
+// self.stat_fired = number + ((number==0) ? 1 : 64) * fired * sv_accuracy_data_share;
+
+	if(number) {
+		self.stat_hit = number + 64 * hit * sv_accuracy_data_share;
+		self.stat_fired = number + 64 * fired * sv_accuracy_data_share;
+	} else {
+		self.stat_hit = hit * sv_accuracy_data_share;
+		self.stat_fired = fired * sv_accuracy_data_share;
+	}
+}
+
 /*
 ======================
 spectate mode routines
 ======================
 */
+
+.float weapon_count;
 void SpectateCopy(entity spectatee) {
+	if(spectatee.weapon_count < WEP_LAST) {
+		update_stats (spectatee.weapon_count, spectatee.cvar_cl_accuracy_data_share * floor(spectatee.stats_hit[spectatee.weapon_count - 1]), spectatee.cvar_cl_accuracy_data_share * floor(spectatee.stats_fired[spectatee.weapon_count - 1]));
+		spectatee.weapon_count ++;
+	} else
+		update_stats (0, spectatee.cvar_cl_accuracy_data_share * spectatee.stat_hit, spectatee.cvar_cl_accuracy_data_share * spectatee.stat_fired);
+
 	self.kh_state = spectatee.kh_state;
 	self.armortype = spectatee.armortype;
 	self.armorvalue = spectatee.armorvalue;
@@ -2093,20 +2114,25 @@ float SpectateUpdate() {
 
 float SpectateNext() {
 	other = find(self.enemy, classname, "player");
-	if (!other) {
+
+	if (!other)
 		other = find(other, classname, "player");
-	}
-	if (other) {
+
+	if (other)
 		self.enemy = other;
-	}
+
 	if(self.enemy.classname == "player") {
 		msg_entity = self;
 		WriteByte(MSG_ONE, SVC_SETVIEW);
 		WriteEntity(MSG_ONE, self.enemy);
 	 	//stuffcmd(self, "set viewsize $tmpviewsize \n");
 		self.movetype = MOVETYPE_NONE;
+
+		self.enemy.weapon_count = 0;
+
 		if(!SpectateUpdate())
 			PutObserverInServer();
+
 		return 1;
 	} else {
 		return 0;
@@ -2144,15 +2170,23 @@ void LeaveSpectatorMode()
 	if(isJoinAllowed()) {
 		if(!teams_matter || cvar("g_campaign") || cvar("g_balance_teams") || (self.wasplayer && cvar("g_changeteam_banned"))) {
 			self.classname = "player";
+
 			if(cvar("g_campaign") || cvar("g_balance_teams") || cvar("g_balance_teams_force"))
 				JoinBestTeam(self, FALSE, TRUE);
+
 			if(cvar("g_campaign"))
 				campaign_bots_may_start = 1;
+
+			self.stat_count = WEP_LAST;
+
 			PutClientInServer();
+
 			if(self.classname == "player")
 				bprint ("^4", self.netname, "^4 is playing now\n");
+
 			if(!cvar("g_campaign"))
 				centerprint(self,""); // clear MOTD
+
 			return;
 		} else {
 			if (g_ca && self.caplayer) {
@@ -2289,12 +2323,14 @@ void SpectatorThink()
 				self.classname = "spectator";
 			} else {
 				self.classname = "observer";
+				self.stat_count = WEP_LAST;
 				PutClientInServer();
 			}
 		} else if (self.BUTTON_ATCK2) {
 			self.welcomemessage_time = 0;
 			self.flags &~= FL_JUMPRELEASED;
 			self.classname = "observer";
+			self.stat_count = WEP_LAST;
 			PutClientInServer();
 		} else {
 			if(!SpectateUpdate())
@@ -2311,6 +2347,7 @@ void SpectatorThink()
 			}
 		}
 	}
+
 	PrintWelcomeMessage(self);
 	self.flags |= FL_CLIENT | FL_NOTARGET;
 }
@@ -2837,6 +2874,15 @@ void PlayerPostThink (void)
 	if (strlen(self.netname) < 1) {
 		self.netname = "Player";
 		stuffcmd(self, "seta _cl_name Player\n");
+	}
+
+	// send the clients accuracy stats to the client
+	if(self.stat_count > 0)
+	if(frametime)
+	{
+		self.stat_hit = self.stat_count + 64 * floor(self.(stats_hit[self.stat_count - 1]));
+		self.stat_fired = self.stat_count + 64 * floor(self.(stats_fired[self.stat_count - 1]));
+		self.stat_count -= 1;
 	}
 
 	if(sv_maxidle && frametime)

@@ -1,4 +1,3 @@
-
 void W_Shotgun_Attack (void)
 {
 	float	sc;

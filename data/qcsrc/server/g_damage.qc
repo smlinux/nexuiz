@@ -1009,23 +1009,16 @@ vector NearestPointOnBox(entity box, vector org)
 	return nearest;
 }
 
-.float actual_damage[WEP_COUNT]; //amount of damage done
-.float max_damage[WEP_COUNT]; //the maximum damage of the weapon
-
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(actual_damage);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(max_damage);
-
 void Damage_RecordDamage(entity attacker, float deathtype, float damage)
 {
 	float weaponid;
 	weaponid = DEATH_WEAPONOF(deathtype);
+
 	if not(inWarmupStage)
-	if(weaponid)
-	if(clienttype(attacker) == CLIENTTYPE_REAL)
-	{
-		// Track damage done and update the stat to be sent later in g_world.qc
-		attacker.actual_damage[weaponid] += damage;
-		attacker.damage_hits = weaponid + 64 * rint(attacker.actual_damage[weaponid]);
+	if (weaponid)
+	if ((clienttype(attacker) == CLIENTTYPE_REAL) | (clienttype(attacker) == CLIENTTYPE_BOT)) {
+		attacker.stats_hit[weaponid - 1] += damage;
+		attacker.stat_hit = weaponid + 64 * floor(attacker.stats_hit[weaponid - 1]);
 	}
 }
 

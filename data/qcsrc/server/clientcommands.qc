@@ -275,6 +275,7 @@ void SV_ParseClientCommand(string s) {
 					self.caplayer = 1;
 				PlayerScore_Clear(self);
 				bprint ("^4", self.netname, "^4 is playing now\n");
+				self.stat_count = WEP_LAST;
 				PutClientInServer();
 				if(cvar("g_campaign"))
 					campaign_bots_may_start = 1;

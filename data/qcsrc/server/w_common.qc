@@ -1,9 +1,3 @@
-.float bullets_hit[WEP_COUNT]; 		//for hitscan bullets hit
-.float bullets_fired[WEP_COUNT];	//for hitscan bullets fired
-
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(bullets_hit);
-FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(bullets_fired);
-
 void W_GiveWeapon (entity e, float wep, string name)
 {
 	entity oldself;
@@ -32,15 +26,14 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 	local vector hitloc, force, endpoint, dir;
 	local entity ent, endent;
 	local float endq3surfaceflags;
-	//local entity explosion;
-	float did_hit;
+
 	float length;
 	vector beampos;
 	string snd;
 	entity pseudoprojectile;
 	float f, ffs;
 
-	did_hit = 0;
+	float hit;
 
 	railgun_start = start;
 	railgun_end = end;
@@ -131,11 +124,11 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 		//for stats so that team hit will count as a miss
 		if(ent.flags & FL_CLIENT)
 		if(ent.deadflag == DEAD_NO)
-			did_hit = 1;
+			hit = 1;
 
 		if(teams_matter)
 		if(ent.team == self.team)
-			did_hit = 0;
+			hit = 0;
 
 		f = ExponentialFalloff(mindist, maxdist, halflifedist, (ent.origin - start) * dir);
 		ffs = ExponentialFalloff(mindist, maxdist, forcehalflifedist, (ent.origin - start) * dir);
@@ -152,22 +145,17 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 		ent = findfloat(ent, railgunhit, TRUE);
 	}
 
-	//calculate hits and fired shots for hitscan
+	// calculate hits and fired shots for hitscan
 	if not(inWarmupStage)
-	if not(self.isbot)
 	{
-		self.bullets_fired[self.weapon] += 1;
+		self.stats_fired[self.weapon - 1] += 1;
+		self.stat_fired = self.weapon + 64 * floor(self.stats_fired[self.weapon - 1]);
 
-		if(did_hit)
-			self.bullets_hit[self.weapon] += 1;
-
-		// update the client and store in addstat() in g_world
-		self.damage_hits = self.weapon + 64 * rint(self.bullets_hit[self.weapon]);
-		self.maxdamage_fired = self.weapon + 64 * rint(self.bullets_fired[self.weapon]);
+		if(hit) {
+			self.stats_hit[self.weapon - 1] += 1;
+			self.stat_hit = self.weapon + 64 * floor(self.stats_hit[self.weapon - 1]);
+		}
 	}
-
-	// we're done with the explosion entity, remove it
-	//remove(explosion);
 
 	trace_endpos = endpoint;
 	trace_ent = endent;
@@ -180,9 +168,6 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 void W_BallisticBullet_Hit (void)
 {
 	float f;
-
-	float hit;
-	hit = 0;
 
 	f = pow(bound(0, vlen(self.velocity) / vlen(self.oldvelocity), 1), 2); // energy multiplier
 
@@ -199,14 +184,6 @@ void W_BallisticBullet_Hit (void)
 		railgun_start = self.origin - 2 * frametime * self.velocity;
 		railgun_end = self.origin + 2 * frametime * self.velocity;
 
-		if(other.flags & FL_CLIENT)
-		if(other.deadflag == DEAD_NO)
-			hit = 1;
-
-		if(teamplay)
-		if(other.team == self.owner.team)
-			hit = 0;
-
 		Damage(other, self, self.owner, self.dmg * f, self.projectiledeathtype, self.origin, self.dmg_force * normalize(self.velocity) * f);
 		damage_headshotbonus = 0;
 
@@ -218,17 +195,15 @@ void W_BallisticBullet_Hit (void)
 				announce(self.owner, "announcer/male/awesome.wav");
 		}
 
-		//calculate hits for ballistic weapons
-		if not(inWarmupStage)
-		if not(self.owner.isbot)
+		// calculate hits for ballistic weapons
+		if (other.flags & FL_CLIENT)  // is the player a client
+		if (other.deadflag == DEAD_NO)  // is the victim a corpse
+		if ((!(teamplay)) | (other.team != self.owner.team))  // not teamplay (ctf, kh, tdm etc) or the victim is in the same team
+		if not(inWarmupStage)  // not in warm up stage
 		{
-			if(hit)
-				self.owner.bullets_hit[self.owner.weapon] += 1;
-			// update the client
-			self.owner.damage_hits = self.owner.weapon + 64 * rint(self.owner.bullets_hit[self.owner.weapon]);
+			self.owner.stats_hit[self.owner.weapon - 1] += 1;
+			self.owner.stat_hit = self.owner.weapon + 64 * floor(self.owner.stats_hit[self.owner.weapon - 1]);
 		}
-
-		//sound (self, CHAN_PROJECTILE, "weapons/electro_impact.wav", VOL_BASE, ATTN_NORM);
 	}
 
 	self.enemy = other; // don't hit the same player twice with the same bullet
@@ -342,6 +317,7 @@ void endFireBallisticBullet()
 {
 	endzcurveparticles();
 }
+
 void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, float lifetime, float damage, float headshotbonus, float force, float dtype, float tracereffects, float gravityfactor, float bulletconstant)
 {
 	float lag, dt, savetime;
@@ -376,14 +352,6 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 
 	proj.oldvelocity = proj.velocity;
 
-	//calculate fired bullets for ballistics
-	if not(inWarmupStage)
-	if not(self.isbot)
-	{
-		self.bullets_fired[self.weapon] += 1;
-		self.maxdamage_fired = self.weapon + 64 * rint(self.bullets_fired[self.weapon]);
-	}
-
 	if(cvar("g_antilag_bullets"))
 	if(pSpeed >= cvar("g_antilag_bullets"))
 	{
@@ -413,6 +381,13 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 		savetime = frametime;
 		frametime = 0.05;
 
+		// update the accuracy stats - increase shots fired by 1
+		if not(inWarmupStage)
+		{
+			oldself.stats_fired[oldself.weapon - 1] += 1;
+			oldself.stat_fired = oldself.weapon + 64 * floor(oldself.stats_fired[oldself.weapon - 1]);
+		}
+
 		for(;;)
 		{
 			// DP tracetoss is stupid and always traces in 0.05s
@@ -428,13 +403,6 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 			tracetoss(self, oldself);
 			self.velocity = v0;
 			self.gravity = g0;
-
-			if not(inWarmupStage)
-			if not(self.isbot)
-			{
-				self.bullets_fired[self.weapon] += 1;
-				self.maxdamage_fired = self.weapon + 64 * rint(self.bullets_fired[self.weapon]);
-			}
 
 			if(vlen(trace_endpos - self.origin) > 16)
 				zcurveparticles_from_tracetoss(eff, self.origin, trace_endpos, self.velocity);
@@ -455,7 +423,7 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 					break;
 
 				// hit the player
-				W_BallisticBullet_Hit ();
+				W_BallisticBullet_Hit();
 			}
 
 			// go through solid!
@@ -476,6 +444,13 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 		return;
 	}
 
+	// update the accuracy stats
+	if not(inWarmupStage)
+	{
+		self.stats_fired[self.weapon - 1] += 1;
+		self.stat_fired = self.weapon + 64 * floor(self.stats_fired[self.weapon - 1]);
+	}
+
 	if(tracereffects & EF_RED)
 		CSQCProjectile(proj, TRUE, PROJECTILE_BULLET_GLOWING_TRACER, TRUE);
 	else if(tracereffects & EF_BLUE)
@@ -484,11 +459,9 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 		CSQCProjectile(proj, TRUE, PROJECTILE_BULLET, TRUE);
 }
 
-
 void fireBullet (vector start, vector dir, float spread, float damage, float force, float dtype, float tracer)
 {
 	vector  end;
-	//local entity e;
 
 	dir = normalize(dir + randomvec() * spread);
 	end = start + dir * MAX_SHOT_DISTANCE;
@@ -497,7 +470,7 @@ void fireBullet (vector start, vector dir, float spread, float damage, float for
 	else
 		traceline_antilag (self, start, end, FALSE, self, ANTILAG_LATENCY(self));
 
-    end = trace_endpos;
+	end = trace_endpos;
 
 	if ((trace_fraction != 1.0) && (pointcontents (trace_endpos) != CONTENT_SKY))
 	{
@@ -509,7 +482,6 @@ void fireBullet (vector start, vector dir, float spread, float damage, float for
 	}
 	trace_endpos = end;
 }
-
 
 void W_PrepareExplosionByDamage(entity attacker, void() explode)
 {
