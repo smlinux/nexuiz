@@ -85,8 +85,17 @@ float W_Tuba_NoteSendEntity(entity to, float sf)
 
 void W_Tuba_NoteThink()
 {
-	self.owner.tuba_note = world;
-	remove(self);
+	self.nextthink = time;
+	if(self.owner.origin != self.origin)
+	{
+		setorigin(self, self.owner.origin);
+		self.SendFlags |= 1;
+	}
+	if(time > self.teleport_time)
+	{
+		self.owner.tuba_note = world;
+		remove(self);
+	}
 }
 
 void W_Tuba_Attack(float hittype)
@@ -126,15 +135,11 @@ void W_Tuba_Attack(float hittype)
 		self.tuba_note.owner = self;
 		self.tuba_note.cnt = n;
 		self.tuba_note.think = W_Tuba_NoteThink;
+		self.tuba_note.nextthink = time;
 		Net_LinkEntity(self.tuba_note, FALSE, 0, W_Tuba_NoteSendEntity);
 	}
 
-	self.tuba_note.nextthink = time + cvar("g_balance_tuba_refire") * 2; // so it can get prolonged safely
-	if(self.origin != self.tuba_note.origin)
-	{
-		setorigin(self.tuba_note, self.origin);
-		self.tuba_note.SendFlags |= 1;
-	}
+	self.tuba_note.teleport_time = time + cvar("g_balance_tuba_refire") * 2; // so it can get prolonged safely
 
 	//sound(self, c, TUBA_NOTE(n), bound(0, VOL_BASE * cvar("g_balance_tuba_volume"), 1), cvar("g_balance_tuba_attenuation"));
 	RadiusDamage(self, self, cvar("g_balance_tuba_damage"), cvar("g_balance_tuba_edgedamage"), cvar("g_balance_tuba_radius"), world, cvar("g_balance_tuba_force"), hittype | WEP_TUBA, world);
