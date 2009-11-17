@@ -420,85 +420,104 @@ string NearestLocation(vector p)
 
 string formatmessage(string msg)
 {
-    float p, p1, p2;
-    float n;
-    string escape;
-    string replacement;
-    p = 0;
-    n = 7;
-    while (1)
-    {
-        if (n < 1)
-            break; // too many replacements
-        n = n - 1;
-        p1 = strstr(msg, "%", p); // NOTE: this destroys msg as it's a tempstring!
-        p2 = strstr(msg, "\\", p); // NOTE: this destroys msg as it's a tempstring!
+	float p, p1, p2;
+	float n;
+	string escape;
+	string replacement;
+	p = 0;
+	n = 7;
 
-        if (p1 < 0)
-            p1 = p2;
-        if (p2 < 0)
-            p2 = p1;
-        p = min(p1, p2);
+	while (1) {
+		if (n < 1)
+			break; // too many replacements
 
-        if (p < 0)
-            break;
-        replacement = substring(msg, p, 2);
-        escape = substring(msg, p + 1, 1);
-        if (escape == "%")
-            replacement = "%";
-        else if (escape == "\\")
-            replacement = "\\";
-        else if (escape == "n")
-            replacement = "\n";
-        else if (escape == "a")
-            replacement = ftos(floor(self.armorvalue));
-        else if (escape == "h")
-            replacement = ftos(floor(self.health));
-        else if (escape == "l")
-            replacement = NearestLocation(self.origin);
-        else if (escape == "y")
-            replacement = NearestLocation(self.cursor_trace_endpos);
-        else if (escape == "d")
-            replacement = NearestLocation(self.death_origin);
-        else if (escape == "w")
-        {
-            float wep;
-            wep = self.weapon;
-            if (!wep)
-                wep = self.switchweapon;
-            if (!wep)
-                wep = self.cnt;
-            replacement = W_Name(wep);
-        }
-        else if (escape == "W")
-        {
-            if (self.items & IT_SHELLS) replacement = "shells";
-            else if (self.items & IT_NAILS) replacement = "bullets";
-            else if (self.items & IT_ROCKETS) replacement = "rockets";
-            else if (self.items & IT_CELLS) replacement = "cells";
-            else replacement = "batteries"; // ;)
-        }
-        else if (escape == "x")
-        {
-            replacement = self.cursor_trace_ent.netname;
-            if (!replacement || !self.cursor_trace_ent)
-                replacement = "nothing";
-        }
-        else if (escape == "p")
-        {
-            if (self.last_selected_player)
-                replacement = self.last_selected_player.netname;
-            else
-                replacement = "(nobody)";
-        }
-	else if (escape == "s")
-		replacement = ftos(vlen(self.velocity - self.velocity_z * '0 0 1'));
-	else if (escape == "S")
-		replacement = ftos(vlen(self.velocity));
-	msg = strcat(substring(msg, 0, p), replacement, substring(msg, p+2, strlen(msg) - (p+2)));
-	p = p + strlen(replacement);
+		n = n - 1;
+		p1 = strstr(msg, "%", p); // NOTE: this destroys msg as it's a tempstring!
+		p2 = strstr(msg, "\\", p); // NOTE: this destroys msg as it's a tempstring!
+	
+		if (p1 < 0)
+			p1 = p2;
+
+		if (p2 < 0)
+			p2 = p1;
+
+		p = min(p1, p2);
+	
+		if (p < 0)
+			break;
+
+		replacement = substring(msg, p, 2);
+		escape = substring(msg, p + 1, 1);
+
+		if (escape == "%")
+			replacement = "%";
+		else if (escape == "\\")
+			replacement = "\\";
+		else if (escape == "n")
+			replacement = "\n";
+		else if (escape == "a")
+			replacement = ftos(floor(self.armorvalue));
+		else if (escape == "h")
+			replacement = ftos(floor(self.health));
+		else if (escape == "l")
+			replacement = NearestLocation(self.origin);
+		else if (escape == "y")
+			replacement = NearestLocation(self.cursor_trace_endpos);
+		else if (escape == "d")
+			replacement = NearestLocation(self.death_origin);
+		else if (escape == "w") {
+			float wep;
+			wep = self.weapon;
+			if (!wep)
+				wep = self.switchweapon;
+			if (!wep)
+				wep = self.cnt;
+			replacement = W_Name(wep);
+		} else if (escape == "W") {
+			if (self.items & IT_SHELLS) replacement = "shells";
+			else if (self.items & IT_NAILS) replacement = "bullets";
+			else if (self.items & IT_ROCKETS) replacement = "rockets";
+			else if (self.items & IT_CELLS) replacement = "cells";
+			else replacement = "batteries"; // ;)
+		} else if (escape == "x") {
+			replacement = self.cursor_trace_ent.netname;
+			if (!replacement || !self.cursor_trace_ent)
+				replacement = "nothing";
+		} else if (escape == "p") {
+			if (self.last_selected_player)
+				replacement = self.last_selected_player.netname;
+			else
+				replacement = "(nobody)";
+		} else if (escape == "s")
+			replacement = ftos(vlen(self.velocity - self.velocity_z * '0 0 1'));
+		else if (escape == "S")
+			replacement = ftos(vlen(self.velocity));
+		else if (escape == "v") {
+			float weapon_number;
+			local entity stats;
+
+			if(self.classname == "spectator")
+				stats = self.enemy;
+			else
+				stats = self;
+
+			weapon_number = stats.weapon;
+
+			if (!weapon_number)
+				weapon_number = stats.switchweapon;
+
+			if (!weapon_number)
+				weapon_number = stats.cnt;
+
+			if(stats.cvar_cl_accuracy_data_share && stats.stats_fired[weapon_number - 1])
+				replacement = ftos(bound(0, floor(100 * stats.stats_hit[weapon_number - 1] / stats.stats_fired[weapon_number - 1]), 100));
+			else
+				replacement = "~"; // or something to indicate NULL, not available
+		}
+
+		msg = strcat(substring(msg, 0, p), replacement, substring(msg, p+2, strlen(msg) - (p+2)));
+		p = p + strlen(replacement);
 	}
-
 	return msg;
 }
 

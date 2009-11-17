@@ -1342,7 +1342,7 @@ void NextLevel()
 	if(cvar("sv_accuracy_data_send")) {
 		string stats_to_send;
 
-		FOR_EACH_PLAYER(other) {  // make the string to send
+		FOR_EACH_CLIENT(other) {  // make the string to send
 			FixIntermissionClient(other);
 
 			if(other.cvar_cl_accuracy_data_share) {
@@ -1360,10 +1360,10 @@ void NextLevel()
 			}
 		}
 
-		FOR_EACH_PLAYER(other) {  // send the stats string to all the willing clients
+		FOR_EACH_REALCLIENT(other) {  // only spam humans
 			Score_NicePrint(other);  // print the score
 
-			if(other.cvar_cl_accuracy_data_receive)
+			if(other.cvar_cl_accuracy_data_receive)  // send the stats string to all the willing clients
 				bprint(stats_to_send);
 		}
 	} else { // ye olde message

@@ -207,6 +207,9 @@ void bot_setnameandstuff()
 	self.playerskin = self.playerskin_freeme = strzone(bot_skin);
 
 	self.netname = self.netname_freeme = strzone(strcat(prefix, name, suffix));
+
+	self.cvar_cl_accuracy_data_share = 1;  // share the bots weapon accuracy data with the world
+	self.cvar_cl_accuracy_data_receive = 0;  // don't receive any weapon accuracy data
 };
 
 void bot_custom_weapon_priority_setup()
