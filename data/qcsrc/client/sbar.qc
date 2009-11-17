@@ -1750,6 +1750,8 @@ void Sbar_Timer()
 	topright = '0 0 0';
 	topright_x = vid_conwidth;
 	
+	float scale;
+	scale = cvar("sbar_timer_scale");
 	timelimit = getstatf(STAT_TIMELIMIT);
 	
 	timeleft = max(0, timelimit * 60 + getstatf(STAT_GAMESTARTTIME) - time);
@@ -1774,45 +1776,45 @@ void Sbar_Timer()
 			seconds = elapsedTime - minutes*60;
 		}
 		if (minutes < 10)
-			bgpos_x = topright_x - 54 - 17 - 12;
+			bgpos_x = topright_x - (54 + 17 + 12) * scale;
 		else if (minutes < 100)	// nudge the timer background left if more digits are drawn
-			bgpos_x = topright_x - 72 - 17 - 12;
+			bgpos_x = topright_x - (72 + 17 + 12) * scale;
 		else
-			bgpos_x = topright_x - 90 - 17 - 12;
+			bgpos_x = topright_x - (90 + 17 + 12) * scale;
 		bgpos_y = 0;
 		bgpos_z = 0;
 	} else {
 		minutes = minutesLeft;
 		seconds = secondsLeft;
 		if (minutes == 0)
-		bgpos_x = topright_x - 36 - 7 - 12;
+			bgpos_x = topright_x - (36 + 7 + 12) * scale;
 		else if (minutes < 10) // nudge the timer background left if more digits are drawn
-			bgpos_x = topright_x - 54 - 17 - 12;
+			bgpos_x = topright_x - (54 + 17 + 12) * scale;
 		else if (minutes < 100)
-			bgpos_x = topright_x - 72 - 17 - 12;
+			bgpos_x = topright_x - (72 + 17 + 12) * scale;
 		else
-			bgpos_x = topright_x - 90 - 17 - 12;
+			bgpos_x = topright_x - (90 + 17 + 12) * scale;
 		bgpos_y = 0;
 		bgpos_z = 0;
 	}
 
 	if (cvar("viewsize") <= 100) { // draw timer background when viewsize <= 100
 		if (teamplay)
-			drawpic(bgpos, "gfx/hud/sb_timerbg", '120 30 0', GetTeamRGB(myteam) * sbar_color_bg_team, sbar_alpha_bg, DRAWFLAG_NORMAL); // timer bg color = myteam color
+			drawpic(bgpos, "gfx/hud/sb_timerbg", '120 30 0' * scale, GetTeamRGB(myteam) * sbar_color_bg_team, sbar_alpha_bg, DRAWFLAG_NORMAL); // timer bg color = myteam color
 		else {
 			color_x = cvar("sbar_color_bg_r");
 			color_y = cvar("sbar_color_bg_g");
 			color_z = cvar("sbar_color_bg_b");
 
-			drawpic(bgpos, "gfx/hud/sb_timerbg", '120 30 0', color, sbar_alpha_bg, DRAWFLAG_NORMAL);
+			drawpic(bgpos, "gfx/hud/sb_timerbg", '120 30 0' * scale, color, sbar_alpha_bg, DRAWFLAG_NORMAL);
 		}
 	}
 
 	if(minutesLeft >= 1 || cvar("sbar_increment_maptime") || timelimit == 0 || warmup_stage) {
-		Sbar_DrawXNum(topright - '103 0 0' + '0 2 0', minutes, 3, 0, 18, timer_color, 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
-		drawpic(topright - '53 0 0' + '0 1 0', "gfx/hud/num_colon", '18 18 0', timer_color, sbar_alpha_fg, DRAWFLAG_NORMAL);
+		Sbar_DrawXNum(topright - ('103 0 0' - '0 2 0') * scale, minutes, 3, 0, 18 * scale, timer_color, 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+		drawpic(topright - ('53 0 0' - '0 1 0') * scale, "gfx/hud/num_colon", '18 18 0' * scale, timer_color, sbar_alpha_fg, DRAWFLAG_NORMAL);
 	}
-	Sbar_DrawXNum(topright - '36 0 0' - '3 0 0' + '0 2 0', seconds, -2, 0, 18, timer_color, 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
+	Sbar_DrawXNum(topright - ('36 0 0' + '3 0 0' - '0 2 0') * scale, seconds, -2, 0, 18 * scale, timer_color, 0, 0, sbar_alpha_fg, DRAWFLAG_NORMAL);
 }
 
 void CSQC_Strength_Timer() {
