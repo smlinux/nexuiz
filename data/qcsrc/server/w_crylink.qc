@@ -178,7 +178,7 @@ void W_Crylink_Attack3 (void)
 {
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_secondary_ammo");
-	W_SetupShot (self, TRUE, 0, "weapons/crylink_fire.wav", cvar("g_balance_crylink_secondary_damage"));
+	W_SetupShot (self, TRUE, 0, "weapons/crylink_fire2.wav", cvar("g_balance_crylink_secondary_damage"));
 
 	traceline_antilag(self, w_shotorg, w_shotorg + w_shotdir * cvar("g_balance_crylink_secondary_radius"), FALSE, self, self.ping * 0.001);
 
