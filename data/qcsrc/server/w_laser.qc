@@ -97,6 +97,18 @@ void W_Laser_Attack (float issecondary)
 	}
 }
 
+void W_Laser_Attack2 (void) // gauntlet
+{
+	W_SetupShot (self, TRUE, 0, "weapons/gauntlet_fire.wav", cvar("g_balance_laser_primary_damage"));
+
+	traceline_antilag(self, w_shotorg, w_shotorg + w_shotdir * cvar("g_balance_laser_primary_radius"), FALSE, self, self.ping * 0.001);
+
+	pointparticles(particleeffectnum("laser_gauntlet"), w_shotorg + w_shotdir * cvar("g_balance_laser_primary_radius"), '0 0 0', 1);
+
+	if (trace_fraction < 1)
+		Damage(trace_ent, self, self, cvar("g_balance_laser_primary_damage"), WEP_LASER | HITTYPE_SECONDARY, trace_endpos, cvar("g_balance_laser_primary_force") * w_shotdir);
+}
+
 void spawnfunc_weapon_laser (void)
 {
 	weapon_defaultspawnfunc(WEP_LASER);
@@ -125,7 +137,10 @@ float w_laser(float req)
 		if (self.BUTTON_ATCK)
 		if (weapon_prepareattack(0, cvar("g_balance_laser_primary_refire")))
 		{
-			W_Laser_Attack(0);
+			if(cvar("g_balance_laser_gauntlet"))
+				W_Laser_Attack2();
+			else
+				W_Laser_Attack(0);
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_laser_primary_animtime"), w_ready);
 		}
 		if (self.BUTTON_ATCK2)
