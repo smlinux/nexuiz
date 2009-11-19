@@ -2303,16 +2303,6 @@ bounce -1
 velocityjitter 64 64 64
 velocitymultiplier 100
 
-// used nowhere in code
-effect crylinklightning 
-countabsolute 1
-type beam
-tex 60 60
-size 0.5 0.5
-alpha 256 256 64
-color 0xff0000 0xff0000
-sizeincrease 1.1
-velocitymultiplier 1.3
 
 
 
