@@ -730,7 +730,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		if(defer_ClientKill_Now_TeamChange)
 			ClientKill_Now_TeamChange();
 
-		if(sv_gentle > 0) {
+		if(sv_gentle > 0 || cvar("ekg")) {
 			// remove corpse
 			PlayerCorpseDamage (inflictor, attacker, 100.0, deathtype, hitloc, force);
 		}
