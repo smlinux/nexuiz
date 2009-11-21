@@ -856,6 +856,13 @@ float bot_cmd_aimtarget()
 float bot_presskeys()
 {
 	self.movement = '0 0 0';
+	self.BUTTON_JUMP = FALSE;
+	self.BUTTON_CROUCH = FALSE;
+	self.BUTTON_ATCK = FALSE;
+	self.BUTTON_ATCK2 = FALSE;
+	self.BUTTON_USE = FALSE;
+	self.BUTTON_HOOK = FALSE;
+	self.BUTTON_CHAT = FALSE;
 
 	if(self.bot_cmd_keys == BOT_CMD_KEY_NONE)
 		return FALSE;
