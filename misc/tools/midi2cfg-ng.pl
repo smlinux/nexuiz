@@ -20,6 +20,39 @@ sub unsort(@)
 	return map { $_->[0] } sort { $a->[1] <=> $b->[1] } map { [$_, rand] } @_;
 }
 
+sub override($$);
+sub override($$)
+{
+	my ($dest, $src) = @_;
+	if(ref $src eq 'HASH')
+	{
+		$dest = {}
+			if not defined $dest;
+		for(keys %$src)
+		{
+			$dest->{$_} = override $dest->{$_}, $src->{$_};
+		}
+	}
+	elsif(ref $src eq 'ARRAY')
+	{
+		$dest = []
+			if not defined $dest;
+		for(@$src)
+		{
+			push @$dest, override undef, $_;
+		}
+	}
+	elsif(ref $src)
+	{
+		$dest = Storable::dclone $src;
+	}
+	else
+	{
+		$dest = $src;
+	}
+	return $dest;
+}
+
 my $precommands = "";
 my $commands = "";
 my $busybots;
@@ -66,18 +99,7 @@ sub botconfig_read($)
 			if(/^include (.*)/)
 			{
 				my $base = $bots{$1};
-				for(keys %$base)
-				{
-					if(ref $base->{$_})
-					{
-						$currentbot->{$_} = Storable::dclone $base->{$_}; # copy array items as new array
-					}
-					else
-					{
-						$currentbot->{$_} = $base->{$_};
-					}
-				}
-				# better: do some merging TODO
+				$currentbot = override $currentbot, $base;
 			}
 			elsif(/^count (\d+)/)
 			{
@@ -241,15 +263,19 @@ sub busybot_intermission_bot($)
 	$notetime = $timeoffset_postintermission - $lowestnotestart;
 }
 
+#my $busy = 0;
 sub busybot_note_off_bot($$$$)
 {
 	my ($bot, $time, $channel, $note) = @_;
+	#print STDERR "note off $bot:$time:$channel:$note\n";
 	return 1
 		if $channel == 10;
 	my $cmds = $bot->{notes_off}->{$note - $bot->{transpose} - $transpose};
 	return 1
 		if not defined $cmds; # note off cannot fail
 	$bot->{busy} = 0;
+	#--$busy;
+	#print STDERR "BUSY: $busy bots (OFF)\n";
 	busybot_cmd_bot_execute $bot, $time + $notetime, @$cmds; 
 	return 1;
 }
@@ -261,19 +287,18 @@ sub busybot_note_on_bot($$$$$)
 		if defined $bot->{channels} and not $bot->{channels}->{$channel};
 	return 0
 		if $bot->{busy};
+	#print STDERR "note on $bot:$time:$channel:$note\n";
 	my $cmds;
+	my $cmds_off;
 	if($channel == 10)
 	{
 		$cmds = $bot->{percussion}->{$note};
+		$cmds_off = undef;
 	}
 	else
 	{
 		$cmds = $bot->{notes_on}->{$note - $bot->{transpose} - $transpose};
-		my $cmds_off = $bot->{notes_off}->{$note - $bot->{transpose} - $transpose};
-		if(defined $cmds and defined $cmds_off)
-		{
-			$bot->{busy} = 1;
-		}
+		$cmds_off = $bot->{notes_off}->{$note - $bot->{transpose} - $transpose};
 	}
 	return -1 # I won't play this note
 		if not defined $cmds;
@@ -298,6 +323,12 @@ sub busybot_note_on_bot($$$$$)
 			if not busybot_cmd_bot_test $bot, $time + $notetime, @$cmds; 
 		busybot_cmd_bot_execute $bot, $time + $notetime, @$cmds; 
 	}
+	if(defined $cmds and defined $cmds_off)
+	{
+		$bot->{busy} = 1;
+		#++$busy;
+		#print STDERR "BUSY: $busy bots (ON)\n";
+	}
 	return 1;
 }
 
@@ -313,6 +344,8 @@ sub busybots_reset()
 sub busybot_note_off($$$)
 {
 	my ($time, $channel, $note) = @_;
+
+	#print STDERR "note off $time:$channel:$note\n";
 
 	return 0
 		if $channel == 10;
@@ -335,6 +368,8 @@ sub busybot_note_on($$$)
 	{
 		busybot_note_off $time, $channel, $note;
 	}
+
+	#print STDERR "note on $time:$channel:$note\n";
 
 	my $overflow = 0;
 
