@@ -1324,6 +1324,8 @@ void ClientConnect (void)
 	ClientData_Attach();
 
 	bot_clientconnect();
+	
+	playerdemo_init();
 
 	race_PreSpawnObserver();
 
@@ -1513,6 +1515,8 @@ void ClientDisconnect (void)
 		fclose(self.hitplotfh);
 		self.hitplotfh = -1;
 	}
+
+	playerdemo_shutdown();
 
 	bot_clientdisconnect();
 
@@ -3003,4 +3007,6 @@ void PlayerPostThink (void)
 
 	if(self.waypointsprite_attachedforcarrier)
 		WaypointSprite_UpdateHealth(self.waypointsprite_attachedforcarrier, '1 0 0' * healtharmor_maxdamage(self.health, self.armorvalue, cvar("g_balance_armor_blockpercent")));
+	
+	playerdemo_write();
 }

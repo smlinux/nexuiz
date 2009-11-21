@@ -41,6 +41,8 @@ antilag.qh
 
 vote.qh
 
+playerdemo.qh
+
 scores_rules.qc
 
 miscfunctions.qc
@@ -170,3 +172,5 @@ monsters/monster_zombie.qc
 csqcprojectile.qc
 
 ../common/mathlib.qc
+
+playerdemo.qc

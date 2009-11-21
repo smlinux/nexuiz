@@ -680,9 +680,31 @@ void SV_PlayerPhysics()
 	}
 	self.shtest_accumulator += frametime;
 
-	if (clienttype(self) == CLIENTTYPE_BOT)
-		bot_think();
+	if (self.punchangle != '0 0 0')
+	{
+		f = vlen(self.punchangle) - 10 * frametime;
+		if (f > 0)
+			self.punchangle = normalize(self.punchangle) * f;
+		else
+			self.punchangle = '0 0 0';
+	}
 
+	if (self.punchvector != '0 0 0')
+	{
+		f = vlen(self.punchvector) - 30 * frametime;
+		if (f > 0)
+			self.punchvector = normalize(self.punchvector) * f;
+		else
+			self.punchvector = '0 0 0';
+	}
+
+	if (clienttype(self) == CLIENTTYPE_BOT)
+	{
+		if(playerdemo_read())
+			return;
+		bot_think();
+	}
+	
 	self.items &~= IT_USING_JETPACK;
 
 	if(self.classname == "player")
@@ -714,24 +736,6 @@ void SV_PlayerPhysics()
 
 	if (self.movetype == MOVETYPE_NONE)
 		return;
-
-	if (self.punchangle != '0 0 0')
-	{
-		f = vlen(self.punchangle) - 10 * frametime;
-		if (f > 0)
-			self.punchangle = normalize(self.punchangle) * f;
-		else
-			self.punchangle = '0 0 0';
-	}
-
-	if (self.punchvector != '0 0 0')
-	{
-		f = vlen(self.punchvector) - 30 * frametime;
-		if (f > 0)
-			self.punchvector = normalize(self.punchvector) * f;
-		else
-			self.punchvector = '0 0 0';
-	}
 
 	maxspd_mod = 1;
 

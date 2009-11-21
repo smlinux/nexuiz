@@ -1050,6 +1050,38 @@ void GameCommand(string command)
 		return;
 	}
 
+	if(argv(0) == "playerdemo")
+	{
+		if(argv(1) == "load")
+		{
+			entno = stof(argv(2));
+			if((entno < 1) | (entno > maxclients)) {
+				print("Player ", argv(2), " doesn't exist\n");
+				return;
+			}
+			client = edict_num(entno);
+			if(clienttype(client) != CLIENTTYPE_BOT) {
+				print("Player ", client.netname, " is not a bot\n");
+				return;
+			}
+			self = client;
+			playerdemo_open_read(argv(3));
+			return;
+		}
+		else if(argv(1) == "write")
+		{
+			entno = stof(argv(2));
+			if((entno < 1) | (entno > maxclients)) {
+				print("Player ", argv(2), " doesn't exist\n");
+				return;
+			}
+			client = edict_num(entno);
+			self = client;
+			playerdemo_open_write(argv(3));
+			return;
+		}
+	}
+
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");
 }
 
