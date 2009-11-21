@@ -49,6 +49,46 @@ float RadarMapAtPoint_Trace(float x, float y, float w, float h, float zmin, floa
 
 	return FullTraceFraction(a, mi, ma, b);
 }
+float RadarMapAtPoint_LineBlock(float x, float y, float w, float h, float zmin, float zsize, float q)
+{
+	vector o, mi, ma;
+	float i, r;
+	vector dz;
+
+	q = 256 * q - 1;
+	// 256q-1 is the ideal sample count to map equal amount of sample values to one pixel value
+
+	mi = '0 0 0';
+	dz = (zsize / q) * '0 0 1';
+	ma = '1 0 0' * w + '0 1 0' * h + dz;
+	o = '1 0 0' * x + '0 1 0' * y + '0 0 1' * zmin;
+
+	if(x < world.absmin_x - w)
+		return 0;
+	if(y < world.absmin_y - h)
+		return 0;
+	if(x > world.absmax_x)
+		return 0;
+	if(y > world.absmax_y)
+		return 0;
+
+	r = 0;
+	for(i = 0; i < q; ++i)
+	{
+		vector v1, v2;
+		v1 = v2 = o + dz * i + mi;
+		v1_x += random() * (ma_x - mi_x);
+		v1_y += random() * (ma_y - mi_y);
+		v1_z += random() * (ma_z - mi_z);
+		v2_x += random() * (ma_x - mi_x);
+		v2_y += random() * (ma_y - mi_y);
+		v2_z += random() * (ma_z - mi_z);
+		traceline(v1, v2, MOVE_WORLDONLY, world);
+		if(trace_startsolid || trace_fraction < 1)
+			++r;
+	}
+	return r / q;
+}
 float RadarMapAtPoint_Block(float x, float y, float w, float h, float zmin, float zsize, float q)
 {
 	vector o, mi, ma;
@@ -290,6 +330,13 @@ void RadarMap_Think()
 					sharpen_set(x, l);
 				}
 				break;
+			case 24:
+				for(x = 0; x < self.size_x; ++x)
+				{
+					l = RadarMapAtPoint_LineBlock(self.mins_x + x * self.maxs_x, self.mins_y + (self.size_y - self.frame) * self.maxs_y, self.maxs_x, self.maxs_y, self.mins_z, self.maxs_z, self.size_z);
+					sharpen_set(x, l);
+				}
+				break;
 		}
 
 		// do we have enough lines?
@@ -381,6 +428,10 @@ void RadarMap(float argc)
 			radarmapper.count &~= 24;
 			radarmapper.count |= 16;
 		}
+		else if(argv(i) == "--lineblock")
+		{
+			radarmapper.count |= 24;
+		}
 		else if(argv(i) == "--flags") // for the recursive call
 		{
 			++i;
@@ -407,7 +458,7 @@ void RadarMap(float argc)
 		{
 			remove(radarmapper);
 			radarmapper = world;
-			print("Usage: sv_cmd radarmap [--force] [--loop] [--quit] [--block | --trace | --sample] [--sharpen N] [--res W H] [--qual Q]\n");
+			print("Usage: sv_cmd radarmap [--force] [--loop] [--quit] [--block | --trace | --sample | --lineblock] [--sharpen N] [--res W H] [--qual Q]\n");
 			print("The quality factor Q is roughly proportional to the time taken.\n");
 			print("--trace supports no quality factor; its result should look like --block with infinite quality factor.\n");
 			print("--block \n");
