@@ -579,7 +579,7 @@ void GameCommand(string command)
 	float argc;
 	entity client, e;
 	vector v;
-	float entno, i;
+	float entno, i, n;
 	string s;
 	argc = tokenize_console(command);
 
@@ -1052,7 +1052,7 @@ void GameCommand(string command)
 
 	if(argv(0) == "playerdemo")
 	{
-		if(argv(1) == "load")
+		if(argv(1) == "read")
 		{
 			entno = stof(argv(2));
 			if((entno < 1) | (entno > maxclients)) {
@@ -1078,6 +1078,27 @@ void GameCommand(string command)
 			client = edict_num(entno);
 			self = client;
 			playerdemo_open_write(argv(3));
+			return;
+		}
+		else if(argv(1) == "auto_read_and_write")
+		{
+			s = argv(2);
+			n = stof(argv(3));
+			cvar_set("bot_number", ftos(n));
+			localcmd("wait; wait; wait\n");
+			for(i = 0; i < n; ++i)
+				localcmd("sv_cmd playerdemo read ", ftos(i+2), " ", s, ftos(i+1), "\n");
+			localcmd("sv_cmd playerdemo write 1 ", ftos(n+1), "\n");
+			return;
+		}
+		else if(argv(1) == "auto_read")
+		{
+			s = argv(2);
+			n = stof(argv(3));
+			cvar_set("bot_number", ftos(n));
+			localcmd("wait; wait; wait\n");
+			for(i = 0; i < n; ++i)
+				localcmd("sv_cmd playerdemo read ", ftos(i+2), " ", s, ftos(i+1), "\n");
 			return;
 		}
 	}
