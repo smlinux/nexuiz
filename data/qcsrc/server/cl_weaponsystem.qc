@@ -794,7 +794,10 @@ void CL_ExteriorWeaponentity_Think()
 		ang_y = self.owner.v_angle_y;
 		makevectors(ang);
 		var vector v = v_forward;
+		var float t = self.frame1time;
+		self.frame1time = time;
 		gettaginfo(self.tag_entity, self.tag_index);
+		self.frame1time = t;
 		// untransform v according to this coordinate space
 		vector w;
 		w_x = v_forward * v;
