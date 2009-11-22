@@ -844,6 +844,12 @@ void navigation_poptouchedgoals()
 		if(self.lastteleporttime>0)
 		if(time-self.lastteleporttime<0.15)
 		{
+			if(self.aistatus & AI_STATUS_WAYPOINT_PERSONAL_GOING)
+			if(self.goalcurrent.wpflags & WAYPOINTFLAG_PERSONAL && self.goalcurrent.owner==self)
+			{
+				self.aistatus &~= AI_STATUS_WAYPOINT_PERSONAL_GOING;
+				self.aistatus |= AI_STATUS_WAYPOINT_PERSONAL_REACHED;
+			}
 			navigation_poproute();
 			return;
 		}

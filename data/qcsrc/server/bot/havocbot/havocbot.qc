@@ -1281,6 +1281,20 @@ float havocbot_moveto(vector pos)
 	self.havocbot_personal_waypoint_failcounter = 0;
 	self.aistatus |= AI_STATUS_WAYPOINT_PERSONAL_LINKING;
 
+	// if pos is inside a teleport, then let's mark it as teleport waypoint
+	for(head = world; (head = find(head, classname, "trigger_teleport")); )
+	{
+		entity s, o;
+		s = self;
+		o = other;
+		self = head;
+		other = s;
+		if(ExactTriggerHit())
+			wp.wpflags |= WAYPOINTFLAG_TELEPORT;
+		self = s;
+		other = o;
+	}
+
 	return CMD_STATUS_EXECUTING;
 }
 
