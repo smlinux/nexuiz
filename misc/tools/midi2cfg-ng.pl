@@ -285,9 +285,6 @@ sub busybot_note_on_bot($$$$$)
 	my ($bot, $time, $channel, $note, $init) = @_;
 	return -1 # I won't play on this channel
 		if defined $bot->{channels} and not $bot->{channels}->{$channel};
-	return 0
-		if $bot->{busy};
-	#print STDERR "note on $bot:$time:$channel:$note\n";
 	my $cmds;
 	my $cmds_off;
 	if($channel == 10)
@@ -302,6 +299,9 @@ sub busybot_note_on_bot($$$$$)
 	}
 	return -1 # I won't play this note
 		if not defined $cmds;
+	return 0
+		if $bot->{busy};
+	#print STDERR "note on $bot:$time:$channel:$note\n";
 	if($init)
 	{
 		return 0
@@ -402,7 +402,7 @@ sub busybot_note_on($$$)
 			push @busybots_allocated, $bot;
 			return 1;
 		}
-		$overflow = 1
+		die "Fresh bot cannot play stuff"
 			if $canplay == 0;
 	}
 
