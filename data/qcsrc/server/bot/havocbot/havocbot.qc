@@ -1294,11 +1294,21 @@ float havocbot_moveto(vector pos)
 		other.absmax = pos;
 		other.dphitcontentsmask = self.dphitcontentsmask;
 		if(ExactTriggerHit())
+		{
 			wp.wpflags |= WAYPOINTFLAG_TELEPORT;
+			s.lastteleporttime = 0;
+		}
 		remove(other);
 		self = s;
 		other = o;
 	}
+
+/*
+	if(wp.wpflags & WAYPOINTFLAG_TELEPORT)
+		print("routing to a teleporter\n");
+	else
+		print("routing to a non-teleporter\n");
+*/
 
 	return CMD_STATUS_EXECUTING;
 }
