@@ -155,8 +155,6 @@ void Teleport_Touch (void)
 	if(other.classname == "player")
 		RemoveGrapplingHook(other);
 	
-	o = e.origin + '0 0 1' * (1 - other.mins_z - 24);
-
 	if(self.enemy)
 	{
 		e = self.enemy;
@@ -168,8 +166,11 @@ void Teleport_Touch (void)
 		{
 			p = 1;
 			if(cvar("g_telefrag_avoid"))
+			{
+				o = e.origin + '0 0 1' * (1 - other.mins_z - 24);
 				if(check_tdeath(other, o, '0 0 0', '0 0 0'))
 					p = 0;
+			}
 			if(e.cnt)
 				RandomSelection_Add(e, 0, string_null, e.cnt, p);
 			else
@@ -187,6 +188,7 @@ void Teleport_Touch (void)
 		if(vlen(other.velocity) > e.speed)
 			other.velocity = normalize(other.velocity) * max(0, e.speed);
 
+	o = e.origin + '0 0 1' * (1 - other.mins_z - 24);
 	TeleportPlayer(self, other, o, e.mangle, v_forward * vlen(other.velocity), '0 0 0', '0 0 0');
 
 	if(e.target)

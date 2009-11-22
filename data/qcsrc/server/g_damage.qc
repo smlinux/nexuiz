@@ -1064,6 +1064,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 	total_damage_to_creatures = 0;
 
 	if(deathtype != (WEP_HOOK | HITTYPE_SECONDARY | HITTYPE_BOUNCE)) // only send gravity bomb damage once
+	if(DEATH_WEAPONOF(deathtype) != WEP_TUBA) // do not send tuba damage (bandwidth hog)
 	{
 		force = inflictor.velocity;
 		if(vlen(force) == 0)

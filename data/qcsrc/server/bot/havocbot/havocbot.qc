@@ -1289,9 +1289,13 @@ float havocbot_moveto(vector pos)
 		s = self;
 		o = other;
 		self = head;
-		other = s;
+		other = spawn();
+		other.absmin = pos;
+		other.absmax = pos;
+		other.dphitcontentsmask = self.dphitcontentsmask;
 		if(ExactTriggerHit())
 			wp.wpflags |= WAYPOINTFLAG_TELEPORT;
+		remove(other);
 		self = s;
 		other = o;
 	}
