@@ -4,42 +4,59 @@ void trigger_teleport_use()
 		self.team = activator.team;
 }
 
+#define TDEATHLOOP(o) \
+	entity head; \
+	vector deathmin; \
+	vector deathmax; \
+	float deathradius; \
+	deathmin = (o) + player.mins; \
+	deathmax = (o) + player.maxs; \
+	if(telefragmin != telefragmax) \
+	{ \
+		if(deathmin_x > telefragmin_x) deathmin_x = telefragmin_x; \
+		if(deathmin_y > telefragmin_y) deathmin_y = telefragmin_y; \
+		if(deathmin_z > telefragmin_z) deathmin_z = telefragmin_z; \
+		if(deathmax_x < telefragmax_x) deathmax_x = telefragmax_x; \
+		if(deathmax_y < telefragmax_y) deathmax_y = telefragmax_y; \
+		if(deathmax_z < telefragmax_z) deathmax_z = telefragmax_z; \
+	} \
+	deathradius = max(vlen(deathmin), vlen(deathmax)); \
+	for(head = findradius(o, deathradius); head; head = head.chain) \
+		if(head != player) \
+			if(head.takedamage) \
+				if(boxesoverlap(deathmin, deathmax, head.absmin, head.absmax))
+	
+
+float check_tdeath(entity player, vector org, vector telefragmin, vector telefragmax)
+{
+	TDEATHLOOP(org)
+	{
+		if ((player.classname == "player") && (player.health >= 1))
+		{
+			if(head.classname == "player")
+				if(head.health >= 1)
+					return 1;
+		}
+	}
+	return 0;
+}
 float tdeath_hit;
 void tdeath(entity player, entity teleporter, entity telefragger, vector telefragmin, vector telefragmax)
 {
-	entity head;
-	vector deathmin;
-	vector deathmax;
-	float deathradius;
-	deathmin = player.absmin;
-	deathmax = player.absmax;
-	if(telefragmin != telefragmax)
+	TDEATHLOOP(player.origin)
 	{
-		if(deathmin_x > telefragmin_x) deathmin_x = telefragmin_x;
-		if(deathmin_y > telefragmin_y) deathmin_y = telefragmin_y;
-		if(deathmin_z > telefragmin_z) deathmin_z = telefragmin_z;
-		if(deathmax_x < telefragmax_x) deathmax_x = telefragmax_x;
-		if(deathmax_y < telefragmax_y) deathmax_y = telefragmax_y;
-		if(deathmax_z < telefragmax_z) deathmax_z = telefragmax_z;
+		if ((player.classname == "player") && (player.health >= 1))
+		{
+			if(head.classname == "player")
+				if(head.health >= 1)
+					++tdeath_hit;
+			Damage (head, teleporter, telefragger, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
+		}
+		else if (telefragger.health < 1) // corpses gib
+			Damage (head, teleporter, telefragger, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
+		else // dead bodies and monsters gib themselves instead of telefragging
+			Damage (telefragger, teleporter, telefragger, 10000, DEATH_TELEFRAG, telefragger.origin, '0 0 0');
 	}
-	deathradius = max(vlen(deathmin), vlen(deathmax));
-	for(head = findradius(player.origin, deathradius); head; head = head.chain)
-		if(head != player)
-			if(head.takedamage)
-				if(boxesoverlap(deathmin, deathmax, head.absmin, head.absmax))
-				{
-					if ((player.classname == "player") && (player.health >= 1))
-					{
-						if(head.classname == "player")
-						if(head.health >= 1)
-							++tdeath_hit;
-						Damage (head, teleporter, telefragger, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
-					}
-					else if (telefragger.health < 1) // corpses gib
-						Damage (head, teleporter, telefragger, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
-					else // dead bodies and monsters gib themselves instead of telefragging
-						Damage (telefragger, teleporter, telefragger, 10000, DEATH_TELEFRAG, telefragger.origin, '0 0 0');
-				}
 }
 
 void spawn_tdeath(vector v0, entity e, vector v)
@@ -119,6 +136,8 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 void Teleport_Touch (void)
 {
 	entity oldself, e;
+	vector o;
+	float p;
 
 	if (other.health < 1)
 		return;
@@ -135,6 +154,8 @@ void Teleport_Touch (void)
 
 	if(other.classname == "player")
 		RemoveGrapplingHook(other);
+	
+	o = e.origin + '0 0 1' * (1 - other.mins_z - 24);
 
 	if(self.enemy)
 	{
@@ -145,10 +166,14 @@ void Teleport_Touch (void)
 		RandomSelection_Init();
 		for(e = world; (e = find(e, targetname, self.target)); )
 		{
+			p = 1;
+			if(cvar("g_telefrag_avoid"))
+				if(check_tdeath(other, o, '0 0 0', '0 0 0'))
+					p = 0;
 			if(e.cnt)
-				RandomSelection_Add(e, 0, string_null, e.cnt, 0);
+				RandomSelection_Add(e, 0, string_null, e.cnt, p);
 			else
-				RandomSelection_Add(e, 0, string_null, 1, 0);
+				RandomSelection_Add(e, 0, string_null, 1, p);
 		}
 		e = RandomSelection_chosen_ent;
 	}
@@ -162,7 +187,7 @@ void Teleport_Touch (void)
 		if(vlen(other.velocity) > e.speed)
 			other.velocity = normalize(other.velocity) * max(0, e.speed);
 
-	TeleportPlayer(self, other, e.origin + '0 0 1' * (1 - other.mins_z - 24), e.mangle, v_forward * vlen(other.velocity), '0 0 0', '0 0 0');
+	TeleportPlayer(self, other, o, e.mangle, v_forward * vlen(other.velocity), '0 0 0', '0 0 0');
 
 	if(e.target)
 	{

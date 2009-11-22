@@ -3,7 +3,12 @@
 
 void Ent_TubaNote_Think()
 {
-	self.cnt -= frametime * self.count * 3;
+	float f;
+	f = cvar("g_balance_tuba_fadetime");
+	if(f > 0)
+		self.cnt -= frametime * self.count / f;
+	else
+		self.cnt = 0;
 	self.nextthink = time;
 	if(self.cnt <= 0)
 	{
