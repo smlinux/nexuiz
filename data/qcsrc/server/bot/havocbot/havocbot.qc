@@ -1282,6 +1282,7 @@ float havocbot_moveto(vector pos)
 	self.aistatus |= AI_STATUS_WAYPOINT_PERSONAL_LINKING;
 
 	// if pos is inside a teleport, then let's mark it as teleport waypoint
+	entity head;
 	for(head = world; (head = find(head, classname, "trigger_teleport")); )
 	{
 		entity s, o;
