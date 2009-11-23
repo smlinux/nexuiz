@@ -1074,7 +1074,7 @@ string MapInfo_ListAllowedMaps(float pRequiredFlags, float pForbiddenFlags)
 
 void MapInfo_LoadMapSettings(string s) // to be called from worldspawn
 {
-	float t;
+	float t, t0;
 	if(!_MapInfo_CheckMap(s)) // with underscore, it keeps temps
 	{
 		if(MapInfo_Map_supportedGametypes <= 0)
@@ -1087,8 +1087,26 @@ void MapInfo_LoadMapSettings(string s) // to be called from worldspawn
 			MapInfo_Map_supportedGametypes = floor(MapInfo_Map_supportedGametypes / 2);
 		}
 		// t is now a supported mode!
-		print("EMERGENCY: can't play the selected map in the given game mode. Falling back to a supported mode.\n");
-		MapInfo_SwitchGameType(t);
+		t0 = MapInfo_CurrentGametype();
+		switch(t0)
+		{
+			case MAPINFO_TYPE_RUNEMATCH:
+			case MAPINFO_TYPE_TEAM_DEATHMATCH:
+			case MAPINFO_TYPE_LMS:
+			case MAPINFO_TYPE_ARENA:
+			case MAPINFO_TYPE_CA:
+			case MAPINFO_TYPE_KEYHUNT:
+			case MAPINFO_TYPE_DEATHMATCH:
+				print("EMERGENCY: can't play the selected map in the given game mode. Working with only the override settings.\n");
+				cvar_set("timelimit", "0");
+				cvar_set("fraglimit", "0");
+				cvar_set("g_keyhunt_teams", "3");
+				break;
+			default:
+				print("EMERGENCY: can't play the selected map in the given game mode. Falling back to a supported mode.\n");
+				MapInfo_SwitchGameType(t);
+				break;
+		}
 	}
 	cvar_settemp_restore();
 	MapInfo_Get_ByName(s, 1, MapInfo_CurrentGametype());
