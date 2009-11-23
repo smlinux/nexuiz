@@ -85,16 +85,41 @@ float W_Tuba_NoteSendEntity(entity to, float sf)
 
 void W_Tuba_NoteThink()
 {
-	self.nextthink = time;
-	if(self.owner.origin != self.origin)
-	{
-		setorigin(self, self.owner.origin);
-		self.SendFlags |= 1;
-	}
+	float needchange, dist_mult;
+	float vol0, vol1;
+	vector dir0, dir1;
+	vector v;
+	entity e;
 	if(time > self.teleport_time)
 	{
 		self.owner.tuba_note = world;
 		remove(self);
+		return;
+	}
+	self.nextthink = time;
+	dist_mult = cvar("g_balance_tuba_attenuation") / cvar("snd_soundradius");
+	needchange = 0;
+	FOR_EACH_REALCLIENT(e)
+	if(e != self.owner)
+	{
+		v = self.origin - (e.origin + e.view_ofs);
+		vol0 = max(0, 1 - vlen(v) * dist_mult);
+		dir0 = normalize(v);
+		v = self.owner.origin - (e.origin + e.view_ofs);
+		vol1 = max(0, 1 - vlen(v) * dist_mult);
+		dir1 = normalize(v);
+		if(fabs(vol0 - vol1) > 0.005) // 0.5 percent change in volume
+		{
+			setorigin(self, self.owner.origin);
+			self.SendFlags |= 1;
+			break;
+		}
+		if(dir0 * dir1 < 0.9994) // 2 degrees change in angle
+		{
+			setorigin(self, self.owner.origin);
+			self.SendFlags |= 1;
+			break;
+		}
 	}
 }
 
