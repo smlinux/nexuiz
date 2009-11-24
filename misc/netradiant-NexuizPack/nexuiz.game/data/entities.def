@@ -1726,3 +1726,16 @@ REPLACE_OUTSIDE: also perform the replacement when outside the radius (to hide t
 CONTINUE: even if this magic ear matched, continue looking for further matches/replacements (useful for swear word filters)
 NODECOLORIZE: do not decolorize the input string before matching
 */
+
+/*QUAKED weapon_fireball (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
+the Fireball
+-------- KEYS --------
+ammo_rockets: initial rockets of the weapon (if unset, g_pickup_rockets is used)
+respawntime: time till it respawns (default: 15)
+team: out of items with the same value here, only one (random one) will spawn. Useful to put multiple items on one spot.
+cnt: weight of this item for random selection using "team". Set to a lower value for items you want to see less likely.
+-------- SPAWNFLAGS --------
+FLOATING: the item will float in air, instead of aligning to the floor by falling
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/weapons/g_fireball.md3"
+*/
