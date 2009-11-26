@@ -562,22 +562,28 @@ void PutObserverInServer (void)
 
 	if(self.flagcarried)
 		DropFlag(self.flagcarried, world, world);
+
 	if(self.ballcarried)
 		DropBall(self.ballcarried, self.origin + self.ballcarried.origin, self.velocity);
 
 	WaypointSprite_PlayerDead();
 
-	if(self.killcount != -666)
-	{
-		if(g_lms)
-		{
+	if not(g_ca)  // don't reset teams when moving a ca player to the spectators
+		self.team = -1;  // move this as it is needed to log the player spectating in eventlog
+
+	if(self.killcount != -666) {
+		if(g_lms) {
 			if(PlayerScore_Add(self, SP_LMS_RANK, 0) > 0)
 				bprint ("^4", self.netname, "^4 has no more lives left\n");
 			else
 				bprint ("^4", self.netname, "^4 is spectating now\n"); // TODO turn this into a proper forfeit?
-		}
-		else
+		} else
 			bprint ("^4", self.netname, "^4 is spectating now\n");
+
+		if(self.just_joined == FALSE) {
+			LogTeamchange(self.playerid, -1, 4);
+		} else
+			self.just_joined = FALSE;
 	}
 
 	PlayerScore_Clear(self); // clear scores when needed
@@ -642,12 +648,6 @@ void PutObserverInServer (void)
 
 	if(sv_loddistance1)
 		SetCustomizer(self, Client_customizeentityforclient, Client_uncustomizeentityforclient);
-
-	if(g_ca) {
-		// do nothing
-	}
-	else
-		self.team = -1;
 
 	if(g_arena)
 	{
@@ -1295,7 +1295,6 @@ void DecodeLevelParms (void);
 //void dom_player_join_team(entity pl);
 void ClientConnect (void)
 {
-	local string s;
 	float t;
 
 	if(self.flags & FL_CLIENT)
@@ -1357,28 +1356,20 @@ void ClientConnect (void)
 	}
 
 	self.playerid = (playerid_last = playerid_last + 1);
+
 	if(cvar("sv_eventlog"))
-	{
-		if(clienttype(self) == CLIENTTYPE_REAL)
-			GameLogEcho(strcat(":join:", ftos(self.playerid), ":", ftos(num_for_edict(self)), ":", self.netaddress, ":", self.netname));
-		else
-			GameLogEcho(strcat(":join:", ftos(self.playerid), ":", ftos(num_for_edict(self)), ":bot:", self.netname));
-		s = strcat(":team:", ftos(self.playerid), ":");
-		s = strcat(s, ftos(self.team));
-		GameLogEcho(s);
-	}
+		GameLogEcho(strcat(":join:", ftos(self.playerid), ":", ftos(num_for_edict(self)), ":", ((clienttype(self) == CLIENTTYPE_REAL) ? self.netaddress : "bot"), ":", self.netname));
+
+	LogTeamchange(self.playerid, self.team, 1);
+
+	self.just_joined = TRUE;  // stop spamming the eventlog with additional lines when the client connects
+
 	self.netname_previous = strzone(self.netname);
 
-	//stuffcmd(self, "set tmpviewsize $viewsize \n");
-
-	bprint ("^4",self.netname);
-	bprint ("^4 connected");
+	bprint("^4", self.netname, "^4 connected");
 
 	if(g_domination || g_ctf)
-	{
-		bprint(" and joined the ");
-		bprint(ColoredTeamName(self.team));
-	}
+		bprint(" and joined the ", ColoredTeamName(self.team));
 
 	bprint("\n");
 
@@ -1488,7 +1479,7 @@ void ClientConnect (void)
 		speedaward_alltimebest_holder = db_get(ServerProgsDB, strcat(GetMapname(), rr, "speed/netname"));
 		race_send_speedaward_alltimebest(MSG_ONE);
 	}
-	else if(cvar("sv_teamnagger"))
+	else if(cvar("sv_teamnagger") && !g_ca) // teamnagger is currently bad for ca
 		send_CSQC_teamnagger();
 }
 

@@ -27,7 +27,7 @@ ______________
    :join:<ID>:<slot>:bot:<nickname>
    :name:<ID>:<nickname>
    :part:<ID>
-   :team:<ID>:<team>
+   :team:<ID>:<team>:<jointype>
    :kill:frag:<ID of killer>:<ID of victim>:type=<death type>:items=<itemstring of killer>:victimitems=<itemstring of victim>
    :kill:tk:<ID of killer>:<ID of victim>:type=<death type>:items=<itemstring of killer>:victimitems=<itemstring of victim>
    :kill:suicide:<ID>:<ID>:type=<death type>:items=<itemstring>
@@ -82,6 +82,12 @@ team colors:
    14 = Blue Team
    13 = Yellow Team
    10 = Pink Team
+
+join types:
+    1 = connect
+    2 = auto
+    3 = manual
+    4 = spectating
 
 label flags:
    !! = primary sorting key

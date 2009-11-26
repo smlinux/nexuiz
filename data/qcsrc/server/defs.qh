@@ -634,7 +634,7 @@ float client_cefc_accumulatortime;
 
 string deathmessage;
 
-
+.float just_joined;
 
 .float cvar_cl_accuracy_data_share;
 .float cvar_cl_accuracy_data_receive;

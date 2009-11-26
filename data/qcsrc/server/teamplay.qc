@@ -72,16 +72,15 @@ void tdm_init();
 void nb_init();
 void entcs_init();
 
-void LogTeamchange(entity pl)
+void LogTeamchange(float player_id, float team_number, float type)
 {
-	string str;
 	if(!cvar("sv_eventlog"))
 		return;
-	if(pl.playerid < 1)
+
+	if(player_id < 1)
 		return;
-	str = strcat(":team:", ftos(pl.playerid), ":");
-	str = strcat(str, ftos(pl.team));
-	GameLogEcho(str);
+
+	GameLogEcho(strcat(":team:", ftos(player_id), ":", ftos(team_number), ":", ftos(type)));
 }
 
 void WriteGameCvars()
@@ -601,14 +600,13 @@ void SetPlayerTeam(entity pl, float t, float s, float noprint)
 
 	SetPlayerColors(pl,_color);
 
-	if(!noprint && t != s)
-	{
-		//bprint(pl.netname, " has changed to ", TeamNoName(t), "\n");
+	if(t != s) {
+		LogTeamchange(pl.playerid, pl.team, 3);  // log manual team join
+
+		if(!noprint)
 		bprint(pl.netname, "^7 has changed from ", TeamNoName(s), " to ", TeamNoName(t), "\n");
 	}
 
-	if(t != s)
-		LogTeamchange(pl);
 }
 
 // set c1...c4 to show what teams are allowed
@@ -881,12 +879,16 @@ float JoinBestTeam(entity pl, float only_return_best, float forcebestteam)
 			selectedteam = pl.team;
 		else
 			selectedteam = -1;
+
 		if(selectedteam > 0)
 		{
 			if(!only_return_best)
 			{
 				SetPlayerColors(pl, selectedteam - 1);
-				LogTeamchange(pl);
+
+				// when JoinBestTeam is called by client.qc/ClientKill_Now_TeamChange the players team is -1 and thus skipped
+				// when JoinBestTeam is called by cl_client.qc/ClientConnect the player_id is 0 the log attempt is rejected
+				LogTeamchange(pl.playerid, pl.team, 99);
 			}
 			return selectedteam;
 		}
@@ -894,7 +896,6 @@ float JoinBestTeam(entity pl, float only_return_best, float forcebestteam)
 	}
 
 	smallest = FindSmallestTeam(pl, TRUE);
-
 
 	if(!only_return_best)
 	{
@@ -919,7 +920,9 @@ float JoinBestTeam(entity pl, float only_return_best, float forcebestteam)
 		{
 			error("smallest team: invalid team\n");
 		}
-		LogTeamchange(pl);
+
+		LogTeamchange(pl.playerid, pl.team, 2); // log auto join
+
 		if(pl.deadflag == DEAD_NO)
 			Damage(pl, pl, pl, 100000, DEATH_TEAMCHANGE, pl.origin, '0 0 0');
 	}
@@ -973,16 +976,9 @@ void SV_ChangeTeam(float _color)
 		return;
 	}
 
-	if(cvar("g_campaign"))
-	{
+	if((cvar("g_campaign")) || (cvar("g_changeteam_banned") && self.wasplayer)) {
 		sprint(self, "Team changes not allowed\n");
 		return; // changing teams is not allowed
-	}
-
-	if(cvar("g_changeteam_banned") && self.wasplayer)
-	{
-		sprint(self, "Team changes not allowed\n");
-		return;
 	}
 
 	if(cvar("g_balance_teams_prevent_imbalance"))
