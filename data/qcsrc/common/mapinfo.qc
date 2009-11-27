@@ -878,12 +878,15 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 	}
 	fclose(fh);
 
-	if(!MapInfo_Map_supportedGametypes)
-		_MapInfo_Map_ApplyGametype("30 20", pGametypeToSet, MAPINFO_TYPE_DEATHMATCH);
-
 	if(pGametypeToSet)
+	{
 		if(!(MapInfo_Map_supportedGametypes & pGametypeToSet))
-			error("Can't select the requested game type. Bailing out.");
+		{
+			print("Can't select the requested game type. Trying anyway with stupid settings.\n");
+			_MapInfo_Map_ApplyGametype("0 0 0", pGametypeToSet, MAPINFO_TYPE_DEATHMATCH);
+		}
+	}
+
 	MapInfo_Cache_Store();
 	if(MapInfo_Map_supportedGametypes != 0)
 		return r;
@@ -1088,24 +1091,20 @@ void MapInfo_LoadMapSettings(string s) // to be called from worldspawn
 		}
 		// t is now a supported mode!
 		t0 = MapInfo_CurrentGametype();
-		switch(t0)
+		if(cvar("g_mapinfo_allow_unsupported_modes_and_let_stuff_break"))
 		{
-			case MAPINFO_TYPE_RUNEMATCH:
-			case MAPINFO_TYPE_TEAM_DEATHMATCH:
-			case MAPINFO_TYPE_LMS:
-			case MAPINFO_TYPE_ARENA:
-			case MAPINFO_TYPE_CA:
-			case MAPINFO_TYPE_KEYHUNT:
-			case MAPINFO_TYPE_DEATHMATCH:
-				print("EMERGENCY: can't play the selected map in the given game mode. Working with only the override settings.\n");
-				cvar_set("timelimit", "0");
-				cvar_set("fraglimit", "0");
-				cvar_set("g_keyhunt_teams", "3");
-				break;
-			default:
-				print("EMERGENCY: can't play the selected map in the given game mode. Falling back to a supported mode.\n");
-				MapInfo_SwitchGameType(t);
-				break;
+			print("EMERGENCY: can't play the selected map in the given game mode. Working with only the override settings.\n");
+			cvar_set("timelimit", "0");
+			cvar_set("fraglimit", "0");
+			cvar_set("g_tdm_teams", "2");
+			cvar_set("g_keyhunt_teams", "3");
+			cvar_set("g_race_qualifying_timelimit", "0");
+			cvar_set("leadlimit", "0");
+		}
+		else
+		{
+			print("EMERGENCY: can't play the selected map in the given game mode. Falling back to a supported mode.\n");
+			MapInfo_SwitchGameType(t);
 		}
 	}
 	cvar_settemp_restore();
