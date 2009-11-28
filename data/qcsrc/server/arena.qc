@@ -198,11 +198,11 @@ void Arena_Warmup()
 
 	allowed_to_spawn = 0;
 
-	if(g_ca && player_cnt < 2)
+	if(g_ca && (player_cnt < 2 || inWarmupStage))
 		allowed_to_spawn = 1;
 
 	msg = NEWLINES;
-	if(time < warmup)
+	if(time < warmup && !inWarmupStage)
 	{
 		if (g_ca)
 			allowed_to_spawn = 1;
@@ -261,7 +261,7 @@ float next_round;
  */
 void Spawnqueue_Check()
 {
-	if(time < warmup + 1)
+	if(time < warmup + 1 || inWarmupStage)
 		return;
 
 	if(g_ca) {

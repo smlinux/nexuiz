@@ -1036,7 +1036,7 @@ void readplayerstartcvars()
         warmup_start_armorvalue = start_armorvalue;
         warmup_start_weapons = start_weapons;
 
-        if (!g_weaponarena && !g_nixnex && !g_minstagib)
+        if (!g_weaponarena && !g_nixnex && !g_minstagib && !g_ca)
         {
             if (cvar("g_use_ammunition"))
             {
@@ -1262,7 +1262,7 @@ void readlevelcvars(void)
 	if(g_ghost_items >= 1)
 		g_ghost_items = 0.13; // default alpha value
 
-	if not(inWarmupStage)
+	if not(inWarmupStage && !g_ca)
 		game_starttime = cvar("g_start_delay");
 
 	sv_pitch_min = cvar("sv_pitch_min");

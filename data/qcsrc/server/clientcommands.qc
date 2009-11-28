@@ -776,7 +776,9 @@ void ReadyRestartForce()
 
 
 	readyrestart_happened = 1;
-	game_starttime = time + RESTART_COUNTDOWN;
+	game_starttime = time;
+	if(!g_ca)
+		game_starttime += RESTART_COUNTDOWN;
 	restart_mapalreadyrestarted = 0; //reset this var, needed when cvar sv_ready_restart_repeatable is in use
 
 	inWarmupStage = 0; //once the game is restarted the game is in match stage
@@ -818,8 +820,7 @@ void ReadyRestartForce()
 void ReadyRestart()
 {
 	// no arena, assault support yet...
-	// TODO: CA support
-	if(g_arena | g_ca | g_assault | gameover | intermission_running | race_completing)
+	if(g_arena | g_assault | gameover | intermission_running | race_completing)
 		localcmd("restart\n");
 	else
 		localcmd("\nsv_hook_gamerestart;");

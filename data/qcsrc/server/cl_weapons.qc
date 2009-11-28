@@ -271,7 +271,7 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 		return;
 	if (g_nexball && w == WEP_GRENADE_LAUNCHER)
 		return;
-	if (!cvar("g_pickup_items"))
+	if (!cvar("g_pickup_items") || g_ca)
 		return;
 	if(!W_IsWeaponThrowable(w))
 		return;

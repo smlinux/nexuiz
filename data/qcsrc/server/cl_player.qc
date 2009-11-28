@@ -475,7 +475,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	else
 		Violence_GibSplash_At(hitloc, force, 2, bound(0, damage, 200) / 16, self, attacker);
 
-	if((g_arena && numspawned < 2) || (g_ca && player_cnt < 2))
+	if((g_arena && numspawned < 2) || (g_ca && player_cnt < 2) && !inWarmupStage)
 		return;
 
 	if (!g_minstagib)
