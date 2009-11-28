@@ -1000,7 +1000,7 @@ void readplayerstartcvars()
 
             t = cvar(strcat("g_start_weapon_", e.netname));
 
-            if (t < 0) // "default" weapon selection
+	    if (t == -1) // "default" weapon selection
             {
                 if (g_lms || g_ca)
                     t = (e.spawnflags & WEPSPAWNFLAG_NORMAL);
@@ -1013,6 +1013,10 @@ void readplayerstartcvars()
                 if (g_grappling_hook) // if possible, redirect off-hand hook to on-hand hook
                     t += (i == WEP_HOOK);
             }
+	    else if (t == -2 && (g_ca || g_lms))
+		t = 1;
+	    else if (t < 0)
+		t = 0;
 
             if (g_nexball && i == WEP_PORTO)
                 t=1;
