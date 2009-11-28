@@ -1,0 +1,28 @@
+/*
+Generated framegroups file for xolar_lod2
+Used by DarkPlaces to simulate frame groups in DPM models.
+*/
+
+1 41 15 0 // xolar_lod2 die1
+42 47 30 0 // xolar_lod2 die2
+89 11 30 1 // xolar_lod2 draw
+100 11 30 1 // xolar_lod2 duck
+111 81 60 1 // xolar_lod2 duckwalk
+192 41 60 0 // xolar_lod2 duckjump
+233 21 10 1 // xolar_lod2 duckidle
+254 301 10 1 // xolar_lod2 idle
+555 41 60 0 // xolar_lod2 jump
+596 6 15 0 // xolar_lod2 pain1
+602 6 15 0 // xolar_lod2 pain2
+608 8 30 1 // xolar_lod2 shoot
+616 31 30 1 // xolar_lod2 taunt
+647 41 60 1 // xolar_lod2 run
+688 41 60 1 // xolar_lod2 runbackwards
+729 41 60 1 // xolar_lod2 strafeleft
+770 41 60 1 // xolar_lod2 straferight
+811 3 30 0 // xolar_lod2 dead1
+814 3 30 0 // xolar_lod2 dead2
+817 41 60 1 // xolar_lod2 forwardright
+858 41 60 1 // xolar_lod2 forwardleft
+899 41 60 1 // xolar_lod2 backright
+940 41 60 1 // xolar_lod2 backleft
