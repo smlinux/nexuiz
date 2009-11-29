@@ -350,9 +350,9 @@ void spawnfunc___init_dedicated_server(void)
 	// handler for _init/_init map (only for dedicated server initialization)
 
 	world_initialized = -1; // don't complain
-	cvar = cvar_builtin;
-	cvar_string = cvar_string_builtin;
-	cvar_set = cvar_set_builtin;
+	cvar = cvar_normal;
+	cvar_string = cvar_string_normal;
+	cvar_set = cvar_set_normal;
 	dprint_load(); // load dprint status from cvar
 
 	remove = remove_unsafely;
@@ -383,9 +383,9 @@ void spawnfunc_worldspawn (void)
 	float fd, l, i, j, n;
 	string s, col;
 
-	cvar = cvar_builtin;
-	cvar_string = cvar_string_builtin;
-	cvar_set = cvar_set_builtin;
+	cvar = cvar_normal;
+	cvar_string = cvar_string_normal;
+	cvar_set = cvar_set_normal;
 	dprint_load(); // load dprint status from cvar
 
 	if(world_already_spawned)

@@ -11,9 +11,9 @@ float checkrules_equality;
 
 float CampaignBailout(string s)
 {
-	cvar = cvar_builtin;
-	cvar_string = cvar_string_builtin;
-	cvar_set = cvar_set_builtin;
+	cvar = cvar_normal;
+	cvar_string = cvar_string_normal;
+	cvar_set = cvar_set_normal;
 	cvar_set("g_campaign", "0");
 	print("campaign initialization failed: ", s, "\n");
 	return 1;
@@ -101,7 +101,7 @@ void CampaignPreInit()
 
 	// copy sv_gravity cvar, as the engine needs it too (sorry, this will mess
 	// with the menu a little still...)
-	cvar_set_builtin("sv_gravity", cvar_string("sv_gravity"));
+	cvar_set_normal("sv_gravity", cvar_string("sv_gravity"));
 
 	if(Campaign_Invalid())
 		return;
@@ -120,8 +120,8 @@ void CampaignPostInit()
 		return;
 	cvar_set("fraglimit", ftos(campaign_fraglimit[0]));
 	cvar_set("timelimit", "0");
-	cvar_set_builtin("fraglimit", ftos(campaign_fraglimit[0]));
-	cvar_set_builtin("timelimit", "0");
+	cvar_set_normal("fraglimit", ftos(campaign_fraglimit[0]));
+	cvar_set_normal("timelimit", "0");
 }
 
 void CampaignSaveCvar(string cvarname, float value)
@@ -132,7 +132,7 @@ void CampaignSaveCvar(string cvarname, float value)
 	string l;
 
 	registercvar(cvarname, ftos(value));
-	cvar_set_builtin(cvarname, ftos(value));
+	cvar_set_normal(cvarname, ftos(value));
 	// note: cvarname must be remembered
 
 	fh = fopen("campaign.cfg", FILE_READ);
@@ -209,7 +209,7 @@ void CampaignPreIntermission()
 			// advance level (for menu to show it right)
 			CampaignSaveCvar(campaign_index_var, campaign_level + 1);
 		}
-		else if(campaign_level == cvar_builtin(campaign_index_var))
+		else if(campaign_level == cvar_normal(campaign_index_var))
 		{
 			// advance level
 			CampaignSaveCvar(campaign_index_var, campaign_level + 1);

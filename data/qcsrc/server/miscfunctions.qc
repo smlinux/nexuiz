@@ -2758,3 +2758,24 @@ float ExponentialFalloff(float mindist, float maxdist, float halflifedist, float
 	else
 		return 1;
 }
+
+
+
+
+#ifdef RELEASE
+#define cvar_string_normal cvar_string_builtin
+#define cvar_normal cvar_builtin
+#else
+string cvar_string_normal(string n)
+{
+	if not(cvar_type(n) & 1)
+		error(strcat("Attempt to access undefined cvar: ", n));
+	return cvar_string_builtin(n);
+}
+
+float cvar_normal(string n)
+{
+	return stof(cvar_string_normal(n));
+}
+#endif
+#define cvar_set_normal cvar_set_builtin
