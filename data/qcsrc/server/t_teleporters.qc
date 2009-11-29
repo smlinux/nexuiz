@@ -165,7 +165,7 @@ void Teleport_Touch (void)
 		for(e = world; (e = find(e, targetname, self.target)); )
 		{
 			p = 1;
-			if(cvar("g_telefrag_avoid"))
+			if(cvar("g_telefrags_avoid"))
 			{
 				o = e.origin + '0 0 1' * (1 - other.mins_z - 24);
 				if(check_tdeath(other, o, '0 0 0', '0 0 0'))
