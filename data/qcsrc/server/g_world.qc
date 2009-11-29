@@ -518,8 +518,6 @@ void spawnfunc_worldspawn (void)
 			s = strcat(s, ":no_use_ammunition");
 		if(!cvar("g_pickup_items"))
 			s = strcat(s, ":no_pickup_items");
-		if(cvar("g_instagib"))
-			s = strcat(s, ":instagib");
 		if(cvar_string("g_weaponarena") != "0")
 			s = strcat(s, ":", cvar_string("g_weaponarena"), " arena");
 		if(cvar("g_nixnex"))
@@ -2077,7 +2075,7 @@ string MapVote_Suggest(string m)
 	m = MapInfo_FixName(m);
 	if(!m)
 		return "The map you suggested is not available on this server.";
-	if(!cvar("g_maplist_votable_override_mostrecent"))
+	if(!cvar("g_maplist_votable_suggestions_override_mostrecent"))
 		if(Map_IsRecent(m))
 			return "This server does not allow for recent maps to be played again. Please be patient for some rounds.";
 

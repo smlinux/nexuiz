@@ -305,7 +305,7 @@ void W_Rocket_Attack (void)
 	missile.pushltime = time + cvar("g_balance_rocketlauncher_guidedelay");
 	missile.classname = "rocket";
 	missile.bot_dodge = TRUE;
-	missile.bot_dodgerating = cvar("g_balance_rocketlauncher_primary_damage") * 2; // * 2 because it can be detonated inflight which makes it even more dangerous
+	missile.bot_dodgerating = cvar("g_balance_rocketlauncher_damage") * 2; // * 2 because it can be detonated inflight which makes it even more dangerous
 
 	missile.takedamage = DAMAGE_YES;
 	missile.damageforcescale = cvar("g_balance_rocketlauncher_damageforcescale");
