@@ -843,6 +843,38 @@ float g_ghost_items;
 
 entity get_weaponinfo(float w);
 
+float want_weapon(string cvarprefix, entity weaponinfo, float allguns)
+{
+	var float i = weaponinfo.weapon;
+
+	if (!i)
+		return 0;
+
+	var float t = cvar(strcat(cvarprefix, weaponinfo.netname));
+
+	if (t < 0) // "default" weapon selection
+	{
+		if (g_lms || g_ca || allguns)
+			t = (weaponinfo.spawnflags & WEPSPAWNFLAG_NORMAL);
+		else if(t < -1)
+			t = 0;
+		else if (g_race || g_cts)
+			t = (i == WEP_LASER);
+		else if (g_nexball)
+			t = 0; // weapon is set a few lines later
+		else
+			t = (i == WEP_LASER || i == WEP_SHOTGUN);
+		if(g_grappling_hook) // if possible, redirect off-hand hook to on-hand hook
+			t |= (i == WEP_HOOK);
+	}
+
+	// we cannot disable porto in Nexball, we must force it
+	if(g_nexball && i == WEP_PORTO)
+		t = 1;
+
+	return t;
+}
+
 float NixNex_CanChooseWeapon(float wpn);
 void readplayerstartcvars()
 {
@@ -995,34 +1027,8 @@ void readplayerstartcvars()
         for (i = WEP_FIRST; i <= WEP_LAST; ++i)
         {
             e = get_weaponinfo(i);
-            if (!(e.weapon))
-                continue;
-
-            t = cvar(strcat("g_start_weapon_", e.netname));
-
-	    if (t == -1) // "default" weapon selection
-            {
-                if (g_lms || g_ca)
-                    t = (e.spawnflags & WEPSPAWNFLAG_NORMAL);
-                else if (g_race || g_cts)
-                    t = (i == WEP_LASER);
-                else if (g_nexball)
-                    t = 0; // weapon is set a few lines later
-                else
-                    t = (i == WEP_LASER || i == WEP_SHOTGUN);
-                if (g_grappling_hook) // if possible, redirect off-hand hook to on-hand hook
-                    t += (i == WEP_HOOK);
-            }
-	    else if (t == -2 && (g_ca || g_lms))
-		t = 1;
-	    else if (t < 0)
-		t = 0;
-
-            if (g_nexball && i == WEP_PORTO)
-                t=1;
-
-            if (t)
-            {
+			if(want_weapon("g_start_weapon_", e, FALSE))
+			{
                 start_weapons |= e.weapons;
                 weapon_action(e.weapon, WR_PRECACHE);
             }
@@ -1052,20 +1058,15 @@ void readplayerstartcvars()
             }
             warmup_start_health = cvar("g_warmup_start_health");
             warmup_start_armorvalue = cvar("g_warmup_start_armor");
-            if (cvar("g_warmup_allguns"))
-            {
-                for (i = WEP_FIRST; i <= WEP_LAST; ++i)
-                {
-                    e = get_weaponinfo(i);
-                    if (!(e.weapon))
-                        continue;
-                    if (e.spawnflags & WEPSPAWNFLAG_NORMAL)
-                    {
-                        warmup_start_weapons |= e.weapons;
-                        weapon_action(e.weapon, WR_PRECACHE);
-                    }
-                }
-            }
+			for (i = WEP_FIRST; i <= WEP_LAST; ++i)
+			{
+				e = get_weaponinfo(i);
+				if(want_weapon("g_start_weapon_", e, cvar("g_warmup_allguns")))
+				{
+					start_weapons |= e.weapons;
+					weapon_action(e.weapon, WR_PRECACHE);
+				}
+			}
         }
     }
 
