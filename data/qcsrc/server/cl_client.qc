@@ -892,8 +892,6 @@ void PutClientInServer (void)
 		self.strength_finished = 0;
 		self.invincible_finished = 0;
 		self.pushltime = 0;
-		//self.speed_finished = 0;
-		//self.slowmo_finished = 0;
 		// players have no think function
 		self.think = SUB_Null;
 		self.nextthink = 0;

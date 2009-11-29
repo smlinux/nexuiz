@@ -419,16 +419,6 @@ float Item_GiveTo(entity item, entity player)
 				pickedup = TRUE;
 				player.invincible_finished = max(player.invincible_finished, time) + cvar("g_balance_powerup_invincible_time");
 			}
-			//if (item.speed_finished)
-			//{
-			//	pickedup = TRUE;
-			//	player.speed_finished = max(player.speed_finished, time) + cvar("g_balance_powerup_speed_time");
-			//}
-			//if (item.slowmo_finished)
-			//{
-			//	pickedup = TRUE;
-			//	player.slowmo_finished = max(player.slowmo_finished, time) + (cvar("g_balance_powerup_slowmo_time") * cvar("g_balance_powerup_slowmo_speed"));
-			//}
 
 			if (item.health)
 			if (player.health < item.max_health)
