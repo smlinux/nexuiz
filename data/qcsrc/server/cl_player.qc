@@ -671,17 +671,10 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		// when to allow respawn
 		sdelay = 0;
 		waves = 0;
-		if(cvar("g_respawn_mapsettings"))
-		{
-			sdelay = cvar("g_respawn_mapsettings_delay");
-			waves = cvar("g_respawn_mapsettings_waves");
-		}
-		if(!sdelay)
-			sdelay = cvar(strcat("g_", GetGametype(), "_respawn_delay"));
+		sdelay = cvar(strcat("g_", GetGametype(), "_respawn_delay"));
 		if(!sdelay)
 			sdelay = cvar("g_respawn_delay");
-		if(!waves)
-			waves = cvar(strcat("g_", GetGametype(), "_respawn_waves"));
+		waves = cvar(strcat("g_", GetGametype(), "_respawn_waves"));
 		if(!waves)
 			waves = cvar("g_respawn_waves");
 		if(waves)
