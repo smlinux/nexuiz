@@ -971,7 +971,7 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
     load_unit_settings(self,self.cvar_basename,0);
 
     // Handle turret teams.
-    if (cvar("g_assult") != 0)
+    if (cvar("g_assault") != 0)
     {
         if (!self.team)
             self.team = 14; // Assume turrets are on the defending side if not explicitly set otehrwize
