@@ -416,7 +416,11 @@ float GameCommand_Generic(string command)
 						rpn_error = TRUE;
 					}
 				} else if(rpncmd == "load") {
+#ifdef SVQC
+					rpn_set(cvar_string_builtin(rpn_get())); // cvar name comes from user
+#else
 					rpn_set(cvar_string(rpn_get()));
+#endif
 				} else if(rpncmd == "exch") {
 					s = rpn_pop();
 					s2 = rpn_get();
