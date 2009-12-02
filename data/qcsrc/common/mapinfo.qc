@@ -377,6 +377,8 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 					++spawnpoints;
 				else if(v == "trigger_race_checkpoint")
 					MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_RACE;
+				else if(v == "target_startTimer")
+					MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_CTS;
 				else if(v == "weapon_nex")
 					{ }
 				else if(v == "weapon_railgun")
