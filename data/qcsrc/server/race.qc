@@ -375,27 +375,38 @@ void checkpoint_passed()
 
 	other.porto_forbidden = 2; // decreased by 1 each StartFrame
 
-	if(self.race_checkpoint == -2) 
-	{
-		self.race_checkpoint = other.race_checkpoint;
-	}
-
-	entity cp;
-	float largest_cp_id;
-	for(cp = world; (cp = find(cp, classname, "target_checkpoint"));)
-		if(cp.race_checkpoint > largest_cp_id) // update the finish id if someone hit a new checkpoint
+	if(defrag_ents) {
+		if(self.race_checkpoint == -2) 
 		{
-			largest_cp_id = cp.race_checkpoint;
-			for(cp = world; (cp = find(cp, classname, "target_stopTimer"));)
-				cp.race_checkpoint = largest_cp_id + 1; // finish line
-			race_highest_checkpoint = largest_cp_id + 1;
-			race_timed_checkpoint = largest_cp_id + 1;
-
-			for(cp = world; (cp = find(cp, classname, "target_checkpoint"));) {
-				if(cp.race_checkpoint == -2) // set defragcpexists to -1 so that the cp id file will be rewritten when someone finishes
-					defragcpexists = -1;
-			}	
+			self.race_checkpoint = other.race_checkpoint;
 		}
+
+		entity cp;
+		float largest_cp_id;
+		float cp_amount;
+		for(cp = world; (cp = find(cp, classname, "target_checkpoint"));) {
+			cp_amount += 1;
+			if(cp.race_checkpoint > largest_cp_id) // update the finish id if someone hit a new checkpoint
+			{
+				largest_cp_id = cp.race_checkpoint;
+				for(cp = world; (cp = find(cp, classname, "target_stopTimer"));)
+					cp.race_checkpoint = largest_cp_id + 1; // finish line
+				race_highest_checkpoint = largest_cp_id + 1;
+				race_timed_checkpoint = largest_cp_id + 1;
+
+				for(cp = world; (cp = find(cp, classname, "target_checkpoint"));) {
+					if(cp.race_checkpoint == -2) // set defragcpexists to -1 so that the cp id file will be rewritten when someone finishes
+						defragcpexists = -1;
+				}	
+			}
+		}
+		if(cp_amount == 0) {
+			for(cp = world; (cp = find(cp, classname, "target_stopTimer"));)
+				cp.race_checkpoint = 1;
+			race_highest_checkpoint = 1;
+			race_timed_checkpoint = 1;
+		}
+	}
 
 	if(other.race_checkpoint == -1 || other.race_checkpoint == self.race_checkpoint)
 	{
