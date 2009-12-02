@@ -723,6 +723,43 @@ string Team_ColorNameLowerCase(float t)
     return "neutral";
 }
 
+float ColourToNumber(string team_colour)
+{
+	if (team_colour == "red")
+		return COLOR_TEAM1;
+
+	if (team_colour == "blue")
+		return COLOR_TEAM2;
+
+	if (team_colour == "yellow")
+		return COLOR_TEAM3;
+
+	if (team_colour == "pink")
+		return COLOR_TEAM4;
+
+	if (team_colour == "auto")
+		return 0;
+
+	return -1;
+}
+
+float NumberToTeamNumber(float number)
+{
+	if (number == 1)
+		return COLOR_TEAM1;
+
+	if (number == 2)
+		return COLOR_TEAM2;
+
+	if (number == 3)
+		return COLOR_TEAM3;
+
+	if (number == 4)
+		return COLOR_TEAM4;
+
+	return -1;
+}
+
 #define CENTERPRIO_POINT 1
 #define CENTERPRIO_SPAM 2
 #define CENTERPRIO_VOTE 4

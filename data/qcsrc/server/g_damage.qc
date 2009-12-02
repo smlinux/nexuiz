@@ -266,13 +266,14 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 					centerprint(targ, strcat(DAMAGE_CENTERPRINT_SPACER, "^1Don't go against team mates!"));
 				else
 					centerprint(targ, strcat(DAMAGE_CENTERPRINT_SPACER, "^1Don't shoot your team mates!"));
+			} else if (deathtype == DEATH_QUIET) {
+				// do nothing
 			} else {
 				if(sv_gentle)
 					centerprint(targ, strcat(DAMAGE_CENTERPRINT_SPACER, "^1You need to be more careful!"));
 				else
 					centerprint(targ, strcat(DAMAGE_CENTERPRINT_SPACER, "^1You killed your own dumb self!"));
 			}
-
 			if(sv_gentle) {
 				if (deathtype == DEATH_CAMP)
 					bprint ("^1",s, "^1 thought they found a nice camping ground\n");
@@ -281,7 +282,7 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 				else
 					bprint ("^1",s, "^1 will be reinserted into the game due to their own actions\n");
 
-				if(deathtype != DEATH_TEAMCHANGE)
+				if(deathtype != DEATH_TEAMCHANGE && deathtype != DEATH_QUIET)
 				{
 					LogDeath("suicide", deathtype, targ, targ);
 					GiveFrags(attacker, targ, -1);
@@ -311,10 +312,10 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 					bprint ("^1",s, "^1 unfairly eliminated themself\n");
 				else if (deathtype == DEATH_FIRE)
 					bprint ("^1",s, "^1 burned to death\n");
-				else if (deathtype != DEATH_TEAMCHANGE)
+				else if (deathtype != DEATH_TEAMCHANGE && deathtype != DEATH_QUIET)
 					bprint ("^1",s, "^1 couldn't resist the urge to self-destruct\n");
 
-				if(deathtype != DEATH_TEAMCHANGE)
+				if(deathtype != DEATH_TEAMCHANGE && deathtype != DEATH_QUIET)
 				{
 					LogDeath("suicide", deathtype, targ, targ);
 					GiveFrags(attacker, targ, -1);
@@ -656,7 +657,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			}
 	}
 
-	if(deathtype == DEATH_KILL || deathtype == DEATH_TEAMCHANGE || deathtype == DEATH_AUTOTEAMCHANGE)
+	if(deathtype == DEATH_KILL || deathtype == DEATH_TEAMCHANGE || deathtype == DEATH_AUTOTEAMCHANGE || deathtype == DEATH_QUIET)
 	{
 		// These are ALWAYS lethal
 		// No damage modification here

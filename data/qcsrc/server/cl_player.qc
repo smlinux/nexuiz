@@ -1393,3 +1393,31 @@ void VoiceMessage(string type, string msg)
 	if (!flood)
 		PlayerSound(sample, CHAN_VOICE, voicetype);
 }
+
+void MoveToTeam(entity client, float team_colour, float type, float show_message)
+{
+// 	show_message
+// 	0 (00) automove centerprint, admin message
+// 	1 (01) automove centerprint, no admin message
+// 	2 (10) no centerprint, admin message
+// 	3 (11) no centerprint, no admin message
+
+	float lockteams_backup;
+
+	lockteams_backup = lockteams;  // backup any team lock
+
+	lockteams = 0;  // disable locked teams
+
+	TeamchangeFrags(client);  // move the players frags
+	SetPlayerColors(client, team_colour - 1);  // set the players colour
+	Damage(client, client, client, 100000, ((show_message & 2) ? DEATH_QUIET : DEATH_AUTOTEAMCHANGE), client.origin, '0 0 0');  // kill the player
+
+	lockteams = lockteams_backup;  // restore the team lock
+
+	LogTeamchange(client.playerid, client.team, type);
+
+	if not(show_message & 1) // admin message
+		sprint(client, strcat("\{1}\{13}^3", admin_name(), "^7: You have been moved to the ", Team_ColorNameLowerCase(team_colour), " team\n"));  // send a chat message
+
+	bprint(strcat(client.netname, " joined the ", ColoredTeamName(client.team), "\n"));
+}

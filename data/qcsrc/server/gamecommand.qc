@@ -805,25 +805,86 @@ void GameCommand(string command)
 			bprint("That command can only be used in a team-based gamemode.\n");
 		return;
 	}
-	if (argv(0) == "movetoteam") if(argc == 3)
-	{
-		entno = stof(argv(1));
-		client = world;
-		if(entno <= maxclients)
-			client = edict_num(entno);
-		if(client.flags & FL_CLIENT)
-		{
-			float lt;
-			lt = lockteams;
-			lockteams = 0;
+	if(argv(0) == "movetoteam")
+	if(argc == 3 || argc == 4) {
+// 	sv_cmd movetoteam  player_id  team_colour
+// 	sv_cmd movetoteam  player_id  team_colour  type_of_move
 
-			self = client;
-			SV_ParseClientCommand(strcat("selectteam ", argv(2)));
+// 	type of move
+// 	0 (00) automove centerprint, admin message
+// 	1 (01) automove centerprint, no admin message
+// 	2 (10) no centerprint, admin message
+// 	3 (11) no centerprint, no admin message
 
-			lockteams = lt;
+		if(!teams_matter) {  // death match
+			print("Currently not playing a team game\n");
+			return;
 		}
-		else
-			print("Client not found\n");
+
+		entno = stof(argv(1));
+
+		// player_id is out of range
+		if((entno < 1) | (entno > maxclients)) {
+			print("Player ", argv(1), " doesn't exist\n");
+			return;
+		}
+
+			client = edict_num(entno);
+
+		// player entity is not a client
+		if not(client.flags & FL_CLIENT) {
+			print("Player ", argv(1), " doesn't exist\n");
+			return;
+		}
+
+		// find the team to move the player to
+		float team_colour;
+
+		team_colour = ColourToNumber(argv(2));
+
+		if(team_colour == client.team) {  // player already on the team
+			print("Player ", argv(1), " (", client.netname, ") is already on the ", ColoredTeamName(client.team), "\n");
+			return;
+		} else if(team_colour == 0)  // auto team
+			team_colour = NumberToTeamNumber(FindSmallestTeam(client, FALSE));
+
+		switch(team_colour) {
+			case COLOR_TEAM1:
+				if(c1 == -1) {
+					print("Sorry, there isn't a red team\n");
+					return;
+		}
+			break;
+
+			case COLOR_TEAM2:
+				if(c2 == -1) {
+					print("Sorry, there isn't a blue team\n");
+		return;
+	}
+			break;
+
+			case COLOR_TEAM3:
+				if(c3 == -1) {
+					print("Sorry, there isn't a yellow team\n");
+					return;
+				}
+			break;
+
+			case COLOR_TEAM4:
+				if(c4 == -1) {
+					print("Sorry, there isn't a pink team\n");
+					return;
+				}
+			break;
+
+			default:
+				print("Sorry, team ", argv(2), " doesn't exist\n");
+				return;
+		}
+
+		MoveToTeam(client, team_colour, 6, stof(argv(3)));
+		print("Player ", argv(1), " (", client.netname, ") has been moved to the ", ColoredTeamName(team_colour), "\n");
+
 		return;
 	}
 	if (argv(0) == "teamstatus")

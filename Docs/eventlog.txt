@@ -88,6 +88,7 @@ join types:
     2 = auto
     3 = manual
     4 = spectating
+    6 = adminmove
 
 label flags:
    !! = primary sorting key
