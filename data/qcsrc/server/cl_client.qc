@@ -1789,7 +1789,7 @@ void player_powerups (void)
 		if (self.items & IT_INVINCIBLE)
 		{
 			play_countdown(self.invincible_finished, "misc/poweroff.wav");
-			if (time > self.invincible_finished)
+			if (time > self.invincible_finished && cvar("g_balance_powerup_timer"))
 			{
 				self.items = self.items - (self.items & IT_INVINCIBLE);
 				sprint(self, "^3Speed has worn off\n");
@@ -1810,7 +1810,7 @@ void player_powerups (void)
 	{
 		play_countdown(self.strength_finished, "misc/poweroff.wav");
 		self.effects = self.effects | (EF_BLUE | EF_ADDITIVE | EF_FULLBRIGHT);
-		if (time > self.strength_finished)
+		if (time > self.strength_finished && cvar("g_balance_powerup_timer"))
 		{
 			self.items = self.items - (self.items & IT_STRENGTH);
 			sprint(self, "^3Strength has worn off\n");
@@ -1828,7 +1828,7 @@ void player_powerups (void)
 	{
 		play_countdown(self.invincible_finished, "misc/poweroff.wav");
 		self.effects = self.effects | (EF_RED | EF_ADDITIVE | EF_FULLBRIGHT);
-		if (time > self.invincible_finished)
+		if (time > self.invincible_finished && cvar("g_balance_powerup_timer"))
 		{
 			self.items = self.items - (self.items & IT_INVINCIBLE);
 			sprint(self, "^3Shield has worn off\n");
