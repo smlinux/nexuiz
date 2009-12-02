@@ -367,7 +367,7 @@ void SV_ParseClientCommand(string s) {
 		}
 		//clientcommand(self, formatmessage(s));
 	} else if(cmd == "info") {
-		cmd = cvar_string(strcat("sv_info_", argv(1)));
+		cmd = cvar_string_builtin(strcat("sv_info_", argv(1))); // This needed fixed for the cvar check
 		if(cmd == "")
 			sprint(self, "ERROR: unsupported info command\n");
 		else
