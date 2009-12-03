@@ -1641,7 +1641,8 @@ void Sbar_Score()
 		vector m;
 		string s, forcetime;
 
-		m = '0.5 0 0' * vid_conwidth + '0 0.25 0' * vid_conheight;
+		float pos;
+		m = '0.5 0 0' * vid_conwidth + '0 1 0' * cvar_or("cl_racetimer_position", 0.25) * vid_conheight;
 
 		if(race_checkpointtime)
 		{
