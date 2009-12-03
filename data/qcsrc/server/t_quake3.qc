@@ -38,6 +38,9 @@ void spawnfunc_item_armor_body()     { spawnfunc_item_armor_large();   }
 void spawnfunc_item_armor_combat()   { spawnfunc_item_armor_big();     }
 void spawnfunc_item_armor_shard()    { spawnfunc_item_armor_small();   }
 void spawnfunc_item_enviro()         { spawnfunc_item_invincible();    }
+
+// weapon remove ent from defrag
+void spawnfunc_target_init()         { spawnfunc_target_items();       }
 //void spawnfunc_item_flight()       /* not supported */
 //void spawnfunc_item_haste()        /* not supported */
 //void spawnfunc_item_health()       /* handled in t_quake.qc */
