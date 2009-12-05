@@ -27,21 +27,6 @@ void Projectile_DrawTrail(vector to)
 	self.trail_oldorigin = to;
 	self.trail_oldtime = time;
 
-	if(from == to)
-	{
-		switch(self.cnt)
-		{
-			case PROJECTILE_FIREMINE:
-				to_z += 1;
-				break;
-			case PROJECTILE_ELECTRO:
-                        	trailparticles(self, particleeffectnum("TR_NEXUIZPLASMA"), from, to);
-                        	return;
-			default:
-				return;
-		}
-	}
-
 	switch(self.cnt)
 	{
 		case PROJECTILE_ROCKET:
@@ -90,6 +75,8 @@ void Projectile_DrawTrail(vector to)
 			trailparticles(self, particleeffectnum("tr_rifle"), from, to);
 			break;
 		case PROJECTILE_FIREMINE:
+			if(from == to)
+				to_z += 1;
 			trailparticles(self, particleeffectnum("firemine"), from, to);
 			break;
 		case PROJECTILE_FIREBALL:
