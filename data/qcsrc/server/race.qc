@@ -343,6 +343,7 @@ void dumpsurface(entity e)
 void checkpoint_passed()
 {
 	string oldmsg;
+	entity cp;
 
 	if(other.classname == "porto")
 	{
@@ -381,7 +382,6 @@ void checkpoint_passed()
 			self.race_checkpoint = other.race_checkpoint;
 		}
 
-		entity cp;
 		float largest_cp_id;
 		float cp_amount;
 		for(cp = world; (cp = find(cp, classname, "target_checkpoint"));) {
@@ -451,7 +451,6 @@ void checkpoint_passed()
 
 		if(defrag_ents && defragcpexists < 0 && self.classname == "target_stopTimer")
 		{
-			entity cp;
 			float fh;
 			defragcpexists = fh = fopen(strcat("maps/", GetMapname(), ".defragcp"), FILE_WRITE);
 			if(fh >= 0)
@@ -569,7 +568,7 @@ void trigger_race_checkpoint_verify()
 		defragcpexists = fh = fopen(strcat("maps/", GetMapname(), ".defragcp"), FILE_READ);
 		if(fh >= 0)
 		{
-			while(l = fgets(fh))
+			while((l = fgets(fh)))
 			{
 				len = tokenize_console(l);
 				if(len != 2) {
