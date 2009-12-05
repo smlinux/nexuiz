@@ -997,8 +997,8 @@ void GameCommand(string command)
 		print("TEST CASE. If this returns the runaway loop counter error, possibly everything is oaky.\n");
 		for(;;)
 		{
-			vector org, delta, start, end, p, pos;
-			float safe, unsafe;
+			vector org, delta, start, end, p, q, q0, pos;
+			float safe, unsafe, dq, dqf;
 
 			org = world.mins;
 			delta = world.maxs - world.mins;
@@ -1019,45 +1019,104 @@ void GameCommand(string command)
 			{
 				p = trace_endpos;
 				tracebox(p, PL_MIN, PL_MAX, p, MOVE_NOMONSTERS, world);
-				if(trace_startsolid)
+				if(trace_startsolid || trace_fraction == 1)
 				{
 					rint(42); // do an engine breakpoint on VM_rint so you can get the trace that errnoeously returns startsolid
 					tracebox(start, PL_MIN, PL_MAX, end, MOVE_NOMONSTERS, world);
-					tracebox(p, PL_MIN, PL_MAX, p, MOVE_NOMONSTERS, world);
+					tracebox(p, PL_MIN, PL_MAX, q, MOVE_NOMONSTERS, world);
 
-					// how much do we need to back off?
-					safe = 1;
-					unsafe = 0;
-					for(;;)
+					if(trace_startsolid)
 					{
-						pos = p * (1 - (safe + unsafe) * 0.5) + start * ((safe + unsafe) * 0.5);
-						tracebox(pos, PL_MIN, PL_MAX, pos, MOVE_NOMONSTERS, world);
+						// how much do we need to back off?
+						safe = 1;
+						unsafe = 0;
+						for(;;)
+						{
+							pos = p * (1 - (safe + unsafe) * 0.5) + start * ((safe + unsafe) * 0.5);
+							tracebox(pos, PL_MIN, PL_MAX, pos, MOVE_NOMONSTERS, world);
+							if(trace_startsolid)
+							{
+								if((safe + unsafe) * 0.5 == unsafe)
+									break;
+								unsafe = (safe + unsafe) * 0.5;
+							}
+							else
+							{
+								if((safe + unsafe) * 0.5 == safe)
+									break;
+								safe = (safe + unsafe) * 0.5;
+							}
+						}
+
+						print("safe distance to back off: ", ftos(safe * vlen(p - start)), "qu\n");
+						print("unsafe distance to back off: ", ftos(unsafe * vlen(p - start)), "qu\n");
+
+						tracebox(p, PL_MIN + '0.1 0.1 0.1', PL_MAX - '0.1 0.1 0.1', p, MOVE_NOMONSTERS, world);
 						if(trace_startsolid)
-						{
-							if((safe + unsafe) * 0.5 == unsafe)
-								break;
-							unsafe = (safe + unsafe) * 0.5;
-						}
+							print("trace_endpos much in solid when tracing from ", vtos(start), " to ", vtos(end), " endpos ", vtos(p), "\n");
 						else
-						{
-							if((safe + unsafe) * 0.5 == safe)
-								break;
-							safe = (safe + unsafe) * 0.5;
-						}
+							print("trace_endpos just in solid when tracing from ", vtos(start), " to ", vtos(end), " endpos ", vtos(p), "\n");
+						break;
 					}
 
-					print("safe distance to back off: ", ftos(safe * vlen(p - start)), "qu\n");
-					print("unsafe distance to back off: ", ftos(unsafe * vlen(p - start)), "qu\n");
-
-					tracebox(p, PL_MIN + '0.1 0.1 0.1', PL_MAX - '0.1 0.1 0.1', p, MOVE_NOMONSTERS, world);
-					if(trace_startsolid)
-						print("trace_endpos much in solid when tracing from ", vtos(start), " to ", vtos(end), " endpos ", vtos(trace_endpos), "\n");
-					else
-						print("trace_endpos just in solid when tracing from ", vtos(start), " to ", vtos(end), " endpos ", vtos(trace_endpos), "\n");
-					break;
+					q0 = p;
+					dq = 0;
+					dqf = 1;
+					for(;;)
+					{
+						q = p + normalize(end - p) * (dq + dqf);
+						if(q == q0)
+							break;
+						tracebox(p, PL_MIN, PL_MAX, q, MOVE_NOMONSTERS, world);
+						if(trace_startsolid)
+							error("THIS ONE cannot happen");
+						if(trace_fraction > 0)
+							dq += dqf * trace_fraction;
+						dqf *= 0.5;
+						q0 = q;
+					}
+					if(dq > 0)
+					{
+						print("trace_endpos still before solid when tracing from ", vtos(start), " to ", vtos(end), " endpos ", vtos(p), "\n");
+						print("could go ", ftos(dq), " units further to ", vtos(q), "\n");
+						break;
+					}
 				}
 			}
 		}
+	}
+
+	if(argv(0) == "tracebug2")
+	{
+		e = nextent(world);
+		float f;
+		vector vv, dv;
+		tracebox(e.origin + '0 0 32', e.mins, e.maxs, e.origin + '0 0 -1024', MOVE_NORMAL, e);
+		vv = trace_endpos;
+		if(trace_fraction == 1)
+		{
+			print("not above ground, aborting\n");
+			return;
+		}
+		f = 0;
+		for(i = 0; i < 100000; ++i)
+		{
+			dv = randomvec();
+			if(dv_z > 0)
+				dv = -1 * dv;
+			tracebox(vv, e.mins, e.maxs, vv + dv, MOVE_NORMAL, e);
+			if(trace_startsolid)
+				print("bug 1\n");
+			if(trace_fraction == 1)
+			if(dv_z < f)
+			{
+				print("bug 2: ", ftos(dv_x), " ", ftos(dv_y), " ", ftos(dv_z));
+				print(" (", ftos(asin(dv_z / vlen(dv)) * 180 / M_PI), " degrees)\n");
+				f = dv_z;
+			}
+		}
+		print("highest possible dist: ", ftos(f), "\n");
+		return;
 	}
 
 	if(argv(0) == "tracewalk")
