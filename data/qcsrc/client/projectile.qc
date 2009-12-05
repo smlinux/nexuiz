@@ -17,6 +17,7 @@ void SUB_Stop()
 .float gravity;
 .float snd_looping;
 .float silent;
+.float traileffect;
 
 void Projectile_DrawTrail(vector to)
 {
@@ -27,64 +28,8 @@ void Projectile_DrawTrail(vector to)
 	self.trail_oldorigin = to;
 	self.trail_oldtime = time;
 
-	switch(self.cnt)
-	{
-		case PROJECTILE_ROCKET:
-			trailparticles(self, particleeffectnum("TR_ROCKET"), from, to);
-			break;
-		case PROJECTILE_CRYLINK:
-			trailparticles(self, particleeffectnum("TR_CRYLINKPLASMA"), from, to);
-			break;
-		case PROJECTILE_CRYLINK_BOUNCING:
-			trailparticles(self, particleeffectnum("TR_CRYLINKPLASMA"), from, to);
-			break;
-		case PROJECTILE_ELECTRO:
-			trailparticles(self, particleeffectnum("TR_NEXUIZPLASMA"), from, to);
-			break;
-		case PROJECTILE_ELECTRO_BEAM:
-			trailparticles(self, particleeffectnum("TR_NEXUIZPLASMA"), from, to);
-			break;
-		case PROJECTILE_GRENADE:
-			trailparticles(self, particleeffectnum("TR_KNIGHTSPIKE"), from, to);
-			break;
-		case PROJECTILE_GRENADE_BOUNCING:
-			trailparticles(self, particleeffectnum("TR_KNIGHTSPIKE"), from, to);
-			break;
-		case PROJECTILE_PORTO_RED:
-			trailparticles(self, particleeffectnum("TR_WIZSPIKE"), from, to);
-			break;
-		case PROJECTILE_PORTO_BLUE:
-			trailparticles(self, particleeffectnum("TR_WIZSPIKE"), from, to);
-			break;
-		case PROJECTILE_HOOKBOMB:
-			trailparticles(self, particleeffectnum("TR_KNIGHTSPIKE"), from, to);
-			break;
-		case PROJECTILE_HAGAR:
-			trailparticles(self, particleeffectnum("TR_GRENADE"), from, to);
-			break;
-		case PROJECTILE_HAGAR_BOUNCING:
-			trailparticles(self, particleeffectnum("TR_GRENADE"), from, to);
-			break;
-		case PROJECTILE_BULLET:
-			trailparticles(self, particleeffectnum("tr_bullet"), from, to);
-			break;
-		case PROJECTILE_BULLET_GLOWING:
-			trailparticles(self, particleeffectnum("tr_bullet"), from, to);
-			break;
-		case PROJECTILE_BULLET_GLOWING_TRACER:
-			trailparticles(self, particleeffectnum("tr_rifle"), from, to);
-			break;
-		case PROJECTILE_FIREMINE:
-			if(from == to)
-				to_z += 1;
-			trailparticles(self, particleeffectnum("firemine"), from, to);
-			break;
-		case PROJECTILE_FIREBALL:
-			trailparticles(self, particleeffectnum("fireball"), from, to);
-			break;
-		default:
-			break;
-	}
+	if (self.traileffect)
+		trailparticles(self, self.traileffect, from, to);
 }
 
 void Projectile_Draw()
@@ -204,6 +149,7 @@ void Ent_RemoveProjectile()
 void Ent_Projectile()
 {
 	float f;
+	string trailname;
 
 	// projectile properties:
 	//   kind (interpolated, or clientside)
@@ -274,27 +220,28 @@ void Ent_Projectile()
 		self.cnt = (self.cnt & 0x7F);
 
 		self.scale = 1;
+		self.traileffect = 0;
 		switch(self.cnt)
 		{
-			case PROJECTILE_ELECTRO: setmodel(self, "models/ebomb.mdl"); break;
-			case PROJECTILE_ROCKET: setmodel(self, "models/rocket.md3"); self.scale = 2; break;
-			case PROJECTILE_BULLET: setmodel(self, "models/tracer.mdl"); break;
-			case PROJECTILE_BULLET_GLOWING: setmodel(self, "models/tracer.mdl"); break;
-			case PROJECTILE_BULLET_GLOWING_TRACER: setmodel(self, "models/tracer.mdl"); break;
-			case PROJECTILE_CRYLINK: setmodel(self, "models/plasmatrail.mdl"); break;
-			case PROJECTILE_CRYLINK_BOUNCING: setmodel(self, "models/plasmatrail.mdl"); break;
-			case PROJECTILE_ELECTRO_BEAM: setmodel(self, "models/elaser.mdl"); break;
-			case PROJECTILE_GRENADE: setmodel(self, "models/grenademodel.md3"); break;
-			case PROJECTILE_GRENADE_BOUNCING: setmodel(self, "models/grenademodel.md3"); break;
-			case PROJECTILE_LASER: setmodel(self, "models/laser.mdl"); break;
-			case PROJECTILE_HLAC: setmodel(self, "models/hlac_bullet.md3"); break;
-			case PROJECTILE_PORTO_RED: setmodel(self, "models/grenademodel.md3"); self.scale = 4; break;
-			case PROJECTILE_PORTO_BLUE: setmodel(self, "models/grenademodel.md3"); self.scale = 4; break;
-			case PROJECTILE_HOOKBOMB: setmodel(self, "models/grenademodel.md3"); break;
-			case PROJECTILE_HAGAR: setmodel(self, "models/hagarmissile.mdl"); self.scale = 0.4; break;
-			case PROJECTILE_HAGAR_BOUNCING: setmodel(self, "models/hagarmissile.mdl"); self.scale = 0.4; break;
-			case PROJECTILE_FIREBALL: self.model = ""; self.modelindex = 0; break; // particle effect is good enough
-			case PROJECTILE_FIREMINE: self.model = ""; self.modelindex = 0; break; // particle effect is good enough
+			case PROJECTILE_ELECTRO: setmodel(self, "models/ebomb.mdl");self.traileffect = particleeffectnum("TR_NEXUIZPLASMA"); break;
+			case PROJECTILE_ROCKET: setmodel(self, "models/rocket.md3");self.traileffect = particleeffectnum("TR_ROCKET"); self.scale = 2; break;
+			case PROJECTILE_BULLET: setmodel(self, "models/tracer.mdl");self.traileffect = particleeffectnum("tr_bullet"); break;
+			case PROJECTILE_BULLET_GLOWING: setmodel(self, "models/tracer.mdl");self.traileffect = particleeffectnum("tr_bullet"); break;
+			case PROJECTILE_BULLET_GLOWING_TRACER: setmodel(self, "models/tracer.mdl");self.traileffect = particleeffectnum("tr_rifle"); break;
+			case PROJECTILE_CRYLINK: setmodel(self, "models/plasmatrail.mdl");self.traileffect = particleeffectnum("TR_CRYLINKPLASMA"); break;
+			case PROJECTILE_CRYLINK_BOUNCING: setmodel(self, "models/plasmatrail.mdl");self.traileffect = particleeffectnum("TR_CRYLINKPLASMA"); break;
+			case PROJECTILE_ELECTRO_BEAM: setmodel(self, "models/elaser.mdl");self.traileffect = particleeffectnum("TR_NEXUIZPLASMA"); break;
+			case PROJECTILE_GRENADE: setmodel(self, "models/grenademodel.md3");self.traileffect = particleeffectnum("TR_GRENADE"); break;
+			case PROJECTILE_GRENADE_BOUNCING: setmodel(self, "models/grenademodel.md3");self.traileffect = particleeffectnum("TR_GRENADE"); break;
+			case PROJECTILE_LASER: setmodel(self, "models/laser.mdl");self.traileffect = particleeffectnum(""); break;
+			case PROJECTILE_HLAC: setmodel(self, "models/hlac_bullet.md3");self.traileffect = particleeffectnum(""); break;
+			case PROJECTILE_PORTO_RED: setmodel(self, "models/grenademodel.md3");self.traileffect = particleeffectnum("TR_WIZSPIKE"); self.scale = 4; break;
+			case PROJECTILE_PORTO_BLUE: setmodel(self, "models/grenademodel.md3");self.traileffect = particleeffectnum("TR_WIZSPIKE"); self.scale = 4; break;
+			case PROJECTILE_HOOKBOMB: setmodel(self, "models/grenademodel.md3");self.traileffect = particleeffectnum("TR_KNIGHTSPIKE"); break;
+			case PROJECTILE_HAGAR: setmodel(self, "models/hagarmissile.mdl");self.traileffect = particleeffectnum("TR_GRENADE"); self.scale = 0.4; break;
+			case PROJECTILE_HAGAR_BOUNCING: setmodel(self, "models/hagarmissile.mdl");self.traileffect = particleeffectnum("TR_GRENADE"); self.scale = 0.4; break;
+			case PROJECTILE_FIREBALL: self.model = ""; self.modelindex = 0; self.traileffect = particleeffectnum("fireball"); break; // particle effect is good enough
+			case PROJECTILE_FIREMINE: self.model = ""; self.modelindex = 0; self.traileffect = particleeffectnum("firemine"); break; // particle effect is good enough
 			default:
 				error("Received invalid CSQC projectile, can't work with this!");
 				break;
