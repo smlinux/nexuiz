@@ -550,6 +550,25 @@ float(float a) tan = #475; // returns tangent value (which is simply sin(a)/cos(
 //useful math functions for analyzing vectors, note that these all use angles in radians (just like the cos/sin functions) not degrees unlike makevectors/vectoyaw/vectoangles, so be sure to do the appropriate conversions (multiply by DEG2RAD or RAD2DEG as needed).
 //note: atan2 can take unnormalized vectors (just like vectoyaw), and the function was included only for completeness (more often you want vectoyaw or vectoangles), atan2(v_x,v_y) * RAD2DEG gives the same result as vectoyaw(v)
 
+//DP_QC_AUTOCVARS
+//idea: div0
+//darkplaces implementation: div0
+//description:
+//allows QC variables to be bound to cvars
+//(works for float, string, vector types)
+//example:
+// float autocvar_developer;
+// float autocvar_registered;
+// string autocvar__cl_name;
+//NOTE: copying a string-typed autocvar to another variable/field, and then
+//changing the cvar or returning from progs is UNDEFINED. Writing to autocvar
+//globals is UNDEFINED.  Accessing autocvar globals after cvar_set()ing that
+//cvar is IMPLEMENTATION DEFINED (an implementation may either yield the
+//previous, or the current, value). Whether autocvar globals, after restoring
+//a savegame, have the cvar's current value, or the original value at time of
+//saving, is UNDEFINED. Restoring a savegame however must not restore the
+//cvar values themselves.
+
 //DP_QC_CHANGEPITCH
 //idea: id Software
 //darkplaces implementation: id Software
