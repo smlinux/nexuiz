@@ -824,7 +824,10 @@ void PutClientInServer (void)
 		self.iscreature = TRUE;
 		self.movetype = MOVETYPE_WALK;
 		self.solid = SOLID_SLIDEBOX;
-		self.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_PLAYERCLIP;
+		if(cvar("g_playerclip_collisions"))
+			self.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_PLAYERCLIP;
+		else
+			self.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY;
 		self.frags = FRAGS_PLAYER;
 		if(independent_players)
 			MAKE_INDEPENDENT_PLAYER(self);
