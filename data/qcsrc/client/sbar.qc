@@ -1752,7 +1752,7 @@ void Sbar_Timer()
 	topright_x = vid_conwidth;
 	
 	float scale;
-	scale = cvar("sbar_timer_scale");
+	scale = cvar_or("sbar_timer_scale", 1);
 	timelimit = getstatf(STAT_TIMELIMIT);
 	
 	timeleft = max(0, timelimit * 60 + getstatf(STAT_GAMESTARTTIME) - time);
