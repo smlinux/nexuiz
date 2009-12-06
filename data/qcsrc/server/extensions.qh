@@ -568,6 +568,14 @@ float(float a) tan = #475; // returns tangent value (which is simply sin(a)/cos(
 //a savegame, have the cvar's current value, or the original value at time of
 //saving, is UNDEFINED. Restoring a savegame however must not restore the
 //cvar values themselves.
+//In case the cvar does NOT exist, then it is automatically created with the
+//value of the autocvar initializer, if given. This is possible with e.g.
+//frikqcc and fteqcc the following way:
+// var float autocvar_whatever = 42;
+//If no initializer is given, the cvar will be initialized to a string
+//equivalent to the NULL value of the given data type, that is, the empty
+//string, 0, or '0 0 0'. However, when automatic cvar creation took place, a
+//warning is printed to the game console.
 
 //DP_QC_CHANGEPITCH
 //idea: id Software
