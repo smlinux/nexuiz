@@ -1,0 +1,7 @@
+var float autocvar_cl_projectiles_sloppy = 0;
+
+var float autocvar_cl_gibs_ticrate = 0.1;
+var float autocvar_cl_gibs_sloppy = 1;
+
+var float autocvar_cl_casings_ticrate = 0.1;
+var float autocvar_cl_casings_sloppy = 1;
