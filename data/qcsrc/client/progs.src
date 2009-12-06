@@ -11,6 +11,9 @@ csqc_builtins.qc
 ../common/items.qh
 
 ../common/mapinfo.qh
+
+autocvars.qh
+
 interpolate.qh
 teamradar.qh
 waypointsprites.qh

@@ -14,7 +14,7 @@ void Casing_Draw()
 		self.flags &~= FL_ONGROUND;
 	}
 
-	Movetype_Physics_NoMatchServer();
+	Movetype_Physics_MatchTicrate(autocvar_cl_casings_ticrate, autocvar_cl_casings_sloppy);
 
 	self.renderflags = 0;
 	self.alpha = bound(0, self.cnt - time, 1);

@@ -45,7 +45,7 @@ void Projectile_Draw()
 	if(self.count & 0x80)
 	{
 		//self.move_flags &~= FL_ONGROUND;
-		Movetype_Physics_MatchServer();
+		Movetype_Physics_MatchServer(autocvar_cl_projectiles_sloppy);
 		if(!(self.move_flags & FL_ONGROUND))
 			self.angles = vectoangles(self.velocity);
 	}
@@ -149,7 +149,6 @@ void Ent_RemoveProjectile()
 void Ent_Projectile()
 {
 	float f;
-	string trailname;
 
 	// projectile properties:
 	//   kind (interpolated, or clientside)

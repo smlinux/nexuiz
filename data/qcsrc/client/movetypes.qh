@@ -10,7 +10,8 @@
 .float move_bounce_stopspeed;
 .float move_nomonsters; // -1 for MOVE_NORMAL, otherwise a MOVE_ constant
 
-void Movetype_Physics_MatchServer();
+void Movetype_Physics_MatchTicrate(float tr, float sloppy);
+void Movetype_Physics_MatchServer(float sloppy);
 void Movetype_Physics_NoMatchServer();
 
 float	MOVETYPE_NONE				= 0;

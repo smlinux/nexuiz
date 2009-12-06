@@ -84,7 +84,7 @@ void Gib_Draw()
 	vector oldorg;
 	oldorg = self.origin;
 
-	Movetype_Physics_NoMatchServer();
+	Movetype_Physics_MatchTicrate(autocvar_cl_gibs_ticrate, autocvar_cl_gibs_sloppy);
 	if(wasfreed(self))
 		return;
 

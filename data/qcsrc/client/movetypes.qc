@@ -377,11 +377,16 @@ void Movetype_Physics_NoMatchServer() // optimized
 	setorigin(self, self.move_origin);
 }
 
-void Movetype_Physics_MatchServer() // SV_Physics_Entity
+void Movetype_Physics_MatchServer(float sloppy)
+{
+	Movetype_Physics_MatchTicrate(ticrate, sloppy);
+}
+
+void Movetype_Physics_MatchTicrate(float tr, float sloppy) // SV_Physics_Entity
 {
 	float n, i, dt, movedt;
 
-	if(ticrate <= 0)
+	if(tr <= 0)
 	{
 		Movetype_Physics_NoMatchServer();
 		return;
@@ -389,10 +394,10 @@ void Movetype_Physics_MatchServer() // SV_Physics_Entity
 
 	dt = time - self.move_time;
 
-	movedt = ticrate;
-	n = max(0, floor(dt / ticrate));
-	dt -= n * ticrate;
-	self.move_time += n * ticrate;
+	movedt = tr;
+	n = max(0, floor(dt / tr));
+	dt -= n * tr;
+	self.move_time += n * tr;
 
 	//self.move_didgravity = ((self.move_movetype == MOVETYPE_BOUNCE || self.move_movetype == MOVETYPE_TOSS) && !(self.move_flags & FL_ONGROUND));
 	// we use the field as set by the last run of this
@@ -420,14 +425,16 @@ void Movetype_Physics_MatchServer() // SV_Physics_Entity
 
 		self.angles = self.move_angles + dt * self.avelocity;
 
-		if(self.movetype != MOVETYPE_NOCLIP)
+		if(sloppy || self.movetype == MOVETYPE_NOCLIP)
+		{
+			setorigin(self, self.move_origin + dt * self.velocity);
+		}
+		else
 		{
 			_Movetype_PushEntityTrace(dt * self.velocity);
 			if(!trace_startsolid)
 				setorigin(self, trace_endpos);
 		}
-		else
-			setorigin(self, self.move_origin + dt * self.velocity);
 	}
 	else
 	{

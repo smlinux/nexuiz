@@ -53,22 +53,22 @@ void Sbar_FinaleOverlay()
 
 vector Sbar_AccuracyColor(float accuracy)
 {
-	vector color;
+	vector rgb;
 	float yellow_accuracy = cvar("sbar_accuracy_yellow"); // value at which this function returns yellow
 	if(accuracy >= 100) {
-		color_x = 0;
-		color_y = 1;
+		rgb_x = 0;
+		rgb_y = 1;
 	}
 	else if(accuracy > yellow_accuracy) {
-		color_x = 1 - (accuracy-yellow_accuracy)/(100-yellow_accuracy); // red value between 1 -> 0
-		color_y = 1;
+		rgb_x = 1 - (accuracy-yellow_accuracy)/(100-yellow_accuracy); // red value between 1 -> 0
+		rgb_y = 1;
 	}
 	else {
-		color_x = 1;
-		color_y = accuracy/yellow_accuracy; // green value between 0 -> 1
+		rgb_x = 1;
+		rgb_y = accuracy/yellow_accuracy; // green value between 0 -> 1
 	}
-	color_z = 0;
-	return color;
+	rgb_z = 0;
+	return rgb;
 }
 
 float weaponspace[10];
@@ -1213,9 +1213,8 @@ vector Sbar_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 			float padding;
 			padding = ((sbwidth/weapon_cnt) - stringwidth(s, FALSE) * fontsize) / 2; // center the accuracy value
 
-			vector color;
-			color = Sbar_AccuracyColor(weapon_stats);
-			drawstring(pos + '1 0 0' * padding + '0 1 0' * height * (2/3), s, '1 1 0' * fontsize, color, sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
+			rgb = Sbar_AccuracyColor(weapon_stats);
+			drawstring(pos + '1 0 0' * padding + '0 1 0' * height * (2/3), s, '1 1 0' * fontsize, rgb, sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
 		}
 		pos_x += sbwidth/weapon_cnt * rows;
 		if(rows == 2 && i == 6) {
@@ -1641,7 +1640,6 @@ void Sbar_Score()
 		vector m;
 		string s, forcetime;
 
-		float pos;
 		m = '0.5 0 0' * vid_conwidth + '0 1 0' * cvar_or("cl_racetimer_position", 0.25) * vid_conheight;
 
 		if(race_checkpointtime)
