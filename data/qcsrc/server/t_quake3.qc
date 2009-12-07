@@ -48,7 +48,7 @@ void spawnfunc_target_init()
 }
 
 // weapon give ent from defrag
-void spawnfunc_target_give()
+void target_give_init()
 {
 	entity targ;
 	for (targ = world; (targ = find(targ, targetname, self.target)); ) {
@@ -56,35 +56,40 @@ void spawnfunc_target_give()
 			self.ammo_rockets += targ.count * cvar("g_balance_rocketlauncher_ammo");
 			self.netname = "rocketlauncher";
 		}
-		if (targ.classname == "weapon_plasmagun") {
+		else if (targ.classname == "weapon_plasmagun") {
 			self.ammo_rockets += targ.count * cvar("g_balance_hagar_primary_ammo");
 			if(self.netname == "")
 				self.netname = "hagar";
 			else
 				self.netname = strcat(self.netname, " hagar");
 		}
-		if (targ.classname == "weapon_bfg") {
+		else if (targ.classname == "weapon_bfg") {
 			self.ammo_cells += targ.count * cvar("g_balance_crylink_primary_ammo");
 			if(self.netname == "")
 				self.netname = "crylink";
 			else
 				self.netname = strcat(self.netname, " crylink");
 		}
-		if (targ.classname == "weapon_grenadelauncher") {
+		else if (targ.classname == "weapon_grenadelauncher") {
 			self.ammo_rockets += targ.count * cvar("g_balance_grenadelauncher_primary_ammo");
 			if(self.netname == "")
 				self.netname = "grenadelauncher";
 			else
 				self.netname = strcat(self.netname, " grenadelauncher");
 		}
-		if (targ.classname == "item_armor_body")
+		else if (targ.classname == "item_armor_body")
 			self.armorvalue = 100;
-		if (targ.classname == "item_health_mega")
+		else if (targ.classname == "item_health_mega")
 			self.health = 200;
 		remove(targ);
 	}
 	self.spawnflags = 2;
 	spawnfunc_target_items();
+}
+
+void spawnfunc_target_give()
+{
+	InitializeEntity(self, target_give_init, INITPRIO_FINDTARGET);
 }
 
 //void spawnfunc_item_flight()       /* not supported */
