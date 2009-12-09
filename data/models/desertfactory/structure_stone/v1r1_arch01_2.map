@@ -1,0 +1,76 @@
+
+// entity 0
+{
+"classname" "worldspawn"
+"message" "Created for the Desert Factory map project"
+"author" "sev"
+"license" "GNU GPL version 2 or any later version"
+// brush 0
+{
+( -224 -8 128 ) ( -32 -8 320 ) ( -32 -8 128 ) common/nodraw 0 0 0 2 2 0 0 0
+( -32 56 320 ) ( -80 56 272 ) ( -32 -72 320 ) common/nodraw 0 0 0 2 2 0 0 0
+( -32 -72 320 ) ( -140 56 308 ) ( -32 56 320 ) common/nodraw 0 0 0 2 2 0 0 0
+( -140 -72 308 ) ( -80 56 272 ) ( -140 56 308 ) desertfactory_stone/bricks02 8 0 90 2 2 0 0 0
+( -64 0 8 ) ( -64 0 0 ) ( 64 0 8 ) desertfactory_stone/bricks02 0 0 0 2 2 0 0 0
+}
+// brush 1
+{
+( -32 8 320 ) ( -224 -8 320 ) ( -224 8 320 ) common/nodraw 0 0 0 2 2 0 0 0
+( -224 -8 128 ) ( -32 -8 320 ) ( -32 -8 128 ) common/nodraw 0 0 0 2 2 0 0 0
+( -32 56 320 ) ( -140 56 308 ) ( -32 -72 320 ) common/nodraw 0 0 0 2 2 0 0 0
+( -224 -72 320 ) ( -140 56 308 ) ( -224 56 320 ) desertfactory_stone/bricks02 8 0 90 2 2 0 0 0
+( -64 0 8 ) ( -64 0 0 ) ( 64 0 8 ) desertfactory_stone/bricks02 0 0 0 2 2 0 0 0
+}
+// brush 2
+{
+( -224 -8 128 ) ( -32 -8 320 ) ( -32 -8 128 ) common/nodraw 0 0 0 2 2 0 0 0
+( -32 -72 320 ) ( -80 56 272 ) ( -32 56 320 ) common/nodraw 0 0 0 2 2 0 0 0
+( -32 56 320 ) ( -44 56 212 ) ( -32 -72 320 ) common/nodraw 0 0 0 2 2 0 0 0
+( -80 -72 272 ) ( -44 56 212 ) ( -80 56 272 ) desertfactory_stone/bricks02 8 0 0 2 2 0 0 0
+( -64 0 8 ) ( -64 0 0 ) ( 64 0 8 ) desertfactory_stone/bricks02 0 0 0 2 2 0 0 0
+}
+// brush 3
+{
+( 224 8 320 ) ( 224 -8 320 ) ( 32 8 320 ) common/nodraw 0 0 0 2 2 0 0 0
+( 32 -8 128 ) ( 32 -8 320 ) ( 224 -8 128 ) common/nodraw 0 0 0 2 2 0 0 0
+( 32 -72 320 ) ( 140 56 308 ) ( 32 56 320 ) common/nodraw 0 0 0 2 2 0 0 0
+( 224 56 320 ) ( 140 56 308 ) ( 224 -72 320 ) desertfactory_stone/bricks02 504 0 -90 2 2 0 0 0
+( -64 0 8 ) ( -64 0 0 ) ( 64 0 8 ) desertfactory_stone/bricks02 0 0 0 2 2 0 0 0
+}
+// brush 4
+{
+( 32 -8 128 ) ( 32 -8 320 ) ( 224 -8 128 ) common/nodraw 0 0 0 2 2 0 0 0
+( 32 -72 320 ) ( 80 56 272 ) ( 32 56 320 ) common/nodraw 0 0 0 2 2 0 0 0
+( 32 56 320 ) ( 140 56 308 ) ( 32 -72 320 ) common/nodraw 0 0 0 2 2 0 0 0
+( 140 56 308 ) ( 80 56 272 ) ( 140 -72 308 ) desertfactory_stone/bricks02 504 0 -90 2 2 0 0 0
+( -64 0 8 ) ( -64 0 0 ) ( 64 0 8 ) desertfactory_stone/bricks02 0 0 0 2 2 0 0 0
+}
+// brush 5
+{
+( 32 -8 128 ) ( 32 -8 320 ) ( 224 -8 128 ) common/nodraw 0 0 0 2 2 0 0 0
+( 32 56 320 ) ( 80 56 272 ) ( 32 -72 320 ) common/nodraw 0 0 0 2 2 0 0 0
+( 32 -72 320 ) ( 44 56 212 ) ( 32 56 320 ) common/nodraw 0 0 0 2 2 0 0 0
+( 80 56 272 ) ( 44 56 212 ) ( 80 -72 272 ) desertfactory_stone/bricks02 8 0 0 2 2 0 0 0
+( -64 0 8 ) ( -64 0 0 ) ( 64 0 8 ) desertfactory_stone/bricks02 0 0 0 2 2 0 0 0
+}
+// brush 6
+{
+( 24 8 128 ) ( 24 -8 128 ) ( -40 8 128 ) common/nodraw 0 0 0 2 2 0 0 0
+( 32 8 320 ) ( 32 8 -64 ) ( 32 -8 320 ) desertfactory_stone/bricks02 8 0 0 2 2 0 0 0
+( -32 -8 0 ) ( 32 -8 0 ) ( -32 8 0 ) common/nodraw 0 0 0 2 2 0 0 0
+( -32 -8 -64 ) ( -32 -8 320 ) ( 32 -8 -64 ) common/nodraw 0 0 0 2 2 0 0 0
+( -32 -8 -64 ) ( -32 8 -64 ) ( -32 -8 320 ) desertfactory_stone/bricks02 8 0 0 2 2 0 0 0
+( -64 0 8 ) ( -64 0 0 ) ( 64 0 8 ) desertfactory_stone/bricks02 0 0 0 2 2 0 0 0
+}
+// brush 7
+{
+( -224 -8 128 ) ( -32 -8 320 ) ( -32 -8 128 ) common/nodraw 0 0 0 2 2 0 0 0
+( -32 -72 320 ) ( -44 56 212 ) ( -32 56 320 ) common/nodraw 0 0 0 2 2 0 0 0
+( -44 -72 212 ) ( -32 56 128 ) ( -44 56 212 ) desertfactory_stone/bricks02 8 0 0 2 2 0 0 0
+( -64 0 8 ) ( -64 0 0 ) ( 64 0 8 ) desertfactory_stone/bricks02 0 0 0 2 2 0 0 0
+( 24 8 320 ) ( 24 -8 320 ) ( -40 8 320 ) common/nodraw 0 0 0 2 2 0 0 0
+( -32 -8 128 ) ( 32 -8 128 ) ( -32 8 128 ) common/nodraw 0 0 0 2 2 0 0 0
+( 32 56 320 ) ( 44 56 212 ) ( 32 -72 320 ) common/nodraw 0 0 0 2 2 0 0 0
+( 44 56 212 ) ( 32 56 128 ) ( 44 -72 212 ) desertfactory_stone/bricks02 8 0 0 2 2 0 0 0
+}
+}

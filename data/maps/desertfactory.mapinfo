@@ -9,3 +9,5 @@ type lms 9 20
 type arena 10 20
 type kh 1000 20 2
 type ca 10 20
+type dom 500 20
+type rune 200 20
