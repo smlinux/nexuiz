@@ -21,9 +21,9 @@ sub checkmagick($)
 	return $e;
 }
 
-my ($pixw, $pixh, $cols, $beamoffset, $beams) = @ARGV;
+my ($pixw, $pixh, $cols, $rows, $beamoffset, $beams) = @ARGV;
 defined $beams
-	or die "Usage: $0 pixw pixh columns beamoffset beams\n";
+	or die "Usage: $0 pixw pixh columns rows beamoffset beams\n";
 
 if($magick)
 {
@@ -31,8 +31,9 @@ if($magick)
 	checkmagick $magick->ReadImage("xc:white");
 }
 
-my $square = 1.0 / $cols;
-my $rows = $cols - $beams;
+my $square_x = 1.0 / $cols;
+my $square_y = 1.0 / $rows;
+$rows -= $beams;
 
 my $dx = 1.0 / $pixw;
 my $dy = 1.0 / $pixh;
@@ -42,10 +43,10 @@ for my $row(0..$rows-1)
 {
 	for my $col(0..$cols-1)
 	{
-		my $s0 = $col * $square + $dx;
-		my $s1 = ($col+1) * $square - $dx;
-		my $t0 = $row * $square + $dy;
-		my $t1 = ($row+1) * $square - $dy;
+		my $s0 = $col * $square_x + $dx;
+		my $s1 = ($col+1) * $square_x - $dx;
+		my $t0 = $row * $square_y + $dy;
+		my $t1 = ($row+1) * $square_y - $dy;
 		print "$i $s0 $t0 $s1 $t1\n";
 		if($magick)
 		{
@@ -70,8 +71,8 @@ for my $beam(0..$beams-1)
 	my $s0 = 0;
 	my $s1 = 1;
 	my $row = $beam + $rows;
-	my $t0 = $row * $square + $dy;
-	my $t1 = ($row+1) * $square - $dy;
+	my $t0 = $row * $square_y + $dy;
+	my $t1 = ($row+1) * $square_y - $dy;
 	print "$i $s0 $t0 $s1 $t1\n";
 	if($magick)
 	{
