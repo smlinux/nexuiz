@@ -165,6 +165,10 @@ void multi_trigger()
 		self.think = multi_wait;
 		self.nextthink = time + self.wait;
 	}
+	else if (self.wait == 0)
+	{
+		multi_wait(); // waiting finished
+	}
 	else
 	{	// we can't just remove (self) here, because this is a touch function
 		// called wheil C code is looping through area links...
@@ -270,6 +274,8 @@ void spawnfunc_trigger_multiple()
 
 	if (!self.wait)
 		self.wait = 0.2;
+	else if(self.wait < -1)
+		self.wait = 0;
 	self.use = multi_use;
 
 	EXACTTRIGGER_INIT;
