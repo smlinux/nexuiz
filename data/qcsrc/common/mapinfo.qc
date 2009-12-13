@@ -622,6 +622,8 @@ void _MapInfo_Parse_Settemp(string pFilename, string acl, float type, string s, 
 		print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
 	else if(substring(t, 0, 1) == "_")
 		print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
+	else if(substring(t, 0, 5) == "g_ban")
+		print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
 	else if(matchacl(acl, t) <= 0)
 		print("Map ", pFilename, " contains a denied setting, ignored\n");
 	else
