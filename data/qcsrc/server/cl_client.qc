@@ -695,8 +695,13 @@ void FixPlayermodel()
 
 		if(teams_matter)
 		{
-			defaultmodel = cvar_string(strcat("sv_defaultplayermodel_", Team_ColorNameLowerCase(self.team)));
-			defaultskin = cvar(strcat("sv_defaultplayerskin_", Team_ColorNameLowerCase(self.team)));
+			string s;
+			s = Team_ColorNameLowerCase(self.team);
+			if(s != "neutral")
+			{
+				defaultmodel = cvar_string(strcat("sv_defaultplayermodel_", s));
+				defaultskin = cvar(strcat("sv_defaultplayerskin_", s));
+			}
 		}
 
 		if(defaultmodel == "")
