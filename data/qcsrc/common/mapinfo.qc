@@ -540,7 +540,7 @@ float MapInfo_Type_FromString(string t)
 	else                    return 0;
 }
 
-void _MapInfo_Parse_Settemp(string pFilename, string acl, string s, float recurse)
+void _MapInfo_Parse_Settemp(string pFilename, string acl, float type, string s, float recurse)
 {
 	string t;
 	float fh, o;
@@ -602,7 +602,7 @@ void _MapInfo_Parse_Settemp(string pFilename, string acl, string s, float recurs
 					if(substring(s, 0, 5) == "seta ")
 						s = substring(s, 5, -1);
 
-					_MapInfo_Parse_Settemp(pFilename, acl, s, recurse - 1);
+					_MapInfo_Parse_Settemp(pFilename, acl, type, s, recurse - 1);
 				}
 				fclose(fh);
 			}
@@ -616,15 +616,31 @@ void _MapInfo_Parse_Settemp(string pFilename, string acl, string s, float recurs
 		print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
 	else if(substring(t, 0, 10) == "g_mapinfo_")
 		print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
+	else if(substring(t, 0, 5) == "rcon_")
+		print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
+	else if(substring(t, 0, 8) == "settemp_")
+		print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
+	else if(substring(t, 0, 1) == "_")
+		print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
 	else if(matchacl(acl, t) <= 0)
 		print("Map ", pFilename, " contains a denied setting, ignored\n");
 	else
 	{
-		dprint("Applying temporary setting ", t, " := ", s, "\n");
-		if(cvar("g_campaign"))
-			cvar_set(t, s); // this is a wrapper and is always temporary anyway; no need to backup old values then
+		if(type == 0) // server set
+		{
+			dprint("Applying temporary setting ", t, " := ", s, "\n");
+			if(cvar("g_campaign"))
+				cvar_set(t, s); // this is a wrapper and is always temporary anyway; no need to backup old values then
+			else
+				cvar_settemp(t, s);
+		}
 		else
-			cvar_settemp(t, s);
+		{
+			dprint("Applying temporary client setting ", t, " := ", s, "\n");
+			MapInfo_Map_clientstuff = strcat(
+					MapInfo_Map_clientstuff, "cl_cmd settemp \"", t, "\" \"", s, "\"\n"
+					);
+		}
 	}
 }
 
@@ -822,7 +838,7 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 			{
 				if(f & pGametypeToSet)
 				{
-					_MapInfo_Parse_Settemp(pFilename, acl, s, 1);
+					_MapInfo_Parse_Settemp(pFilename, acl, 0, s, 1);
 				}
 			}
 			else
@@ -837,18 +853,7 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 			{
 				if(f & pGametypeToSet)
 				{
-					t = car(s); s = cdr(s);
-					if not(cvar_value_issafe(t))
-						print("Map ", pFilename, " contains a potentially harmful client setting, ignored\n");
-					else if not (cvar_value_issafe(s))
-						print("Map ", pFilename, " contains a potentially harmful client setting, ignored\n");
-					else
-					{
-						dprint("Applying temporary client setting ", t, " := ", s, "\n");
-						MapInfo_Map_clientstuff = strcat(
-							MapInfo_Map_clientstuff, "cl_cmd settemp \"", t, "\" \"", s, "\"\n"
-						);
-					}
+					_MapInfo_Parse_Settemp(pFilename, acl, 1, s, 1);
 				}
 			}
 			else
