@@ -995,7 +995,7 @@ falloff: "gravity field": 0 means no falloff, 1 means linear falloff (zero at th
 Variable sized repeatable trigger.  Must be targeted at one or more entities.  If "health" is set, the trigger must be killed to activate each time.
 -------- KEYS --------
 health: amount of damage that has to be dealt to the trigger to activate (it then won't respond to merely touching it)
-wait: prevent triggering again for this amount of time
+wait: prevent triggering again for this amount of time (default: 0.2, set to -1 to wait indefinitely, or -2 to not wait at all)
 sounds: 1 to play misc/secret.wav, 2 to play misc/talk.wav, 3 to play misc/trigger1.wav
 noise: path to sound file, if you want to play something else
 target: trigger all entities with this targetname when triggered
