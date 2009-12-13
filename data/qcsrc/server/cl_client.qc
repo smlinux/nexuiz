@@ -1329,9 +1329,11 @@ void ClientConnect (void)
 	ClientData_Attach();
 
 	bot_clientconnect();
-	
+
 	playerdemo_init();
 
+	anticheat_init();
+	
 	race_PreSpawnObserver();
 
 	//if(g_domination)
@@ -1512,6 +1514,9 @@ void ClientDisconnect (void)
 		fclose(self.hitplotfh);
 		self.hitplotfh = -1;
 	}
+
+	anticheat_report();
+	anticheat_shutdown();
 
 	playerdemo_shutdown();
 
@@ -2096,6 +2101,8 @@ void SpectateCopy(entity spectatee) {
 	setorigin(self, spectatee.origin);
 	setsize(self, spectatee.mins, spectatee.maxs);
 	SetZoomState(spectatee.zoomstate);
+
+	anticheat_spectatecopy(spectatee);
 }
 
 float SpectateUpdate() {
@@ -2370,6 +2377,12 @@ void PlayerPreThink (void)
 	self.stat_game_starttime = game_starttime;
 	self.stat_allow_oldnexbeam = cvar("g_allow_oldnexbeam");
 	self.stat_leadlimit = cvar("leadlimit");
+
+	if(frametime)
+	{
+		// physics frames: update anticheat stuff
+		anticheat_prethink();
+	}
 
 	if(blockSpectators && frametime)
 		// WORKAROUND: only use dropclient in server frames (frametime set). Never use it in cl_movement frames (frametime zero).

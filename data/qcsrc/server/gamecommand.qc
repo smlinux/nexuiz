@@ -1274,6 +1274,23 @@ void GameCommand(string command)
 		}
 	}
 
+	if(argv(0) == "anticheat")
+	{
+		entno = stof(argv(1));
+		if((entno < 1) | (entno > maxclients)) {
+			print("Player ", argv(1), " doesn't exist\n");
+			return;
+		}
+		client = edict_num(entno);
+		if(clienttype(client) != CLIENTTYPE_REAL && clienttype(client) != CLIENTTYPE_BOT) {
+			print("Player ", client.netname, " is not active\n");
+			return;
+		}
+		self = client;
+		anticheat_report();
+		return;
+	}
+
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");
 }
 

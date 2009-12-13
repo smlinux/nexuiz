@@ -29,10 +29,6 @@ float sv_warsowbunny_backtosideratio;
 .float wasFlying;
 .float spectatorspeed;
 
-#define SHTEST_DELTA 10
-#define SHTEST_THRESHOLD 1.1
-.float shtest_next;
-.float shtest_accumulator;
 .float doublejump_nextjumptime;
 
 /*
@@ -542,7 +538,7 @@ float speedaward_lastsent;
 void SV_PlayerPhysics()
 {
 	local vector wishvel, wishdir, v;
-	local float wishspeed, f, maxspd_mod, spd, maxairspd, airaccel, swampspd_mod, shtest_score, buttons;
+	local float wishspeed, f, maxspd_mod, spd, maxairspd, airaccel, swampspd_mod, buttons;
 	string temps;
 	float buttons_prev;
 	float not_allowed_to_move;
@@ -552,57 +548,13 @@ void SV_PlayerPhysics()
         if(self.PlayerPhysplug())
             return;
 
-	if(g_race || g_cts)
-	{
-		// if record times matter
-		// ensure nothing EVIL is being done (i.e. strafebot)
-		// this hinders joystick users though
-		// but it still gives SOME analog control
-		// TODO implement this for engine cl_movement code too (basically, clipping to the four axes)
-		wishvel_x = fabs(self.movement_x);
-		wishvel_y = fabs(self.movement_y);
-		if(wishvel_x != 0 && wishvel_y != 0 && wishvel_x != wishvel_y)
-		{
-			wishvel_z = 0;
-			wishspeed = vlen(wishvel);
-			if(wishvel_x >= 2 * wishvel_y)
-			{
-				// pure X motion
-				if(self.movement_x > 0)
-					self.movement_x = wishspeed;
-				else
-					self.movement_x = -wishspeed;
-				self.movement_y = 0;
-			}
-			else if(wishvel_y >= 2 * wishvel_x)
-			{
-				// pure Y motion
-				self.movement_x = 0;
-				if(self.movement_y > 0)
-					self.movement_y = wishspeed;
-				else
-					self.movement_y = -wishspeed;
-			}
-			else
-			{
-				// diagonal
-				if(self.movement_x > 0)
-					self.movement_x = M_SQRT1_2 * wishspeed;
-				else
-					self.movement_x = -M_SQRT1_2 * wishspeed;
-				if(self.movement_y > 0)
-					self.movement_y = M_SQRT1_2 * wishspeed;
-				else
-					self.movement_y = -M_SQRT1_2 * wishspeed;
-			}
-		}
-	}
-
 	self.race_movetime_frac += frametime;
 	f = floor(self.race_movetime_frac);
 	self.race_movetime_frac -= f;
 	self.race_movetime_count += f;
 	self.race_movetime = self.race_movetime_frac + self.race_movetime_count;
+
+	anticheat_physics();
 
 	buttons = self.BUTTON_ATCK + 2 * self.BUTTON_JUMP + 4 * self.BUTTON_ATCK2 + 8 * self.BUTTON_ZOOM + 16 * self.BUTTON_CROUCH + 32 * self.BUTTON_HOOK + 64 * self.BUTTON_USE + 128 * (self.movement_x < 0) + 256 * (self.movement_x > 0) + 512 * (self.movement_y < 0) + 1024 * (self.movement_y > 0);
 
@@ -661,24 +613,6 @@ void SV_PlayerPhysics()
 			self.fixangle = 1;
 		}
 	}
-
-	if(time > self.shtest_next)
-	{
-		if(self.shtest_next > 0)
-		{
-			// self.shtest_accumulator:
-			//   started at time - SHTEST_DELTA
-			//   should be at SHTEST_DELTA
-			shtest_score = self.shtest_accumulator / (SHTEST_DELTA + time - self.shtest_next);
-			if(shtest_score > SHTEST_THRESHOLD)
-				print("TIME PARADOX: shtest for ", self.netname, " said ", ftos(shtest_score), "\n");
-			else if(cvar("developer_shtest"))
-				dprint("okay: shtest for ", self.netname, " said ", ftos(shtest_score), "\n");
-		}
-		self.shtest_next = time + SHTEST_DELTA;
-		self.shtest_accumulator = 0;
-	}
-	self.shtest_accumulator += frametime;
 
 	if (self.punchangle != '0 0 0')
 	{

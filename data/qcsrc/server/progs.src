@@ -25,6 +25,8 @@ campaign.qh
 csqcprojectile.qh
 csqceffects.qc
 
+anticheat.qh
+
 portals.qh
 
 g_hook.qh
@@ -174,3 +176,5 @@ csqcprojectile.qc
 ../common/mathlib.qc
 
 playerdemo.qc
+
+anticheat.qc
