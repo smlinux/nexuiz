@@ -202,3 +202,9 @@ float float2range11(float f);
 float float2range01(float f);
 
 float gsl_ran_gaussian(float sigma);
+
+string car(string s); // returns first word
+string cdr(string s); // returns all but first word
+float matchacl(string acl, string str); // matches str against ACL acl (with entries +foo*, +foo, +*foo, +*foo*, and same with - for forbidding)
+float startsWith(string haystack, string needle);
+float startsWithNocase(string haystack, string needle);
