@@ -82,3 +82,6 @@ void MapInfo_Cache_Invalidate(); // delete cache if any, but keep enabled
 void MapInfo_ClearTemps(); // call this when done with mapinfo for this frame
 
 void MapInfo_Shutdown(); // call this in the shutdown handler
+
+#define MAPINFO_SETTEMP_ACL_USER cvar_string("g_mapinfo_settemp_acl")
+#define MAPINFO_SETTEMP_ACL_SYSTEM "-g_mapinfo_* -rcon_* -settemp_* -_* -g_ban* +*"
