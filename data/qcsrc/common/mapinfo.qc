@@ -549,6 +549,8 @@ void _MapInfo_Parse_Settemp(string pFilename, string acl, float type, string s, 
 		else
 			print("Map ", pFilename, " uses too many levels of inclusion\n");
 	}
+	else if(t == "")
+		print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
 	else if not(cvar_value_issafe(t))
 		print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
 	else if not (cvar_value_issafe(s))
