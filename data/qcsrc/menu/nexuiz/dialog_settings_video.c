@@ -51,7 +51,7 @@ void fillNexuizVideoSettingsTab(entity me)
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "vid_vsync", "Vertical Synchronization"));
 	me.TR(me);
 	me.TR(me);
-		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_glsl", "Use OpenGL 2.0 shaders (GLSL)"));
+		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "vid_gl20", "Use OpenGL 2.0 shaders (GLSL)"));
 	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "r_coronas_occlusionquery", "Use Occlusion Queries"));
 	me.TR(me);
@@ -92,12 +92,12 @@ void fillNexuizVideoSettingsTab(entity me)
 		me.TD(me, 1, 2, e = makeNexuizSlider(1.0, 5.0, 0.1, "v_contrastboost"));
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Saturation:"));
-			setDependent(e, "r_glsl", 1, 1);
+			setDependent(e, "vid_gl20", 1, 1);
 		me.TD(me, 1, 2, e = makeNexuizSlider(0.5, 2.0, 0.05, "r_glsl_saturation"));
-			setDependent(e, "r_glsl", 1, 1);
+			setDependent(e, "vid_gl20", 1, 1);
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "v_glslgamma", "Use GLSL to handle color control"));
-			setDependent(e, "r_glsl", 1, 1);
+			setDependent(e, "vid_gl20", 1, 1);
 	me.TR(me);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Ambient:"));
