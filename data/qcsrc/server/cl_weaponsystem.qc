@@ -406,6 +406,8 @@ void CL_Weaponentity_Think()
 				self.weaponentity.model = "";
 			setmodel(self, strcat("models/weapons/v_", self.owner.weaponname, ".md3")); // precision set below
 			v_shot_idx = gettagindex(self, "shot"); // used later
+			if(!v_shot_idx)
+				v_shot_idx = gettagindex(self, "tag_shot");
 
 			if(qcweaponanimation)
 			{
@@ -447,6 +449,13 @@ void CL_Weaponentity_Think()
 					setmodel(self.weaponentity, strcat("models/weapons/v_", self.owner.weaponname, ".md3")); // precision does not matter
 					setattachment(self.weaponentity, self, "weapon");
 				}
+				else if(gettagindex(self, "tag_weapon"))
+				{
+					if (!self.weaponentity)
+						self.weaponentity = spawn();
+					setmodel(self.weaponentity, strcat("models/weapons/v_", self.owner.weaponname, ".md3")); // precision does not matter
+					setattachment(self.weaponentity, self, "tag_weapon");
+				}
 				else
 				{
 					if(self.weaponentity)
@@ -461,6 +470,8 @@ void CL_Weaponentity_Think()
 
 				float idx;
 				idx = gettagindex(self, "shot");
+				if(!idx)
+					idx = gettagindex(self, "tag_shot");
 				if(idx)
 				{
 					self.movedir = gettaginfo(self, idx);
@@ -472,6 +483,8 @@ void CL_Weaponentity_Think()
 				}
 
 				idx = gettagindex(self, "shell");
+				if(!idx)
+					idx = gettagindex(self, "tag_shell");
 				if(idx)
 				{
 					self.spawnorigin = gettaginfo(self, idx);
@@ -489,9 +502,17 @@ void CL_Weaponentity_Think()
 				else
 				{
 					if(self.weaponentity)
+					{
 						idx = gettagindex(self, "weapon");
+						if(!idx)
+							idx = gettagindex(self, "tag_weapon");
+					}
 					else
+					{
 						idx = gettagindex(self, "handle");
+						if(!idx)
+							idx = gettagindex(self, "tag_handle");
+					}
 					if(idx)
 					{
 						self.oldorigin = self.movedir - gettaginfo(self, idx);
