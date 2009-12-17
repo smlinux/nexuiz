@@ -153,6 +153,8 @@ void anticheat_prethink()
 
 void anticheat_report()
 {
+	if(!cvar("sv_eventlog"))
+		return;
 	GameLogEcho(strcat(":anticheat:speedhack:", ftos(self.playerid), ":", ftos(MEAN_EVALUATE(anticheat_speedhack))));
 	GameLogEcho(strcat(":anticheat:div0_strafebot_old:", ftos(self.playerid), ":", ftos(MEAN_EVALUATE(anticheat_div0_strafebot_old))));
 	GameLogEcho(strcat(":anticheat:div0_strafebot_new:", ftos(self.playerid), ":", ftos(MEAN_EVALUATE(anticheat_div0_strafebot_new))));
@@ -171,5 +173,4 @@ void anticheat_init()
 
 void anticheat_shutdown()
 {
-	anticheat_report();
 }
