@@ -755,6 +755,7 @@ void race_PreparePlayer()
 {
 	race_ClearTime(self);
 	self.race_place = 0;
+	self.race_started = 0;
 }
 
 void race_RetractPlayer()
