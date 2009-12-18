@@ -97,6 +97,10 @@ void() m_init_delayed =
 
 	dprint_load();
 
+	conwidth = conheight = -1;
+	UpdateConWidthHeight();
+	draw_reset_cropped();
+
 	menuInitialized = 0;
 	if(!preMenuInit())
 		return;
@@ -146,10 +150,6 @@ void() m_init_delayed =
 	}
 
 	draw_setMousePointer(SKINGFX_CURSOR, SKINSIZE_CURSOR, SKINOFFSET_CURSOR);
-
-	conwidth = conheight = -1;
-	UpdateConWidthHeight();
-	draw_reset_cropped();
 
 	loadTooltips();
 	main = spawnMainWindow(); main.configureMainWindow(main);
