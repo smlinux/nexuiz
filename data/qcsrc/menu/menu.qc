@@ -226,62 +226,85 @@ void(float key, float ascii) m_keydown =
 	if(key == K_SHIFT) menuShiftState |= S_SHIFT;
 };
 
-void(string img, float a, float algn, float force1) drawBackground =
+void(string img, float a, string algn, float force1) drawBackground =
 {
 	vector sz;
-	vector isz;
-	vector tl, ce, br;
+	float width_is_larger;
+	vector isz_w;
+	vector isz_h;
+	vector tl, ce, br, isz;
 	vector v;
 	string s;
-	float i, f;
+	string mode;
+	float i, l;
+	string c;
 	sz = draw_PictureSize(img);
 	// keep aspect of image
-	if(sz_x * draw_scale_y >= sz_y * draw_scale_x)
-	{
-		// that is, sz_x/sz_y >= draw_scale_x/draw_scale_y
-		// match up the height
-		isz_y = 1;
-		isz_x = isz_y * (sz_x / sz_y) * (draw_scale_y / draw_scale_x);
-	}
-	else
-	{
-		// that is, sz_x/sz_y <= draw_scale_x/draw_scale_y
-		// match up the width
-		isz_x = 1;
-		isz_y = isz_x * (sz_y / sz_x) * (draw_scale_x / draw_scale_y);
-	}
-	tl = '0 0 0';
-	ce = '0.5 0.5 0' - 0.5 * isz;
-	br = '1 1 0' - isz;
+	width_is_larger = (sz_x * draw_scale_y >= sz_y * draw_scale_x);
 
-	s = ftos(algn);
+	isz_w = '1 0 0' + '0 1 0' * ((sz_y / sz_x) * (draw_scale_x / draw_scale_y)); 
+	isz_h = '0 1 0' + '1 0 0' * ((sz_x / sz_y) * (draw_scale_y / draw_scale_x)); 
+
 	v_z = 0;
-	for(i = 0; i < strlen(s); ++i)
+
+	// mode "c"
+	if(width_is_larger)
+		isz = isz_h;
+	else
+		isz = isz_w;
+
+	for(i = 0; i < strlen(algn); ++i)
 	{
-		f = stof(substring(s, i, 1));
-		switch(f)
+		br = '1 1 0' - isz;
+		tl = '0 0 0';
+		ce = 0.5 * (tl + br);
+		c = substring(algn, i, 1);
+		switch(c)
 		{
-			case 1: case 4: case 7: v_x = tl_x; break;
-			case 2: case 5: case 8: v_x = ce_x; break;
-			case 3: case 6: case 9: v_x = br_x; break;
+			case "c": // crop
+				if(width_is_larger)
+					isz = isz_h;
+				else
+					isz = isz_w;
+				goto nopic;
+			case "l": // letterbox
+				if(width_is_larger)
+					isz = isz_w;
+				else
+					isz = isz_h;
+				goto nopic;
+			case "h": // height
+				isz = isz_h;
+				goto nopic;
+			case "w": // width
+				isz = isz_w;
+				goto nopic;
+			case "s": // stretch
+				isz = '1 1 0';
+				goto nopic;
+			case "1": case "4": case "7": v_x = tl_x; break;
+			case "2": case "5": case "8": v_x = ce_x; break;
+			case "3": case "6": case "9": v_x = br_x; break;
 			default: v_x = tl_x + (br_x - tl_x) * random(); break;
 		}
-		switch(f)
+		switch(c)
 		{
-			case 7: case 8: case 9: v_y = tl_y; break;
-			case 4: case 5: case 6: v_y = ce_y; break;
-			case 1: case 2: case 3: v_y = br_y; break;
+			case "7": case "8": case "9": v_y = tl_y; break;
+			case "4": case "5": case "6": v_y = ce_y; break;
+			case "1": case "2": case "3": v_y = br_y; break;
 			default: v_y = tl_y + (br_y - tl_y) * random(); break;
 		}
-		if(i == 0)
+		if(l == 0)
 			draw_Picture(v, img, isz, '1 1 1', a);
 		else if(force1)
 			// force all secondary layers to use alpha 1. Prevents ugly issues
 			// with overlap. It's a flag because it cannot be used for the
 			// ingame background
-			draw_Picture(v, strcat(img, "_l", ftos(i+1)), isz, '1 1 1', 1);
+			draw_Picture(v, strcat(img, "_l", ftos(l+1)), isz, '1 1 1', 1);
 		else
-			draw_Picture(v, strcat(img, "_l", ftos(i+1)), isz, '1 1 1', a);
+			draw_Picture(v, strcat(img, "_l", ftos(l+1)), isz, '1 1 1', a);
+		++l;
+:nopic
 	}
 }
 

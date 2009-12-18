@@ -1,7 +1,8 @@
 #define SKINBEGIN
 #define SKINVECTOR(name,def) var vector SKIN##name = def
 #define SKINFLOAT(name,def) var float SKIN##name = def
-#define SKINSTRING(name,def) const string SKIN##name = def
+//#define SKINSTRING(name,def) const string SKIN##name = def
+#define SKINSTRING(name,def) var string SKIN##name = def
 #define SKINEND
 #include "skin-customizables.inc"
 #undef SKINEND
@@ -13,7 +14,9 @@
 #define SKINBEGIN void Skin_ApplySetting(string key, string value) { switch(key) {
 #define SKINVECTOR(name,def) case #name: SKIN##name = stov(value); break
 #define SKINFLOAT(name,def) case #name: SKIN##name = stof(value); break
-#define SKINSTRING(name,def) case #name: break
+//#define SKINSTRING(name,def) case #name: break
+#define SKINSTRING(name,def) case #name: SKIN##name = strzone(value); break
+	// I know this leaks memory when skin is read multiple times. Screw it.
 #define SKINEND case "": break; case "//": break; default: print("Invalid key in skin file: ", key, "\n"); } }
 #include "skin-customizables.inc"
 #undef SKINEND

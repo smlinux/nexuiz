@@ -12,7 +12,8 @@ while(<DATA>)
 	}
 	elsif(/^\s*SKINSTRING\(([A-Z_]+), "(.*)"\);$/)
 	{
-		printf "//   uses \"$2\" images\n";
+		# printf "//   uses \"$2\" images\n";
+		printf "%-31s %s\n", $1, $2;
 	}
 	elsif(/^$/)
 	{
@@ -82,8 +83,9 @@ SKINBEGIN
 	// general
 	SKINSTRING(GFX_BACKGROUND, "background");
 	SKINSTRING(GFX_BACKGROUND_INGAME, "background_ingame");
-	SKINFLOAT(ALIGN_BACKGROUND, 5);
-	SKINFLOAT(ALIGN_BACKGROUND_INGAME, 5);
+	// alignment string of num keys for orientations, or l = letterbox, c = crop, h = height, w = width, s = scale
+	SKINSTRING(ALIGN_BACKGROUND, "5");
+	SKINSTRING(ALIGN_BACKGROUND_INGAME, "5");
 	SKINFLOAT(ALPHA_BACKGROUND_INGAME, 0.7);
 	SKINFLOAT(ALPHA_DISABLED, 0.2);
 	SKINFLOAT(ALPHA_BEHIND, 0.5);
