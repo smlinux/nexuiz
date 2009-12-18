@@ -172,7 +172,7 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck, float anypoin
 								pl = 0;
 							if(pl == 0 && !self.race_started)
 								pl = race_highest_place_spawn; // use last place if he has not even touched finish yet
-							print("race started? ", ftos(self.race_started), "\n");
+							//print("race started? ", ftos(self.race_started), "\n");
 							if(spot.race_place != pl)
 								return -1;
 						}
