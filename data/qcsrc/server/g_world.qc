@@ -216,6 +216,7 @@ void cvar_changes_init()
 		BADCVAR("mod_q3bsp_nolightmaps");
 
 		// private
+		BADCVAR("serverconfig");
 		BADPREFIX("g_ban_");
 		BADPREFIX("g_chat_flood_");
 		BADPREFIX("g_voice_flood_");
