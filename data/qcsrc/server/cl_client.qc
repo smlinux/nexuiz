@@ -107,7 +107,7 @@ void spawnpoint_use()
 // Returns:
 //   -1 if a spawn can't be used
 //   otherwise, a weight of the spawnpoint
-float Spawn_Score(entity spot, entity playerlist, float teamcheck)
+float Spawn_Score(entity spot, entity playerlist, float teamcheck, float anypoint)
 {
 	float shortest, thisdist;
 	entity player;
@@ -137,6 +137,7 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 		local entity ent;
 		float good, found;
 		ent = find(world, targetname, spot.target);
+
 		while(ent) {
 			if(ent.classname == "target_objective")
 			{
@@ -148,7 +149,8 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 			else if(ent.classname == "trigger_race_checkpoint")
 			{
 				found = 1;
-				if(self.classname == "player") // spectators may spawn everywhere
+				if(!anypoint) // spectators may spawn everywhere
+
 				{
 					if(g_race_qualifying)
 					{
@@ -162,14 +164,18 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 					{
 						if(ent.race_checkpoint != race_PreviousCheckpoint(self.race_checkpoint))
 							return -1;
-						float pl;
-						pl = self.race_place;
-						if(pl > race_highest_place_spawn)
-							pl = 0;
-						if(pl == 0 && !self.race_started)
-							pl = race_highest_place_spawn; // use last place if he has not even touched finish yet
-						if(spot.race_place != pl)
-							return -1;
+						if(ent.race_checkpoint == 0)
+						{
+							float pl;
+							pl = self.race_place;
+							if(pl > race_highest_place_spawn)
+								pl = 0;
+							if(pl == 0 && !self.race_started)
+								pl = race_highest_place_spawn; // use last place if he has not even touched finish yet
+							print("race started? ", ftos(self.race_started), "\n");
+							if(spot.race_place != pl)
+								return -1;
+						}
 					}
 				}
 				good = 1;
@@ -195,7 +201,7 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 
 float spawn_allbad;
 float spawn_allgood;
-entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindist, float teamcheck)
+entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindist, float teamcheck, float anypoint)
 {
 	local entity spot, spotlist, spotlistend;
 	spawn_allgood = TRUE;
@@ -206,7 +212,7 @@ entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindis
 
 	for(spot = firstspot; spot; spot = spot.chain)
 	{
-		spot.SPAWNPOINT_SCORE = Spawn_Score(spot, playerlist, teamcheck);
+		spot.SPAWNPOINT_SCORE = Spawn_Score(spot, playerlist, teamcheck, anypoint);
 
 		if(cvar("spawn_debugview"))
 		{
@@ -315,9 +321,9 @@ entity SelectSpawnPoint (float anypoint)
 	}
 	else
 	{
-		firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, 100, teamcheck);
+		firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, 100, teamcheck, anypoint);
 		if(!firstspot_new)
-			firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, -1, teamcheck);
+			firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, -1, teamcheck, anypoint);
 		firstspot = firstspot_new;
 
 		// there is 50/50 chance of choosing a random spot or the furthest spot
@@ -325,7 +331,7 @@ entity SelectSpawnPoint (float anypoint)
 		// usually won't get fragged at spawn twice in a row)
 		if (arena_roundbased && !g_ca)
 		{
-			firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, 800, teamcheck);
+			firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, 800, teamcheck, anypoint);
 			if(firstspot_new)
 				firstspot = firstspot_new;
 			spot = Spawn_WeightedPoint(firstspot, 1, 1, 1);
