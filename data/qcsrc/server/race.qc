@@ -761,12 +761,12 @@ void race_RetractPlayer()
 {
 	if(!g_race && !g_cts)
 		return;
-	self.race_checkpoint = race_PreviousCheckpoint(self.race_checkpoint);
-	if(self.race_checkpoint == 0)
-	{
-		race_ClearTime(self);
+	if(self.race_started)
+		self.race_checkpoint = race_PreviousCheckpoint(self.race_checkpoint);
+	else
 		self.race_checkpoint = 0;
-	}
+	if(self.race_checkpoint == 0)
+		race_ClearTime(self);
 }
 
 void race_PreDie()
@@ -791,7 +791,7 @@ void race_PostSpawn(entity spot)
 {
 	if(!g_race && !g_cts)
 		return;
-	if(self.killcount != -666 && !g_race_qualifying)
+	if(self.killcount != -666 /* REspawning, not spawning */ && !g_race_qualifying)
 	{
 		if(spot.target == "")
 			// let the player run without timing, if he did not spawn at a targetting spawnpoint
@@ -800,7 +800,7 @@ void race_PostSpawn(entity spot)
 			race_RetractPlayer();
 	}
 
-	if(spot.target != "" && self.race_checkpoint == -1)
+	if(spot.target != "" && self.race_checkpoint == -1 && self.race_started)
 		self.race_checkpoint = 0;
 
 	self.race_place = 0;
