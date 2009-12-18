@@ -335,8 +335,8 @@ Example of entity placement:
 
                          ###
     ---------------------###---
-   /    >>>>  7  5  3  1 ###   \
-  /     >>>> 8  6  4  2  ###    \
+   /    9999  7  5  3  1>###   \
+  /     9999 8  6  4  2 >###    \
  |     ------------------###     |
 %%%%%%%%                 ###|    |
 %%%%%%%%                 $$$|    |
@@ -354,6 +354,7 @@ $$$:  classname = trigger_race_checkpoint, cnt = 1, targetname = cp1
 2:    classname = info_player_race,                 target = finish, angle = 0, race_place = 2
 ....
 8:    classname = info_player_race,                 target = finish, angle = 0, race_place = 8
+9:    classname = info_player_race,                 target = finish, angle = 0, race_place = 9
 <:    classname = info_player_race,                 target = cp1,    angle = 180
 ^:    classname = info_player_race,                 target = cp2,    angle = 90
 
