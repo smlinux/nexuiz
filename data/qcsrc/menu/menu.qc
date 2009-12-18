@@ -226,81 +226,87 @@ void(float key, float ascii) m_keydown =
 	if(key == K_SHIFT) menuShiftState |= S_SHIFT;
 };
 
-void(string img, float a, string algn, float force1) drawBackground =
+float SCALEMODE_CROP = 0;
+float SCALEMODE_LETTERBOX = 1;
+float SCALEMODE_WIDTH = 2;
+float SCALEMODE_HEIGHT = 3;
+float SCALEMODE_STRETCH = 4;
+void draw_Picture_Aligned(vector algn, float scalemode, string img, float a)
 {
-	vector sz;
+	vector sz, org, isz, isz_w, isz_h;
 	float width_is_larger;
-	vector isz_w;
-	vector isz_h;
-	vector tl, ce, br, isz;
-	vector v;
-	float i, l;
-	string c;
-	sz = draw_PictureSize(img);
-	// keep aspect of image
-	width_is_larger = (sz_x * draw_scale_y >= sz_y * draw_scale_x);
 
+	sz = draw_PictureSize(img);
+	width_is_larger = (sz_x * draw_scale_y >= sz_y * draw_scale_x);
 	isz_w = '1 0 0' + '0 1 0' * ((sz_y / sz_x) * (draw_scale_x / draw_scale_y)); 
 	isz_h = '0 1 0' + '1 0 0' * ((sz_x / sz_y) * (draw_scale_y / draw_scale_x)); 
 
+	switch(scalemode)
+	{
+		default:
+		case SCALEMODE_CROP:
+			isz = (width_is_larger ? isz_h : isz_w);
+			break;
+		case SCALEMODE_LETTERBOX:
+			isz = (width_is_larger ? isz_w : isz_h);
+			break;
+		case SCALEMODE_WIDTH:
+			isz = isz_w;
+			break;
+		case SCALEMODE_HEIGHT:
+			isz = isz_h;
+			break;
+		case SCALEMODE_STRETCH:
+			isz = '1 1 0';
+			break;
+	}
+
+	org = eX * (algn_x * (1 - isz_x)) + eY * (algn_y * (1 - isz_y));
+	draw_Picture(org, img, isz, '1 1 1', a);
+}
+
+void(string img, float a, string algn, float force1) drawBackground =
+{
+	vector v;
+	float i, l;
+	string c;
+	float scalemode;
+
 	v_z = 0;
 
-	// mode "c"
-	if(width_is_larger)
-		isz = isz_h;
-	else
-		isz = isz_w;
+	scalemode = SCALEMODE_CROP;
 
 	for(i = 0; i < strlen(algn); ++i)
 	{
-		br = '1 1 0' - isz;
-		tl = '0 0 0';
-		ce = 0.5 * (tl + br);
 		c = substring(algn, i, 1);
 		switch(c)
 		{
-			case "c": // crop
-				if(width_is_larger)
-					isz = isz_h;
-				else
-					isz = isz_w;
-				goto nopic;
-			case "l": // letterbox
-				if(width_is_larger)
-					isz = isz_w;
-				else
-					isz = isz_h;
-				goto nopic;
-			case "h": // height
-				isz = isz_h;
-				goto nopic;
-			case "w": // width
-				isz = isz_w;
-				goto nopic;
-			case "s": // stretch
-				isz = '1 1 0';
-				goto nopic;
-			case "1": case "4": case "7": v_x = tl_x; break;
-			case "2": case "5": case "8": v_x = ce_x; break;
-			case "3": case "6": case "9": v_x = br_x; break;
-			default: v_x = tl_x + (br_x - tl_x) * random(); break;
+			case "c": scalemode = SCALEMODE_CROP; goto nopic;
+			case "l": scalemode = SCALEMODE_LETTERBOX; goto nopic;
+			case "h": scalemode = SCALEMODE_HEIGHT; goto nopic;
+			case "w": scalemode = SCALEMODE_WIDTH; goto nopic;
+			case "s": scalemode = SCALEMODE_STRETCH; goto nopic;
+			case "1": case "4": case "7": v_x = 0.0; break;
+			case "2": case "5": case "8": v_x = 0.5; break;
+			case "3": case "6": case "9": v_x = 1.0; break;
+			default: v_x = random(); break;
 		}
 		switch(c)
 		{
-			case "7": case "8": case "9": v_y = tl_y; break;
-			case "4": case "5": case "6": v_y = ce_y; break;
-			case "1": case "2": case "3": v_y = br_y; break;
-			default: v_y = tl_y + (br_y - tl_y) * random(); break;
+			case "7": case "8": case "9": v_y = 0.0; break;
+			case "4": case "5": case "6": v_y = 0.5; break;
+			case "1": case "2": case "3": v_y = 1.0; break;
+			default: v_y = random(); break;
 		}
 		if(l == 0)
-			draw_Picture(v, img, isz, '1 1 1', a);
+			draw_Picture_Aligned(v, scalemode, img, a);
 		else if(force1)
 			// force all secondary layers to use alpha 1. Prevents ugly issues
 			// with overlap. It's a flag because it cannot be used for the
 			// ingame background
-			draw_Picture(v, strcat(img, "_l", ftos(l+1)), isz, '1 1 1', 1);
+			draw_Picture_Aligned(v, scalemode, strcat(img, "_l", ftos(l+1)), 1);
 		else
-			draw_Picture(v, strcat(img, "_l", ftos(l+1)), isz, '1 1 1', a);
+			draw_Picture_Aligned(v, scalemode, strcat(img, "_l", ftos(l+1)), a);
 		++l;
 :nopic
 	}
