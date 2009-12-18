@@ -1257,12 +1257,12 @@ NOTOUCH: the trigger will not become active when touched, it HAS to be targeted
 
 /*QUAKED info_player_race (1 0.5 0) (-16 -16 -24) (16 16 45) 
 Race spawn point.
-NOTE for race_place: when the race starts after the qualifying, the player with the fastest map ends up at the info_player_race with race_place 1, and so on. If there are too many players, or if someone comes in later, he will spawn at an info_player_race with race_place not set. So for each trigger_race_checkpoint, there must be at least one corresponding info_player_race with race_place NOT set.
+NOTE for race_place: when the race starts after the qualifying, the player with the fastest lap ends up at the info_player_race with race_place 1, and so on. If there are too many players, or if someone comes in later, he will spawn at an info_player_race with highest race_place. If someone dies after reaching the the starting checkpoint, he will spawn at race_place 0. So for each trigger_race_checkpoint, there must be at least one corresponding info_player_race with race_place NOT set.
 -------- KEYS --------
 target: this should point to a trigger_race_checkpoint to decide when this spawning point is active. The checkpoint has to be AFTER this spawn.
 target2: trigger all entities with this targetname when someone spawns
 cnt: weight of spawn point for random selection. Set to a lower value if you have many spawn points close together. Default value is 1.
-race_place: if target points to the trigger_race_checkpoint with cnt 0 (finish line), this sets which place the spawn corresponds to; the special value 0 stands for spawns for players who come in later (have to be behind the ones with race_place set to an actual place), and -1 marks the spawnpoint for qualifying mode only; any race map must have spawnpoints with race_place being 1, 2, 3 or it gets marked as a frustrating map
+race_place: if target points to the trigger_race_checkpoint with cnt 0 (finish line), this sets which place the spawn corresponds to; the special value 0 stands for spawns for players who died in game, and -1 marks the spawnpoint for qualifying mode only; any race map must have spawnpoints with race_place being 1, 2, 3 or it gets marked as a frustrating map
 restriction: when 1, only bots can spawn here; when 2, only humans can spawn here (be careful with these, or the game will crash because someone cannot spawn)
 */
 

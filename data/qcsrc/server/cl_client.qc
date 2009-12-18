@@ -166,6 +166,8 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 						pl = self.race_place;
 						if(pl > race_highest_place_spawn)
 							pl = 0;
+						if(pl == 0 && !self.race_started)
+							pl = race_highest_place_spawn; // use last place if he has not even touched finish yet
 						if(spot.race_place != pl)
 							return -1;
 					}

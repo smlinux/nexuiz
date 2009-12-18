@@ -18,7 +18,6 @@ entity race_checkpoint_lastplayers[MAX_CHECKPOINTS];
 float race_highest_checkpoint;
 float race_timed_checkpoint;
 
-float dfcp_cnt;
 float defrag_ents;
 float defragcpexists;
 
@@ -408,8 +407,11 @@ void checkpoint_passed()
 		}
 	}
 
-	if(other.race_checkpoint == -1 || other.race_checkpoint == self.race_checkpoint)
+	if((other.race_checkpoint == -1 && self.race_checkpoint == 0) || (other.race_checkpoint == self.race_checkpoint))
 	{
+		// once he has seen the start, he can spawn normally at place-0 spawns
+		other.race_started = 1;
+
 		if(self.race_penalty)
 		{
 			if(other.race_lastpenalty != self)
@@ -841,7 +843,10 @@ void race_ClearRecords()
 	}
 
 	FOR_EACH_CLIENT(e)
+	{
 		race_ClearTime(e);
+		e.race_started = 0;
+	}
 }
 
 void race_ReadyRestart()
