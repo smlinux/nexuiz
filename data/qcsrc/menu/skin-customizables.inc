@@ -81,6 +81,7 @@ SKINBEGIN
 	SKINFLOAT(ALPHA_CURSOR_INTRO, 0);
 
 	// general
+	SKINVECTOR(COLOR_BACKGROUND, '0 0 0');
 	SKINSTRING(GFX_BACKGROUND, "background");
 	SKINSTRING(GFX_BACKGROUND_INGAME, "background_ingame");
 	// alignment string of num keys for orientations, or l = letterbox, c = crop, h = height, w = width, s = scale

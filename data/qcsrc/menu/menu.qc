@@ -234,8 +234,6 @@ void(string img, float a, string algn, float force1) drawBackground =
 	vector isz_h;
 	vector tl, ce, br, isz;
 	vector v;
-	string s;
-	string mode;
 	float i, l;
 	string c;
 	sz = draw_PictureSize(img);
@@ -617,6 +615,7 @@ void() m_draw =
 		if(menuLogoAlpha > 0)
 		{
 			draw_reset_full();
+			draw_Fill('0 0 0', '1 1 0', SKINCOLOR_BACKGROUND, 1);
 			drawBackground(SKINGFX_BACKGROUND, bound(0, menuLogoAlpha, 1), SKINALIGN_BACKGROUND, TRUE);
 			draw_reset_cropped();
 			if(menuAlpha <= 0 && SKINALPHA_CURSOR_INTRO > 0)

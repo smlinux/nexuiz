@@ -119,6 +119,7 @@ void getSkinsNexuizSkinList(entity me)
 			else if(substring(s, 0, 7) == "author ")
 				bufstr_set(buf, i * SKINPARM_COUNT + SKINPARM_AUTHOR, substring(s, 7, strlen(s) - 7));
 		}
+		fclose(fh);
 	}
 
 	search_end(glob);

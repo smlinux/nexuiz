@@ -6,6 +6,8 @@ CLASS(NexuizCvarList) EXTENDS(NexuizListBox)
 	METHOD(NexuizCvarList, resizeNotify, void(entity, vector, vector, vector, vector))
 	METHOD(NexuizCvarList, keyDown, float(entity, float, float, float))
 
+	METHOD(NexuizCvarList, destroy, void(entity))
+
 	ATTRIB(NexuizCvarList, realFontSize, vector, '0 0 0')
 	ATTRIB(NexuizCvarList, realUpperMargin, float, 0)
 	ATTRIB(NexuizCvarList, columnNameOrigin, float, 0)
@@ -48,6 +50,10 @@ void configureNexuizCvarListNexuizCvarList(entity me)
 	me.handle = buf_create();
 	buf_cvarlist(me.handle, "", "_");
 	me.nItems = buf_getsize(me.handle);
+}
+void destroyNexuizCvarList(entity me)
+{
+	buf_del(me.handle);
 }
 void setSelectedNexuizCvarList(entity me, float i)
 {
