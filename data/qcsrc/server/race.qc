@@ -801,6 +801,11 @@ void race_PostSpawn(entity spot)
 	}
 
 	if(spot.target != "" && self.race_checkpoint == -1 && self.race_started)
+	// if we have cleared the time, but were already in the race, set the
+	// current CP to 0, not -1, so when dying again we properly retract...
+	// however, note that race_laptime is still 0, so this won't count as
+	// completing another lap (as we already HAD seen that finish line before,
+	// or we wouldn't be at -1 and race_started)
 		self.race_checkpoint = 0;
 
 	self.race_place = 0;
