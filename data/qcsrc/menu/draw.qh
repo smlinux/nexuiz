@@ -2,7 +2,7 @@ vector draw_shift;
 vector draw_scale;
 float draw_alpha;
 
-void draw_reset();
+void draw_reset(float cw, float ch, float ox, float oy);
 void draw_setMousePointer(string pic, vector theSize, vector theOffset);
 void draw_drawMousePointer(vector where);
 

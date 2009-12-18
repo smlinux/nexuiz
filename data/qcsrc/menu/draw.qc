@@ -22,11 +22,11 @@ void draw_drawMousePointer(vector where)
 	drawpic(boxToGlobal(where, draw_shift, draw_scale) - draw_mousepointer_offset, draw_mousepointer, draw_mousepointer_size, '1 1 1', draw_alpha, 0);
 }
 
-void draw_reset()
+void draw_reset(float cw, float ch, float ox, float oy)
 {
 	drawfont = FONT_USER+0;
-	draw_shift = '0 0 0';
-	draw_scale = '1 0 0' * cvar("vid_conwidth") + '0 1 0' * cvar("vid_conheight");
+	draw_shift = '1 0 0' * ox + '0 1 0' * oy;
+	draw_scale = '1 0 0' * cw + '0 1 0' * ch;
 	draw_alpha = 1;
 }
 

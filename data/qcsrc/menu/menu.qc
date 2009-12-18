@@ -40,13 +40,36 @@ void() m_init =
 	}
 }
 
-float conwidth_s, conheight_s;
+float MENU_ASPECT = 1.2; // 1280x1024
+float conwidth_s, conheight_s, realconwidth, realconheight, screenconwidth, screenconheight;
+void draw_reset_cropped()
+{
+	draw_reset(screenconwidth, screenconheight, 0.5 * (realconwidth - screenconwidth), 0.5 * (realconheight - screenconheight));
+}
+void draw_reset_full()
+{
+	draw_reset(realconwidth, realconheight, 0, 0);
+}
 void UpdateConWidthHeight()
 {
 	conwidth_s = conwidth;
 	conheight_s = conheight;
-	conwidth = cvar("vid_conwidth");
-	conheight = cvar("vid_conheight");
+	realconwidth = cvar("vid_conwidth");
+	realconheight = cvar("vid_conheight");
+	if(realconwidth / realconheight > MENU_ASPECT)
+	{
+		// widescreen
+		conwidth = realconheight * MENU_ASPECT;
+		conheight = realconheight;
+	}
+	else
+	{
+		// squarescreen
+		conwidth = realconwidth;
+		conheight = realconwidth / MENU_ASPECT;
+	}
+	screenconwidth = conwidth;
+	screenconheight = conheight;
 	if(conwidth < 800)
 	{
 		conheight *= 800 / conwidth;
@@ -61,7 +84,7 @@ void UpdateConWidthHeight()
 	{
 		if(conwidth_s != conwidth || conheight_s != conheight)
 		{
-			draw_reset();
+			draw_reset_cropped();
 			main.resizeNotify(main, '0 0 0', eX * conwidth + eY * conheight, '0 0 0', eX * conwidth + eY * conheight);
 		}
 	}
@@ -125,8 +148,8 @@ void() m_init_delayed =
 	draw_setMousePointer(SKINGFX_CURSOR, SKINSIZE_CURSOR, SKINOFFSET_CURSOR);
 
 	conwidth = conheight = -1;
-	draw_reset();
 	UpdateConWidthHeight();
+	draw_reset_cropped();
 
 	loadTooltips();
 	main = spawnMainWindow(); main.configureMainWindow(main);
@@ -147,7 +170,7 @@ void(float key, float ascii) m_keyup =
 		return;
 	if(!Menu_Active)
 		return;
-	draw_reset();
+	draw_reset_cropped();
 	main.keyUp(main, key, ascii, menuShiftState);
 	if(key >= K_MOUSE1 && key <= K_MOUSE3)
 	{
@@ -180,7 +203,7 @@ void(float key, float ascii) m_keydown =
 	}
 	else
 	{
-		draw_reset();
+		draw_reset_cropped();
 		if(key >= K_MOUSE1 && key <= K_MOUSE3)
 			if(!mouseButtonsPressed)
 				main.mousePress(main, menuMousePos);
@@ -564,13 +587,15 @@ void() m_draw =
 		menuLogoAlpha = 2;
 	}
 
-	draw_reset();
+	draw_reset_cropped();
 
 	if(!(gamestatus & (GAME_CONNECTED | GAME_ISSERVER)))
 	{
 		if(menuLogoAlpha > 0)
 		{
+			draw_reset_full();
 			drawBackground(SKINGFX_BACKGROUND, bound(0, menuLogoAlpha, 1), SKINALIGN_BACKGROUND, TRUE);
+			draw_reset_cropped();
 			if(menuAlpha <= 0 && SKINALPHA_CURSOR_INTRO > 0)
 			{
 				draw_alpha = SKINALPHA_CURSOR_INTRO * bound(0, menuLogoAlpha, 1);
@@ -582,21 +607,25 @@ void() m_draw =
 	else if(SKINALPHA_BACKGROUND_INGAME)
 	{
 		if(menuAlpha > 0)
+		{
+			draw_reset_full();
 			drawBackground(SKINGFX_BACKGROUND_INGAME, menuAlpha * SKINALPHA_BACKGROUND_INGAME, SKINALIGN_BACKGROUND_INGAME, FALSE);
+			draw_reset_cropped();
+		}
 	}
 
 	if(menuAlpha != prevMenuAlpha)
 		cvar_set("_menu_alpha", ftos(menuAlpha));
 
-	draw_reset();
+	draw_reset_cropped();
 	preMenuDraw();
-	draw_reset();
+	draw_reset_cropped();
 
 	if(menuAlpha <= 0)
 	{
 		if(prevMenuAlpha > 0)
 			main.initializeDialog(main, main.firstChild);
-		draw_reset();
+		draw_reset_cropped();
 		postMenuDraw();
 		return;
 	}
@@ -606,7 +635,7 @@ void() m_draw =
 	if(menuMouseMode)
 	{
 		vector newMouse;
-		newMouse = globalToBoxSize(getmousepos(), draw_scale);
+		newMouse = globalToBox(getmousepos(), draw_shift, draw_scale);
 		if(newMouse != '0 0 0')
 			if(newMouse != menuMousePos)
 			{
@@ -644,7 +673,7 @@ void() m_draw =
 
 	draw_drawMousePointer(menuMousePos);
 
-	draw_reset();
+	draw_reset_cropped();
 	postMenuDraw();
 
 	frametime = 0;

@@ -299,7 +299,7 @@ float preMenuInit()
 	MapInfo_Enumerate();
 	if(!MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 0, 0, 1))
 	{
-		draw_reset();
+		draw_reset_cropped();
 
 		sz = eX * 0.025 + eY * 0.025 * (draw_scale_x / draw_scale_y);
 		draw_CenterText('0.5 0.5 0' - 1.25 * sz_y * eY, "Autogenerating mapinfo for newly added maps...", sz, '1 1 1', 1, 0);
