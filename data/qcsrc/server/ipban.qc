@@ -26,7 +26,7 @@ void OnlineBanList_SendBan(string ip, float bantime, string reason)
 	string uri;
 	float i, n;
 
-	uri = strcat(     "?action=ban&hostname=", uri_escape(cvar_string("hostname")));
+	uri = strcat(     "action=ban&hostname=", uri_escape(cvar_string("hostname")));
 	uri = strcat(uri, "&ip=", uri_escape(ip));
 	uri = strcat(uri, "&duration=", ftos(bantime));
 	uri = strcat(uri, "&reason=", uri_escape(reason));
@@ -35,7 +35,12 @@ void OnlineBanList_SendBan(string ip, float bantime, string reason)
 	if(n >= MAX_IPBAN_URIS)
 		n = MAX_IPBAN_URIS;
 	for(i = 0; i < n; ++i)
-		uri_get(strcat(argv(i), uri), URI_GET_DISCARD); // 0 = "discard" callback target
+	{
+		if(strstrofs(argv(i), "?", 0) >= 0)
+			uri_get(strcat(argv(i), "&", uri), URI_GET_DISCARD); // 0 = "discard" callback target
+		else
+			uri_get(strcat(argv(i), "?", uri), URI_GET_DISCARD); // 0 = "discard" callback target
+	}
 }
 
 void OnlineBanList_SendUnban(string ip)
@@ -43,14 +48,19 @@ void OnlineBanList_SendUnban(string ip)
 	string uri;
 	float i, n;
 
-	uri = strcat(     "?action=unban&hostname=", uri_escape(cvar_string("hostname")));
+	uri = strcat(     "action=unban&hostname=", uri_escape(cvar_string("hostname")));
 	uri = strcat(uri, "&ip=", uri_escape(ip));
 
 	n = tokenize_console(cvar_string("g_ban_sync_uri"));
 	if(n >= MAX_IPBAN_URIS)
 		n = MAX_IPBAN_URIS;
 	for(i = 0; i < n; ++i)
-		uri_get(strcat(argv(i), uri), URI_GET_DISCARD); // 0 = "discard" callback target
+	{
+		if(strstrofs(argv(i), "?", 0) >= 0)
+			uri_get(strcat(argv(i), "&", uri), URI_GET_DISCARD); // 0 = "discard" callback target
+		else
+			uri_get(strcat(argv(i), "?", uri), URI_GET_DISCARD); // 0 = "discard" callback target
+	}
 }
 
 string OnlineBanList_Servers;
@@ -194,7 +204,7 @@ void OnlineBanList_Think()
 		OnlineBanList_Servers = strcat(OnlineBanList_Servers, ";", argv(i));
 	OnlineBanList_Servers = strzone(OnlineBanList_Servers);
 	
-	uri = strcat(     "?action=list&hostname=", uri_escape(cvar_string("hostname")));
+	uri = strcat(     "action=list&hostname=", uri_escape(cvar_string("hostname")));
 	uri = strcat(uri, "&servers=", uri_escape(OnlineBanList_Servers));
 
 	OnlineBanList_Timeout = time + cvar("g_ban_sync_timeout");
@@ -207,7 +217,10 @@ void OnlineBanList_Think()
 		if(OnlineBanList_RequestWaiting[i])
 			continue;
 		OnlineBanList_RequestWaiting[i] = 1;
-		uri_get(strcat(argv(i), uri), URI_GET_IPBAN + i); // 1000 = "banlist" callback target
+		if(strstrofs(argv(i), "?", 0) >= 0)
+			uri_get(strcat(argv(i), "&", uri), URI_GET_IPBAN + i); // 1000 = "banlist" callback target
+		else
+			uri_get(strcat(argv(i), "?", uri), URI_GET_IPBAN + i); // 1000 = "banlist" callback target
 	}
 	
 	if(cvar("g_ban_sync_interval") > 0)
