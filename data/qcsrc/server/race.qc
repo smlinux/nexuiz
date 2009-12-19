@@ -614,6 +614,12 @@ void trigger_race_checkpoint_verify()
 				race_highest_checkpoint = 255;
 				race_timed_checkpoint = 255;
 			}
+			entity targ;
+			for(targ = world; (targ = find(targ, target, self.targetname)); )
+				if (targ.classname == "trigger_multiple") {
+					targ.wait = -2; // still needs investigating, why cant two players pass a (defrag) checkpoint at the same time?
+					targ.delay = 0;
+				}
 		}
 		else {
 			for(cp = world; (cp = find(cp, classname, "trigger_race_checkpoint")); )
@@ -691,7 +697,6 @@ void spawnfunc_target_checkpoint() // defrag entity
 		return;
 	}
 	defrag_ents = 1;
-
 
 	EXACTTRIGGER_INIT;
 
