@@ -397,15 +397,6 @@ void spawnfunc_worldspawn (void)
 
 	check_unacceptable_compiler_bugs();
 
-	if(cvar_string("cvar_check_default") != "bypass")
-	{
-		if(cvar_string("cvar_check_default") != CVAR_CHECK_DEFAULT)
-			error("Config file mismatch! Please update defaultNexuiz.cfg to match the QuakeC code, and restart the engine!");
-
-		if(cvar_string("cvar_check_balance") != CVAR_CHECK_BALANCE)
-			error("Config file mismatch! Please update balance*.cfg to match the QuakeC code, and restart the engine!");
-	}
-
 	compressShortVector_init();
 
 	local entity head;

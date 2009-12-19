@@ -1,6 +1,3 @@
-string CVAR_CHECK_DEFAULT = "eff74125dcce791892223923df9dbf93";
-string CVAR_CHECK_BALANCE = "78dd1eac1223c09227ae89b307fb4654";
-
 float	FALSE					= 0;
 float	TRUE					= 1;
 
