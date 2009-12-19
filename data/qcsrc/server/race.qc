@@ -436,8 +436,9 @@ void checkpoint_passed()
 			self.message = oldmsg;
 		}
 
+		if(other.race_respawn_checkpoint != self.race_checkpoint)
+			other.race_respawn_spotref = self; // this is not a spot but a CP, but spawnpoint selection will deal with that
 		other.race_respawn_checkpoint = self.race_checkpoint;
-		other.race_respawn_spotref = self; // this is not a spot but a CP, but spawnpoint selection will deal with that
 		other.race_checkpoint = race_NextCheckpoint(self.race_checkpoint);
 
 		race_SendTime(other, self.race_checkpoint, other.race_movetime, !!other.race_laptime);
