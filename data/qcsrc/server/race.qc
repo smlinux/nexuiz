@@ -436,6 +436,8 @@ void checkpoint_passed()
 			self.message = oldmsg;
 		}
 
+		other.race_respawn_checkpoint = self.race_checkpoint;
+		other.race_respawn_spotref = self; // this is not a spot but a CP, but spawnpoint selection will deal with that
 		other.race_checkpoint = race_NextCheckpoint(self.race_checkpoint);
 
 		race_SendTime(other, self.race_checkpoint, other.race_movetime, !!other.race_laptime);
@@ -761,18 +763,17 @@ void race_PreparePlayer()
 	race_ClearTime(self);
 	self.race_place = 0;
 	self.race_started = 0;
+	self.race_respawn_checkpoint = -1;
+	self.race_respawn_spotref = world;
 }
 
 void race_RetractPlayer()
 {
 	if(!g_race && !g_cts)
 		return;
-	if(self.race_started)
-		self.race_checkpoint = race_PreviousCheckpoint(self.race_checkpoint);
-	else
-		self.race_checkpoint = 0;
-	if(self.race_checkpoint == 0)
+	if(self.race_respawn_checkpoint == 0 || self.race_respawn_checkpoint == -1 || self.race_respawn_checkpoint == race_timed_checkpoint)
 		race_ClearTime(self);
+	self.race_checkpoint = self.race_respawn_checkpoint;
 }
 
 void race_PreDie()
@@ -787,8 +788,10 @@ void race_PreSpawn()
 {
 	if(!g_race && !g_cts)
 		return;
-	if(self.killcount == -666 || g_race_qualifying)
+	if(self.killcount == -666 /* initial spawn */ || g_race_qualifying) // spawn
 		race_PreparePlayer();
+	else // respawn
+		race_RetractPlayer();
 
 	race_AbandonRaceCheck(self);
 }
@@ -797,22 +800,14 @@ void race_PostSpawn(entity spot)
 {
 	if(!g_race && !g_cts)
 		return;
-	if(self.killcount != -666 /* REspawning, not spawning */ && !g_race_qualifying)
-	{
-		if(spot.target == "")
-			// let the player run without timing, if he did not spawn at a targetting spawnpoint
-			race_PreparePlayer();
-		else
-			race_RetractPlayer();
-	}
 
-	if(spot.target != "" && self.race_checkpoint == -1 && self.race_started)
-	// if we have cleared the time, but were already in the race, set the
-	// current CP to 0, not -1, so when dying again we properly retract...
-	// however, note that race_laptime is still 0, so this won't count as
-	// completing another lap (as we already HAD seen that finish line before,
-	// or we wouldn't be at -1 and race_started)
-		self.race_checkpoint = 0;
+	if(spot.target == "")
+		// Emergency: this wasn't a real spawnpoint. Can this ever happen?
+		race_PreparePlayer();
+
+	// if we need to respawn, do it right
+	self.race_respawn_checkpoint = self.race_checkpoint;
+	self.race_respawn_spotref = spot;
 
 	self.race_place = 0;
 }
@@ -853,11 +848,15 @@ void race_ClearRecords()
 		race_checkpoint_recordholders[i] = string_null;
 	}
 
-	FOR_EACH_CLIENT(e)
+	e = self;
+	FOR_EACH_CLIENT(self)
 	{
-		race_ClearTime(e);
-		e.race_started = 0;
+		float p;
+		p = self.race_place;
+		race_PreparePlayer();
+		self.race_place = p;
 	}
+	self = e;
 }
 
 void race_ReadyRestart()

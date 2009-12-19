@@ -24,3 +24,6 @@ void race_StartCompleting();
 .float race_movetime; // for reading
 .float race_movetime_frac; // fractional accumulator for higher accuracy (helper for writing)
 .float race_movetime_count; // integer accumulator
+
+.float race_respawn_checkpoint;
+.entity race_respawn_spotref; // try THIS spawn in case you respawn

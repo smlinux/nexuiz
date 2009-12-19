@@ -74,8 +74,7 @@ void ClientData_Touch(entity e)
 }
 
 
-#define SPAWNPOINT_SCORE frags
-
+.vector spawnpoint_score;
 .string netname_previous;
 
 void spawnfunc_info_player_survivor (void)
@@ -105,31 +104,34 @@ void spawnpoint_use()
 };
 
 // Returns:
-//   -1 if a spawn can't be used
-//   otherwise, a weight of the spawnpoint
-float Spawn_Score(entity spot, entity playerlist, float teamcheck, float anypoint)
+//   _x: prio (-1 if unusable)
+//   _y: weight
+vector Spawn_Score(entity spot, entity playerlist, float teamcheck, float anypoint)
 {
 	float shortest, thisdist;
+	float prio;
 	entity player;
+
+	prio = 0;
 
 	// filter out spots for the wrong team
 	if(teamcheck)
 	if(spot.team != teamcheck)
-		return -1;
+		return '-1 0 0';
 
 	if(race_spawns)
 		if(spot.target == "")
-			return -1;
+			return '-1 0 0';
 
 	if(clienttype(self) == CLIENTTYPE_REAL)
 	{
 		if(spot.restriction == 1)
-			return -1;
+			return '-1 0 0';
 	}
 	else
 	{
 		if(spot.restriction == 2)
-			return -1;
+			return '-1 0 0';
 	}
 
 	// filter out spots for assault
@@ -143,7 +145,7 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck, float anypoin
 			{
 				found = 1;
 				if(ent.health < 0 || ent.health >= ASSAULT_VALUE_INACTIVE)
-					return -1;
+					return '-1 0 0';
 				good = 1;
 			}
 			else if(ent.classname == "trigger_race_checkpoint")
@@ -156,14 +158,17 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck, float anypoin
 					{
 						// spawn at first
 						if(ent.race_checkpoint != 0)
-							return -1;
+							return '-1 0 0';
 						if(spot.race_place != race_lowest_place_spawn)
-							return -1;
+							return '-1 0 0';
 					}
 					else
 					{
-						if(ent.race_checkpoint != race_PreviousCheckpoint(self.race_checkpoint))
-							return -1;
+						if(ent.race_checkpoint != max(0, self.race_respawn_checkpoint))
+							return '-1 0 0';
+						// try reusing the previous spawn
+						if(ent == self.race_respawn_spotref || spot == self.race_respawn_spotref)
+							prio += 1;
 						if(ent.race_checkpoint == 0)
 						{
 							float pl;
@@ -172,9 +177,8 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck, float anypoin
 								pl = 0;
 							if(pl == 0 && !self.race_started)
 								pl = race_highest_place_spawn; // use last place if he has not even touched finish yet
-							//print("race started? ", ftos(self.race_started), "\n");
 							if(spot.race_place != pl)
-								return -1;
+								return '-1 0 0';
 						}
 					}
 				}
@@ -184,7 +188,7 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck, float anypoin
 		}
 
 		if(found && !good)
-			return -1;
+			return '-1 0 0';
 	}
 
 	player = playerlist;
@@ -196,7 +200,7 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck, float anypoin
 			if (thisdist < shortest)
 				shortest = thisdist;
 		}
-	return shortest;
+	return prio * '1 0 0' + shortest * '0 1 0';
 }
 
 float spawn_allbad;
@@ -212,12 +216,12 @@ entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindis
 
 	for(spot = firstspot; spot; spot = spot.chain)
 	{
-		spot.SPAWNPOINT_SCORE = Spawn_Score(spot, playerlist, teamcheck, anypoint);
+		spot.spawnpoint_score = Spawn_Score(spot, playerlist, teamcheck, anypoint);
 
 		if(cvar("spawn_debugview"))
 		{
 			setmodel(spot, "models/runematch/rune.mdl");
-			if(spot.SPAWNPOINT_SCORE < mindist)
+			if(spot.spawnpoint_score_y < mindist)
 			{
 				spot.colormod = '1 0 0';
 				spot.scale = 1;
@@ -225,13 +229,13 @@ entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindis
 			else
 			{
 				spot.colormod = '0 1 0';
-				spot.scale = spot.SPAWNPOINT_SCORE / mindist;
+				spot.scale = spot.spawnpoint_score_y / mindist;
 			}
 		}
 
-		if(spot.SPAWNPOINT_SCORE >= 0) // spawning allowed here
+		if(spot.spawnpoint_score_x >= 0) // spawning allowed here
 		{
-			if(spot.SPAWNPOINT_SCORE < mindist)
+			if(spot.spawnpoint_score_y < mindist)
 			{
 				// too short distance
 				spawn_allgood = FALSE;
@@ -282,7 +286,7 @@ entity Spawn_WeightedPoint(entity firstspot, float lower, float upper, float exp
 
 	RandomSelection_Init();
 	for(spot = firstspot; spot; spot = spot.chain)
-		RandomSelection_Add(spot, 0, string_null, pow(bound(lower, spot.SPAWNPOINT_SCORE, upper), exponent) * spot.cnt, spot.SPAWNPOINT_SCORE >= lower);
+		RandomSelection_Add(spot, 0, string_null, pow(bound(lower, spot.spawnpoint_score_y, upper), exponent) * spot.cnt, (spot.spawnpoint_score_y >= lower) * 0.5 + spot.spawnpoint_score_x);
 
 	return RandomSelection_chosen_ent;
 }
@@ -344,7 +348,7 @@ entity SelectSpawnPoint (float anypoint)
 
 	if(cvar("spawn_debugview"))
 	{
-		print("spot mindistance: ", ftos(spot.SPAWNPOINT_SCORE), "\n");
+		print("spot mindistance: ", vtos(spot.spawnpoint_score), "\n");
 
 		entity e;
 		if(teamcheck)
