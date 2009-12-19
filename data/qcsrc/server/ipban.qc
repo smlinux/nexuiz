@@ -220,7 +220,7 @@ void OnlineBanList_Think()
 	remove(self);
 }
 
-#define BAN_MAX 64
+#define BAN_MAX 256
 float ban_loaded;
 string ban_ip[BAN_MAX];
 float ban_expire[BAN_MAX];
