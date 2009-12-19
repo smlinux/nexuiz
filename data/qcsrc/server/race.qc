@@ -301,7 +301,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 
 void race_ClearTime(entity e)
 {
-	e.race_checkpoint = -1;
+	e.race_checkpoint = 0;
 	e.race_laptime = 0;
 	e.race_movetime = e.race_movetime_frac = e.race_movetime_count = 0;
 	e.race_penalty_accumulator = 0;
@@ -492,7 +492,7 @@ void checkpoint_use()
 
 float race_waypointsprite_visible_for_player(entity e)
 {
-	if(e.race_checkpoint == -1 || e.race_checkpoint == -2)
+	if(e.race_checkpoint == -1 || self.owner.race_checkpoint == -2)
 		return TRUE;
 	else if(e.race_checkpoint == self.owner.race_checkpoint)
 		return TRUE;
@@ -762,7 +762,7 @@ void race_PreparePlayer()
 	race_ClearTime(self);
 	self.race_place = 0;
 	self.race_started = 0;
-	self.race_respawn_checkpoint = -1;
+	self.race_respawn_checkpoint = 0;
 	self.race_respawn_spotref = world;
 }
 
@@ -770,7 +770,7 @@ void race_RetractPlayer()
 {
 	if(!g_race && !g_cts)
 		return;
-	if(self.race_respawn_checkpoint == 0 || self.race_respawn_checkpoint == -1 || self.race_respawn_checkpoint == race_timed_checkpoint)
+	if(self.race_respawn_checkpoint == 0 || self.race_respawn_checkpoint == race_timed_checkpoint)
 		race_ClearTime(self);
 	self.race_checkpoint = self.race_respawn_checkpoint;
 }
@@ -816,6 +816,7 @@ void race_PreSpawnObserver()
 	if(!g_race && !g_cts)
 		return;
 	race_PreparePlayer();
+	self.race_checkpoint = -1;
 }
 
 void spawnfunc_info_player_race (void)

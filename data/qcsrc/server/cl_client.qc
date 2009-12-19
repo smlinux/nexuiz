@@ -164,7 +164,7 @@ vector Spawn_Score(entity spot, entity playerlist, float teamcheck, float anypoi
 					}
 					else
 					{
-						if(ent.race_checkpoint != max(0, self.race_respawn_checkpoint))
+						if(ent.race_checkpoint != self.race_respawn_checkpoint)
 							return '-1 0 0';
 						// try reusing the previous spawn
 						if(ent == self.race_respawn_spotref || spot == self.race_respawn_spotref)
