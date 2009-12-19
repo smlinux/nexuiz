@@ -409,9 +409,6 @@ void checkpoint_passed()
 
 	if((other.race_checkpoint == -1 && self.race_checkpoint == 0) || (other.race_checkpoint == self.race_checkpoint))
 	{
-		// once he has seen the start, he can spawn normally at place-0 spawns
-		other.race_started = 1;
-
 		if(self.race_penalty)
 		{
 			if(other.race_lastpenalty != self)
@@ -436,10 +433,11 @@ void checkpoint_passed()
 			self.message = oldmsg;
 		}
 
-		if(other.race_respawn_checkpoint != self.race_checkpoint)
+		if(other.race_respawn_checkpoint != self.race_checkpoint || !other.race_started)
 			other.race_respawn_spotref = self; // this is not a spot but a CP, but spawnpoint selection will deal with that
 		other.race_respawn_checkpoint = self.race_checkpoint;
 		other.race_checkpoint = race_NextCheckpoint(self.race_checkpoint);
+		other.race_started = 1;
 
 		race_SendTime(other, self.race_checkpoint, other.race_movetime, !!other.race_laptime);
 
