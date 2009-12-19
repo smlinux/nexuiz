@@ -40,7 +40,7 @@ void() m_init =
 	}
 }
 
-float MENU_ASPECT = 1.2; // 1280x1024
+float MENU_ASPECT = 1.25; // 1280x1024
 float conwidth_s, conheight_s, realconwidth, realconheight, screenconwidth, screenconheight;
 void draw_reset_cropped()
 {
