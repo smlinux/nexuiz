@@ -25,23 +25,23 @@ void fillNexuizServerListTab(entity me)
 	slist  = makeNexuizServerList();
 
 	me.TR(me);
-		me.TD(me, 1, 0.5, e = makeNexuizTextLabel(0, "Filter:"));
-		me.TD(me, 1, 0.5, btn = makeNexuizButton("Clear", '0 0 0'));
+		me.TD(me, 1, 0.4, e = makeNexuizTextLabel(0, "Filter:"));
+		me.TD(me, 1, 0.6, btn = makeNexuizButton("Clear", '0 0 0'));
 			btn.onClick = InputBox_Clear_Click;
-		me.TD(me, 1, me.columns - 2.5, e = makeNexuizInputBox(0, string_null));
+		me.TD(me, 1, me.columns - 0.6 * 4 - 0.4, e = makeNexuizInputBox(0, string_null));
 			e.onChange = ServerList_Filter_Change;
 			e.onChangeEntity = slist;
 			btn.onClickEntity = e;
 			slist.controlledTextbox = e;
-		me.TD(me, 1, 0.5, e = makeNexuizCheckBox(0, "menu_slist_showempty", "Empty"));
+		me.TD(me, 1, 0.6, e = makeNexuizCheckBox(0, "menu_slist_showempty", "Empty"));
 			slist.filterShowEmpty = e.checked;
 			e.onClickEntity = slist;
 			e.onClick = ServerList_ShowEmpty_Click;
-		me.TD(me, 1, 0.5, e = makeNexuizCheckBox(0, "menu_slist_showfull", "Full"));
+		me.TD(me, 1, 0.6, e = makeNexuizCheckBox(0, "menu_slist_showfull", "Full"));
 			slist.filterShowFull = e.checked;
 			e.onClickEntity = slist;
 			e.onClick = ServerList_ShowFull_Click;
-		me.TD(me, 1, 0.5, e = makeNexuizCheckBox(0, "net_slist_pause", "Pause"));
+		me.TD(me, 1, 0.6, e = makeNexuizCheckBox(0, "net_slist_pause", "Pause"));
 
 	me.TR(me);
 		me.TD(me, 1, 1, slist.sortButton1 = makeNexuizButton(string_null, '0 0 0'));
