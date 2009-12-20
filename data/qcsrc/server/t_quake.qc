@@ -62,5 +62,6 @@ void junk_function ()
 	gettaginfo_forward = '0 0 0';
 	gettaginfo_right = '0 0 0';
 	gettaginfo_up = '0 0 0';
+	self.mass = 0;
 }
 
