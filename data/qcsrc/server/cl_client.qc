@@ -2919,7 +2919,7 @@ void PlayerPostThink (void)
 	// Savage: Check for nameless players
 	if (isInvisibleString(self.netname)) {
 		self.netname = "Player";
-		stuffcmd(self, "seta _cl_name Player\n");
+		stuffcmd(self, strcat("name ", self.netname, substring(ftos(random()), 2, -1), "\n"));
 	}
 
 	// send the clients accuracy stats to the client
