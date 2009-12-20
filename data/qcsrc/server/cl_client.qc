@@ -2886,6 +2886,26 @@ void Drag_MoveDrag(entity from, entity to)
 	}
 }
 
+float isInvisibleString(string s)
+{
+	float i, n, c;
+	s = strdecolorize(s);
+	for((i = 0), (n = strlen(s)); i < n; ++i)
+	{
+		c = str2chr(s, i);
+		switch(c)
+		{
+			case 0:
+			case 32:
+			case 160:
+				break;
+			default:
+				return FALSE;
+		}
+	}
+	return TRUE;
+}
+
 /*
 =============
 PlayerPostThink
@@ -2897,7 +2917,7 @@ Called every frame for each client after the physics are run
 void PlayerPostThink (void)
 {
 	// Savage: Check for nameless players
-	if (strlen(self.netname) < 1) {
+	if (isInvisibleString(self.netname)) {
 		self.netname = "Player";
 		stuffcmd(self, "seta _cl_name Player\n");
 	}
