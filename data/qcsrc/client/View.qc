@@ -721,8 +721,6 @@ void CSQC_UpdateView(float w, float h)
 				wcross_scale *= 1 - cvar("_menu_alpha");
 				wcross_alpha *= 1 - cvar("_menu_alpha");
 
-				wcross_size = drawgetimagesize(wcross_name) * wcross_scale;
-
 				// ring around crosshair representing bullets left in camping rifle clip
 				if (activeweapon == WEP_CAMPINGRIFLE)
 				{
@@ -757,20 +755,22 @@ void CSQC_UpdateView(float w, float h)
 #define CROSSHAIR_DRAW(sz,wcross_name,wcross_alpha) \
 				CROSSHAIR_DO_BLUR(CROSSHAIR_DRAW_SINGLE,sz,wcross_name,wcross_alpha)
 
-				if(bullets)
-				{
-					CROSSHAIR_DO_BLUR(CROSSHAIR_DRAW_RING, wcross_resolution, wcross_name, wcross_alpha);
-				}
-
 				if(time < wcross_name_changedonetime && wcross_name != wcross_name_goal_prev_prev && wcross_name_goal_prev_prev)
 				{
 					f = (wcross_name_changedonetime - time) / (wcross_name_changedonetime - wcross_name_changestarttime);
+					wcross_size = drawgetimagesize(wcross_name_goal_prev_prev) * wcross_scale;
 					CROSSHAIR_DRAW(wcross_resolution_goal_prev_prev, wcross_name_goal_prev_prev, wcross_alpha * f * wcross_name_alpha_goal_prev_prev);
 					f = 1 - f;
 				}
 				else
 				{
 					f = 1;
+				}
+
+				wcross_size = drawgetimagesize(wcross_name) * wcross_scale;
+				if(bullets)
+				{
+					CROSSHAIR_DO_BLUR(CROSSHAIR_DRAW_RING, wcross_resolution, wcross_name, wcross_alpha);
 				}
 				CROSSHAIR_DRAW(wcross_resolution, wcross_name, wcross_alpha * f);
 				wcross_name_alpha_goal_prev = f;
