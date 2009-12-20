@@ -69,6 +69,8 @@ float mouseDragButton(entity me, vector pos)
 float mousePressButton(entity me, vector pos)
 {
 	me.mouseDrag(me, pos); // verify coordinates
+	if(cvar("menu_sounds"))
+		localsound("sound/misc/menu2.wav");
 	return 1;
 }
 float mouseReleaseButton(entity me, vector pos)
@@ -86,6 +88,7 @@ void showNotifyButton(entity me)
 {
 	me.focusable = !me.disabled;
 }
+.float playedfocus;
 void drawButton(entity me)
 {
 	vector bOrigin, bSize;
@@ -156,5 +159,14 @@ void drawButton(entity me)
 			me.onClick(me, me.onClickEntity);
 	}
 	me.clickTime -= frametime;
+
+	if(cvar("menu_sounds") > 1)
+		if(me.focused && !me.playedfocus)
+		{
+			localsound("sound/misc/menu1.wav");
+			me.playedfocus = 1;
+		}
+		else if(!me.focused && me.playedfocus)
+			me.playedfocus = 0;
 }
 #endif

@@ -94,6 +94,7 @@ void fillNexuizAudioSettingsTab(entity me)
 		me.TD(me, 1, 2, s);
 		setDependentStringNotEqual(e, "volume", "0");
 		setDependentStringNotEqual(s, "volume", "0");
+	me.TR(me);
 
 	me.gotoRC(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Frequency:"));
@@ -166,6 +167,8 @@ void fillNexuizAudioSettingsTab(entity me)
 			e.configureNexuizTextSliderValues(e);
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_hitsound", "Hit indicator"));
+	me.TR(me);
+		me.TD(me, 1, 3, e = makeNexuizCheckBoxEx(2, 0, "menu_sounds", "Menu sounds"));
 
 	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "snd_restart; sendcvar cl_hitsound; sendcvar cl_autotaunt; sendcvar cl_voice_directional; sendcvar cl_voice_directional_taunt_attenuation", COMMANDBUTTON_APPLY));

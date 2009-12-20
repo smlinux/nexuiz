@@ -212,6 +212,8 @@ float mousePressSlider(entity me, vector pos)
 			//me.mouseDrag(me, pos);
 		}
 	}
+	if(cvar("menu_sounds"))
+		localsound("sound/misc/menu2.wav");
 	return 1;
 }
 float mouseReleaseSlider(entity me, vector pos)

@@ -175,6 +175,7 @@
 \cl_autotaunt\Automatically taunt enemies after fragging them
 \cl_sound_maptime_warning\Announcer sound telling you the remaining minutes of the match
 \cl_hitsound\Play a hit indicator sound when your shot hits an enemy
+\menu_sounds\Play sounds when clicking or hovering over menu items
 
 \NexuizSettingsDialog/Network\Network settings
 \cl_movement\Enable clientside movement prediction
