@@ -270,7 +270,7 @@ void GrapplingHookTouch (void)
 	if(other == world)
 	{
 		vector tic;
-		tic = self.velocity * sys_ticrate;
+		tic = self.velocity * sys_frametime;
 		tic = tic + normalize(tic) * vlen(self.maxs - self.mins);
 		traceline(self.origin - tic, self.origin + tic, MOVE_NORMAL, self);
 		if(trace_fraction >= 1)

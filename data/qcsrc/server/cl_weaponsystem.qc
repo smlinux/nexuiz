@@ -1178,7 +1178,7 @@ void weapon_thinkf(float fr, float t, void() func)
 	{
 		local vector anim;
 		anim = self.anim_shoot;
-		anim_z = anim_y / t;
+		anim_z = anim_y / (t + sys_frametime);
 		setanim(self, anim, FALSE, TRUE, TRUE);
 	}
 };

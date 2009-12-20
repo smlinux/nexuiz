@@ -58,7 +58,7 @@ void anticheat_physics()
 	if(self.anticheat_div0_evade_offset == 0)
 	{
 		f = fabs(anticheat_div0_evade_evasion_delta - floor(anticheat_div0_evade_evasion_delta) - 0.5) * 2; // triangle function
-		self.anticheat_div0_evade_offset = time + sys_ticrate * (3 * f - 1);
+		self.anticheat_div0_evade_offset = time + sys_frametime * (3 * f - 1);
 		self.anticheat_div0_evade_v_angle = self.v_angle;
 		self.anticheat_div0_evade_forward_initial = v_forward;
 		MEAN_ACCUMULATE(anticheat_div0_evade, 0, 1);

@@ -967,7 +967,7 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 	if(self.owner.iscaptured)
 		WaypointSprite_UpdateHealth(self.owner.sprite, self.health);
 	else
-		WaypointSprite_UpdateBuildFinished(self.owner.sprite, time + (self.max_health - self.health) / (self.count / sys_ticrate));
+		WaypointSprite_UpdateBuildFinished(self.owner.sprite, time + (self.max_health - self.health) / (self.count / sys_frametime));
 	self.pain_finished = time + 1;
 	self.punchangle = (2 * randomvec() - '1 1 1') * 45;
 	self.cp_bob_dmg_z = (2 * random() - 1) * 15;
@@ -1027,7 +1027,7 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 void onslaught_controlpoint_icon_think()
 {
 	entity oself;
-	self.nextthink = time + sys_ticrate;
+	self.nextthink = time + sys_frametime;
 	if (time > self.pain_finished + 5)
 	{
 		if(self.health < self.max_health)
@@ -1115,7 +1115,7 @@ void onslaught_controlpoint_icon_buildthink()
 	local entity oself;
 	float a;
 
-	self.nextthink = time + sys_ticrate;
+	self.nextthink = time + sys_frametime;
 
 	// only do this if there is power
 	a = onslaught_controlpoint_can_be_linked(self.owner, self.owner.team);
@@ -1127,7 +1127,7 @@ void onslaught_controlpoint_icon_buildthink()
 	if (self.health >= self.max_health)
 	{
 		self.health = self.max_health;
-		self.count = cvar("g_onslaught_cp_regen") * sys_ticrate; // slow repair rate from now on
+		self.count = cvar("g_onslaught_cp_regen") * sys_frametime; // slow repair rate from now on
 		self.think = onslaught_controlpoint_icon_think;
 		sound(self, CHAN_TRIGGER, "onslaught/controlpoint_built.wav", VOL_BASE, ATTN_NORM);
 		bprint(ColoredTeamName(self.team), " captured ", self.owner.message, " control point\n");
@@ -1190,12 +1190,12 @@ void onslaught_controlpoint_touch()
 	e.team = other.team;
 	e.colormap = 1024 + (e.team - 1) * 17;
 	e.think = onslaught_controlpoint_icon_buildthink;
-	e.nextthink = time + sys_ticrate;
-	e.count = (e.max_health - e.health) * sys_ticrate / cvar("g_onslaught_cp_buildtime"); // how long it takes to build
+	e.nextthink = time + sys_frametime;
+	e.count = (e.max_health - e.health) * sys_frametime / cvar("g_onslaught_cp_buildtime"); // how long it takes to build
 	sound(e, CHAN_TRIGGER, "onslaught/controlpoint_build.wav", VOL_BASE, ATTN_NORM);
 	self.team = e.team;
 	self.colormap = e.colormap;
-	WaypointSprite_UpdateBuildFinished(self.sprite, time + (e.max_health - e.health) / (e.count / sys_ticrate));
+	WaypointSprite_UpdateBuildFinished(self.sprite, time + (e.max_health - e.health) / (e.count / sys_frametime));
 	onslaught_updatelinks();
 };
 

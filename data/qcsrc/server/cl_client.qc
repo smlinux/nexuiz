@@ -2709,6 +2709,8 @@ void PlayerPreThink (void)
 	}
 
 	target_voicescript_next(self);
+
+	print(ftos(self.frame), "\n");
 }
 
 // on dragger:

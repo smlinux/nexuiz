@@ -26,13 +26,13 @@ vector turret_stdproc_aim_generic()
 
     // Keep track of when we can shoot the next time and
     // try to predict where the target will be then, so we can put our aimpoint there.
-    // + sys_ticrate, becouse spawned REMOVE THIS IF sv_gameplayfix_delayprojectiles are 0!
+    // + sys_frametime, becouse spawned REMOVE THIS IF sv_gameplayfix_delayprojectiles are 0!
     // projectiles dont move during the first tic of their life.
     //if (self.turrcaps_flags & TFL_TURRCAPS_HITSCAN)
-    //    mintime = max(self.attack_finished_single - time,0) + sys_ticrate;
+    //    mintime = max(self.attack_finished_single - time,0) + sys_frametime;
     //else
 
-    mintime = max(self.attack_finished_single - time,0) + sys_ticrate;
+    mintime = max(self.attack_finished_single - time,0) + sys_frametime;
 
     // Baseline
     pre_pos = real_origin(self.enemy);
@@ -77,10 +77,10 @@ vector turret_stdproc_aim_generic()
             float vz;
             prep_z = pre_pos_z;
             vz = self.enemy.velocity_z;
-            for(i = 0; i < impact_time; i += sys_ticrate)
+            for(i = 0; i < impact_time; i += sys_frametime)
             {
-                vz = vz - (sv_gravity * sys_ticrate);
-                prep_z = prep_z + vz * sys_ticrate;
+                vz = vz - (sv_gravity * sys_frametime);
+                prep_z = prep_z + vz * sys_frametime;
             }
         }
         pre_pos = prep;

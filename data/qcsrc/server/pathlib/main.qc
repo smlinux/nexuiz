@@ -511,7 +511,7 @@ entity pathlib_astar(vector from,vector to)
             dprint("Time used - rebuild & filter: ", ftos(ftime),"\n");
             dprint("Time used -          cleanup: ", ftos(ctime),"\n");
             dprint("Time used -            total: ", ftos(ptime + ftime + ctime),"\n");
-            dprint("Time used -         # frames: ", ftos(ceil((ptime + ftime + ctime) / sys_ticrate)),"\n\n");
+            dprint("Time used -         # frames: ", ftos(ceil((ptime + ftime + ctime) / sys_frametime)),"\n\n");
             dprint("Nodes -         created: ", ftos(pathlib_made_cnt),"\n");
             dprint("Nodes -            open: ", ftos(pathlib_open_cnt),"\n");
             dprint("Nodes -          merged: ", ftos(pathlib_merge_cnt),"\n");
