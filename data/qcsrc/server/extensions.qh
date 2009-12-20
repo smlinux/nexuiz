@@ -175,6 +175,16 @@ float   EF_RED          = 128;
 //description:
 //entity emits red light (used for invulnerability)
 
+//DP_EF_RESTARTANIM_BIT
+//idea: id software
+//darkplaces implementation: div0
+//effects bit:
+float   EF_RESTARTANIM_BIT = 1048576;
+//description:
+//when toggled, the current animation is restarted. Useful for weapon animation.
+//to toggle this bit in QC, you can do:
+//  self.effects += (EF_RESTARTANIM_BIT - 2 * (self.effects & EF_RESTARTANIM_BIT));
+
 //DP_EF_STARDUST
 //idea: MythWorks Inc
 //darkplaces implementation: LordHavoc

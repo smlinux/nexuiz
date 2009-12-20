@@ -578,11 +578,12 @@ void CL_Weaponentity_Think()
 		setanim(self, self.anim_idle, TRUE, FALSE, TRUE);
 	}
 
-	tb = (self.effects & EF_TELEPORT_BIT);
+	tb = (self.effects & (EF_TELEPORT_BIT | EF_RESTARTANIM_BIT));
 	self.effects = self.owner.effects & EFMASK_CHEAP;
 	self.effects &~= EF_LOWPRECISION;
 	self.effects &~= EF_FULLBRIGHT; // can mask team color, so get rid of it
 	self.effects &~= EF_TELEPORT_BIT;
+	self.effects &~= EF_RESTARTANIM_BIT;
 	self.effects |= tb;
 
 	if(self.owner.alpha == default_player_alpha)
