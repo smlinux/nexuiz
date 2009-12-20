@@ -39,15 +39,26 @@ void maptimeAnnouncer() {
     float timeleft;
     timeleft = max(0, timelimit * 60 + getstatf(STAT_GAMESTARTTIME) - time);
 
+    float warmuplimit;
+    float warmuptimeleft;
+    if(warmup_stage) {
+        warmuplimit = cvar("g_warmup_limit");
+        if(warmuplimit > 0) {
+           warmuptimeleft = max(0, warmuplimit + getstatf(STAT_GAMESTARTTIME) - time); 
+        }
+    }
+
     //5 minute check
     if (cvar("cl_sound_maptime_warning") >= 2) {
         //make sure that after connect (and e.g. 4 minutes left) we will not get a wrong sound
         if(announcer_5min)
         {
-			if(timeleft > 300)
+			if(((!warmup_stage || warmuplimit == 0) && timeleft > 300) || (warmup_stage && warmuplimit > 0 && warmuptimeleft > 300))
 				announcer_5min = FALSE;
         }
-        else if (timelimit > 0 && timeleft < 300 && timeleft > 299) {
+        else if (((!warmup_stage || warmuplimit == 0) && timelimit > 0 && timeleft < 300 && timeleft > 299) || (warmup_stage && warmuplimit > 0 && warmuptimeleft < 300 && warmuptimeleft > 299))
+	//if we're in warmup mode, check whether there's a warmup timelimit
+        if not (warmuplimit == -1 && warmup_stage) {
 			announcer_5min = TRUE;
 			//dprint("i will play the sound, I promise!\n");
 			sound(self, CHAN_VOICE, "announcer/robotic/5minutesremain.wav", VOL_BASEVOICE, ATTN_NONE);
@@ -58,10 +69,12 @@ void maptimeAnnouncer() {
     if (cvar("cl_sound_maptime_warning") == 1 || cvar("cl_sound_maptime_warning") == 3) {
     	if (announcer_1min)
     	{
-			if(timeleft > 60)
+			if(((!warmup_stage || warmuplimit == 0) && timeleft > 60) || (warmup_stage && warmuplimit > 0 && warmuptimeleft > 60))
 				announcer_1min = FALSE;
     	}
-    	else if (timelimit > 0 && timeleft < 60) {
+    	else if (((!warmup_stage || warmuplimit == 0) && timelimit > 0 && timeleft < 60) || (warmup_stage && warmuplimit > 0 && warmuptimeleft < 60))
+	//if we're in warmup mode, check whether there's a warmup timelimit
+    	if not (warmuplimit == -1 && warmup_stage) {
 			announcer_1min = TRUE;
 			sound(self, CHAN_VOICE, "announcer/robotic/1minuteremains.wav", VOL_BASEVOICE, ATTN_NONE);
     	}
