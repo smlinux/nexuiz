@@ -694,7 +694,7 @@ float sbar_field_icon2_alpha;
 string Sbar_GetField(entity pl, float field)
 {
 	float tmp, num, denom, f;
-	string str;
+	string str, str2;
 	sbar_field_rgb = '1 1 1';
 	sbar_field_icon0 = "";
 	sbar_field_icon1 = "";
