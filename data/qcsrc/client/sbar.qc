@@ -726,7 +726,7 @@ string Sbar_GetField(entity pl, float field)
 				return "";
 			tmp = bound(0, stof(str) / 20 + stof(str2) / 4, 1); // 20% is REALLY BAD pl
 			if not(str2 == "0" || str2 == "")
-				str = strcat(str, "*", str2);
+				str = strcat(str, "~", str2);
 			sbar_field_rgb = '1 0.5 0.5' - '0 0.5 0.5'*tmp;
 			return str;
 
