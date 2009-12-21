@@ -721,9 +721,12 @@ string Sbar_GetField(entity pl, float field)
 			if not(pl.gotscores)
 				return "N/A";
 			str = getplayerkey(pl.sv_entnum, "pl");
-			if(str == "0")
+			str2 = getplayerkey(pl.sv_entnum, "movementloss");
+			if(str == "0" && (str2 == "0" || str2 == ""))
 				return "";
-			tmp = bound(0, stof(str), 20) / 20; // 20% is REALLY BAD pl
+			tmp = bound(0, stof(str) / 20 + stof(str2) / 4, 1); // 20% is REALLY BAD pl
+			if not(str2 == "0" || str2 == "")
+				str = strcat(str, "*", str2);
 			sbar_field_rgb = '1 0.5 0.5' - '0 0.5 0.5'*tmp;
 			return str;
 
