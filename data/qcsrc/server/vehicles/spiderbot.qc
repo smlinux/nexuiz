@@ -187,7 +187,7 @@ void spiderbot_miniguns_do()
     if((self.vehicle_reload1 == 1) || (!self.owner.BUTTON_ATCK))
     {
 
-        ftmp = 1 / cvar("g_vehicle_spiderbot_minigun_cooldown") * sys_ticrate;
+        ftmp = 1 / cvar("g_vehicle_spiderbot_minigun_cooldown") * sys_frametime;
         self.owner.vehicle_reload1 = max(self.owner.vehicle_reload1 - ftmp, 0);
         if(self.owner.vehicle_reload1 <= 0)
             self.vehicle_reload1 = 0;
@@ -199,8 +199,8 @@ void spiderbot_miniguns_do()
     {
 
         // Animate miniguns
-        self.gun1.angles_z += (1440 * sys_ticrate);
-        self.gun2.angles_z -= (1440 * sys_ticrate);
+        self.gun1.angles_z += (1440 * sys_frametime);
+        self.gun2.angles_z -= (1440 * sys_frametime);
         if(self.gun1.angles_z >= 360)
         {
             self.gun1.angles_z = 0;
@@ -295,13 +295,13 @@ float spiderbot_pplug()
     ad = player.v_angle -  (spider.tur_head.angles + spider.angles);
 
     // Rotate head
-    ftmp = cvar("g_vehicle_spiderbot_head_turnspeed") * sys_ticrate;
+    ftmp = cvar("g_vehicle_spiderbot_head_turnspeed") * sys_frametime;
     ftmp2 = ftmp * -1;
     spider.tur_head.angles_y += bound(ftmp2,shortangle_f(ad_y,spider.tur_head.angles_y),ftmp);
     spider.tur_head.angles_y = bound(cvar("g_vehicle_spiderbot_head_turnlimit") * -1,spider.tur_head.angles_y,cvar("g_vehicle_spiderbot_head_turnlimit"));
 
     // Pitch head
-    ftmp = cvar("g_vehicle_spiderbot_head_pitchspeed") * sys_ticrate;
+    ftmp = cvar("g_vehicle_spiderbot_head_pitchspeed") * sys_frametime;
     ftmp2 = ftmp * -1;
     spider.tur_head.angles_x += bound(ftmp2,shortangle_f(ad_x,spider.tur_head.angles_x),ftmp);
     spider.tur_head.angles_x = bound(cvar("g_vehicle_spiderbot_head_pitchlimit_down"),spider.tur_head.angles_x,cvar("g_vehicle_spiderbot_head_pitchlimit_up"));
@@ -311,7 +311,7 @@ float spiderbot_pplug()
     //player.angles_x *= -1;
 
     // Turn Body
-    ftmp = cvar("g_vehicle_spiderbot_turnspeed") * sys_ticrate;
+    ftmp = cvar("g_vehicle_spiderbot_turnspeed") * sys_frametime;
     ftmp2 = ftmp * -1;
     ftmp = bound(ftmp2,spider.tur_head.angles_y,ftmp);
 

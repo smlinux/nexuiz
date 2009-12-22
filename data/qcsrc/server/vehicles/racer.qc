@@ -244,7 +244,7 @@ void racer_fire_rocket(string tagname)
 
     rocket = spawn();
     setsize (rocket, '-1 -1 -1', '1 1 1');
-    rocket.lip             = cvar("g_vehicle_racer_rocket_accel") * sys_ticrate;
+    rocket.lip             = cvar("g_vehicle_racer_rocket_accel") * sys_frametime;
     rocket.wait            = cvar("g_vehicle_racer_rocket_turnrate");
     rocket.solid           = SOLID_BBOX;
     rocket.movetype        = MOVETYPE_FLYMISSILE;
@@ -336,7 +336,7 @@ float racer_pplug()
     makevectors(racer.angles);
 
     // Rotate Body
-    ftmp = racer_turnspeed * sys_ticrate;
+    ftmp = racer_turnspeed * sys_frametime;
     ftmp2 = ftmp * -1;
 
     ftmp = bound(ftmp2,shortangle_f(player.v_angle_y - racer.angles_y,racer.angles_y),ftmp);
@@ -351,7 +351,7 @@ float racer_pplug()
     racer.angles_y = ftmp2;
 
     // Pitch Body
-    ftmp = racer_pitchspeed * sys_ticrate;
+    ftmp = racer_pitchspeed * sys_frametime;
     ftmp2 = ftmp * -1;
 
     ftmp = bound(ftmp2,shortangle_f(player.v_angle_x - racer.angles_x,racer.angles_x),ftmp);
