@@ -4517,3 +4517,73 @@ gravity 0
 airfriction 5
 liquidfriction 10
 velocityjitter 50 50 50
+
+
+//torch flame, spawn it as fast as you can  20 times per second or more, supports direction but not required
+//fast fire
+// used nowhere in code, meant for maps
+effect torchflame
+count 6
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 5 5
+sizeincrease 20
+ gravity -0.06
+alpha 50 256 250
+velocityjitter 40 40 11
+velocitymultiplier 30
+airfriction 1.2
+//slowfire
+effect torchflame
+count 5
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 5 5
+sizeincrease 20
+ gravity -0.06
+alpha 50 256 200
+velocityjitter 40 40 40
+velocitymultiplier 20
+airfriction 1.2
+// very slow and small fire
+effect torchflame
+count 3
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 5 5
+sizeincrease 10
+ gravity -0.06
+alpha 50 256 200
+velocityjitter 30 30 30
+velocitymultiplier 10
+airfriction 0.3
+//decreasing fire
+effect torchflame
+count 4
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 20 30
+sizeincrease -10
+ gravity -0.06
+alpha 50 256 200
+velocityjitter 10 10 10
+velocitymultiplier 15
+airfriction 0.3
+//smoke
+effect torchflame
+count 1
+type alphastatic
+tex 0 8
+size 5 15
+sizeincrease 7
+color 0x000000 0x111111
+alpha 256 256 90
+//gravity -0.2
+originjitter 10 10 10
+velocitymultiplier 20
+velocityoffset 0 0 10
+airfriction 1
