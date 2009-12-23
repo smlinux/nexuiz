@@ -1403,6 +1403,15 @@ float MF_TRACER3 = 128; // purple trail
 //description:
 //continuously updated field indicating client's ping (based on average of last 16 packet time differences).
 
+//DP_SV_PING_PACKETLOSS
+//idea: LordHavoc
+//darkplaces implementation: LordHavoc
+//field definitions:
+.float ping_packetloss;
+.float ping_movementloss;
+//description:
+//continuously updated field indicating client's packet loss, and movement loss (i.e. packet loss affecting player movement).
+
 //DP_SV_POINTPARTICLES
 //idea: Spike
 //darkplaces implementation: LordHavoc

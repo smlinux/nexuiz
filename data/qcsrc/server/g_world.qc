@@ -1,3 +1,43 @@
+entity pingplreport;
+void PingPLReport_Think()
+{
+	float delta;
+	entity e;
+
+	delta = 3 / maxclients;
+	if(delta < sys_frametime)
+		delta = 0;
+	self.nextthink = time + delta;
+
+	e = edict_num(self.cnt + 1);
+	if(clienttype(e) == CLIENTTYPE_REAL)
+	{
+		WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
+		WriteByte(MSG_BROADCAST, TE_CSQC_PINGPLREPORT);
+		WriteByte(MSG_BROADCAST, self.cnt);
+		WriteShort(MSG_BROADCAST, max(1, e.ping));
+		WriteByte(MSG_BROADCAST, ceil(e.ping_packetloss * 255));
+		WriteByte(MSG_BROADCAST, ceil(e.ping_movementloss * 255));
+	}
+	else
+	{
+		WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
+		WriteByte(MSG_BROADCAST, TE_CSQC_PINGPLREPORT);
+		WriteByte(MSG_BROADCAST, self.cnt);
+		WriteShort(MSG_BROADCAST, 0);
+		WriteByte(MSG_BROADCAST, 0);
+		WriteByte(MSG_BROADCAST, 0);
+	}
+	self.cnt = mod(self.cnt + 1, maxclients);
+}
+void PingPLReport_Spawn()
+{
+	pingplreport = spawn();
+	pingplreport.classname = "pingplreport";
+	pingplreport.think = PingPLReport_Think;
+	pingplreport.nextthink = time;
+}
+
 float SPAWNFLAG_NO_WAYPOINTS_FOR_ITEMS = 1;
 string redirection_target;
 float world_initialized;
@@ -639,6 +679,7 @@ void spawnfunc_worldspawn (void)
 
 	ClientInit_Spawn();
 	RandomSeed_Spawn();
+	PingPLReport_Spawn();
 
 	localcmd("\n_sv_hook_gamestart ", GetGametype(), ";");
 

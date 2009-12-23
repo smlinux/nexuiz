@@ -290,6 +290,9 @@ void Playerchecker_Think()
 				if not(e)
 					playerslots[i] = e = spawn();
 				e.sv_entnum = i;
+				e.ping = 0;
+				e.ping_packetloss = 0;
+				e.ping_movementloss = 0;
 				//e.gotscores = 0; // we might already have the scores...
 				SetTeam(e, GetPlayerColor(i)); // will not hurt; later updates come with Sbar_UpdatePlayerTeams
 				RegisterPlayer(e);
@@ -1064,6 +1067,20 @@ void Net_TeamNagger()
 	teamnagger = 1;
 }
 
+void Net_ReadPingPLReport()
+{
+	float e, pi, pl, ml;
+	e = ReadByte();
+	pi = ReadShort();
+	pl = ReadByte();
+	ml = ReadByte();
+	if not(playerslots[e])
+		return;
+	playerslots[e].ping = pi;
+	playerslots[e].ping_packetloss = pl / 255.0;
+	playerslots[e].ping_movementloss = ml / 255.0;
+}
+
 // CSQC_Parse_TempEntity : Handles all temporary entity network data in the CSQC layer.
 // You must ALWAYS first acquire the temporary ID, which is sent as a byte.
 // Return value should be 1 if CSQC handled the temporary entity, otherwise return 0 to have the engine process the event.
@@ -1108,6 +1125,10 @@ float CSQC_Parse_TempEntity()
 			break;
         case TE_CSQC_LIGHTNINGARC:
             Net_ReadLightningarc();
+            bHandled = true;
+            break;
+        case TE_CSQC_PINGPLREPORT:
+            Net_ReadPingPLReport();
             bHandled = true;
             break;
 		default:

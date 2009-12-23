@@ -104,3 +104,7 @@ logupdate:
 .PHONY: logvupdate
 logvupdate:
 	cd .. && svn log -r HEAD:BASE -v && svn up
+
+.PHONY: testcase
+testcase:
+	cd qcsrc/testcase && $(FTEQCC) $(FTEQCCFLAGS) $(FTEQCCFLAGS_CSPROGS) -DTESTCASE="$$TESTCASE"

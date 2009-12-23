@@ -158,3 +158,5 @@ float g_weaponswitchdelay;
 float calledhooks;
 #define HOOK_START    1
 #define HOOK_END      2
+
+.float ping, ping_packetloss, ping_movementloss;

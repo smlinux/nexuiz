@@ -694,7 +694,7 @@ float sbar_field_icon2_alpha;
 string Sbar_GetField(entity pl, float field)
 {
 	float tmp, num, denom, f;
-	string str, str2;
+	string str;
 	sbar_field_rgb = '1 1 1';
 	sbar_field_icon0 = "";
 	sbar_field_icon1 = "";
@@ -710,23 +710,25 @@ string Sbar_GetField(entity pl, float field)
 		case SP_PING:
 			if not(pl.gotscores)
 				return "\x8D\x8D\x8D"; // >>> sign
-			str = getplayerkey(pl.sv_entnum, "ping");
-			if(str == "0")
+			//str = getplayerkey(pl.sv_entnum, "ping");
+			f = pl.ping;
+			if(f == 0)
 				return "N/A";
-			tmp = max(0, min(220, stof(str)-80)) / 220;
+			tmp = max(0, min(220, f-80)) / 220;
 			sbar_field_rgb = '1 1 1' - '0 1 1'*tmp;
-			return str;
+			return ftos(f);
 
 		case SP_PL:
 			if not(pl.gotscores)
 				return "N/A";
-			str = getplayerkey(pl.sv_entnum, "pl");
-			str2 = getplayerkey(pl.sv_entnum, "movementloss");
-			if(str == "0" && (str2 == "0" || str2 == ""))
+			f = pl.ping_packetloss;
+			tmp = pl.ping_movementloss;
+			if(f == 0 && tmp == 0)
 				return "";
-			tmp = bound(0, stof(str) / 20 + stof(str2) / 4, 1); // 20% is REALLY BAD pl
-			if not(str2 == "0" || str2 == "")
-				str = strcat(str, "~", str2);
+			str = ftos(ceil(f * 100));
+			if(tmp != 0)
+				str = strcat(str, "~", ftos(ceil(tmp * 100)));
+			tmp = bound(0, f / 0.2 + tmp / 0.04, 1); // 20% is REALLY BAD pl
 			sbar_field_rgb = '1 0.5 0.5' - '0 0.5 0.5'*tmp;
 			return str;
 
@@ -1237,7 +1239,6 @@ vector Sbar_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 	return pos;
 }
 
-float lastpingstime;
 float scoreboard_bottom;
 float sbar_scoreboard_fade_alpha;
 float sbar_woulddrawscoreboard_prev;
@@ -1278,11 +1279,6 @@ void Sbar_DrawScoreboard()
 	
 	vector rgb, pos, tmp;
 	entity pl, tm;
-
-	if(time > lastpingstime + bound(1, cvar_or("sbar_pingrefreshinterval", 10), 60)) {
-		localcmd("pings\n");
-		lastpingstime = time;
-	}
 
 	sbwidth = Sbar_GetWidth(6.5 * sbar_fontsize_y);
 
