@@ -903,12 +903,14 @@ void CSQC_Parse_CenterPrint(string strMessage)
 	centerprint(strMessage);
 }
 
+string notranslate_fogcmd1 = "\nfog ";
+string notranslate_fogcmd2 = "\nr_fog_exp2 0\nr_drawfog 1\n";
 void Fog_Force()
 {
 	// TODO somehow thwart prvm_globalset client ...
 
 	if(forcefog != "")
-		localcmd(strcat("\nfog ", forcefog, "\nr_fog_exp2 0\nr_drawfog 1\n"));
+		localcmd(strcat(notranslate_fogcmd1, forcefog, notranslate_fogcmd2));
 }
 
 void Gamemode_Init();
