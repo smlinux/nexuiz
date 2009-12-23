@@ -928,6 +928,26 @@ float(float a, float b) pow = #97;
 //description:
 //useful math functions, sine of val, cosine of val, square root of val, and raise a to power b, respectively.
 
+//DP_QC_SPRINTF
+//idea: div0
+//darkplaces implementation: div0
+//builtin definitions:
+string(string format, ...) sprintf = #627;
+//description:
+//you know sprintf :P
+//supported stuff:
+//  %
+//  optional: <argpos>$ for the argument to format
+//  flags: #0- +
+//  optional: <width>, *, or *<argpos>$ for the field width
+//  optional: .<precision>, .*, or .*<argpos>$ for the precision
+//  length modifiers: h for forcing a float, l for forcing an int/entity (by default, %d etc. cast a float to int)
+//  conversions:
+//    di take a float if no length is specified or h is, and an int/entity if l is specified as length, and cast it to an int
+//    ouxXc take a float if no length is specified or h is, and an int/entity if l is specified as length, and cast it to an unsigned int
+//    eEfFgG take a float if no length is specified or h is, and an int/entity if l is specified as length, and cast it to a double
+//    s takes a string
+
 //DP_QC_STRFTIME
 //idea: LordHavoc
 //darkplaces implementation: LordHavoc
