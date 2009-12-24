@@ -678,14 +678,16 @@ void() m_draw =
 	{
 		if(frametime > 0)
 		{
-			vector dMouse;
+			vector dMouse, minpos, maxpos;
 			dMouse = getmousepos() * (frametime / realFrametime); // for capturevideo
 			if(dMouse != '0 0 0')
 			{
+				minpos = globalToBox('0 0 0', draw_shift, draw_scale);
+				maxpos = globalToBox(eX * (realconwidth - 1) + eY * (realconheight - 1), draw_shift, draw_scale);
 				dMouse = globalToBoxSize(dMouse, draw_scale);
 				menuMousePos += dMouse * cvar("menu_mouse_speed");
-				menuMousePos_x = bound(0, menuMousePos_x, 1);
-				menuMousePos_y = bound(0, menuMousePos_y, 1);
+				menuMousePos_x = bound(minpos_x, menuMousePos_x, maxpos_x);
+				menuMousePos_y = bound(minpos_y, menuMousePos_y, maxpos_y);
 				if(mouseButtonsPressed)
 					main.mouseDrag(main, menuMousePos);
 				else
