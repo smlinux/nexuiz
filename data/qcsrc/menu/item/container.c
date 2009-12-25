@@ -31,6 +31,7 @@ ENDCLASS(Container)
 .float resized;
 .vector Container_origin;
 .vector Container_size;
+.vector Container_fontscale;
 .float Container_alpha;
 #endif
 
@@ -127,11 +128,13 @@ void drawContainer(entity me)
 	vector oldshift;
 	vector oldscale;
 	float oldalpha;
+	vector oldfontscale;
 	entity e;
 
 	oldshift = draw_shift;
 	oldscale = draw_scale;
 	oldalpha = draw_alpha;
+	oldfontscale = draw_fontscale;
 	me.focusable = 0;
 	for(e = me.firstChild; e; e = e.nextSibling)
 	{
@@ -141,10 +144,13 @@ void drawContainer(entity me)
 			continue;
 		draw_shift = boxToGlobal(e.Container_origin, oldshift, oldscale);
 		draw_scale = boxToGlobalSize(e.Container_size, oldscale);
+		if(e.Container_fontscale != '0 0 0')
+			draw_fontscale = boxToGlobalSize(e.Container_fontscale, oldfontscale);
 		draw_alpha *= e.Container_alpha;
 		e.draw(e);
 		draw_shift = oldshift;
 		draw_scale = oldscale;
+		draw_fontscale = oldfontscale;
 		draw_alpha = oldalpha;
 	}
 };

@@ -28,6 +28,7 @@ void draw_reset(float cw, float ch, float ox, float oy)
 	draw_shift = '1 0 0' * ox + '0 1 0' * oy;
 	draw_scale = '1 0 0' * cw + '0 1 0' * ch;
 	draw_alpha = 1;
+	draw_fontscale = '1 1 0';
 }
 
 vector globalToBox(vector v, vector theOrigin, vector theScale)
@@ -229,12 +230,22 @@ void draw_BorderPicture(vector theOrigin, string pic, vector theSize, vector the
 }
 void draw_Text(vector theOrigin, string theText, vector theSize, vector theColor, float theAlpha, float ICanHasKallerz)
 {
+	vector fs;
 	if(theSize_x <= 0 || theSize_y <= 0)
 		error("Drawing zero size text?\n");
+	if not(cvar("menu_font_size_snapping_fix")) // FIXME remove this, this is to detect old engines
+	{
+		fs = draw_fontscale;
+		draw_fontscale = '1 1 0';
+	}
 	if(ICanHasKallerz)
-		drawcolorcodedstring(boxToGlobal(theOrigin, draw_shift, draw_scale), theText, boxToGlobalSize(theSize, draw_scale), theAlpha * draw_alpha, 0);
+		drawcolorcodedstring(boxToGlobal(theOrigin, draw_shift, draw_scale), theText, globalToBoxSize(boxToGlobalSize(theSize, draw_scale), draw_fontscale), theAlpha * draw_alpha, 0);
 	else
-		drawstring(boxToGlobal(theOrigin, draw_shift, draw_scale), theText, boxToGlobalSize(theSize, draw_scale), theColor, theAlpha * draw_alpha, 0);
+		drawstring(boxToGlobal(theOrigin, draw_shift, draw_scale), theText, globalToBoxSize(boxToGlobalSize(theSize, draw_scale), draw_fontscale), theColor, theAlpha * draw_alpha, 0);
+	if not(cvar("menu_font_size_snapping_fix")) // FIXME remove this, this is to detect old engines
+	{
+		draw_fontscale = fs;
+	}
 }
 void draw_CenterText(vector theOrigin, string theText, vector theSize, vector theColor, float theAlpha, float ICanHasKallerz)
 {
@@ -245,7 +256,19 @@ float draw_TextWidth(string theText, float ICanHasKallerz)
 {
 	//return strlen(theText);
 	//print("draw_TextWidth \"", theText, "\"\n");
-	return stringwidth(theText, ICanHasKallerz);
+	vector fs;
+	float r;
+	if not(cvar("menu_font_size_snapping_fix")) // FIXME remove this, this is to detect old engines
+	{
+		fs = draw_fontscale;
+		draw_fontscale = '1 1 0';
+	}
+	r = stringwidth(theText, ICanHasKallerz) / draw_fontscale_x;
+	if not(cvar("menu_font_size_snapping_fix")) // FIXME remove this, this is to detect old engines
+	{
+		draw_fontscale = fs;
+	}
+	return r;
 }
 
 float draw_clipSet;

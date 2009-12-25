@@ -202,26 +202,11 @@ void drawNexposee(entity me)
 			a = e.Nexposee_smallAlpha * (1 - me.animationFactor);
 		}
 		me.setAlphaOf(me, e, e.Container_alpha * (1 - f) + a * f);
+
+		e.Container_fontscale = globalToBoxSize(e.Container_size, e.Nexposee_initialSize);
 	}
 
 	drawContainer(me);
-
-	/*
-	for(e = me.firstChild; e; e = e.nextSibling)
-	{
-		vector t, fs;
-		a0 = e.Container_alpha;
-		if(a0 < e.Nexposee_smallAlpha)
-			a = 0.3 * (a0 - 0) / (e.Nexposee_smallAlpha - 0);
-		else if(a0 < e.Nexposee_mediumAlpha)
-			a = 0.3 + 0.5 * (a0 - e.Nexposee_smallAlpha)  / (e.Nexposee_mediumAlpha - e.Nexposee_smallAlpha);
-		else
-			a = 0.8 - 0.8 * (a0 - e.Nexposee_mediumAlpha) / (1 - e.Nexposee_mediumAlpha);
-		fs = (eX * (1 / draw_scale_x) + eY * (1 / draw_scale_y)) * 36;
-		t = draw_TextWidth(e.title, FALSE) * eX * fs_x + eY * fs_y;
-		draw_Text(e.Container_origin + (e.Container_size_x * eX - t) * 0.5 - 0.5 * eY * t_y, e.title, fs, e.color, a, FALSE);
-	}
-	*/
 };
 
 float mousePressNexposee(entity me, vector pos)

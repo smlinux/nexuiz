@@ -1,6 +1,14 @@
+// from the engine
+vector drawfontscale;
+#define draw_fontscale drawfontscale
+#define draw_fontscale_x drawfontscale_x
+#define draw_fontscale_y drawfontscale_y
+#define draw_fontscale_z drawfontscale_z
+
 vector draw_shift;
 vector draw_scale;
 float draw_alpha;
+vector draw_fontscale;
 
 void draw_reset(float cw, float ch, float ox, float oy);
 void draw_setMousePointer(string pic, vector theSize, vector theOffset);
