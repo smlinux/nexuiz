@@ -433,7 +433,7 @@ void PM_Accelerate(vector wishdir, float wishspeed, float wishspeed0, float acce
 	if(sidefric < 0 && (vel_perpend*vel_perpend))
 	{
 		float f, fminimum;
-		f = (1 + frametime * wishspeed * sidefric);
+		f = (1 - frametime * wishspeed * sidefric);
 		fminimum = (savespeed - vel_straight*vel_straight) / (vel_perpend*vel_perpend);
 		if(fminimum <= 0)
 			vel_perpend = vel_perpend * f;
