@@ -70,10 +70,10 @@ void UpdateConWidthHeight()
 	}
 	screenconwidth = conwidth;
 	screenconheight = conheight;
-	if(conwidth < 800)
+	if(conwidth < 600 * MENU_ASPECT)
 	{
-		conheight *= 800 / conwidth;
-		conwidth = 800;
+		conheight *= 600 * MENU_ASPECT / conwidth;
+		conwidth = 600 * MENU_ASPECT;
 	}
 	if(conheight < 600)
 	{
