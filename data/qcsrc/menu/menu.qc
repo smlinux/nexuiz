@@ -41,6 +41,7 @@ void() m_init =
 }
 
 float MENU_ASPECT = 1.25; // 1280x1024
+float MENU_MINHEIGHT = 600;
 float conwidth_s, conheight_s, realconwidth, realconheight, screenconwidth, screenconheight;
 void draw_reset_cropped()
 {
@@ -70,18 +71,16 @@ void UpdateConWidthHeight()
 	}
 	screenconwidth = conwidth;
 	screenconheight = conheight;
-#if 0
-	if(conwidth < 600 * MENU_ASPECT)
+	if(conwidth < MENU_MINHEIGHT * MENU_ASPECT)
 	{
-		conheight *= 600 * MENU_ASPECT / conwidth;
-		conwidth = 600 * MENU_ASPECT;
+		conheight *= MENU_MINHEIGHT * MENU_ASPECT / conwidth;
+		conwidth = MENU_MINHEIGHT * MENU_ASPECT;
 	}
-	if(conheight < 600)
+	if(conheight < MENU_MINHEIGHT)
 	{
-		conwidth *= 600 / conheight;
-		conheight = 600;
+		conwidth *= MENU_MINHEIGHT / conheight;
+		conheight = MENU_MINHEIGHT;
 	}
-#endif
 	if(main)
 	{
 		if(conwidth_s != conwidth || conheight_s != conheight)
