@@ -70,6 +70,7 @@ void UpdateConWidthHeight()
 	}
 	screenconwidth = conwidth;
 	screenconheight = conheight;
+#if 0
 	if(conwidth < 600 * MENU_ASPECT)
 	{
 		conheight *= 600 * MENU_ASPECT / conwidth;
@@ -80,6 +81,7 @@ void UpdateConWidthHeight()
 		conwidth *= 600 / conheight;
 		conheight = 600;
 	}
+#endif
 	if(main)
 	{
 		if(conwidth_s != conwidth || conheight_s != conheight)
