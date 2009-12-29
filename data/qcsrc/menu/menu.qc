@@ -22,7 +22,6 @@ void() m_init =
 {
 	cvar_set("_menu_alpha", "0");
 
-	dprint_load();
 	check_unacceptable_compiler_bugs();
 
 	// list all game dirs (TEST)
@@ -95,8 +94,6 @@ void() m_init_delayed =
 {
 	float fh, glob, n, i;
 	string s;
-
-	dprint_load();
 
 	conwidth = conheight = -1;
 	UpdateConWidthHeight();
@@ -587,7 +584,6 @@ void() m_draw =
 	if(cvar("cl_capturevideo"))
 		frametime = t / cvar("cl_capturevideo_fps"); // make capturevideo work smoothly
 
-	dprint_load();
 	gamestatus = 0;
 	if(isserver())
 		gamestatus = gamestatus | GAME_ISSERVER;

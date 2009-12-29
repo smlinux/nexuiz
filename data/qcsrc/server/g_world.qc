@@ -394,7 +394,6 @@ void spawnfunc___init_dedicated_server(void)
 	cvar = cvar_normal;
 	cvar_string = cvar_string_normal;
 	cvar_set = cvar_set_normal;
-	dprint_load(); // load dprint status from cvar
 
 	remove = remove_unsafely;
 
@@ -427,7 +426,6 @@ void spawnfunc_worldspawn (void)
 	cvar = cvar_normal;
 	cvar_string = cvar_string_normal;
 	cvar_set = cvar_set_normal;
-	dprint_load(); // load dprint status from cvar
 
 	if(world_already_spawned)
 		error("world already spawned - you may have EXACTLY ONE worldspawn!");

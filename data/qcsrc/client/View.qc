@@ -348,7 +348,6 @@ void CSQC_UpdateView(float w, float h)
 	float f, i, j;
 	vector v;
 
-	dprint_load();
 	WaypointSprite_Load();
 
 	if(spectatee_status)

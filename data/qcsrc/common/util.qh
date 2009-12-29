@@ -1,14 +1,3 @@
-// note: this is in util.qh so it is included as early as possible.
-var void(string s, ...) dprint;
-void dprint_null() { }
-void dprint_load()
-{
-	if(cvar("developer") > 0)
-		dprint = print;
-	else
-		dprint = dprint_null;
-}
-
 // this returns a tempstring containing a copy of s with additional \n newlines added, it also replaces \n in the text with a real newline
 // NOTE: s IS allowed to be a tempstring
 string wordwrap(string s, float l);

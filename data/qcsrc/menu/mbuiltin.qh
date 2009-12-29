@@ -37,7 +37,7 @@ const string cvar_string(string name) = #71;
 const string cvar_defstring(string name) = #89;
 void	cvar_set(string name, string value) = #15;
 
-//void	dprint(string text,...) = #16;
+void	dprint(string text,...) = #16;
 
 // conversion functions
 

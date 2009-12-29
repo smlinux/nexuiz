@@ -166,8 +166,6 @@ void StartFrame (void)
 	}
 #endif
 
-	dprint_load(); // load dprint status from cvar
-
 	entity e;
 	for(e = world; (e = findfloat(e, csqcprojectile_clientanimate, 1)); )
 		CSQCProjectile_Check(e);

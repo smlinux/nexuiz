@@ -20,7 +20,7 @@ entity (entity start, .string fld, string match)			find = #18;
 string (string s)							precache_sound = #19;
 string (string s)							precache_model = #20;
 
-//void (string s)								dprint = #25;
+void (string s, ...)						dprint = #25;
 string (float f)							ftos = #26;
 string (vector v)							vtos = #27;
 void ()									coredump = #28;
