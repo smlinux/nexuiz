@@ -121,13 +121,13 @@ void OnlineBanList_URI_Get_Callback(float id, float status, string data)
 
 	if(substring(data, 0, 1) == "<")
 	{
-		print("error: received HTML instead of a ban list: ");
+		print("error: received HTML instead of a ban list\n");
 		return;
 	}
 
 	if(strstrofs(data, "\r", 0) != -1)
 	{
-		print("error: received carriage returns: ");
+		print("error: received carriage returns\n");
 		return;
 	}
 
