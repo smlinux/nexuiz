@@ -1022,8 +1022,8 @@ void MapInfo_LoadMapSettings(string s) // to be called from worldspawn
 	float t, t0;
 	if(!_MapInfo_CheckMap(s)) // with underscore, it keeps temps
 	{
-		if(MapInfo_Map_supportedGametypes <= 0)
-			error("Mapinfo system is not functional at all. BAILED OUT.\n");
+		if(MapInfo_Map_supportedGametypes == 0)
+			print("Mapinfo system is not functional at all. Assuming deathmatch.\n");
 
 		t = 1;
 		while(!(MapInfo_Map_supportedGametypes & 1))
