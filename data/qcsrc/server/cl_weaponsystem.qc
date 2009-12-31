@@ -798,7 +798,11 @@ void CL_ExteriorWeaponentity_Think()
 		if (!self.tag_index)
 			self.model = "";
 	}
-	self.effects = self.owner.effects | EF_LOWPRECISION;
+	self.effects = self.owner.effects;
+	if(sv_pitch_min == sv_pitch_max)
+		self.effects |= EF_LOWPRECISION;
+	else
+		self.effects &~= EF_LOWPRECISION;
 	self.effects = self.effects & EFMASK_CHEAP; // eat performance
 	if(self.owner.alpha == default_player_alpha)
 		self.alpha = default_weapon_alpha;
@@ -816,12 +820,16 @@ void CL_ExteriorWeaponentity_Think()
 		ang_y = self.owner.v_angle_y;
 		makevectors(ang);
 		var vector v = v_forward;
-		var float t = self.frame1time;
-		self.frame1time = time;
+		var float t = self.tag_entity.frame1time;
+		var float f = self.tag_entity.frame;
+		self.tag_entity.frame1time = time;
+		self.tag_entity.frame = self.tag_entity.anim_idle_x;
 		gettaginfo(self.tag_entity, self.tag_index);
-		self.frame1time = t;
+		self.tag_entity.frame1time = t;
+		self.tag_entity.frame = f;
 		// untransform v according to this coordinate space
 		vector w;
+		print(vtos(v_forward * 1000), "\n");
 		w_x = v_forward * v;
 		w_y = -v_right * v;
 		w_z = v_up * v;
