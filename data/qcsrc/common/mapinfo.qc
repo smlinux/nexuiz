@@ -994,11 +994,12 @@ void MapInfo_SwitchGameType(float t)
 void MapInfo_LoadMap(string s)
 {
 	MapInfo_Map_supportedGametypes = 0;
-	if(!MapInfo_CheckMap(s))
-	{
-		print("EMERGENCY: can't play the selected map in the given game mode. Falling back to DM.\n");
-		MapInfo_SwitchGameType(MAPINFO_TYPE_DEATHMATCH);
-	}
+	// we shouldn't need this, as LoadMapSettings already fixes the gametype
+	//if(!MapInfo_CheckMap(s))
+	//{
+	//	print("EMERGENCY: can't play the selected map in the given game mode. Falling back to DM.\n");
+	//	MapInfo_SwitchGameType(MAPINFO_TYPE_DEATHMATCH);
+	//}
 	localcmd(strcat("\nsettemp_restore\nchangelevel ", s, "\n"));
 }
 
@@ -1023,7 +1024,10 @@ void MapInfo_LoadMapSettings(string s) // to be called from worldspawn
 	if(!_MapInfo_CheckMap(s)) // with underscore, it keeps temps
 	{
 		if(MapInfo_Map_supportedGametypes == 0)
+		{
 			print("Mapinfo system is not functional at all. Assuming deathmatch.\n");
+			MapInfo_Map_supportedGametypes = MAPINFO_TYPE_DEATHMATCH;
+		}
 
 		t = 1;
 		while(!(MapInfo_Map_supportedGametypes & 1))
