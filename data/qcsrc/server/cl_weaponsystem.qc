@@ -829,7 +829,6 @@ void CL_ExteriorWeaponentity_Think()
 		self.tag_entity.frame = f;
 		// untransform v according to this coordinate space
 		vector w;
-		print(vtos(v_forward * 1000), "\n");
 		w_x = v_forward * v;
 		w_y = -v_right * v;
 		w_z = v_up * v;
