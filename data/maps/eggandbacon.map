@@ -1011,6 +1011,7 @@
 "classname" "weapon_tuba"
 "origin" "1376 256 96"
 "angle" "180"
+"cvarfilter" "-!developer !sv_cheats"
 }
 // entity 100
 {
@@ -1021,6 +1022,7 @@
 {
 "classname" "weapon_tuba"
 "origin" "-1376 -256 96"
+"cvarfilter" "-!developer !sv_cheats"
 }
 // entity 102
 {
