@@ -63,15 +63,17 @@ void drawBorderImage(entity me)
 		draw_BorderPicture('0 0 0', me.src, '1 1 0', me.color, 1, me.borderLines * me.borderVec);
 	if(me.fontSize > 0)
 	{
-		vector ro, rf;
+		vector ro, rf, df;
 		if(me.isNexposeeTitleBar)
 		{
 			// me.parent.Nexposee_animationFactor 0 (small) or 1 (full)
 			// default values are for 1
 			ro = me.realOrigin;
 			rf = me.realFontSize;
+			df = draw_fontscale;
 			me.realOrigin = ro * me.parent.Nexposee_animationFactor + me.realOrigin_Nexposeed * (1 - me.parent.Nexposee_animationFactor);
 			me.realFontSize = rf * me.parent.Nexposee_animationFactor + me.realFontSize_Nexposeed * (1 - me.parent.Nexposee_animationFactor);
+			draw_fontscale = globalToBoxSize(boxToGlobalSize(df, me.realFontSize), rf);
 		}
 
 		drawLabel(me);
@@ -82,6 +84,7 @@ void drawBorderImage(entity me)
 			// default values are for 1
 			me.realOrigin = ro;
 			me.realFontSize = rf;
+			draw_fontscale = df;
 		}
 	}
 };
