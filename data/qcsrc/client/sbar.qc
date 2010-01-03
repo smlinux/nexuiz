@@ -2116,7 +2116,7 @@ void Sbar_ShowSpeed(void)
 {
 	vector numsize;
 	float pos, conversion_factor;
-	string speed, unit;
+	string speed, zspeed, unit;
 
 	switch(cvar("cl_showspeed_unit"))
 	{
@@ -2147,16 +2147,19 @@ void Sbar_ShowSpeed(void)
 			break;
 	}
 
-	if (cvar("cl_showspeed_z") == 1)
-		speed = strcat(ftos(floor( vlen(pmove_vel) * conversion_factor + 0.5 )), unit);
-	else
-		speed = strcat(ftos(floor( vlen(pmove_vel - pmove_vel_z * '0 0 1') * conversion_factor + 0.5 )), unit);
+	speed = strcat(ftos(floor( vlen(pmove_vel - pmove_vel_z * '0 0 1') * conversion_factor + 0.5 )), unit);
 
 	numsize_x = numsize_y = cvar("cl_showspeed_size");
 	pos = (vid_conheight - numsize_y) * cvar("cl_showspeed_position");
 	
 	drawfont = sbar_bigfont;
 	drawstringcenter('1 0 0' + pos * '0 1 0', speed, numsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+
+	if (cvar("cl_showspeed_z") == 1) {
+		zspeed = strcat(ftos(fabs(floor( pmove_vel_z * conversion_factor + 0.5 ))), unit);
+		drawstringcenter('1 0 0' + pos * '0 1 0' + numsize_y * '0 1 0', zspeed, numsize * 0.5, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+	}
+
 	drawfont = sbar_font;
 }
 
