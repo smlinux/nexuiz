@@ -1378,6 +1378,7 @@ vector W_CalculateProjectileSpread(vector forward, float spread)
 	vector v1, v2;
 	float dx, dy, r;
 	float sstyle;
+	spread *= g_weaponspreadfactor;
 	if(spread <= 0)
 		return forward;
 	sstyle = cvar("g_projectiles_spread_style");
