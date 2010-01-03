@@ -14,10 +14,12 @@
 # current code has been tested against version 0.8 of the Geo::IPfree module
 # You can obtain a copy here: http://search.cpan.org/~bricas/Geo-IPfree-0.8/lib/Geo/IPfree.pm
 # Place the 'Geo' dir in the same directory as this plugin or anywhere in @INC.
-if ($pj{irc_show_country}) { 
-	use Geo::IPfree; 
-	$pj{geo} = Geo::IPfree->new;
-	$pj{geo}->Faster; # Due to a relatively large amount of lookups, this is probably a good idea
+if ($pj{irc_show_country}) {
+	eval { 
+		require Geo::IPfree;
+		$pj{geo} = Geo::IPfree->new;
+		$pj{geo}->Faster; # Due to a relatively large amount of lookups, this is probably a good idea 
+	} or die "joinsparts.pl: requested countrynames, but can't load data, $@";
 } 
 
 $store{plugin_joinsparts} = \%pj; }
