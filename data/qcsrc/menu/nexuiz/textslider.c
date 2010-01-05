@@ -77,12 +77,20 @@ void saveCvarsNexuizTextSlider(entity me)
 		}
 		else
 		{
-			var float m = tokenize_console(strcat(me.cvarName, " ", me.getIdentifier(me)));
-			if(m != n * 2)
-				error("NexuizTextSlider: invalid identifier ", me.getIdentifier(me), " does not match cvar list ", me.cvarName);
 			float i;
-			for(i = 0; i < n; ++i)
-				cvar_set(argv(i), argv(i + n));
+			var float m = tokenize_console(strcat(me.cvarName, " ", me.getIdentifier(me)));
+			if(m == n + 1)
+			{
+				for(i = 0; i < n; ++i)
+					cvar_set(argv(i), argv(n));
+			}
+			else if(m == n * 2)
+			{
+				for(i = 0; i < n; ++i)
+					cvar_set(argv(i), argv(i + n));
+			}
+			else
+				error("NexuizTextSlider: invalid identifier ", me.getIdentifier(me), " does not match cvar list ", me.cvarName);
 		}
 	}
 }
