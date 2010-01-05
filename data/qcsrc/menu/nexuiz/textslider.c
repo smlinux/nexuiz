@@ -55,7 +55,12 @@ void loadCvarsNexuizTextSlider(entity me)
 	if not(me.cvarName)
 		return;
 
-	me.setValueFromIdentifier(me, cvar_string(me.cvarName));
+	var float n = tokenize_console(me.cvarName);
+	var string s = cvar_string(argv(0));
+	float i;
+	for(i = 1; i < n; ++i)
+		s = strcat(s, " ", cvar_string(argv(i)));
+	me.setValueFromIdentifier(me, s);
 }
 void saveCvarsNexuizTextSlider(entity me)
 {
@@ -63,7 +68,23 @@ void saveCvarsNexuizTextSlider(entity me)
 		return;
 
 	if(me.value >= 0 && me.value < me.nValues)
-		cvar_set(me.cvarName, me.getIdentifier(me));
+	{
+		var float n = tokenize_console(me.cvarName);
+		if(n == 1)
+		{
+			// this is a special case to allow spaces in the identifiers
+			cvar_set(argv(0), me.getIdentifier(me));
+		}
+		else
+		{
+			var float m = tokenize_console(strcat(me.cvarName, " ", me.getIdentifier(me)));
+			if(m != n * 2)
+				error("NexuizTextSlider: invalid identifier ", me.getIdentifier(me), " does not match cvar list ", me.cvarName);
+			float i;
+			for(i = 0; i < n; ++i)
+				cvar_set(argv(i), argv(i + n));
+		}
+	}
 }
 void configureNexuizTextSliderValuesNexuizTextSlider(entity me)
 {
