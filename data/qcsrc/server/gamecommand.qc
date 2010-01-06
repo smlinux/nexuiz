@@ -881,9 +881,9 @@ void GameCommand(string command)
 				print("Sorry, team ", argv(2), " doesn't exist\n");
 				return;
 		}
+		print("Player ", argv(1), " (", client.netname, ") has been moved to the ", ColoredTeamName(team_colour), "\n");
 
 		MoveToTeam(client, team_colour, 6, stof(argv(3)));
-		print("Player ", argv(1), " (", client.netname, ") has been moved to the ", ColoredTeamName(team_colour), "\n");
 
 		return;
 	}
