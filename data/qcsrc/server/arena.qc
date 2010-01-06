@@ -206,11 +206,13 @@ void Arena_Warmup()
 	{
 		if (g_ca)
 			allowed_to_spawn = 1;
-		if(champion && !(g_ca))
-			centerprint(self, strcat(msg, "The Champion is ", champion.netname, "^7\n"));
+		if(champion && g_arena)
+			msg = strcat("The Champion is ", champion.netname, "^7\n");
+			//centerprint(self, strcat(msg, "The Champion is ", champion.netname, "^7\n"));
 
 		if(f != roundStartTime_prev) {
-			centerprint(self, strcat("Round will start in ", ftos(f),"\n"));
+			msg = strcat(msg, "Round will start in ", ftos(f),"\n");
+			//centerprint(self, strcat("Round will start in ", ftos(f),"\n"));
 			roundStartTime_prev = f;
 			if(f == 5)
 				play2all("announcer/robotic/prepareforbattle.wav");
@@ -220,10 +222,12 @@ void Arena_Warmup()
 				play2all("announcer/robotic/2.wav");
 			else if(f == 1)
 				play2all("announcer/robotic/1.wav");
+
+			centerprint(self, msg);
 		}
 
-		if (!g_ca) {
-			if(self.spawned)
+		if (g_arena) {
+			if(self.spawned && self.classname == "player")
 				self.movetype = MOVETYPE_NONE;
 
 			self.velocity = '0 0 0';
@@ -233,22 +237,24 @@ void Arena_Warmup()
 		}
 	}
 
-	else if((!g_ca && self.movetype == MOVETYPE_NONE) || ((g_ca && f > -1 && f != roundStartTime_prev)))
+	else if(f > -1 && f != roundStartTime_prev)
 	{
-		if(self.classname == "player")
-			self.movetype = MOVETYPE_WALK;
-		centerprint(self, "^1Fight!\n");	
 		roundStartTime_prev = f;
 		play2all("announcer/robotic/begin.wav");
+		centerprint(self, "^1Begin!\n");	
 
-		player_cnt = 0;
+		if(g_ca) {
+			player_cnt = 0;
 
-		FOR_EACH_CLIENT(self) {
-			if (self.classname == "player") {
+			FOR_EACH_CLIENT(self) {
+			if (self.classname == "player")
 				player_cnt += 1;
-			}
-		}		
+			}		
+		}
 	}
+
+	if(self.classname == "player")
+		self.movetype = MOVETYPE_WALK;
 }
 
 float next_round;
