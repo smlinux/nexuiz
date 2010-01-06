@@ -1291,6 +1291,42 @@ void GameCommand(string command)
 		return;
 	}
 
+	if(argv(0) == "defer_clear")
+	if(argc == 2)
+	{
+		entno = stof(argv(1));
+
+		// player_id is out of range
+		if((entno < 1) | (entno > maxclients)) {
+			print("Player ", argv(1), " doesn't exist\n");
+			return;
+		}
+
+		client = edict_num(entno);
+
+		if not(client.flags & FL_CLIENT) {
+			print("Player ", argv(1), " doesn't exist\n");
+			return;
+		}
+
+		if(clienttype(client) == CLIENTTYPE_BOT) {
+			print("Player ", argv(1), " (", client.netname, ") is a bot\n");
+			return;
+		}
+
+		stuffcmd(client, "defer clear\n");
+		print("defer clear stuffed to ", argv(1), " (", client.netname, ")\n");
+		return;
+	}
+
+	if(argv(0) == "defer_clear_all")
+	{
+		FOR_EACH_CLIENTSLOT(client)
+			GameCommand(strcat("defer_clear ", ftos(num_for_edict(client))));	
+
+		return;
+	}
+
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");
 }
 
