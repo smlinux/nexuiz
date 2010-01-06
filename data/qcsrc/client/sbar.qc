@@ -129,7 +129,7 @@ void Sbar_DrawWeapon(float nr, float fade, float active, float wc)
 	drawstring(pos, ftos(imp), vsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 	// draw the weapon accuracy on the HUD
-	if(sbar_accuracy_hud && !(GAME_RACE || GAME_CTS))
+	if(sbar_accuracy_hud && !(gametype == GAME_RACE || gametype == GAME_CTS))
  	{
 		if(weapon_damage)
  			weapon_stats = floor(100 * weapon_hit / weapon_damage);
@@ -1347,7 +1347,7 @@ void Sbar_DrawScoreboard()
 			pos_y += 1.25 * sbar_fontsize_y;
 		}
 	}
-	else if(cvar("sbar_accuracy")) {
+	else if(cvar("sbar_accuracy") && spectatee_status != -1) {
 		if(teamplay)
 			pos = Sbar_DrawScoreboardAccuracyStats(pos, GetTeamRGB(myteam), bg_size);
 		else
@@ -2258,7 +2258,7 @@ void Sbar_DrawAccuracyStats()
 		return;
 	}
 
-	else if(GAME_RACE || GAME_CTS)
+	if(gametype == GAME_RACE || gametype == GAME_CTS)
 	{
 		pos_y += 40;
 		if(mod(time, 1) >= 0.4)
@@ -2647,7 +2647,7 @@ void Sbar_Draw (void)
 	Sbar_UpdatePlayerTeams();
 	if (intermission == 2) // map voting screen
 	{
-		if(sb_showaccuracy) {
+		if(sb_showaccuracy && spectatee_status != -1) {
 			Sbar_DrawAccuracyStats();
 			Sbar_Score();
 			Sbar_Timer();
@@ -2664,7 +2664,7 @@ void Sbar_Draw (void)
 	}
 	else if (sb_showscores_force || getstati(STAT_HEALTH) <= 0 || intermission == 1)
 	{
-  		if(sb_showaccuracy)
+  		if(sb_showaccuracy && spectatee_status != -1)
   			Sbar_DrawAccuracyStats();
   		else
 			Sbar_DrawScoreboard();
@@ -2675,7 +2675,7 @@ void Sbar_Draw (void)
   	}
 	else
 	{
-		if(sb_showaccuracy)
+		if(sb_showaccuracy && spectatee_status != -1)
 			Sbar_DrawAccuracyStats();
 		else
 			Sbar_DrawScoreboard();
