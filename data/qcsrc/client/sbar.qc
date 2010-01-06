@@ -129,7 +129,7 @@ void Sbar_DrawWeapon(float nr, float fade, float active, float wc)
 	drawstring(pos, ftos(imp), vsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 	// draw the weapon accuracy on the HUD
-	if(sbar_accuracy_hud)
+	if(sbar_accuracy_hud && !(GAME_RACE || GAME_CTS))
  	{
 		if(weapon_damage)
  			weapon_stats = floor(100 * weapon_hit / weapon_damage);
@@ -2254,6 +2254,15 @@ void Sbar_DrawAccuracyStats()
 		pos_y += 40;
 		if(mod(time, 1) >= 0.4)
 			drawstringcenter(pos, "Stats are not tracked during warmup stage", sbar_fontsize, '1 1 0', sbar_alpha_fg, DRAWFLAG_NORMAL);
+
+		return;
+	}
+
+	else if(GAME_RACE || GAME_CTS)
+	{
+		pos_y += 40;
+		if(mod(time, 1) >= 0.4)
+			drawstringcenter(pos, "Stats are not tracked in Race/CTS", sbar_fontsize, '1 1 0', sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 		return;
 	}
