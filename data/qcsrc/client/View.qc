@@ -411,6 +411,7 @@ void CSQC_UpdateView(float w, float h)
 
 	CheckForGamestartChange();
 	maptimeAnnouncer();
+	carrierAnnouncer();
 
 	fov = cvar("fov");
 	if(button_zoom || fov <= 59.5)

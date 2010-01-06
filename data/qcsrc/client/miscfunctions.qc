@@ -81,6 +81,55 @@ void maptimeAnnouncer() {
 	}
 }
 
+ /**
+ * Announce carried items (e.g. flags in CTF).
+ */
+float redflag_prev;
+float blueflag_prev;
+void carrierAnnouncer() {
+	float stat_items, redflag, blueflag;
+	float pickup;
+	string item;
+
+	if not(cvar("cl_notify_carried_items"))
+		return;
+
+	stat_items = getstati(STAT_ITEMS);
+
+	redflag = (stat_items/IT_RED_FLAG_TAKEN) & 3;
+	blueflag = (stat_items/IT_BLUE_FLAG_TAKEN) & 3;
+
+	if (redflag == 3 && redflag != redflag_prev) {
+		item = "^1RED^7 flag";
+		pickup = (redflag_prev == 2);
+	}
+
+	if (blueflag == 3 && blueflag != blueflag_prev) {
+		item = "^4BLUE^7 flag";
+		pickup = (blueflag_prev == 2);
+	}
+
+	if (item)
+	{
+		if (pickup) {
+			if (cvar("cl_notify_carried_items") & 2)
+				centerprint(strcat("You picked up the ", item, "!"));
+		}
+		else {
+			if (cvar("cl_notify_carried_items") & 1)
+				centerprint(strcat("You got the ", item, "!"));
+		}
+	}
+
+	blueflag_prev = blueflag;
+	redflag_prev = redflag;
+}
+
+/**
+  * Add all future announcer sounds precaches here.
+  * TODO: make all announcer sound() calls client-side in the end, to allow queues etc.
+  */
+
 /**
  * Add all future announcer sounds precaches here.
  * TODO: make all announcer sound() calls client-side in the end, to allow queues etc.
