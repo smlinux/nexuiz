@@ -31,7 +31,7 @@ float someShadowCvarIsEnabled(entity box)
 
 void fillNexuizEffectsSettingsTab(entity me)
 {
-	entity e;
+	entity e, s;
 	float n;
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Quality preset:"));
@@ -159,16 +159,19 @@ void fillNexuizEffectsSettingsTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "r_bloom", "Bloom"));
 			setDependent(e, "r_hdr", 0, 0);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "r_hdr", "High Dynamic Range (HDR)"));
-	me.TR(me);
 	
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Motion blur:"));
-		me.TD(me, 1, 2, e = makeNexuizSlider(0, 1, 0.1, "r_motionblur"));
+		s = makeNexuizSlider(0.1, 1, 0.1, "r_motionblur");
+		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(0, 1, s, "Motion blur:"));
+		if(s.value != e.savedValue)
+			e.savedValue = 0.5; // default
+		me.TD(me, 1, 2, s);
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Damage blur:"));
-			setDependent(e, "r_motionblur", 0, 1);
-		me.TD(me, 1, 2, e = makeNexuizSlider(0, 1, 0.1, "r_damageblur"));
-			setDependent(e, "r_motionblur", 0, 1);
+		s = makeNexuizSlider(0.1, 1, 0.1, "r_damageblur");
+		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(0, 1, s, "Damage blur:"));
+		if(s.value != e.savedValue)
+			e.savedValue = 0.4; // default
+		me.TD(me, 1, 2, s);
 	
 	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "vid_restart", COMMANDBUTTON_APPLY));
