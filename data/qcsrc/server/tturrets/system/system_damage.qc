@@ -148,9 +148,7 @@ void turret_stdproc_die()
     self.tur_head.customizeentityforclient = SUB_False;
 
     self.event_damage           = SUB_Null;
-    self.tur_head.event_damage  = SUB_Null;
     self.takedamage             = DAMAGE_NO;
-    self.tur_head.takedamage    = self.takedamage;
 
     self.effects            = 0;
     self.tur_head.effects   = self.effects;
@@ -240,30 +238,23 @@ void turret_stdproc_respawn()
 	}
 
     self.deadflag           = DEAD_NO;
-    self.tur_head.deadflag  = self.deadflag;
     self.effects            = 0;
     self.tur_head.effects   = self.effects;
 
     self.solid              = SOLID_BBOX;
-    self.tur_head.solid     = self.solid;
 
     self.alpha = 1;
     self.tur_head.alpha     = self.alpha;
     self.customizeentityforclient = SUB_True;
     self.tur_head.customizeentityforclient = SUB_True;
 
-
     self.takedamage = DAMAGE_AIM;
-    self.tur_head.takedamage    = self.takedamage;
-
     self.event_damage           = turret_stdproc_damage;
-    self.tur_head.event_damage  = self.event_damage;
 
     self.avelocity              = '0 0 0';
     self.tur_head.avelocity     = self.avelocity;
     self.tur_head.angles        = self.idle_aim;
     self.health                 = self.tur_health;
-    self.tur_head.health         = self.tur_health;
 
     self.enemy                  = world;
     self.volly_counter          = self.shot_volly;
@@ -282,26 +273,19 @@ void turret_stdproc_respawn()
 */
 void turret_stdproc_damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector vforce)
 {
-    entity baseent;
-
-    if (self.owner)
-        baseent = self.owner;
-    else
-        baseent = self;
 
     // Enougth allready!
     if (self.health <= 0)
         return;
 
     // Inactive turrets take no damage. (hm..)
-    if not (baseent.tur_active)
+    if not (self.tur_active)
         return;
 
     if (teamplay != 0)
     if (self.team == attacker.team)
     {
         // This does not happen anymore. Re-enable if you fix that.
-        //if(attacker.flags & FL_CLIENT)
         if(clienttype(attacker) == CLIENTTYPE_REAL)
             sprint(attacker, "\{1}Turret tells you: I'm on your team!\n");
 
@@ -314,17 +298,16 @@ void turret_stdproc_damage (entity inflictor, entity attacker, float damage, flo
     self.health = self.health - damage;
 
     // thorw head slightly off aim when hit?
-    if (self.classname == "turret_head")
-        if (baseent.damage_flags & TFL_DMG_HEADSHAKE)
-        {
-            //baseent.tur_aimoff_x += (random() * damage);
-            //baseent.tur_aimoff_y += ((random()*0.75) * damage);
-            self.angles_x = self.angles_x + (-0.5 + random()) * damage;
-            self.angles_y = self.angles_y + (-0.5 + random()) * damage;
-        }
+    if (self.damage_flags & TFL_DMG_HEADSHAKE)
+    {
+        //baseent.tur_aimoff_x += (random() * damage);
+        //baseent.tur_aimoff_y += ((random()*0.75) * damage);
+        self.tur_head.angles_x = self.tur_head.angles_x + (-0.5 + random()) * damage;
+        self.tur_head.angles_y = self.tur_head.angles_y + (-0.5 + random()) * damage;
+    }
 
-    if (baseent.turrcaps_flags & TFL_TURRCAPS_MOVE)
-        baseent.velocity = baseent.velocity + vforce;
+    if (self.turrcaps_flags & TFL_TURRCAPS_MOVE)
+        self.velocity = self.velocity + vforce;
 
     // FIXME: Better damage feedback
     // Start burning when we have 10% or less health left
@@ -333,11 +316,10 @@ void turret_stdproc_damage (entity inflictor, entity attacker, float damage, flo
 
     if (self.health <= 0)
     {
-        baseent.event_damage           = SUB_Null;
-        baseent.tur_head.event_damage  = SUB_Null;
-        baseent.takedamage             = DAMAGE_NO;
-        baseent.tur_head.takedamage    = baseent.takedamage;
-        baseent.nextthink = time;
-        baseent.think = turret_stdproc_die;
+        self.event_damage           = SUB_Null;
+        self.tur_head.event_damage  = SUB_Null;
+        self.takedamage             = DAMAGE_NO;
+        self.nextthink = time;
+        self.think = turret_stdproc_die;
     }
 }

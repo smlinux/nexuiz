@@ -42,10 +42,7 @@ void load_unit_settings(entity ent,string unitname,float is_reload)
         ent.enemy = world;
         ent.tur_head.avelocity = '0 0 0';
 
-        if (ent.turrcaps_flags & TFL_TURRCAPS_HEADATTACHED)
-            ent.tur_head.angles = '0 0 0';
-        else
-            ent.tur_head.angles = ent.angles;
+        ent.tur_head.angles = '0 0 0';
     }
 
     ent.health      = cvar(strcat(sbase,"_health")) * ent.turret_scale_health;
@@ -232,7 +229,6 @@ void turret_stdproc_track()
 {
     vector target_angle; // This is where we want to aim
     vector move_angle;   // This is where we can aim
-    vector a_off;
     float f_tmp;
 
     if (self.track_flags == TFL_TRACK_NO)
@@ -243,10 +239,7 @@ void turret_stdproc_track()
     else if (self.enemy == world)
     {
         if(time > self.lip)
-            if (self.turrcaps_flags & TFL_TURRCAPS_HEADATTACHED)
-                target_angle = self.idle_aim + self.angles;
-            else
-                target_angle = self.idle_aim;
+            target_angle = self.idle_aim + self.angles;
         else
             target_angle = vectoangles(normalize(self.tur_aimpos - self.tur_shotorg));
     }
@@ -261,19 +254,11 @@ void turret_stdproc_track()
     self.tur_head.angles_y = safeangle(self.tur_head.angles_y);
 
     // Find the diffrence between where we currently aim and where we want to aim
-    if (self.turrcaps_flags & TFL_TURRCAPS_HEADATTACHED)
-    {
-        move_angle = target_angle - (self.angles + self.tur_head.angles);
-        move_angle = shortangle_vxy(move_angle,(self.angles + self.tur_head.angles));
-        a_off = '0 0 0';
+    move_angle = target_angle - (self.angles + self.tur_head.angles);
+    move_angle = shortangle_vxy(move_angle,(self.angles + self.tur_head.angles));
 
-    }
-    else
-    {
-        move_angle = target_angle - self.tur_head.angles;
-        move_angle = shortangle_vxy(move_angle,self.tur_head.angles);
-        a_off = self.angles;
-    }
+
+
 
     switch(self.track_type)
     {
@@ -282,21 +267,21 @@ void turret_stdproc_track()
             if (self.track_flags & TFL_TRACK_PITCH)
             {
                 self.tur_head.angles_x += bound(-f_tmp,move_angle_x, f_tmp);
-                if(self.tur_head.angles_x + a_off_x > self.aim_maxpitch)
-                    self.tur_head.angles_x = a_off_x + self.aim_maxpitch;
+                if(self.tur_head.angles_x > self.aim_maxpitch)
+                    self.tur_head.angles_x = self.aim_maxpitch;
 
-                if(self.tur_head.angles_x + a_off_x < -self.aim_maxpitch)
-                    self.tur_head.angles_x = a_off_x - self.aim_maxpitch;
+                if(self.tur_head.angles_x  < -self.aim_maxpitch)
+                    self.tur_head.angles_x = self.aim_maxpitch;
             }
 
             if (self.track_flags & TFL_TRACK_ROT)
             {
                 self.tur_head.angles_y += bound(-f_tmp, move_angle_y, f_tmp);
-                if((self.tur_head.angles_y - a_off_y) > self.aim_maxrot)
-                    self.tur_head.angles_y = a_off_y + self.aim_maxrot;
+                if(self.tur_head.angles_y > self.aim_maxrot)
+                    self.tur_head.angles_y = self.aim_maxrot;
 
-                if((self.tur_head.angles_y - a_off_y) < -self.aim_maxrot)
-                    self.tur_head.angles_y = a_off_y - self.aim_maxrot;
+                if(self.tur_head.angles_y  < -self.aim_maxrot)
+                    self.tur_head.angles_y = self.aim_maxrot;
             }
 
             return;
@@ -320,15 +305,15 @@ void turret_stdproc_track()
     if (self.track_flags & TFL_TRACK_PITCH)
     {
         self.tur_head.avelocity_x = move_angle_x;
-        if((self.tur_head.angles_x + self.tur_head.avelocity_x * self.ticrate) + a_off_x > self.aim_maxpitch)
+        if((self.tur_head.angles_x + self.tur_head.avelocity_x * self.ticrate) > self.aim_maxpitch)
         {
             self.tur_head.avelocity_x = 0;
-            self.tur_head.angles_x = a_off_x + self.aim_maxpitch;
+            self.tur_head.angles_x = self.aim_maxpitch;
         }
-        if((self.tur_head.angles_x + self.tur_head.avelocity_x * self.ticrate) + a_off_x < -self.aim_maxpitch)
+        if((self.tur_head.angles_x + self.tur_head.avelocity_x * self.ticrate) < -self.aim_maxpitch)
         {
             self.tur_head.avelocity_x = 0;
-            self.tur_head.angles_x = a_off_x - self.aim_maxpitch;
+            self.tur_head.angles_x = self.aim_maxpitch;
         }
 
     }
@@ -338,16 +323,16 @@ void turret_stdproc_track()
     {
         self.tur_head.avelocity_y = move_angle_y;
 
-        if(((self.tur_head.angles_y + self.tur_head.avelocity_y * self.ticrate)- a_off_y) > self.aim_maxrot)
+        if((self.tur_head.angles_y + self.tur_head.avelocity_y * self.ticrate) > self.aim_maxrot)
         {
             self.tur_head.avelocity_y = 0;
-            self.tur_head.angles_y = a_off_y + self.aim_maxrot;
+            self.tur_head.angles_y = self.aim_maxrot;
         }
 
-        if(((self.tur_head.angles_y + self.tur_head.avelocity_y * self.ticrate) - a_off_y) < -self.aim_maxrot)
+        if((self.tur_head.angles_y + self.tur_head.avelocity_y * self.ticrate) < -self.aim_maxrot)
         {
             self.tur_head.avelocity_y = 0;
-            self.tur_head.angles_y = a_off_y - self.aim_maxrot;
+            self.tur_head.angles_y = self.aim_maxrot;
         }
 
     }
@@ -552,15 +537,10 @@ float turret_validate_target(entity e_turret,entity e_target,float validate_flag
     }
 
     // Can we even aim this thing?
-    if(e_turret.turrcaps_flags & TFL_TURRCAPS_HEADATTACHED)
-    {
-        tvt_thadv = angleofs3(e_turret.tur_head.origin,e_turret.angles + e_turret.tur_head.angles ,e_target);
-        //tvt_thadv = angleofs(e_turret.angles,e_target);
-    }
-    else
-    {
-        tvt_thadv = angleofs(e_turret.tur_head,e_target);
-    }
+    tvt_thadv = angleofs3(e_turret.tur_head.origin,e_turret.angles + e_turret.tur_head.angles ,e_target);
+    //tvt_thadv = angleofs(e_turret.angles,e_target);
+
+
 
     tvt_tadv  = shortangle_vxy(angleofs(e_turret,e_target),e_turret.angles);
     tvt_thadf = vlen(tvt_thadv);
@@ -864,7 +844,6 @@ void turret_fire()
             self.attack_finished_single = time + self.shot_volly_refire;
     }
 
-
 #ifdef TURRET_DEBUG
     if (self.enemy) paint_target3(self.tur_aimpos, 64, self.tur_dbg_rvec, self.tur_impacttime + 0.25);
 #endif
@@ -898,6 +877,7 @@ void turret_link()
     self.think      = turret_think;
     self.nextthink  = time;
 }
+
 void turrets_manager_think()
 {
     self.nextthink = time + 1;
@@ -908,9 +888,8 @@ void turrets_manager_think()
         e = nextent(world);
         while (e)
         {
-            if (e.tur_head != world)
+            if (e.turrcaps_flags & TFL_TURRCAPS_ISTURRET)
             {
-
                 load_unit_settings(e,e.cvar_basename,1);
                 if(e.turret_postthink)
                     e.turret_postthink();
@@ -929,8 +908,7 @@ void turrets_manager_think()
 */
 float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base, string head)
 {
-	entity e,ee;
-
+	entity e, ee;
 
     e = find(world, classname, "turret_manager");
     if not (e)
@@ -941,19 +919,15 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
         e.nextthink = time + 2;
     }
 
-
     if(csqc_shared)
     {
-        dprint("turrets: csqc_shared requested but not implemented. expect strange things to happen.\n");
+        dprint("WARNING: turret requested csqc_shared but this is not implemented. Expect strange things to happen.\n");
         csqc_shared = 0;
     }
 
     // Are turrets allowed atm?
     if (cvar("g_turrets") == 0)
         return 0;
-
-    // Better more then once then never.
-    // turret_gibs_precash();
 
     // Terrainbase spawnflag. This puts a enlongated model
     // under the turret, so it looks ok on uneaven surfaces.
@@ -964,16 +938,15 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
         setmodel(tb,"models/turrets/terrainbase.md3");
         setorigin(tb,self.origin);
         tb.solid = SOLID_BBOX;
-        //makestatic(tb);
     }
 
     self.cvar_basename = cvar_base_name;
-    load_unit_settings(self,self.cvar_basename,0);
+    load_unit_settings(self,self.cvar_basename, 0);
 
     // Handle turret teams.
     if (cvar("g_assault") != 0)
     {
-        if (!self.team)
+        if not (self.team)
             self.team = 14; // Assume turrets are on the defending side if not explicitly set otehrwize
     }
     else if not (teamplay)
@@ -990,8 +963,6 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
 	else if(!self.team)
 		self.team = MAX_SHOT_DISTANCE; // Group all turrets into the same team iso they dont kill eachother.
 
-
-
     /*
     * Try to guess some reasonaly defaults
     * for missing params and do sanety checks
@@ -1000,9 +971,9 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
     * as possible beforehand.
     */
     if (self.turrcaps_flags & TFL_TURRCAPS_SUPPORT)
-        if (!self.ticrate) self.ticrate = 0.2;     // Support units generaly dont need to have a high speed ai-loop
+        if not (self.ticrate) self.ticrate = 0.2;     // Support units generaly dont need to have a high speed ai-loop
     else
-        if (!self.ticrate) self.ticrate = 0.1;     // 10 fps for normal turrets
+        if not (self.ticrate) self.ticrate = 0.1;     // 10 fps for normal turrets
 
     self.ticrate = bound(sys_frametime,self.ticrate,60);  // keep it sane
 
@@ -1010,64 +981,64 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
     if (self.netname == "")
         self.netname = self.classname;
 
-    if (!self.respawntime)
+    if not (self.respawntime)
         self.respawntime = 60;
     self.respawntime = max(-1,self.respawntime);
 
-    if (!self.health)
+    if not (self.health)
         self.health = 1000;
     self.tur_health = max(1,self.health);
 
-    if (!self.turrcaps_flags)
+    if not (self.turrcaps_flags)
         self.turrcaps_flags = TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_MEDPROJ | TFL_TURRCAPS_PLAYERKILL;
 
     if (!self.damage_flags)
         self.damage_flags = TFL_DMG_YES | TFL_DMG_RETALIATE | TFL_DMG_AIMSHAKE;
 
 // Shot stuff.
-    if (!self.shot_refire)
+    if not (self.shot_refire)
         self.shot_refire = 1;
     self.shot_refire = bound(0.01,self.shot_refire,9999);
 
-    if (!self.shot_dmg)
+    if not (self.shot_dmg)
         self.shot_dmg  = self.shot_refire * 50;
     self.shot_dmg = max(1,self.shot_dmg);
 
-    if (!self.shot_radius)
+    if not (self.shot_radius)
         self.shot_radius = self.shot_dmg * 0.5;
     self.shot_radius = max(1,self.shot_radius);
 
-    if (!self.shot_speed)
+    if not (self.shot_speed)
         self.shot_speed = 2500;
     self.shot_speed = max(1,self.shot_speed);
 
-    if (!self.shot_spread)
+    if not (self.shot_spread)
         self.shot_spread = 0.0125;
     self.shot_spread = bound(0.0001,self.shot_spread,500);
 
-    if (!self.shot_force)
+    if not (self.shot_force)
         self.shot_force = self.shot_dmg * 0.5 + self.shot_radius * 0.5;
     self.shot_force = bound(0.001,self.shot_force,MAX_SHOT_DISTANCE * 0.5);
 
-    if (!self.shot_volly)
+    if not (self.shot_volly)
         self.shot_volly = 1;
     self.shot_volly = bound(1,self.shot_volly,floor(self.ammo_max / self.shot_dmg));
 
-    if (!self.shot_volly_refire)
+    if not (self.shot_volly_refire)
         self.shot_volly_refire = self.shot_refire * self.shot_volly;
     self.shot_volly_refire = bound(self.shot_refire,self.shot_volly_refire,60);
 
-    if (!self.firecheck_flags)
+    if not (self.firecheck_flags)
         self.firecheck_flags = TFL_FIRECHECK_WORLD | TFL_FIRECHECK_DEAD | TFL_FIRECHECK_DISTANCES |
                                TFL_FIRECHECK_LOS | TFL_FIRECHECK_AIMDIST | TFL_FIRECHECK_TEAMCECK |
                                TFL_FIRECHECK_OWM_AMMO | TFL_FIRECHECK_REFIRE | TFL_FIRECHECK_WORLD;
 
 // Range stuff.
-    if (!self.target_range)
+    if not (self.target_range)
         self.target_range = self.shot_speed * 0.5;
     self.target_range = bound(0,self.target_range,MAX_SHOT_DISTANCE);
 
-    if (!self.target_range_min)
+    if not (self.target_range_min)
         self.target_range_min = self.shot_radius * 2;
     self.target_range_min = bound(0,self.target_range_min,MAX_SHOT_DISTANCE);
 
@@ -1075,29 +1046,29 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
     //    self.target_range_fire = self.target_range * 0.8;
     //self.target_range_fire = bound(0,self.target_range_fire,MAX_SHOT_DISTANCE);
 
-    if (!self.target_range_optimal)
+    if not (self.target_range_optimal)
         self.target_range_optimal = self.target_range * 0.5;
     self.target_range_optimal = bound(0,self.target_range_optimal,MAX_SHOT_DISTANCE);
 
 
 // Aim stuff.
-    if (!self.aim_maxrot)
+    if not (self.aim_maxrot)
         self.aim_maxrot = 90;
     self.aim_maxrot = bound(0,self.aim_maxrot,360);
 
-    if (!self.aim_maxpitch)
+    if not (self.aim_maxpitch)
         self.aim_maxpitch = 20;
     self.aim_maxpitch = bound(0,self.aim_maxpitch,90);
 
-    if (!self.aim_speed)
+    if not (self.aim_speed)
         self.aim_speed = 36;
     self.aim_speed  = bound(0.1,self.aim_speed, 1000);
 
-    if (!self.aim_firetolerance_dist)
+    if not (self.aim_firetolerance_dist)
         self.aim_firetolerance_dist  = 5 + (self.shot_radius * 2);
     self.aim_firetolerance_dist = bound(0.1,self.aim_firetolerance_dist,MAX_SHOT_DISTANCE);
 
-    if (!self.aim_flags)
+    if not (self.aim_flags)
     {
         self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE;
         if(self.turrcaps_flags & TFL_TURRCAPS_RADIUSDMG)
@@ -1105,7 +1076,8 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
     }
 
     // Sill the most tested (and aim-effective)
-    if (!self.track_type) self.track_type = TFL_TRACKTYPE_STEPMOTOR;
+    if not (self.track_type)
+        self.track_type = TFL_TRACKTYPE_STEPMOTOR;
 
     if (self.track_type != TFL_TRACKTYPE_STEPMOTOR)
     {
@@ -1113,17 +1085,17 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
         // Can inmapt aim preformance alot.
         // needs a bit diffrent aimspeed
 
-        if (!self.aim_speed)
+        if not (self.aim_speed)
             self.aim_speed = 180;
         self.aim_speed = bound(0.1,self.aim_speed, 1000);
 
-        if (!self.track_accel_pitch)
+        if not (self.track_accel_pitch)
             self.track_accel_pitch = 0.5;
 
-        if (!self.track_accel_rot)
+        if not (self.track_accel_rot)
             self.track_accel_rot   = 0.5;
 
-        if (!self.track_blendrate)
+        if not (self.track_blendrate)
             self.track_blendrate   = 0.35;
     }
 
@@ -1132,25 +1104,25 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
 
 
 // Target selection stuff.
-    if (!self.target_select_rangebias)
+    if not (self.target_select_rangebias)
         self.target_select_rangebias = 1;
     self.target_select_rangebias = bound(-10,self.target_select_rangebias,10);
 
-    if (!self.target_select_samebias)
+    if not (self.target_select_samebias)
         self.target_select_samebias = 1;
     self.target_select_samebias = bound(-10,self.target_select_samebias,10);
 
-    if (!self.target_select_anglebias)
+    if not (self.target_select_anglebias)
         self.target_select_anglebias = 1;
     self.target_select_anglebias = bound(-10,self.target_select_anglebias,10);
 
-    if (!self.target_select_missilebias)
+    if not (self.target_select_missilebias)
         self.target_select_missilebias = -10;
 
     self.target_select_missilebias = bound(-10,self.target_select_missilebias,10);
     self.target_select_playerbias = bound(-10,self.target_select_playerbias,10);
 
-    if (!self.target_select_flags)
+    if not (self.target_select_flags)
     {
             self.target_select_flags = TFL_TARGETSELECT_LOS | TFL_TARGETSELECT_TEAMCHECK
                                      | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_ANGLELIMITS;
@@ -1168,22 +1140,22 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
 
 
 // Ammo stuff
-    if (!self.ammo_max)
+    if not (self.ammo_max)
         self.ammo_max = self.shot_dmg * 10;
     self.ammo_max = max(self.shot_dmg,self.ammo_max);
 
-    if (!self.ammo)
+    if not (self.ammo)
         self.ammo = self.shot_dmg * 5;
     self.ammo = bound(0,self.ammo,self.ammo_max);
 
-    if (!self.ammo_recharge)
+    if not (self.ammo_recharge)
         self.ammo_recharge = self.shot_dmg * 0.5;
     self.ammo_recharge = max(0,self.ammo_recharge);
 
     // Convert the recharge from X per sec to X per ticrate
     self.ammo_recharge = self.ammo_recharge * self.ticrate;
 
-    if (!self.ammo_flags)
+    if not (self.ammo_flags)
         self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE;
 
 // Damage stuff
@@ -1205,12 +1177,25 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
     setmodel(self,base);
     setmodel(self.tur_head,head);
 
-    setsize(self,'-32 -32 0','32 32 32');
-    setsize(self.tur_head,'-32 -32 0','32 32 32');
+    setsize(self,'-32 -32 0','32 32 64');
+    setsize(self.tur_head,'0 0 0','0 0 0');
 
+    setorigin(self.tur_head,'0 0 0');
+    setattachment(self.tur_head, self, "tag_head");
+
+    if (!self.health)
+        self.health = 150;
+
+    self.tur_health          = self.health;
+    self.solid               = SOLID_BBOX;
+    self.tur_head.solid      = SOLID_NOT;
+    self.takedamage          = DAMAGE_AIM;
+    self.tur_head.takedamage = DAMAGE_NO;
+    self.movetype            = MOVETYPE_NOCLIP;
+    self.tur_head.movetype   = MOVETYPE_NOCLIP;
 
     // Defend mode?
-    if(!self.tur_defend)
+    if not (self.tur_defend)
     if (self.target != "")
     {
         self.tur_defend = find(world, targetname, self.target);
@@ -1221,43 +1206,11 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
         }
     }
 
-// Put pices in place
-    if not (self.turrcaps_flags & TFL_TURRCAPS_HEADATTACHED)
-        setorigin(self.tur_head,self.origin);
-
     // In target defend mode, aim on the spot to defend when idle.
-    if(self.turrcaps_flags & TFL_TURRCAPS_HEADATTACHED)
-    {
-        if (self.tur_defend)
-            self.idle_aim  = self.tur_head.angles + angleofs(self.tur_head,self.tur_defend);
-        else
-            self.idle_aim  = '0 0 0';
-    }
+    if (self.tur_defend)
+        self.idle_aim  = self.tur_head.angles + angleofs(self.tur_head,self.tur_defend);
     else
-    {
-        if (self.tur_defend)
-            self.idle_aim  = self.tur_head.angles + angleofs(self.tur_head,self.tur_defend);
-        else
-            self.idle_aim  = self.angles;
-    }
-
-    if not (self.turrcaps_flags & TFL_TURRCAPS_HEADATTACHED)
-        self.tur_head.angles    = self.idle_aim;
-
-    if (!self.health)
-        self.health = 150;
-
-    self.tur_health      = self.health;
-    self.tur_head.health = self.health;
-
-    self.solid          = SOLID_BBOX;
-    self.tur_head.solid = SOLID_BBOX;
-
-    self.takedamage          = DAMAGE_AIM;
-    self.tur_head.takedamage = DAMAGE_AIM;
-
-    self.movetype            = MOVETYPE_NOCLIP;
-    self.tur_head.movetype   = MOVETYPE_NOCLIP;
+        self.idle_aim  = '0 0 0';
 
     // Team color
     if (self.team == COLOR_TEAM1) self.colormod = '1.4 0.8 0.8';
@@ -1269,19 +1222,14 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
         self.turret_score_target    = turret_stdproc_targetscore_support;
         self.turret_firecheckfunc   = turret_stdproc_firecheck;
         self.turret_firefunc        = turret_stdproc_fire;
-        //self.turret_postthink       = turret_stdproc_nothing;
         self.event_damage           = turret_stdproc_damage;
-        self.tur_head.event_damage  = turret_stdproc_damage;
     }
     else
     {
         self.turret_score_target    = turret_stdproc_targetscore_generic;
         self.turret_firecheckfunc   = turret_stdproc_firecheck;
         self.turret_firefunc        = turret_stdproc_fire;
-        //self.turret_postthink       = turret_stdproc_nothing;
         self.event_damage           = turret_stdproc_damage;
-        self.tur_head.event_damage  = turret_stdproc_damage;
-        //self.turret_addtarget       = turret_stdproc_false;
     }
 
     self.use = turret_stdproc_use;
@@ -1311,6 +1259,8 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
 #endif
 
     // Its all good.
+    self.turrcaps_flags |= TFL_TURRCAPS_ISTURRET;
+
     self.classname = "turret_main";
 
     self.tur_active = 1;

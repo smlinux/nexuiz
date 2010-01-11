@@ -197,7 +197,7 @@ vector real_origin(entity ent);
 #define TFL_TURRCAPS_MOVE 16384
 /// Will roam arround even if not chasing anyting
 #define TFL_TURRCAPS_ROAM 32768
-#define TFL_TURRCAPS_HEADATTACHED 65536
+#define TFL_TURRCAPS_ISTURRET 65536
 
 /// Ammo types needed and/or provided
 .float ammo_flags;

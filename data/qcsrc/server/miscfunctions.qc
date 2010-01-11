@@ -131,10 +131,10 @@ string GetAdvancedDeathReports(entity enPlayer) // Extra fragmessage information
 		strPlayerPingColor = "^1";
 	else
 		strPlayerPingColor = "^2";
-		
+
 	if((cvar("sv_fragmessage_information_stats")) && (enPlayer.health >= 1))
 		strMessage = strcat(strMessage, "\n^7(Health ^1", ftos(nPlayerHealth), "^7 / Armor ^2", ftos(nPlayerArmor), "^7)");
-			
+
 	if(cvar("sv_fragmessage_information_ping")) {
 		if(clienttype(enPlayer) == CLIENTTYPE_BOT) // Bots have no ping
 			strMessage = strcat(strMessage, "\n^7(^2Bot");
@@ -144,7 +144,7 @@ string GetAdvancedDeathReports(entity enPlayer) // Extra fragmessage information
 			if(cvar("sv_fragmessage_information_handicap") == 2)
 				if(nPlayerHandicap <= 1)
 					strMessage = strcat(strMessage, "^7 / Handicap ^2Off^7)");
-				else 
+				else
 					strMessage = strcat(strMessage, "^7 / Handicap ^2", ftos(nPlayerHandicap), "^7)");
 			else if not(nPlayerHandicap <= 1)
 				strMessage = strcat(strMessage, "^7 / Handicap ^2", ftos(nPlayerHandicap), "^7)");
@@ -154,7 +154,7 @@ string GetAdvancedDeathReports(entity enPlayer) // Extra fragmessage information
 		if(cvar("sv_fragmessage_information_handicap") == 2)
 			if(nPlayerHandicap <= 1)
 				strMessage = strcat(strMessage, "\n^7(Handicap ^2Off^7)");
-			else 
+			else
 				strMessage = strcat(strMessage, "\n^7(Handicap ^2", ftos(nPlayerHandicap), "^7)");
 		else if(nPlayerHandicap > 1)
 			strMessage = strcat(strMessage, "\n^7(Handicap ^2", ftos(nPlayerHandicap), "^7)");
@@ -233,7 +233,7 @@ void relocate_spawnpoint()
     PL_MAX                                  = stov(cvar_string("sv_player_maxs"));
     PL_CROUCH_VIEW_OFS                      = stov(cvar_string("sv_player_crouch_viewoffset"));
     PL_CROUCH_MIN                           = stov(cvar_string("sv_player_crouch_mins"));
-    PL_CROUCH_MAX                           = stov(cvar_string("sv_player_crouch_maxs")); 
+    PL_CROUCH_MAX                           = stov(cvar_string("sv_player_crouch_maxs"));
 
     // nudge off the floor
     setorigin(self, self.origin + '0 0 1');
@@ -448,7 +448,7 @@ string formatmessage(string msg)
 		n = n - 1;
 		p1 = strstr(msg, "%", p); // NOTE: this destroys msg as it's a tempstring!
 		p2 = strstr(msg, "\\", p); // NOTE: this destroys msg as it's a tempstring!
-	
+
 		if (p1 < 0)
 			p1 = p2;
 
@@ -456,7 +456,7 @@ string formatmessage(string msg)
 			p2 = p1;
 
 		p = min(p1, p2);
-	
+
 		if (p < 0)
 			break;
 
@@ -2833,3 +2833,30 @@ float cvar_normal(string n)
 }
 #endif
 #define cvar_set_normal cvar_set_builtin
+
+void defer_think()
+{
+    entity oself;
+
+    oself           = self;
+    self            = self.owner;
+    oself.think     = SUB_Remove;
+    oself.nextthink = time;
+
+    oself.use();
+}
+
+/*
+    Execute func() after time + fdelay.
+    self when func is executed = self when defer is called
+*/
+void defer(float fdelay, void() func)
+{
+    entity e;
+
+    e           = spawn();
+    e.owner     = self;
+    e.use       = func;
+    e.think     = defer_think;
+    e.nextthink = time + fdelay;
+}

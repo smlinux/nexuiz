@@ -271,7 +271,9 @@ float turret_tag_setup()
         return 0;
     }
 
-    setorigin(self.tur_head,gettaginfo(self,gettagindex(self,"tag_head")));
+    //if not(self.turrcaps_flags & TFL_TURRCAPS_HEADATTACHED)
+    //    setorigin(self.tur_head,gettaginfo(self,gettagindex(self,"tag_head")));
+
     self.tur_shotorg = gettaginfo(self.tur_head,gettagindex(self.tur_head,"tag_fire"));
 
     v_forward = normalize(v_forward);
