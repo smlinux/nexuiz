@@ -923,7 +923,7 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
         setorigin(e,'0 0 0');
         setmodel(e,"models/turrets/plasma.md3");
         vector v;
-        v = gettaginfo(e,gettagindex(e,"tag_head"));
+        v = gettaginfo(e,gettagindex(e,"tag_fire"));
         if(v == '0 0 0')
         {
             objerror("^1ERROR: Engine is borken! Turrets will NOT work. force g_turrets to 0 to run maps with turrets anyway.");
