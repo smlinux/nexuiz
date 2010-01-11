@@ -910,10 +910,27 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
 {
 	entity e, ee;
 
+    // Are turrets allowed atm?
+    if (cvar("g_turrets") == 0)
+        return 0;
+
+
     e = find(world, classname, "turret_manager");
     if not (e)
     {
         e = spawn();
+
+        setorigin(e,'0 0 0');
+        setmodel(e,"models/turrets/plasma.md3");
+        vector v;
+        v = gettaginfo(e,gettagindex(e,"tag_head"));
+        if(v == '0 0 0')
+        {
+            objerror("^1ERROR: Engine is borken! Turrets will NOT work. force g_turrets to 0 to run maps with turrets anyway.");
+            crash();
+        }
+        setmodel(e,"");
+
         e.classname = "turret_manager";
         e.think = turrets_manager_think;
         e.nextthink = time + 2;
@@ -924,10 +941,6 @@ float turret_stdproc_init (string cvar_base_name, float csqc_shared, string base
         dprint("WARNING: turret requested csqc_shared but this is not implemented. Expect strange things to happen.\n");
         csqc_shared = 0;
     }
-
-    // Are turrets allowed atm?
-    if (cvar("g_turrets") == 0)
-        return 0;
 
     // Terrainbase spawnflag. This puts a enlongated model
     // under the turret, so it looks ok on uneaven surfaces.
