@@ -1,3 +1,4 @@
+SCM := $(shell if [ -d .svn ]; then echo svn; elif [ -d ../.git ]; then echo git; fi)
 FTEQCC ?= fteqcc
 PERL ?= perl
 PK3NAME ?= `date +../data%Y%m%d.pk3`
@@ -85,26 +86,67 @@ $(PK3NAME): qc
 		$(RM) -r qcsrc common-spog.pk3; \
 		$(ZIP) $$ABSPK3NAME .
 
-.PHONY: log
-log:
-	cd .. && svn log -r HEAD:BASE
-
-.PHONY: logv
-logv:
-	cd .. && svn log -r HEAD:BASE -v
-
-.PHONY: update
-update:
-	cd .. && svn up
-
-.PHONY: logupdate
-logupdate:
-	cd .. && svn log -r HEAD:BASE && svn up
-
-.PHONY: logvupdate
-logvupdate:
-	cd .. && svn log -r HEAD:BASE -v && svn up
-
 .PHONY: testcase
 testcase:
 	cd qcsrc/testcase && $(FTEQCC) $(FTEQCCFLAGS) $(FTEQCCFLAGS_CSPROGS) -DTESTCASE="$$TESTCASE"
+
+.PHONY: update commit diff log logv logupdate logvupdate revert
+update: $(SCM)-update
+commit: $(SCM)-commit
+diff: $(SCM)-diff
+log: $(SCM)-log
+logv: $(SCM)-logv
+revert: $(SCM)-revert
+logupdate: log update
+logvupdate: logv update
+
+.PHONY: svn-update
+svn-update:
+	cd .. && svn update
+
+.PHONY: svn-commit
+svn-commit:
+	cd .. && svn commit
+
+.PHONY: svn-diff
+svn-diff:
+	cd .. && svn diff
+
+.PHONY: svn-log
+svn-log:
+	cd .. && svn log -r HEAD:BASE
+
+.PHONY: svn-logv
+svn-logv:
+	cd .. && svn log -r HEAD:BASE -v
+
+.PHONY: svn-revert
+svn-revert:
+	svn revert -- $(FILE)
+
+.PHONY: git-update
+git-update:
+	git pull origin
+
+.PHONY: git-commit
+git-commit:
+	git commit -a
+	if echo -n 'Also send to server? Hit Enter for yes, ^C for no. '; read -r L; then \
+		git svn dcommit; \
+	fi
+
+.PHONY: git-diff
+git-diff:
+	git diff; git diff origin/master..HEAD; true
+
+.PHONY: git-log
+git-log:
+	git fetch && git log HEAD..origin/master
+
+.PHONY: git-logv
+git-logv:
+	git fetch && git log -v HEAD..origin/master
+
+.PHONY: git-revert
+git-revert:
+	git checkout -- $(FILE)
