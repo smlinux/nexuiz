@@ -1,4 +1,5 @@
 string GotoMap(string m);
+void race_DeleteTime(float pos);
 
 float FullTraceFraction(vector a, vector mi, vector ma, vector b)
 {
@@ -930,6 +931,13 @@ void GameCommand(string command)
 		print(records_reply);
 		return;
 	}
+	if (argv(0) == "rankings")
+	{
+		strunzone(rankings_reply);
+		rankings_reply = strzone(getrankings());
+		print(rankings_reply);
+		return;
+	}
 
 	if(argv(0) == "cointoss")
 	{
@@ -1324,6 +1332,11 @@ void GameCommand(string command)
 		FOR_EACH_CLIENTSLOT(client)
 			GameCommand(strcat("defer_clear ", ftos(num_for_edict(client))));	
 
+		return;
+	}
+	if(argv(0) == "delrec")
+	{
+		race_DeleteTime(stof(argv(1)));
 		return;
 	}
 

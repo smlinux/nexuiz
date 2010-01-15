@@ -199,6 +199,7 @@ float GameCommand_Generic(string command)
 		print("  maplist lsmaps\n");
 		print("  addtolist variable addedvalue\n");
 		print("  records\n");
+		print("  rankings (map argument optional)\n");
 		return TRUE;
 	}
 	
@@ -809,6 +810,10 @@ float GameCommand_Generic(string command)
 	}
 	else if(argv(0) == "records") {
 		print(records_reply);
+		return TRUE;
+	}
+	else if(argv(0) == "rankings") {
+		print(rankings_reply);
 		return TRUE;
 #ifdef MENUQC
 	} else if(argv(0) == "cp") {

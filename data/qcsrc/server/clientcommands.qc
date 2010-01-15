@@ -340,6 +340,8 @@ void SV_ParseClientCommand(string s) {
 		sprint(self, lsmaps_reply);
 	} else if(cmd == "records") {
 		sprint(self, records_reply);
+	} else if(cmd == "rankings") {
+		sprint(self, rankings_reply);
 	} else if(cmd == "voice") {
 		if(tokens >= 3)
 			VoiceMessage(argv(1), substring(s, argv_start_index(2), argv_end_index(-1) - argv_start_index(2)));

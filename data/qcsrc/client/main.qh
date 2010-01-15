@@ -98,6 +98,9 @@ float teamscores_flags[MAX_SCORE];
 vector sbar_fontsize;
 vector sbar_fontsize_spec;
 
+float RANKINGS_RECEIVED_CNT;
+string grecordholder[RANKINGS_CNT];
+float grecordtime[RANKINGS_CNT];
 //float csqc_flags;
 
 entity playerslots[255]; // 255 is engine limit on maxclients

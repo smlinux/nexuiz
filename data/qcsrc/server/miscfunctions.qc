@@ -5,6 +5,10 @@ void droptofloor();
 
 void() spawnfunc_info_player_deathmatch; // needed for the other spawnpoints
 void() spawnpoint_use;
+float race_GetTime(float pos);
+string race_GetName(float pos);
+string race_PlaceName(float pos);
+string GetMapname();
 string ColoredTeamName(float t);
 
 string admin_name(void)
@@ -2228,6 +2232,37 @@ string getrecords()
         return "No records are available on this server.\n";
     else
         return strcat("Records on this server:\n", s);
+}
+
+string getrankings()
+{
+    string n;
+    float t;
+    float i;
+    string s;
+    string p;
+    string map;
+
+    s = "";
+
+    map = GetMapname();
+
+    for (i = 1; i <= RANKINGS_CNT; ++i)
+    {
+        t = race_GetTime(i);
+	if (t == 0)
+	    continue;
+	n = race_GetName(i);
+	p = race_PlaceName(i);
+        s = strcat(s, strpad(8, p), " ", strpad(-8, TIME_ENCODED_TOSTRING(t)), " ", n, "\n");
+    }
+
+    MapInfo_ClearTemps();
+
+    if (s == "")
+        return strcat("No records are available for the map: ", map, "\n");
+    else
+        return strcat("Records for ", map, ":\n", s);
 }
 
 float MoveToRandomMapLocation(entity e, float goodcontents, float badcontents, float badsurfaceflags, float attempts, float maxaboveground, float minviewdistance)

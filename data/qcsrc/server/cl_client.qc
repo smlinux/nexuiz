@@ -1,4 +1,5 @@
-void race_send_recordtime(float t, float msg);
+void race_send_recordtime(float msg);
+void race_SendRankings(float pos, float prevpos, float del, float msg);
 
 void send_CSQC_teamnagger() {
 	WriteByte(0, SVC_TEMPENTITY);
@@ -1492,12 +1493,17 @@ void ClientConnect (void)
 			rr = RACE_RECORD;
 		t = stof(db_get(ServerProgsDB, strcat(GetMapname(), rr, "time")));
 
-		race_send_recordtime(t, MSG_ONE);
+		race_send_recordtime(MSG_ONE);
 		race_send_speedaward(MSG_ONE);
 
 		speedaward_alltimebest = stof(db_get(ServerProgsDB, strcat(GetMapname(), rr, "speed/speed")));
 		speedaward_alltimebest_holder = db_get(ServerProgsDB, strcat(GetMapname(), rr, "speed/netname"));
 		race_send_speedaward_alltimebest(MSG_ONE);
+
+		float i;
+		for (i = 1; i <= RANKINGS_CNT; ++i) {
+			race_SendRankings(i, 0, 0, MSG_ONE);
+		}
 	}
 	else if(cvar("sv_teamnagger") && !g_ca) // teamnagger is currently bad for ca
 		send_CSQC_teamnagger();

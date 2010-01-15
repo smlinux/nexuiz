@@ -674,6 +674,7 @@ void spawnfunc_worldspawn (void)
 	MapInfo_ClearTemps();
 
 	records_reply = strzone(getrecords());
+	rankings_reply = strzone(getrankings());
 
 	ClientInit_Spawn();
 	RandomSeed_Spawn();

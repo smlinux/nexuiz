@@ -1239,6 +1239,68 @@ vector Sbar_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 	return pos;
 }
 
+string race_PlaceName(float pos) {
+	if(pos == 1)
+		return "1st";
+	else if(pos == 2)
+		return "2nd";
+	else if(pos == 3)
+		return "3rd";
+	else
+		return strcat(ftos(pos), "th");
+}
+
+vector Sbar_DrawScoreboardRankings(vector pos, entity pl,  vector rgb, vector bg_size)
+{
+	float i;
+	RANKINGS_RECEIVED_CNT = 0;
+		for (i=RANKINGS_CNT-1; i>=0; --i)
+			if (grecordtime[i])
+				RANKINGS_RECEIVED_CNT = RANKINGS_RECEIVED_CNT + 1;
+
+	if (RANKINGS_RECEIVED_CNT == 0)
+		return pos;
+
+	float is_spec;
+	is_spec = (GetPlayerColor(pl.sv_entnum) == COLOR_SPECTATOR);
+	vector hl_rgb;
+		hl_rgb_x = cvar("sbar_color_bg_r") + 0.5;
+		hl_rgb_y = cvar("sbar_color_bg_g") + 0.5;
+		hl_rgb_z = cvar("sbar_color_bg_b") + 0.5;
+
+	pos_y += sbar_fontsize_y;
+	drawstring(pos, strcat("Rankings"), sbar_fontsize, '1 1 1', sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
+	pos_y += sbar_fontsize_y;
+	vector tmp;
+	tmp_x = sbwidth;
+	tmp_y = sbar_fontsize_y * RANKINGS_RECEIVED_CNT;
+
+	drawpic_tiled(pos, "gfx/hud/sb_scoreboard_bg", bg_size, tmp, rgb * sbar_color_bg_team, sbar_scoreboard_alpha_bg, DRAWFLAG_NORMAL);
+	drawborderlines(sbar_border_thickness, pos, tmp, '0 0 0', sbar_scoreboard_alpha_bg * 0.75, DRAWFLAG_NORMAL);
+
+	// row highlighting
+	for(i = 0; i<RANKINGS_RECEIVED_CNT; ++i)
+	{
+		string n, p;
+		float t;
+		t = grecordtime[i];
+		if (t == 0)
+			continue;
+		n = grecordholder[i];
+		p = race_PlaceName(i+1);
+		if(grecordholder[i] == GetPlayerName(player_localentnum - 1))
+			drawfill(pos, '1 0 0' * sbwidth + '0 1 0' * sbar_fontsize_y, hl_rgb, sbar_scoreboard_highlight_alpha_self, DRAWFLAG_NORMAL);	
+		else if(!mod(i, 2) && sbar_scoreboard_highlight)
+			drawfill(pos, '1 0 0' * sbwidth + '0 1 0' * sbar_fontsize_y, hl_rgb, sbar_scoreboard_highlight_alpha, DRAWFLAG_NORMAL);	
+		drawstring(pos, p, sbar_fontsize, '1 1 1', sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
+		drawstring(pos + '3 0 0' * sbar_fontsize_x, TIME_ENCODED_TOSTRING(t), sbar_fontsize, '1 1 1', sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
+		drawcolorcodedstring(pos + '8 0 0' * sbar_fontsize_x, n, sbar_fontsize, sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
+		pos += '0 1 0' * sbar_fontsize_y;
+	}
+
+	return pos;
+}
+
 float scoreboard_bottom;
 float sbar_scoreboard_fade_alpha;
 float sbar_woulddrawscoreboard_prev;
@@ -1346,6 +1408,7 @@ void Sbar_DrawScoreboard()
 			drawcolorcodedstring(pos, strcat("All-time fastest: ", ftos(race_speedaward_alltimebest), " (", race_speedaward_alltimebest_holder, ")"), sbar_fontsize, sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
 			pos_y += 1.25 * sbar_fontsize_y;
 		}
+		pos = Sbar_DrawScoreboardRankings(pos, pl, rgb, bg_size);
 	}
 	else if(cvar("sbar_accuracy") && spectatee_status != -1) {
 		if(teamplay)
