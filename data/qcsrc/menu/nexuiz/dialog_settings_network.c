@@ -36,7 +36,7 @@ void fillNexuizNetworkSettingsTab(entity me)
 			e.addValue(e, "ISDN", "7000");
 			e.addValue(e, "Slow ADSL", "15000");
 			e.addValue(e, "Fast ADSL", "20000");
-			e.addValue(e, "Broadband", "25000");
+			e.addValue(e, "Broadband", "66666");
 			e.configureNexuizTextSliderValues(e);
     me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Input packets/s:"));
