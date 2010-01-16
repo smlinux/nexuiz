@@ -101,6 +101,9 @@ void race_InitSpectator()
 string rr;
 float grecordtime[RANKINGS_CNT];
 string grecordholder[RANKINGS_CNT];
+#ifdef UID
+string grecorduid[RANKINGS_CNT];
+#endif
 float worst_time; // last ranked time
 float have_recs; // have we already read the records from the database before?
 float race_GetTime(float pos) {
@@ -114,9 +117,15 @@ float race_GetTime(float pos) {
 		for(i=0;i<RANKINGS_CNT;++i) {
 			grecordtime[i] = stof(db_get(ServerProgsDB, strcat(GetMapname(), rr, "time", ftos(i))));
 			grecordholder[i] = strzone(db_get(ServerProgsDB, strcat(GetMapname(), rr, "netname", ftos(i))));
+#ifdef UID
+			grecorduid[i] = strzone(db_get(ServerProgsDB, strcat(GetMapname(), rr, "uid", ftos(i))));
+#endif
 		}
 		grecordtime[0] = stof(db_get(ServerProgsDB, strcat(GetMapname(), rr, "time")));
 		grecordholder[0] = strzone(db_get(ServerProgsDB, strcat(GetMapname(), rr, "netname")));
+#ifdef UID
+		grecorduid[0] = strzone(db_get(ServerProgsDB, strcat(GetMapname(), rr, "uid")));
+#endif
 		worst_time = stof(db_get(ServerProgsDB, strcat(GetMapname(), rr, strcat("time", ftos(RANKINGS_CNT-1)))));
 		have_recs = 1;
 	}
@@ -127,6 +136,19 @@ float race_GetTime(float pos) {
 string race_GetName(float pos) { // these other functions assume that race_GetTime has been called >= once before
 	return grecordholder[pos-1];
 }
+
+#ifdef UID
+float race_CheckUID(string uid, string netname) { // return existing UID or player name ranking pos, else 0
+	float i;
+	for (i=RANKINGS_CNT-1;i>=0;--i)
+		if(grecorduid[i] == uid)
+			return i+1;
+	for (i=RANKINGS_CNT-1;i>=0;--i)
+		if(grecordholder[i] == netname)
+			return i+1;
+	return 0;
+}
+#endif
 
 float race_CheckName(string netname) { // Does the name already exist in rankings? In that case, where? (otherwise 0)
 	float i;
@@ -192,6 +214,9 @@ void race_SetTime(entity e, float t) {
 	pos = race_GetPos(t);
 
 	float prevpos = race_CheckName(e.netname);
+#ifdef UID
+	float prevpos = race_CheckUID(e.uid, e.netname);
+#endif
 	if (prevpos && (prevpos < pos || !pos))
 	{
 		oldrec = race_GetTime(prevpos);
@@ -215,23 +240,41 @@ void race_SetTime(entity e, float t) {
 		for (i=prevpos-1;i>pos-1;--i) {
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "time", ftos(i)), ftos(grecordtime[i-1]));
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname", ftos(i)), grecordholder[i-1]);
+#ifdef UID
+			db_put(ServerProgsDB, strcat(GetMapname(), rr, "uid", ftos(i)), grecorduid[i-1]);
+#endif
 			if(i == prevpos-1) {
 				oldrec = grecordtime[i];
 				oldname = grecordholder[i];
 			}
 			grecordtime[i] = grecordtime[i-1];
+
 			if (grecordholder[i])
 				strunzone(grecordholder[i]);
 			grecordholder[i] = strzone(grecordholder[i-1]);
+#ifdef UID
+			if (grecorduid[i])
+				strunzone(grecorduid[i]);
+			grecorduid[i] = strzone(grecorduid[i-1]);
+#endif
 		}
 	} else { // player has no ranked record yet
 		for (i=RANKINGS_CNT-1;i>pos-1;--i) {
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "time", ftos(i)), ftos(grecordtime[i-1]));
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname", ftos(i)), grecordholder[i-1]);
+#ifdef UID
+			db_put(ServerProgsDB, strcat(GetMapname(), rr, "uid", ftos(i)), grecorduid[i-1]);
+#endif
 			grecordtime[i] = grecordtime[i-1];
+
 			if (grecordholder[i])
 				strunzone(grecordholder[i]);
 			grecordholder[i] = strzone(grecordholder[i-1]);
+#ifdef UID
+			if (grecorduid[i])
+				strunzone(grecorduid[i]);
+			grecorduid[i] = strzone(grecorduid[i-1]);
+#endif
 		}
 	}
 	
@@ -239,19 +282,39 @@ void race_SetTime(entity e, float t) {
 	if (pos == 1) {
 		db_put(ServerProgsDB, strcat(GetMapname(), rr, "time"), ftos(t));
 		db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname"), e.netname);
+#ifdef UID
+		db_put(ServerProgsDB, strcat(GetMapname(), rr, "uid"), e.uid);
+#endif
+
 		grecordtime[0] = t;
+
 		if (grecordholder[0])
 			strunzone(grecordholder[0]);
 		grecordholder[0] = strzone(e.netname);
+#ifdef UID
+		if (grecorduid[0])
+			strunzone(grecorduid[0]);
+		grecorduid[0] = strzone(e.uid);
+#endif
 		write_recordmarker(e, time - TIME_DECODE(t), TIME_DECODE(t));
 		race_send_recordtime(MSG_ALL);
 	} else {
 		db_put(ServerProgsDB, strcat(GetMapname(), rr, "time", ftos(pos-1)), ftos(t));
 		db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname", ftos(pos-1)), e.netname);
+#ifdef UID
+		db_put(ServerProgsDB, strcat(GetMapname(), rr, "uid", ftos(pos-1)), e.uid);
+#endif
+
 		grecordtime[pos-1] = t;
+
 		if (grecordholder[pos-1])
 			strunzone(grecordholder[pos-1]);
 		grecordholder[pos-1] = strzone(e.netname);
+#ifdef UID
+		if (grecorduid[pos-1])
+			strunzone(grecorduid[pos-1]);
+		grecorduid[pos-1] = strzone(e.uid);
+#endif
 	}
 
 	if (pos == RANKINGS_CNT)

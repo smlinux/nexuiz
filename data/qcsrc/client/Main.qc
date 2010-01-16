@@ -135,6 +135,23 @@ void CSQC_Init(void)
 	Announcer_Precache();
 	Tuba_Precache();
 
+#ifdef UID
+	{
+		// find the user ID
+		string uid;
+		registercvar("_cl_userid", "", CVAR_SAVE);
+		uid = cvar_string("_cl_userid");
+		if(strlen(uid) < 16)
+		{
+			uid = "";
+			for(i = 0; i < 4; ++i)
+				uid = strcat(uid, substring(ftos(floor(10000 + random() * 10000)), 1, -1));
+		}
+		cvar_set("_cl_userid", uid);
+		localcmd(strcat("\ncmd uid ", uid, "\n"));
+	}
+#endif
+
 	get_mi_min_max_texcoords(1); // try the CLEVER way first
 	minimapname = strcat("gfx/", mi_shortname, "_radar.tga");
 	shortmapname = mi_shortname;

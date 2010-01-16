@@ -1312,6 +1312,10 @@ Called when a client connects to the server
 string ColoredTeamName(float t);
 void DecodeLevelParms (void);
 //void dom_player_join_team(entity pl);
+#ifdef UID
+.float uid_kicktime;
+.string uid;
+#endif
 void ClientConnect (void)
 {
 	float t;
@@ -1484,6 +1488,12 @@ void ClientConnect (void)
 	}
 	else
 		self.hitplotfh = -1;
+
+#ifdef UID
+	if(clienttype(self) == CLIENTTYPE_REAL)
+	if not(self.uid)
+		self.uid_kicktime = time + 60;
+#endif
 
 	if(g_race || g_cts) {
 		string rr;
@@ -2937,6 +2947,15 @@ void PlayerPostThink (void)
 		self.stat_count -= 1;
 	}
 
+#ifdef UID
+	if(self.uid_kicktime)
+	if(time > self.uid_kicktime)
+	{
+		bprint("^3", self.netname, "^3 was kicked for missing UID.\n");
+		dropclient(self);
+		return;
+	}
+#endif
 	if(sv_maxidle && frametime)
 	{
 		// WORKAROUND: only use dropclient in server frames (frametime set). Never use it in cl_movement frames (frametime zero).

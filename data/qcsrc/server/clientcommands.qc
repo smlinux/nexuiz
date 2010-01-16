@@ -221,6 +221,15 @@ void SV_ParseClientCommand(string s) {
 			tokens = tokenize_console(s);
 		}
 		GetCvars(1);
+#ifdef UID
+	} else if (cmd == "uid") {
+		if not(self.uid)
+		{
+			self.uid = strzone(argv(1));
+			self.uid_kicktime = 0;
+			print("Client ", etos(self), " has UID ", self.uid, "\n");
+		}
+#endif
 	} else if(cmd == "sentcvar") { // new system
 		if(tokens == 2) // undefined cvar: use the default value on the server then
 		{
