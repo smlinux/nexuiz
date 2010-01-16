@@ -1,5 +1,7 @@
 #define MAX_CHECKPOINTS 255
 
+void spawnfunc_target_checkpoint();
+
 .float race_penalty;
 .float race_penalty_accumulator;
 .string race_penalty_reason;
@@ -787,12 +789,6 @@ void trigger_race_checkpoint_verify()
 				race_highest_checkpoint = 255;
 				race_timed_checkpoint = 255;
 			}
-			entity targ;
-			for(targ = world; (targ = find(targ, target, self.targetname)); )
-				if (targ.classname == "trigger_multiple") {
-					targ.wait = -2; // still needs investigating, why cant two players pass a (defrag) checkpoint at the same time?
-					targ.delay = 0;
-				}
 		}
 		else {
 			for(cp = world; (cp = find(cp, classname, "trigger_race_checkpoint")); )
@@ -806,6 +802,19 @@ void trigger_race_checkpoint_verify()
 		}
 	}
 
+	if(defrag_ents) {
+		entity trigger, targ;
+		for(trigger = world; (trigger = find(trigger, classname, "trigger_multiple")); )
+			for(targ = world; (targ = find(targ, targetname, trigger.target)); )
+				if (targ.classname == "target_checkpoint" || targ.classname == "target_startTimer" || targ.classname == "target_stopTimer") {
+					targ.wait = -2;
+					targ.delay = 0;
+
+					setsize(targ, trigger.mins, trigger.maxs);
+					setorigin(targ, trigger.origin);
+					remove(trigger);
+				}
+	}
 	remove(self);
 	self = oldself;
 }
@@ -874,8 +883,8 @@ void spawnfunc_target_checkpoint() // defrag entity
 	EXACTTRIGGER_INIT;
 
 	self.use = checkpoint_use;
-	//if not(self.spawnflags & 1)
-	//	self.touch = checkpoint_touch;
+	if not(self.spawnflags & 1)
+		self.touch = checkpoint_touch;
 
 	o = (self.absmin + self.absmax) * 0.5;
 	tracebox(o, PL_MIN, PL_MAX, o - '0 0 1' * (o_z - self.absmin_z), MOVE_NORMAL, self);
