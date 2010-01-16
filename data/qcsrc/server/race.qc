@@ -193,13 +193,16 @@ void race_SendRankings(float pos, float prevpos, float del, float msg)
 	WriteInt24_t(msg, race_GetTime(pos));
 }
 
-void race_SendStatus(float id)
+void race_SendStatus(float id, entity e)
 {
 	float msg = MSG_ONE;
-	WriteByte(msg, SVC_TEMPENTITY);
-	WriteByte(msg, TE_CSQC_RACE);
-	WriteByte(msg, RACE_NET_SERVER_STATUS);
-	WriteShort(msg, id);
+	msg_entity = e;
+	WRITESPECTATABLE_MSG_ONE_VARNAME(dummy3, {
+		WriteByte(msg, SVC_TEMPENTITY);
+		WriteByte(msg, TE_CSQC_RACE);
+		WriteByte(msg, RACE_NET_SERVER_STATUS);
+		WriteShort(msg, id);
+	});
 }
 
 string race_PlaceName(float pos) {
@@ -335,24 +338,24 @@ void race_SetTime(entity e, float t) {
 		if(pos == prevpos) {
 			recorddifference = strcat(" ^2[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
 			bprint(e.netname, "^1 improved their 1st place record with ", TIME_ENCODED_TOSTRING(t), recorddifference, "\n");
-			race_SendStatus(2); // "new record"
+			race_SendStatus(2, e); // "new record"
 		} else {
 			recorddifference = strcat(" ^2[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
 			bprint(e.netname, "^1 broke ", grecordholder[pos], "^1's 1st place record with ", strcat(TIME_ENCODED_TOSTRING(t), recorddifference, "\n"));
-			race_SendStatus(2); // "new record"
+			race_SendStatus(2, e); // "new record"
 		}
 	} else {
 		if(pos == prevpos) {
 			recorddifference = strcat(" ^2[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
 			bprint(e.netname, "^3 improved their ", race_PlaceName(pos), " ^3place record with ", TIME_ENCODED_TOSTRING(t), recorddifference, "\n");
-			race_SendStatus(0); // "new time"
+			race_SendStatus(0, e); // "new time"
 		} else if (oldrec == 0) {
 			bprint(e.netname, "^2 set the ", race_PlaceName(pos), " ^2place record with ", TIME_ENCODED_TOSTRING(t), "\n");
-			race_SendStatus(1); // "new rank"
+			race_SendStatus(1, e); // "new rank"
 		} else {
 			recorddifference = strcat(" ^2[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
 			bprint(e.netname, "^2 broke ", grecordholder[pos], "^2's ", race_PlaceName(pos), " ^2place record with ", strcat(TIME_ENCODED_TOSTRING(t), recorddifference, "\n"));
-			race_SendStatus(1); // "new rank"
+			race_SendStatus(1, e); // "new rank"
 		}
 	}
 }

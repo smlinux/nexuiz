@@ -1588,11 +1588,11 @@ void Sbar_DrawRaceStatus(vector pos)
 	a = bound(0, race_status_time - time, 1);
 
 	if(race_status == 0)
-		drawpic(pos, "gfx/hud/race/newtime", '50 50 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+		drawpic(pos, "gfx/hud/race/newtime", '80 80 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
 	else if(race_status == 1)
-		drawpic(pos, "gfx/hud/race/newrank", '50 50 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+		drawpic(pos, "gfx/hud/race/newrank", '80 80 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
 	else if(race_status == 2)
-		drawpic(pos, "gfx/hud/race/newrecord", '50 50 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+		drawpic(pos, "gfx/hud/race/newrecord", '80 80 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
 
 	if (race_status_time - time <= 0) {
 		race_status_prev = -1;
