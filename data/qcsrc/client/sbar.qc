@@ -1575,6 +1575,31 @@ string MakeRaceString(float cp, float mytime, float histime, float lapdelta, str
 		return strcat(col, cpname, " (", timestr, " ", strcat(hisname, col, lapstr), ")");
 }
 
+float race_status_time;
+float race_status_prev;
+void Sbar_DrawRaceStatus(vector pos)
+{
+	if (race_status != race_status_prev) {
+		race_status_time = time + 3;
+		race_status_prev = race_status;
+	}
+
+	float a;
+	a = bound(0, race_status_time - time, 1);
+
+	if(race_status == 0)
+		drawpic(pos, "gfx/hud/race/newtime", '50 50 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+	else if(race_status == 1)
+		drawpic(pos, "gfx/hud/race/newrank", '50 50 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+	else if(race_status == 2)
+		drawpic(pos, "gfx/hud/race/newrecord", '50 50 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+
+	if (race_status_time - time <= 0) {
+		race_status_prev = -1;
+		race_status = -1;
+	}
+}
+
 void Sbar_Score()
 {
 	float score, distribution, leader;
@@ -1704,6 +1729,7 @@ void Sbar_Score()
 
 		m = '0.5 0 0' * vid_conwidth + '0 1 0' * cvar_or("cl_racetimer_position", 0.25) * vid_conheight;
 
+		Sbar_DrawRaceStatus(m + '100 0 0');
 		if(race_checkpointtime)
 		{
 			a = bound(0, 2 - (time - race_checkpointtime), 1);

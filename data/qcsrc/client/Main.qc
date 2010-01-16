@@ -1119,6 +1119,9 @@ void Net_ReadRace()
 				strunzone(grecordholder[pos-1]);
 			grecordholder[pos-1] = strzone(ReadString());
 			grecordtime[pos-1] = ReadInt24_t();
+			break;
+		case RACE_NET_SERVER_STATUS:
+			race_status = ReadShort();
 	}
 }
 

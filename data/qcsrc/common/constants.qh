@@ -66,6 +66,7 @@ const float RACE_NET_SERVER_RECORD = 8; // server record, sent to client
 const float RACE_NET_SPEED_AWARD = 9; // speed award, sent to client
 const float RACE_NET_SPEED_AWARD_BEST = 10; // all time best speed award, sent to client
 const float RACE_NET_SERVER_RANKINGS = 11;
+const float RACE_NET_SERVER_STATUS = 12;
 const float RANKINGS_CNT = 15;
 
 const float ENT_CLIENT = 0;

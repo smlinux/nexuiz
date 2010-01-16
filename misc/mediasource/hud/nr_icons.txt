@@ -1,0 +1,9 @@
+The svg files have been created and edited with Inkscape 0.46
+The background images are based on the following files provided with Nexuiz:
+
+textures/ons_boom1.tga
+gfx/hud/sb_scoreboard_bg.tga
+
+License: GNU GPL version 2 or any later version
+
+sev

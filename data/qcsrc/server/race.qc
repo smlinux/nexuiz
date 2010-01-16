@@ -138,22 +138,22 @@ string race_GetName(float pos) { // these other functions assume that race_GetTi
 }
 
 #ifdef UID
-float race_CheckUID(string uid, string netname) { // return existing UID or player name ranking pos, else 0
+float race_CheckUID(string myuid, string net_name) { // return existing UID or player name ranking pos, else 0
 	float i;
 	for (i=RANKINGS_CNT-1;i>=0;--i)
-		if(grecorduid[i] == uid)
+		if(grecorduid[i] == myuid)
 			return i+1;
 	for (i=RANKINGS_CNT-1;i>=0;--i)
-		if(grecordholder[i] == netname)
+		if(grecordholder[i] == net_name)
 			return i+1;
 	return 0;
 }
 #endif
 
-float race_CheckName(string netname) { // Does the name already exist in rankings? In that case, where? (otherwise 0)
+float race_CheckName(string net_name) { // Does the name already exist in rankings? In that case, where? (otherwise 0)
 	float i;
 	for (i=RANKINGS_CNT-1;i>=0;--i)
-		if(grecordholder[i] == netname)
+		if(grecordholder[i] == net_name)
 			return i+1;
 	return 0;
 }
@@ -193,6 +193,15 @@ void race_SendRankings(float pos, float prevpos, float del, float msg)
 	WriteInt24_t(msg, race_GetTime(pos));
 }
 
+void race_SendStatus(float id)
+{
+	float msg = MSG_ONE;
+	WriteByte(msg, SVC_TEMPENTITY);
+	WriteByte(msg, TE_CSQC_RACE);
+	WriteByte(msg, RACE_NET_SERVER_STATUS);
+	WriteShort(msg, id);
+}
+
 string race_PlaceName(float pos) {
 	if(pos == 1)
 		return "1st";
@@ -209,44 +218,41 @@ void race_SetTime(entity e, float t) {
 		return;
 
 	float oldrec;
-	string oldname;
+	string recorddifference;
 	float pos;
 	pos = race_GetPos(t);
+	float prevpos;
 
-	float prevpos = race_CheckName(e.netname);
+	prevpos = race_CheckName(e.netname);
 #ifdef UID
-	float prevpos = race_CheckUID(e.uid, e.netname);
+	prevpos = race_CheckUID(e.uid, e.netname);
 #endif
 	if (prevpos && (prevpos < pos || !pos))
 	{
 		oldrec = race_GetTime(prevpos);
-		string recorddifference = strcat(" ^1[+", TIME_ENCODED_TOSTRING(t - oldrec), "]");
-		bprint(e.netname, "^1 couldn't break their ", race_PlaceName(prevpos), " place record of ", TIME_ENCODED_TOSTRING(oldrec), recorddifference, "\n");
+		recorddifference = strcat(" ^1[+", TIME_ENCODED_TOSTRING(t - oldrec), "]");
+		bprint(e.netname, "^7 couldn't break their ", race_PlaceName(prevpos), " place record of ", TIME_ENCODED_TOSTRING(oldrec), recorddifference, "\n");
 
 		return;
 	} else if (!pos) { // no ranking, time worse than the worst ranked
-		string recorddifference = strcat(" ^1[+", TIME_ENCODED_TOSTRING(t - grecordtime[RANKINGS_CNT-1]), "]");
-		bprint(e.netname, "^1 couldn't break the ", race_PlaceName(RANKINGS_CNT), " place record of ", TIME_ENCODED_TOSTRING(grecordtime[RANKINGS_CNT-1]), recorddifference, "\n");
+		recorddifference = strcat(" ^1[+", TIME_ENCODED_TOSTRING(t - grecordtime[RANKINGS_CNT-1]), "]");
+		bprint(e.netname, "^7 couldn't break the ", race_PlaceName(RANKINGS_CNT), " place record of ", TIME_ENCODED_TOSTRING(grecordtime[RANKINGS_CNT-1]), recorddifference, "\n");
 		return;
 	}
-
 
 	// move other rankings out of the way
 	float i;
 	if (prevpos) { // player improved his existing record
-		if(prevpos == pos) {
+		if(prevpos == pos)
 			oldrec = grecordtime[pos-1];
-		}
+		else
+			oldrec = grecordtime[pos-1];
 		for (i=prevpos-1;i>pos-1;--i) {
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "time", ftos(i)), ftos(grecordtime[i-1]));
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname", ftos(i)), grecordholder[i-1]);
 #ifdef UID
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "uid", ftos(i)), grecorduid[i-1]);
 #endif
-			if(i == prevpos-1) {
-				oldrec = grecordtime[i];
-				oldname = grecordholder[i];
-			}
 			grecordtime[i] = grecordtime[i-1];
 
 			if (grecordholder[i])
@@ -259,6 +265,7 @@ void race_SetTime(entity e, float t) {
 #endif
 		}
 	} else { // player has no ranked record yet
+		oldrec = grecordtime[pos-1];
 		for (i=RANKINGS_CNT-1;i>pos-1;--i) {
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "time", ftos(i)), ftos(grecordtime[i-1]));
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname", ftos(i)), grecordholder[i-1]);
@@ -324,15 +331,29 @@ void race_SetTime(entity e, float t) {
 	if(rankings_reply)
 		strunzone(rankings_reply);
 	rankings_reply = strzone(getrankings());
-	if(pos == prevpos) {
-		string recorddifference = strcat(" ^3[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
-		bprint(e.netname, "^3 improved their ", race_PlaceName(pos), " ^3place record with ", TIME_ENCODED_TOSTRING(t), recorddifference, "\n");
-	}
-	else if(oldname == "")
-		bprint(e.netname, "^2 set the ", race_PlaceName(pos), " ^2place record with ", TIME_ENCODED_TOSTRING(t), "\n");
-	else {
-		string recorddifference = strcat(" ^2[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
-		bprint(e.netname, "^2 broke ", oldname, "^2's ", race_PlaceName(pos), " ^2place record ", strcat(TIME_ENCODED_TOSTRING(oldrec), " ^2with ", TIME_ENCODED_TOSTRING(t), recorddifference, "\n"));
+	if(pos == 1) {
+		if(pos == prevpos) {
+			recorddifference = strcat(" ^2[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
+			bprint(e.netname, "^1 improved their 1st place record with ", TIME_ENCODED_TOSTRING(t), recorddifference, "\n");
+			race_SendStatus(2); // "new record"
+		} else {
+			recorddifference = strcat(" ^2[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
+			bprint(e.netname, "^1 broke ", grecordholder[pos], "^1's 1st place record with ", strcat(TIME_ENCODED_TOSTRING(t), recorddifference, "\n"));
+			race_SendStatus(2); // "new record"
+		}
+	} else {
+		if(pos == prevpos) {
+			recorddifference = strcat(" ^2[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
+			bprint(e.netname, "^3 improved their ", race_PlaceName(pos), " ^3place record with ", TIME_ENCODED_TOSTRING(t), recorddifference, "\n");
+			race_SendStatus(0); // "new time"
+		} else if (oldrec == 0) {
+			bprint(e.netname, "^2 set the ", race_PlaceName(pos), " ^2place record with ", TIME_ENCODED_TOSTRING(t), "\n");
+			race_SendStatus(1); // "new rank"
+		} else {
+			recorddifference = strcat(" ^2[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
+			bprint(e.netname, "^2 broke ", grecordholder[pos], "^2's ", race_PlaceName(pos), " ^2place record with ", strcat(TIME_ENCODED_TOSTRING(t), recorddifference, "\n"));
+			race_SendStatus(1); // "new rank"
+		}
 	}
 }
 
@@ -343,26 +364,53 @@ void race_DeleteTime(float pos) {
 		if (i == 0) {
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "time"), ftos(grecordtime[1]));
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname"), grecordholder[1]);
+#ifdef UID
+			db_put(ServerProgsDB, strcat(GetMapname(), rr, "uid"), grecorduid[1]);
+#endif
 			grecordtime[0] = grecordtime[1];
 			if (grecordholder[i])
 				strunzone(grecordholder[0]);
 			grecordholder[0] = strzone(grecordholder[1]);
+
+#ifdef UID
+			if (grecorduid[i])
+				strunzone(grecorduid[0]);
+			grecorduid[0] = strzone(grecorduid[1]);
+#endif
 		}
 		else if (i == RANKINGS_CNT-1) {
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "time", ftos(i)), string_null);
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname", ftos(i)), string_null);
+#ifdef UID
+			db_put(ServerProgsDB, strcat(GetMapname(), rr, "uid", ftos(i)), string_null);
+#endif
 			grecordtime[i] = 0;
 			if (grecordholder[i])
 				strunzone(grecordholder[i]);
 			grecordholder[i] = string_null;
+
+#ifdef UID
+			if (grecorduid[i])
+				strunzone(grecorduid[i]);
+			grecorduid[i] = string_null;
+#endif
 		}
 		else {
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "time", ftos(i)), ftos(grecordtime[i+1]));
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname", ftos(i)), grecordholder[i+1]);
+#ifdef UID
+			db_put(ServerProgsDB, strcat(GetMapname(), rr, "uid", ftos(i)), grecorduid[i+1]);
+#endif
 			grecordtime[i] = grecordtime[i+1];
 			if (grecordholder[i])
 				strunzone(grecordholder[i]);
 			grecordholder[i] = strzone(grecordholder[i+1]);
+
+#ifdef UID
+			if (grecorduid[i])
+				strunzone(grecorduid[i]);
+			grecorduid[i] = strzone(grecorduid[i+1]);
+#endif
 		}
 	}
 
