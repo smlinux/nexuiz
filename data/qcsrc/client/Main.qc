@@ -1122,6 +1122,9 @@ void Net_ReadRace()
 			break;
 		case RACE_NET_SERVER_STATUS:
 			race_status = ReadShort();
+			if(race_status_name)
+				strunzone(race_status_name);
+			race_status_name = strzone(ReadString());
 	}
 }
 

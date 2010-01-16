@@ -195,13 +195,18 @@ void race_SendRankings(float pos, float prevpos, float del, float msg)
 
 void race_SendStatus(float id, entity e)
 {
-	float msg = MSG_ONE;
+	float msg;
+	if (id == 0)
+		msg = MSG_ONE;
+	else
+		msg = MSG_ALL;
 	msg_entity = e;
 	WRITESPECTATABLE_MSG_ONE_VARNAME(dummy3, {
 		WriteByte(msg, SVC_TEMPENTITY);
 		WriteByte(msg, TE_CSQC_RACE);
 		WriteByte(msg, RACE_NET_SERVER_STATUS);
 		WriteShort(msg, id);
+		WriteString(msg, e.netname);
 	});
 }
 

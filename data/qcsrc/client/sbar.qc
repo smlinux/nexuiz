@@ -1587,12 +1587,19 @@ void Sbar_DrawRaceStatus(vector pos)
 	float a;
 	a = bound(0, race_status_time - time, 1);
 
+	string s;
+	s = textShortenToWidth(race_status_name, 120/9, stringwidth_colors);
+
 	if(race_status == 0)
 		drawpic(pos, "gfx/hud/race/newtime", '80 80 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
-	else if(race_status == 1)
+	else if(race_status == 1) {
 		drawpic(pos, "gfx/hud/race/newrank", '80 80 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
-	else if(race_status == 2)
+		drawcolorcodedstring(pos + '-20 80 0', s, '10 10 0', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+
+	} else if(race_status == 2) {
 		drawpic(pos, "gfx/hud/race/newrecord", '80 80 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+		drawcolorcodedstring(pos + '-20 80 0', s, '10 10 0', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+	}
 
 	if (race_status_time - time <= 0) {
 		race_status_prev = -1;
@@ -1729,7 +1736,6 @@ void Sbar_Score()
 
 		m = '0.5 0 0' * vid_conwidth + '0 1 0' * cvar_or("cl_racetimer_position", 0.25) * vid_conheight;
 
-		Sbar_DrawRaceStatus(m + '100 0 0');
 		if(race_checkpointtime)
 		{
 			a = bound(0, 2 - (time - race_checkpointtime), 1);
@@ -1840,6 +1846,8 @@ void Sbar_Timer()
 	float scale;
 	scale = cvar_or("sbar_timer_scale", 1);
 	timelimit = getstatf(STAT_TIMELIMIT);
+
+	Sbar_DrawRaceStatus((topright_x - 100) * '1 0 0' + '0 30 0' * scale);
 	
 	timeleft = max(0, timelimit * 60 + getstatf(STAT_GAMESTARTTIME) - time);
 	timeleft = ceil(timeleft);

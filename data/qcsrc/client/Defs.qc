@@ -211,6 +211,7 @@ float race_othercheckpointlapsdelta;
 string race_othercheckpointenemy;
 float sb_showscores_force;
 float race_status;
+string race_status_name;
 
 // Nexball
 float nb_pb_period;
