@@ -142,7 +142,7 @@ float race_GetPos(float t) {
 		if (grecordtime[i] == 0 || grecordtime[i] > t)
 			return i+1;
 
-	for (i=RANKINGS_CNT-1;i>=0;--i)
+	for (i=0;i<RANKINGS_CNT;++i)
 		if (grecordtime[i] > t)
 			return i+1;
 	return 0;
@@ -267,7 +267,7 @@ void race_SetTime(entity e, float t) {
 		bprint(e.netname, "^2 set the ", race_PlaceName(pos), " ^2place record with ", TIME_ENCODED_TOSTRING(t), "\n");
 	else {
 		string recorddifference = strcat(" ^2[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
-		bprint(e.netname, "^2 broke ", oldname, "^2's ", race_PlaceName(pos), " ^2place, record ", strcat(TIME_ENCODED_TOSTRING(oldrec), " ^2with ", TIME_ENCODED_TOSTRING(t), recorddifference, "\n"));
+		bprint(e.netname, "^2 broke ", oldname, "^2's ", race_PlaceName(pos), " ^2place record ", strcat(TIME_ENCODED_TOSTRING(oldrec), " ^2with ", TIME_ENCODED_TOSTRING(t), recorddifference, "\n"));
 	}
 }
 
