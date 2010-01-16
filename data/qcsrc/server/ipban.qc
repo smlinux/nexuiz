@@ -243,6 +243,9 @@ string ban_ip1;
 string ban_ip2;
 string ban_ip3;
 string ban_ip4;
+#ifdef UID
+string ban_uid;
+#endif
 
 void Ban_SaveBans()
 {
@@ -351,6 +354,9 @@ float Ban_GetClientIP(entity client)
 	ban_ip2 = substring(s, 0, i2);
 	ban_ip3 = substring(s, 0, i3);
 	ban_ip4 = strcat1(s);
+#ifdef UID
+	ban_uid = client.uid;
+#endif
 
 	return TRUE;
 }
@@ -382,6 +388,9 @@ float Ban_IsClientBanned(entity client, float idx)
 		if(ban_ip2 == s) return TRUE;
 		if(ban_ip3 == s) return TRUE;
 		if(ban_ip4 == s) return TRUE;
+#ifdef UID
+		if(ban_uid == s) return TRUE;
+#endif
 	}
 	return FALSE;
 }
@@ -522,9 +531,15 @@ void Ban_KickBanClient(entity client, float bantime, float masksize, string reas
 		case 3:
 			Ban_Insert(ban_ip3, bantime, reason, 1);
 			break;
+		case 4:
 		default:
 			Ban_Insert(ban_ip4, bantime, reason, 1);
 			break;
+#ifdef UID
+		case 0:
+			Ban_Insert(ban_uid, bantime, reason, 1);
+			break;
+#endif
 	}
 	/*
 	 * not needed, as we enforce the ban in Ban_Insert anyway

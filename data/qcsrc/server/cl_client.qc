@@ -2956,6 +2956,7 @@ void PlayerPostThink (void)
 		return;
 	}
 #endif
+
 	if(sv_maxidle && frametime)
 	{
 		// WORKAROUND: only use dropclient in server frames (frametime set). Never use it in cl_movement frames (frametime zero).

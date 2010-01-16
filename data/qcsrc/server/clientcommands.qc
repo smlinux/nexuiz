@@ -222,12 +222,13 @@ void SV_ParseClientCommand(string s) {
 		}
 		GetCvars(1);
 #ifdef UID
-	} else if (cmd == "uid") {
+	} else if(cmd == "uid") {
 		if not(self.uid)
 		{
 			self.uid = strzone(argv(1));
 			self.uid_kicktime = 0;
 			print("Client ", etos(self), " has UID ", self.uid, "\n");
+			Ban_MaybeEnforceBan(self);
 		}
 #endif
 	} else if(cmd == "sentcvar") { // new system
