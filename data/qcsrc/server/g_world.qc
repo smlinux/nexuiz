@@ -274,7 +274,7 @@ void cvar_changes_init()
 		BADCVAR("net_address");
 		BADCVAR("port");
 		BADCVAR("savedgamecfg");
-		BADCVAR("sv_heartbeatperoid");
+		BADCVAR("sv_heartbeatperiod");
 		BADCVAR("sv_vote_master_password");
 		BADCVAR("sys_colortranslation");
 		BADCVAR("sys_specialcharactertranslation");
