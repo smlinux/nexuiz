@@ -275,10 +275,13 @@ void MapVote_CheckPic(string pic, string pk3, float id)
 	MapVote_CheckPK3(pic, pk3, id);
 }
 
+#define NUM_SSDIRS 4
+string ssdirs[NUM_SSDIRS];
+float n_ssdirs;
 void MapVote_Init()
 {
-	float i, power;
-	string map, pk3, ssdir;
+	float i, j, power;
+	string map, pk3, s;
 
 	precache_sound ("misc/invshot.wav");
 
@@ -287,8 +290,16 @@ void MapVote_Init()
 
 	mv_active = 1;
 
-	ssdir = ReadString();
-	
+	for(n_ssdirs = 0; ; ++n_ssdirs)
+	{
+		s = ReadString();
+		if(s == "")
+			break;
+		if(n_ssdirs < NUM_SSDIRS)
+			ssdirs[n_ssdirs] = s;
+	}
+	n_ssdirs = min(n_ssdirs, NUM_SSDIRS);
+
 	mv_num_maps = min(MAPVOTE_COUNT, ReadByte());
 	mv_abstain = ReadByte();
 	if(mv_abstain)
@@ -314,9 +325,11 @@ void MapVote_Init()
 		{
 			map = strzone(ReadString());
 			pk3 = strzone(ReadString());
+			j = bound(0, ReadByte(), n_ssdirs - 1);
+	
 			mv_maps[i] = map;
 			mv_pk3[i] = pk3;
-			map = strzone(strcat(ssdir, "/", map));
+			map = strzone(strcat(ssdirs[j], "/", map));
 			mv_pics[i] = map;
 
 			mv_preview[i] = false;
@@ -332,6 +345,10 @@ void MapVote_Init()
 			mv_preview[i] = false;
 		}
 	}
+
+	for(i = 0; i < n_ssdirs; ++i)
+		ssdirs[n_ssdirs] = string_null;
+	n_ssdirs = 0;
 
 	// do we NEED this, or can we handle key presses directly in CSQC?
 	localcmd("\nin_bind 7 1 \"impulse 1\"; in_bind 7 2 \"impulse 2\"; in_bind 7 3 \"impulse 3\"; in_bind 7 4 \"impulse 4\"; in_bind 7 5 \"impulse 5\"; in_bind 7 6 \"impulse 6\"; in_bind 7 7 \"impulse 7\"; in_bind 7 8 \"impulse 8\"; in_bind 7 9 \"impulse 9\"; in_bind 7 0 \"impulse 10\"; in_bind 7 KP_1 \"impulse 1\"; in_bind 7 KP_2 \"impulse 2\"; in_bind 7 KP_3 \"impulse 3\"; in_bind 7 KP_4 \"impulse 4\"; in_bind 7 KP_5 \"impulse 5\"; in_bind 7 KP_6 \"impulse 6\"; in_bind 7 KP_7 \"impulse 7\"; in_bind 7 KP_8 \"impulse 8\"; in_bind 7 KP_9 \"impulse 9\"; in_bind 7 KP_0 \"impulse 10\"; in_bindmap 7 0\n");

@@ -2073,11 +2073,15 @@ float mapvote_initialized;
 float mapvote_keeptwotime;
 float mapvote_timeout;
 string mapvote_message;
-string mapvote_screenshot_dir;
+#define MAPVOTE_SCREENSHOT_DIRS_COUNT 4
+string mapvote_screenshot_dirs[MAPVOTE_SCREENSHOT_DIRS_COUNT];
+float mapvote_screenshot_dirs_count;
 
 float mapvote_count;
 float mapvote_count_real;
 string mapvote_maps[MAPVOTE_COUNT];
+float mapvote_maps_screenshot_dir[MAPVOTE_COUNT];
+string mapvote_maps_pakfile[MAPVOTE_COUNT];
 float mapvote_maps_suggested[MAPVOTE_COUNT];
 string mapvote_suggestions[MAPVOTE_COUNT];
 float mapvote_suggestion_ptr;
@@ -2135,7 +2139,9 @@ string MapVote_Suggest(string m)
 
 void MapVote_AddVotable(string nextMap, float isSuggestion)
 {
-	float j;
+	float j, i, o;
+	string pakfile, mapfile;
+
 	if(nextMap == "")
 		return;
 	for(j = 0; j < mapvote_count; ++j)
@@ -2145,6 +2151,26 @@ void MapVote_AddVotable(string nextMap, float isSuggestion)
 		mapvote_maxlen = strlen(nextMap);
 	mapvote_maps[mapvote_count] = strzone(nextMap);
 	mapvote_maps_suggested[mapvote_count] = isSuggestion;
+
+	for(i = 0; i < mapvote_screenshot_dirs_count; ++i)
+	{
+		mapfile = strcat(mapvote_screenshot_dirs[i], "/", mapvote_maps[i]);
+		pakfile = whichpack(strcat(mapfile, ".tga"));
+		if(pakfile == "")
+			pakfile = whichpack(strcat(mapfile, ".jpg"));
+		if(pakfile == "")
+			pakfile = whichpack(strcat(mapfile, ".png"));
+		if(pakfile != "")
+			break;
+	}
+	if(i >= mapvote_screenshot_dirs_count)
+		i = 0; // FIXME maybe network this error case, as that means there is no mapshot on the server?
+	for(o = strstr(pakfile, "/", 0)+1; o > 0; o = strstr(pakfile, "/", 0)+1)
+		pakfile = substring(pakfile, o, -1);
+
+	mapvote_maps_screenshot_dir[mapvote_count] = i;
+	mapvote_maps_pakfile[mapvote_count] = strzone(pakfile);
+
 	mapvote_count += 1;
 }
 
@@ -2165,6 +2191,14 @@ void MapVote_Init()
 	else
 		nmax = min(MAPVOTE_COUNT, cvar("g_maplist_votable"));
 	smax = min3(nmax, cvar("g_maplist_votable_suggestions"), mapvote_suggestion_ptr);
+
+	// we need this for AddVotable, as that cycles through the screenshot dirs
+	mapvote_screenshot_dirs_count = tokenize_console(cvar_string("g_maplist_votable_screenshot_dir"));
+	if(mapvote_screenshot_dirs_count == 0)
+		mapvote_screenshot_dirs_count = tokenize_console("maps levelshots");
+	mapvote_screenshot_dirs_count = min(mapvote_screenshot_dirs_count, MAPVOTE_SCREENSHOT_DIRS_COUNT);
+	for(i = 0; i < mapvote_screenshot_dirs_count; ++i)
+		mapvote_screenshot_dirs[i] = strzone(argv(i));
 
 	if(mapvote_suggestion_ptr)
 		for(i = 0; i < 100 && mapvote_count < smax; ++i)
@@ -2196,11 +2230,6 @@ void MapVote_Init()
 		mapvote_keeptwotime = 0;
 	mapvote_message = "Choose a map and press its key!";
 
-	mapvote_screenshot_dir = cvar_string("g_maplist_votable_screenshot_dir");
-	if(mapvote_screenshot_dir == "")
-		mapvote_screenshot_dir = "maps";
-	mapvote_screenshot_dir = strzone(mapvote_screenshot_dir);
-
 	MapVote_Spawn();
 }
 
@@ -2210,7 +2239,7 @@ void MapVote_SendPicture(float id)
 	WriteByte(MSG_ONE, SVC_TEMPENTITY);
 	WriteByte(MSG_ONE, TE_CSQC_PICTURE);
 	WriteByte(MSG_ONE, id);
-	WritePicture(MSG_ONE, strcat(mapvote_screenshot_dir, "/", mapvote_maps[id]), 3072);
+	WritePicture(MSG_ONE, strcat(mapvote_screenshot_dirs[mapvote_maps_screenshot_dir[id]], "/", mapvote_maps[id]), 3072);
 }
 
 float GameCommand_MapVote(string cmd)
@@ -2240,8 +2269,7 @@ float MapVote_GetMapMask()
 entity mapvote_ent;
 float MapVote_SendEntity(entity to, float sf)
 {
-	string mapfile, pakfile;
-	float i, o;
+	float i;
 
 	if(sf & 1)
 		sf &~= 2; // if we send 1, we don't need to also send 2
@@ -2252,7 +2280,9 @@ float MapVote_SendEntity(entity to, float sf)
 	if(sf & 1)
 	{
 		// flag 1 == initialization
-		WriteString(MSG_ENTITY, mapvote_screenshot_dir);
+		for(i = 0; i < mapvote_screenshot_dirs_count; ++i)
+			WriteString(MSG_ENTITY, mapvote_screenshot_dirs[i]);
+		WriteString(MSG_ENTITY, "");
 		WriteByte(MSG_ENTITY, mapvote_count);
 		WriteByte(MSG_ENTITY, mapvote_abstain);
 		WriteByte(MSG_ENTITY, mapvote_detail);
@@ -2267,20 +2297,14 @@ float MapVote_SendEntity(entity to, float sf)
 				if(mapvote_abstain && i == mapvote_count - 1)
 				{
 					WriteString(MSG_ENTITY, ""); // abstain needs no text
+					WriteByte(MSG_ENTITY, 0); // abstain needs no screenshot dir
 					WriteString(MSG_ENTITY, ""); // abstain needs no pack
 				}
 				else
 				{
 					WriteString(MSG_ENTITY, mapvote_maps[i]);
-					mapfile = strcat(mapvote_screenshot_dir, "/", mapvote_maps[i]);
-					pakfile = whichpack(strcat(mapfile, ".tga"));
-					if(pakfile == "")
-						pakfile = whichpack(strcat(mapfile, ".jpg"));
-					if(pakfile == "")
-						pakfile = whichpack(strcat(mapfile, ".png"));
-					for(o = strstr(pakfile, "/", 0)+1; o > 0; o = strstr(pakfile, "/", 0)+1)
-						pakfile = substring(pakfile, o, 999);
-					WriteString(MSG_ENTITY, pakfile);
+					WriteByte(MSG_ENTITY, mapvote_maps_screenshot_dir[i]);
+					WriteString(MSG_ENTITY, mapvote_maps_pakfile[i]);
 				}
 			}
 	}
@@ -2444,6 +2468,8 @@ float MapVote_CheckRules_2()
 							{
 								strunzone(mapvote_maps[i]);
 								mapvote_maps[i] = "";
+								strunzone(mapvote_maps_pakfile[i]);
+								mapvote_maps_pakfile[i] = "";
 							}
 						}
 				}
