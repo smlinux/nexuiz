@@ -15,28 +15,21 @@
    sodipodi:version="0.32"
    inkscape:version="0.46"
    version="1.0"
-   sodipodi:docname="nr_icon_time.svg"
+   sodipodi:docname="newtime.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   inkscape:export-filename="/home/sev/.nexuiz/data/nr_icons/nr_icon_time.png"
+   inkscape:export-filename="/home/sev/.nexuiz/data/nexrun_icons/newtime.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
      id="defs4">
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 128 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="256 : 128 : 1"
-       inkscape:persp3d-origin="128 : 85.333333 : 1"
-       id="perspective21" />
     <pattern
        patternUnits="userSpaceOnUse"
        width="256"
        height="256"
        id="BGImage">
       <image
-         xlink:href="nr_icon_time_bg.tga"
-         sodipodi:absref="/home/sev/Desktop/data/nr_icons/nr_icon_time_bg.tga"
+         xlink:href="newtime_bg.tga"
+         sodipodi:absref="/home/sev/Desktop/data/nexrun_icons/newtime_bg.tga"
          width="256"
          height="256"
          id="image3180"
@@ -64,6 +57,14 @@
        x2="0"
        y2="128"
        gradientUnits="userSpaceOnUse" />
+    <filter
+       inkscape:collect="always"
+       id="filter3886">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.92"
+         id="feGaussianBlur3888" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -120,6 +121,17 @@
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline">
+    <path
+       inkscape:label="Icon"
+       transform="matrix(1.3043478,0,0,1.3043478,-65.043477,-44.17391)"
+       d="M 240,132 A 92,92 0 1 1 56,132 A 92,92 0 1 1 240,132 z"
+       sodipodi:ry="92"
+       sodipodi:rx="92"
+       sodipodi:cy="132"
+       sodipodi:cx="148"
+       id="Border"
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:9.85714244999999956;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter3886)"
+       sodipodi:type="arc" />
     <path
        sodipodi:type="arc"
        style="opacity:1;fill:url(#BGImage);fill-opacity:1;stroke:#000000;stroke-width:9.85714289;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
