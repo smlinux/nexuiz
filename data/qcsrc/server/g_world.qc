@@ -2074,6 +2074,7 @@ float mapvote_keeptwotime;
 float mapvote_timeout;
 string mapvote_message;
 string mapvote_screenshot_dir;
+string mapvote_screenshot_dir2;
 
 float mapvote_count;
 float mapvote_count_real;
@@ -2201,6 +2202,11 @@ void MapVote_Init()
 		mapvote_screenshot_dir = "maps";
 	mapvote_screenshot_dir = strzone(mapvote_screenshot_dir);
 
+	mapvote_screenshot_dir2 = cvar_string("g_maplist_votable_screenshot_dir2");
+	if(mapvote_screenshot_dir2 == "")
+		mapvote_screenshot_dir2 = "levelshots";
+	mapvote_screenshot_dir2 = strzone(mapvote_screenshot_dir2);
+
 	MapVote_Spawn();
 }
 
@@ -2240,7 +2246,7 @@ float MapVote_GetMapMask()
 entity mapvote_ent;
 float MapVote_SendEntity(entity to, float sf)
 {
-	string mapfile, pakfile;
+	string mapfile, mapfile2, pakfile;
 	float i, o;
 
 	if(sf & 1)
@@ -2252,7 +2258,6 @@ float MapVote_SendEntity(entity to, float sf)
 	if(sf & 1)
 	{
 		// flag 1 == initialization
-		WriteString(MSG_ENTITY, mapvote_screenshot_dir);
 		WriteByte(MSG_ENTITY, mapvote_count);
 		WriteByte(MSG_ENTITY, mapvote_abstain);
 		WriteByte(MSG_ENTITY, mapvote_detail);
@@ -2273,13 +2278,23 @@ float MapVote_SendEntity(entity to, float sf)
 				{
 					WriteString(MSG_ENTITY, mapvote_maps[i]);
 					mapfile = strcat(mapvote_screenshot_dir, "/", mapvote_maps[i]);
+					mapfile2 = strcat(mapvote_screenshot_dir2, "/", mapvote_maps[i]);
 					pakfile = whichpack(strcat(mapfile, ".tga"));
 					if(pakfile == "")
 						pakfile = whichpack(strcat(mapfile, ".jpg"));
 					if(pakfile == "")
 						pakfile = whichpack(strcat(mapfile, ".png"));
+					if(pakfile == "") {
+						mapvote_screenshot_dir = mapvote_screenshot_dir2;
+						pakfile = whichpack(strcat(mapfile2, ".tga"));
+					}
+					if(pakfile == "")
+						pakfile = whichpack(strcat(mapfile2, ".jpg"));
+					if(pakfile == "")
+						pakfile = whichpack(strcat(mapfile2, ".png"));
 					for(o = strstr(pakfile, "/", 0)+1; o > 0; o = strstr(pakfile, "/", 0)+1)
 						pakfile = substring(pakfile, o, 999);
+					WriteString(MSG_ENTITY, mapvote_screenshot_dir);
 					WriteString(MSG_ENTITY, pakfile);
 				}
 			}

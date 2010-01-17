@@ -1577,33 +1577,43 @@ string MakeRaceString(float cp, float mytime, float histime, float lapdelta, str
 
 float race_status_time;
 float race_status_prev;
+string race_status_name_prev;
 void Sbar_DrawRaceStatus(vector pos)
 {
-	if (race_status != race_status_prev) {
+	if (race_status != race_status_prev || race_status_name != race_status_name_prev) {
 		race_status_time = time + 3;
 		race_status_prev = race_status;
+		if (race_status_name_prev)
+			strunzone(race_status_name_prev);
+		race_status_name_prev = strzone(race_status_name);
 	}
 
 	float a;
 	a = bound(0, race_status_time - time, 1);
 
 	string s;
-	s = textShortenToWidth(race_status_name, 120/9, stringwidth_colors);
+	s = textShortenToWidth(race_status_name, 120/10, stringwidth_colors);
 
 	if(race_status == 0)
 		drawpic(pos, "gfx/hud/race/newtime", '80 80 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
 	else if(race_status == 1) {
-		drawpic(pos, "gfx/hud/race/newrank", '80 80 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
-		drawcolorcodedstring(pos + '-20 80 0', s, '10 10 0', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+		drawpic(pos, "gfx/hud/race/newrank", '80 80 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);	
+		drawcolorcodedstring(pos + '40 80 0' - '5 0 0' * stringwidth(s, TRUE), s, '10 10 0', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
 
 	} else if(race_status == 2) {
 		drawpic(pos, "gfx/hud/race/newrecord", '80 80 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
-		drawcolorcodedstring(pos + '-20 80 0', s, '10 10 0', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+		drawcolorcodedstring(pos + '40 80 0' - '5 0 0' * stringwidth(s, TRUE), s, '10 10 0', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
 	}
 
 	if (race_status_time - time <= 0) {
 		race_status_prev = -1;
 		race_status = -1;
+		if(race_status_name)
+			strunzone(race_status_name);
+		race_status_name = string_null;
+		if(race_status_name_prev)
+			strunzone(race_status_name_prev);
+		race_status_name_prev = string_null;
 	}
 }
 

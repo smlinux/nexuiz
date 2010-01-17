@@ -287,8 +287,6 @@ void MapVote_Init()
 
 	mv_active = 1;
 
-	ssdir = ReadString();
-	
 	mv_num_maps = min(MAPVOTE_COUNT, ReadByte());
 	mv_abstain = ReadByte();
 	if(mv_abstain)
@@ -313,7 +311,9 @@ void MapVote_Init()
 		if(mv_maps_mask & power)
 		{
 			map = strzone(ReadString());
+			ssdir = ReadString();
 			pk3 = strzone(ReadString());
+	
 			mv_maps[i] = map;
 			mv_pk3[i] = pk3;
 			map = strzone(strcat(ssdir, "/", map));
