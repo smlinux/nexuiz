@@ -2297,14 +2297,14 @@ float MapVote_SendEntity(entity to, float sf)
 				if(mapvote_abstain && i == mapvote_count - 1)
 				{
 					WriteString(MSG_ENTITY, ""); // abstain needs no text
-					WriteByte(MSG_ENTITY, 0); // abstain needs no screenshot dir
 					WriteString(MSG_ENTITY, ""); // abstain needs no pack
+					WriteByte(MSG_ENTITY, 0); // abstain needs no screenshot dir
 				}
 				else
 				{
 					WriteString(MSG_ENTITY, mapvote_maps[i]);
-					WriteByte(MSG_ENTITY, mapvote_maps_screenshot_dir[i]);
 					WriteString(MSG_ENTITY, mapvote_maps_pakfile[i]);
+					WriteByte(MSG_ENTITY, mapvote_maps_screenshot_dir[i]);
 				}
 			}
 	}
