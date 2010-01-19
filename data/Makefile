@@ -130,7 +130,7 @@ git-update:
 
 .PHONY: git-commit
 git-commit:
-	git commit -a
+	git commit -a || true
 	if echo -n 'Also send to server? Hit Enter for yes, ^C for no. '; read -r L; then \
 		git config svn-remote.svn.url svn://svn.icculus.org/nexuiz; \
 		git config svn-remote.svn.fetch trunk:refs/remotes/origin/master; \
