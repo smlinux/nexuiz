@@ -1,6 +1,7 @@
 .float spawntime;
 .vector trail_oldorigin;
 .float trail_oldtime;
+.float fade_time, fade_rate;
 
 void SUB_Null()
 {
@@ -12,6 +13,7 @@ void SUB_Stop()
 	self.move_movetype = MOVETYPE_NONE;
 }
 
+.float alphamod;
 .float count; // set if clientside projectile
 .float cnt; // sound index
 .float gravity;
@@ -39,6 +41,7 @@ void Projectile_Draw()
 	float f;
 	float drawn;
 	float t;
+	float a;
 
 	f = self.move_flags;
 
@@ -89,6 +92,10 @@ void Projectile_Draw()
 
 	fixedmakevectors(self.angles);
 
+	a = 1 - (time - self.fade_time) * self.fade_rate;
+	if(a <= 0)
+		drawn = 0;
+
 	trailorigin = self.origin;
 	switch(self.cnt)
 	{
@@ -114,12 +121,13 @@ void Projectile_Draw()
 	{
 		case PROJECTILE_BULLET_GLOWING:
 		case PROJECTILE_BULLET_GLOWING_TRACER:
-			R_AddDynamicLight(self.origin, 50, '1 1 0');
+			R_AddDynamicLight(self.origin, 50 * a, '1 1 0');
 			break;
 		default:
 			break;
 	}
 
+	self.alpha = self.alphamod * a;
 	self.renderflags = 0;
 
 	R_AddEntity(self);
@@ -209,6 +217,17 @@ void Ent_Projectile()
 
 		if(time == self.spawntime || (self.count & 0x80) || (f & 0x20))
 			self.trail_oldorigin = self.origin;
+
+		if(f & 0x20)
+		{
+			self.fade_time = time + ReadByte() * ticrate;
+			self.fade_rate = 1 / (ReadByte() * ticrate);
+		}
+		else
+		{
+			self.fade_time = 0;
+			self.fade_rate = 0;
+		}
 	}
 
 	if(f & 2)
@@ -251,6 +270,7 @@ void Ent_Projectile()
 		self.colormod = '0 0 0';
 		self.move_touch = SUB_Stop;
 		self.move_movetype = MOVETYPE_TOSS;
+		self.alphamod = 1;
 
 		switch(self.cnt)
 		{
@@ -279,13 +299,13 @@ void Ent_Projectile()
 				break;
 			case PROJECTILE_PORTO_RED:
 				self.colormod = '2 1 1';
-				self.alpha = 0.5;
+				self.alphamod = 0.5;
 				self.move_movetype = MOVETYPE_BOUNCE;
 				self.move_touch = SUB_Null;
 				break;
 			case PROJECTILE_PORTO_BLUE:
 				self.colormod = '1 1 2';
-				self.alpha = 0.5;
+				self.alphamod = 0.5;
 				self.move_movetype = MOVETYPE_BOUNCE;
 				self.move_touch = SUB_Null;
 				break;

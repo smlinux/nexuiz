@@ -2,14 +2,24 @@
 
 float CSQCProjectile_SendEntity(entity to, float sf)
 {
+	float ft, fr;
+
 	// note: flag 0x20 = no trail please
-	sf = sf & 0x3F;
+	sf = sf & 0x1F;
 
 	if(self.csqcprojectile_clientanimate)
 		sf |= 0x80; // client animated, not interpolated
 
 	if(self.flags & FL_ONGROUND)
 		sf |= 0x40;
+
+	if(self.fade_time != 0 && self.fade_rate != 0)
+	{
+		ft = (self.fade_time - time) / sys_frametime;
+		fr = (1 / self.fade_rate) / sys_frametime;
+		if(ft <= 255 && fr <= 255 && fr >= 1)
+			sf |= 0x20;
+	}
 
 	WriteByte(MSG_ENTITY, ENT_CLIENT_PROJECTILE);
 	WriteByte(MSG_ENTITY, sf);
@@ -27,11 +37,17 @@ float CSQCProjectile_SendEntity(entity to, float sf)
 			WriteCoord(MSG_ENTITY, self.velocity_z);
 			WriteCoord(MSG_ENTITY, self.gravity);
 		}
+
+		if(sf & 0x20)
+		{
+			WriteByte(MSG_ENTITY, ft);
+			WriteByte(MSG_ENTITY, fr);
+		}
 	}
 
 	if(sf & 2)
 		WriteByte(MSG_ENTITY, self.csqcprojectile_type); // TODO maybe put this into sf?
-
+	
 	return 1;
 }
 
