@@ -2,7 +2,7 @@ SCM := $(shell if [ -d .svn ]; then echo svn; elif [ -d ../.git ]; then echo git
 FTEQCC ?= fteqcc
 PERL ?= perl
 PK3NAME ?= `date +../data%Y%m%d.pk3`
-ZIP ?= 7za a -tzip -mx=9
+ZIP ?= 7za a -tzip -mx=9 -x\!*.pk3 -xr\!\.svn -x\!qcsrc
 ZIPEXCLUDE ?= -x\!*.pk3 -xr\!\.svn -x\!qcsrc
 DIFF ?= diff
 
@@ -83,7 +83,6 @@ $(PK3NAME): qc
 		cp -v progs.dat csprogs.dat menu.dat $$TDIR/; \
 		svn export --force . $$TDIR; \
 		cd $$TDIR; \
-		$(RM) -r qcsrc common-spog.pk3; \
 		$(ZIP) $$ABSPK3NAME .
 
 .PHONY: testcase

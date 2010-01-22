@@ -49,6 +49,9 @@ Tyler "-z-" Mulligan
 Wolfgang "Blub\0" Bumiller
 *Programmer
 
+Merlijn Hofstra
+*Programmer and server admin
+
 
 
 **Past Team Members
