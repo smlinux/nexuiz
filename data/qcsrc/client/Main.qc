@@ -1128,6 +1128,11 @@ void Net_ReadRace()
 				strunzone(grecordholder[pos-1]);
 			grecordholder[pos-1] = strzone(ReadString());
 			grecordtime[pos-1] = ReadInt24_t();
+			if(!myrank_old) {
+				myrank_old = race_CheckName(GetPlayerName(player_localentnum -1));
+				if(!myrank_old)
+					myrank_old = -1;
+			}
 			break;
 		case RACE_NET_SERVER_STATUS:
 			race_status = ReadShort();

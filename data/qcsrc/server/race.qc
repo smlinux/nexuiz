@@ -221,30 +221,28 @@ string race_PlaceName(float pos) {
 		return strcat(ftos(pos), "th");
 }
 
-void race_SetTime(entity e, float t) {
-	if (worst_time && t > worst_time)
-		return;
+void race_SetTime(entity e, float t, float match_rec) {
+	float pos, prevpos;
+	pos = race_GetPos(t);
+#ifdef UID
+	prevpos = race_CheckUID(e.uid, e.netname);
+#else
+	prevpos = race_CheckName(e.netname);
+#endif
 
 	float oldrec;
 	string recorddifference;
-	float pos;
-	pos = race_GetPos(t);
-	float prevpos;
-
-	prevpos = race_CheckName(e.netname);
-#ifdef UID
-	prevpos = race_CheckUID(e.uid, e.netname);
-#endif
 	if (prevpos && (prevpos < pos || !pos))
 	{
 		oldrec = race_GetTime(prevpos);
 		recorddifference = strcat(" ^1[+", TIME_ENCODED_TOSTRING(t - oldrec), "]");
 		bprint(e.netname, "^7 couldn't break their ", race_PlaceName(prevpos), " place record of ", TIME_ENCODED_TOSTRING(oldrec), recorddifference, "\n");
-
+		race_SendStatus(0, e); // "fail"
 		return;
 	} else if (!pos) { // no ranking, time worse than the worst ranked
 		recorddifference = strcat(" ^1[+", TIME_ENCODED_TOSTRING(t - grecordtime[RANKINGS_CNT-1]), "]");
 		bprint(e.netname, "^7 couldn't break the ", race_PlaceName(RANKINGS_CNT), " place record of ", TIME_ENCODED_TOSTRING(grecordtime[RANKINGS_CNT-1]), recorddifference, "\n");
+		race_SendStatus(0, e); // "fail"
 		return;
 	}
 
@@ -343,24 +341,24 @@ void race_SetTime(entity e, float t) {
 		if(pos == prevpos) {
 			recorddifference = strcat(" ^2[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
 			bprint(e.netname, "^1 improved their 1st place record with ", TIME_ENCODED_TOSTRING(t), recorddifference, "\n");
-			race_SendStatus(2, e); // "new record"
+			race_SendStatus(3, e); // "new server record"
 		} else {
 			recorddifference = strcat(" ^2[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
 			bprint(e.netname, "^1 broke ", grecordholder[pos], "^1's 1st place record with ", strcat(TIME_ENCODED_TOSTRING(t), recorddifference, "\n"));
-			race_SendStatus(2, e); // "new record"
+			race_SendStatus(3, e); // "new server record"
 		}
 	} else {
 		if(pos == prevpos) {
 			recorddifference = strcat(" ^2[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
-			bprint(e.netname, "^3 improved their ", race_PlaceName(pos), " ^3place record with ", TIME_ENCODED_TOSTRING(t), recorddifference, "\n");
-			race_SendStatus(0, e); // "new time"
+			bprint(e.netname, "^5 improved their ", race_PlaceName(pos), " ^5place record with ", TIME_ENCODED_TOSTRING(t), recorddifference, "\n");
+			race_SendStatus(1, e); // "new time"
 		} else if (oldrec == 0) {
 			bprint(e.netname, "^2 set the ", race_PlaceName(pos), " ^2place record with ", TIME_ENCODED_TOSTRING(t), "\n");
-			race_SendStatus(1, e); // "new rank"
+			race_SendStatus(2, e); // "new rank"
 		} else {
 			recorddifference = strcat(" ^2[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
 			bprint(e.netname, "^2 broke ", grecordholder[pos], "^2's ", race_PlaceName(pos), " ^2place record with ", strcat(TIME_ENCODED_TOSTRING(t), recorddifference, "\n"));
-			race_SendStatus(1, e); // "new rank"
+			race_SendStatus(2, e); // "new rank"
 		}
 	}
 }
@@ -487,13 +485,9 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 			if(recordholder == e.netname)
 				recordholder = "";
 
-			if(t != 0)
-			if(t < worst_time || worst_time == 0)
-			{
+			if(t != 0) {
 				if(cp == race_timed_checkpoint)
-				{
-					race_SetTime(e, t);
-				}
+					race_SetTime(e, t, recordtime);
 
 				if(t < recordtime || recordtime == 0)
 				{
