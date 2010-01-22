@@ -701,6 +701,7 @@ our %config = (
 
 	irc_quakenet_authname => "",
 	irc_quakenet_password => "",
+	irc_quakenet_authusers => "",
 	irc_quakenet_getchallenge => 'PRIVMSG Q@CServe.quakenet.org :CHALLENGE',
 	irc_quakenet_challengeauth => 'PRIVMSG Q@CServe.quakenet.org :CHALLENGEAUTH',
 	irc_quakenet_challengeprefix => ':Q!TheQBot@CServe.quakenet.org NOTICE [^:]+ :CHALLENGE',
@@ -1125,7 +1126,7 @@ sub cond($)
 
 	# IRC admin commands
 	[ irc => q{:(([^! ]*)![^ ]*) (?i:PRIVMSG) [^&#%]\S* :(.*)} => sub {
-		return 0 unless $config{irc_admin_password} ne '';
+		return 0 unless ($config{irc_admin_password} ne '' || $config{irc_quakenet_authusers});
 
 		my ($hostmask, $nick, $command) = @_;
 		my $dpnick = color_dpfix $nick;
@@ -1306,6 +1307,44 @@ sub cond($)
 	[ irc => q{(??{$config{irc_quakenet_challengeprefix}}) (.*)} => sub {
 		$store{irc_quakenet_challenge} = $1;
 		return irc_joinstage(0);
+	} ],
+	
+	# Catch joins of people in a channel the bot is in and catch our own joins of a channel
+	[ irc => q{:(([^! ]*)![^ ]*) JOIN (#.+)} => sub {
+		my ($hostmask, $nick, $chan) = @_;
+		return 0 unless ($config{irc_quakenet_authusers});
+		
+		if ($nick eq $config{irc_nick}) {
+			out irc => 0, "PRIVMSG Q :users $chan"; # get auths for all users
+		} else {
+			$store{quakenet_hosts}->{$nick} = $hostmask;
+			out irc => 0, "PRIVMSG Q :whois $nick"; # get auth for single user
+		}
+		
+		return 0;
+	} ],
+	
+	# Catch response of users request
+	[ irc => q{:Q!TheQBot@CServe.quakenet.org NOTICE [^:]+ :[@\+\s]?(\S+)\s+(\S+)\s*(\S*)\s*\((.*)\)} => sub {
+		my ($nick, $username, $flags, $host) = @_;
+		return 0 unless ($config{irc_quakenet_authusers});
+		
+		$store{logins}{"$nick!$host"} = time() + 600 if ($store{quakenet_users}->{$username});
+		
+		return 0;
+	} ],
+	
+	# Catch response of whois request
+	[ irc => q{:Q!TheQBot@CServe.quakenet.org NOTICE [^:]+ :-Information for user (.*) \(using account (.*)\):} => sub {
+		my ($nick, $username) = @_;
+		return 0 unless ($config{irc_quakenet_authusers});
+		
+		if ($store{quakenet_users}->{$username}) {
+			my $hostmask = $store{quakenet_hosts}->{$nick};
+			$store{logins}{$hostmask} = time() + 600;
+		}
+		
+		return 0;
 	} ],
 
 	# shut down everything on SIGINT
@@ -1648,6 +1687,17 @@ for my $p(split ' ', $config{plugins})
 	}
 }
 
+
+# If users for quakenet are listed, parse them into a hash and schedule a sub to query information
+if ($config{irc_quakenet_authusers} ne '') {
+	$store{quakenet_users} = { map { $_ => 1 } split ' ', $config{irc_quakenet_authusers} };
+	
+	schedule sub {
+		my ($timer) = @_;
+		out irc => 0, "PRIVMSG Q :users " . $config{irc_channel};
+		schedule $timer => 300;;
+	} => 1;
+}
 
 
 # verify that the server is up by letting it echo back a string that causes
