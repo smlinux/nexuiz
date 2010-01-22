@@ -1,5 +1,5 @@
 #ifdef REGISTER_WEAPON
-REGISTER_WEAPON(SHOTGUN,          w_shotgun,      IT_SHELLS,        2,  1, 0, WEP_TYPE_HITSCAN, BOT_PICKUP_RATING_LOW,  "shotgun",      "shotgun",         "Shotgun");
+REGISTER_WEAPON(SHOTGUN, w_shotgun, IT_SHELLS, 2, WEP_FLAG_NORMAL | WEP_TYPE_HITSCAN, BOT_PICKUP_RATING_LOW, "shotgun", "shotgun", "Shotgun");
 #else
 void W_Shotgun_Attack (void)
 {

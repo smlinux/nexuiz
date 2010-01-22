@@ -219,7 +219,7 @@ void fillNexuizMutatorsDialog(entity me)
 	for(i = WEP_FIRST, j = 0; i <= WEP_LAST; ++i)
 	{
 		w = get_weaponinfo(i);
-		if(w.spawnflags & WEPSPAWNFLAG_HIDDEN)
+		if(w.spawnflags & WEP_FLAG_HIDDEN)
 			continue;
 		if(j & 1 == 0)
 			me.TR(me);

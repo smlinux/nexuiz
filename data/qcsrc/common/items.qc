@@ -2,7 +2,7 @@
 entity weapon_info[24];
 entity dummy_weapon_info;
 
-void register_weapon(float id, float(float) func, float ammotype, float i, float normalweapon, float canclimb, float weapontype, float pickupbasevalue, string modelname, string shortname, string wname)
+void register_weapon(float id, float(float) func, float ammotype, float i, float weapontype, float pickupbasevalue, string modelname, string shortname, string wname)
 {
 	entity e;
 	weapon_info[id - 1] = e = spawn();
@@ -15,16 +15,9 @@ void register_weapon(float id, float(float) func, float ammotype, float i, float
 	e.weapon_func = func;
 	e.mdl = modelname;
 	e.model = strzone(strcat("models/weapons/g_", modelname, ".md3"));
-	e.spawnflags = 0;
+	e.spawnflags = weapontype;
 	e.model2 = strzone(strcat("wpn-", e.mdl));
-	if(normalweapon > 0)
-		e.spawnflags |= WEPSPAWNFLAG_NORMAL;
-	if(normalweapon < 0)
-		e.spawnflags |= WEPSPAWNFLAG_HIDDEN;
-	if(canclimb)
-		e.spawnflags |= WEPSPAWNFLAG_CANCLIMB;
 	e.impulse = i;
-	e.weapon_type = weapontype;
 	e.bot_pickupbasevalue = pickupbasevalue;
 }
 float w_null(float dummy)
@@ -46,7 +39,6 @@ void register_weapons_done()
 	dummy_weapon_info.model = "";
 	dummy_weapon_info.spawnflags = 0;
 	dummy_weapon_info.impulse = -1;
-	dummy_weapon_info.weapon_type = WEP_TYPE_OTHER;
 	dummy_weapon_info.bot_pickupbasevalue = 0;
 	dummy_weapon_info.model2 = "";
 

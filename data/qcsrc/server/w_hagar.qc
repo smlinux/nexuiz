@@ -1,5 +1,5 @@
 #ifdef REGISTER_WEAPON
-REGISTER_WEAPON(HAGAR,            w_hagar,        IT_ROCKETS,       8,  1, 1, WEP_TYPE_SPLASH , BOT_PICKUP_RATING_MID,  "hagar",        "hagar",           "Hagar");
+REGISTER_WEAPON(HAGAR, w_hagar, IT_ROCKETS, 8, WEP_FLAG_NORMAL | WEP_FLAG_CANCLIMB | WEP_TYPE_SPLASH, BOT_PICKUP_RATING_MID, "hagar", "hagar", "Hagar");
 #else
 // NO bounce protection, as bounces are limited!
 void W_Hagar_Explode (void)

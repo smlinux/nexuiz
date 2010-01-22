@@ -151,7 +151,7 @@ void W_SetupShot_Dir_ProjectileSize(entity ent, vector s_forward, vector mi, vec
 	if not(inWarmupStage) {
 		entity w;
 		w = get_weaponinfo(ent.weapon);
-		if(w.weapon_type == WEP_TYPE_SPLASH) {  // splash damage
+		if(w.spawnflags & WEP_TYPE_SPLASH) {  // splash damage
 			ent.stats_fired[ent.weapon - 1] += maxdamage;
 			ent.stat_fired = ent.weapon + 64 * floor(ent.stats_fired[ent.weapon - 1]);
 		}

@@ -1,5 +1,5 @@
 #ifdef REGISTER_WEAPON
-REGISTER_WEAPON(GRENADE_LAUNCHER, w_glauncher,    IT_ROCKETS,       4,  1, 1, WEP_TYPE_SPLASH , BOT_PICKUP_RATING_MID,  "gl",           "grenadelauncher", "Mortar");
+REGISTER_WEAPON(GRENADE_LAUNCHER, w_glauncher, IT_ROCKETS, 4, WEP_FLAG_NORMAL | WEP_FLAG_CANCLIMB | WEP_TYPE_SPLASH, BOT_PICKUP_RATING_MID, "gl", "grenadelauncher", "Mortar");
 #else
 void W_Grenade_Explode (void)
 {

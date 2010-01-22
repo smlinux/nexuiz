@@ -1,5 +1,5 @@
 #ifdef REGISTER_WEAPON
-REGISTER_WEAPON(HOOK,             w_hook,         IT_CELLS|IT_FUEL, 0,  0, 1, WEP_TYPE_SPLASH,  0,                      "hookgun",      "hook",            "Grappling Hook");
+REGISTER_WEAPON(HOOK, w_hook, IT_CELLS|IT_FUEL, 0, WEP_FLAG_CANCLIMB | WEP_TYPE_SPLASH, 0, "hookgun", "hook", "Grappling Hook");
 #else
 .float dmg;
 .float dmg_edge;

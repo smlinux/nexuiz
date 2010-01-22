@@ -911,7 +911,7 @@ float want_weapon(string cvarprefix, entity weaponinfo, float allguns)
 	if (t < 0) // "default" weapon selection
 	{
 		if (g_lms || g_ca || allguns)
-			t = (weaponinfo.spawnflags & WEPSPAWNFLAG_NORMAL);
+			t = (weaponinfo.spawnflags & WEP_FLAG_NORMAL);
 		else if(t < -1)
 			t = 0;
 		else if (g_race || g_cts)
@@ -969,7 +969,7 @@ void readplayerstartcvars()
 		for (j = WEP_FIRST; j <= WEP_LAST; ++j)
 		{
 			e = get_weaponinfo(j);
-			if (e.spawnflags & WEPSPAWNFLAG_NORMAL)
+			if (e.spawnflags & WEP_FLAG_NORMAL)
 			{
 				g_weaponarena |= e.weapons;
 				weapon_action(e.weapon, WR_PRECACHE);

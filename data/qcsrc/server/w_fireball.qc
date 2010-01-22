@@ -1,5 +1,5 @@
 #ifdef REGISTER_WEAPON
-REGISTER_WEAPON(FIREBALL,         w_fireball,     IT_ROCKETS,       9,  0, 0, WEP_TYPE_SPLASH,  BOT_PICKUP_RATING_MID,  "fireball",     "fireball",        "Fireball");
+REGISTER_WEAPON(FIREBALL, w_fireball, IT_ROCKETS, 9, WEP_TYPE_SPLASH, BOT_PICKUP_RATING_MID, "fireball", "fireball", "Fireball");
 #else
 .float bot_secondary_fireballmooth; // whatever a mooth is
 .vector fireball_impactvec;

@@ -2388,7 +2388,7 @@ void Sbar_DrawAccuracyStats()
 		border_colour = (i == activeweapon) ? '1 1 1' : '0 0 0';  // white or black border
 
 		if (weapon_damage) {
-			if (self.weapon_type == WEP_TYPE_SPLASH) {
+			if (self.spawnflags & WEP_TYPE_SPLASH) {
 				weapon_stats = bound(0, floor(100 * weapon_hit / weapon_damage), 100);
 
 				fill_colour_x = 1 - 0.015 * weapon_stats;
@@ -2438,7 +2438,7 @@ void Sbar_DrawAccuracyStats()
 				drawstringright(pos + '4.5 0 0' * sbar_fontsize_x + '0 9 0' * sbar_fontsize_y, ftos(max(0, weapon_damage - weapon_hit)), sbar_fontsize, '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 				++count_splash;
-			} else if (self.weapon_type == WEP_TYPE_HITSCAN) {
+			} else if (self.spawnflags & WEP_TYPE_HITSCAN) {
 				weapon_stats = bound(0, floor(100 * weapon_hit / weapon_damage), 100);
 
 				fill_colour_x = 1 - 0.015 * weapon_stats;

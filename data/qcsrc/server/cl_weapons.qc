@@ -446,7 +446,7 @@ float NixNex_CanChooseWeapon(float wpn)
 	{
 		if(wpn == WEP_LASER && g_nixnex_with_laser)
 			return FALSE;
-		if not(e.spawnflags & WEPSPAWNFLAG_NORMAL)
+		if not(e.spawnflags & WEP_FLAG_NORMAL)
 			return FALSE;
 	}
 	return TRUE;
