@@ -8,7 +8,8 @@
 	irc_show_playerip => 0,
 	irc_show_mapname => 0,
 	irc_show_amount_of_players => 0,
-	irc_show_country => 0
+	irc_show_country => 0,
+	check_clones => 1
 );
 
 # current code has been tested against version 0.8 of the Geo::IPfree module
@@ -41,13 +42,25 @@ sub get_player_count
 	my $pj = $store{plugin_joinsparts};
 	$pj->{alive_check}->[$slot] = 1;
 	
-	my ($cn) = $pj->{geo}->LookUp($ip) if ($pj->{irc_show_country} && $ip ne 'bot');
+	return 0 if ($ip eq 'bot');
+	
+	my ($cn) = $pj->{geo}->LookUp($ip) if ($pj->{irc_show_country});
+	
+	my $clonenicks;
+	if ($pj->{check_clones}) {
+		for (1 .. $store{slots_max}) {
+			my $plrid = $store{"playerid_byslot_$_"};
+			next if (!defined $plrid || $plrid == $id || $ip ne $store{"playerip_byid_$plrid"});
+			$clonenicks .= ' ' . $store{"playernick_byid_$plrid"} . "\017";
+		}
+	}
 	
 	$nick = color_dp2irc $nick;
-	if ($pj->{irc_announce_joins} && !$store{"playerid_byslot_$slot"} && $ip ne 'bot') {
+	if ($pj->{irc_announce_joins} && !$store{"playerid_byslot_$slot"}) {
 		out irc => 0, "PRIVMSG $config{irc_channel} :\00309+ join\017: $nick\017" . 
 			($pj->{irc_show_playerip} ? " (\00304$ip\017)" : '') .
 			($pj->{irc_show_country} && $cn ? " CN: \00304$cn\017" : '') .
+			($clonenicks ? " Clone of:$clonenicks" : '') .
 			($pj->{irc_show_mapname} ? " playing on \00304$store{map}\017" : '') .
 			($pj->{irc_show_amount_of_players} ? " players: \00304" . (get_player_count()+1) . "\017/$store{slots_max}" : '');
 	}
