@@ -1,3 +1,6 @@
+#ifdef REGISTER_WEAPON
+REGISTER_WEAPON(ELECTRO,          w_electro,      IT_CELLS,         5,  1, 0, WEP_TYPE_SPLASH , BOT_PICKUP_RATING_MID,  "electro",      "electro",         "Electro");
+#else
 .float electro_count;
 .float electro_secondarytime;
 
@@ -298,3 +301,4 @@ float w_electro(float req)
 	}
 	return TRUE;
 };
+#endif

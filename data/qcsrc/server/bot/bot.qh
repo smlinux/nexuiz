@@ -45,9 +45,9 @@ float bot_custom_weapon;
 float bot_distance_far;
 float bot_distance_close;
 
-float bot_weapons_far[WEP_LAST];
-float bot_weapons_mid[WEP_LAST];
-float bot_weapons_close[WEP_LAST];
+float bot_weapons_far[WEP_MAXCOUNT];
+float bot_weapons_mid[WEP_MAXCOUNT];
+float bot_weapons_close[WEP_MAXCOUNT];
 
 entity bot_list;
 entity player_list;

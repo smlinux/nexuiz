@@ -88,22 +88,7 @@ g_models.qc
 cl_weaponsystem.qc
 w_common.qc
 
-w_laser.qc
-w_shotgun.qc
-w_uzi.qc
-w_grenadelauncher.qc
-w_electro.qc
-w_crylink.qc
-w_nex.qc
-w_minstanex.qc
-w_hagar.qc
-w_rocketlauncher.qc
-w_porto.qc
-w_hook.qc
-w_hlac.qc
-w_campingrifle.qc
-w_tuba.qc
-w_fireball.qc
+w_all.qc
 
 t_items.qc
 cl_weapons.qc

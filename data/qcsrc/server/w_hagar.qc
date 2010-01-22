@@ -1,3 +1,6 @@
+#ifdef REGISTER_WEAPON
+REGISTER_WEAPON(HAGAR,            w_hagar,        IT_ROCKETS,       8,  1, 1, WEP_TYPE_SPLASH , BOT_PICKUP_RATING_MID,  "hagar",        "hagar",           "Hagar");
+#else
 // NO bounce protection, as bounces are limited!
 void W_Hagar_Explode (void)
 {
@@ -158,3 +161,4 @@ float w_hagar(float req)
 	}
 	return TRUE;
 };
+#endif

@@ -389,7 +389,7 @@ void centerprint(entity e, string s);
 
 float bot_waypoints_for_items;
 
-.float attack_finished_for[WEP_COUNT];
+.float attack_finished_for[WEP_MAXCOUNT];
 .float attack_finished_single;
 #ifdef INDEPENDENT_ATTACK_FINISHED
 #define ATTACK_FINISHED_FOR(ent,w) ((ent).(attack_finished_for[(w) - WEP_FIRST]))
@@ -602,8 +602,8 @@ string matchid;
 .float stat_fired;
 .float stat_count;
 
-.float stats_hit[WEP_LAST - WEP_FIRST + 1];  // for hitscan bullets hit
-.float stats_fired[WEP_LAST - WEP_FIRST + 1];  // for hitscan bullets fired
+.float stats_hit[WEP_MAXCOUNT];  // for hitscan bullets hit
+.float stats_fired[WEP_MAXCOUNT];  // for hitscan bullets fired
 
 FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(stats_hit);
 FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(stats_fired);

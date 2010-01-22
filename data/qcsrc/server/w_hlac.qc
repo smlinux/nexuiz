@@ -1,3 +1,6 @@
+#ifdef REGISTER_WEAPON
+REGISTER_WEAPON(HLAC,             w_hlac,         IT_CELLS,         6,  1, 0, WEP_TYPE_SPLASH,  BOT_PICKUP_RATING_MID,  "hlac",         "hlac",            "Heavy Laser Assault Cannon");
+#else
 .float HLAC_bulletcounter;
 void W_HLAC_Touch (void)
 {
@@ -210,3 +213,4 @@ float w_hlac(float req)
 		w_deathtypestring = "was cut down by";
 	return TRUE;
 };
+#endif

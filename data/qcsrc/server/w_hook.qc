@@ -1,3 +1,6 @@
+#ifdef REGISTER_WEAPON
+REGISTER_WEAPON(HOOK,             w_hook,         IT_CELLS|IT_FUEL, 0,  0, 1, WEP_TYPE_SPLASH,  0,                      "hookgun",      "hook",            "Grappling Hook");
+#else
 .float dmg;
 .float dmg_edge;
 .float dmg_radius;
@@ -245,3 +248,4 @@ float w_hook(float req)
 	}
 	return TRUE;
 };
+#endif

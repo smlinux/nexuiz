@@ -1,3 +1,6 @@
+#ifdef REGISTER_WEAPON
+REGISTER_WEAPON(TUBA,             w_tuba,         0,                1, -1, 0, WEP_TYPE_SPLASH,  BOT_PICKUP_RATING_MID,  "tuba",         "tuba",            "@!#%'n Tuba");
+#else
 //#define TUBA_NOTE(n) strcat("weapons/tuba_note", ftos(n), ".wav")
 .float tuba_notecount;
 .entity tuba_note;
@@ -247,3 +250,4 @@ float w_tuba(float req)
 	}
 	return TRUE;
 };
+#endif

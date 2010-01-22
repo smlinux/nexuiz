@@ -1,25 +1,3 @@
-// Weapon indexes
-// %weaponaddpoint
-float WEP_FIRST				=  1;
-float WEP_LASER				=  1; float WEPBIT_LASER			= 1; // always: 2^(w-1)
-float WEP_SHOTGUN			=  2; float WEPBIT_SHOTGUN			= 2;
-float WEP_UZI				=  3; float WEPBIT_UZI				= 4;
-float WEP_GRENADE_LAUNCHER	=  4; float WEPBIT_GRENADE_LAUNCHER	= 8;
-float WEP_ELECTRO			=  5; float WEPBIT_ELECTRO			= 16;
-float WEP_CRYLINK			=  6; float WEPBIT_CRYLINK			= 32;
-float WEP_NEX				=  7; float WEPBIT_NEX				= 64;
-float WEP_HAGAR				=  8; float WEPBIT_HAGAR			= 128;
-float WEP_ROCKET_LAUNCHER	=  9; float WEPBIT_ROCKET_LAUNCHER	= 256;
-float WEP_PORTO				= 10; float WEPBIT_PORTO			= 512;
-float WEP_MINSTANEX			= 11; float WEPBIT_MINSTANEX		= 1024;
-float WEP_HOOK     			= 12; float WEPBIT_HOOK     		= 2048;
-float WEP_HLAC			    = 13; float WEPBIT_HLAC		        = 4096;
-float WEP_TUBA        	    = 14; float WEPBIT_TUBA             = 8192;
-float WEP_CAMPINGRIFLE	    = 15; float WEPBIT_CAMPINGRIFLE     = 16384;
-float WEP_FIREBALL          = 16; float WEPBIT_FIREBALL		    = 32768;
-float WEP_LAST				= 16; float WEPBIT_ALL              = 65535;
-float WEP_COUNT             = 17;
-
 float BOT_PICKUP_RATING_LOW	= 2500;
 float BOT_PICKUP_RATING_MID	= 5000;
 float BOT_PICKUP_RATING_HIGH	= 10000;
@@ -74,7 +52,6 @@ string weaponpriority_hudselector_1;
 // functions:
 entity get_weaponinfo(float id);
 string W_FixWeaponOrder(string order, float complete);
-void RegisterWeapons();
 
 #define WEPSPAWNFLAG_NORMAL 1
 #define WEPSPAWNFLAG_CANCLIMB 2
@@ -94,3 +71,40 @@ void RegisterWeapons();
 .float weapon_type; // see WEP_TYPE_* constants
 .float bot_pickupbasevalue; // bot weapon priority
 .string model2; // wpn- sprite name
+
+
+
+// dynamic weapon adding
+float w_null(float dummy);
+void register_weapon(float id, float(float) func, float ammotype, float i, float normalweapon, float canclimb, float weapontype, float pickupbasevalue, string modelname, string shortname, string wname);
+void register_weapons_done();
+
+float WEP_COUNT;
+float WEP_FIRST = 1;
+float WEP_LAST;
+#define WEP_MAXCOUNT 24
+float WEPBIT_ALL;
+#define REGISTER_WEAPON_2(id,bit,func,ammotype,i,normalweapon,canclimb,weapontype,pickupbasevalue,modelname,shortname,wname) \
+	float id; \
+	float bit; \
+	float func(float); \
+	void RegisterWeapons_##id() \
+	{ \
+		WEP_LAST = (id = WEP_FIRST + WEP_COUNT); \
+		WEPBIT_ALL |= (bit = power2of(WEP_COUNT)); \
+		++WEP_COUNT; \
+		register_weapon(id,func,ammotype,i,normalweapon,canclimb,weapontype,pickupbasevalue,modelname,shortname,wname); \
+	} \
+	ACCUMULATE_FUNCTION(RegisterWeapons, RegisterWeapons_##id)
+#ifdef SVQC
+#define REGISTER_WEAPON(id,func,ammotype,i,normalweapon,canclimb,weapontype,pickupbasevalue,modelname,shortname,wname) \
+	REGISTER_WEAPON_2(WEP_##id,WEPBIT_##id,func,ammotype,i,normalweapon,canclimb,weapontype,pickupbasevalue,modelname,shortname,wname)
+#else
+#define REGISTER_WEAPON(id,func,ammotype,i,normalweapon,canclimb,weapontype,pickupbasevalue,modelname,shortname,wname) \
+	REGISTER_WEAPON_2(WEP_##id,WEPBIT_##id,w_null,ammotype,i,normalweapon,canclimb,weapontype,pickupbasevalue,modelname,shortname,wname)
+#endif
+
+#include "../server/w_all.qc"
+
+#undef REGISTER_WEAPON
+ACCUMULATE_FUNCTION(RegisterWeapons, register_weapons_done)

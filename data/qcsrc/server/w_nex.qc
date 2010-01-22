@@ -1,3 +1,6 @@
+#ifdef REGISTER_WEAPON
+REGISTER_WEAPON(NEX,              w_nex,          IT_CELLS,         7,  1, 0, WEP_TYPE_HITSCAN, BOT_PICKUP_RATING_HIGH, "nex",          "nex",             "Nex");
+#else
 void SendCSQCNexBeamParticle() {
 	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte(MSG_BROADCAST, TE_CSQC_NEXGUNBEAMPARTICLE);
@@ -74,3 +77,4 @@ float w_nex(float req)
 		w_deathtypestring = "has been vaporized by";
 	return TRUE;
 };
+#endif

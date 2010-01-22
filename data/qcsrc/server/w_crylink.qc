@@ -1,3 +1,6 @@
+#ifdef REGISTER_WEAPON
+REGISTER_WEAPON(CRYLINK,          w_crylink,      IT_CELLS,         6,  1, 0, WEP_TYPE_SPLASH , BOT_PICKUP_RATING_MID,  "crylink",      "crylink",         "Crylink");
+#else
 .float gravity;
 
 .entity realowner;
@@ -249,3 +252,4 @@ float w_crylink(float req)
 	}
 	return TRUE;
 };
+#endif

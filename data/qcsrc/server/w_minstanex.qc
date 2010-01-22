@@ -1,3 +1,6 @@
+#ifdef REGISTER_WEAPON
+REGISTER_WEAPON(MINSTANEX,        w_minstanex,    IT_CELLS,         7, -1, 1, WEP_TYPE_HITSCAN, BOT_PICKUP_RATING_HIGH, "minstanex",    "minstanex",       "MinstaNex");
+#else
 .float minstanex_lasthit;
 
 void W_MinstaNex_Attack (void)
@@ -236,3 +239,4 @@ float w_minstanex(float req)
 	}
 	return TRUE;
 };
+#endif

@@ -3,8 +3,8 @@ void drawstringcenter(vector, string, vector, vector, float, float);
 
 float teamnagger;
 
-float weapon_hits[WEP_COUNT];
-float weapon_fired[WEP_COUNT];
+float weapon_hits[WEP_MAXCOUNT];
+float weapon_fired[WEP_MAXCOUNT];
 float weapon_number;
 
 float last_weapon;
