@@ -81,7 +81,7 @@ string toStringNexuizWeaponsList(entity me)
 	float n, i;
 	string s;
 	entity e;
-	n = tokenize_console(cvar_string(W_NumberWeaponOrder("cl_weaponpriority")));
+	n = tokenize_console(W_NumberWeaponOrder(cvar_string("cl_weaponpriority")));
 	s = "";
 	for(i = 0; i < n; ++i)
 	{
