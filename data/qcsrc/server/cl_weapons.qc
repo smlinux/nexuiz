@@ -135,7 +135,7 @@ string W_FixWeaponOrder_AllowIncomplete(string order)
 string W_FixWeaponOrder_ForceComplete(string order)
 {
 	if(order == "")
-		order = cvar_string("cl_weaponpriority");
+		order = W_NumberWeaponOrder(cvar_string("cl_weaponpriority"));
 	return W_FixWeaponOrder(order, 1);
 }
 

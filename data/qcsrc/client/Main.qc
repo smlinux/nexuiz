@@ -472,6 +472,7 @@ void ShotOrg_Spawn()
 
 void GameCommand(string msg)
 {
+	string s;
 	float argc;
 	argc = tokenize_console(msg);
 
@@ -556,6 +557,14 @@ void GameCommand(string msg)
 			debug_shotorg = world;
 		}
 		localcmd("sv_cmd debug_shotorg\n");
+	}
+	else if(cmd == "sendcvar") {
+		s = cvar_string(argv(1));
+		if(argv(1) == "cl_weaponpriority")
+			s = W_FixWeaponOrder(W_NumberWeaponOrder(s), 1);
+		else if(substring(argv(1), 0, 17) == "cl_weaponpriority" && strlen(argv(1)) == 18)
+			s = W_FixWeaponOrder(W_NumberWeaponOrder(s), 0);
+		localcmd("cmd sentcvar ", argv(1), " \"", s, "\"\n");
 	}
 	else
 	{

@@ -52,6 +52,8 @@ string weaponpriority_hudselector_1;
 // functions:
 entity get_weaponinfo(float id);
 string W_FixWeaponOrder(string order, float complete);
+string W_NameWeaponOrder(string order);
+string W_NumberWeaponOrder(string order);
 
 #define WEPSPAWNFLAG_NORMAL 1
 #define WEPSPAWNFLAG_CANCLIMB 2

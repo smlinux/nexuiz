@@ -245,7 +245,7 @@ void bot_custom_weapon_priority_setup()
 	bot_weapons_close[0] = -1;
 
 	// Parse far distance weapon priorities
-	tokens = tokenizebyseparator(cvar_string("bot_ai_custom_weapon_priority_far")," ");
+	tokens = tokenizebyseparator(W_NumberWeaponOrder(cvar_string("bot_ai_custom_weapon_priority_far"))," ");
 
 	c = 0;
 	for(i=0; i < tokens && c < WEP_COUNT; ++i){
@@ -259,7 +259,7 @@ void bot_custom_weapon_priority_setup()
 		bot_weapons_far[c] = -1;
 
 	// Parse mid distance weapon priorities
-	tokens = tokenizebyseparator(cvar_string("bot_ai_custom_weapon_priority_mid")," ");
+	tokens = tokenizebyseparator(W_NumberWeaponOrder(cvar_string("bot_ai_custom_weapon_priority_mid"))," ");
 
 	c = 0;
 	for(i=0; i < tokens && c < WEP_COUNT; ++i){
@@ -273,7 +273,7 @@ void bot_custom_weapon_priority_setup()
 		bot_weapons_mid[c] = -1;
 
 	// Parse close distance weapon priorities
-	tokens = tokenizebyseparator(cvar_string("bot_ai_custom_weapon_priority_close")," ");
+	tokens = tokenizebyseparator(W_NumberWeaponOrder(cvar_string("bot_ai_custom_weapon_priority_close"))," ");
 
 	c = 0;
 	for(i=0; i < tokens && i < WEP_COUNT; ++i){

@@ -701,6 +701,7 @@ string fixPriorityList(string order, float from, float to, float subtract, float
 	float i, n, w;
 
 	n = tokenize_console(order);
+	neworder = "";
 	for(i = 0; i < n; ++i)
 	{
 		w = stof(argv(i));
@@ -729,6 +730,19 @@ string fixPriorityList(string order, float from, float to, float subtract, float
 				neworder = strcat(neworder, ftos(w), " ");
 		}
 	}
+	
+	return substring(neworder, 0, strlen(neworder) - 1);
+}
+
+string mapPriorityList(string order, string(string) mapfunc)
+{
+	string neworder;
+	float i, n, w;
+
+	n = tokenize_console(order);
+	neworder = "";
+	for(i = 0; i < n; ++i)
+		neworder = strcat(neworder, mapfunc(argv(i)), " ");
 	
 	return substring(neworder, 0, strlen(neworder) - 1);
 }

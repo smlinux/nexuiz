@@ -33,12 +33,12 @@ void drawNexuizWeaponsList(entity me)
 {
 	// read in cvar?
 	string s, t;
-	s = cvar_string("cl_weaponpriority");
+	s = W_NumberWeaponOrder(cvar_string("cl_weaponpriority"));
 	t = W_FixWeaponOrder(s, 1);
 	if(t != s)
 	{
 		print("AUTOFIXED\n");
-		cvar_set("cl_weaponpriority", t);
+		cvar_set("cl_weaponpriority", W_NameWeaponOrder(t));
 	}
 	me.nItems = tokenize_console(t);
 	drawListBox(me);
@@ -81,7 +81,7 @@ string toStringNexuizWeaponsList(entity me)
 	float n, i;
 	string s;
 	entity e;
-	n = tokenize_console(cvar_string("cl_weaponpriority"));
+	n = tokenize_console(cvar_string(W_NumberWeaponOrder("cl_weaponpriority")));
 	s = "";
 	for(i = 0; i < n; ++i)
 	{
