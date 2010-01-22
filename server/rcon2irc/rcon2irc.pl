@@ -1126,7 +1126,7 @@ sub cond($)
 
 	# IRC admin commands
 	[ irc => q{:(([^! ]*)![^ ]*) (?i:PRIVMSG) [^&#%]\S* :(.*)} => sub {
-		return 0 unless ($config{irc_admin_password} ne '' || $config{irc_quakenet_authusers});
+		return 0 unless ($config{irc_admin_password} ne '' || $store{irc_quakenet_users});
 
 		my ($hostmask, $nick, $command) = @_;
 		my $dpnick = color_dpfix $nick;
@@ -1312,7 +1312,7 @@ sub cond($)
 	# Catch joins of people in a channel the bot is in and catch our own joins of a channel
 	[ irc => q{:(([^! ]*)![^ ]*) JOIN (#.+)} => sub {
 		my ($hostmask, $nick, $chan) = @_;
-		return 0 unless ($config{irc_quakenet_authusers});
+		return 0 unless ($store{irc_quakenet_users});
 		
 		if ($nick eq $config{irc_nick}) {
 			out irc => 0, "PRIVMSG Q :users $chan"; # get auths for all users
@@ -1327,7 +1327,7 @@ sub cond($)
 	# Catch response of users request
 	[ irc => q{:Q!TheQBot@CServe.quakenet.org NOTICE [^:]+ :[@\+\s]?(\S+)\s+(\S+)\s*(\S*)\s*\((.*)\)} => sub {
 		my ($nick, $username, $flags, $host) = @_;
-		return 0 unless ($config{irc_quakenet_authusers});
+		return 0 unless ($store{irc_quakenet_users});
 		
 		$store{logins}{"$nick!$host"} = time() + 600 if ($store{quakenet_users}->{$username});
 		
@@ -1337,7 +1337,7 @@ sub cond($)
 	# Catch response of whois request
 	[ irc => q{:Q!TheQBot@CServe.quakenet.org NOTICE [^:]+ :-Information for user (.*) \(using account (.*)\):} => sub {
 		my ($nick, $username) = @_;
-		return 0 unless ($config{irc_quakenet_authusers});
+		return 0 unless ($store{irc_quakenet_users});
 		
 		if ($store{quakenet_users}->{$username}) {
 			my $hostmask = $store{quakenet_hosts}->{$nick};
@@ -1690,7 +1690,7 @@ for my $p(split ' ', $config{plugins})
 
 # If users for quakenet are listed, parse them into a hash and schedule a sub to query information
 if ($config{irc_quakenet_authusers} ne '') {
-	$store{quakenet_users} = { map { $_ => 1 } split ' ', $config{irc_quakenet_authusers} };
+	$store{quakenet_users} = { map { $_ => 1 } split / /, $config{irc_quakenet_authusers} };
 	
 	schedule sub {
 		my ($timer) = @_;
