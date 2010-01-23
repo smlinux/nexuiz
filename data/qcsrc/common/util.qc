@@ -737,7 +737,7 @@ string fixPriorityList(string order, float from, float to, float subtract, float
 string mapPriorityList(string order, string(string) mapfunc)
 {
 	string neworder;
-	float i, n, w;
+	float i, n;
 
 	n = tokenize_console(order);
 	neworder = "";
