@@ -799,7 +799,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 
 		if (targ == attacker)
 		{
-			if(g_ca)
+			if(g_ca || (g_cts && !cvar("g_cts_selfdamage")))
 				damage = 0;
 			else
 				damage = damage * cvar("g_balance_selfdamagepercent");	// Partial damage if the attacker hits himself

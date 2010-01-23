@@ -67,7 +67,7 @@ void CreatureFrame (void)
 				self.dmg = 2;
 			}
 			// check for falling damage
-			if(!self.hook.state && !g_ca)
+			if(!self.hook.state && !g_ca && !(g_cts && !cvar("g_cts_selfdamage")))
 			{
 				dm = vlen(self.oldvelocity) - vlen(self.velocity); // dm is now the velocity DECREASE. Velocity INCREASE should never cause a sound or any damage.
 				if (self.deadflag)
