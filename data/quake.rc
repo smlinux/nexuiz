@@ -8,3 +8,4 @@ stuffcmds
 //startdemos
 //play announcer/male/welcome.ogg
 
+//exec font-dejavu.cfg
