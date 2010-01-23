@@ -1586,7 +1586,6 @@ float race_CheckName(string net_name) { // Does the name already exist in rankin
 float race_status_time;
 float race_status_prev;
 string race_status_name_prev;
-float myrank_old;
 void Sbar_DrawRaceStatus(vector pos)
 {
 	if (race_status != race_status_prev || race_status_name != race_status_name_prev) {
@@ -1603,26 +1602,29 @@ void Sbar_DrawRaceStatus(vector pos)
 	string s;
 	s = textShortenToWidth(race_status_name, 120/10, stringwidth_colors);
 
-	float myrank;
+	float rank;
+	if(race_status > 0)
+		rank = race_CheckName(race_status_name);
+	string rankname;
+	rankname = race_PlaceName(rank);
+
 	if(race_status == 0)
 		drawpic(pos, "gfx/hud/race/newfail", '80 80 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
 	else if(race_status == 1) {
 		drawpic(pos, "gfx/hud/race/newtime", '80 80 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);	
 		drawcolorcodedstring(pos + '40 80 0' - '5 0 0' * stringwidth(s, TRUE), s, '10 10 0', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+		drawstring(pos + '40 20 0' - '7 0 0' * stringwidth(rankname, TRUE), rankname, '14 14 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
 	} else if(race_status == 2) {
-		myrank = race_CheckName(GetPlayerName(player_localentnum -1));
-		if(myrank == myrank_old) {
+		if(race_status_name == GetPlayerName(player_localentnum -1) || !race_myrank || race_myrank < rank)
 			drawpic(pos, "gfx/hud/race/newrankgreen", '80 80 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
-			drawcolorcodedstring(pos + '40 80 0' - '5 0 0' * stringwidth(s, TRUE), s, '10 10 0', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
-		}
-		else {
+		else
 			drawpic(pos, "gfx/hud/race/newrankyellow", '80 80 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
-			drawcolorcodedstring(pos + '40 80 0' - '5 0 0' * stringwidth(s, TRUE), s, '10 10 0', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
-			myrank_old = race_CheckName(GetPlayerName(player_localentnum -1));
-		}
+		drawcolorcodedstring(pos + '40 80 0' - '5 0 0' * stringwidth(s, TRUE), s, '10 10 0', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+		drawstring(pos + '40 20 0' - '7 0 0' * stringwidth(rankname, TRUE), rankname, '14 14 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
 	} else if(race_status == 3) {
 		drawpic(pos, "gfx/hud/race/newrecordserver", '80 80 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
 		drawcolorcodedstring(pos + '40 80 0' - '5 0 0' * stringwidth(s, TRUE), s, '10 10 0', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
+		drawstring(pos + '40 20 0' - '7 0 0' * stringwidth(rankname, TRUE), rankname, '14 14 0', '1 1 1', sbar_alpha_fg * a, DRAWFLAG_NORMAL);
 	}
 
 	if (race_status_time - time <= 0) {

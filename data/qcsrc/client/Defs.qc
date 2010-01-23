@@ -212,7 +212,7 @@ string race_othercheckpointenemy;
 float sb_showscores_force;
 float race_status;
 string race_status_name;
-float myrank_old;
+float race_myrank;
 
 // Nexball
 float nb_pb_period;
