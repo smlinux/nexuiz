@@ -24,6 +24,7 @@ evil6_trims
 evil6_walls
 evil8_base
 eX
+exosystem
 final_rage
 flags
 flamethrower
