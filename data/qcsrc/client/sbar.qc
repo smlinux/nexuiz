@@ -3347,10 +3347,8 @@ void CSQC_race_hud(void)
 	} else {
 		drawstring(pos, "Personal best ", '10 10 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 		drawstring(pos + '0 10 0', TIME_ENCODED_TOSTRING(t),'14 14 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
-
-		// expanding
-		drawstring(pos - '0 50 0' * f, "Personal best ", '10 10 0' + '30 30 0' * f, '1 1 1', sbar_alpha_fg * (1 - f), DRAWFLAG_NORMAL);
-		drawstring(pos + '0 10 0' - '0 30 0' * f, TIME_ENCODED_TOSTRING(t),'14 14 0' + '42 42 0' * f, '1 1 1', sbar_alpha_fg * (1 - f), DRAWFLAG_NORMAL);
+		drawstring_expanding(pos, "Personal best ", '10 10 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, f);
+		drawstring_expanding(pos + '0 10 0', TIME_ENCODED_TOSTRING(t),'14 14 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, f);
 	}
 
 	// server record
@@ -3368,10 +3366,8 @@ void CSQC_race_hud(void)
 	} else {
 		drawstring(pos, "Server best ", '10 10 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 		drawstring(pos + '0 10 0', TIME_ENCODED_TOSTRING(t),'14 14 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
-
-		// expanding
-		drawstring(pos - '0 50 0' * f, "Server best ", '10 10 0' + '30 30 0' * f, '1 1 1', sbar_alpha_fg * (1 - f), DRAWFLAG_NORMAL);
-		drawstring(pos + '0 10 0' - '0 30 0' * f, TIME_ENCODED_TOSTRING(t),'14 14 0' + '42 42 0' * f, '1 1 1', sbar_alpha_fg * (1 - f), DRAWFLAG_NORMAL);
+		drawstring_expanding(pos, "Server best ", '10 10 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, f);
+		drawstring_expanding(pos + '0 10 0', TIME_ENCODED_TOSTRING(t),'14 14 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL, f);
 	}
 	drawfont = sbar_font;
 }
