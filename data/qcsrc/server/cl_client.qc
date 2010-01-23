@@ -3077,4 +3077,9 @@ void PlayerPostThink (void)
 		WaypointSprite_UpdateHealth(self.waypointsprite_attachedforcarrier, '1 0 0' * healtharmor_maxdamage(self.health, self.armorvalue, cvar("g_balance_armor_blockpercent")));
 	
 	playerdemo_write();
+
+	/*
+	if(g_race)
+		dprint(sprintf("%f %.6f\n", time, race_GetFractionalLapCount(self)));
+	*/
 }

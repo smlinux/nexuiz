@@ -140,6 +140,7 @@ void ScoreRules_kh(float teams)
 #define SP_RACE_LAPS 4
 #define SP_RACE_FASTEST 5
 #define SP_RACE_TIME 5
+//#define SP_RACE_RANK 6
 void ScoreRules_race()
 {
 	ScoreRules_basics(race_teams, 0, 0, FALSE);
@@ -148,6 +149,7 @@ void ScoreRules_race()
 		ScoreInfo_SetLabel_TeamScore(  ST_RACE_LAPS,    "laps",      SFL_SORT_PRIO_PRIMARY);
 		ScoreInfo_SetLabel_PlayerScore(SP_RACE_LAPS,    "laps",      SFL_SORT_PRIO_PRIMARY);
 		ScoreInfo_SetLabel_PlayerScore(SP_RACE_TIME,    "time",      SFL_SORT_PRIO_SECONDARY | SFL_LOWER_IS_BETTER | SFL_TIME);
+		//ScoreInfo_SetLabel_PlayerScore(SP_RACE_RANK,    "rank",      SFL_LOWER_IS_BETTER | SFL_RANK | SFL_ALLOW_HIDE);
 	}
 	else if(g_race_qualifying)
 	{

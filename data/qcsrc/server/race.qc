@@ -1241,3 +1241,64 @@ void spawnfunc_trigger_race_penalty()
 	if (!self.race_penalty)
 		self.race_penalty = 5;
 }
+
+float race_GetFractionalLapCount(entity e)
+{
+	// interesting metrics (idea by KrimZon) to maybe sort players in the
+	// scoreboard, immediately updates when overtaking
+	//
+	// requires the track to be built so you never get farther away from the
+	// next checkpoint, though, and current Nexuiz race maps are not built that
+	// way
+	//
+	// also, this code is slow and would need optimization (i.e. "next CP"
+	// links on CP entities)
+
+	float l;
+	l = PlayerScore_Add(e, SP_RACE_LAPS, 0);
+	if(e.race_completed)
+		return l; // not fractional
+	
+	vector o0, o1;
+	float bestfraction, fraction;
+	entity lastcp, cp0, cp1;
+	float nextcpindex, lastcpindex;
+
+	nextcpindex = max(e.race_checkpoint, 0);
+	lastcpindex = e.race_respawn_checkpoint;
+	lastcp = e.race_respawn_spotref;
+
+	if(nextcpindex == lastcpindex)
+		return l; // finish
+	
+	bestfraction = 1;
+	for(cp0 = world; (cp0 = find(cp0, classname, "trigger_race_checkpoint")); )
+	{
+		if(cp0.race_checkpoint != lastcpindex)
+			continue;
+		if(lastcp)
+			if(cp0 != lastcp)
+				continue;
+		o0 = (cp0.absmin + cp0.absmax) * 0.5;
+		for(cp1 = world; (cp1 = find(cp1, classname, "trigger_race_checkpoint")); )
+		{
+			if(cp1.race_checkpoint != nextcpindex)
+				continue;
+			o1 = (cp1.absmin + cp1.absmax) * 0.5;
+			if(o0 == o1)
+				continue;
+			fraction = bound(0.0001, vlen(e.origin - o1) / vlen(o0 - o1), 1);
+			if(fraction < bestfraction)
+				bestfraction = fraction;
+		}
+	}
+
+	// we are at CP "nextcpindex - bestfraction"
+	// race_timed_checkpoint == 4: then nextcp==4 means 0.9999x, nextcp==0 means 0.0000x
+	// race_timed_checkpoint == 0: then nextcp==0 means 0.9999x
+	float c, nc;
+	nc = race_highest_checkpoint + 1;
+	c = (mod(nextcpindex - race_timed_checkpoint + nc + nc - 1, nc) + 1) - bestfraction;
+
+	return l + c / nc;
+}
