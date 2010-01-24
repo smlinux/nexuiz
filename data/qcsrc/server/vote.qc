@@ -310,6 +310,8 @@ float GameCommand_Vote(string s, entity e) {
 				print_to(e, "^1You can't vote from the server console.");
 			} else if(e.vote_vote == 0
 				  || cvar("sv_vote_change")) {
+				msg_entity = e;
+				VoteDialog_UpdateHighlight(3);
 				print_to(e, "^1You abstained from your vote.");
 				e.vote_vote = -2;
 				centerprint_expire(e, CENTERPRIO_VOTE);

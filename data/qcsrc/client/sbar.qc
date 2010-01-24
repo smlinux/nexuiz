@@ -2776,9 +2776,13 @@ void Sbar_Draw (void)
 		float a;
 		a = vote_alpha * bound(cvar_or("sbar_vote_alreadyvoted_alpha", 0.75), 1 - vote_highlighted, 1);
 
-		color_x = cvar("sbar_color_bg_r");
-		color_y = cvar("sbar_color_bg_g");
-		color_z = cvar("sbar_color_bg_b");
+		if (teamplay)
+			color =  GetTeamRGB(myteam) * sbar_color_bg_team;
+		else {
+			color_x = cvar("sbar_color_bg_r");
+			color_y = cvar("sbar_color_bg_g");
+			color_z = cvar("sbar_color_bg_b");
+		}
 
 		vector origin = bottomright - '290 135 0';
 		vector size = '280 70 0';
@@ -2787,8 +2791,8 @@ void Sbar_Draw (void)
 		string s;
 	        s = "A vote has been called for: ";
 		drawstring(origin + '0.5 0 0' * size_x + '0 0.1 0' * size_y - '6 0 0' * stringwidth(s, FALSE), s, '12 12 0', '1 1 1', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
-		s = textShortenToWidth(vote_called_vote, size_x * 0.95, stringwidth_colors);
-		drawcolorcodedstring(origin + '0.5 0 0' * size_x + '0 0.3 0' * size_y - '5 0 0' * stringwidth(s, FALSE), s, '10 10 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
+		s = textShortenToWidth(vote_called_vote, size_x * 0.96/10, stringwidth_colors);
+		drawcolorcodedstring(origin + '0.52 0 0' * size_x + '0 0.3 0' * size_y - '5 0 0' * stringwidth(s, FALSE), s, '10 10 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 		// print the yes/no counts
 		s = strcat("Yes: ", ftos(vote_yescount));
