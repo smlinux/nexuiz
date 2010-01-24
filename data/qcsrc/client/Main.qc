@@ -444,7 +444,7 @@ void ShotOrg_Draw2D()
 	coord2d_topleft = project_3d_to_2d(self.origin + view_up * 4 - view_right * 4);
 	coord2d_topright = project_3d_to_2d(self.origin + view_up * 4 + view_right * 4);
 
-	fs = '1 1 0' * ((coord2d_topright_x - coord2d_topleft_x) / stringwidth(s, FALSE));
+	fs = '1 1 0' * ((coord2d_topright_x - coord2d_topleft_x) / stringwidth(s, FALSE, '8 8 0'));
 
 	coord2d = coord2d_topleft;
 	if(fs_x < 8)

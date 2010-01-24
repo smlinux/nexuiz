@@ -140,12 +140,16 @@ vector AnglesTransform_TurnDirection(vector transform);
 vector AnglesTransform_Divide(vector to_transform, vector from_transform);
 #endif
 
-typedef float(string s) textLengthUpToWidth_widthFunction_t;
-float textLengthUpToWidth(string theText, float maxWidth, textLengthUpToWidth_widthFunction_t tw);
-string textShortenToWidth(string theText, float maxWidth, textLengthUpToWidth_widthFunction_t tw);
+typedef float(string s, vector size) textLengthUpToWidth_widthFunction_t;
+typedef float(string s) textLengthUpToLength_lenFunction_t;
+float textLengthUpToWidth(string theText, float maxWidth, vector size, textLengthUpToWidth_widthFunction_t tw);
+string textShortenToWidth(string theText, float maxWidth, vector size, textLengthUpToWidth_widthFunction_t tw);
+float textLengthUpToLength(string theText, float maxWidth, textLengthUpToLength_lenFunction_t tw);
+string textShortenToLength(string theText, float maxWidth, textLengthUpToLength_lenFunction_t tw);
 
 string getWrappedLine_remaining;
-string getWrappedLine(float w, textLengthUpToWidth_widthFunction_t tw);
+string getWrappedLine(float w, vector size, textLengthUpToWidth_widthFunction_t tw);
+string getWrappedLineLen(float w, textLengthUpToLength_lenFunction_t tw);
 
 float isGametypeInFilter(float gt, float tp, string pattern);
 

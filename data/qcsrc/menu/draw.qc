@@ -249,26 +249,30 @@ void draw_Text(vector theOrigin, string theText, vector theSize, vector theColor
 }
 void draw_CenterText(vector theOrigin, string theText, vector theSize, vector theColor, float theAlpha, float ICanHasKallerz)
 {
-	draw_Text(theOrigin - eX * theSize_x * 0.5 * draw_TextWidth(theText, ICanHasKallerz), theText, theSize, theColor, theAlpha, ICanHasKallerz);
+	//print(strcat("orig = ", vtos(theOrigin) ," tx = ", ftos(draw_TextWidth(theText, ICanHasKallerz, theSize)), "\n"));
+	draw_Text(theOrigin - eX * 0.5 * draw_TextWidth(theText, ICanHasKallerz, theSize), theText, theSize, theColor, theAlpha, ICanHasKallerz);
 }
 
-float draw_TextWidth(string theText, float ICanHasKallerz)
+float draw_TextWidth(string theText, float ICanHasKallerz, vector SizeThxBye)
 {
 	//return strlen(theText);
 	//print("draw_TextWidth \"", theText, "\"\n");
 	vector fs;
-	float r;
+	vector v;
+	v = '0 0 0';
+	//float r;
 	if not(cvar("menu_font_size_snapping_fix")) // FIXME remove this, this is to detect old engines
 	{
 		fs = draw_fontscale;
 		draw_fontscale = '1 1 0';
 	}
-	r = stringwidth(theText, ICanHasKallerz) / draw_fontscale_x;
+	v_x = stringwidth(theText, ICanHasKallerz, boxToGlobalSize(SizeThxBye, draw_scale)) / draw_fontscale_x;
 	if not(cvar("menu_font_size_snapping_fix")) // FIXME remove this, this is to detect old engines
 	{
 		draw_fontscale = fs;
 	}
-	return r;
+	v = globalToBoxSize(v, draw_scale);
+	return v_x;
 }
 
 float draw_clipSet;
@@ -299,28 +303,34 @@ void draw_ClearClip()
 	draw_clipSet = 0;
 }
 
-string draw_TextShortenToWidth(string theText, float maxWidth, float ICanHasKallerz)
+string draw_TextShortenToWidth(string theText, float maxWidth, float ICanHasKallerz, vector SizeThxBye)
 {
-	if(ICanHasKallerz)
-		return textShortenToWidth(theText, maxWidth, draw_TextWidth_WithColors);
+	/*
+	if(draw_TextWidth(theText, ICanHasKallerz, SizeThxBye) <= maxWidth)
+		return theText;
 	else
-		return textShortenToWidth(theText, maxWidth, draw_TextWidth_WithoutColors);
+		return strcat(substring(theText, 0, draw_TextLengthUpToWidth(theText, maxWidth - draw_TextWidth("...", ICanHasKallerz, SizeThxBye), ICanHasKallerz, SizeThxBye)), "...");
+	*/
+	if(ICanHasKallerz)
+		return textShortenToWidth(theText, maxWidth, SizeThxBye, draw_TextWidth_WithColors);
+	else
+		return textShortenToWidth(theText, maxWidth, SizeThxBye, draw_TextWidth_WithoutColors);
 }
 
-float draw_TextWidth_WithColors(string s)
+float draw_TextWidth_WithColors(string s, vector theFontSize)
 {
-	return draw_TextWidth(s, TRUE);
+	return draw_TextWidth(s, TRUE, theFontSize);
 }
 
-float draw_TextWidth_WithoutColors(string s)
+float draw_TextWidth_WithoutColors(string s, vector theFontSize)
 {
-	return draw_TextWidth(s, FALSE);
+	return draw_TextWidth(s, FALSE, theFontSize);
 }
 
-float draw_TextLengthUpToWidth(string theText, float maxWidth, float allowColorCodes)
+float draw_TextLengthUpToWidth(string theText, float maxWidth, float allowColorCodes, vector theFontSize)
 {
 	if(allowColorCodes)
-		return textLengthUpToWidth(theText, maxWidth, draw_TextWidth_WithColors);
+		return textLengthUpToWidth(theText, maxWidth, theFontSize, draw_TextWidth_WithColors);
 	else
-		return textLengthUpToWidth(theText, maxWidth, draw_TextWidth_WithoutColors);
+		return textLengthUpToWidth(theText, maxWidth, theFontSize, draw_TextWidth_WithoutColors);
 }

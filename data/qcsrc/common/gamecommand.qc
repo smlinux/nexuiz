@@ -178,6 +178,8 @@ float GameCommand_Generic(string command)
 		print("    f1 f2 b when ----------------------> f   : f1 if b, f2 otherwise\n");
 		print("    s s union|intersection|difference -> s   : set operations\n");
 		print("    s shuffle -------------------------> s   : randomly arrange elements\n");
+		print("    /key /value put ------------------->     : set a database key\n");
+		print("    /key get --------------------------> s   : get a database value\n");
 		print("    x dbpush -------------------------->     : pushes the top onto the database\n");
 		print("    dbpop|dbget -----------------------> x   : removes/reads DB's top\n");
 		print("    dblen|dbat ------------------------> f   : gets the DB's size/cursor pos\n");
@@ -506,6 +508,18 @@ float GameCommand_Generic(string command)
 					rpn_setf(ceil(random() * rpn_getf()) - 1);
 				} else if(rpncmd == "crc16") {
 					rpn_setf(crc16(FALSE, rpn_get()));
+				} else if(rpncmd == "put") {
+					s2 = rpn_pop();
+					if (!rpn_error)
+					{
+						s = rpn_pop();
+						if (!rpn_error)
+							db_put(rpn_db, s, s2);
+					}
+				} else if(rpncmd == "get") {
+					s = rpn_pop();
+					if (!rpn_error)
+						rpn_push(db_get(rpn_db, s));
 				} else if(rpncmd == "dbpush") {
 					s = rpn_pop();
 					if(!rpn_error)

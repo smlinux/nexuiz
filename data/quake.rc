@@ -4,6 +4,7 @@ exec data/campaign.cfg
 exec config_update.cfg
 exec autoexec.cfg
 stuffcmds
+exec loadfonts.cfg
 //startdemos demos/demo1 demos/demo2 demos/demo3
 //startdemos
 //play announcer/male/welcome.ogg
