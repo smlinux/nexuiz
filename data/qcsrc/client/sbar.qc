@@ -2575,6 +2575,16 @@ void Sbar_Reset (void)
 		CSQC_ctf_hudreset();
 }
 
+float vote_yescount;
+float vote_nocount;
+float vote_needed;
+float vote_highlighted; // currently selected vote
+
+float vote_active; // is there an active vote?
+float vote_prev; // previous state of vote_active to check for a change
+float vote_alpha;
+float vote_change; // "time" when vote_active changed
+
 void Sbar_Draw (void)
 {
 	// vectors for top right, bottom right, bottom and bottom left corners
@@ -2721,28 +2731,7 @@ void Sbar_Draw (void)
 		s = strcat("^2Press ^3", getcommandkey("ready", "ready"), "^2 to end warmup");
 		o = Sbar_DrawNoteLine(o, s);
 	}
-	if(vote_waiting)
-	{
-		s = strcat("^2A vote has been called for ^1",  textShortenToWidth(vote_called_vote, vid_conwidth/2/sbar_fontsize_x, stringwidth_colors));
-		o = Sbar_DrawNoteLine(o, s);
 
-		if(vote_waiting_for_me)
-		{
-			s = strcat(blinkcolor, "Press ^3", getcommandkey("vote yes", "vyes"), blinkcolor, " to accept");
-			o = Sbar_DrawNoteLine(o, s);
-
-			s = strcat(blinkcolor, "Press ^3", getcommandkey("vote no", "vno"), blinkcolor, " to reject");
-			o = Sbar_DrawNoteLine(o, s);
-
-			s = strcat(blinkcolor, "Press ^3", getcommandkey("vote abstain", "vabstain"), blinkcolor, " to abstain");
-			o = Sbar_DrawNoteLine(o, s);
-		}
-		else
-		{
-			s = strcat("^2Waiting for others to vote...");
-			o = Sbar_DrawNoteLine(o, s);
-		}
-	}
 	if(teamplay && !intermission && !spectatee_status && gametype != GAME_CA && teamnagger)
 	{
 		entity tm;
@@ -2771,6 +2760,63 @@ void Sbar_Draw (void)
 				o = Sbar_DrawNoteLine(o, s);
 			}
 		}
+	}
+
+	if(vote_active != vote_prev) {
+		vote_change = time;
+		vote_prev = bound(0, vote_active, 1);
+	}
+
+	if(vote_active)
+		vote_alpha = bound(0, (time - vote_change) * 2, 1);
+	else
+		vote_alpha = bound(0, 1 - (time - vote_change) * 2, 1);
+
+	if(vote_alpha) {
+		float a;
+		a = vote_alpha * bound(cvar_or("sbar_vote_alreadyvoted_alpha", 0.75), 1 - vote_highlighted, 1);
+
+		color_x = cvar("sbar_color_bg_r");
+		color_y = cvar("sbar_color_bg_g");
+		color_z = cvar("sbar_color_bg_b");
+
+		vector origin = bottomright - '290 135 0';
+		vector size = '280 70 0';
+		drawpic(origin, "gfx/hud/voteprogress_back", size, color, a * sbar_alpha_bg, DRAWFLAG_NORMAL);
+
+		string s;
+	        s = "A vote has been called for: ";
+		drawstring(origin + '0.5 0 0' * size_x + '0 0.1 0' * size_y - '6 0 0' * stringwidth(s, FALSE), s, '12 12 0', '1 1 1', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
+		s = textShortenToWidth(vote_called_vote, size_x * 0.95, stringwidth_colors);
+		drawcolorcodedstring(origin + '0.5 0 0' * size_x + '0 0.3 0' * size_y - '5 0 0' * stringwidth(s, FALSE), s, '10 10 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
+
+		// print the yes/no counts
+		s = strcat("Yes: ", ftos(vote_yescount));
+		drawstring(origin + '0 0.6 0' * size_y + '0.02 0 0' * size_x, s, '12 12 0', '0 1 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
+		s = strcat("No: ", ftos(vote_nocount));
+		drawstring(origin + '0 0.6 0' * size_y + '0.98 0 0' * size_x - '12 0 0' * stringwidth(s, FALSE), s, '12 12 0', '1 0 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
+
+		// draw the progress bars
+		drawsetcliparea(origin_x, origin_y, size_x * 0.5 * (vote_yescount/vote_needed), size_y);
+		drawpic(origin, "gfx/hud/voteprogress_prog", size, '0 1 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
+
+		drawsetcliparea(origin_x + size_x - size_x * 0.5 * (vote_nocount/vote_needed), origin_y, size_x * 0.5, size_y);
+		drawpic(origin, "gfx/hud/voteprogress_prog", size, '1 0 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
+
+		// draw the highlights
+		if(vote_highlighted == 1) {
+			drawsetcliparea(origin_x, origin_y, size_x * 0.5, size_y);
+			drawpic(origin, "gfx/hud/voteprogress_voted", size, '0 1 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
+		}
+		else if(vote_highlighted == 2) {
+			drawsetcliparea(origin_x + 0.5 * size_x, origin_y, size_x * 0.5, size_y);
+			drawpic(origin, "gfx/hud/voteprogress_voted", size, '1 0 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
+		}
+
+		drawresetcliparea();
+	}
+	else if(!vote_active) {
+		vote_highlighted = 0;
 	}
 
 	Sbar_UpdatePlayerTeams();

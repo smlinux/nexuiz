@@ -1164,6 +1164,22 @@ void Net_ReadPingPLReport()
 	playerslots[e].ping_movementloss = ml / 255.0;
 }
 
+void Net_VoteDialog(float highlight) {
+	if(highlight) {
+		vote_highlighted = ReadShort();
+		return;
+	}
+
+	vote_yescount = ReadShort();
+	vote_nocount = ReadShort();
+	vote_needed = ReadShort();
+	vote_active = 1;
+}
+
+void Net_VoteDialogReset() {
+	vote_active = 0;
+}
+
 // CSQC_Parse_TempEntity : Handles all temporary entity network data in the CSQC layer.
 // You must ALWAYS first acquire the temporary ID, which is sent as a byte.
 // Return value should be 1 if CSQC handled the temporary entity, otherwise return 0 to have the engine process the event.
@@ -1204,6 +1220,14 @@ float CSQC_Parse_TempEntity()
 			break;
 		case TE_CSQC_TEAMNAGGER:
 			Net_TeamNagger();
+			bHandled = true;
+			break;
+		case TE_CSQC_VOTE:
+			Net_VoteDialog(ReadByte());
+			bHandled = true;
+			break;
+		case TE_CSQC_VOTERESET:
+			Net_VoteDialogReset();
 			bHandled = true;
 			break;
         case TE_CSQC_LIGHTNINGARC:

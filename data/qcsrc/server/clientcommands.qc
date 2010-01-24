@@ -29,10 +29,7 @@ float Nagger_SendEntity(entity to, float sendflags)
 
 	if(nags & 128)
 	{
-		if(votecalled)
-			WriteString(MSG_ENTITY, votecalledvote_display);
-		else
-			WriteString(MSG_ENTITY, "");
+		WriteString(MSG_ENTITY, votecalledvote_display);
 	}
 
 	if(nags & 1)

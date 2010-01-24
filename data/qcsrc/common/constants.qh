@@ -53,6 +53,8 @@ const float TE_CSQC_NEXGUNBEAMPARTICLE = 104;
 const float TE_CSQC_LIGHTNINGARC = 105;
 const float TE_CSQC_TEAMNAGGER = 106;
 const float TE_CSQC_PINGPLREPORT = 107;
+const float TE_CSQC_VOTE = 108;
+const float TE_CSQC_VOTERESET = 109;
 
 const float RACE_NET_CHECKPOINT_HIT_QUALIFYING = 0; // byte checkpoint, short time, short recordtime, string recordholder
 const float RACE_NET_CHECKPOINT_CLEAR = 1;
