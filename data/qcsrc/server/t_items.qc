@@ -1636,3 +1636,217 @@ void spawnfunc_weapon_seeker()
 {
 	spawnfunc_weapon_fireball();
 }
+
+
+#define OP_SET 0
+#define OP_MIN 1
+#define OP_MAX 2
+#define OP_PLUS 3
+#define OP_MINUS 4
+
+void GiveSound(entity e, float v0, float v1, string snd_incr, string snd_decr)
+{
+	if(v0 > v1)
+	{
+		if(snd_decr != "")
+			sound (e, CHAN_AUTO, snd_decr, VOL_BASE, ATTN_NORM);
+	}
+	else if(v0 < v1)
+	{
+		if(snd_incr != "")
+			sound (e, CHAN_AUTO, snd_incr, VOL_BASE, ATTN_NORM);
+	}
+}
+
+float GiveBit(entity e, .float fld, float bit, float op, float val, string snd_incr, string snd_decr)
+{
+	float v0, v1;
+	v0 = (e.fld & bit);
+	switch(op)
+	{
+		case OP_SET:
+			if(val > 0)
+				e.fld |= bit;
+			else
+				e.fld &~= bit;
+			break;
+		case OP_MIN:
+		case OP_PLUS:
+			if(val > 0)
+				e.fld |= bit;
+			break;
+		case OP_MAX:
+			if(val <= 0)
+				e.fld &~= bit;
+			break;
+		case OP_MINUS:
+			if(val > 0)
+				e.fld &~= bit;
+			break;
+	}
+	v1 = (e.fld & bit);
+	GiveSound(e, v0, v1, snd_incr, snd_decr);
+	return (v0 != v1);
+}
+
+float GiveValue(entity e, .float fld, float op, float val, string snd_incr, string snd_decr)
+{
+	float v0, v1;
+	v0 = e.fld;
+	switch(op)
+	{
+		case OP_SET:
+			e.fld = val;
+			break;
+		case OP_MIN:
+			e.fld = min(e.fld, val);
+			break;
+		case OP_MAX:
+			e.fld = max(e.fld, val);
+			break;
+		case OP_PLUS:
+			e.fld += val;
+			break;
+		case OP_MINUS:
+			e.fld -= val;
+			break;
+	}
+	v1 = e.fld;
+	GiveSound(e, v0, v1, snd_incr, snd_decr);
+	return (v0 != v1);
+}
+
+float GiveValueRot(entity e, .float fld, .float rotfield, float rottime, .float regenfield, float regentime, float op, float val, string snd_incr, string snd_decr)
+{
+	float v0, v1;
+	v0 = e.fld;
+	GiveValue(e, fld, op, val, snd_incr, snd_decr);
+	v1 = e.fld;
+	if(v0 > v1)
+		e.rotfield = max(e.rotfield, time + rottime);
+	else if(v0 < v1)
+		e.regenfield = max(e.regenfield, time + regentime);
+	return (v0 != v1);
+}
+
+float GiveItems(entity e, float beginarg, float endarg)
+{
+	float got, i, j, val, op;
+	float _switchweapon;
+	entity wi;
+	string cmd;
+
+	val = 999;
+	op = OP_SET;
+
+	got = 0;
+
+	_switchweapon = FALSE;
+	if (activator.autoswitch)
+		if (activator.switchweapon == w_getbestweapon(activator))
+			_switchweapon = TRUE;
+
+	if(activator.strength_finished <= time)
+		activator.invincible_finished = time;
+	if(activator.invincible_finished <= time)
+		activator.invincible_finished = time;
+
+	for(i = beginarg; i < endarg; ++i)
+	{
+		cmd = argv(i);
+		if(cmd == "0" || stof(cmd))
+		{
+			val = stof(cmd);
+			continue;
+		}
+		switch(cmd)
+		{
+			case "no":
+				op = OP_MAX;
+				val = 0;
+				continue;
+			case "max":
+				op = OP_MAX;
+				continue;
+			case "min":
+				op = OP_MIN;
+				continue;
+			case "plus":
+				op = OP_PLUS;
+				continue;
+			case "minus":
+				op = OP_MINUS;
+				continue;
+			case "unlimited_ammo":
+				got += GiveBit(e, items, IT_UNLIMITED_AMMO, op, val, "misc/powerup.wav", "misc/poweroff.wav");
+				break;
+			case "unlimited_weapon_ammo":
+				got += GiveBit(e, items, IT_UNLIMITED_WEAPON_AMMO, op, val, "misc/powerup.wav", "misc/poweroff.wav");
+				break;
+			case "unlimited_superweapons":
+				got += GiveBit(e, items, IT_UNLIMITED_SUPERWEAPONS, op, val, "misc/powerup.wav", "misc/poweroff.wav");
+				break;
+			case "jetpack":
+				got += GiveBit(e, items, IT_JETPACK, op, val, "misc/itempickup.wav", string_null);
+				break;
+			case "fuel_regen":
+				got += GiveBit(e, items, IT_FUEL_REGEN, op, val, "misc/itempickup.wav", string_null);
+				break;
+			case "strength":
+				got += GiveValue(e, strength_finished, op, time + val, "misc/powerup.wav", "misc/poweroff.wav");
+				break;
+			case "invinicible":
+				got += GiveValue(e, invincible_finished, op, time + val, "misc/powerup_shield.wav", "misc/poweroff.wav");
+				break;
+			case "cells":
+				got += GiveValue(e, ammo_cells, op, val, "misc/itempickup.wav", string_null);
+				break;
+			case "shells":
+				got += GiveValue(e, ammo_shells, op, val, "misc/itempickup.wav", string_null);
+				break;
+			case "nails":
+			case "bullets":
+				got += GiveValue(e, ammo_nails, op, val, "misc/itempickup.wav", string_null);
+				break;
+			case "rockets":
+				got += GiveValue(e, ammo_rockets, op, val, "misc/itempickup.wav", string_null);
+				break;
+			case "health":
+				got += GiveValueRot(e, health, pauserothealth_finished, cvar("g_balance_pause_health_rot"), pauseregen_finished, cvar("g_balance_pause_health_regen"), op, val, "misc/megahealth.wav", string_null);
+				break;
+			case "armor":
+				got += GiveValueRot(e, armorvalue, pauserotarmor_finished, cvar("g_balance_pause_armor_rot"), pauseregen_finished, cvar("g_balance_pause_health_regen"), op, val, "misc/armor25.wav", string_null);
+				break;
+			case "fuel":
+				got += GiveValueRot(e, ammo_fuel, pauserotfuel_finished, cvar("g_balance_pause_fuel_rot"), pauseregen_finished, cvar("g_balance_pause_fuel_regen"), op, val, "misc/itempickup.wav", string_null);
+				break;
+			default:
+				for(j = WEP_FIRST; j <= WEP_LAST; ++j)
+				{
+					wi = get_weaponinfo(j);
+					if(cmd == wi.netname)
+					{
+						got += GiveBit(e, weapons, wi.weapons, op, val, "weapons/weaponpickup.wav", "");
+						break;
+					}
+				}
+				if(j > WEP_LAST)
+					print("give: invalid item ", cmd, "\n");
+				break;
+		}
+		val = 999;
+		op = OP_SET;
+	}
+
+	if(activator.strength_finished <= time)
+		activator.invincible_finished = 0;
+	if(activator.invincible_finished <= time)
+		activator.invincible_finished = 0;
+
+	if not(activator.weapons & W_WeaponBit(activator.switchweapon))
+		_switchweapon = TRUE;
+	if(_switchweapon)
+		W_SwitchWeapon_Force(activator, w_getbestweapon(activator));
+
+	return got;
+}

@@ -618,6 +618,8 @@ float CheatCommand(float argc)
 		case "give":
 			if(argv(1) == "all")
 				return CheatImpulse(99); // not gonna duplicate this
+			if(GiveItems(self, 1, argc))
+				goto cheated;
 			break;
 	}
 	return 0;
