@@ -93,7 +93,7 @@ float CheatImpulse(float i)
 			self.personal.strength_finished = self.strength_finished;
 			self.personal.invincible_finished = self.invincible_finished;
 			self.personal.teleport_time = time;
-			goto cheated;
+			break; // this part itself doesn't cheat, so let's not count this
 		case CHIMPULSE_CLONE_MOVING:
 			makevectors (self.v_angle);
 			self.velocity = self.velocity + v_forward * 300;
