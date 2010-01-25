@@ -1,2 +1,2 @@
 float CheatImpulse(float i);
-float CheatCommand(string cmd);
+float CheatCommand(float argc);
