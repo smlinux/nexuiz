@@ -46,13 +46,25 @@ void CheatShutdownClient()
 
 float CheatsAllowed(float i, float argc, float fr) // the cheat gets passed as argument for possible future ACL checking
 {
+	// dead people cannot cheat
+	if(self.deadflag != DEAD_NO)
+		return 0;
+	if(self.classname != "player")
+		return 0;
+	
+	// sv_clones
 	if(i == CHIMPULSE_CLONE_MOVING || i == CHIMPULSE_CLONE_STANDING)
 		if(self.lip < sv_clones)
 			return 1;
+
+	// haha
 	if(self.maycheat)
 		return 1;
+	
+	// sv_cheats
 	if(sv_cheats && autocvar_sv_cheats)
 		return 1;
+
 	return 0;
 }
 
