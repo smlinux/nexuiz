@@ -58,8 +58,19 @@ float CheatsAllowed(float i, float argc, float fr) // the cheat gets passed as a
 	return 0;
 }
 
+#define BEGIN_CHEAT_FUNCTION() \
+	float cheating; \
+	cheating = 0
+#define DID_CHEAT() \
+	++cheating
+#define END_CHEAT_FUNCTION() \
+	cheatcount_total += cheating; \
+	self.cheatcount += cheating; \
+	return cheating
+
 float CheatImpulse(float i)
 {
+	BEGIN_CHEAT_FUNCTION();
 	if not(CheatsAllowed(i, 0, 0))
 		return 0;
 	switch(i)
@@ -99,11 +110,13 @@ float CheatImpulse(float i)
 			CopyBody(1);
 			self.lip += 1;
 			self.velocity = self.velocity - v_forward * 300;
-			goto cheated;
+			DID_CHEAT();
+			break;
 		case CHIMPULSE_CLONE_STANDING:
 			CopyBody(0);
 			self.lip += 1;
-			goto cheated;
+			DID_CHEAT();
+			break;
 		case CHIMPULSE_GIVE_ALL:
 			CheatCommand(tokenize_console("give all"));
 			break; // already counted as cheat
@@ -164,9 +177,10 @@ float CheatImpulse(float i)
 					self.strength_finished = time + self.personal.strength_finished - self.personal.teleport_time;
 					self.invincible_finished = time + self.personal.invincible_finished - self.personal.teleport_time;
 				}
-				goto cheated;
+				DID_CHEAT();
+				break;
 			}
-			else if(self.deadflag != DEAD_NO)
+			if(self.deadflag != DEAD_NO)
 				sprint(self, "UR DEAD AHAHAH))\n");
 			else
 				sprint(self, "No waypoint set, cheater (use g_waypointsprite_personal to set one)\n");
@@ -177,10 +191,10 @@ float CheatImpulse(float i)
 				self.angles_x = -self.angles_x;
 				self.fixangle = TRUE;
 				self.velocity = '0 0 0';
-				goto cheated;
+				DID_CHEAT();
+				break;
 			}
-			else
-				sprint(self, "Emergency teleport could not find a good location, forget it!\n");
+			sprint(self, "Emergency teleport could not find a good location, forget it!\n");
 			break;
 		case CHIMPULSE_R00T:
 			FOR_EACH_PLAYER(e)
@@ -213,20 +227,18 @@ float CheatImpulse(float i)
 				remove(e2);
 			}
 			print("404 Sportsmanship not found.\n");
-			goto cheated;
+			DID_CHEAT();
+			break;
 	}
-	return 0;
 
-:cheated
-	cheatcount_total += 1;
-	self.cheatcount += 1;
-	return 1;
+	END_CHEAT_FUNCTION();
 }
 
 void DragBox_Think();
 float drag_lastcnt;
 float CheatCommand(float argc)
 {
+	BEGIN_CHEAT_FUNCTION();
 	if not(CheatsAllowed(0, argc, 0))
 		return 0;
 	string cmd;
@@ -253,7 +265,8 @@ float CheatCommand(float argc)
 				end = stov(argv(3));
 				f = stof(argv(4));
 				pointparticles(effectnum, start, end, f);
-				goto cheated;
+				DID_CHEAT();
+				break;
 			}
 			sprint(self, "Usage: sv_cheats 1; restart; cmd pointparticles effectname position(0..1) velocityvector multiplier\n");
 			break;
@@ -266,7 +279,8 @@ float CheatCommand(float argc)
 				W_SetupShot(self, FALSE, FALSE, "",0);
 				traceline(w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
 				trailparticles(self, effectnum, w_shotorg, trace_endpos);
-				goto cheated;
+				DID_CHEAT();
+				break;
 			}
 			sprint(self, "Usage: sv_cheats 1; restart; cmd trailparticles effectname\n");
 			break;
@@ -309,10 +323,10 @@ float CheatCommand(float argc)
 							sprint(self, "cannot make stuff there (no space)\n");
 						}
 						else
-							goto cheated;
+							DID_CHEAT();
 					}
 					else
-						goto cheated;
+						DID_CHEAT();
 				}
 			}
 			else
@@ -322,7 +336,8 @@ float CheatCommand(float argc)
 			if(argc == 3)
 			{
 				race_ImposePenaltyTime(self, stof(argv(1)), argv(2));
-				goto cheated;
+				DID_CHEAT();
+				break;
 			}
 			sprint(self, "Usage: sv_cheats 1; restart; cmd penalty 5.0 AHAHAHAHAHAHAH))\n");
 			break;
@@ -374,7 +389,8 @@ float CheatCommand(float argc)
 			e.killindicator.killindicator.owner = e;
 			setattachment(e.killindicator.killindicator, e, "");
 			setorigin(e.killindicator.killindicator, '0 0 8');
-			goto cheated;
+			DID_CHEAT();
+			break;
 		case "dragpoint_spawn":
 			e = spawn();
 			e.classname = "dragpoint";
@@ -406,7 +422,8 @@ float CheatCommand(float argc)
 			e.killindicator.killindicator.owner = e;
 			setattachment(e.killindicator.killindicator, e, "");
 			setorigin(e.killindicator.killindicator, '0 0 56');
-			goto cheated;
+			DID_CHEAT();
+			break;
 		case "drag_remove":
 			RandomSelection_Init();
 			for(e = world; (e = find(e, classname, "dragbox_box")); )
@@ -423,7 +440,8 @@ float CheatCommand(float argc)
 					remove(RandomSelection_chosen_ent.enemy);
 				remove(RandomSelection_chosen_ent);
 			}
-			goto cheated;
+			DID_CHEAT();
+			break;
 		case "drag_setcnt":
 			if(argc == 2)
 			{
@@ -439,10 +457,10 @@ float CheatCommand(float argc)
 					else
 						RandomSelection_chosen_ent.cnt = drag_lastcnt = stof(argv(1));
 				}
-				goto cheated;
+				DID_CHEAT();
+				break;
 			}
-			else
-				sprint(self, "Usage: sv_cheats 1; restart; cmd dragbox_setcnt cnt\n");
+			sprint(self, "Usage: sv_cheats 1; restart; cmd dragbox_setcnt cnt\n");
 			break;
 		case "drag_save":
 			if(argc == 2)
@@ -458,10 +476,10 @@ float CheatCommand(float argc)
 					fputs(f, strcat("cmd dragpoint_spawn ", ftos(e.cnt), " \"", vtos(e.origin), "\"\n"));
 				}
 				fclose(f);
-				goto cheated;
+				DID_CHEAT();
+				break;
 			}
-			else
-				sprint(self, "Usage: sv_cheats 1; restart; cmd dragbox_save filename\n");
+			sprint(self, "Usage: sv_cheats 1; restart; cmd dragbox_save filename\n");
 			break;
 		case "drag_saveraceent":
 			if(argc == 2)
@@ -526,10 +544,10 @@ float CheatCommand(float argc)
 					fputs(f, "}\n");
 				}
 				fclose(f);
-				goto cheated;
+				DID_CHEAT();
+				break;
 			}
-			else
-				sprint(self, "Usage: sv_cheats 1; restart; cmd dragbox_save filename\n");
+			sprint(self, "Usage: sv_cheats 1; restart; cmd dragbox_save filename\n");
 			break;
 		case "drag_clear":
 			for(e = world; (e = find(e, classname, "dragbox_box")); )
@@ -542,12 +560,13 @@ float CheatCommand(float argc)
 				remove(e);
 			for(e = world; (e = find(e, classname, "drag_digit")); )
 				remove(e);
-			goto cheated;
+			DID_CHEAT();
+			break;
 		case "warp":
 			if(argc == 2) if(cvar("g_campaign"))
 			{
 				CampaignLevelWarp(stof(argv(1)));
-				goto cheated;
+				DID_CHEAT();
 			}
 			break;
 		case "god":
@@ -555,7 +574,7 @@ float CheatCommand(float argc)
 			if(self.flags & FL_GODMODE)
 			{
 				sprint(self, "godmode ON\n");
-				goto cheated;
+				DID_CHEAT();
 			}
 			else
 				sprint(self, "godmode OFF\n");
@@ -565,7 +584,7 @@ float CheatCommand(float argc)
 			if(self.flags & FL_NOTARGET)
 			{
 				sprint(self, "notarget ON\n");
-				goto cheated;
+				DID_CHEAT();
 			}
 			else
 				sprint(self, "notarget OFF\n");
@@ -575,7 +594,7 @@ float CheatCommand(float argc)
 			{
 				self.movetype = MOVETYPE_NOCLIP;
 				sprint(self, "noclip ON\n");
-				goto cheated;
+				DID_CHEAT();
 			}
 			else
 			{
@@ -588,7 +607,7 @@ float CheatCommand(float argc)
 			{
 				self.movetype = MOVETYPE_FLY;
 				sprint(self, "flmodey ON\n");
-				goto cheated;
+				DID_CHEAT();
 			}
 			else
 			{
@@ -608,18 +627,14 @@ float CheatCommand(float argc)
 				}
 				argc = tokenize_console(s);
 				GiveItems(self, 0, tokenize_console(s));
-				goto cheated;
+				DID_CHEAT();
 			}
-			if(GiveItems(self, 1, argc))
-				goto cheated;
+			else if(GiveItems(self, 1, argc))
+				DID_CHEAT();
 			break;
 	}
-	return 0;
 
-:cheated
-	cheatcount_total += 1;
-	self.cheatcount += 1;
-	return 1;
+	END_CHEAT_FUNCTION();
 }
 
 void Drag_Begin(entity dragger, entity draggee, vector touchpoint);
@@ -637,8 +652,7 @@ void Drag_MoveDrag(entity from, entity to);
 
 float CheatFrame()
 {
-	float cheating;
-	cheating = 0;
+	BEGIN_CHEAT_FUNCTION();
 
 	if(CheatsAllowed(0, 0, CHRAME_DRAG))
 		if(Drag_CanDrag(self))
@@ -652,7 +666,7 @@ float CheatFrame()
 							if(self.cursor_trace_ent.tag_entity)
 								detach_sameorigin(self.cursor_trace_ent);
 							Drag_Begin(self, self.cursor_trace_ent, self.cursor_trace_endpos);
-							++cheating;
+							DID_CHEAT();
 						}
 	if(Drag_IsDragging(self))
 	{
@@ -686,14 +700,7 @@ float CheatFrame()
 		}
 	}
 
-	if(cheating)
-	{
-		cheatcount_total += 1;
-		self.cheatcount += 1;
-		return 1;
-	}
-
-	return cheating;
+	END_CHEAT_FUNCTION();
 }
 
 
