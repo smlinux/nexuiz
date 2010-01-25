@@ -1653,6 +1653,34 @@ float GiveItems(entity e, float beginarg, float endarg)
 			case "minus":
 				op = OP_MINUS;
 				continue;
+			case "all":
+				got += GiveBit(e, items, IT_UNLIMITED_AMMO | IT_JETPACK, op, val, "misc/powerup.wav", "misc/poweroff.wav");
+				got += GiveValue(e, ammo_cells, op, val, "misc/itempickup.wav", string_null);
+				got += GiveValue(e, ammo_shells, op, val, "misc/itempickup.wav", string_null);
+				got += GiveValue(e, ammo_nails, op, val, "misc/itempickup.wav", string_null);
+				got += GiveValue(e, ammo_rockets, op, val, "misc/itempickup.wav", string_null);
+				got += GiveValueRot(e, health, pauserothealth_finished, cvar("g_balance_pause_health_rot"), pauseregen_finished, cvar("g_balance_pause_health_regen"), op, val, "misc/megahealth.wav", string_null);
+				got += GiveValueRot(e, armorvalue, pauserotarmor_finished, cvar("g_balance_pause_armor_rot"), pauseregen_finished, cvar("g_balance_pause_health_regen"), op, val, "misc/armor25.wav", string_null);
+				got += GiveValueRot(e, ammo_fuel, pauserotfuel_finished, cvar("g_balance_pause_fuel_rot"), pauseregen_finished, cvar("g_balance_pause_fuel_regen"), op, val, "misc/itempickup.wav", string_null);
+				for(j = WEP_FIRST; j <= WEP_LAST; ++j)
+				{
+					wi = get_weaponinfo(j);
+					if(wi.weapons)
+					{
+						if(e.weapons & wi.weapons)
+						{
+							got += GiveBit(e, weapons, wi.weapons, op, val, "weapons/weaponpickup.wav", "");
+						}
+						else
+						{
+							got += GiveBit(e, weapons, wi.weapons, op, val, "weapons/weaponpickup.wav", "");
+							if(e.weapons & wi.weapons)
+								weapon_action(wi.weapon, WR_PRECACHE);
+						}
+						break;
+					}
+				}
+				break;
 			case "unlimited_ammo":
 				got += GiveBit(e, items, IT_UNLIMITED_AMMO, op, val, "misc/powerup.wav", "misc/poweroff.wav");
 				break;

@@ -61,9 +61,11 @@ float CheatsAllowed(float i, float argc, float fr) // the cheat gets passed as a
 	cheating = 0
 #define DID_CHEAT() \
 	++cheating
+#define ADD_CHEATS(e,n) \
+	cheatcount_total += n; \
+	e.cheatcount += n
 #define END_CHEAT_FUNCTION() \
-	cheatcount_total += cheating; \
-	self.cheatcount += cheating; \
+	ADD_CHEATS(self,cheating); \
 	return cheating
 
 float CheatImpulse(float i)
@@ -243,11 +245,10 @@ float CheatCommand(float argc)
 	cmd = argv(0);
 	switch(cmd)
 	{
-		entity e, wi;
-		float effectnum, f, j;
+		entity e;
+		float effectnum, f;
 		vector start, end;
 		entity oldself;
-		string s;
 
 		case "pointparticles":
 			if(argc == 5)
@@ -614,20 +615,7 @@ float CheatCommand(float argc)
 			}
 			break;
 		case "give":
-			if(argv(1) == "all")
-			{
-				s = "jetpack cells shells nails rockets health armor fuel";
-				for(j = WEP_FIRST; j <= WEP_LAST; ++j)
-				{
-					wi = get_weaponinfo(j);
-					if(wi.weapon)
-						s = strcat(s, " ", wi.netname);
-				}
-				argc = tokenize_console(s);
-				GiveItems(self, 0, tokenize_console(s));
-				DID_CHEAT();
-			}
-			else if(GiveItems(self, 1, argc))
+			if(GiveItems(self, 1, argc))
 				DID_CHEAT();
 			break;
 	}
