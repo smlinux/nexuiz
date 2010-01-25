@@ -1381,22 +1381,6 @@ void spawnfunc_target_items (void)
 	n = tokenize_console(self.netname);
 	if(argv(0) == "give")
 	{
-		for(i = 0; i < n; ++i)
-		{
-			for(j = WEP_FIRST; j <= WEP_LAST; ++j)
-			{
-				e = get_weaponinfo(j);
-				if(argv(i) == e.netname)
-				{
-					if(self.spawnflags == 0 || self.spawnflags == 2)
-						weapon_action(e.weapon, WR_PRECACHE);
-					break;
-				}
-			}
-			if(j > WEP_LAST)
-				print("target_items: invalid item ", argv(i), "\n");
-		}
-
 		self.netname = substring(self.netname, argv_start_index(1), argv_end_index(-1) - argv_start_index(1));
 	}
 	else
@@ -1473,6 +1457,22 @@ void spawnfunc_target_items (void)
 	}
 	self.netname = strzone(self.netname);
 	//print(self.netname, "\n");
+
+	n = tokenize(self.netname);
+	for(i = 0; i < n; ++i)
+	{
+		for(j = WEP_FIRST; j <= WEP_LAST; ++j)
+		{
+			e = get_weaponinfo(j);
+			if(argv(i) == e.netname)
+			{
+				weapon_action(e.weapon, WR_PRECACHE);
+				break;
+			}
+		}
+		if(j > WEP_LAST)
+			print("target_items: invalid item ", argv(i), "\n");
+	}
 }
 
 void spawnfunc_item_fuel(void)
