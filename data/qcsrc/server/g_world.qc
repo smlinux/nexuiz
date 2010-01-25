@@ -677,6 +677,8 @@ void spawnfunc_worldspawn (void)
 	RandomSeed_Spawn();
 	PingPLReport_Spawn();
 
+	CheatInit();
+
 	localcmd("\n_sv_hook_gamestart ", GetGametype(), ";");
 
 	world_initialized = 1;
@@ -2711,6 +2713,7 @@ void SV_Shutdown()
 			db_save(ServerProgsDB, "server.db");
 		if(cvar("developer"))
 			db_save(TemporaryDB, "server-temp.db");
+		CheatShutdown(); // must be after cheatcount check
 		db_close(ServerProgsDB);
 		db_close(TemporaryDB);
 		print("done!\n");
