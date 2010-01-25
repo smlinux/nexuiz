@@ -1393,7 +1393,7 @@ void ClientConnect (void)
 
 	bprint("^4", self.netname, "^4 connected");
 
-	if(g_domination || g_ctf)
+	if(self.classname != "observer" && (g_domination || g_ctf))
 		bprint(" and joined the ", ColoredTeamName(self.team));
 
 	bprint("\n");
