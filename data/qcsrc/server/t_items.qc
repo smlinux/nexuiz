@@ -1657,8 +1657,9 @@ float GiveItems(entity e, float beginarg, float endarg)
 				got += GiveBit(e, items, IT_FUEL_REGEN, op, val, "misc/itempickup.wav", string_null);
 				got += GiveValue(e, strength_finished, op, time + val, "misc/powerup.wav", "misc/poweroff.wav");
 				got += GiveValue(e, invincible_finished, op, time + val, "misc/powerup_shield.wav", "misc/poweroff.wav");
+				got += GiveBit(e, items, IT_UNLIMITED_AMMO, op, val, "misc/powerup.wav", "misc/poweroff.wav");
 			case "all":
-				got += GiveBit(e, items, IT_UNLIMITED_AMMO | IT_JETPACK, op, val, "misc/powerup.wav", "misc/poweroff.wav");
+				got += GiveBit(e, items, IT_JETPACK, op, val, "misc/powerup.wav", "misc/poweroff.wav");
 				got += GiveValue(e, ammo_cells, op, val, "misc/itempickup.wav", string_null);
 				got += GiveValue(e, ammo_shells, op, val, "misc/itempickup.wav", string_null);
 				got += GiveValue(e, ammo_nails, op, val, "misc/itempickup.wav", string_null);
