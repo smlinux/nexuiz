@@ -64,7 +64,6 @@ float CheatImpulse(float i)
 		return 0;
 	switch(i)
 	{
-		float wep;
 		entity e, e2;
 		vector org;
 
@@ -106,27 +105,8 @@ float CheatImpulse(float i)
 			self.lip += 1;
 			goto cheated;
 		case CHIMPULSE_GIVE_ALL:
-			self.weapons |= WEPBIT_ALL;
-			self.items |= IT_UNLIMITED_AMMO;
-			self.ammo_shells = g_pickup_shells_max;
-			self.ammo_nails = g_pickup_nails_max;
-			self.ammo_rockets = g_pickup_rockets_max;
-			self.ammo_cells = g_pickup_cells_max;
-			self.ammo_fuel = g_pickup_fuel_max;
-			self.health = g_pickup_healthsmall_max;
-			self.armorvalue = g_pickup_armorsmall_max;
-			self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
-			self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
-			self.pauserotfuel_finished = time + cvar("g_balance_pause_fuel_rot_spawn");
-			self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
-			// precache weapon models/sounds
-			wep = WEP_FIRST;
-			while (wep <= WEP_LAST)
-			{
-				weapon_action(wep, WR_PRECACHE);
-				wep = wep + 1;
-			}
-			goto cheated;
+			CheatCommand(tokenize_console("give all"));
+			break; // already counted as cheat
 		case CHIMPULSE_SPEEDRUN:
 			if(self.personal)
 			{
@@ -253,10 +233,11 @@ float CheatCommand(float argc)
 	cmd = argv(0);
 	switch(cmd)
 	{
-		entity e;
-		float effectnum, f;
+		entity e, wi;
+		float effectnum, f, j;
 		vector start, end;
 		entity oldself;
+		string s;
 
 		case "pointparticles":
 			if(argc == 5)
@@ -617,7 +598,18 @@ float CheatCommand(float argc)
 			break;
 		case "give":
 			if(argv(1) == "all")
-				return CheatImpulse(99); // not gonna duplicate this
+			{
+				s = "unlimited_ammo jetpack fuel_regen strength invinicible cells shells nails rockets health armor fuel";
+				for(j = WEP_FIRST; j <= WEP_LAST; ++j)
+				{
+					wi = get_weaponinfo(j);
+					if(wi.weapon)
+						s = strcat(s, " ", wi.netname);
+				}
+				argc = tokenize_console(s);
+				GiveItems(self, 0, tokenize_console(s));
+				goto cheated;
+			}
 			if(GiveItems(self, 1, argc))
 				goto cheated;
 			break;

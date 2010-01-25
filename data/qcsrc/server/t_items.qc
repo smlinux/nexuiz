@@ -1676,7 +1676,16 @@ float GiveItems(entity e, float beginarg, float endarg)
 					wi = get_weaponinfo(j);
 					if(cmd == wi.netname)
 					{
-						got += GiveBit(e, weapons, wi.weapons, op, val, "weapons/weaponpickup.wav", "");
+						if(e.weapons & wi.weapons)
+						{
+							got += GiveBit(e, weapons, wi.weapons, op, val, "weapons/weaponpickup.wav", "");
+						}
+						else
+						{
+							got += GiveBit(e, weapons, wi.weapons, op, val, "weapons/weaponpickup.wav", "");
+							if(e.weapons & wi.weapons)
+								weapon_action(wi.weapon, WR_PRECACHE);
+						}
 						break;
 					}
 				}
