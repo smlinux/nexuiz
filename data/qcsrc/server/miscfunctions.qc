@@ -1230,7 +1230,6 @@ void readlevelcvars(void)
 		sv_loddistance2 = 1073741824; // enough to turn off LOD 2 reliably
 
 	sv_clones = cvar("sv_clones");
-	sv_cheats = cvar("sv_cheats");
 	sv_gentle = cvar("sv_gentle");
 	sv_foginterval = cvar("sv_foginterval");
 	g_cloaked = cvar("g_cloaked");

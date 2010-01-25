@@ -1,5 +1,18 @@
 void CopyBody(float keepvelocity);
 
+#ifdef NOCHEATS
+
+float CheatImpulse(float i) { return 0; }
+float CheatCommand(float argc) { return 0; }
+float CheatFrame() { return 0; }
+void CheatInit() { cheatcount_total = world.cheatcount; }
+void CheatShutdown() { }
+void CheatInitClient() { }
+void CheatShutdownClient() { }
+void Drag_MoveDrag(entity from, entity to) { }
+
+#else
+
 .float maycheat;
 float sv_cheats;
 float autocvar_sv_cheats;
@@ -14,11 +27,28 @@ float autocvar_sv_cheats;
 
 #define CHRAME_DRAG 1
 
+void CheatInit()
+{
+	sv_cheats = cvar("sv_cheats");
+}
+
+void CheatShutdown()
+{
+}
+
+void CheatInitClient()
+{
+}
+
+void CheatShutdownClient()
+{
+}
+
 float CheatsAllowed(float i, float argc, float fr) // the cheat gets passed as argument for possible future ACL checking
 {
 	if(i == CHIMPULSE_CLONE_MOVING || i == CHIMPULSE_CLONE_STANDING)
 		if(self.lip < sv_clones)
-			goto allow;
+			return 1;
 	if(self.maycheat)
 		return 1;
 	if(sv_cheats && autocvar_sv_cheats)
@@ -213,6 +243,8 @@ float CheatImpulse(float i)
 	return 1;
 }
 
+void DragBox_Think();
+float drag_lastcnt;
 float CheatCommand(float argc)
 {
 	if not(CheatsAllowed(0, argc, 0))
@@ -530,6 +562,13 @@ float CheatCommand(float argc)
 			for(e = world; (e = find(e, classname, "drag_digit")); )
 				remove(e);
 			goto cheated;
+		case "warp":
+			if(argc == 2) if(cvar("g_campaign"))
+			{
+				CampaignLevelWarp(stof(argv(1)));
+				goto cheated;
+			}
+			break;
 		case "god":
 			BITXOR_ASSIGN(self.flags, FL_GODMODE);
 			if(self.flags & FL_GODMODE)
@@ -842,3 +881,44 @@ void Drag_MoveDrag(entity from, entity to)
 	}
 }
 
+
+
+
+
+
+void DragBox_Think()
+{
+	if(self.aiment && self.enemy)
+	{
+		self.origin_x = (self.aiment.origin_x + self.enemy.origin_x) * 0.5;
+		self.origin_y = (self.aiment.origin_y + self.enemy.origin_y) * 0.5;
+		self.origin_z = (self.aiment.origin_z + self.enemy.origin_z) * 0.5;
+		self.maxs_x = fabs(self.aiment.origin_x - self.enemy.origin_x) * 0.5;
+		self.maxs_y = fabs(self.aiment.origin_y - self.enemy.origin_y) * 0.5;
+		self.maxs_z = fabs(self.aiment.origin_z - self.enemy.origin_z) * 0.5;
+		self.mins = -1 * self.maxs;
+		setorigin(self, self.origin); setsize(self, self.mins, self.maxs); // link edict
+	}
+
+	if(self.cnt == -1) // actually race_place -1
+	{
+		// show "10 10" for qualifying spawns
+		setmodel(self.killindicator, "models/sprites/10.spr32");
+		setmodel(self.killindicator.killindicator, "models/sprites/10.spr32");
+	}
+	else if(self.cnt == -2) // actually race_place 0
+	{
+		// show "10 0" for loser spawns
+		setmodel(self.killindicator, "models/sprites/10.spr32");
+		setmodel(self.killindicator.killindicator, "models/sprites/0.spr32");
+	}
+	else
+	{
+		setmodel(self.killindicator, strcat("models/sprites/", ftos(mod(self.cnt, 10)), ".spr32"));
+		setmodel(self.killindicator.killindicator, strcat("models/sprites/", ftos(floor(self.cnt / 10)), ".spr32"));
+	}
+
+	self.nextthink = time;
+}
+
+#endif

@@ -186,7 +186,7 @@ void CampaignPreIntermission()
 		head = head.chain;
 	}
 
-	if(won == 1 && lost == 0 && checkrules_equality == 0)
+	if(won == 1 && lost == 0 && checkrules_equality == 0 && cheatcount_total == 0)
 	{
 		campaign_won = 1;
 		bprint("The current level has been WON.\n");
@@ -241,8 +241,6 @@ void CampaignPostIntermission()
 
 void CampaignLevelWarp(float n)
 {
-	if(!sv_cheats)
-		return;
 	CampaignFile_Unload();
 	CampaignFile_Load(n, 1);
 	if(campaign_entries)

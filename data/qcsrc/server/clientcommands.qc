@@ -94,42 +94,6 @@ entity GetPlayer(string name)
 	return world;
 }
 
-float drag_lastcnt;
-void DragBox_Think()
-{
-	if(self.aiment && self.enemy)
-	{
-		self.origin_x = (self.aiment.origin_x + self.enemy.origin_x) * 0.5;
-		self.origin_y = (self.aiment.origin_y + self.enemy.origin_y) * 0.5;
-		self.origin_z = (self.aiment.origin_z + self.enemy.origin_z) * 0.5;
-		self.maxs_x = fabs(self.aiment.origin_x - self.enemy.origin_x) * 0.5;
-		self.maxs_y = fabs(self.aiment.origin_y - self.enemy.origin_y) * 0.5;
-		self.maxs_z = fabs(self.aiment.origin_z - self.enemy.origin_z) * 0.5;
-		self.mins = -1 * self.maxs;
-		setorigin(self, self.origin); setsize(self, self.mins, self.maxs); // link edict
-	}
-
-	if(self.cnt == -1) // actually race_place -1
-	{
-		// show "10 10" for qualifying spawns
-		setmodel(self.killindicator, "models/sprites/10.spr32");
-		setmodel(self.killindicator.killindicator, "models/sprites/10.spr32");
-	}
-	else if(self.cnt == -2) // actually race_place 0
-	{
-		// show "10 0" for loser spawns
-		setmodel(self.killindicator, "models/sprites/10.spr32");
-		setmodel(self.killindicator.killindicator, "models/sprites/0.spr32");
-	}
-	else
-	{
-		setmodel(self.killindicator, strcat("models/sprites/", ftos(mod(self.cnt, 10)), ".spr32"));
-		setmodel(self.killindicator.killindicator, strcat("models/sprites/", ftos(floor(self.cnt / 10)), ".spr32"));
-	}
-
-	self.nextthink = time;
-}
-
 //float ctf_clientcommand();
 float readyrestart_happened;
 .float lms_spectate_warning;
