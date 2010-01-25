@@ -53,8 +53,6 @@ float CheatsAllowed(float i, float argc, float fr) // the cheat gets passed as a
 		return 1;
 	if(sv_cheats && autocvar_sv_cheats)
 		return 1;
-	if(autocvar_sv_cheats)
-		sprint(self, "Cheats are not yet allowed, and will be activated at next map change.\n");
 	return 0;
 }
 
