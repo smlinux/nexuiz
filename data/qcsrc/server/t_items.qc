@@ -1381,6 +1381,22 @@ void spawnfunc_target_items (void)
 	n = tokenize_console(self.netname);
 	if(argv(0) == "give")
 	{
+		for(i = 0; i < n; ++i)
+		{
+			for(j = WEP_FIRST; j <= WEP_LAST; ++j)
+			{
+				e = get_weaponinfo(j);
+				if(argv(i) == e.netname)
+				{
+					if(self.spawnflags == 0 || self.spawnflags == 2)
+						weapon_action(e.weapon, WR_PRECACHE);
+					break;
+				}
+			}
+			if(j > WEP_LAST)
+				print("target_items: invalid item ", argv(i), "\n");
+		}
+
 		self.netname = substring(self.netname, argv_start_index(1), argv_end_index(-1) - argv_start_index(1));
 	}
 	else
@@ -1431,23 +1447,32 @@ void spawnfunc_target_items (void)
 			itemprefix = "minus ";
 			valueprefix = "max ";
 		}
+		else
+			error("invalid spawnflags");
 
 		self.netname = "";
-		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, ftos(!!(self.items & IT_UNLIMITED_WEAPON_AMMO)), "unlimited_weapon_ammo");
-		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, ftos(!!(self.items & IT_UNLIMITED_SUPERWEAPONS)), "unlimited_superweapons");
-		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, ftos(!!(self.items & IT_STRENGTH)), "strength");
-		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, ftos(!!(self.items & IT_INVINCIBLE)), "invincible");
-		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, ftos(!!(self.items & IT_JETPACK)), "jetpack");
-		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, ftos(!!(self.items & IT_FUEL_REGEN)), "fuel_regen");
+		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, !!(self.items & IT_UNLIMITED_WEAPON_AMMO), "unlimited_weapon_ammo");
+		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, !!(self.items & IT_UNLIMITED_SUPERWEAPONS), "unlimited_superweapons");
+		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, !!(self.items & IT_STRENGTH), "strength");
+		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, !!(self.items & IT_INVINCIBLE), "invincible");
+		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, !!(self.items & IT_JETPACK), "jetpack");
+		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, !!(self.items & IT_FUEL_REGEN), "fuel_regen");
 		if(self.ammo_shells != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.ammo_shells), "shells");
-		if(self.ammo_nails != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.ammo_shells), "shells");
+		if(self.ammo_nails != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.ammo_nails), "nails");
 		if(self.ammo_rockets != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.ammo_rockets), "rockets");
-		if(self.ammo_cells != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.ammo_shells), "shells");
-		if(self.ammo_fuel != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.ammo_shells), "shells");
+		if(self.ammo_cells != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.ammo_cells), "cells");
+		if(self.ammo_fuel != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.ammo_fuel), "fuel");
 		if(self.health != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.health), "health");
 		if(self.armorvalue != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.health), "armor");
+		for(j = WEP_FIRST; j <= WEP_LAST; ++j)
+		{
+			e = get_weaponinfo(j);
+			if(e.weapons)
+				self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, !!(self.weapons & e.weapons), e.netname);
+		}
 	}
 	self.netname = strzone(self.netname);
+	//print(self.netname, "\n");
 }
 
 void spawnfunc_item_fuel(void)
@@ -1597,13 +1622,14 @@ float GiveItems(entity e, float beginarg, float endarg)
 			_switchweapon = TRUE;
 
 	if(activator.strength_finished <= time)
-		activator.invincible_finished = time;
+		activator.strength_finished = time;
 	if(activator.invincible_finished <= time)
 		activator.invincible_finished = time;
 
 	for(i = beginarg; i < endarg; ++i)
 	{
 		cmd = argv(i);
+
 		if(cmd == "0" || stof(cmd))
 		{
 			val = stof(cmd);
@@ -1645,7 +1671,7 @@ float GiveItems(entity e, float beginarg, float endarg)
 			case "strength":
 				got += GiveValue(e, strength_finished, op, time + val, "misc/powerup.wav", "misc/poweroff.wav");
 				break;
-			case "invinicible":
+			case "invincible":
 				got += GiveValue(e, invincible_finished, op, time + val, "misc/powerup_shield.wav", "misc/poweroff.wav");
 				break;
 			case "cells":
@@ -1698,7 +1724,7 @@ float GiveItems(entity e, float beginarg, float endarg)
 	}
 
 	if(activator.strength_finished <= time)
-		activator.invincible_finished = 0;
+		activator.strength_finished = 0;
 	if(activator.invincible_finished <= time)
 		activator.invincible_finished = 0;
 
