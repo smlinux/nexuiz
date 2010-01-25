@@ -530,6 +530,55 @@ float CheatCommand(float argc)
 			for(e = world; (e = find(e, classname, "drag_digit")); )
 				remove(e);
 			goto cheated;
+		case "god":
+			BITXOR_ASSIGN(self.flags, FL_GODMODE);
+			if(self.flags & FL_GODMODE)
+			{
+				sprint(self, "godmode ON\n");
+				goto cheated;
+			}
+			else
+				sprint(self, "godmode OFF\n");
+			break;
+		case "notarget":
+			BITXOR_ASSIGN(self.flags, FL_NOTARGET);
+			if(self.flags & FL_NOTARGET)
+			{
+				sprint(self, "notarget ON\n");
+				goto cheated;
+			}
+			else
+				sprint(self, "notarget OFF\n");
+			break;
+		case "noclip":
+			if(self.movetype != MOVETYPE_NOCLIP)
+			{
+				self.movetype = MOVETYPE_NOCLIP;
+				sprint(self, "noclip ON\n");
+				goto cheated;
+			}
+			else
+			{
+				self.movetype = MOVETYPE_WALK;
+				sprint(self, "noclip OFF\n");
+			}
+			break;
+		case "fly":
+			if(self.movetype != MOVETYPE_FLY)
+			{
+				self.movetype = MOVETYPE_FLY;
+				sprint(self, "flmodey ON\n");
+				goto cheated;
+			}
+			else
+			{
+				self.movetype = MOVETYPE_WALK;
+				sprint(self, "flymode OFF\n");
+			}
+			break;
+		case "give":
+			// TODO
+			break;
 	}
 	return 0;
 
