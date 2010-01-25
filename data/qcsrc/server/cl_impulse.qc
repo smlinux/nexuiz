@@ -1,58 +1,3 @@
-void CopyBody(float keepvelocity);
-
-// changes by LordHavoc on 03/30/04
-// cleaned up dummy code
-// dummies are now removed eventually after being gibbed (norespawn = TRUE)
-// dummy impulse now checks sv_cheats to prevent players from overwhelming server with dummies
-// dummies now use player code where possible
-
-void player_anim (void);
-void DummyThink(void)
-{
-	self.think = DummyThink;
-	self.nextthink = time;
-	SV_PlayerPhysics();
-	PlayerPreThink();
-	//player_anim();
-	PlayerPostThink();
-}
-
-// from dpmod
-void printsurfaceinfo(entity e, vector v)
-{
-	local float surfnum, numpoints, vnum;
-	local string s;
-	local vector n;
-	surfnum = getsurfacenearpoint(e, v);
-	if (surfnum >= 0)
-	{
-		sprint(self, "texture: ");
-		s = getsurfacetexture(e, surfnum);
-		sprint(self, s);
-		sprint(self, " normal: ");
-		n = getsurfacenormal(e, surfnum);
-		sprint(self, vtos(n));
-		sprint(self, " ");
-		numpoints = getsurfacenumpoints(e, surfnum);
-		sprint(self, ftos(numpoints));
-		sprint(self, " verts:");
-		vnum = 0;
-		while (vnum < numpoints)
-		{
-			sprint(self, " ");
-			n = getsurfacepoint(e, surfnum, vnum);
-			sprint(self, vtos(n));
-			vnum = vnum + 1;
-		}
-		sprint(self, " point tested: ");
-		sprint(self, vtos(v));
-		sprint(self, " nearest point on surface: ");
-		n = getsurfaceclippedpoint(e, surfnum, v);
-		sprint(self, vtos(n));
-		sprint(self, "\n");
-	}
-};
-
 /*
  * Impulse map:
  *
@@ -79,8 +24,6 @@ void printsurfaceinfo(entity e, vector v)
  * 141: ctf speedrun
  * 142: fixed clone
  * 143: emergency teleport
- * 144: printsurfaceinfo
- * 145: distance
  * 148: unfairly eliminate
  *
  * TODO:
@@ -96,7 +39,6 @@ void ImpulseCommands (void)
 	vector org;
 	float i;
 	float m;
-	float wep;
 	entity e, e2;
 
 	imp = self.impulse;
@@ -107,7 +49,10 @@ void ImpulseCommands (void)
 	if (timeoutStatus == 2) //don't allow any impulses while the game is paused
 		return;
 
-	if (imp >= 1 && imp <= 9)
+	if(CheatImpulse(imp))
+	{
+	}
+	else if (imp >= 1 && imp <= 9)
 	{
 		// weapon switching impulses
 		if(self.deadflag == DEAD_NO)
@@ -191,33 +136,6 @@ void ImpulseCommands (void)
 				{
 					WaypointSprite_UpdateTeamRadar(wp, RADARICON_WAYPOINT, '0 1 1');
 					WaypointSprite_Ping(wp);
-				}
-				if(sv_cheats)
-				{
-					if(!self.personal)
-					{
-						self.personal = spawn();
-						self.personal.classname = "personal_wp";
-					}
-					self.personal.origin = self.origin;
-					self.personal.v_angle = self.v_angle;
-					self.personal.velocity = self.velocity;
-					self.personal.ammo_rockets = self.ammo_rockets;
-					self.personal.ammo_nails = self.ammo_nails;
-					self.personal.ammo_cells = self.ammo_cells;
-					self.personal.ammo_shells = self.ammo_shells;
-					self.personal.ammo_fuel = self.ammo_fuel;
-					self.personal.health = self.health;
-					self.personal.armorvalue = self.armorvalue;
-					self.personal.weapons = self.weapons;
-					self.personal.items = self.items;
-					self.personal.pauserotarmor_finished = self.pauserotarmor_finished;
-					self.personal.pauserothealth_finished = self.pauserothealth_finished;
-					self.personal.pauserotfuel_finished = self.pauserotfuel_finished;
-					self.personal.pauseregen_finished = self.pauseregen_finished;
-					self.personal.strength_finished = self.strength_finished;
-					self.personal.invincible_finished = self.invincible_finished;
-					self.personal.teleport_time = time;
 				}
 				sprint(self, "personal waypoint spawned at location\n");
 				break;
@@ -333,183 +251,6 @@ void ImpulseCommands (void)
 				}
 				sprint(self, "all waypoints cleared\n");
 				break;
-		}
-	}
-	else if(imp >= 140 && imp <= 149 || imp == 99) // 10 cheats ought to be enough for anyone
-	{
-		if(self.deadflag == DEAD_NO)
-		{
-			if(sv_cheats || self.maycheat || (self.lip < sv_clones))
-			{
-				switch(imp)
-				{
-					 case 140:
-						makevectors (self.v_angle);
-						self.velocity = self.velocity + v_forward * 300;
-						CopyBody(1);
-						self.lip += 1;
-						self.velocity = self.velocity - v_forward * 300;
-						break;
-					case 142:
-						CopyBody(0);
-						self.lip += 1;
-						break;
-				 }
-			}
-
-			if(sv_cheats || self.maycheat)
-			{
-				switch(imp)
-				{
-					case 99:
-						self.weapons |= WEPBIT_ALL;
-						self.items |= IT_UNLIMITED_AMMO;
-						self.ammo_shells = g_pickup_shells_max;
-						self.ammo_nails = g_pickup_nails_max;
-						self.ammo_rockets = g_pickup_rockets_max;
-						self.ammo_cells = g_pickup_cells_max;
-						self.ammo_fuel = g_pickup_fuel_max;
-						self.health = g_pickup_healthsmall_max;
-						self.armorvalue = g_pickup_armorsmall_max;
-						self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
-						self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
-						self.pauserotfuel_finished = time + cvar("g_balance_pause_fuel_rot_spawn");
-						self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
-						// precache weapon models/sounds
-						wep = WEP_FIRST;
-						while (wep <= WEP_LAST)
-						{
-							weapon_action(wep, WR_PRECACHE);
-							wep = wep + 1;
-						}
-						break;
-					case 141:
-						if(self.personal)
-						{
-							self.speedrunning = TRUE;
-							tracebox(self.personal.origin, self.mins, self.maxs, self.personal.origin, MOVE_WORLDONLY, self);
-							if(trace_startsolid)
-							{
-								sprint(self, "Cannot move there, cheater - only waypoints set using g_waypointsprite_personal work\n");
-							}
-							else
-							{
-								// Abort speedrun, teleport back
-								setorigin(self, self.personal.origin);
-								self.oldvelocity = self.velocity = self.personal.velocity;
-								self.angles = self.personal.v_angle;
-								self.fixangle = TRUE;
-								if(self.flagcarried)
-								{
-									bprint("The ", self.flagcarried.netname, " was returned to base by its carrier\n");
-									ReturnFlag(self.flagcarried);
-								}
-							}
-							if(g_ctf)
-							{
-								self.ammo_rockets = 999;
-								self.ammo_nails = 999;
-								self.ammo_cells = 999;
-								self.ammo_shells = 999;
-								self.ammo_fuel = 999;
-								self.health = start_health;
-								self.armorvalue = start_armorvalue;
-								self.weapons |= weaponsInMap;
-								self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
-								self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
-								self.pauserotfuel_finished = time + cvar("g_balance_pause_fuel_rot_spawn");
-								self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
-								self.strength_finished = 0;
-								self.invincible_finished = 0;
-							}
-							else
-							{
-								self.ammo_rockets = self.personal.ammo_rockets;
-								self.ammo_nails = self.personal.ammo_nails;
-								self.ammo_cells = self.personal.ammo_cells;
-								self.ammo_shells = self.personal.ammo_shells;
-								self.ammo_fuel = self.personal.ammo_fuel;
-								self.health = self.personal.health;
-								self.armorvalue = self.personal.armorvalue;
-								self.weapons = self.personal.weapons;
-								self.items = self.personal.items;
-								self.pauserotarmor_finished = time + self.personal.pauserotarmor_finished - self.personal.teleport_time;
-								self.pauserothealth_finished = time + self.personal.pauserothealth_finished - self.personal.teleport_time;
-								self.pauserotfuel_finished = time + self.personal.pauserotfuel_finished - self.personal.teleport_time;
-								self.pauseregen_finished = time + self.personal.pauseregen_finished - self.personal.teleport_time;
-								self.strength_finished = time + self.personal.strength_finished - self.personal.teleport_time;
-								self.invincible_finished = time + self.personal.invincible_finished - self.personal.teleport_time;
-							}
-						}
-						else if(self.deadflag != DEAD_NO)
-							sprint(self, "UR DEAD AHAHAH))\n");
-						else
-							sprint(self, "No waypoint set, cheater (use g_waypointsprite_personal to set one)\n");
-						break;
-					case 143:
-						if(MoveToRandomMapLocation(self, DPCONTENTS_SOLID | DPCONTENTS_CORPSE | DPCONTENTS_PLAYERCLIP, DPCONTENTS_SLIME | DPCONTENTS_LAVA | DPCONTENTS_SKY | DPCONTENTS_BODY | DPCONTENTS_DONOTENTER, Q3SURFACEFLAG_SKY, ((sv_cheats >= 2) ? 100000 : 100), 1024, 256))
-						{
-							self.angles_x = -self.angles_x;
-							self.fixangle = TRUE;
-							self.velocity = '0 0 0';
-						}
-						else
-							sprint(self, "Emergency teleport could not find a good location, forget it!\n");
-						break;
-					case 144:
-						makevectors(self.v_angle);
-						traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, FALSE, self);
-						if (trace_fraction < 1)
-							printsurfaceinfo(trace_ent, trace_endpos);
-						break;
-					case 145:
-						makevectors(self.v_angle);
-						traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 65536, FALSE, self);
-						sprint(self, strcat("distance: ", ftos(fabs(vlen(trace_endpos - (self.origin + self.view_ofs)))), "\n"));
-						break;
-					case 146:
-						makevectors(self.v_angle);
-						i = self.dphitcontentsmask;
-						self.dphitcontentsmask = DPCONTENTS_OPAQUE;
-						traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 65536, FALSE, self);
-						self.dphitcontentsmask = i;
-						sprint(self, strcat("distance: ", ftos(fabs(vlen(trace_endpos - (self.origin + self.view_ofs)))), "\n"));
-						pointparticles(particleeffectnum("fire_big"), trace_endpos, '0 0 0', 10);
-						break;
-					case 148:
-						FOR_EACH_PLAYER(e)
-						{
-							if( e.playermodel == "models/player/jeandarc.zym"
-							||  e.playermodel == "models/player/pyria.zym"
-							||  e.playermodel == "models/player/skadi.zym"
-							|| (e.playermodel == "models/player/specop.zym" && random() < 0.5) // you never know
-							||  e.playermodel == "models/player/visitant.zym")
-							{
-								makevectors(e.angles);
-								traceline(e.origin, e.origin + v_right * 256, MOVE_NORMAL, e);
-							}
-							else
-							{
-								org_x = random();
-								org_y = random();
-								org_z = 0;
-								org = normalize(org);
-								traceline(e.origin, e.origin + org * 256, MOVE_NORMAL, e); // random direction
-							}
-
-							org = findbetterlocation(trace_endpos, 12);
-
-							e2 = spawn();
-							setorigin(e2, org);
-							pointparticles(particleeffectnum("rocket_explode"), org, '0 0 0', 1);
-							sound(e2, CHAN_PROJECTILE, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
-							RadiusDamage(e2, e, 1000, 0, 128, e, 500, DEATH_CHEAT, world);
-							remove(e2);
-						}
-						print("404 Sportsmanship not found.\n");
-						break;
-				}
-			}
 		}
 	}
 	else if(imp >= 103 && imp <= 107)
