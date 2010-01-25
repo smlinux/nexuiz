@@ -616,7 +616,7 @@ float CheatCommand(float argc)
 		case "give":
 			if(argv(1) == "all")
 			{
-				s = "unlimited_ammo jetpack fuel_regen strength invinicible cells shells nails rockets health armor fuel";
+				s = "jetpack cells shells nails rockets health armor fuel";
 				for(j = WEP_FIRST; j <= WEP_LAST; ++j)
 				{
 					wi = get_weaponinfo(j);

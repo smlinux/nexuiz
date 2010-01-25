@@ -1572,9 +1572,9 @@ float GiveValueRot(entity e, .float fld, .float rotfield, float rottime, .float 
 	v0 = e.fld;
 	GiveValue(e, fld, op, val, snd_incr, snd_decr);
 	v1 = e.fld;
-	if(v0 > v1)
+	if(v0 < v1)
 		e.rotfield = max(e.rotfield, time + rottime);
-	else if(v0 < v1)
+	else if(v0 > v1)
 		e.regenfield = max(e.regenfield, time + regentime);
 	return (v0 != v1);
 }
