@@ -1,2 +1,3 @@
 float CheatImpulse(float i);
 float CheatCommand(float argc);
+float CheatFrame();
