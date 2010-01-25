@@ -1677,7 +1677,6 @@ float GiveItems(entity e, float beginarg, float endarg)
 							if(e.weapons & wi.weapons)
 								weapon_action(wi.weapon, WR_PRECACHE);
 						}
-						break;
 					}
 				}
 				break;
