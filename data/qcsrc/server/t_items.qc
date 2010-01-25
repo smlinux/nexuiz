@@ -1325,99 +1325,9 @@ void spawnfunc_item_minst_cells (void) {
 // compatibility:
 void spawnfunc_item_quad (void) {self.classname = "item_strength";spawnfunc_item_strength();}
 
-float target_item_func_set(float a, float b)
-{
-	if(b == 0)
-		return a;
-	else if(b < 0)
-		return 0;
-	else
-		return b;
-}
-
-float target_item_func_min(float a, float b)
-{
-	if(b == 0)
-		return a;
-	else if(b < 0)
-		return 0;
-	else
-		return min(a, b);
-}
-
-float target_item_func_max(float a, float b)
-{
-	return max(a, b);
-}
-
-float target_item_func_bitset(float a, float b)
-{
-	return b;
-}
-
-float target_item_func_and(float a, float b)
-{
-	return a & b;
-}
-
-float target_item_func_itembitset(float a, float b)
-{
-	return (a - (a & (IT_PICKUPMASK | IT_STRENGTH | IT_INVINCIBLE))) | b;
-}
-
-float target_item_func_itemand(float a, float b)
-{
-	return (a - (a & (IT_PICKUPMASK | IT_STRENGTH | IT_INVINCIBLE))) | (a & b);
-}
-
-float target_item_func_or(float a, float b)
-{
-	return a | b;
-}
-
-float target_item_func_andnot(float a, float b)
-{
-	return a - (a & b);
-}
-
-float target_item_changed;
-void target_item_change(float binary, .float field, float(float a, float b) func, string sound_increase, string sound_decrease)
-{
-	float n, d;
-	n = func(activator.field, self.field);
-
-	if(binary)
-	{
-		d = n & activator.field;
-		if(d != n) // bits added?
-			d = +1;
-		else if(d != activator.field) // bits removed?
-			d = -1;
-		else
-			d = 0;
-	}
-	else
-		d = n - activator.field;
-
-	if(d < 0)
-	{
-		if(sound_decrease != "")
-			sound (activator, CHAN_AUTO, sound_decrease, VOL_BASE, ATTN_NORM);
-		target_item_changed = 1;
-	}
-	else if(d > 0)
-	{
-		if(sound_increase != "")
-			sound (activator, CHAN_AUTO, sound_increase, VOL_BASE, ATTN_NORM);
-		target_item_changed = 1;
-	}
-	activator.field = n;
-}
-
+float GiveItems(entity e, float beginarg, float endarg);
 void target_items_use (void)
 {
-	float h0, a0, f0;
-
 	if(activator.classname == "droppedweapon")
 	{
 		EXACTTRIGGER_TOUCH;
@@ -1436,110 +1346,7 @@ void target_items_use (void)
 		if(e.enemy == activator)
 			remove(e);
 
-	float _switchweapon;
-	_switchweapon = FALSE;
-	if (activator.autoswitch)
-		if (activator.switchweapon == w_getbestweapon(activator))
-			_switchweapon = TRUE;
-
-	a0 = activator.armorvalue;
-	h0 = activator.health;
-	f0 = activator.ammo_fuel;
-	target_item_changed = 0;
-
-	if(self.spawnflags == 0) // SET
-	{
-		target_item_change(0, ammo_shells, target_item_func_set, "misc/itempickup.wav", "");
-		target_item_change(0, ammo_nails, target_item_func_set, "misc/itempickup.wav", "");
-		target_item_change(0, ammo_rockets, target_item_func_set, "misc/itempickup.wav", "");
-		target_item_change(0, ammo_cells, target_item_func_set, "misc/itempickup.wav", "");
-		target_item_change(0, ammo_fuel, target_item_func_set, "misc/itempickup.wav", "");
-		target_item_change(0, health, target_item_func_set, "misc/megahealth.wav", "");
-		target_item_change(0, armorvalue, target_item_func_set, "misc/armor25.wav", "");
-		target_item_change(1, items, target_item_func_itembitset, "misc/powerup.wav", "misc/poweroff.wav");
-		target_item_change(1, weapons, target_item_func_bitset, "weapons/weaponpickup.wav", "");
-
-		if((self.items & activator.items) & IT_STRENGTH)
-			activator.strength_finished = time + self.strength_finished;
-		if((self.items & activator.items) & IT_INVINCIBLE)
-			activator.invincible_finished = time + self.invincible_finished;
-	}
-	else if(self.spawnflags == 1) // AND/MIN
-	{
-		target_item_change(0, ammo_shells, target_item_func_min, "misc/itempickup.wav", "");
-		target_item_change(0, ammo_nails, target_item_func_min, "misc/itempickup.wav", "");
-		target_item_change(0, ammo_rockets, target_item_func_min, "misc/itempickup.wav", "");
-		target_item_change(0, ammo_cells, target_item_func_min, "misc/itempickup.wav", "");
-		target_item_change(0, ammo_fuel, target_item_func_min, "misc/itempickup.wav", "");
-		target_item_change(0, health, target_item_func_min, "misc/megahealth.wav", "");
-		target_item_change(0, armorvalue, target_item_func_min, "misc/armor25.wav", "");
-		target_item_change(1, items, target_item_func_itemand, "misc/powerup.wav", "misc/poweroff.wav");
-		target_item_change(1, weapons, target_item_func_and, "weapons/weaponpickup.wav", "");
-
-		if((self.items & activator.items) & IT_STRENGTH)
-			activator.strength_finished = min(activator.strength_finished, time + self.strength_finished);
-		if((self.items & activator.items) & IT_INVINCIBLE)
-			activator.invincible_finished = min(activator.invincible_finished, time + self.invincible_finished);
-	}
-	else if(self.spawnflags == 2) // OR/MAX
-	{
-		target_item_change(0, ammo_shells, target_item_func_max, "misc/itempickup.wav", "");
-		target_item_change(0, ammo_nails, target_item_func_max, "misc/itempickup.wav", "");
-		target_item_change(0, ammo_rockets, target_item_func_max, "misc/itempickup.wav", "");
-		target_item_change(0, ammo_cells, target_item_func_max, "misc/itempickup.wav", "");
-		target_item_change(0, ammo_fuel, target_item_func_max, "misc/itempickup.wav", "");
-		target_item_change(0, health, target_item_func_max, "misc/megahealth.wav", "");
-		target_item_change(0, armorvalue, target_item_func_max, "misc/armor25.wav", "");
-		target_item_change(1, items, target_item_func_or, "misc/powerup.wav", "misc/poweroff.wav");
-		target_item_change(1, weapons, target_item_func_or, "weapons/weaponpickup.wav", "");
-
-		if((self.items & activator.items) & IT_STRENGTH)
-			activator.strength_finished = max(activator.strength_finished, time + self.strength_finished);
-		if((self.items & activator.items) & IT_INVINCIBLE)
-			activator.invincible_finished = max(activator.invincible_finished, time + self.invincible_finished);
-	}
-	else if(self.spawnflags == 4) // ANDNOT/MIN
-	{
-		target_item_change(0, ammo_shells, target_item_func_min, "misc/itempickup.wav", "");
-		target_item_change(0, ammo_nails, target_item_func_min, "misc/itempickup.wav", "");
-		target_item_change(0, ammo_rockets, target_item_func_min, "misc/itempickup.wav", "");
-		target_item_change(0, ammo_cells, target_item_func_min, "misc/itempickup.wav", "");
-		target_item_change(0, ammo_fuel, target_item_func_min, "misc/itempickup.wav", "");
-		target_item_change(0, health, target_item_func_min, "misc/megahealth.wav", "");
-		target_item_change(0, armorvalue, target_item_func_min, "misc/armor25.wav", "");
-		target_item_change(1, items, target_item_func_andnot, "misc/powerup.wav", "misc/poweroff.wav");
-		target_item_change(1, weapons, target_item_func_andnot, "weapons/weaponpickup.wav", "");
-
-		if((self.items & activator.items) & IT_STRENGTH)
-			activator.strength_finished = min(activator.strength_finished, time + self.strength_finished);
-		if((self.items & activator.items) & IT_INVINCIBLE)
-			activator.invincible_finished = min(activator.invincible_finished, time + self.invincible_finished);
-	}
-
-	if not(activator.items & IT_STRENGTH)
-		activator.strength_finished = 0;
-	if not(activator.items & IT_INVINCIBLE)
-		activator.invincible_finished = 0;
-
-	if(activator.health > h0)
-		activator.pauserothealth_finished = max(activator.pauserothealth_finished, time + cvar("g_balance_pause_health_rot"));
-	else if(activator.health < h0)
-		activator.pauseregen_finished = max(activator.pauseregen_finished, time + cvar("g_balance_pause_health_regen"));
-
-	if(activator.ammo_fuel > f0)
-		activator.pauserotfuel_finished = max(activator.pauserotfuel_finished, time + cvar("g_balance_pause_fuel_rot"));
-	else if(activator.ammo_fuel < f0)
-		activator.pauseregen_finished = max(activator.pauseregen_finished, time + cvar("g_balance_pause_fuel_regen"));
-
-	if(activator.armorvalue > a0)
-		activator.pauserotarmor_finished = max(activator.pauserothealth_finished, time + cvar("g_balance_pause_health_rot"));
-
-	if not(activator.weapons & W_WeaponBit(activator.switchweapon))
-		_switchweapon = TRUE;
-	if(_switchweapon)
-		W_SwitchWeapon_Force(activator, w_getbestweapon(activator));
-
-	if(target_item_changed)
+	if(GiveItems(activator, 0, tokenize_console(self.netname)))
 		centerprint(activator, self.message);
 }
 
@@ -1572,17 +1379,22 @@ void spawnfunc_target_items (void)
 	precache_sound("weapons/weaponpickup.wav");
 
 	n = tokenize_console(self.netname);
-	for(i = 0; i < n; ++i)
+	if(argv(0) == "give")
 	{
-		if     (argv(i) == "unlimited_ammo")         self.items |= IT_UNLIMITED_AMMO;
-		else if(argv(i) == "unlimited_weapon_ammo")  self.items |= IT_UNLIMITED_WEAPON_AMMO;
-		else if(argv(i) == "unlimited_superweapons") self.items |= IT_UNLIMITED_SUPERWEAPONS;
-		else if(argv(i) == "strength")               self.items |= IT_STRENGTH;
-		else if(argv(i) == "invincible")             self.items |= IT_INVINCIBLE;
-		else if(argv(i) == "jetpack")                self.items |= IT_JETPACK;
-		else if(argv(i) == "fuel_regen")             self.items |= IT_FUEL_REGEN;
-		else
+		self.netname = substring(self.netname, argv_start_index(1), argv_end_index(-1) - argv_start_index(1));
+	}
+	else
+	{
+		for(i = 0; i < n; ++i)
 		{
+			if     (argv(i) == "unlimited_ammo")         self.items |= IT_UNLIMITED_AMMO;
+			else if(argv(i) == "unlimited_weapon_ammo")  self.items |= IT_UNLIMITED_WEAPON_AMMO;
+			else if(argv(i) == "unlimited_superweapons") self.items |= IT_UNLIMITED_SUPERWEAPONS;
+			else if(argv(i) == "strength")               self.items |= IT_STRENGTH;
+			else if(argv(i) == "invincible")             self.items |= IT_INVINCIBLE;
+			else if(argv(i) == "jetpack")                self.items |= IT_JETPACK;
+			else if(argv(i) == "fuel_regen")             self.items |= IT_FUEL_REGEN;
+			else
 			for(j = WEP_FIRST; j <= WEP_LAST; ++j)
 			{
 				e = get_weaponinfo(j);
@@ -1597,7 +1409,45 @@ void spawnfunc_target_items (void)
 			if(j > WEP_LAST)
 				print("target_items: invalid item ", argv(i), "\n");
 		}
+
+		string itemprefix, valueprefix;
+		if(self.spawnflags == 0)
+		{
+			itemprefix = "";
+			valueprefix = "";
+		}
+		else if(self.spawnflags == 1)
+		{
+			itemprefix = "max ";
+			valueprefix = "max ";
+		}
+		else if(self.spawnflags == 2)
+		{
+			itemprefix = "min ";
+			valueprefix = "min ";
+		}
+		else if(self.spawnflags == 4)
+		{
+			itemprefix = "minus ";
+			valueprefix = "max ";
+		}
+
+		self.netname = "";
+		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, ftos(!!(self.items & IT_UNLIMITED_WEAPON_AMMO)), "unlimited_weapon_ammo");
+		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, ftos(!!(self.items & IT_UNLIMITED_SUPERWEAPONS)), "unlimited_superweapons");
+		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, ftos(!!(self.items & IT_STRENGTH)), "strength");
+		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, ftos(!!(self.items & IT_INVINCIBLE)), "invincible");
+		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, ftos(!!(self.items & IT_JETPACK)), "jetpack");
+		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, ftos(!!(self.items & IT_FUEL_REGEN)), "fuel_regen");
+		if(self.ammo_shells != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.ammo_shells), "shells");
+		if(self.ammo_nails != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.ammo_shells), "shells");
+		if(self.ammo_rockets != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.ammo_rockets), "rockets");
+		if(self.ammo_cells != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.ammo_shells), "shells");
+		if(self.ammo_fuel != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.ammo_shells), "shells");
+		if(self.health != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.health), "health");
+		if(self.armorvalue != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.health), "armor");
 	}
+	self.netname = strzone(self.netname);
 }
 
 void spawnfunc_item_fuel(void)
@@ -1699,10 +1549,10 @@ float GiveValue(entity e, .float fld, float op, float val, string snd_incr, stri
 			e.fld = val;
 			break;
 		case OP_MIN:
-			e.fld = min(e.fld, val);
+			e.fld = max(e.fld, val); // min 100 cells = at least 100 cells
 			break;
 		case OP_MAX:
-			e.fld = max(e.fld, val);
+			e.fld = min(e.fld, val);
 			break;
 		case OP_PLUS:
 			e.fld += val;
