@@ -1,3 +1,5 @@
+float cheatcount_total;
+.float cheatcount;
 float CheatImpulse(float i);
 float CheatCommand(float argc);
 float CheatFrame();

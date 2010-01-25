@@ -241,7 +241,7 @@ void CampaignPostIntermission()
 
 void CampaignLevelWarp(float n)
 {
-	if(!sv_cheats) // can this even work?
+	if(!sv_cheats)
 		return;
 	CampaignFile_Unload();
 	CampaignFile_Load(n, 1);

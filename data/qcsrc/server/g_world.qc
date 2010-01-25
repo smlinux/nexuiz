@@ -449,10 +449,7 @@ void spawnfunc_worldspawn (void)
 	// needs to be done so early as they would still spawn
 	RegisterWeapons();
 
-	if(sv_cheats)
-		ServerProgsDB = db_create();
-	else
-		ServerProgsDB = db_load("server.db");
+	ServerProgsDB = db_load("server.db");
 
 	TemporaryDB = db_create();
 
@@ -2689,10 +2686,7 @@ void RestoreGame()
 	// some things then break, so let's work around them...
 
 	// Progs DB (capture records)
-	if(sv_cheats)
-		ServerProgsDB = db_create();
-	else
-		ServerProgsDB = db_load("server.db");
+	ServerProgsDB = db_load("server.db");
 
 	// Mapinfo
 	MapInfo_Shutdown();
@@ -2713,7 +2707,7 @@ void SV_Shutdown()
 		world_initialized = 0;
 		print("Saving persistent data...\n");
 		Ban_SaveBans();
-		if(!sv_cheats)
+		if(!cheatcount_total)
 			db_save(ServerProgsDB, "server.db");
 		if(cvar("developer"))
 			db_save(TemporaryDB, "server-temp.db");

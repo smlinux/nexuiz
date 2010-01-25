@@ -501,9 +501,7 @@ void SpecialCommand()
 #ifdef TETRIS
 	TetrisImpulse();
 #else
-	if(sv_cheats || self.maycheat)
-		self.impulse = 99;
-	else
+	if(!CheatImpulse(99))
 		print("A hollow voice says \"Plugh\".\n");
 #endif
 }
