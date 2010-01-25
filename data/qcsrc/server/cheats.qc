@@ -616,7 +616,8 @@ float CheatCommand(float argc)
 			}
 			break;
 		case "give":
-			// TODO
+			if(argv(1) == "all")
+				return CheatImpulse(99); // not gonna duplicate this
 			break;
 	}
 	return 0;
