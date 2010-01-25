@@ -65,12 +65,22 @@ float CheatsAllowed(float i, float argc, float fr) // the cheat gets passed as a
 	if(sv_cheats && autocvar_sv_cheats)
 		return 1;
 
+	// if we get here, player is not allowed to cheat. Log it.
+	if(i)
+		bprint(sprintf("Player %s^7 tried to use cheat 'impulse %d'\n", self.netname, i));
+	else if(argc)
+		bprint(sprintf("Player %s^7 tried to use cheat '%s'\n", self.netname, argv(0)));
+	else if(fr)
+		bprint(sprintf("Player %s^7 tried to use cheat frame %d\n", self.netname, fr));
+	else
+		bprint(sprintf("Player %s^7 tried to use an unknown cheat\n", self.netname));
+
 	return 0;
 }
 
 #define BEGIN_CHEAT_FUNCTION() \
-	float cheating; \
-	cheating = 0
+	float cheating, attempting; \
+	cheating = 0; attempting = 0
 #define DID_CHEAT() \
 	++cheating
 #define ADD_CHEATS(e,n) \
@@ -78,19 +88,22 @@ float CheatsAllowed(float i, float argc, float fr) // the cheat gets passed as a
 	e.cheatcount += n
 #define END_CHEAT_FUNCTION() \
 	ADD_CHEATS(self,cheating); \
-	return cheating
+	return attempting
+#define IS_CHEAT(i,argc,fr) \
+	++attempting; \
+	if(!CheatsAllowed(i,argc,fr)) \
+		break
 
 float CheatImpulse(float i)
 {
 	BEGIN_CHEAT_FUNCTION();
-	if not(CheatsAllowed(i, 0, 0))
-		return 0;
 	switch(i)
 	{
 		entity e, e2;
 		vector org;
 
 		case CHIMPULSE_SPEEDRUN_INIT: // deploy personal waypoint
+			// shared with regular waypoint init, so this is not a cheat by itself
 			if(!self.personal)
 			{
 				self.personal = spawn();
@@ -117,6 +130,7 @@ float CheatImpulse(float i)
 			self.personal.teleport_time = time;
 			break; // this part itself doesn't cheat, so let's not count this
 		case CHIMPULSE_CLONE_MOVING:
+			IS_CHEAT(i, 0, 0);
 			makevectors (self.v_angle);
 			self.velocity = self.velocity + v_forward * 300;
 			CopyBody(1);
@@ -125,14 +139,17 @@ float CheatImpulse(float i)
 			DID_CHEAT();
 			break;
 		case CHIMPULSE_CLONE_STANDING:
+			IS_CHEAT(i, 0, 0);
 			CopyBody(0);
 			self.lip += 1;
 			DID_CHEAT();
 			break;
 		case CHIMPULSE_GIVE_ALL:
+			IS_CHEAT(i, 0, 0);
 			CheatCommand(tokenize_console("give all"));
 			break; // already counted as cheat
 		case CHIMPULSE_SPEEDRUN:
+			IS_CHEAT(i, 0, 0);
 			if(self.personal)
 			{
 				self.speedrunning = TRUE;
@@ -198,6 +215,7 @@ float CheatImpulse(float i)
 				sprint(self, "No waypoint set, cheater (use g_waypointsprite_personal to set one)\n");
 			break;
 		case CHIMPULSE_TELEPORT:
+			IS_CHEAT(i, 0, 0);
 			if(MoveToRandomMapLocation(self, DPCONTENTS_SOLID | DPCONTENTS_CORPSE | DPCONTENTS_PLAYERCLIP, DPCONTENTS_SLIME | DPCONTENTS_LAVA | DPCONTENTS_SKY | DPCONTENTS_BODY | DPCONTENTS_DONOTENTER, Q3SURFACEFLAG_SKY, ((sv_cheats >= 2) ? 100000 : 100), 1024, 256))
 			{
 				self.angles_x = -self.angles_x;
@@ -209,6 +227,7 @@ float CheatImpulse(float i)
 			sprint(self, "Emergency teleport could not find a good location, forget it!\n");
 			break;
 		case CHIMPULSE_R00T:
+			IS_CHEAT(i, 0, 0);
 			FOR_EACH_PLAYER(e)
 			{
 				if( e.playermodel == "models/player/jeandarc.zym"
@@ -251,8 +270,6 @@ float drag_lastcnt;
 float CheatCommand(float argc)
 {
 	BEGIN_CHEAT_FUNCTION();
-	if not(CheatsAllowed(0, argc, 0))
-		return 0;
 	string cmd;
 	cmd = argv(0);
 	switch(cmd)
@@ -263,6 +280,7 @@ float CheatCommand(float argc)
 		entity oldself;
 
 		case "pointparticles":
+			IS_CHEAT(0, argc, 0);
 			if(argc == 5)
 			{
 				// arguments:
@@ -282,6 +300,7 @@ float CheatCommand(float argc)
 			sprint(self, "Usage: sv_cheats 1; restart; cmd pointparticles effectname position(0..1) velocityvector multiplier\n");
 			break;
 		case "trailparticles":
+			IS_CHEAT(0, argc, 0);
 			if(argc == 2)
 			{
 				// arguments:
@@ -296,6 +315,7 @@ float CheatCommand(float argc)
 			sprint(self, "Usage: sv_cheats 1; restart; cmd trailparticles effectname\n");
 			break;
 		case "make":
+			IS_CHEAT(0, argc, 0);
 			if(argc == 3)
 			{
 				// arguments:
@@ -344,6 +364,7 @@ float CheatCommand(float argc)
 				sprint(self, "Usage: sv_cheats 1; restart; cmd make models/... 0/1/2\n");
 			break;
 		case "penalty":
+			IS_CHEAT(0, argc, 0);
 			if(argc == 3)
 			{
 				race_ImposePenaltyTime(self, stof(argv(1)), argv(2));
@@ -353,6 +374,7 @@ float CheatCommand(float argc)
 			sprint(self, "Usage: sv_cheats 1; restart; cmd penalty 5.0 AHAHAHAHAHAHAH))\n");
 			break;
 		case "dragbox_spawn":
+			IS_CHEAT(0, argc, 0);
 			e = spawn();
 			e.classname = "dragbox_box";
 			e.think = DragBox_Think;
@@ -403,6 +425,7 @@ float CheatCommand(float argc)
 			DID_CHEAT();
 			break;
 		case "dragpoint_spawn":
+			IS_CHEAT(0, argc, 0);
 			e = spawn();
 			e.classname = "dragpoint";
 			e.think = DragBox_Think;
@@ -436,6 +459,7 @@ float CheatCommand(float argc)
 			DID_CHEAT();
 			break;
 		case "drag_remove":
+			IS_CHEAT(0, argc, 0);
 			RandomSelection_Init();
 			for(e = world; (e = find(e, classname, "dragbox_box")); )
 				RandomSelection_Add(e, 0, string_null, 1, 1 / vlen(e.origin + (e.mins + e.maxs) * 0.5 - self.cursor_trace_endpos));
@@ -454,6 +478,7 @@ float CheatCommand(float argc)
 			DID_CHEAT();
 			break;
 		case "drag_setcnt":
+			IS_CHEAT(0, argc, 0);
 			if(argc == 2)
 			{
 				RandomSelection_Init();
@@ -474,6 +499,7 @@ float CheatCommand(float argc)
 			sprint(self, "Usage: sv_cheats 1; restart; cmd dragbox_setcnt cnt\n");
 			break;
 		case "drag_save":
+			IS_CHEAT(0, argc, 0);
 			if(argc == 2)
 			{
 				f = fopen(argv(1), FILE_WRITE);
@@ -493,6 +519,7 @@ float CheatCommand(float argc)
 			sprint(self, "Usage: sv_cheats 1; restart; cmd dragbox_save filename\n");
 			break;
 		case "drag_saveraceent":
+			IS_CHEAT(0, argc, 0);
 			if(argc == 2)
 			{
 				f = fopen(argv(1), FILE_WRITE);
@@ -561,6 +588,7 @@ float CheatCommand(float argc)
 			sprint(self, "Usage: sv_cheats 1; restart; cmd dragbox_save filename\n");
 			break;
 		case "drag_clear":
+			IS_CHEAT(0, argc, 0);
 			for(e = world; (e = find(e, classname, "dragbox_box")); )
 				remove(e);
 			for(e = world; (e = find(e, classname, "dragbox_corner_1")); )
@@ -574,6 +602,7 @@ float CheatCommand(float argc)
 			DID_CHEAT();
 			break;
 		case "warp":
+			IS_CHEAT(0, argc, 0);
 			if(argc == 2) if(cvar("g_campaign"))
 			{
 				CampaignLevelWarp(stof(argv(1)));
@@ -581,6 +610,7 @@ float CheatCommand(float argc)
 			}
 			break;
 		case "god":
+			IS_CHEAT(0, argc, 0);
 			BITXOR_ASSIGN(self.flags, FL_GODMODE);
 			if(self.flags & FL_GODMODE)
 			{
@@ -591,6 +621,7 @@ float CheatCommand(float argc)
 				sprint(self, "godmode OFF\n");
 			break;
 		case "notarget":
+			IS_CHEAT(0, argc, 0);
 			BITXOR_ASSIGN(self.flags, FL_NOTARGET);
 			if(self.flags & FL_NOTARGET)
 			{
@@ -601,6 +632,7 @@ float CheatCommand(float argc)
 				sprint(self, "notarget OFF\n");
 			break;
 		case "noclip":
+			IS_CHEAT(0, argc, 0);
 			if(self.movetype != MOVETYPE_NOCLIP)
 			{
 				self.movetype = MOVETYPE_NOCLIP;
@@ -614,6 +646,7 @@ float CheatCommand(float argc)
 			}
 			break;
 		case "fly":
+			IS_CHEAT(0, argc, 0);
 			if(self.movetype != MOVETYPE_FLY)
 			{
 				self.movetype = MOVETYPE_FLY;
@@ -627,6 +660,7 @@ float CheatCommand(float argc)
 			}
 			break;
 		case "give":
+			IS_CHEAT(0, argc, 0);
 			if(GiveItems(self, 1, argc))
 				DID_CHEAT();
 			break;
@@ -652,20 +686,6 @@ float CheatFrame()
 {
 	BEGIN_CHEAT_FUNCTION();
 
-	if(CheatsAllowed(0, 0, CHRAME_DRAG))
-		if(Drag_CanDrag(self))
-			if(self.BUTTON_DRAG)
-				if(!self.dragentity)
-					if(self.cursor_trace_ent)
-						if(Drag_IsDraggable(self.cursor_trace_ent))
-						{
-							if(self.cursor_trace_ent.draggedby)
-								Drag_Finish(self.cursor_trace_ent.draggedby);
-							if(self.cursor_trace_ent.tag_entity)
-								detach_sameorigin(self.cursor_trace_ent);
-							Drag_Begin(self, self.cursor_trace_ent, self.cursor_trace_endpos);
-							DID_CHEAT();
-						}
 	if(Drag_IsDragging(self))
 	{
 		if(self.BUTTON_DRAG)
@@ -696,6 +716,25 @@ float CheatFrame()
 		{
 			Drag_Finish(self);
 		}
+	}
+	else
+	{
+		if(Drag_CanDrag(self))
+			if(self.BUTTON_DRAG)
+				if(self.cursor_trace_ent)
+					if(Drag_IsDraggable(self.cursor_trace_ent))
+						switch(0)
+						{
+							default:
+								IS_CHEAT(0, 0, CHRAME_DRAG);
+								if(self.cursor_trace_ent.draggedby)
+									Drag_Finish(self.cursor_trace_ent.draggedby);
+								if(self.cursor_trace_ent.tag_entity)
+									detach_sameorigin(self.cursor_trace_ent);
+								Drag_Begin(self, self.cursor_trace_ent, self.cursor_trace_endpos);
+								DID_CHEAT();
+								break;
+						}
 	}
 
 	END_CHEAT_FUNCTION();

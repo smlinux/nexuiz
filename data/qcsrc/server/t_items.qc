@@ -1519,21 +1519,7 @@ void spawnfunc_weapon_seeker()
 #define OP_PLUS 3
 #define OP_MINUS 4
 
-void GiveSound(entity e, float v0, float v1, string snd_incr, string snd_decr)
-{
-	if(v0 > v1)
-	{
-		if(snd_decr != "")
-			sound (e, CHAN_AUTO, snd_decr, VOL_BASE, ATTN_NORM);
-	}
-	else if(v0 < v1)
-	{
-		if(snd_incr != "")
-			sound (e, CHAN_AUTO, snd_incr, VOL_BASE, ATTN_NORM);
-	}
-}
-
-float GiveBit(entity e, .float fld, float bit, float op, float val, string snd_incr, string snd_decr)
+float GiveBit(entity e, .float fld, float bit, float op, float val)
 {
 	float v0, v1;
 	v0 = (e.fld & bit);
@@ -1560,11 +1546,10 @@ float GiveBit(entity e, .float fld, float bit, float op, float val, string snd_i
 			break;
 	}
 	v1 = (e.fld & bit);
-	GiveSound(e, v0, v1, snd_incr, snd_decr);
 	return (v0 != v1);
 }
 
-float GiveValue(entity e, .float fld, float op, float val, string snd_incr, string snd_decr)
+float GiveValue(entity e, .float fld, float op, float val)
 {
 	float v0, v1;
 	v0 = e.fld;
@@ -1587,22 +1572,35 @@ float GiveValue(entity e, .float fld, float op, float val, string snd_incr, stri
 			break;
 	}
 	v1 = e.fld;
-	GiveSound(e, v0, v1, snd_incr, snd_decr);
 	return (v0 != v1);
 }
 
-float GiveValueRot(entity e, .float fld, .float rotfield, float rottime, .float regenfield, float regentime, float op, float val, string snd_incr, string snd_decr)
+void GiveSound(entity e, float v0, float v1, string snd_incr, string snd_decr)
 {
-	float v0, v1;
-	v0 = e.fld;
-	GiveValue(e, fld, op, val, snd_incr, snd_decr);
-	v1 = e.fld;
+	if(v0 > v1)
+	{
+		if(snd_decr != "")
+			sound (e, CHAN_AUTO, snd_decr, VOL_BASE, ATTN_NORM);
+	}
+	else if(v0 < v1)
+	{
+		if(snd_incr != "")
+			sound (e, CHAN_AUTO, snd_incr, VOL_BASE, ATTN_NORM);
+	}
+}
+
+void GiveRot(entity e, float v0, float v1, .float rotfield, float rottime, .float regenfield, float regentime)
+{
 	if(v0 < v1)
 		e.rotfield = max(e.rotfield, time + rottime);
 	else if(v0 > v1)
 		e.regenfield = max(e.regenfield, time + regentime);
-	return (v0 != v1);
 }
+
+#define PREGIVE(e,f) float save_##f; save_##f = (e).f
+#define POSTGIVE_BIT(e,f,b,snd_incr,snd_decr) GiveSound((e), save_##f & (b), (e).f & (b), snd_incr, snd_decr)
+#define POSTGIVE_VALUE(e,f,snd_incr,snd_decr) GiveSound((e), save_##f, (e).f, snd_incr, snd_decr)
+#define POSTGIVE_VALUE_ROT(e,f,rotfield,rottime,regenfield,regentime,snd_incr,snd_decr) GiveRot((e), save_##f, (e).f, rotfield, rottime, regenfield, regentime); GiveSound((e), save_##f, (e).f, snd_incr, snd_decr)
 
 float GiveItems(entity e, float beginarg, float endarg)
 {
@@ -1621,10 +1619,20 @@ float GiveItems(entity e, float beginarg, float endarg)
 		if (activator.switchweapon == w_getbestweapon(activator))
 			_switchweapon = TRUE;
 
-	if(activator.strength_finished <= time)
-		activator.strength_finished = time;
-	if(activator.invincible_finished <= time)
-		activator.invincible_finished = time;
+	activator.strength_finished = max(0, activator.strength_finished - time);
+	activator.invincible_finished = max(0, activator.invincible_finished - time);
+	
+	PREGIVE(e, items);
+	PREGIVE(e, weapons);
+	PREGIVE(e, strength_finished);
+	PREGIVE(e, invincible_finished);
+	PREGIVE(e, ammo_nails);
+	PREGIVE(e, ammo_cells);
+	PREGIVE(e, ammo_shells);
+	PREGIVE(e, ammo_rockets);
+	PREGIVE(e, ammo_fuel);
+	PREGIVE(e, armorvalue);
+	PREGIVE(e, health);
 
 	for(i = beginarg; i < endarg; ++i)
 	{
@@ -1654,79 +1662,70 @@ float GiveItems(entity e, float beginarg, float endarg)
 				op = OP_MINUS;
 				continue;
 			case "ALL":
-				got += GiveBit(e, items, IT_FUEL_REGEN, op, val, "misc/itempickup.wav", string_null);
-				got += GiveValue(e, strength_finished, op, time + val, "misc/powerup.wav", "misc/poweroff.wav");
-				got += GiveValue(e, invincible_finished, op, time + val, "misc/powerup_shield.wav", "misc/poweroff.wav");
-				got += GiveBit(e, items, IT_UNLIMITED_AMMO, op, val, "misc/powerup.wav", "misc/poweroff.wav");
+				got += GiveBit(e, items, IT_FUEL_REGEN, op, val);
+				got += GiveValue(e, strength_finished, op, time + val);
+				got += GiveValue(e, invincible_finished, op, time + val);
+				got += GiveBit(e, items, IT_UNLIMITED_AMMO, op, val);
 			case "all":
-				got += GiveBit(e, items, IT_JETPACK, op, val, "misc/powerup.wav", "misc/poweroff.wav");
-				got += GiveValue(e, ammo_cells, op, val, "misc/itempickup.wav", string_null);
-				got += GiveValue(e, ammo_shells, op, val, "misc/itempickup.wav", string_null);
-				got += GiveValue(e, ammo_nails, op, val, "misc/itempickup.wav", string_null);
-				got += GiveValue(e, ammo_rockets, op, val, "misc/itempickup.wav", string_null);
-				got += GiveValueRot(e, health, pauserothealth_finished, cvar("g_balance_pause_health_rot"), pauseregen_finished, cvar("g_balance_pause_health_regen"), op, val, "misc/megahealth.wav", string_null);
-				got += GiveValueRot(e, armorvalue, pauserotarmor_finished, cvar("g_balance_pause_armor_rot"), pauseregen_finished, cvar("g_balance_pause_health_regen"), op, val, "misc/armor25.wav", string_null);
-				got += GiveValueRot(e, ammo_fuel, pauserotfuel_finished, cvar("g_balance_pause_fuel_rot"), pauseregen_finished, cvar("g_balance_pause_fuel_regen"), op, val, "misc/itempickup.wav", string_null);
+				got += GiveBit(e, items, IT_JETPACK, op, val);
+				got += GiveValue(e, health, op, val);
+				got += GiveValue(e, armorvalue, op, val);
+			case "allweapons":
 				for(j = WEP_FIRST; j <= WEP_LAST; ++j)
 				{
 					wi = get_weaponinfo(j);
 					if(wi.weapons)
-					{
-						if(e.weapons & wi.weapons)
-						{
-							got += GiveBit(e, weapons, wi.weapons, op, val, "weapons/weaponpickup.wav", "");
-						}
-						else
-						{
-							got += GiveBit(e, weapons, wi.weapons, op, val, "weapons/weaponpickup.wav", "");
-							if(e.weapons & wi.weapons)
-								weapon_action(wi.weapon, WR_PRECACHE);
-						}
-					}
+						got += GiveBit(e, weapons, wi.weapons, op, val);
 				}
+			case "allammo":
+				got += GiveValue(e, ammo_cells, op, val);
+				got += GiveValue(e, ammo_shells, op, val);
+				got += GiveValue(e, ammo_nails, op, val);
+				got += GiveValue(e, ammo_rockets, op, val);
+				got += GiveValue(e, ammo_fuel, op, val);
 				break;
 			case "unlimited_ammo":
-				got += GiveBit(e, items, IT_UNLIMITED_AMMO, op, val, "misc/powerup.wav", "misc/poweroff.wav");
+				got += GiveBit(e, items, IT_UNLIMITED_AMMO, op, val);
 				break;
 			case "unlimited_weapon_ammo":
-				got += GiveBit(e, items, IT_UNLIMITED_WEAPON_AMMO, op, val, "misc/powerup.wav", "misc/poweroff.wav");
+				got += GiveBit(e, items, IT_UNLIMITED_WEAPON_AMMO, op, val);
 				break;
 			case "unlimited_superweapons":
-				got += GiveBit(e, items, IT_UNLIMITED_SUPERWEAPONS, op, val, "misc/powerup.wav", "misc/poweroff.wav");
+				got += GiveBit(e, items, IT_UNLIMITED_SUPERWEAPONS, op, val);
 				break;
 			case "jetpack":
-				got += GiveBit(e, items, IT_JETPACK, op, val, "misc/itempickup.wav", string_null);
+				got += GiveBit(e, items, IT_JETPACK, op, val);
 				break;
 			case "fuel_regen":
-				got += GiveBit(e, items, IT_FUEL_REGEN, op, val, "misc/itempickup.wav", string_null);
+				got += GiveBit(e, items, IT_FUEL_REGEN, op, val);
 				break;
 			case "strength":
-				got += GiveValue(e, strength_finished, op, time + val, "misc/powerup.wav", "misc/poweroff.wav");
+				got += GiveValue(e, strength_finished, op, time + val);
 				break;
 			case "invincible":
-				got += GiveValue(e, invincible_finished, op, time + val, "misc/powerup_shield.wav", "misc/poweroff.wav");
+				got += GiveValue(e, invincible_finished, op, time + val);
 				break;
 			case "cells":
-				got += GiveValue(e, ammo_cells, op, val, "misc/itempickup.wav", string_null);
+				got += GiveValue(e, ammo_cells, op, val);
 				break;
 			case "shells":
-				got += GiveValue(e, ammo_shells, op, val, "misc/itempickup.wav", string_null);
+				got += GiveValue(e, ammo_shells, op, val);
 				break;
 			case "nails":
 			case "bullets":
-				got += GiveValue(e, ammo_nails, op, val, "misc/itempickup.wav", string_null);
+				got += GiveValue(e, ammo_nails, op, val);
 				break;
 			case "rockets":
-				got += GiveValue(e, ammo_rockets, op, val, "misc/itempickup.wav", string_null);
+				got += GiveValue(e, ammo_rockets, op, val);
 				break;
 			case "health":
-				got += GiveValueRot(e, health, pauserothealth_finished, cvar("g_balance_pause_health_rot"), pauseregen_finished, cvar("g_balance_pause_health_regen"), op, val, "misc/megahealth.wav", string_null);
+				got += GiveValue(e, health, op, val);
 				break;
 			case "armor":
-				got += GiveValueRot(e, armorvalue, pauserotarmor_finished, cvar("g_balance_pause_armor_rot"), pauseregen_finished, cvar("g_balance_pause_health_regen"), op, val, "misc/armor25.wav", string_null);
+				got += GiveValue(e, armorvalue, op, val);
 				break;
 			case "fuel":
-				got += GiveValueRot(e, ammo_fuel, pauserotfuel_finished, cvar("g_balance_pause_fuel_rot"), pauseregen_finished, cvar("g_balance_pause_fuel_regen"), op, val, "misc/itempickup.wav", string_null);
+				got += GiveValue(e, ammo_fuel, op, val);
 				break;
 			default:
 				for(j = WEP_FIRST; j <= WEP_LAST; ++j)
@@ -1734,16 +1733,7 @@ float GiveItems(entity e, float beginarg, float endarg)
 					wi = get_weaponinfo(j);
 					if(cmd == wi.netname)
 					{
-						if(e.weapons & wi.weapons)
-						{
-							got += GiveBit(e, weapons, wi.weapons, op, val, "weapons/weaponpickup.wav", "");
-						}
-						else
-						{
-							got += GiveBit(e, weapons, wi.weapons, op, val, "weapons/weaponpickup.wav", "");
-							if(e.weapons & wi.weapons)
-								weapon_action(wi.weapon, WR_PRECACHE);
-						}
+						got += GiveBit(e, weapons, wi.weapons, op, val);
 						break;
 					}
 				}
@@ -1755,10 +1745,39 @@ float GiveItems(entity e, float beginarg, float endarg)
 		op = OP_SET;
 	}
 
-	if(activator.strength_finished <= time)
+	POSTGIVE_BIT(e, items, IT_FUEL_REGEN, "misc/itempickup.wav", string_null);
+	POSTGIVE_BIT(e, items, IT_UNLIMITED_SUPERWEAPONS, "misc/powerup.wav", "misc/poweroff.wav");
+	POSTGIVE_BIT(e, items, IT_UNLIMITED_WEAPON_AMMO, "misc/powerup.wav", "misc/poweroff.wav");
+	POSTGIVE_BIT(e, items, IT_JETPACK, "misc/itempickup.wav", string_null);
+	for(j = WEP_FIRST; j <= WEP_LAST; ++j)
+	{
+		wi = get_weaponinfo(j);
+		if(wi.weapons)
+		{
+			POSTGIVE_BIT(e, weapons, wi.weapons, "weapons/weaponpickup.wav", string_null);
+			if not(save_weapons & wi.weapons)
+				if(e.weapons & wi.weapons)
+					weapon_action(wi.weapon, WR_PRECACHE);
+		}
+	}
+	POSTGIVE_VALUE(e, strength_finished, "misc/powerup.wav", "misc/poweroff.wav");
+	POSTGIVE_VALUE(e, invincible_finished, "misc/powerup_shield.wav", "misc/poweroff.wav");
+	POSTGIVE_VALUE(e, ammo_nails, "misc/itempickup.wav", string_null);
+	POSTGIVE_VALUE(e, ammo_cells, "misc/itempickup.wav", string_null);
+	POSTGIVE_VALUE(e, ammo_shells, "misc/itempickup.wav", string_null);
+	POSTGIVE_VALUE(e, ammo_rockets, "misc/itempickup.wav", string_null);
+	POSTGIVE_VALUE_ROT(e, ammo_fuel, pauserotfuel_finished, cvar("g_balance_pause_fuel_rot"), pauseregen_finished, cvar("g_balance_pause_fuel_regen"), "misc/itempickup.wav", string_null);
+	POSTGIVE_VALUE_ROT(e, armorvalue, pauserotarmor_finished, cvar("g_balance_pause_armor_rot"), pauseregen_finished, cvar("g_balance_pause_health_regen"), "misc/armor25.wav", string_null);
+	POSTGIVE_VALUE_ROT(e, health, pauserothealth_finished, cvar("g_balance_pause_health_rot"), pauseregen_finished, cvar("g_balance_pause_health_regen"), "misc/megahealth.wav", string_null);
+
+	if(activator.strength_finished <= 0)
 		activator.strength_finished = 0;
-	if(activator.invincible_finished <= time)
+	else
+		activator.strength_finished += time;
+	if(activator.invincible_finished <= 0)
 		activator.invincible_finished = 0;
+	else
+		activator.invincible_finished += time;
 
 	if not(activator.weapons & W_WeaponBit(activator.switchweapon))
 		_switchweapon = TRUE;
