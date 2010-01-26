@@ -759,7 +759,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 				damage = 0;
 				if (targ != attacker)
 				{
-					if (targ.classname == "player")
+					if ((targ.health >= 1) && (targ.classname == "player"))
 						centerprint(attacker, strcat(DAMAGE_CENTERPRINT_SPACER, "Secondary fire inflicts no damage!"));
 					damage = 0;
 					mirrordamage = 0;
