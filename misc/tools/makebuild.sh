@@ -236,7 +236,6 @@ rm -rf "$tmpdir/data/qcsrc"
 cd "$tmpdir/Docs"
 cp "$dpdir/darkplaces.txt" .
 cd "$tmpdir/data"
-mv common-spog.pk3 ..
 perl -pi -e '/^set g_nexuizversion "?([0-9.]*)[^"]*"?/ and $_ = "set g_nexuizversion '$version'\n"' defaultNexuiz.cfg
 if [ -z "$versiontag" ]; then
 	perl -pi -e 'm|^//!<showbrand| .. m|^//!>showbrand| and $_ = "";' defaultNexuiz.cfg
@@ -249,6 +248,16 @@ cd "$nexdir/misc/mediasource/menuskins/wickedz/background_builder"
 sh append.sh "`echo "$version" | sed 's/svn/s/g'`" "$tmpdir/data/gfx/menu/wickedz/"
 cd "$tmpdir/data"
 
+pk3dirpk3s=
+for X in *.pk3dir; do
+	Y=${X%.pk3dir}.pk3
+	cd "$X"
+		mk7z ../../"$Y" .
+	cd ..
+	rm -rf "$X"
+	pk3dirpk3s="$pk3dirpk3s Nexuiz/data/$Y"
+done
+mv common-spog.pk3 ..
 mk7z ../data.pk3 .
 
 cd "$tmpdir/havoc"
@@ -259,10 +268,10 @@ cd "$tmpdir"
 rm -rf data
 mkdir data
 mv data.pk3 data/data$tag$date.pk3
-mv common-spog.pk3 data/
 rm -rf havoc
 mkdir havoc
 mv havoc.pk3 havoc/data$tag${date}havoc.pk3
+mv *.pk3 data/
 
 cp -r "$mingwdlls"/* .
 # fix up permissions
@@ -297,9 +306,10 @@ mkdir Nexuiz
 mv * Nexuiz/ || true
 
 find . -name .svn -exec rm -rf {} \; -prune
+find . -name .git -exec rm -rf {} \; -prune
 
 rm -f "$zipdir/nexuiz$date$ext.zip"
-zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/readme.html Nexuiz/server Nexuiz/data/data$tag$date.pk3 Nexuiz/data/common-spog.pk3 Nexuiz/havoc/* Nexuiz/extra/*
+zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/readme.html Nexuiz/server Nexuiz/data/data$tag$date.pk3 Nexuiz/data/common-spog.pk3 $pk3dirpk3s Nexuiz/havoc/* Nexuiz/extra/*
 ln -snf nexuiz$date$ext.zip "$zipdir/nexuiz-$newest.zip"
 
 rm -f "$zipdir/nexuizengineonly$date$ext.zip"
@@ -312,7 +322,7 @@ ln -snf nexuizsource$date$ext.zip "$zipdir/nexuizsource-$newest.zip"
 
 # TODO remove these excludes after the version after 2.4.2
 $zipdiff -o "Nexuiz/data/data$tag$date""patch.pk3" -f "$basepk3" -t Nexuiz/data/data$tag$date.pk3
-[ -n "$hotbasepk3" ] && $zipdiff -o "Nexuiz/data/data$tag$date""hotfix.pk3" -f "$hotbasepk3" -t Nexuiz/data/data$tag$date.pk3
+[ -n "$hotbasepk3" ] && $zipdiff -o "Nexuiz/data/data$tag$date""hotfix.pk3" $pk3dirpk3s -f "$hotbasepk3" -t Nexuiz/data/data$tag$date.pk3
 mkdir -p gfx
 if unzip "Nexuiz/data/data$tag$date.pk3" gfx/brand.tga; then
 	zip -9r "Nexuiz/data/data$tag$date""patch.pk3" gfx/brand.tga
@@ -321,11 +331,11 @@ if unzip "Nexuiz/data/data$tag$date.pk3" gfx/brand.tga; then
 fi
 
 rm -f "$zipdir/nexuizpatch$date$ext.zip"
-zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/readme.html Nexuiz/server Nexuiz/data/data$tag$date""patch.pk3 Nexuiz/havoc/*
+zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/readme.html Nexuiz/server Nexuiz/data/data$tag$date""patch.pk3 $pk3dirpk3s Nexuiz/havoc/*
 ln -snf nexuizpatch$date$ext.zip "$zipdir/nexuizpatch-$newest.zip"
 
 [ -n "$hotbasepk3" ] && rm -f "$zipdir/nexuizhotfix$date$ext.zip"
-[ -n "$hotbasepk3" ] && zip $zipflags -9yr "$zipdir/nexuizhotfix$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/readme.html Nexuiz/server Nexuiz/data/data$tag$date""hotfix.pk3 Nexuiz/havoc/*
+[ -n "$hotbasepk3" ] && zip $zipflags -9yr "$zipdir/nexuizhotfix$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/readme.html Nexuiz/server Nexuiz/data/data$tag$date""hotfix.pk3 $pk3dirpk3s Nexuiz/havoc/*
 [ -n "$hotbasepk3" ] && ln -snf nexuizhotfix$date$ext.zip "$zipdir/nexuizhotfix-$newest.zip"
 
 rm -f "$zipdir/nexuizdocs$date$ext.zip"
