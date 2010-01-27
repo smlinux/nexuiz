@@ -2789,37 +2789,36 @@ void Sbar_Draw (void)
 			color_z = cvar("sbar_color_bg_b");
 		}
 
-		vector origin = bottomright - '290 135 0';
-		vector size = '280 70 0';
-		drawpic(origin, "gfx/hud/voteprogress_back", size, color, a * sbar_alpha_bg, DRAWFLAG_NORMAL);
+		vector voteorigin = bottomright - '290 135 0';
+		vector votesize = '280 70 0';
+		drawpic(voteorigin, "gfx/hud/voteprogress_back", votesize, color, a * sbar_alpha_bg, DRAWFLAG_NORMAL);
 
-		string s;
 	        s = "A vote has been called for: ";
-		drawstring(origin + '0.5 0 0' * size_x + '0 0.1 0' * size_y - '1 0 0' * stringwidth(s, FALSE, '6 0 0'), s, '12 12 0', '1 1 1', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
-		s = textShortenToWidth(vote_called_vote, size_x * 0.96, '10 0 0', stringwidth_colors);
-		drawcolorcodedstring(origin + '0.52 0 0' * size_x + '0 0.3 0' * size_y - '1 0 0' * stringwidth(s, FALSE, '5 0 0'), s, '10 10 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
+		drawstring(voteorigin + '0.5 0 0' * votesize_x + '0 0.1 0' * votesize_y - '1 0 0' * stringwidth(s, FALSE, '6 0 0'), s, '12 12 0', '1 1 1', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
+		s = textShortenToWidth(vote_called_vote, votesize_x * 0.96, '10 0 0', stringwidth_colors);
+		drawcolorcodedstring(voteorigin + '0.52 0 0' * votesize_x + '0 0.3 0' * votesize_y - '1 0 0' * stringwidth(s, FALSE, '5 0 0'), s, '10 10 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 		// print the yes/no counts
 		s = strcat("Yes: ", ftos(vote_yescount));
-		drawstring(origin + '0 0.6 0' * size_y + '0.02 0 0' * size_x, s, '12 12 0', '0 1 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
+		drawstring(voteorigin + '0 0.6 0' * votesize_y + '0.02 0 0' * votesize_x, s, '12 12 0', '0 1 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
 		s = strcat("No: ", ftos(vote_nocount));
-		drawstring(origin + '0 0.6 0' * size_y + '0.98 0 0' * size_x - '1 0 0' * stringwidth(s, FALSE, '12 0 0'), s, '12 12 0', '1 0 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
+		drawstring(voteorigin + '0 0.6 0' * votesize_y + '0.98 0 0' * votesize_x - '1 0 0' * stringwidth(s, FALSE, '12 0 0'), s, '12 12 0', '1 0 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 		// draw the progress bars
-		drawsetcliparea(origin_x, origin_y, size_x * 0.5 * (vote_yescount/vote_needed), size_y);
-		drawpic(origin, "gfx/hud/voteprogress_prog", size, '0 1 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
+		drawsetcliparea(voteorigin_x, voteorigin_y, votesize_x * 0.5 * (vote_yescount/vote_needed), votesize_y);
+		drawpic(voteorigin, "gfx/hud/voteprogress_prog", votesize, '0 1 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
 
-		drawsetcliparea(origin_x + size_x - size_x * 0.5 * (vote_nocount/vote_needed), origin_y, size_x * 0.5, size_y);
-		drawpic(origin, "gfx/hud/voteprogress_prog", size, '1 0 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
+		drawsetcliparea(voteorigin_x + votesize_x - votesize_x * 0.5 * (vote_nocount/vote_needed), voteorigin_y, votesize_x * 0.5, votesize_y);
+		drawpic(voteorigin, "gfx/hud/voteprogress_prog", votesize, '1 0 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
 
 		// draw the highlights
 		if(vote_highlighted == 1) {
-			drawsetcliparea(origin_x, origin_y, size_x * 0.5, size_y);
-			drawpic(origin, "gfx/hud/voteprogress_voted", size, '0 1 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
+			drawsetcliparea(voteorigin_x, voteorigin_y, votesize_x * 0.5, votesize_y);
+			drawpic(voteorigin, "gfx/hud/voteprogress_voted", votesize, '0 1 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
 		}
 		else if(vote_highlighted == 2) {
-			drawsetcliparea(origin_x + 0.5 * size_x, origin_y, size_x * 0.5, size_y);
-			drawpic(origin, "gfx/hud/voteprogress_voted", size, '1 0 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
+			drawsetcliparea(voteorigin_x + 0.5 * votesize_x, voteorigin_y, votesize_x * 0.5, votesize_y);
+			drawpic(voteorigin, "gfx/hud/voteprogress_voted", votesize, '1 0 0', a * sbar_alpha_fg, DRAWFLAG_NORMAL);
 		}
 
 		drawresetcliparea();
@@ -2947,7 +2946,6 @@ void Sbar_Draw (void)
 		}
 
 		// ammo
-		float a; // i will be the ammo type (already declared), a will contain how much ammo there is of type i
 
 		for (i = 0; i < 4; ++i) {
 			a = getstati(GetAmmoStat(i)); // how much ammo do we have of type i?
