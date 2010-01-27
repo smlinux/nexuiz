@@ -1309,9 +1309,16 @@ float Fire_AddDamage(entity e, entity o, float d, float t, float dt)
 void Fire_ApplyDamage(entity e)
 {
 	float t, d, hi, ty;
+	entity o;
 
 	if not(Fire_IsBurning(e))
 		return;
+
+	o = e.owner;
+	while(o.owner)
+		o = o.owner;
+	if(clienttype(o) == CLIENTTYPE_NOTACLIENT)
+		o = e.fire_owner;
 
 	// water and slime stop fire
 	if(e.waterlevel)
@@ -1343,7 +1350,7 @@ void Fire_ApplyDamage(entity e)
 		{
 			t = cvar("g_balance_firetransfer_time") * (e.fire_endtime - time);
 			d = cvar("g_balance_firetransfer_damage") * e.fire_damagepersec * t;
-			Fire_AddDamage(other, e, d, t, DEATH_FIRE);
+			Fire_AddDamage(other, o, d, t, DEATH_FIRE);
 		}
 	}
 }
