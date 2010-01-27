@@ -25,7 +25,7 @@ float autocvar_sv_cheats;
 #define CHIMPULSE_TELEPORT 143
 #define CHIMPULSE_R00T 148
 
-#define CHRAME_DRAG 1
+#define CHRAME_DRAG 8
 
 void CheatInit()
 {
