@@ -119,3 +119,4 @@ case "$xserver" in
 esac
 
 exec "$@"
+42

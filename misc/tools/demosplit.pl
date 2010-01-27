@@ -45,6 +45,8 @@ for(;;)
 	die "Invalid demo packet"
 		unless $length == read $infh, my($data), $length;
 
+	use Data::Dumper; $Data::Dumper::Useqq = 1; print Dumper $data;
+
 	if($data =~ m{
 		^
 		$svc_signon
@@ -61,11 +63,11 @@ for(;;)
 		print "Writing to $outname...\n";
 	}
 
-	die "No signon received"
-		unless $outfh;
-	print $outfh pack("V", length $data);
-	print $outfh $angles;
-	print $outfh $data;
+	#die "No signon received"
+	#	unless $outfh;
+	#print $outfh pack("V", length $data);
+	#print $outfh $angles;
+	#print $outfh $data;
 }
 
 close $outfh;
