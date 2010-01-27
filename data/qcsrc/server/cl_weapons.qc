@@ -22,8 +22,10 @@ void W_SwitchWeapon(float imp)
 .float weaponcomplainindex;
 float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float imp, float complain)
 {
-	float n, i, weaponwant, first_valid, prev_valid, switchtonext, switchtolast, c;
-	n = tokenize_console(weaponorder);
+	// We cannot tokenize in this function, as GiveItems calls this
+	// function. Thus we must use car/cdr.
+	float weaponwant, first_valid, prev_valid, switchtonext, switchtolast, c;
+	string rest;
 	switchtonext = switchtolast = 0;
 	first_valid = prev_valid = 0;
 
@@ -32,9 +34,10 @@ float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float imp, floa
 
 	c = 0;
 
-	for(i = 0; i < n; ++i)
+	rest = weaponorder;
+	while(rest != "")
 	{
-		weaponwant = stof(argv(i));
+		weaponwant = stof(car(rest)); rest = cdr(rest);
 		if(imp >= 0)
 			if((get_weaponinfo(weaponwant)).impulse != imp)
 				continue;
@@ -71,9 +74,10 @@ float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float imp, floa
 	{
 		self.weaponcomplainindex += 1;
 		c = mod(self.weaponcomplainindex, c) + 1;
-		for(i = 0; i < n; ++i)
+		rest = weaponorder;
+		while(rest != "")
 		{
-			weaponwant = stof(argv(i));
+			weaponwant = stof(car(rest)); rest = cdr(rest);
 			if(imp >= 0)
 				if((get_weaponinfo(weaponwant)).impulse != imp)
 					continue;
