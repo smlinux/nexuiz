@@ -449,7 +449,11 @@ void drawstring_expanding(vector position, string text, vector scale, vector rgb
 	else
 		drawfontscale = '1 1 0';
 	dummyfunction(0, 0, 0, 0, 0, 0, 0, 0);
-	drawstring(position + expandingbox_resize_centered_box_offset(sz, scale, stringwidth(text, FALSE, '1 0 0') / drawfontscale_x), text, scale * sz, rgb, alpha * (1 - fadelerp), flag);
+        drawstring(position + expandingbox_resize_centered_box_offset(sz, scale, stringwidth(text, FALSE, scale * (sz / drawfontscale_x)) / (scale_x * sz)), text, scale * (sz / drawfontscale_x), rgb, alpha * (1 - fadelerp), flag);
+	// width parameter:
+	//    (scale_x * sz / drawfontscale_x) * drawfontscale_x * SIZE1 / (scale_x * sz)
+	//    SIZE1
+
 	if(cvar("menu_font_size_snapping_fix"))
 		drawfontscale = '1 1 0';
 }
@@ -459,6 +463,13 @@ void drawcolorcodedstring_expanding(vector position, string text, vector scale, 
 	float sz;
 	sz = expandingbox_sizefactor_from_fadelerp(fadelerp);
 
+	if(cvar("menu_font_size_snapping_fix"))
+		drawfontscale = sz * '1 1 0';
+	else
+		drawfontscale = '1 1 0';
 	dummyfunction(0, 0, 0, 0, 0, 0, 0, 0);
-	drawcolorcodedstring(position + expandingbox_resize_centered_box_offset(sz, scale, stringwidth(text, TRUE, '1 0 0')), text, scale * sz, alpha * (1 - fadelerp), flag);
+	drawcolorcodedstring(position + expandingbox_resize_centered_box_offset(sz, scale, stringwidth(text, TRUE, scale * (sz / drawfontscale_x)) / (scale_x * sz)), text, scale * (sz / drawfontscale_x), alpha * (1 - fadelerp), flag);
+
+	if(cvar("menu_font_size_snapping_fix"))
+		drawfontscale = '1 1 0';
 }

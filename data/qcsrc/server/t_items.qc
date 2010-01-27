@@ -1458,7 +1458,7 @@ void spawnfunc_target_items (void)
 	self.netname = strzone(self.netname);
 	//print(self.netname, "\n");
 
-	n = tokenize(self.netname);
+	n = tokenize_console(self.netname);
 	for(i = 0; i < n; ++i)
 	{
 		for(j = WEP_FIRST; j <= WEP_LAST; ++j)
