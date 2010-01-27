@@ -19,7 +19,7 @@ entity makeNexuizModButton(string menu)
 void NexuizModButton_Click(entity me, entity other)
 {
 	string thecmd;
-	thecmd = strcat("\nmenu_restart");
+	thecmd = strcat("\ndisconnect\nmenu_restart");
 
 	if (me.destination != "")
 		thecmd = strcat(thecmd, "\ntogglemenu\ndefer 0.1 \"menu_cmd directmenu ", me.destination,"\"\n");
