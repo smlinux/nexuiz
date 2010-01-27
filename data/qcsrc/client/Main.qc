@@ -470,10 +470,24 @@ void ShotOrg_Spawn()
 	debug_shotorg.view_ofs = '25 8 -8';
 }
 
+void DrawDebugModel()
+{
+	if(time - floor(time) > 0.5)
+	{
+		PolyDrawModel(self);
+	}
+	else
+	{
+		self.renderflags = 0;
+		R_AddEntity(self);
+	}
+}
+
 void GameCommand(string msg)
 {
 	string s;
 	float argc;
+	entity e;
 	argc = tokenize_console(msg);
 
 	if(argv(0) == "help" || argc == 0)
@@ -565,6 +579,16 @@ void GameCommand(string msg)
 		else if(substring(argv(1), 0, 17) == "cl_weaponpriority" && strlen(argv(1)) == 18)
 			s = W_FixWeaponOrder(W_NumberWeaponOrder(s), 0);
 		localcmd("cmd sentcvar ", argv(1), " \"", s, "\"\n");
+	}
+	else if(cmd == "spawn") {
+		s = argv(1);
+		e = spawn();
+		precache_model(s);
+		setmodel(e, s);
+		setorigin(e, view_origin);
+		e.angles = view_angles;
+		e.draw = DrawDebugModel;
+		e.classname = "debugmodel";
 	}
 	else
 	{

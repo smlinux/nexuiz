@@ -473,3 +473,28 @@ void drawcolorcodedstring_expanding(vector position, string text, vector scale, 
 	if(cvar("menu_font_size_snapping_fix"))
 		drawfontscale = '1 1 0';
 }
+
+// this draws the triangles of a model DIRECTLY. Don't expect high performance, really...
+void PolyDrawModel(entity e)
+{
+	float i_s, i_t;
+	float n_t;
+	vector tri;
+	string tex;
+	for(i_s = 0; ; ++i_s)
+	{
+		tex = getsurfacetexture(e, i_s);
+		if not(tex)
+			break; // this is beyond the last one
+		n_t = getsurfacenumtriangles(e, i_s);
+		for(i_t = 0; i_t < n_t; ++i_t)
+		{
+			tri = getsurfacetriangle(e, i_s, i_t);
+			R_BeginPolygon(tex, 0);
+			R_PolygonVertex(getsurfacepoint(e, i_s, tri_x), getsurfacepointattribute(e, i_s, tri_x, SPA_TEXCOORDS0), '1 1 1', 1);
+			R_PolygonVertex(getsurfacepoint(e, i_s, tri_y), getsurfacepointattribute(e, i_s, tri_y, SPA_TEXCOORDS0), '1 1 1', 1);
+			R_PolygonVertex(getsurfacepoint(e, i_s, tri_z), getsurfacepointattribute(e, i_s, tri_z, SPA_TEXCOORDS0), '1 1 1', 1);
+			R_EndPolygon();
+		}
+	}
+}
