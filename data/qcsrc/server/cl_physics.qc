@@ -478,7 +478,10 @@ void PM_Accelerate(vector wishdir, float wishspeed, float wishspeed0, float acce
 		if(fminimum <= 0)
 			vel_perpend = vel_perpend * f;
 		else
-			vel_perpend = vel_perpend * min(1, max(fminimum, f));
+		{
+			fminimum = sqrt(fminimum);
+			vel_perpend = vel_perpend * bound(fminimum, f, 1);
+		}
 	}
 	else
 		vel_perpend = vel_perpend * (1 - frametime * wishspeed * sidefric);
