@@ -407,7 +407,6 @@ void CPM_PM_Aircontrol(vector wishdir, float wishspeed)
 	self.velocity_z = zspeed;
 }
 
-var float speedclamp_mode = 0;
 // example config for alternate speed clamping:
 //   sv_airaccel_qw 0.8
 //   sv_airaccel_sideways_friction 0
@@ -418,74 +417,39 @@ void PM_Accelerate(vector wishdir, float wishspeed, float wishspeed0, float acce
 	float vel_straight;
 	float vel_z;
 	vector vel_perpend;
-	float addspeed;
-	float savespeed;
+	float step;
+
+	vector vel_xy;
+	float vel_xy_current;
+	float vel_xy_backward, vel_xy_forward;
+	float speedclamp;
+
+	speedclamp = (accelqw < 0);
+	if(speedclamp)
+		accelqw = -accelqw;
 
 	if(cvar("sv_gameplayfix_q2airaccelerate"))
 		wishspeed0 = wishspeed;
 
-	savespeed = self.velocity * self.velocity;
-
 	vel_straight = self.velocity * wishdir;
 	vel_z = self.velocity_z;
-	vel_perpend = self.velocity - vel_straight * wishdir - vel_z * '0 0 1';
+	vel_xy = self.velocity - vel_z * '0 0 1';
+	vel_perpend = vel_xy - vel_straight * wishdir;
 
-	if(wishspeed0)
-	{
-		if(speedclamp_mode)
-		{
-			// 1. move as normal, but fake a forward move to get the maximum ALLOWED speed
-			float vel_xy;
-			vel_xy = sqrt(vel_straight * vel_straight + vel_perpend * vel_perpend);
-			addspeed = wishspeed - vel_xy;
-			if(addspeed > 0)
-				vel_xy = vel_xy + min(addspeed, accel * frametime * wishspeed0) * accelqw;
-			if(wishspeed > 0)
-				vel_xy = vel_xy +               accel * frametime * wishspeed0  * (1 - accelqw);
-			if(speedclamp_mode == 2)
-			{
-				// havoc style:
-				// accelerate normally, then clamp the total velocity to the just calculated maxspeed
-				addspeed = wishspeed - vel_straight;
-				if(addspeed > 0)
-					vel_straight = vel_straight + min(addspeed, accel * frametime * wishspeed0) * accelqw;
-				if(wishspeed > 0)
-					vel_straight = vel_straight +               accel * frametime * wishspeed0  * (1 - accelqw);
-				vel_xy = vel_xy / sqrt(vel_straight * vel_straight + vel_perpend * vel_perpend);
-				if(vel_xy < 1)
-				{
-					vel_straight = vel_straight * vel_xy;
-					vel_perpend = vel_perpend * vel_xy;
-				}
-			}
-			else
-			{
-				// div0 style:
-				// 2. accelerate actually, using our acceleration factor and the max allowed forward speed we derived
-				//    we may add at most a vector length of        min(wishspeed, accel * frametime * wishspeed0) 
-				//    however, the absolute value must not exceed  vel_xy
-				addspeed = accel * frametime * wishspeed0;
-				addspeed = bound(0, sqrt(vel_xy * vel_xy - vel_perpend * vel_perpend) - vel_straight, addspeed);
-				//                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-				// this is how much we can add without exceeding vel_xy
-				vel_straight += addspeed;
-			}
-		}
-		else
-		{
-			addspeed = wishspeed - vel_straight;
-			if(addspeed > 0)
-				vel_straight = vel_straight + min(addspeed, accel * frametime * wishspeed0) * accelqw;
-			if(wishspeed > 0)
-				vel_straight = vel_straight +               accel * frametime * wishspeed0  * (1 - accelqw);
-		}
-	}
+	step = accel * frametime * wishspeed0;
+
+	vel_xy_current  = vlen(vel_xy);
+	vel_xy_forward  = vel_xy_current + bound(0, wishspeed - vel_xy_current, step) * accelqw + step * (1 - accelqw);
+	vel_xy_backward = vel_xy_current - bound(0, wishspeed + vel_xy_current, step) * accelqw - step * (1 - accelqw);
+
+	vel_straight = vel_straight + bound(0, wishspeed - vel_straight, step) * accelqw + step * (1 - accelqw);
 
 	if(sidefric < 0 && (vel_perpend*vel_perpend))
+		// negative: only apply so much sideways friction to stay below the speed you could get by "braking"
 	{
 		float f, fminimum;
 		f = (1 - frametime * wishspeed * sidefric);
-		fminimum = (savespeed - vel_straight*vel_straight) / (vel_perpend*vel_perpend);
+		fminimum = (vel_xy_backward*vel_xy_backward - vel_straight*vel_straight) / (vel_perpend*vel_perpend);
 		if(fminimum <= 0)
 			vel_perpend = vel_perpend * f;
 		else
@@ -493,8 +457,18 @@ void PM_Accelerate(vector wishdir, float wishspeed, float wishspeed0, float acce
 	}
 	else
 		vel_perpend = vel_perpend * (1 - frametime * wishspeed * sidefric);
+	
+	vel_xy = vel_straight * wishdir + vel_perpend;
+	
+	if(speedclamp)
+	{
+		// ensure we don't get too fast or decelerate faster than we should
+		vel_xy_current = min(vlen(vel_xy), vel_xy_forward);
+		if(vel_xy_current > 0) // prevent division by zero
+			vel_xy = normalize(vel_xy) * vel_xy_current;
+	}
 
-	self.velocity = vel_straight * wishdir + vel_z * '0 0 1' + vel_perpend;
+	self.velocity = vel_xy + vel_z * '0 0 1';
 }
 
 void PM_AirAccelerate(vector wishdir, float wishspeed)
