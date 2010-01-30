@@ -384,12 +384,31 @@ void RaceCarPhysics()
 	self.angles_z =  smoothangles_z;
 }
 
+float IsMoveInDirection(vector mv, float angle)
+{
+	angle = RAD2DEG * atan2(mv_y, mv_x);
+	angle = remainder(angle, 360) / 22.5;
+	if(angle >  1)
+		return 0;
+	if(angle < -1)
+		return 0;
+	return 1 - angle * angle;
+}
+
 void CPM_PM_Aircontrol(vector wishdir, float wishspeed)
 {
 	float zspeed, xyspeed, dot, k;
 
+#if 0
+	// this doesn't play well with analog input
 	if(self.movement_x == 0 || self.movement_y != 0)
 		return; // can't control movement if not moving forward or backward
+	k = 32;
+#else
+	k = 32 * IsMoveInDirection(self.movement, 0);
+	if(k <= 0)
+		return;
+#endif
 
 	zspeed = self.velocity_z;
 	self.velocity_z = 0;
@@ -397,7 +416,6 @@ void CPM_PM_Aircontrol(vector wishdir, float wishspeed)
 	self.velocity = normalize(self.velocity);
 
 	dot = self.velocity * wishdir;
-	k = 32;
 	k *= sv_aircontrol*dot*dot*frametime;
 
 	if(dot > 0) // we can't change direction while slowing down
@@ -1120,6 +1138,9 @@ void SV_PlayerPhysics()
 			if(sv_airstopaccelerate)
 				if(self.velocity * wishdir < 0)
 					airaccel = sv_airstopaccelerate*maxspd_mod;
+			// this doesn't play well with analog input, but can't r
+			// fixed like the AirControl can. So, don't set the maxa
+			// cvars when you want to support analog input.
 			if(self.movement_x == 0 && self.movement_y != 0)
 			{
 				if(sv_maxairstrafespeed)
