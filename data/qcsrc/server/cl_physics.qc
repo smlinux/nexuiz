@@ -441,6 +441,8 @@ void PM_Accelerate(vector wishdir, float wishspeed, float wishspeed0, float acce
 	vel_xy_current  = vlen(vel_xy);
 	vel_xy_forward  = vel_xy_current + bound(0, wishspeed - vel_xy_current, step) * accelqw + step * (1 - accelqw);
 	vel_xy_backward = vel_xy_current - bound(0, wishspeed + vel_xy_current, step) * accelqw - step * (1 - accelqw);
+	if(vel_xy_backward < 0)
+		vel_xy_backward = 0; // not that it REALLY occurs that this would cause wrong behaviour afterwards
 
 	vel_straight = vel_straight + bound(0, wishspeed - vel_straight, step) * accelqw + step * (1 - accelqw);
 
