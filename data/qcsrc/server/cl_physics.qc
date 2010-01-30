@@ -384,15 +384,17 @@ void RaceCarPhysics()
 	self.angles_z =  smoothangles_z;
 }
 
-float IsMoveInDirection(vector mv, float angle)
+float IsMoveInDirection(vector mv, float angle) // key mix factor
 {
+	if(mv_x == 0 && mv_y == 0)
+		return 0; // avoid division by zero
 	angle = RAD2DEG * atan2(mv_y, mv_x);
-	angle = remainder(angle, 360) / 22.5;
+	angle = remainder(angle, 360) / 45;
 	if(angle >  1)
 		return 0;
 	if(angle < -1)
 		return 0;
-	return 1 - angle * angle;
+	return 1 - fabs(angle);
 }
 
 void CPM_PM_Aircontrol(vector wishdir, float wishspeed)
@@ -405,21 +407,24 @@ void CPM_PM_Aircontrol(vector wishdir, float wishspeed)
 		return; // can't control movement if not moving forward or backward
 	k = 32;
 #else
-	k = 32 * IsMoveInDirection(self.movement, 0);
+	k = 32 * (2 * IsMoveInDirection(self.movement, 0) - 1);
 	if(k <= 0)
 		return;
 #endif
 
+	k *= bound(0, wishspeed / maxairspd, 1);
+
 	zspeed = self.velocity_z;
 	self.velocity_z = 0;
-	xyspeed = vlen(self.velocity);
-	self.velocity = normalize(self.velocity);
+	xyspeed = vlen(self.velocity); self.velocity = normalize(self.velocity);
 
 	dot = self.velocity * wishdir;
 	k *= sv_aircontrol*dot*dot*frametime;
 
 	if(dot > 0) // we can't change direction while slowing down
+	{
 		self.velocity = normalize(self.velocity * xyspeed + wishdir * k);
+	}
 
 	self.velocity = self.velocity * xyspeed;
 	self.velocity_z = zspeed;
