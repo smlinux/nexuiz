@@ -412,7 +412,7 @@ void CPM_PM_Aircontrol(vector wishdir, float wishspeed)
 		return;
 #endif
 
-	k *= bound(0, wishspeed / maxairspd, 1);
+	k *= bound(0, wishspeed / sv_maxairspeed, 1);
 
 	zspeed = self.velocity_z;
 	self.velocity_z = 0;
