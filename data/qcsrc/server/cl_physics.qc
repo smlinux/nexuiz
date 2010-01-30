@@ -407,6 +407,12 @@ void CPM_PM_Aircontrol(vector wishdir, float wishspeed)
 	self.velocity_z = zspeed;
 }
 
+var float speedclamp_mode = 0;
+// example config for alternate speed clamping:
+//   sv_airaccel_qw 0.8
+//   sv_airaccel_sideways_friction 0
+//   prvm_globalset server speedclamp_mode 1
+//     (or 2)
 void PM_Accelerate(vector wishdir, float wishspeed, float wishspeed0, float accel, float accelqw, float sidefric)
 {
 	float vel_straight;
@@ -424,34 +430,55 @@ void PM_Accelerate(vector wishdir, float wishspeed, float wishspeed0, float acce
 	vel_z = self.velocity_z;
 	vel_perpend = self.velocity - vel_straight * wishdir - vel_z * '0 0 1';
 
-#if 0
-	if(cvar("sv_gameplayfix_alternatespeedclamp"))
+	if(wishspeed0)
 	{
-		// 1. move as normal, but fake a forward move to get the maximum ALLOWED speed
-		float vel_xy;
-		vel_xy = sqrt(vel_straight * vel_straight + vel_perpend * vel_perpend);
-		addspeed = wishspeed - vel_xy;
-		if(addspeed > 0)
-			vel_xy = vel_xy + min(addspeed, accel * frametime * wishspeed0) * accelqw;
-		if(wishspeed > 0)
-			vel_xy = vel_xy +               accel * frametime * wishspeed0  * (1 - accelqw);
-		// 2. accelerate actually, using our acceleration factor and the max allowed forward speed we derived
-		//    we may add at most a vector length of        min(wishspeed, accel * frametime * wishspeed0) 
-		//    however, the absolute value must not exceed  vel_xy
-		addspeed = accel * frametime * wishspeed0;
-		addspeed = bound(0, sqrt(vel_xy * vel_xy - vel_perpend * vel_perpend) - vel_straight, addspeed);
-		//                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-		// this is how much we can add without exceeding vel_xy
-		vel_straight += addspeed;
-	}
-	else
-#endif
-	{
-		addspeed = wishspeed - vel_straight;
-		if(addspeed > 0)
-			vel_straight = vel_straight + min(addspeed, accel * frametime * wishspeed0) * accelqw;
-		if(wishspeed > 0)
-			vel_straight = vel_straight +               accel * frametime * wishspeed0  * (1 - accelqw);
+		if(speedclamp_mode)
+		{
+			// 1. move as normal, but fake a forward move to get the maximum ALLOWED speed
+			float vel_xy;
+			vel_xy = sqrt(vel_straight * vel_straight + vel_perpend * vel_perpend);
+			addspeed = wishspeed - vel_xy;
+			if(addspeed > 0)
+				vel_xy = vel_xy + min(addspeed, accel * frametime * wishspeed0) * accelqw;
+			if(wishspeed > 0)
+				vel_xy = vel_xy +               accel * frametime * wishspeed0  * (1 - accelqw);
+			if(speedclamp_mode == 2)
+			{
+				// havoc style:
+				// accelerate normally, then clamp the total velocity to the just calculated maxspeed
+				addspeed = wishspeed - vel_straight;
+				if(addspeed > 0)
+					vel_straight = vel_straight + min(addspeed, accel * frametime * wishspeed0) * accelqw;
+				if(wishspeed > 0)
+					vel_straight = vel_straight +               accel * frametime * wishspeed0  * (1 - accelqw);
+				vel_xy = vel_xy / sqrt(vel_straight * vel_straight + vel_perpend * vel_perpend);
+				if(vel_xy < 1)
+				{
+					vel_straight = vel_straight * vel_xy;
+					vel_perpend = vel_perpend * vel_xy;
+				}
+			}
+			else
+			{
+				// div0 style:
+				// 2. accelerate actually, using our acceleration factor and the max allowed forward speed we derived
+				//    we may add at most a vector length of        min(wishspeed, accel * frametime * wishspeed0) 
+				//    however, the absolute value must not exceed  vel_xy
+				addspeed = accel * frametime * wishspeed0;
+				addspeed = bound(0, sqrt(vel_xy * vel_xy - vel_perpend * vel_perpend) - vel_straight, addspeed);
+				//                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+				// this is how much we can add without exceeding vel_xy
+				vel_straight += addspeed;
+			}
+		}
+		else
+		{
+			addspeed = wishspeed - vel_straight;
+			if(addspeed > 0)
+				vel_straight = vel_straight + min(addspeed, accel * frametime * wishspeed0) * accelqw;
+			if(wishspeed > 0)
+				vel_straight = vel_straight +               accel * frametime * wishspeed0  * (1 - accelqw);
+		}
 	}
 
 	if(sidefric < 0 && (vel_perpend*vel_perpend))
