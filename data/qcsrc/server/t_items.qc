@@ -1615,12 +1615,12 @@ float GiveItems(entity e, float beginarg, float endarg)
 	got = 0;
 
 	_switchweapon = FALSE;
-	if (activator.autoswitch)
-		if (activator.switchweapon == w_getbestweapon(activator))
+	if (e.autoswitch)
+		if (e.switchweapon == w_getbestweapon(e))
 			_switchweapon = TRUE;
 
-	activator.strength_finished = max(0, activator.strength_finished - time);
-	activator.invincible_finished = max(0, activator.invincible_finished - time);
+	e.strength_finished = max(0, e.strength_finished - time);
+	e.invincible_finished = max(0, e.invincible_finished - time);
 	
 	PREGIVE(e, items);
 	PREGIVE(e, weapons);
@@ -1770,19 +1770,19 @@ float GiveItems(entity e, float beginarg, float endarg)
 	POSTGIVE_VALUE_ROT(e, armorvalue, pauserotarmor_finished, cvar("g_balance_pause_armor_rot"), pauseregen_finished, cvar("g_balance_pause_health_regen"), "misc/armor25.wav", string_null);
 	POSTGIVE_VALUE_ROT(e, health, pauserothealth_finished, cvar("g_balance_pause_health_rot"), pauseregen_finished, cvar("g_balance_pause_health_regen"), "misc/megahealth.wav", string_null);
 
-	if(activator.strength_finished <= 0)
-		activator.strength_finished = 0;
+	if(e.strength_finished <= 0)
+		e.strength_finished = 0;
 	else
-		activator.strength_finished += time;
-	if(activator.invincible_finished <= 0)
-		activator.invincible_finished = 0;
+		e.strength_finished += time;
+	if(e.invincible_finished <= 0)
+		e.invincible_finished = 0;
 	else
-		activator.invincible_finished += time;
+		e.invincible_finished += time;
 
-	if not(activator.weapons & W_WeaponBit(activator.switchweapon))
+	if not(e.weapons & W_WeaponBit(e.switchweapon))
 		_switchweapon = TRUE;
 	if(_switchweapon)
-		W_SwitchWeapon_Force(activator, w_getbestweapon(activator));
+		W_SwitchWeapon_Force(e, w_getbestweapon(e));
 
 	return got;
 }
