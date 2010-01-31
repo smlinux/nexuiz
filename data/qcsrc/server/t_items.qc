@@ -1437,8 +1437,8 @@ void spawnfunc_target_items (void)
 		self.netname = "";
 		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, !!(self.items & IT_UNLIMITED_WEAPON_AMMO), "unlimited_weapon_ammo");
 		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, !!(self.items & IT_UNLIMITED_SUPERWEAPONS), "unlimited_superweapons");
-		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, !!(self.items & IT_STRENGTH), "strength");
-		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, !!(self.items & IT_INVINCIBLE), "invincible");
+		self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, self.strength_finished * !!(self.items & IT_STRENGTH), "strength");
+		self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, self.invincible_finished * !!(self.items & IT_INVINCIBLE), "invincible");
 		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, !!(self.items & IT_JETPACK), "jetpack");
 		self.netname = sprintf("%s %s%d %s", self.netname, itemprefix, !!(self.items & IT_FUEL_REGEN), "fuel_regen");
 		if(self.ammo_shells != 0) self.netname = sprintf("%s %s%d %s", self.netname, valueprefix, max(0, self.ammo_shells), "shells");
