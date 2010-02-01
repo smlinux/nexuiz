@@ -1470,8 +1470,6 @@ void spawnfunc_target_items (void)
 				break;
 			}
 		}
-		if(j > WEP_LAST)
-			print("target_items: invalid item ", argv(i), "\n");
 	}
 }
 
