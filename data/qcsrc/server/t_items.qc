@@ -1575,7 +1575,7 @@ float GiveValue(entity e, .float fld, float op, float val)
 	return (v0 != v1);
 }
 
-void GiveSound(entity e, float v0, float v1, float thresh, string snd_incr, string snd_decr)
+void GiveSound(entity e, float v0, float v1, float t, string snd_incr, string snd_decr)
 {
 	if(v1 == v0)
 		return;
