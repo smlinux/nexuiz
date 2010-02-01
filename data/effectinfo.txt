@@ -484,6 +484,9 @@ airfriction 1
 liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 1
+staincolor 0x808080 0x808080
+staintex 16 24
+
 
 
 // sparks (quake effect)
@@ -747,6 +750,8 @@ airfriction 1
 liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 5
+staincolor 0x808080 0x808080
+staintex 16 24
 //blood mist
 effect blood
 countabsolute 1
@@ -792,6 +797,8 @@ airfriction 1
 liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 0.5
+staincolor 0x808080 0x808080
+staintex 16 24
 
 
 
@@ -809,6 +816,8 @@ airfriction 1
 liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 0.5
+staincolor 0x808080 0x808080
+staintex 16 24
 
 
 
@@ -3260,6 +3269,8 @@ airfriction 1
 liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 5
+staincolor 0x808080 0x808080
+staintex 16 24
 //blood mist
 effect alien_blood
 countabsolute 1
@@ -3282,6 +3293,8 @@ airfriction 1
 liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 5
+staincolor 0x808080 0x808080
+staintex 16 24
 //blood mist
 effect robot_blood
 countabsolute 1
@@ -3305,6 +3318,8 @@ airfriction 1
 liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 0.5
+staincolor 0x808080 0x808080
+staintex 16 24
 
 effect robot_TR_BLOOD
 trailspacing 16
@@ -3318,6 +3333,8 @@ airfriction 1
 liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 0.5
+staincolor 0x808080 0x808080
+staintex 16 24
 
 effect alien_TR_SLIGHTBLOOD
 trailspacing 32
@@ -3331,6 +3348,8 @@ airfriction 1
 liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 0.5
+staincolor 0x808080 0x808080
+staintex 16 24
 
 effect robot_TR_SLIGHTBLOOD
 trailspacing 32
@@ -3344,6 +3363,8 @@ airfriction 1
 liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 0.5
+staincolor 0x808080 0x808080
+staintex 16 24
 
 // flare particle and light
 // used in qcsrc/server/t_items.qc:	pointparticles(particleeffectnum("item_pickup"), self.origin, '0 0 0', 1)
@@ -3376,6 +3397,8 @@ airfriction 1
 liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 1
+staincolor 0x808080 0x808080
+staintex 16 24
 
 effect alien_bloodshower
 countabsolute 1
@@ -3389,6 +3412,8 @@ airfriction 1
 liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 1
+staincolor 0x808080 0x808080
+staintex 16 24
 
 effect robot_bloodshower
 countabsolute 1
@@ -3402,6 +3427,8 @@ airfriction 1
 liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 1
+staincolor 0x808080 0x808080
+staintex 16 24
 
 
 //red_ground_quake
@@ -3844,6 +3871,8 @@ bounce -1
 airfriction 3
 liquidfriction 6
 velocityjitter 156 156 212
+staincolor 0x808080 0x808080
+staintex 16 24
 // front blood
 effect particlegibs_damage_hit
 type blood
@@ -3859,6 +3888,8 @@ airfriction 1
 liquidfriction 3
 velocityjitter 6 6 30
 velocitymultiplier -1
+staincolor 0x808080 0x808080
+staintex 16 24
 // back blood
 effect particlegibs_damage_hit
 type blood
@@ -3875,6 +3906,8 @@ liquidfriction 3
 velocityjitter 26 26 112
 originjitter 3 3 3
 velocitymultiplier 2
+staincolor 0x808080 0x808080
+staintex 16 24
  
 // effect for removing player model
 // "teleport"
@@ -3894,6 +3927,8 @@ airfriction 3
 liquidfriction 6
 originjitter 10 10 25
 velocityjitter 256 256 312
+staincolor 0x808080 0x808080
+staintex 16 24
 // core decal
 effect particlegibs_damage_dissolve
 type blood
@@ -3908,6 +3943,8 @@ airfriction 2
 liquidfriction 6
 originjitter 10 10 25
 velocityjitter 356 356 412
+staincolor 0x808080 0x808080
+staintex 16 24
 // front blood
 effect particlegibs_damage_dissolve
 type blood
@@ -3924,6 +3961,8 @@ liquidfriction 3
 velocityjitter 56 56 212
 originjitter 5 5 10
 velocitymultiplier -0.3
+staincolor 0x808080 0x808080
+staintex 16 24
 // back blood
 effect particlegibs_damage_dissolve
 type blood
@@ -3940,6 +3979,8 @@ liquidfriction 3
 velocityjitter 56 56 212
 originjitter 5 5 10
 velocitymultiplier 0.5
+staincolor 0x808080 0x808080
+staintex 16 24
 // small bits
 effect particlegibs_damage_dissolve
 type blood
@@ -3954,6 +3995,8 @@ airfriction 1.5
 liquidfriction 3
 originjitter 10 10 25
 velocityjitter 656 656 912
+staincolor 0x808080 0x808080
+staintex 16 24
 
 // fire effect which expands then slows
 effect onslaught_generator_gib_explode
