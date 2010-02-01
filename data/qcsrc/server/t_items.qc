@@ -1575,14 +1575,16 @@ float GiveValue(entity e, .float fld, float op, float val)
 	return (v0 != v1);
 }
 
-void GiveSound(entity e, float v0, float v1, string snd_incr, string snd_decr)
+void GiveSound(entity e, float v0, float v1, float thresh, string snd_incr, string snd_decr)
 {
-	if(v0 > v1)
+	if(v1 == v0)
+		return;
+	if(v1 <= v0 - t)
 	{
 		if(snd_decr != "")
 			sound (e, CHAN_AUTO, snd_decr, VOL_BASE, ATTN_NORM);
 	}
-	else if(v0 < v1)
+	else if(v0 >= v0 + t)
 	{
 		if(snd_incr != "")
 			sound (e, CHAN_AUTO, snd_incr, VOL_BASE, ATTN_NORM);
@@ -1598,9 +1600,9 @@ void GiveRot(entity e, float v0, float v1, .float rotfield, float rottime, .floa
 }
 
 #define PREGIVE(e,f) float save_##f; save_##f = (e).f
-#define POSTGIVE_BIT(e,f,b,snd_incr,snd_decr) GiveSound((e), save_##f & (b), (e).f & (b), snd_incr, snd_decr)
-#define POSTGIVE_VALUE(e,f,snd_incr,snd_decr) GiveSound((e), save_##f, (e).f, snd_incr, snd_decr)
-#define POSTGIVE_VALUE_ROT(e,f,rotfield,rottime,regenfield,regentime,snd_incr,snd_decr) GiveRot((e), save_##f, (e).f, rotfield, rottime, regenfield, regentime); GiveSound((e), save_##f, (e).f, snd_incr, snd_decr)
+#define POSTGIVE_BIT(e,f,b,snd_incr,snd_decr) GiveSound((e), save_##f & (b), (e).f & (b), 0, snd_incr, snd_decr)
+#define POSTGIVE_VALUE(e,f,t,snd_incr,snd_decr) GiveSound((e), save_##f, (e).f, t, snd_incr, snd_decr)
+#define POSTGIVE_VALUE_ROT(e,f,t,rotfield,rottime,regenfield,regentime,snd_incr,snd_decr) GiveRot((e), save_##f, (e).f, rotfield, rottime, regenfield, regentime); GiveSound((e), save_##f, (e).f, t, snd_incr, snd_decr)
 
 float GiveItems(entity e, float beginarg, float endarg)
 {
@@ -1700,10 +1702,10 @@ float GiveItems(entity e, float beginarg, float endarg)
 				got += GiveBit(e, items, IT_FUEL_REGEN, op, val);
 				break;
 			case "strength":
-				got += GiveValue(e, strength_finished, op, time + val);
+				got += GiveValue(e, strength_finished, op, val);
 				break;
 			case "invincible":
-				got += GiveValue(e, invincible_finished, op, time + val);
+				got += GiveValue(e, invincible_finished, op, val);
 				break;
 			case "cells":
 				got += GiveValue(e, ammo_cells, op, val);
@@ -1760,15 +1762,15 @@ float GiveItems(entity e, float beginarg, float endarg)
 					weapon_action(wi.weapon, WR_PRECACHE);
 		}
 	}
-	POSTGIVE_VALUE(e, strength_finished, "misc/powerup.wav", "misc/poweroff.wav");
-	POSTGIVE_VALUE(e, invincible_finished, "misc/powerup_shield.wav", "misc/poweroff.wav");
-	POSTGIVE_VALUE(e, ammo_nails, "misc/itempickup.wav", string_null);
-	POSTGIVE_VALUE(e, ammo_cells, "misc/itempickup.wav", string_null);
-	POSTGIVE_VALUE(e, ammo_shells, "misc/itempickup.wav", string_null);
-	POSTGIVE_VALUE(e, ammo_rockets, "misc/itempickup.wav", string_null);
-	POSTGIVE_VALUE_ROT(e, ammo_fuel, pauserotfuel_finished, cvar("g_balance_pause_fuel_rot"), pauseregen_finished, cvar("g_balance_pause_fuel_regen"), "misc/itempickup.wav", string_null);
-	POSTGIVE_VALUE_ROT(e, armorvalue, pauserotarmor_finished, cvar("g_balance_pause_armor_rot"), pauseregen_finished, cvar("g_balance_pause_health_regen"), "misc/armor25.wav", string_null);
-	POSTGIVE_VALUE_ROT(e, health, pauserothealth_finished, cvar("g_balance_pause_health_rot"), pauseregen_finished, cvar("g_balance_pause_health_regen"), "misc/megahealth.wav", string_null);
+	POSTGIVE_VALUE(e, strength_finished, 1, "misc/powerup.wav", "misc/poweroff.wav");
+	POSTGIVE_VALUE(e, invincible_finished, 1, "misc/powerup_shield.wav", "misc/poweroff.wav");
+	POSTGIVE_VALUE(e, ammo_nails, 0, "misc/itempickup.wav", string_null);
+	POSTGIVE_VALUE(e, ammo_cells, 0, "misc/itempickup.wav", string_null);
+	POSTGIVE_VALUE(e, ammo_shells, 0, "misc/itempickup.wav", string_null);
+	POSTGIVE_VALUE(e, ammo_rockets, 0, "misc/itempickup.wav", string_null);
+	POSTGIVE_VALUE_ROT(e, ammo_fuel, 1, pauserotfuel_finished, cvar("g_balance_pause_fuel_rot"), pauseregen_finished, cvar("g_balance_pause_fuel_regen"), "misc/itempickup.wav", string_null);
+	POSTGIVE_VALUE_ROT(e, armorvalue, 1, pauserotarmor_finished, cvar("g_balance_pause_armor_rot"), pauseregen_finished, cvar("g_balance_pause_health_regen"), "misc/armor25.wav", string_null);
+	POSTGIVE_VALUE_ROT(e, health, 1, pauserothealth_finished, cvar("g_balance_pause_health_rot"), pauseregen_finished, cvar("g_balance_pause_health_regen"), "misc/megahealth.wav", string_null);
 
 	if(e.strength_finished <= 0)
 		e.strength_finished = 0;
