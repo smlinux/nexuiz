@@ -342,7 +342,7 @@ vector weapon_adjust = '10 0 -15';
 /*
  * supported formats:
  *
- * 1. simple animated model, muzzlr flash handling on h_ model:
+ * 1. simple animated model, muzzle flash handling on h_ model:
  *    h_tuba.dpm, h_tuba.dpm.framegroups - invisible model controlling the animation
  *      tags:
  *        shot = muzzle end (shot origin, also used for muzzle flashes)
@@ -351,7 +351,17 @@ vector weapon_adjust = '10 0 -15';
  *    v_tuba.md3 - first and third person model
  *    g_tuba.md3 - pickup model
  *
- * 2. fully animated model, muzzle flash handling on h_ model:
+ * 2. simple animated model, muzzle flash handling on v_ model:
+ *    h_tuba.dpm, h_tuba.dpm.framegroups - invisible model controlling the animation
+ *      tags:
+ *        weapon = attachment for v_tuba.md3
+ *    v_tuba.md3 - first and third person model
+ *      tags:
+ *        shot = muzzle end (shot origin, also used for muzzle flashes)
+ *        shell = casings ejection point (must be on the right hand side of the gun)
+ *    g_tuba.md3 - pickup model
+ *
+ * 3. fully animated model, muzzle flash handling on h_ model:
  *    h_tuba.dpm, h_tuba.dpm.framegroups - animated first person model
  *      tags:
  *        shot = muzzle end (shot origin, also used for muzzle flashes)
@@ -360,7 +370,7 @@ vector weapon_adjust = '10 0 -15';
  *    v_tuba.md3 - third person model
  *    g_tuba.md3 - pickup model
  *
- * 3. fully animated model, muzzle flash handling on v_ model:
+ * 4. fully animated model, muzzle flash handling on v_ model:
  *    h_tuba.dpm, h_tuba.dpm.framegroups - animated first person model
  *      tags:
  *        shot = muzzle end (shot origin)
@@ -469,35 +479,52 @@ void CL_Weaponentity_Think()
 				self.viewmodelforclient = world;
 
 				float idx;
-				idx = gettagindex(self, "shot");
-				if(!idx)
-					idx = gettagindex(self, "tag_shot");
-				if(idx)
+
+				if(v_shot_idx) // v_ model attached to invisible h_ model
 				{
-					self.movedir = gettaginfo(self, idx);
+					self.movedir = gettaginfo(self.weaponentity, v_shot_idx);
 				}
 				else
 				{
-					print("WARNING: weapon model ", self.model, " does not support the 'shot' tag, will display shots TOTALLY wrong\n");
-					self.movedir = '0 0 0';
+					idx = gettagindex(self, "shot");
+					if(!idx)
+						idx = gettagindex(self, "tag_shot");
+					if(idx)
+						self.movedir = gettaginfo(self, idx);
+					else
+					{
+						print("WARNING: weapon model ", self.model, " does not support the 'shot' tag, will display shots TOTALLY wrong\n");
+						self.movedir = '0 0 0';
+					}
 				}
 
-				idx = gettagindex(self, "shell");
-				if(!idx)
-					idx = gettagindex(self, "tag_shell");
-				if(idx)
+				if(self.weaponentity) // v_ model attached to invisible h_ model
 				{
-					self.spawnorigin = gettaginfo(self, idx);
+					idx = gettagindex(self.weaponentity, "shell");
+					if(!idx)
+						idx = gettagindex(self.weaponentity, "tag_shell");
+					if(idx)
+						self.spawnorigin = gettaginfo(self.weaponentity, idx);
 				}
 				else
+					idx = 0;
+				if(!idx)
 				{
-					print("WARNING: weapon model ", self.model, " does not support the 'shell' tag, will display casings wrong\n");
-					self.spawnorigin = self.movedir;
+					idx = gettagindex(self, "shell");
+					if(!idx)
+						idx = gettagindex(self, "tag_shell");
+					if(idx)
+						self.spawnorigin = gettaginfo(self, idx);
+					else
+					{
+						print("WARNING: weapon model ", self.model, " does not support the 'shell' tag, will display casings wrong\n");
+						self.spawnorigin = self.movedir;
+					}
 				}
 
 				if(v_shot_idx)
 				{
-					self.oldorigin = '0 0 0';
+					self.oldorigin = '0 0 0'; // use regular attachment
 				}
 				else
 				{
