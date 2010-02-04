@@ -125,7 +125,6 @@ float ignore_plus_zoom;
 float ignore_minus_zoom;
 float warmup_stage;
 
-float weaponimpulse[24];
 string getcommandkey(string text, string command);
 float sbar_showbinds;
 float sbar_showbinds_limit;

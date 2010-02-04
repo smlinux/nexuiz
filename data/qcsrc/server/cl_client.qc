@@ -1034,11 +1034,8 @@ void PutClientInServer (void)
 
 float ClientInit_SendEntity(entity to, float sf)
 {
-	float i;
 	WriteByte(MSG_ENTITY, ENT_CLIENT_INIT);
 	WriteByte(MSG_ENTITY, g_nexball_meter_period * 32);
-	for(i = 1; i <= 24; ++i)
-		WriteByte(MSG_ENTITY, (get_weaponinfo(i)).impulse + 1);
 	WriteCoord(MSG_ENTITY, hook_shotorigin_x);
 	WriteCoord(MSG_ENTITY, hook_shotorigin_y);
 	WriteCoord(MSG_ENTITY, hook_shotorigin_z);

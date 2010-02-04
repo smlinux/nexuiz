@@ -984,13 +984,10 @@ void Ent_ScoresInfo()
 
 void Ent_Init()
 {
-	float i;
 	self.classname = "ent_client_init";
 
 	nb_pb_period = ReadByte() / 32; //Accuracy of 1/32th
 
-	for(i = 0; i < 24; ++i)
-		weaponimpulse[i] = ReadByte() - 1;
 	hook_shotorigin_x = ReadCoord();
 	hook_shotorigin_y = ReadCoord();
 	hook_shotorigin_z = ReadCoord();
