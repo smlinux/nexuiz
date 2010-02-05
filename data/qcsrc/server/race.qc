@@ -246,13 +246,11 @@ void race_SetTime(entity e, float t, float match_rec) {
 		return;
 	}
 
+	oldrec = grecordtime[pos-1];
+
 	// move other rankings out of the way
 	float i;
 	if (prevpos) { // player improved his existing record
-		if(prevpos == pos)
-			oldrec = grecordtime[pos-1];
-		else
-			oldrec = grecordtime[pos-1];
 		for (i=prevpos-1;i>pos-1;--i) {
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "time", ftos(i)), ftos(grecordtime[i-1]));
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname", ftos(i)), grecordholder[i-1]);
@@ -271,7 +269,6 @@ void race_SetTime(entity e, float t, float match_rec) {
 #endif
 		}
 	} else { // player has no ranked record yet
-		oldrec = grecordtime[pos-1];
 		for (i=RANKINGS_CNT-1;i>pos-1;--i) {
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "time", ftos(i)), ftos(grecordtime[i-1]));
 			db_put(ServerProgsDB, strcat(GetMapname(), rr, "netname", ftos(i)), grecordholder[i-1]);
@@ -341,12 +338,13 @@ void race_SetTime(entity e, float t, float match_rec) {
 		if(pos == prevpos) {
 			recorddifference = strcat(" ^2[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
 			bprint(e.netname, "^1 improved their 1st place record with ", TIME_ENCODED_TOSTRING(t), recorddifference, "\n");
-			race_SendStatus(3, e); // "new server record"
+		} else if (oldrec == 0) {
+			bprint(e.netname, "^1 set the 1st place record with ", TIME_ENCODED_TOSTRING(t), "\n");
 		} else {
 			recorddifference = strcat(" ^2[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
 			bprint(e.netname, "^1 broke ", grecordholder[pos], "^1's 1st place record with ", strcat(TIME_ENCODED_TOSTRING(t), recorddifference, "\n"));
-			race_SendStatus(3, e); // "new server record"
 		}
+		race_SendStatus(3, e); // "new server record"
 	} else {
 		if(pos == prevpos) {
 			recorddifference = strcat(" ^2[-", TIME_ENCODED_TOSTRING(oldrec - t), "]");
