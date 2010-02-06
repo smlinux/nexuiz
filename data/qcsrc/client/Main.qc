@@ -1094,7 +1094,7 @@ void Net_ReadRace()
 			race_server_record = ReadInt24_t();
 			break;
 		case RACE_NET_SPEED_AWARD:
-			race_speedaward = ReadShort();
+			race_speedaward = ReadInt24_t();
 			if(race_speedaward_holder)
 				strunzone(race_speedaward_holder);
 			race_speedaward_holder = strzone(ReadString());

@@ -567,7 +567,7 @@ void race_send_speedaward(float msg)
 	WriteByte(msg, SVC_TEMPENTITY);
 	WriteByte(msg, TE_CSQC_RACE);
 	WriteByte(msg, RACE_NET_SPEED_AWARD);
-	WriteShort(msg, floor(speedaward_speed+0.5));
+	WriteInt24_t(msg, floor(speedaward_speed+0.5));
 	WriteString(msg, speedaward_holder);
 }
 
