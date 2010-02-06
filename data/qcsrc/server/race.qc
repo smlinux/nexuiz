@@ -923,7 +923,7 @@ void trigger_race_checkpoint_verify()
 
 					setsize(targ, trigger.mins, trigger.maxs);
 					setorigin(targ, trigger.origin);
-					remove(trigger);
+					//remove(trigger);
 				}
 	}
 	remove(self);
