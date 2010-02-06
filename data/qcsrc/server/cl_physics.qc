@@ -117,12 +117,16 @@ void PlayerJump (void)
 	if(sv_doublejump)
 	{
 		// we're moving upwards at self.velocity_z
-		// only allow jumping after we got 3 units upwards
+		// only allow jumping after we got 2 units upwards
 		// so we for sure leave the FL_ONGROUND check
 		//
 		// but as this sucks because of factoring in gravity, we'll just do it
-		// for 4 units, and constant velocity
-		self.doublejump_nextjumptime = time + 4 / max(40, self.velocity_z); // max 0.1s blocking of jumps
+		// for 3 units, and constant velocity
+		if(self.velocity_z >= mjumpheight * 0.5) // only do this when we won't INTENTIONALLY jump a second time... TODO make a better check for this
+		{
+			self.doublejump_nextjumptime = time + 3 / max(30, self.velocity_z); // max 0.1s blocking of jumps, typically just one frame
+			//print(sprintf("blocking jumps for next %f seconds (vel: %f to %f)\n", self.doublejump_nextjumptime - time, self.velocity_z - mjumpheight, self.velocity_z));
+		}
 	}
 
 	self.restart_jump = -1; // restart jump anim next time
