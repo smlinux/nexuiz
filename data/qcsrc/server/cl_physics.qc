@@ -30,6 +30,7 @@ float sv_warsowbunny_backtosideratio;
 .float spectatorspeed;
 
 .float doublejump_nextjumptime;
+.float wasinair;
 
 /*
 =============
@@ -66,7 +67,7 @@ void PlayerJump (void)
 		return;
 
 	if(sv_doublejump)
-		if(time < self.doublejump_nextjumptime)
+		if(time < self.doublejump_nextjumptime || !self.wasinair)
 			return;
 
 	if(g_runematch)
@@ -89,8 +90,10 @@ void PlayerJump (void)
 		mjumpheight = mjumpheight * cvar("g_minstagib_speed_jumpheight");
 	}
 
-	if(self.velocity_z >= cvar("sv_doublejump_speedcap") && cvar("sv_doublejump_speedcap")) // try to "fix" the crazy stair jumps by limiting at which z-axis speeds you can perform a doublejump
-		return; // refuse the jump
+	if(cvar_string("sv_jumpspeedcap_min") != "")
+		self.velocity_z = max(cvar("sv_jumpvelocity") * cvar("sv_jumpspeedcap_min"), self.velocity_z);
+	if(cvar_string("sv_jumpspeedcap_max") != "")
+		self.velocity_z = min(cvar("sv_jumpvelocity") * cvar("sv_jumpspeedcap_max"), self.velocity_z);
 
 	if(!(self.lastflags & FL_ONGROUND))
 	{
@@ -851,6 +854,9 @@ void SV_PlayerPhysics()
 			PlayerJump ();
 		else
 			self.flags |= FL_JUMPRELEASED;
+
+		if (!self.wasinair)
+			self.wasinair = !(self.flags & FL_ONGROUND);
 
 		if (self.waterlevel == WATERLEVEL_SWIMMING)
 			CheckWaterJump ();
