@@ -583,7 +583,7 @@ void race_send_speedaward_alltimebest(float msg)
 	WriteByte(msg, SVC_TEMPENTITY);
 	WriteByte(msg, TE_CSQC_RACE);
 	WriteByte(msg, RACE_NET_SPEED_AWARD_BEST);
-	WriteShort(msg, floor(speedaward_alltimebest+0.5));
+	WriteInt24_t(msg, floor(speedaward_alltimebest+0.5));
 	WriteString(msg, speedaward_alltimebest_holder);
 }
 

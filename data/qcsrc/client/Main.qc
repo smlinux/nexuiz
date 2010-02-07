@@ -1100,7 +1100,7 @@ void Net_ReadRace()
 			race_speedaward_holder = strzone(ReadString());
 			break;
 		case RACE_NET_SPEED_AWARD_BEST:
-			race_speedaward_alltimebest = ReadShort();
+			race_speedaward_alltimebest = ReadInt24_t();
 			if(race_speedaward_alltimebest_holder)
 				strunzone(race_speedaward_alltimebest_holder);
 			race_speedaward_alltimebest_holder = strzone(ReadString());
