@@ -89,20 +89,24 @@ void PlayerJump (void)
 		mjumpheight = mjumpheight * cvar("g_minstagib_speed_jumpheight");
 	}
 
+	if(self.velocity_z >= cvar("sv_doublejump_speedcap") && cvar("sv_doublejump_speedcap")) // try to "fix" the crazy stair jumps by limiting at which z-axis speeds you can perform a doublejump
+		return; // refuse the jump
+
 	if(!(self.lastflags & FL_ONGROUND))
 	{
 		if(cvar("speedmeter"))
 			dprint(strcat("landing velocity: ", vtos(self.velocity), " (abs: ", ftos(vlen(self.velocity)), ")\n"));
 		if(self.lastground < time - 0.3)
-			self.velocity = self.velocity * (1 - cvar("sv_friction_on_land"));
+		{
+			self.velocity_x *= (1 - cvar("sv_friction_on_land"));
+			self.velocity_y *= (1 - cvar("sv_friction_on_land"));
+		}
 		if(self.jumppadcount > 1)
 			dprint(strcat(ftos(self.jumppadcount), "x jumppad combo\n"));
 		self.jumppadcount = 0;
 	}
 
-	if(self.velocity_z < cvar("sv_doublejump_speedcap") || !cvar("sv_doublejump_speedcap")) // try to "fix" the crazy stair jumps by limiting at which z-axis speeds you can perform a doublejump
-		self.velocity_z = self.velocity_z + mjumpheight;
-
+	self.velocity_z = self.velocity_z + mjumpheight;
 	self.oldvelocity_z = self.velocity_z;
 
 	self.flags &~= FL_ONGROUND;
