@@ -100,7 +100,9 @@ void PlayerJump (void)
 		self.jumppadcount = 0;
 	}
 
-	self.velocity_z = self.velocity_z + mjumpheight;
+	if(self.velocity_z < cvar("sv_doublejump_speedcap") || !cvar("sv_doublejump_speedcap")) // try to "fix" the crazy stair jumps by limiting at which z-axis speeds you can perform a doublejump
+		self.velocity_z = self.velocity_z + mjumpheight;
+
 	self.oldvelocity_z = self.velocity_z;
 
 	self.flags &~= FL_ONGROUND;
