@@ -19,14 +19,69 @@ float PlayerEdgeDistance(entity p, vector v)
 	return vbest * v;
 }
 
+vector Portal_ApplyTransformToPlayerAngle(vector transform, vector vangle)
+{
+	vector old_forward, old_up;
+	vector old_yawforward;
+	vector new_forward, new_up;
+	vector new_yawforward;
+
+	vector ang;
+	ang = vangle;
+	/*
+	   ang_x = bound(-89, mod(-ang_x + 180, 360) - 180, 89);
+	   ang = AnglesTransform_Multiply(transform, ang);
+	 */
+
+	// PLAYERS use different math
+	ang_x = -ang_x;
+
+	//print("reference: ", vtos(AnglesTransform_Multiply(transform, ang)), "\n");
+
+	fixedmakevectors(ang);
+	old_forward = v_forward;
+	old_up = v_up;
+	fixedmakevectors(ang_y * '0 1 0');
+	old_yawforward = v_forward;
+
+	// their aiming directions are portalled...
+	new_forward = AnglesTransform_Apply(transform, old_forward);
+	new_up = AnglesTransform_Apply(transform, old_up);
+	new_yawforward = AnglesTransform_Apply(transform, old_yawforward);
+
+	// but now find a new sense of direction
+	// this is NOT easy!
+	// assume new_forward points straight up.
+	// What is our yaw?
+	//
+	// new_up could now point forward OR backward... which direction to choose?
+
+	if(new_forward_z > 0.7 || new_forward_z < -0.7) // far up; in this case, the "up" vector points backwards
+	{
+		// new_yawforward and new_yawup define the new aiming half-circle
+		// we "just" need to find out whether new_up or -new_up is in that half circle
+		ang = fixedvectoangles(new_forward); // this still gets us a nice pitch value...
+		if(new_up * new_yawforward < 0)
+			new_up = -1 * new_up;
+		ang_y = vectoyaw(new_up); // this vector is the yaw we want
+		//print("UP/DOWN path: ", vtos(ang), "\n");
+	}
+	else
+	{
+		// good angles; here, "forward" suffices
+		ang = fixedvectoangles(new_forward);
+		//print("GOOD path: ", vtos(ang), "\n");
+	}
+
+	ang_x = -ang_x;
+	ang_z = vangle_z;
+	return ang;
+}
+
 .vector right_vector;
 float Portal_TeleportPlayer(entity teleporter, entity player)
 {
 	vector from, to, safe, step, transform, ang, newvel;
-	vector new_forward, new_up;
-	vector old_forward, old_up;
-	vector new_yawforward;
-	vector old_yawforward;
 	float planeshift, s, t;
 
 	if not(teleporter.enemy)
@@ -87,61 +142,9 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 
 	// ang_x stuff works around weird quake angles
 	if(player.classname == "player")
-	{
-		ang = player.v_angle;
-		/*
-		ang_x = bound(-89, mod(-ang_x + 180, 360) - 180, 89);
-		ang = AnglesTransform_Multiply(transform, ang);
-		*/
-
-		// PLAYERS use different math
-		ang_x = -ang_x;
-
-		//print("reference: ", vtos(AnglesTransform_Multiply(transform, ang)), "\n");
-
-		fixedmakevectors(ang);
-		old_forward = v_forward;
-		old_up = v_up;
-		fixedmakevectors(ang_y * '0 1 0');
-		old_yawforward = v_forward;
-
-		// their aiming directions are portalled...
-		new_forward = AnglesTransform_Apply(transform, old_forward);
-		new_up = AnglesTransform_Apply(transform, old_up);
-		new_yawforward = AnglesTransform_Apply(transform, old_yawforward);
-
-		// but now find a new sense of direction
-		// this is NOT easy!
-		// assume new_forward points straight up.
-		// What is our yaw?
-		//
-		// new_up could now point forward OR backward... which direction to choose?
-
-		if(new_forward_z > 0.7 || new_forward_z < -0.7) // far up; in this case, the "up" vector points backwards
-		{
-			// new_yawforward and new_yawup define the new aiming half-circle
-			// we "just" need to find out whether new_up or -new_up is in that half circle
-			ang = fixedvectoangles(new_forward); // this still gets us a nice pitch value...
-			if(new_up * new_yawforward < 0)
-				new_up = -1 * new_up;
-			ang_y = vectoyaw(new_up); // this vector is the yaw we want
-			//print("UP/DOWN path: ", vtos(ang), "\n");
-		}
-		else
-		{
-			// good angles; here, "forward" suffices
-			ang = fixedvectoangles(new_forward);
-			//print("GOOD path: ", vtos(ang), "\n");
-		}
-
-		ang_x = -ang_x;
-		ang_z = player.angles_z;
-	}
+		ang = Portal_ApplyTransformToPlayerAngle(transform, player.v_angle);
 	else
-	{
-		ang = player.angles;
 		ang = AnglesTransform_Multiply(transform, player.angles);
-	}
 
 	// factor -1 allows chaining portals, but may be weird
 	player.right_vector = -1 * AnglesTransform_Apply(transform, player.right_vector);
@@ -156,7 +159,7 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 	}
 
 	tdeath_hit = 0;
-	TeleportPlayer(teleporter, player, to, ang, newvel, teleporter.enemy.absmin, teleporter.enemy.absmax);
+	TeleportPlayer(teleporter, player, to, ang, newvel, teleporter.enemy.absmin, teleporter.enemy.absmax, TELEPORT_FLAGS_PORTAL);
 	if(tdeath_hit)
 	{
 		// telefrag within 1 second of portal creation = amazing
