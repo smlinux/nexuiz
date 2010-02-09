@@ -24,7 +24,7 @@ void W_Nex_Attack (void)
 	FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, cvar("g_balance_nex_damage"), cvar("g_balance_nex_force"), cvar("g_balance_nex_damagefalloff_mindist"), cvar("g_balance_nex_damagefalloff_maxdist"), cvar("g_balance_nex_damagefalloff_halflife"), cvar("g_balance_nex_damagefalloff_forcehalflife"), WEP_NEX);
 
 	if(yoda && flying)
-		announce(self, "announcer/male/yoda.wav");
+		AnnounceTo(self, "yoda");
 
 	//beam and muzzle flash done on client
 	SendCSQCNexBeamParticle();

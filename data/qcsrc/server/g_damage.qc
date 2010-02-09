@@ -485,7 +485,7 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 						bprint (a,"^7 made a ^1TRIPLE SCORE\n");
 					} else {
 						bprint (a,"^7 made a ^1TRIPLE FRAG\n");
-						announce(attacker, "announcer/male/03kills.wav");
+						AnnounceTo(attacker, "03kills");
 					}
 				}
 				else if (attacker.killcount == 5)
@@ -494,7 +494,7 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 						bprint (a,"^7 unleashes ^1SCORING RAGE\n");
 					} else {
 						bprint (a,"^7 unleashes ^1RAGE\n");
-						announce(attacker, "announcer/male/05kills.wav");
+						AnnounceTo(attacker, "05kills");
 					}
 				}
 				else if (attacker.killcount == 10)
@@ -503,7 +503,7 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 						bprint (a,"^7 made ^1TEN SCORES IN A ROW!\n");
 					} else {
 						bprint (a,"^7 starts the ^1MASSACRE!\n");
-						announce(attacker, "announcer/male/10kills.wav");
+						AnnounceTo(attacker, "10kills");
 					}
 				}
 				else if (attacker.killcount == 15)
@@ -512,7 +512,7 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 						bprint (a,"^7 made ^1FIFTEEN SCORES IN A ROW!\n");
 					} else {
 						bprint (a,"^7 executes ^1MAYHEM!\n");
-						announce(attacker, "announcer/male/15kills.wav");
+						AnnounceTo(attacker, "15kills");
 					}
 				}
 				else if (attacker.killcount == 20)
@@ -521,7 +521,7 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 						bprint (a,"^7 made ^1TWENTY SCORES IN A ROW!\n");
 					} else {
 						bprint (a,"^7 is a ^1BERSERKER!\n");
-						announce(attacker, "announcer/male/20kills.wav");
+						AnnounceTo(attacker, "20kills");
 					}
 				}
 				else if (attacker.killcount == 25)
@@ -530,7 +530,7 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 						bprint (a,"^7 made ^1TWENTY FIFE SCORES IN A ROW!\n");
 					} else {
 						bprint (a,"^7 inflicts ^1CARNAGE!\n");
-						announce(attacker, "announcer/male/25kills.wav");
+						AnnounceTo(attacker, "25kills");
 					}
 				}
 				else if (attacker.killcount == 30)
@@ -539,7 +539,7 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 						bprint (a,"^7 made ^1THIRTY SCORES IN A ROW!\n");
 					} else {
 						bprint (a,"^7 unleashes ^1ARMAGEDDON!\n");
-						announce(attacker, "announcer/male/30kills.wav");
+						AnnounceTo(attacker, "30kills");
 					}
 				}
 			}
@@ -593,7 +593,7 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 					bprint ("^1",s, "^1 died\n");
 			GiveFrags(targ, targ, -1);
 			if(PlayerScore_Add(targ, SP_SCORE, 0) == -5) {
-				announce(targ, "announcer/male/botlike.wav");
+				AnnounceTo(targ, "botlike");
 			}
 
 			if (targ.killcount > 2)

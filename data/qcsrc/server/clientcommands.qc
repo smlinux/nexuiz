@@ -585,7 +585,7 @@ void evaluateTimeout() {
 	timeoutHandler.nextthink = time; //always let the entity think asap
 
 	//inform all connected clients about the timeout call
-	play2all("announcer/robotic/timeoutcalled.wav");
+	Announce("timeoutcalled");
 }
 
 /**

@@ -273,13 +273,13 @@ float Item_GiveTo(entity item, entity player)
 				if (clienttype(player) == CLIENTTYPE_REAL)
 				{
 					if(player.health <= 5)
-						play2(player, "announcer/robotic/lastsecond.wav");
+						AnnounceTo(player, "lastsecond");
 					else if(player.health < 50)
-						play2(player, "announcer/robotic/narrowly.wav");
+						AnnounceTo(player, "narrowly");
 				}
 				// sound not available
 				// else if(item.items == IT_CELLS)
-				//	play2(player, "announce/robotic/ammo.wav");
+				//	AnnounceTo(player, "ammo");
 
 				if (item.weapons & WEPBIT_MINSTANEX)
 					W_GiveWeapon (player, WEP_MINSTANEX, "Nex");
@@ -293,7 +293,7 @@ float Item_GiveTo(entity item, entity player)
 			{
 				pickedup = TRUE;
 				// sound not available
-				// play2(player, "announce/robotic/extra.ogg\nplay2 announce/robotic/_lives.wav");
+				// AnnounceTo(player, "_lives");
 				player.armorvalue = player.armorvalue + cvar("g_minstagib_extralives");
 				sprint(player, "^3You picked up some extra lives\n");
 			}
@@ -303,7 +303,7 @@ float Item_GiveTo(entity item, entity player)
 			{
 				pickedup = TRUE;
 				// sound not available
-				// play2(player, "announce/robotic/invisible.wav");
+				// AnnounceTo(player, "invisible");
 				player.strength_finished = max(player.strength_finished, time) + cvar("g_balance_powerup_strength_time");
 			}
 
@@ -312,7 +312,7 @@ float Item_GiveTo(entity item, entity player)
 			{
 				pickedup = TRUE;
 				// sound not available
-				// play2(player, "announce/robotic/speed.wav");
+				// AnnounceTo(player, "speed");
 				player.invincible_finished = max(player.invincible_finished, time) + cvar("g_balance_powerup_strength_time");
 			}
 

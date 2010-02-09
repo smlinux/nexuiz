@@ -102,7 +102,7 @@ void CheckForGamestartChange() {
 	if (previous_game_starttime != startTime) {
 		if ((time + 5.0) < startTime) {
 			//if connecting to server while restart was active don't always play prepareforbattle
-			sound(self, CHAN_VOICE, "announcer/robotic/prepareforbattle.wav", VOL_BASEVOICE, ATTN_NONE);
+			sound(self, CHAN_VOICE, strcat("announcer/", cvar_string("cl_announcer"), "/prepareforbattle.wav"), VOL_BASEVOICE, ATTN_NONE);
 		}
 		if (time < startTime) {
 			restartAnnouncer = spawn();
@@ -410,6 +410,7 @@ void CSQC_UpdateView(float w, float h)
 		}
 
 	CheckForGamestartChange();
+	serverAnnouncer();
 	maptimeAnnouncer();
 	carrierAnnouncer();
 

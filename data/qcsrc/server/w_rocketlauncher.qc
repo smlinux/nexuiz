@@ -21,7 +21,7 @@ void W_Rocket_Explode (void)
 		if(other.classname == "player")
 			if(IsDifferentTeam(self.owner, other))
 				if(IsFlying(other))
-					announce(self.owner, "announcer/male/airshot.wav");
+					AnnounceTo(self.owner, "airshot");
 
 	self.event_damage = SUB_Null;
 	self.takedamage = DAMAGE_NO;

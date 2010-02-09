@@ -42,6 +42,7 @@ float __engine_check;
 #endif
 
 string forcefog;
+string cl_announcer_prev;
 void WaypointSprite_Load();
 void CSQC_Init(void)
 {
@@ -128,11 +129,17 @@ void CSQC_Init(void)
 
 	WaypointSprite_Load();
 
+	// precaches
 	Projectile_Precache();
 	GibSplash_Precache();
 	Casings_Precache();
 	DamageInfo_Precache();
-	Announcer_Precache();
+	if(cvar_string("cl_announcer") != cl_announcer_prev) {
+		Announcer_Precache();
+		if(cl_announcer_prev)
+			strunzone(cl_announcer_prev);
+		cl_announcer_prev = strzone(cvar_string("cl_announcer"));
+	}
 	Tuba_Precache();
 
 #ifdef UID
@@ -1251,14 +1258,18 @@ float CSQC_Parse_TempEntity()
 			Net_VoteDialogReset();
 			bHandled = true;
 			break;
-        case TE_CSQC_LIGHTNINGARC:
-            Net_ReadLightningarc();
-            bHandled = true;
-            break;
-        case TE_CSQC_PINGPLREPORT:
-            Net_ReadPingPLReport();
-            bHandled = true;
-            break;
+		case TE_CSQC_LIGHTNINGARC:
+			Net_ReadLightningarc();
+			bHandled = true;
+			break;
+		case TE_CSQC_PINGPLREPORT:
+			Net_ReadPingPLReport();
+			bHandled = true;
+			break;
+		case TE_CSQC_ANNOUNCE:
+			announce_snd = strzone(ReadString());
+			bHandled = true;
+			break;
 		default:
 			// No special logic for this temporary entity; return 0 so the engine can handle it
 			bHandled = false;

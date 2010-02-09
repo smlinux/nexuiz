@@ -1509,27 +1509,16 @@ void play2(entity e, string filename)
     soundtoat(MSG_ONE, world, '0 0 0', CHAN_AUTO, filename, VOL_BASE, ATTN_NONE);
 }
 
-.float announcetime;
-float announce(entity player, string msg)
-{
-    if (time > player.announcetime)
-        if (clienttype(player) == CLIENTTYPE_REAL)
-        {
-            player.announcetime = time + 0.8;
-            play2(player, msg);
-            return TRUE;
-        }
-    return FALSE;
-}
 // use this one if you might be causing spam (e.g. from touch functions that might get called more than once per frame)
+.float spamtime;
 float spamsound(entity e, float chan, string samp, float vol, float atten)
 {
     if (!sound_allowed(MSG_BROADCAST, e))
         return FALSE;
 
-    if (time > e.announcetime)
+    if (time > e.spamtime)
     {
-        e.announcetime = time;
+        e.spamtime = time;
         sound(e, chan, samp, vol, atten);
         return TRUE;
     }
@@ -1692,37 +1681,6 @@ void precache()
     if (g_jetpack)
         precache_sound ("misc/jetpack_fly.wav");
 
-    // announcer sounds - male
-    precache_sound ("announcer/male/electrobitch.wav");
-    precache_sound ("announcer/male/airshot.wav");
-    precache_sound ("announcer/male/03kills.wav");
-    precache_sound ("announcer/male/05kills.wav");
-    precache_sound ("announcer/male/10kills.wav");
-    precache_sound ("announcer/male/15kills.wav");
-    precache_sound ("announcer/male/20kills.wav");
-    precache_sound ("announcer/male/25kills.wav");
-    precache_sound ("announcer/male/30kills.wav");
-    precache_sound ("announcer/male/botlike.wav");
-    precache_sound ("announcer/male/yoda.wav");
-    precache_sound ("announcer/male/amazing.wav");
-    precache_sound ("announcer/male/awesome.wav");
-    precache_sound ("announcer/male/headshot.wav");
-    precache_sound ("announcer/male/impressive.wav");
-
-    // announcer sounds - robotic
-    precache_sound ("announcer/robotic/prepareforbattle.wav");
-    precache_sound ("announcer/robotic/begin.wav");
-    precache_sound ("announcer/robotic/timeoutcalled.wav");
-    precache_sound ("announcer/robotic/1fragleft.wav");
-    precache_sound ("announcer/robotic/2fragsleft.wav");
-    precache_sound ("announcer/robotic/3fragsleft.wav");
-    precache_sound ("announcer/robotic/terminated.wav");
-    if (g_minstagib)
-    {
-        precache_sound ("announcer/robotic/lastsecond.wav");
-        precache_sound ("announcer/robotic/narrowly.wav");
-    }
-
     precache_model ("models/sprites/0.spr32");
     precache_model ("models/sprites/1.spr32");
     precache_model ("models/sprites/2.spr32");
@@ -1734,16 +1692,6 @@ void precache()
     precache_model ("models/sprites/8.spr32");
     precache_model ("models/sprites/9.spr32");
     precache_model ("models/sprites/10.spr32");
-    precache_sound ("announcer/robotic/1.wav");
-    precache_sound ("announcer/robotic/2.wav");
-    precache_sound ("announcer/robotic/3.wav");
-    precache_sound ("announcer/robotic/4.wav");
-    precache_sound ("announcer/robotic/5.wav");
-    precache_sound ("announcer/robotic/6.wav");
-    precache_sound ("announcer/robotic/7.wav");
-    precache_sound ("announcer/robotic/8.wav");
-    precache_sound ("announcer/robotic/9.wav");
-    precache_sound ("announcer/robotic/10.wav");
 
     // common weapon precaches
     precache_sound ("weapons/weapon_switch.wav");

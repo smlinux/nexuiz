@@ -337,6 +337,9 @@ float sv_loddistance2;
 .float cvar_cl_gunalign;
 .float cvar_cl_noantilag;
 
+void Announce(string snd);
+void AnnounceTo(entity e, string snd);
+
 .float version_nagtime;
 
 .float modelindex_lod0;

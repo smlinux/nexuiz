@@ -140,7 +140,7 @@ void timeoutHandler_Think() {
 				}
 			}
 			if(remainingTimeoutTime == cvar("sv_timeout_resumetime")) { //play a warning sound when only <sv_timeout_resumetime> seconds are left
-				play2all("announcer/robotic/prepareforbattle.wav");
+				Announce("prepareforbattle");
 			}
 			remainingTimeoutTime -= 1;
 			self.nextthink = time + TIMEOUT_SLOWMO_VALUE;
@@ -1756,11 +1756,11 @@ float WinningCondition_Scores(float limit, float leadlimit)
 
 			if (limit)
 			if (leaderfrags == limit - 1)
-				play2all("announcer/robotic/1fragleft.wav");
+				Announce("1fragleft");
 			else if (leaderfrags == limit - 2)
-				play2all("announcer/robotic/2fragsleft.wav");
+				Announce("2fragsleft");
 			else if (leaderfrags == limit - 3)
-				play2all("announcer/robotic/3fragsleft.wav");
+				Announce("3fragsleft");
 		}
 	}
 

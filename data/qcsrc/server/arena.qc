@@ -215,13 +215,13 @@ void Arena_Warmup()
 			//centerprint(self, strcat("Round will start in ", ftos(f),"\n"));
 			roundStartTime_prev = f;
 			if(f == 5)
-				play2all("announcer/robotic/prepareforbattle.wav");
+				Announce("prepareforbattle");
 			else if(f == 3)
-				play2all("announcer/robotic/3.wav");
+				Announce("3");
 			else if(f == 2)
-				play2all("announcer/robotic/2.wav");
+				Announce("2");
 			else if(f == 1)
-				play2all("announcer/robotic/1.wav");
+				Announce("1");
 
 			centerprint(self, msg);
 		}
@@ -240,7 +240,7 @@ void Arena_Warmup()
 	else if(f > -1 && f != roundStartTime_prev)
 	{
 		roundStartTime_prev = f;
-		play2all("announcer/robotic/begin.wav");
+		Announce("begin");
 		centerprint(self, "^1Begin!\n");	
 
 		if(g_ca) {

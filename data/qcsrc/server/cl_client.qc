@@ -6,6 +6,19 @@ void send_CSQC_teamnagger() {
 	WriteByte(0, TE_CSQC_TEAMNAGGER);
 }
 
+void Announce(string snd) {
+	WriteByte(MSG_ALL, SVC_TEMPENTITY);
+	WriteByte(MSG_ALL, TE_CSQC_ANNOUNCE);
+	WriteString(MSG_ALL, snd);
+}
+
+void AnnounceTo(entity e, string snd) {
+	msg_entity = e;
+	WriteByte(MSG_ONE, SVC_TEMPENTITY);
+	WriteByte(MSG_ONE, TE_CSQC_ANNOUNCE);
+	WriteString(MSG_ONE, snd);
+}
+
 float ClientData_Send(entity to, float sf)
 {
 	if(to != self.owner)
@@ -1148,7 +1161,7 @@ void KillIndicator_Think()
 		if(clienttype(self.owner) == CLIENTTYPE_REAL)
 		{
 			if(self.cnt <= 10)
-				announce(self.owner, strcat("announcer/robotic/", ftos(self.cnt), ".wav"));
+				AnnounceTo(self.owner, strcat(ftos(self.cnt), ""));
 			if(self.owner.killindicator_teamchange)
 			{
 				if(self.owner.killindicator_teamchange == -1)
@@ -2197,7 +2210,7 @@ void ShowRespawnCountdown()
 		{
 			self.respawn_countdown = number - 1;
 			if(ceil(self.death_time - (time + 0.5)) == number) // only say it if it is the same number even in 0.5s; to prevent overlapping sounds
-				announce(self, strcat("announcer/robotic/", ftos(number), ".wav"));
+				AnnounceTo(self, strcat(ftos(number), ""));
 		}
 	}
 }
@@ -2791,7 +2804,7 @@ void PlayerPostThink (void)
 		if(timeleft <= 0)
 		{
 			bprint("^3", self.netname, "^3 was kicked for idling.\n");
-			announce(self, "announcer/robotic/terminated.wav");
+			AnnounceTo(self, "terminated");
 			dropclient(self);
 			return;
 		}
@@ -2800,7 +2813,7 @@ void PlayerPostThink (void)
 			if(timeleft != self.idlekick_lasttimeleft)
 			{
 				centerprint_atprio(self, CENTERPRIO_IDLEKICK, strcat("^3Stop idling!\n^3Disconnecting in ", ftos(timeleft), "..."));
-				announce(self, strcat("announcer/robotic/", ftos(timeleft), ".wav"));
+				AnnounceTo(self, strcat(ftos(timeleft), ""));
 			}
 		}
 		else

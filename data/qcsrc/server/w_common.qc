@@ -190,9 +190,9 @@ void W_BallisticBullet_Hit (void)
 		if(self.dmg_edge != 0)
 		{
 			if(headshot)
-				announce(self.owner, "announcer/male/headshot.wav");
+				AnnounceTo(self.owner, "headshot");
 			if(yoda)
-				announce(self.owner, "announcer/male/awesome.wav");
+				AnnounceTo(self.owner, "awesome");
 		}
 
 		// calculate hits for ballistic weapons

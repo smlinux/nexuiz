@@ -178,6 +178,9 @@ float		sbar_currentammo;
 float vid_conwidth, vid_conheight;
 float binddb;
 
+//	Announcer
+string announce_snd;
+
 // QUALIFYING
 float race_checkpoint;
 float race_time;
