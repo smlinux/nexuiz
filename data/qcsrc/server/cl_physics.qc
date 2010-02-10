@@ -822,10 +822,16 @@ void SV_PlayerPhysics()
 	{
 		if(sv_doublejump)
 		{
-			self.flags &~= FL_ONGROUND;
 			tracebox(self.origin + '0 0 0.01', self.mins, self.maxs, self.origin - '0 0 0.01', MOVE_NORMAL, self);
-			if(trace_fraction < 1 && trace_plane_normal_z > 0.7)
-				self.flags |= FL_ONGROUND;
+			if(trace_fraction < 1 && trace_plane_normal_z < 0.98 && cvar("sv_doublejump_disable_on_ramps")) {
+				// don't do doublejumps on ramps to preserve old nexuiz ramjump style
+				// print("Trace plane normal z: ", ftos(trace_plane_normal_z), ", disabling dj!\n");
+			}
+			else { // perform doublejump
+				self.flags &~= FL_ONGROUND;
+				if(trace_fraction < 1 && trace_plane_normal_z > 0.7)
+					self.flags |= FL_ONGROUND;
+			}
 		}
 
 		if (self.BUTTON_JUMP)
