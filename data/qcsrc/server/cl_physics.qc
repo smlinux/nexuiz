@@ -29,9 +29,6 @@ float sv_warsowbunny_backtosideratio;
 .float wasFlying;
 .float spectatorspeed;
 
-.float doublejump_nextjumptime;
-.float wasinair;
-
 /*
 =============
 PlayerJump
@@ -65,10 +62,6 @@ void PlayerJump (void)
 
 	if(self.health <= g_bloodloss)
 		return;
-
-	if(sv_doublejump)
-		if(time < self.doublejump_nextjumptime || !self.wasinair)
-			return;
 
 	if(g_runematch)
 	{
@@ -122,21 +115,6 @@ void PlayerJump (void)
 
 	if(g_jump_grunt)
 		PlayerSound(playersound_jump, CHAN_PLAYER, VOICETYPE_PLAYERSOUND);
-
-	if(sv_doublejump)
-	{
-		// we're moving upwards at self.velocity_z
-		// only allow jumping after we got 2 units upwards
-		// so we for sure leave the FL_ONGROUND check
-		//
-		// but as this sucks because of factoring in gravity, we'll just do it
-		// for 3 units, and constant velocity
-		if(self.velocity_z >= mjumpheight * 0.5) // only do this when we won't INTENTIONALLY jump a second time... TODO make a better check for this
-		{
-			self.doublejump_nextjumptime = time + 3 / max(30, self.velocity_z); // max 0.1s blocking of jumps, typically just one frame
-			//print(sprintf("blocking jumps for next %f seconds (vel: %f to %f)\n", self.doublejump_nextjumptime - time, self.velocity_z - mjumpheight, self.velocity_z));
-		}
-	}
 
 	self.restart_jump = -1; // restart jump anim next time
 	// value -1 is used to not use the teleport bit (workaround for tiny hitch when re-jumping)
@@ -845,7 +823,7 @@ void SV_PlayerPhysics()
 		if(sv_doublejump)
 		{
 			self.flags &~= FL_ONGROUND;
-			tracebox(self.origin + '0 0 1', self.mins, self.maxs, self.origin - '0 0 1', MOVE_NORMAL, self);
+			tracebox(self.origin + '0 0 0.01', self.mins, self.maxs, self.origin - '0 0 0.01', MOVE_NORMAL, self);
 			if(trace_fraction < 1 && trace_plane_normal_z > 0.7)
 				self.flags |= FL_ONGROUND;
 		}
@@ -854,9 +832,6 @@ void SV_PlayerPhysics()
 			PlayerJump ();
 		else
 			self.flags |= FL_JUMPRELEASED;
-
-		if (!self.wasinair)
-			self.wasinair = !(self.flags & FL_ONGROUND);
 
 		if (self.waterlevel == WATERLEVEL_SWIMMING)
 			CheckWaterJump ();
