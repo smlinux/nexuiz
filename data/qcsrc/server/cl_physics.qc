@@ -85,8 +85,14 @@ void PlayerJump (void)
 
 	if(cvar_string("sv_jumpspeedcap_min") != "")
 		self.velocity_z = max(cvar("sv_jumpvelocity") * cvar("sv_jumpspeedcap_min"), self.velocity_z);
-	if(cvar_string("sv_jumpspeedcap_max") != "")
-		self.velocity_z = min(cvar("sv_jumpvelocity") * cvar("sv_jumpspeedcap_max"), self.velocity_z);
+	if(cvar_string("sv_jumpspeedcap_max") != "") {
+		if(trace_fraction < 1 && trace_plane_normal_z < 0.98 && cvar("sv_jumpspeedcap_max_disable_on_ramps")) {
+			// don't do jump speedcaps on ramps to preserve old nexuiz ramjump style
+			//print("Trace plane normal z: ", ftos(trace_plane_normal_z), ", disabling speed cap!\n");
+		}
+		else
+			self.velocity_z = min(cvar("sv_jumpvelocity") * cvar("sv_jumpspeedcap_max"), self.velocity_z);
+	}
 
 	if(!(self.lastflags & FL_ONGROUND))
 	{
@@ -823,15 +829,9 @@ void SV_PlayerPhysics()
 		if(sv_doublejump)
 		{
 			tracebox(self.origin + '0 0 0.01', self.mins, self.maxs, self.origin - '0 0 0.01', MOVE_NORMAL, self);
-			if(trace_fraction < 1 && trace_plane_normal_z < 0.98 && cvar("sv_doublejump_disable_on_ramps")) {
-				// don't do doublejumps on ramps to preserve old nexuiz ramjump style
-				// print("Trace plane normal z: ", ftos(trace_plane_normal_z), ", disabling dj!\n");
-			}
-			else { // perform doublejump
-				self.flags &~= FL_ONGROUND;
-				if(trace_fraction < 1 && trace_plane_normal_z > 0.7)
-					self.flags |= FL_ONGROUND;
-			}
+			self.flags &~= FL_ONGROUND;
+			if(trace_fraction < 1 && trace_plane_normal_z > 0.7)
+				self.flags |= FL_ONGROUND;
 		}
 
 		if (self.BUTTON_JUMP)
