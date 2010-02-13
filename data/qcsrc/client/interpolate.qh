@@ -12,5 +12,8 @@ void InterpolateOrigin_Undo();
 // call this AFTER receiving an entity update
 void InterpolateOrigin_Note();
 
+// call this when the entity got teleported, before InterpolateOrigin_Note
+void InterpolateOrigin_Reset();
+
 // call this BEFORE drawing
 void InterpolateOrigin_Do();

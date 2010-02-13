@@ -1,3 +1,4 @@
+.vector iorigin1, iorigin2;
 .float spawntime;
 .vector trail_oldorigin;
 .float trail_oldtime;
@@ -217,8 +218,9 @@ void Ent_Projectile()
 
 		if(time == self.spawntime || (self.count & 0x80) || (f & 0x10))
 		{
-			print("TELE\n");
 			self.trail_oldorigin = self.origin;
+			if(!(self.count & 0x80))
+				InterpolateOrigin_Reset();
 		}
 
 		if(f & 0x20)

@@ -4,6 +4,11 @@
 .vector iforward1, iforward2;
 .vector iup1, iup2;
 .float itime1, itime2;
+void InterpolateOrigin_Reset()
+{
+	self.iflags &~= (IFLAG_PREVALID | IFLAG_VALID);
+	self.itime1 = self.itime2 = 0;
+}
 void InterpolateOrigin_Note()
 {
 	float dt;
