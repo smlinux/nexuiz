@@ -616,6 +616,9 @@ float CSQC_InputEvent(float bInputType, float nPrimary, float nSecondary)
 	local float bSkipKey;
 	bSkipKey = false;
 
+	if (MapVote_InputEvent(bInputType, nPrimary, nSecondary))
+		return true;
+
 	if(menu_visible)
 		if(menu_action(bInputType, nPrimary, nSecondary))
 			return TRUE;

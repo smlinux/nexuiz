@@ -13,6 +13,9 @@ float mv_detail;
 float mv_timeout;
 float mv_maps_mask;
 
+vector mv_mousepos;
+float mv_selection;
+
 string MapVote_FormatMapItem(float id, string map, float count, float maxwidth, vector fontsize)
 {
 	string pre, post;
@@ -34,6 +37,8 @@ string MapVote_FormatMapItem(float id, string map, float count, float maxwidth, 
 vector MapVote_RGB(float id)
 {
 	if(id == mv_ownvote)
+		return '0 1 0';
+	else if (id == mv_selection)
 		return '1 1 0';
 	else
 		return '1 1 1';
@@ -120,6 +125,35 @@ vector MapVote_GridVec(vector gridspec, float i, float m)
 		'0 1 0' * (gridspec_y * (i - r) / m);
 }
 
+float MapVote_Selection(vector topleft, vector cellsize, float rows, float columns)
+{
+	float cell;
+	float c, r;
+
+	cell = -1;
+
+	for (r = 0; r < rows; ++r)
+		for (c = 0; c < columns; ++c)
+		{
+			if (mv_mousepos_x >= topleft_x + cellsize_x *  c &&
+				mv_mousepos_x <= topleft_x + cellsize_x * (c + 1) &&
+				mv_mousepos_y >= topleft_y + cellsize_y *  r &&
+				mv_mousepos_y <= topleft_y + cellsize_y * (r + 1))
+			{
+				cell = r * columns + c;
+				break;
+			}
+		}
+
+	if (cell >= mv_num_maps)
+		cell = -1;
+
+	if (mv_abstain && cell < 0)
+		return mv_num_maps;
+
+	return cell;
+}
+
 void MapVote_Draw()
 {
 	string map;
@@ -134,6 +168,11 @@ void MapVote_Draw()
 	if(!mv_active)
 		return;
 	
+	mv_mousepos = mv_mousepos + getmousepos();
+
+	mv_mousepos_x = bound(0, mv_mousepos_x, vid_conwidth);
+	mv_mousepos_y = bound(0, mv_mousepos_y, vid_conheight);
+
 	center = (vid_conwidth - 1)/2;
 	xmin = vid_conwidth*0.05; // 5% border must suffice
 	xmax = vid_conwidth - xmin;
@@ -182,9 +221,12 @@ void MapVote_Draw()
 	tsize = dist_x - 10;
 	isize = min(dist_y - 10, 0.75 * tsize);
 
+	mv_selection = MapVote_Selection(pos, dist, rows, columns);
+
 	pos_x += (xmax - xmin) / (2 * columns);
 	pos_y += (dist_y - isize) / 2;
 	ymax -= isize;
+
 	for(i = 0; i < mv_num_maps; ++i)
 	{
 		tmp = mv_votes[i]; // FTEQCC bug: too many array accesses in the function call screw it up
@@ -206,6 +248,8 @@ void MapVote_Draw()
 		pos_x = (xmax+xmin)*0.5;
 		MapVote_DrawAbstain(pos, isize, xmax - xmin, tmp, i);
 	}
+
+	drawpic(mv_mousepos, strcat("gfx/menu/", cvar_string("menu_skin"), "/cursor.tga"), '32 32 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 }
 
 void Cmd_MapVote_MapDownload(float argc)
@@ -292,6 +336,9 @@ void MapVote_Init()
 
 	mv_active = 1;
 
+	mv_mousepos = '0.5 0 0' * vid_conwidth + '0 0.5 0' * vid_conheight;
+	mv_selection = -1;
+
 	for(n_ssdirs = 0; ; ++n_ssdirs)
 	{
 		s = ReadString();
@@ -351,9 +398,35 @@ void MapVote_Init()
 	for(i = 0; i < n_ssdirs; ++i)
 		ssdirs[n_ssdirs] = string_null;
 	n_ssdirs = 0;
+}
 
-	// do we NEED this, or can we handle key presses directly in CSQC?
-	localcmd("\nin_bind 7 1 \"impulse 1\"; in_bind 7 2 \"impulse 2\"; in_bind 7 3 \"impulse 3\"; in_bind 7 4 \"impulse 4\"; in_bind 7 5 \"impulse 5\"; in_bind 7 6 \"impulse 6\"; in_bind 7 7 \"impulse 7\"; in_bind 7 8 \"impulse 8\"; in_bind 7 9 \"impulse 9\"; in_bind 7 0 \"impulse 10\"; in_bind 7 KP_1 \"impulse 1\"; in_bind 7 KP_2 \"impulse 2\"; in_bind 7 KP_3 \"impulse 3\"; in_bind 7 KP_4 \"impulse 4\"; in_bind 7 KP_5 \"impulse 5\"; in_bind 7 KP_6 \"impulse 6\"; in_bind 7 KP_7 \"impulse 7\"; in_bind 7 KP_8 \"impulse 8\"; in_bind 7 KP_9 \"impulse 9\"; in_bind 7 KP_0 \"impulse 10\"; in_bindmap 7 0\n");
+float MapVote_InputEvent(float bInputType, float nPrimary, float nSecondary)
+{
+	float imp;
+
+	if (!mv_active)
+		return false;
+
+	if (bInputType != 0)
+		return false;
+
+	if ('0' <= nPrimary && nPrimary <= '9')
+	{
+		imp = nPrimary - '0';
+		if (imp == 0) imp = 10;
+		localcmd(strcat("\nimpulse ", ftos(imp), "\n"));
+		return true;
+	}
+
+	if (nPrimary == K_MOUSE1)
+		if (mv_selection >= 0)
+		{
+			imp = min(mv_selection + 1, mv_num_maps);
+			localcmd(strcat("\nimpulse ", ftos(imp), "\n"));
+			return true;
+		}
+
+	return false;
 }
 
 void MapVote_UpdateMask()
