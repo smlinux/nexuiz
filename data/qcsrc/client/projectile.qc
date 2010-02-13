@@ -215,8 +215,11 @@ void Ent_Projectile()
 			self.move_velocity = self.velocity;
 		}
 
-		if(time == self.spawntime || (self.count & 0x80) || (f & 0x20))
+		if(time == self.spawntime || (self.count & 0x80) || (f & 0x10))
+		{
+			print("TELE\n");
 			self.trail_oldorigin = self.origin;
+		}
 
 		if(f & 0x20)
 		{
