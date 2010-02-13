@@ -47,6 +47,7 @@ float Item_Customize()
 		return TRUE;
 	if(self.weapons != (self.weapons & other.weapons))
 	{
+		self.colormod = self.glowmod = stov(cvar_string("g_ghost_items_color"));
 		self.alpha = 0.5 + 0.5 * g_ghost_items; // halfway more alpha
 		return TRUE;
 	}
@@ -54,6 +55,7 @@ float Item_Customize()
 	{
 		if(g_ghost_items)
 		{
+			self.colormod = self.glowmod = stov(cvar_string("g_ghost_items_color"));
 			self.alpha = g_ghost_items;
 			return TRUE;
 		}
@@ -70,7 +72,7 @@ void Item_Show (entity e, float mode)
 		// make the item look normal, and be touchable
 		e.model = e.mdl;
 		e.solid = SOLID_TRIGGER;
-		//e.colormod = '0 0 0';
+		e.colormod = e.glowmod = '0 0 0';
 		e.alpha = 0;
 		e.customizeentityforclient = func_null;
 
@@ -104,7 +106,7 @@ void Item_Show (entity e, float mode)
 		// make the item translucent green and not touchable
 		e.model = e.mdl;
 		e.solid = SOLID_NOT;
-		//e.colormod = '0.2 1 0.2';
+		e.colormod = e.glowmod = stov(cvar_string("g_ghost_items_color"));
 		e.alpha = g_ghost_items;
 		e.customizeentityforclient = func_null;
 

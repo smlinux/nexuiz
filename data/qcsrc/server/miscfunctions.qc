@@ -1322,7 +1322,7 @@ void readlevelcvars(void)
 	g_ghost_items = cvar("g_ghost_items");
 
 	if(g_ghost_items >= 1)
-		g_ghost_items = 0.13; // default alpha value
+		g_ghost_items = 0.25; // default alpha value
 
 	if not(inWarmupStage && !g_ca)
 		game_starttime = cvar("g_start_delay");
