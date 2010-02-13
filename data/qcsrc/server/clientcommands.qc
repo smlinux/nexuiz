@@ -123,6 +123,7 @@ float cmd_floodcheck()
 void SV_ParseClientCommand(string s) {
 	string cmd;
 	float tokens;
+	float i;
 	entity e;
 
 	tokens = tokenize_console(s);
@@ -308,8 +309,11 @@ void SV_ParseClientCommand(string s) {
 		sprint(self, maplist_reply);
 	} else if(cmd == "lsmaps") {
 		sprint(self, lsmaps_reply);
+	} else if(cmd == "lsnewmaps") {
+		sprint(self, lsnewmaps_reply);
 	} else if(cmd == "records") {
-		sprint(self, records_reply);
+		for(i = 0; i < 10; ++i)
+			sprint(self, records_reply[i]);
 	} else if(cmd == "rankings") {
 		sprint(self, rankings_reply);
 	} else if(cmd == "voice") {

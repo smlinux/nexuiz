@@ -920,9 +920,10 @@ void GameCommand(string command)
 	}
 	if (argv(0) == "records")
 	{
-		strunzone(records_reply);
-		records_reply = strzone(getrecords());
-		print(records_reply);
+		//strunzone(records_reply);
+		//records_reply = strzone(getrecords()); // these should be cached at worldspawn, right?
+		for (i = 0; i < 10; ++i)
+			print(records_reply[i]);
 		return;
 	}
 	if (argv(0) == "rankings")

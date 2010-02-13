@@ -199,6 +199,7 @@ float GameCommand_Generic(string command)
 		print("  maplist cleanup\n");
 		print("  maplist maplist\n");
 		print("  maplist lsmaps\n");
+		print("  maplist lsnewmaps\n");
 		print("  addtolist variable addedvalue\n");
 		print("  records\n");
 		print("  rankings (map argument optional)\n");
@@ -258,6 +259,10 @@ float GameCommand_Generic(string command)
 		}
 		else if(argv(1) == "lsmaps") {
 			print(lsmaps_reply);
+			return TRUE;
+		}
+		else if(argv(1) == "lsnewmaps") {
+			print(lsnewmaps_reply);
 			return TRUE;
 		}
 	}

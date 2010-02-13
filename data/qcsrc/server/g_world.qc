@@ -638,6 +638,7 @@ void spawnfunc_worldspawn (void)
 	detect_maptype();
 
 	lsmaps_reply = "^7Maps available: ";
+	lsnewmaps_reply = "^7Maps without a record set: ";
 	for(i = 0, j = 0; i < MapInfo_count; ++i)
 	{
 		if(MapInfo_Get_ByID(i))
@@ -649,9 +650,16 @@ void spawnfunc_worldspawn (void)
 					col = "^3";
 				++j;
 				lsmaps_reply = strcat(lsmaps_reply, col, MapInfo_Map_bspname, " ");
+				if(g_race && !stof(db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, RACE_RECORD, "time"))))
+					lsnewmaps_reply = strcat(lsnewmaps_reply, col, MapInfo_Map_bspname, " ");
+				else if(g_cts && !stof(db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, CTS_RECORD, "time"))))
+					lsnewmaps_reply = strcat(lsnewmaps_reply, col, MapInfo_Map_bspname, " ");
 			}
 	}
 	lsmaps_reply = strzone(strcat(lsmaps_reply, "\n"));
+	if (!g_race && !g_cts)
+		lsnewmaps_reply = "Need to be playing race or CTS for lsnewmaps to work.";
+	lsnewmaps_reply = strzone(strcat(lsnewmaps_reply, "\n"));
 
 	maplist_reply = "^7Maps in list: ";
 	n = tokenize_console(cvar_string("g_maplist"));
@@ -670,7 +678,11 @@ void spawnfunc_worldspawn (void)
 	maplist_reply = strzone(strcat(maplist_reply, "\n"));
 	MapInfo_ClearTemps();
 
-	records_reply = strzone(getrecords());
+	for(i = 0; i < 10; ++i)
+	{
+		records_reply[i] = strzone(getrecords(i));
+	}
+
 	rankings_reply = strzone(getrankings());
 
 	ClientInit_Spawn();

@@ -174,7 +174,8 @@ void check_unacceptable_compiler_bugs();
 float compressShotOrigin(vector v);
 vector decompressShotOrigin(float f);
 
-string records_reply, rankings_reply, lsmaps_reply, maplist_reply; // cached replies
+string rankings_reply, lsmaps_reply, lsnewmaps_reply, maplist_reply; // cached replies
+string records_reply[10];
 
 float RandomSelection_totalweight;
 float RandomSelection_best_priority;

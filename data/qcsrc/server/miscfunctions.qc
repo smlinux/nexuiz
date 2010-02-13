@@ -2113,7 +2113,7 @@ void print_to(entity e, string s)
         print(s, "\n");
 }
 
-string getrecords()
+string getrecords(float page) // 50 records per page
 {
     float rec;
     string h;
@@ -2127,7 +2127,7 @@ string getrecords()
 
     if (g_ctf)
     {
-        for (i = 0; i < MapInfo_count; ++i)
+        for (i = page * 200; i < MapInfo_count && i < page * 200 + 200; ++i)
         {
             if (MapInfo_Get_ByID(i))
             {
@@ -2143,7 +2143,7 @@ string getrecords()
 
     if (g_race)
     {
-        for (i = 0; i < MapInfo_count; ++i)
+        for (i = page * 200; i < MapInfo_count && i < page * 200 + 200; ++i)
         {
             if (MapInfo_Get_ByID(i))
             {
@@ -2159,7 +2159,7 @@ string getrecords()
 
     if (g_cts)
     {
-        for (i = 0; i < MapInfo_count; ++i)
+        for (i = page * 200; i < MapInfo_count && i < page * 200 + 200; ++i)
         {
             if (MapInfo_Get_ByID(i))
             {
@@ -2175,10 +2175,10 @@ string getrecords()
 
     MapInfo_ClearTemps();
 
-    if (s == "")
+    if (s == "" && page == 0)
         return "No records are available on this server.\n";
     else
-        return strcat("Records on this server:\n", s);
+        return s;
 }
 
 string getrankings()
