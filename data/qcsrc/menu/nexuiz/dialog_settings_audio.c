@@ -137,7 +137,7 @@ void fillNexuizAudioSettingsTab(entity me)
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 0.8, e = makeNexuizTextLabel(0, "Taunt range:"));
 		setDependent(e, "cl_voice_directional", 0.5, -0.5);
-		me.TD(me, 1, 1.8, e = makeNexuizTextSlider("cl_voice_directional_taunt_attenuation"));
+		me.TD(me, 1, 2, e = makeNexuizTextSlider("cl_voice_directional_taunt_attenuation"));
 			e.addValue(e, "Very short", "3");
 			e.addValue(e, "Short", "2");
 			e.addValue(e, "Normal", "0.5");
