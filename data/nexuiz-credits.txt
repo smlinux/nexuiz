@@ -22,9 +22,6 @@ Maik "SavageX" Merten
 Andreas "Black" Kirsch
 *Programmer
 
-Michael "Tenshihan" Quinn
-*Sound FX and Player-Voices
-
 Paul "Strahlemann" Evers
 *Level Designer
 
@@ -33,6 +30,9 @@ Peter "Morphed" Pielak
 
 Samual Lenks
 *Programmer
+
+Rasmus "FruitieX" Eskola
+*Artist and Programmer
 
 Saulo "mand1nga" Gil
 *Programmer
@@ -82,6 +82,9 @@ MauveBib
 Rick "Rat" Kelley
 *Lead Animator, Skinner
 
+Michael "Tenshihan" Quinn
+*Sound FX and Player-Voices
+
 Gottfried "Toddd" Hofmann
 *Sound FX
 
@@ -111,9 +114,6 @@ blkrbt
 
 Gerd "Elysis" Raudenbusch
 *Music
-
-Rasmus "FruitieX" Eskola
-*Artist and Programmer
 
 Marius "GreEn`mArine" Shekow
 *Programmer
