@@ -47,7 +47,9 @@ float Item_Customize()
 		return TRUE;
 	if(self.weapons != (self.weapons & other.weapons))
 	{
-		self.colormod = self.glowmod = stov(cvar_string("g_ghost_items_color"));
+		self.colormod = '0 0 0';
+		if(cvar("gameversion") >= 20600) // only do this for 2.6 and above FIXME remove this check when making 2.6
+			self.glowmod = self.colormod;
 		self.alpha = 0.5 + 0.5 * g_ghost_items; // halfway more alpha
 		return TRUE;
 	}
@@ -55,7 +57,9 @@ float Item_Customize()
 	{
 		if(g_ghost_items)
 		{
-			self.colormod = self.glowmod = stov(cvar_string("g_ghost_items_color"));
+			self.colormod = stov(cvar_string("g_ghost_items_color"));
+			if(cvar("gameversion") >= 20600) // only do this for 2.6 and above FIXME remove this check when making 2.6
+				self.glowmod = self.colormod;
 			self.alpha = g_ghost_items;
 			return TRUE;
 		}
@@ -72,7 +76,9 @@ void Item_Show (entity e, float mode)
 		// make the item look normal, and be touchable
 		e.model = e.mdl;
 		e.solid = SOLID_TRIGGER;
-		e.colormod = e.glowmod = '0 0 0';
+		e.colormod = '0 0 0';
+		if(cvar("gameversion") >= 20600) // only do this for 2.6 and above FIXME remove this check when making 2.6
+			self.glowmod = self.colormod;
 		e.alpha = 0;
 		e.customizeentityforclient = func_null;
 
@@ -83,7 +89,9 @@ void Item_Show (entity e, float mode)
 		// hide the item completely
 		e.model = string_null;
 		e.solid = SOLID_NOT;
-		//e.colormod = '0 0 0';
+		e.colormod = '0 0 0';
+		if(cvar("gameversion") >= 20600) // only do this for 2.6 and above FIXME remove this check when making 2.6
+			self.glowmod = self.colormod;
 		e.alpha = 0;
 		e.customizeentityforclient = func_null;
 
@@ -94,9 +102,10 @@ void Item_Show (entity e, float mode)
 		// make the item translucent green and not touchable
 		e.model = e.mdl;
 		e.solid = SOLID_TRIGGER; // can STILL be picked up!
+		e.colormod = '0 0 0';
+		if(cvar("gameversion") >= 20600) // only do this for 2.6 and above FIXME remove this check when making 2.6
+			self.glowmod = self.colormod;
 		e.effects |= EF_STARDUST;
-		//e.colormod = '0.2 1 0.2';
-		//e.alpha = 0.5; // will be overridden by CEFC though...
 		e.customizeentityforclient = Item_Customize;
 
 		e.spawnshieldtime = 0; // field indicates whether picking it up may give you anything other than the weapon
@@ -106,7 +115,9 @@ void Item_Show (entity e, float mode)
 		// make the item translucent green and not touchable
 		e.model = e.mdl;
 		e.solid = SOLID_NOT;
-		e.colormod = e.glowmod = stov(cvar_string("g_ghost_items_color"));
+		e.colormod = stov(cvar_string("g_ghost_items_color"));
+		if(cvar("gameversion") >= 20600) // only do this for 2.6 and above FIXME remove this check when making 2.6
+			self.glowmod = self.colormod;
 		e.alpha = g_ghost_items;
 		e.customizeentityforclient = func_null;
 
@@ -117,7 +128,9 @@ void Item_Show (entity e, float mode)
 		// hide the item completely
 		e.model = string_null;
 		e.solid = SOLID_NOT;
-		//e.colormod = '0 0 0';
+		e.colormod = stov(cvar_string("g_ghost_items_color"));
+		if(cvar("gameversion") >= 20600) // only do this for 2.6 and above FIXME remove this check when making 2.6
+			self.glowmod = self.colormod;
 		e.alpha = 0;
 		e.customizeentityforclient = func_null;
 
