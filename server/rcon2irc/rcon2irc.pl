@@ -1329,7 +1329,7 @@ sub cond($)
 		my ($nick, $username, $flags, $host) = @_;
 		return 0 unless ($store{irc_quakenet_users});
 		
-		$store{logins}{"$nick!$host"} = time() + 600 if ($store{quakenet_users}->{$username});
+		$store{logins}{"$nick!$host"} = time() + 600 if ($store{irc_quakenet_users}->{$username});
 		
 		return 0;
 	} ],
@@ -1690,7 +1690,7 @@ for my $p(split ' ', $config{plugins})
 
 # If users for quakenet are listed, parse them into a hash and schedule a sub to query information
 if ($config{irc_quakenet_authusers} ne '') {
-	$store{quakenet_users} = { map { $_ => 1 } split / /, $config{irc_quakenet_authusers} };
+	$store{irc_quakenet_users} = { map { $_ => 1 } split / /, $config{irc_quakenet_authusers} };
 	
 	schedule sub {
 		my ($timer) = @_;
