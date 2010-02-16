@@ -2450,10 +2450,6 @@ vector shotorg_adjust(vector vecs, float y_is_right, float visual)
 			vecs_z -= 4;
 		}
 	}
-	else if (cvar("g_shootfromclient"))
-	{
-		vecs = shotorg_adjustfromclient(vecs, y_is_right, (cvar("g_shootfromclient") >= 2));
-	}
 	else if ((s = cvar_string("g_shootfromfixedorigin")) != "")
 	{
 		v = stov(s);
@@ -2463,6 +2459,10 @@ vector shotorg_adjust(vector vecs, float y_is_right, float visual)
 			vecs_x = v_x;
 		vecs_y = v_y;
 		vecs_z = v_z;
+	}
+	else if (cvar("g_shootfromclient"))
+	{
+		vecs = shotorg_adjustfromclient(vecs, y_is_right, (cvar("g_shootfromclient") >= 2));
 	}
 	return vecs;
 }
