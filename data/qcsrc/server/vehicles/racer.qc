@@ -769,6 +769,9 @@ void racer_die()
 void racer_dinit()
 {
 
+    tracebox(self.origin + '0 0 100', RACER_MIN * 0.5, RACER_MAX * 0.5, self.origin - '0 0 10000', MOVE_WORLDONLY, self);
+    setorigin(self,trace_endpos);
+
     if (self.netname == "")
         self.netname     = "Race PoD";
 
@@ -821,6 +824,7 @@ void spawnfunc_vehicle_racer()
 
     self.vehicle_flags      = VHF_HASSHIELD | VHF_SHIELDREGEN;
 
+    /*
     traceline(self.origin,self.origin - '0 0 2048',MOVE_WORLDONLY,self);
     if(trace_startsolid)
     {
@@ -833,6 +837,7 @@ void spawnfunc_vehicle_racer()
             return;
         }
     }
+    */
 
     if(trace_fraction != 1.0)
         setorigin(self,trace_endpos + '0 0 128');

@@ -369,9 +369,9 @@ void walker_fire_rocket(vector org)
     entity rocket;
 
 
-    self.angles_x *= -1;
-    makevectors(self.angles);
-    self.angles_x *= -1;
+    //self.angles_x *= -1;
+    fixedmakevectors(self.angles);
+    //self.angles_x *= -1;
 
     te_explosion (org);
 
@@ -586,9 +586,9 @@ float walker_attack_rockets()
 void walker_postthink()
 {
 
-    self.angles_x *= -1;
-    makevectors(self.angles);
-    self.angles_x *= -1;
+    //self.angles_x *= -1;
+    fixedmakevectors(self.angles);
+    //self.angles_x *= -1;
 
     if ((self.spawnflags & TSF_NO_PATHBREAK) && self.pathcurrent)
         walker_move_path();
@@ -718,9 +718,7 @@ void turret_walker_dinit()
         return;
     }
 
-
     self.damage_flags |= TFL_DMG_DEATH_NOGIBS;
-
     self.target_select_flags   = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK | TFL_TARGETSELECT_LOS;
     self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK | TFL_TARGETSELECT_LOS;
 
@@ -737,7 +735,8 @@ void turret_walker_dinit()
     setsize(self, WALKER_MIN, WALKER_MAX);
 
     setorigin(self,self.origin);
-    traceline(self.origin + '0 0 128', self.origin - '0 0 10000', MOVE_NORMAL, self);
+    //traceline(self.origin + '0 0 128', self.origin - '0 0 10000', MOVE_NORMAL, self);
+    tracebox(self.origin + '0 0 128', self.mins,self.maxs,self.origin - '0 0 10000', MOVE_NORMAL, self);
 
     setorigin(self.wkr_spawn, trace_endpos + '0 0 4');
     setorigin(self, self.wkr_spawn.origin);

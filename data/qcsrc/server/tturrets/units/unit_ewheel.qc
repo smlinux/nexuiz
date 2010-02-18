@@ -176,9 +176,9 @@ void ewheel_postthink()
     self.angles_x = anglemods(self.angles_x);
     self.angles_y = anglemods(self.angles_y);
 
-    self.angles_x *= -1;
-    makevectors(self.angles);
-    self.angles_x *= -1;
+    //self.angles_x *= -1;
+    fixedmakevectors(self.angles);
+    //self.angles_x *= -1;
 
     wish_angle = normalize(self.steerto);
     wish_angle = vectoangles(wish_angle);

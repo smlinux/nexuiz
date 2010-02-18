@@ -1,5 +1,6 @@
 #define spiderbot_MIN '-75 -75 0'
-#define spiderbot_MAX '75 75 100'
+//#define
+const vector spiderbot_MAX  = '75 75 100';
 #define spiderbot_spawnpnt wkr_spawn
 
 void spiderbot_exit(float eject);
@@ -627,7 +628,7 @@ void spiderbot_spawn()
     self.flags      |= FL_NOTARGET;
     self.vehicle_hudmodel.viewmodelforclient = self;
 
-    setorigin(self,self.spiderbot_spawnpnt.origin);
+    setorigin(self,self.spiderbot_spawnpnt.origin + '0 0 1.25' * spiderbot_MAX_z);
     self.angles = self.spiderbot_spawnpnt.angles;
 
     if (self.team == COLOR_TEAM1)
@@ -682,9 +683,15 @@ void vewhicle_spiderbot_dinit()
     self.spiderbot_spawnpnt = spawn();
     self.spiderbot_spawnpnt.angles = self.angles;
 
-    traceline(self.origin + '0 0 16', self.origin - '0 0 10000', MOVE_WORLDONLY, self);
-    setorigin(self.spiderbot_spawnpnt,trace_endpos + '0 0 4');
-    setorigin(self,self.spiderbot_spawnpnt.origin);
+    setorigin(self,self.origin);
+    dprint("ORG1:",vtos(self.origin));
+    //traceline(self.origin + '0 0 100', self.origin - '0 0 10000', MOVE_WORLDONLY, self);
+    tracebox(self.origin + '0 0 100', spiderbot_MIN, spiderbot_MAX, self.origin - '0 0 10000', MOVE_WORLDONLY, self);
+    setorigin(self.spiderbot_spawnpnt,trace_endpos);
+
+    dprint("ORG2:",vtos(self.origin),"\n");
+
+    //setorigin(self.spiderbot_spawnpnt,self.origin);
 
     if(self.team && !teamplay)
         self.team = 0;
