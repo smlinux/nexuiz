@@ -100,11 +100,14 @@ public class SwingGUI extends JFrame implements WindowListener, DemoRecorderUI {
 	private ActionListener menuButtonActionListener = new MenuButtonActionListener();
 	private JMenuItem fileLoadQueue = new JMenuItem("Load job queue", getIcon("fileopen.png"));
 	private JMenuItem fileSaveQueue = new JMenuItem("Save job queue", getIcon("filesave.png"));
+	private JMenuItem fileLoadTemplates = new JMenuItem("Load templates", getIcon("fileopen.png"));
+	private JMenuItem fileSaveTemplates = new JMenuItem("Save templates", getIcon("filesave.png"));
 	private JMenuItem filePreferences = new JMenuItem("Preferences", getIcon("advanced.png"));
 	private JMenuItem fileExit = new JMenuItem("Exit", getIcon("exit.png"));
 	private JMenuItem helpHelp = new JMenuItem("Show help", getIcon("help.png"));
 	private JMenuItem helpAbout = new JMenuItem("About", getIcon("info.png"));
 	private JFileChooser jobQueueSaveAsFC = new JFileChooser();
+	private JFileChooser templatesSaveAsFC = new JFileChooser();
 	
 	private JButton jobs_create = new JButton(LABEL_JOB_CREATE, getIcon("edit_add.png"));
 	private JButton jobs_createFromTempl = new JButton(LABEL_JOB_CREATE_FROM_TEMPL, getIcon("view_right_p.png"));
@@ -316,12 +319,16 @@ public class SwingGUI extends JFrame implements WindowListener, DemoRecorderUI {
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.add(fileLoadQueue);
 		fileMenu.add(fileSaveQueue);
+		fileMenu.add(fileLoadTemplates);
+		fileMenu.add(fileSaveTemplates);
 		fileMenu.add(filePreferences);
 		fileMenu.add(fileExit);
 		menuBar.add(fileMenu);
 		
 		fileLoadQueue.addActionListener(menuButtonActionListener);
 		fileSaveQueue.addActionListener(menuButtonActionListener);
+		fileLoadTemplates.addActionListener(menuButtonActionListener);
+		fileSaveTemplates.addActionListener(menuButtonActionListener);
 		filePreferences.addActionListener(menuButtonActionListener);
 		fileExit.addActionListener(menuButtonActionListener);
 
@@ -456,7 +463,7 @@ public class SwingGUI extends JFrame implements WindowListener, DemoRecorderUI {
 					File selectedFile = jobQueueSaveAsFC.getSelectedFile();
 					if (selectedFile.isFile()) {
 						RecordJobsTableModel tableModel = (RecordJobsTableModel) jobsTable.getModel();
-						tableModel.loadNewJobQueue(selectedFile);
+						tableModel.loadNewJobQueue(SwingGUI.this, selectedFile, jobsTable);
 						configureTableButtons();
 					}
 				}
@@ -476,6 +483,32 @@ public class SwingGUI extends JFrame implements WindowListener, DemoRecorderUI {
 						}
 					}
 					appLayer.saveJobQueue(selectedFile);
+				}
+			} else if (e.getSource() == fileLoadTemplates) {
+				int result = templatesSaveAsFC.showOpenDialog(SwingGUI.this);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = templatesSaveAsFC.getSelectedFile();
+					if (selectedFile.isFile()) {
+						RecordJobTemplatesTableModel tableModel = (RecordJobTemplatesTableModel) templatesTable.getModel();
+						tableModel.loadNewTemplateList(SwingGUI.this, selectedFile, templatesTable);
+						configureTableButtons();
+					}
+				}
+			} else if (e.getSource() == fileSaveTemplates) {
+				int result = templatesSaveAsFC.showSaveDialog(SwingGUI.this);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = templatesSaveAsFC.getSelectedFile();
+					if (!DemoRecorderUtils.getFileExtension(selectedFile).equals("templ")) {
+						selectedFile = new File(selectedFile.getAbsoluteFile() + ".templ");
+					}
+					if (selectedFile.exists()) {
+						int confirm = JOptionPane.showConfirmDialog(SwingGUI.this, "File already exists. Are you sure you want to overwrite it?", "Confirm overwrite", JOptionPane.YES_NO_OPTION);
+						if (confirm == JOptionPane.NO_OPTION) {
+							return;
+						}
+					}
+					RecordJobTemplatesTableModel model = (RecordJobTemplatesTableModel) templatesTable.getModel();
+					model.saveTemplateListToFile(selectedFile);
 				}
 			} else if (e.getSource() == filePreferences) {
 				preferencesDialog.showDialog();

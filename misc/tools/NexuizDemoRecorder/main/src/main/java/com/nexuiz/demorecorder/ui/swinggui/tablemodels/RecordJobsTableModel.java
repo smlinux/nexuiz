@@ -3,12 +3,16 @@ package com.nexuiz.demorecorder.ui.swinggui.tablemodels;
 import java.io.File;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
+
+import org.jdesktop.swingx.JXTable;
 
 import com.nexuiz.demorecorder.application.DemoRecorderApplication;
 import com.nexuiz.demorecorder.application.DemoRecorderException;
 import com.nexuiz.demorecorder.application.DemoRecorderUtils;
 import com.nexuiz.demorecorder.application.jobs.RecordJob;
+import com.nexuiz.demorecorder.ui.swinggui.SwingGUI;
 
 /**
  * Columns:
@@ -80,10 +84,18 @@ public class RecordJobsTableModel extends AbstractTableModel {
 		}
 	}
 	
-	public void loadNewJobQueue(File path) {
-		this.appLayer.loadJobQueue(path);
+	public void loadNewJobQueue(SwingGUI gui, File path, JXTable jobsTable) {
+		int result = JOptionPane.showConfirmDialog(gui, "Do you want to overwrite the current job queue? When pressing 'no' the loaded jobs will be added to the current queue!", "Confirm overwrite", JOptionPane.YES_NO_OPTION);
+		boolean overwrite = false;
+		if (result == JOptionPane.YES_OPTION) {
+			overwrite = true;
+		}
+		int count = this.appLayer.loadJobQueue(path, overwrite);
 		this.jobList = this.appLayer.getRecordJobs();
 		fireTableDataChanged();
+		if (count > 0) {
+			jobsTable.setRowSelectionInterval(jobsTable.getRowCount() - count, jobsTable.getRowCount() - 1);
+		}
 	}
 	
 	public RecordJob getRecordJob(int modelRowIndex) {

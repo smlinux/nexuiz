@@ -311,26 +311,40 @@ public class DemoRecorderApplication {
 	
 	private void loadJobQueue() {
 		File defaultFile = DemoRecorderUtils.computeLocalFile(PREFERENCES_DIRNAME, JOBQUEUE_FILENAME);
-		this.loadJobQueue(defaultFile);
+		this.loadJobQueue(defaultFile, true);
 	}
 	
+	/**
+	 * Loads the jobs from the given file path. If override is enabled, the previous
+	 * job list will be overwritten with the newly loaded list. Otherwise the loaded jobs
+	 * are added to the already existing list.
+	 * @param path
+	 * @param override
+	 * @return the number of jobs loaded from the file
+	 */
 	@SuppressWarnings("unchecked")
-	public void loadJobQueue(File path) {
+	public int loadJobQueue(File path, boolean override) {
 		if (!path.exists()) {
-			return;
+			return 0;
 		}
 		
 		try {
 			FileInputStream fin = new FileInputStream(path);
 			ObjectInputStream ois = new ObjectInputStream(fin);
-			this.jobs = (List<RecordJob>) ois.readObject();
-			for (RecordJob currentJob : this.jobs) {
+			List<RecordJob> newList = (List<RecordJob>) ois.readObject();
+			for (RecordJob currentJob : newList) {
 				currentJob.setAppLayer(this);
 			}
+			if (override) {
+				this.jobs = newList;
+			} else {
+				this.jobs.addAll(newList);
+			}
+			return newList.size();
 		} catch (Exception e) {
 			DemoRecorderUtils.showNonCriticalErrorDialog("Could not load the job queue file " + path.getAbsolutePath(), e, true);
+			return 0;
 		}
-		
 	}
 	
 	public void saveJobQueue() {

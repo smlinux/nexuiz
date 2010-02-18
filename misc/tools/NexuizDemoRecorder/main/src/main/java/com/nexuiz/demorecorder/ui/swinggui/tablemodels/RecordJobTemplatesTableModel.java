@@ -8,7 +8,10 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
+
+import org.jdesktop.swingx.JXTable;
 
 import com.nexuiz.demorecorder.application.DemoRecorderApplication;
 import com.nexuiz.demorecorder.application.DemoRecorderException;
@@ -70,7 +73,7 @@ public class RecordJobTemplatesTableModel extends AbstractTableModel {
 		
 		//load table content
 		File path = DemoRecorderUtils.computeLocalFile(DemoRecorderApplication.PREFERENCES_DIRNAME, SwingGUI.TEMPLATE_TABLE_CONTENT_FILENAME);
-		this.loadTemplateListFromFile(path);
+		this.loadTemplateListFromFile(path, true);
 	}
 	
 	public void deleteRecordJobTemplate(int modelRowIndex, int viewRowIndex) {
@@ -123,9 +126,9 @@ public class RecordJobTemplatesTableModel extends AbstractTableModel {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void loadTemplateListFromFile(File path) {
+	private int loadTemplateListFromFile(File path, boolean overwrite) {
 		if (!path.exists()) {
-			return;
+			return 0;
 		}
 		
 		List<RecordJobTemplate> newTemplateList;
@@ -133,12 +136,30 @@ public class RecordJobTemplatesTableModel extends AbstractTableModel {
 			FileInputStream fin = new FileInputStream(path);
 			ObjectInputStream ois = new ObjectInputStream(fin);
 			newTemplateList = (List<RecordJobTemplate>) ois.readObject();
+			if (overwrite) {
+				this.templates = newTemplateList;
+			} else {
+				this.templates.addAll(newTemplateList);
+			}
+			return newTemplateList.size();
 		} catch (Exception e) {
 			DemoRecorderUtils.showNonCriticalErrorDialog("Could not load the templates from file " + path.getAbsolutePath(), e, true);
-			return;
+			return 0;
 		}
-		this.templates = newTemplateList;
-//		fireTableRowsInserted(0, this.templates.size());
+		
+	}
+	
+	public void loadNewTemplateList(SwingGUI gui, File path, JXTable templatesTable) {
+		int result = JOptionPane.showConfirmDialog(gui, "Do you want to overwrite the current template list? When pressing 'no' the loaded templates will be added to the current list!", "Confirm overwrite", JOptionPane.YES_NO_OPTION);
+		boolean overwrite = false;
+		if (result == JOptionPane.YES_OPTION) {
+			overwrite = true;
+		}
+		int count = loadTemplateListFromFile(path, overwrite);
+		fireTableDataChanged();
+		if (count > 0) {
+			templatesTable.setRowSelectionInterval(templatesTable.getRowCount() - count, templatesTable.getRowCount() - 1);
+		}
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
