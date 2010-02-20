@@ -8,7 +8,7 @@
 		<dependency>
 			<groupId>NexuizDemoRecorder</groupId>
 			<artifactId>NexuizDemoRecorder</artifactId>
-			<version>0.2</version>
+			<version>0.3</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
