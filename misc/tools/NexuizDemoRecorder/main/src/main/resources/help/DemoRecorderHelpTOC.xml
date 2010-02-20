@@ -8,6 +8,8 @@
 
  <tocitem text="Templates " target="html.templates"/>
 
+ <tocitem text="Applying templates " target="html.apply_templates"/>
+
  <tocitem text="Open/Save Jobs and Templates " target="html.open-save"/>
 
  <tocitem text="Preferences dialog " target="html.preferences"/>

@@ -10,9 +10,11 @@
 
 <mapID target="html.license" url="html/license.html"/>
 
+<mapID target="html.open-save" url="html/open-save.html"/>
+
 <mapID target="html.compat-limitations" url="html/compat-limitations.html"/>
 
-<mapID target="html.open-save" url="html/open-save.html"/>
+<mapID target="html.apply_templates" url="html/apply_templates.html"/>
 
 <mapID target="html.introduction" url="html/introduction.html"/>
 

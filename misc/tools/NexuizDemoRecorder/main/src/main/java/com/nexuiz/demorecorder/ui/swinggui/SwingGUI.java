@@ -85,6 +85,7 @@ public class SwingGUI extends JFrame implements WindowListener, DemoRecorderUI {
 	private static final String LABEL_JOB_CLEAR = "Clear";
 	private static final String LABEL_JOB_EDIT = "Edit job";
 	private static final String LABEL_JOB_DUPLICATE = "Duplicate job";
+	private static final String LABEL_JOB_APPLYTEMPL = "Apply template";
 	private static final String LABEL_JOB_START = "Start job";
 	private static final String LABEL_JOB_SHOWERROR = "Show error message";
 	private static final String LABEL_JOB_RESET_STATE_WAITING = "Reset job status to 'waiting'";
@@ -115,6 +116,7 @@ public class SwingGUI extends JFrame implements WindowListener, DemoRecorderUI {
 	private JButton jobs_clear = new JButton(LABEL_JOB_CLEAR, getIcon("editclear.png"));
 	private JMenuItem jobs_contextmenu_edit = new JMenuItem(LABEL_JOB_EDIT, getIcon("edit.png"));
 	private JMenuItem jobs_contextmenu_duplicate = new JMenuItem(LABEL_JOB_DUPLICATE, getIcon("editcopy.png"));
+	private JMenuItem jobs_contextmenu_applytempl = new JMenuItem(LABEL_JOB_APPLYTEMPL, getIcon("editpaste.png"));
 	private JMenuItem jobs_contextmenu_delete = new JMenuItem(LABEL_JOB_DELETE, getIcon("editdelete.png"));
 	private JMenuItem jobs_contextmenu_start = new JMenuItem(LABEL_JOB_START, getIcon("player_play.png"));
 	private JMenuItem jobs_contextmenu_showerror = new JMenuItem(LABEL_JOB_SHOWERROR, getIcon("status_unknown.png"));
@@ -142,7 +144,7 @@ public class SwingGUI extends JFrame implements WindowListener, DemoRecorderUI {
 	private static final String mainHelpSetName = "help/DemoRecorderHelp.hs";
 
 	public SwingGUI(DemoRecorderApplication appLayer) {
-		super("Nexuiz Demo Recorder v0.2");
+		super("Nexuiz Demo Recorder v0.3");
 		addWindowListener(this);
 
 		this.appLayer = appLayer;
@@ -237,6 +239,7 @@ public class SwingGUI extends JFrame implements WindowListener, DemoRecorderUI {
 		
 		this.jobs_contextmenu_edit.addActionListener(this.jobButtonActionListener);
 		this.jobs_contextmenu_duplicate.addActionListener(this.jobButtonActionListener);
+		this.jobs_contextmenu_applytempl.addActionListener(this.jobButtonActionListener);
 		this.jobs_contextmenu_delete.addActionListener(this.jobButtonActionListener);
 		this.jobs_contextmenu_start.addActionListener(this.jobButtonActionListener);
 		this.jobs_contextmenu_showerror.addActionListener(this.jobButtonActionListener);
@@ -345,6 +348,7 @@ public class SwingGUI extends JFrame implements WindowListener, DemoRecorderUI {
 		this.jobsTablePopupMenu = new JPopupMenu();
 		this.jobsTablePopupMenu.add(jobs_contextmenu_edit);
 		this.jobsTablePopupMenu.add(jobs_contextmenu_duplicate);
+		this.jobsTablePopupMenu.add(jobs_contextmenu_applytempl);
 		this.jobsTablePopupMenu.add(jobs_contextmenu_delete);
 		this.jobsTablePopupMenu.add(jobs_contextmenu_start);
 		//add JMenus for plugins
@@ -597,6 +601,12 @@ public class SwingGUI extends JFrame implements WindowListener, DemoRecorderUI {
 					//select all new duplicates in the table automatically
 					jobsTable.setRowSelectionInterval(jobsTable.getRowCount() - selectedJobs.size(), jobsTable.getRowCount() - 1);
 					configureTableButtons();
+				}
+			} else if (e.getSource() == jobs_contextmenu_applytempl) {
+				if (selectedTemplates.size() == 1 && selectedJobs.size() > 0) {
+					RecordJobTemplate template = (RecordJobTemplate) selectedTemplates.get(0);
+					ApplyTemplateDialog applyDialog = new ApplyTemplateDialog(SwingGUI.this, template, selectedJobs);
+					applyDialog.showDialog();
 				}
 			} else if (jobs_contextmenu_runPluginMenuItems.contains(e.getSource())) {
 				int index = jobs_contextmenu_runPluginMenuItems.indexOf(e.getSource());
@@ -946,6 +956,7 @@ public class SwingGUI extends JFrame implements WindowListener, DemoRecorderUI {
 			//Disable all buttons first
 			jobs_contextmenu_edit.setEnabled(false);
 			jobs_contextmenu_duplicate.setEnabled(false);
+			jobs_contextmenu_applytempl.setEnabled(false);
 			jobs_contextmenu_delete.setEnabled(false);
 			jobs_contextmenu_resetstate_waiting.setEnabled(false);
 			jobs_contextmenu_resetstate_done.setEnabled(false);
@@ -975,9 +986,10 @@ public class SwingGUI extends JFrame implements WindowListener, DemoRecorderUI {
 					//none of the jobs is processing
 					jobs_contextmenu_delete.setEnabled(true);
 					jobs_contextmenu_resetstate_waiting.setEnabled(true);
-				} else {
-					jobs_contextmenu_edit.setEnabled(false);
-					jobs_contextmenu_duplicate.setEnabled(false);
+					
+					if (templatesTable.getSelectedRowCount() == 1) {
+						jobs_contextmenu_applytempl.setEnabled(true);
+					}
 				}
 				
 				//Start button

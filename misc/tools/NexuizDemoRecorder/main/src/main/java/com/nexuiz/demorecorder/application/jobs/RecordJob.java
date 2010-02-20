@@ -417,8 +417,11 @@ public class RecordJob implements Runnable, Serializable {
 
 	public void setDemoFile(File demoFile) {
 		this.checkForProcessingState();
-		if (demoFile == null || !demoFile.exists()) {
+		if (demoFile == null) {
 			throw new DemoRecorderException("Could not locate demo file!");
+		}
+		if (!demoFile.exists()) {
+			throw new DemoRecorderException("Could not locate demo file!: " + demoFile.getAbsolutePath());
 		}
 		if (!doReadWriteTest(demoFile.getParentFile())) {
 			throw new DemoRecorderException("The directory you specified for the demo to be recorded is not writable!");
