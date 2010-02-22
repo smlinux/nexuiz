@@ -11,7 +11,7 @@ CLASS(Animation) EXTENDS(Object)
 	METHOD(Animation, finishAnim, void(entity))
 	ATTRIB(Animation, object, entity, NULL)
 	ATTRIB(Animation, setter, void(entity, float), setterDummy)
-	ATTRIB(Animation, math, float(float, float, float, float), linear)
+	ATTRIB(Animation, math, float(float, float, float, float), animLinear)
 	ATTRIB(Animation, value, float, 0)
 	ATTRIB(Animation, startTime, float, 0)
 	ATTRIB(Animation, duration, float, 0)
@@ -21,7 +21,7 @@ CLASS(Animation) EXTENDS(Object)
 ENDCLASS(Animation)
 entity makeHostedAnimation(entity, void(entity, float), float, float, float);
 entity makeAnimation(entity, void(entity, float), float, float, float);
-float linear(float, float, float, float);
+float animLinear(float, float, float, float);
 void setterDummy(entity, float);
 #endif
 
@@ -76,8 +76,12 @@ void setObjectSetterAnimation(entity me, entity o, void(entity, float) s)
 
 void tickAnimation(entity me, float time)
 {
+	if (me.isFinished(me))
+		return;
+
 	me.value = me.math((time - me.startTime), me.duration, me.startValue, me.delta);
 	me.setter(me.object, me.value);
+
 	if (time > (me.startTime + me.duration))
 		me.finishAnim(me);
 }
@@ -96,7 +100,7 @@ void finishAnimAnimation(entity me)
 	me.finished = TRUE;
 }
 
-float linear(float time, float duration, float start, float delta)
+float animLinear(float time, float duration, float start, float delta)
 {
 	if (time > duration)
 		return delta + start;
