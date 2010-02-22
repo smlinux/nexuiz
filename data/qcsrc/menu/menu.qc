@@ -150,6 +150,7 @@ void() m_init_delayed =
 	draw_setMousePointer(SKINGFX_CURSOR, SKINSIZE_CURSOR, SKINOFFSET_CURSOR);
 
 	loadTooltips();
+	anim = spawnAnimHost();
 	main = spawnMainWindow(); main.configureMainWindow(main);
 	unloadTooltips();
 
@@ -538,6 +539,9 @@ void() m_draw =
 	float realFrametime;
 
 	menuMouseMode = cvar("menu_mouse_absolute");
+
+	if (anim)
+		anim.tickAll(anim);
 
 	if(main)
 		UpdateConWidthHeight();

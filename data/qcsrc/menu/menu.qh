@@ -25,6 +25,7 @@ const float S_ALT = 4;
 float frametime;
 float time;
 
+entity anim;
 entity main;
 void m_hide();
 void m_display();

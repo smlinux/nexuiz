@@ -1,3 +1,5 @@
+#include "anim/animhost.c"
+#include "anim/animation.c"
 #include "item.c"
 #include "item/container.c"
 #include "item/inputcontainer.c"
