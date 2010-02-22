@@ -56,7 +56,7 @@ void setValueNexuizSlider(entity me, float val)
 		//float oldValue = me.value;
 		me.value = val;
 		me.saveCvars(me);
-		//makeHostedAnimation(me, setValueSlider, 1, oldValue, val);
+		//makeHostedAnimation(me, setValueSlider, animQuadInOut, 1, oldValue, val);
 	}
 }
 void loadCvarsNexuizSlider(entity me)

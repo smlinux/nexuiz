@@ -66,31 +66,31 @@ void stopAllAnimAnimHost(entity me)
 	entity e;
 	for(e = me.firstChild; e; e = e.nextSibling)
 	{
-		me.removeAnim(me, e);
 		e.stopAnim(e);
 	}
 }
 
 void finishAllAnimAnimHost(entity me)
 {
-	entity e;
+	entity e, tmp;
 	for(e = me.firstChild; e; e = e.nextSibling)
 	{
-		me.removeAnim(me, e);
-		e.finishAnim(e);
+		tmp = e;
+		e = tmp.prevSibling;
+		me.removeAnim(me, tmp);
+		e.finishAnim(tmp);
 	}
 }
 
 void tickAllAnimHost(entity me)
 {
-	entity e;
+	entity e, tmp;
 	for(e = me.firstChild; e; e = e.nextSibling)
 	{
 		e.tick(e, time);
 	}
 	for(e = me.firstChild; e; e = e.nextSibling)
 	{
-		entity tmp;
 		if (e.isFinished(e))
 		{
 			tmp = e;
