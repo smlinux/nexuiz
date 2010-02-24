@@ -2,7 +2,6 @@ void spawnfunc_turret_tesla();
 void turret_tesla_dinit();
 void turret_tesla_fire();
 
-.float toasted;
 entity toast(entity from, float range, float damage)
 {
     entity e;
@@ -15,7 +14,7 @@ entity toast(entity from, float range, float damage)
     e = findradius(from.origin,range);
     while (e)
     {
-        if ((e.toasted != 1) && (e != from))
+        if ((e.railgunhit != 1) && (e != from))
         {
             r = turret_validate_target(self,e,self.target_validate_flags);
             if (r > 0)
@@ -32,7 +31,6 @@ entity toast(entity from, float range, float damage)
                 }
             }
         }
-
         e = e.chain;
     }
 
@@ -40,8 +38,9 @@ entity toast(entity from, float range, float damage)
     {
         te_smallflash(etarget.origin);
         te_csqc_lightningarc(from.origin,etarget.origin);
-        Damage(etarget,self,self,damage,DEATH_TURRET,etarget.origin,'0 0 0');
-        etarget.toasted = 1;
+        dprint("DMG:",ftos(damage),"\n");
+        Damage(etarget, self, self, damage, DEATH_TURRET, etarget.origin, '0 0 0');
+        etarget.railgunhit = 1;
     }
 
     return etarget;
@@ -52,8 +51,7 @@ float turret_tesla_firecheck()
     if not (turret_stdproc_firecheck())
         return 0;
 
-    self.target_select_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_MISSILES |
-                                 TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK;
+    self.target_select_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_MISSILES | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK;
 
     self.enemy = turret_select_target();
 
@@ -76,33 +74,29 @@ void turret_tesla_fire()
     e = spawn();
     setorigin(e,self.tur_shotorg);
 
-
-    self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_MISSILES |
-                                 TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK;
+    self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_MISSILES | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK;
 
     t = toast(e,r,d);
     remove(e);
 
     if (t == world) return;
 
-    self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_MISSILES |
-                                 TFL_TARGETSELECT_TEAMCHECK;
-
-
+    self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_MISSILES | TFL_TARGETSELECT_TEAMCHECK;
 
     self.attack_finished_single = time + self.shot_refire;
     for (i = 0; i < 10; ++i)
     {
-        d *= 0.5;
+        d *= 0.75;
         r *= 0.85;
-        t = toast(t,r,d);
+        t = toast(t, r, d);
         if (t == world) break;
+
     }
 
-    e = findchainfloat(toasted, 1);
+    e = findchainfloat(railgunhit, 1);
     while (e)
     {
-        e.toasted = 0;
+        e.railgunhit = 0;
         e = e.chain;
     }
 }
@@ -117,18 +111,18 @@ void turret_tesla_postthink()
 
     if(self.ammo < self.shot_dmg)
     {
-        self.tur_head.avelocity = '0 9 0' * (self.ammo / self.shot_dmg);
+        self.tur_head.avelocity = '0 45 0' * (self.ammo / self.shot_dmg);
     }
     else
     {
-        self.tur_head.avelocity = '0 90 0' * (self.ammo / self.shot_dmg);
+        self.tur_head.avelocity = '0 180 0' * (self.ammo / self.shot_dmg);
 
         if(self.attack_finished_single > time)
             return;
 
         float f;
         f = (self.ammo / self.ammo_max);
-        f = f*f;
+        f = f * f;
         if(f > random())
             if(random() < 0.1)
                 te_csqc_lightningarc(self.tur_shotorg,self.tur_shotorg + (randomvec() * 350));
@@ -156,7 +150,7 @@ void turret_tesla_dinit()
         remove(self);
         return;
     }
-    setsize(self,'-48 -48 0','48 48 96');
+    setsize(self,'-60 -60 0','60 60 128');
 
     self.target_validate_flags = TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_MISSILES |
                                  TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK;

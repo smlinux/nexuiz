@@ -5,10 +5,8 @@ void turret_fusionreactor_fire();
 float turret_fusionreactor_firecheck()
 {
     if (self.enemy == world) return 0;
-
-    if (!(self.enemy.ammo_flags & TFL_AMMO_RECIVE)) return 0;
-    if (!(self.enemy.ammo_flags & TFL_AMMO_ENERGY)) return 0;
-
+    if not (self.enemy.ammo_flags & TFL_AMMO_RECIVE) return 0;
+    if not (self.enemy.ammo_flags & TFL_AMMO_ENERGY) return 0;
     if (self.ammo < self.shot_dmg) return 0;
     if (self.enemy.ammo >= self.enemy.ammo_max) return 0;
     if (self.tur_dist_aimpos > self.target_range) return 0;
@@ -19,12 +17,20 @@ float turret_fusionreactor_firecheck()
 
 void turret_fusionreactor_fire()
 {
+    vector fl_org;
+
     self.enemy.ammo = min(self.enemy.ammo + self.shot_dmg,self.enemy.ammo_max);
+    fl_org = 0.5 * (self.enemy.absmin + self.enemy.absmax);
+    te_smallflash(fl_org);
     //te_lightning1(world,self.origin,self.enemy.origin);
 }
 
 void turret_fusionreactor_postthink()
 {
+    float v
+    v = self.ammo / self.ammo_max;
+
+    self.tur_head.avelocity = '0 250 0' * v;
 }
 
 void turret_fusionreactor_respawnhook()
@@ -36,33 +42,27 @@ void turret_fusionreactor_dinit()
 {
     if (self.netname == "")      self.netname     = "Fusionreactor";
 
-    self.turrcaps_flags = TFL_TURRCAPS_SUPPORT | TFL_TURRCAPS_AMMOSOURCE;
-
-    self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE;
-
+    self.turrcaps_flags      = TFL_TURRCAPS_SUPPORT | TFL_TURRCAPS_AMMOSOURCE;
+    self.ammo_flags          = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE;
     self.target_select_flags = TFL_TARGETSELECT_TEAMCHECK | TFL_TARGETSELECT_OWNTEAM | TFL_TARGETSELECT_RANGELIMTS;
+    self.firecheck_flags     = TFL_FIRECHECK_OWM_AMMO | TFL_FIRECHECK_OTHER_AMMO | TFL_FIRECHECK_DISTANCES | TFL_FIRECHECK_DEAD | TFL_FIRECHECK_WORLD;
+    self.shoot_flags         = TFL_SHOOT_HITALLVALID;
+    self.aim_flags           = TFL_AIM_NO;
+    self.track_flags         = TFL_TRACK_NO;
+    self.turret_respawnhook  = turret_fusionreactor_respawnhook;
 
-    self.firecheck_flags = TFL_FIRECHECK_OWM_AMMO | TFL_FIRECHECK_OTHER_AMMO | TFL_FIRECHECK_DISTANCES | TFL_FIRECHECK_DEAD | TFL_FIRECHECK_WORLD;
-
-    self.shoot_flags = TFL_SHOOT_HITALLVALID;
-    self.aim_flags = TFL_AIM_NO;
-    self.track_flags = TFL_TRACK_NO;
-    self.turret_respawnhook = turret_fusionreactor_respawnhook;
     if (turret_stdproc_init("fusreac_std",0,"models/turrets/base.md3","models/turrets/reactor.md3") == 0)
     {
         remove(self);
         return;
     }
-    setsize(self.tur_head,'-32 -32 0','32 32 64');
-
     self.tur_head.scale = 0.75;
-    setorigin(self.tur_head,self.origin + '0 0 25');
     self.tur_head.avelocity = '0 50 0';
+    setsize(self,'-34 -34 0','34 34 90');
 
-    self.turret_firecheckfunc = turret_fusionreactor_firecheck;
-    self.turret_firefunc = turret_fusionreactor_fire;
-
-    self.turret_postthink = turret_fusionreactor_postthink;
+    self.turret_firecheckfunc   = turret_fusionreactor_firecheck;
+    self.turret_firefunc        = turret_fusionreactor_fire;
+    self.turret_postthink       = turret_fusionreactor_postthink;
 }
 
 /*QUAKED turret_fusionreactor (0 .5 .8) ?
