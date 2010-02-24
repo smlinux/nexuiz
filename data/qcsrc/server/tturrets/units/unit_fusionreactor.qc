@@ -27,10 +27,9 @@ void turret_fusionreactor_fire()
 
 void turret_fusionreactor_postthink()
 {
-    float v;
-    v = self.ammo / self.ammo_max;
-
-    self.tur_head.avelocity = '0 250 0' * v;
+    float f;
+    f = self.ammo / self.ammo_max;
+    self.tur_head.avelocity = '0 250 0' * f;
 }
 
 void turret_fusionreactor_respawnhook()
