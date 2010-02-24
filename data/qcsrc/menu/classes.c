@@ -1,5 +1,7 @@
 #include "anim/animhost.c"
 #include "anim/animation.c"
+#include "anim/easing.c"
+#include "anim/keyframe.c"
 #include "item.c"
 #include "item/container.c"
 #include "item/inputcontainer.c"

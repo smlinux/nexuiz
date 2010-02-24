@@ -1,12 +1,13 @@
 #ifdef INTERFACE
 CLASS(Animation) EXTENDS(Object)
+	METHOD(Animation, configureAnimation, void(entity, entity, void(entity, float), float, float, float, float))
 	METHOD(Animation, setTimeStartEnd, void(entity, float, float))
 	METHOD(Animation, setTimeStartDuration, void(entity, float, float))
 	METHOD(Animation, setValueStartEnd, void(entity, float, float))
 	METHOD(Animation, setValueStartDelta, void(entity, float, float))
 	METHOD(Animation, setObjectSetter, void(entity, entity, void(entity, float)))
-	METHOD(Animation, setMath, void(entity, float(float, float, float, float)))
 	METHOD(Animation, tick, void(entity, float))
+	METHOD(Animation, calcValue, float(entity, float, float, float, float))
 	METHOD(Animation, isStopped, float(entity))
 	METHOD(Animation, stopAnim, void(entity))
 	METHOD(Animation, resumeAnim, void(entity))
@@ -14,7 +15,6 @@ CLASS(Animation) EXTENDS(Object)
 	METHOD(Animation, finishAnim, void(entity))
 	ATTRIB(Animation, object, entity, NULL)
 	ATTRIB(Animation, setter, void(entity, float), setterDummy)
-	ATTRIB(Animation, math, float(float, float, float, float), animLinear)
 	ATTRIB(Animation, value, float, 0)
 	ATTRIB(Animation, startTime, float, 0)
 	ATTRIB(Animation, duration, float, 0)
@@ -23,33 +23,15 @@ CLASS(Animation) EXTENDS(Object)
 	ATTRIB(Animation, stopped, float, FALSE)
 	ATTRIB(Animation, finished, float, FALSE)
 ENDCLASS(Animation)
-entity makeHostedAnimation(entity, void(entity, float), float(float, float, float, float), float, float, float);
-entity makeAnimation(entity, void(entity, float), float(float, float, float, float), float, float, float);
-float animLinear(float, float, float, float);
-float animQuadIn(float, float, float, float);
-float animQuadOut(float, float, float, float);
-float animQuadInOut(float, float, float, float);
 void setterDummy(entity, float);
 #endif
 
 #ifdef IMPLEMENTATION
-entity makeHostedAnimation(entity obj, void(entity, float) setter, float(float, float, float, float) func, float duration, float start, float end)
+void configureAnimationAnimation(entity me, entity obj, void(entity, float) setter, float startTime, float duration, float startValue, float end)
 {
-	entity me;
-	me = makeAnimation(obj, setter, func, duration, start, end);
-	anim.addAnim(anim, me);
-	return me;
-}
-
-entity makeAnimation(entity obj, void(entity, float) setter, float(float, float, float, float) func, float duration, float start, float end)
-{
-	entity me;
-	me = spawnAnimation();
 	me.setObjectSetter(me, obj, setter);
-	me.setMath(me, func);
-	me.setTimeStartDuration(me, time, duration);
-	me.setValueStartEnd(me, start, end);
-	return me;
+	me.setTimeStartDuration(me, startTime, duration);
+	me.setValueStartEnd(me, startValue, end);
 }
 
 void setTimeStartEndAnimation(entity me, float s, float e)
@@ -82,22 +64,22 @@ void setObjectSetterAnimation(entity me, entity o, void(entity, float) s)
 	me.setter = s;
 }
 
-void setMathAnimation(entity me, float(float, float, float, float) func)
-{
-	me.math = func;
-}
-
 void tickAnimation(entity me, float time)
 {
-	if (me.isStopped(me) || me.isFinished(me))
+	if (me.isStopped(me) || me.isFinished(me) || (time < me.startTime))
 		return;
 
 	if (time >= (me.startTime + me.duration))
 		me.finishAnim(me);
 	else
-		me.value = me.math((time - me.startTime), me.duration, me.startValue, me.delta);
+		me.value = me.calcValue(me, (time - me.startTime), me.duration, me.startValue, me.delta);
 
 	me.setter(me.object, me.value);
+}
+
+float calcValueAnimation(entity me, float time, float duration, float startValue, float delta)
+{
+	return startValue;
 }
 
 float isStoppedAnimation(entity me)
@@ -124,35 +106,6 @@ void finishAnimAnimation(entity me)
 {
 	me.value = me.delta + me.startValue;
 	me.finished = TRUE;
-}
-
-float animLinear(float time, float duration, float start, float delta)
-{
-	return (delta * (time / duration)) + start;
-}
-
-float animQuadIn(float time, float duration, float start, float delta)
-{
-	float frac = time / duration;
-	return (delta * frac * frac) + start;
-}
-
-float animQuadOut(float time, float duration, float start, float delta)
-{
-	float frac = time / duration;
-	return (-delta * frac * (frac - 2)) + start;
-}
-
-float animQuadInOut(float time, float duration, float start, float delta)
-{
-	if (time < (duration / 2))
-	{
- 		return animQuadIn(time, (duration / 2), start, (delta / 2));
-	}
-	else
-	{
- 		return animQuadOut((time - (duration / 2)), (duration / 2), (start + (delta / 2)), (delta / 2));
-	}
 }
 
 void setterDummy(entity object, float value)
