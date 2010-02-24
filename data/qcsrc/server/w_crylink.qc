@@ -198,7 +198,7 @@ float w_crylink(float req)
 			W_Crylink_Attack();
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_crylink_primary_animtime"), w_ready);
 		}
-		if (self.BUTTON_ATCK2)
+		if (self.BUTTON_ATCK2 && cvar("g_balance_crylink_secondary"))
 		if (weapon_prepareattack(1, cvar("g_balance_crylink_secondary_refire")))
 		{
 			W_Crylink_Attack2();
