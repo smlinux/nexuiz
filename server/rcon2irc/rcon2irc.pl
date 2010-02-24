@@ -1339,7 +1339,7 @@ sub cond($)
 		my ($nick, $username) = @_;
 		return 0 unless ($store{irc_quakenet_users});
 		
-		if ($store{quakenet_users}->{$username}) {
+		if ($store{irc_quakenet_users}->{$username}) {
 			my $hostmask = $store{quakenet_hosts}->{$nick};
 			$store{logins}{$hostmask} = time() + 600;
 		}
