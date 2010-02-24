@@ -176,21 +176,6 @@ void W_Crylink_Attack2 (void)
 	}
 }
 
-// experimental lightning gun
-void W_Crylink_Attack3 (void)
-{
-	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
-		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_secondary_ammo");
-	W_SetupShot (self, TRUE, 0, "weapons/crylink_fire2.wav", cvar("g_balance_crylink_secondary_damage"));
-
-	traceline_antilag(self, w_shotorg, w_shotorg + w_shotdir * cvar("g_balance_crylink_secondary_radius"), FALSE, self, ANTILAG_LATENCY(self));
-
-	te_lightning1(self, w_shotorg, trace_endpos);
-
-	if (trace_fraction < 1)
-		Damage(trace_ent, self, self, cvar("g_balance_crylink_secondary_damage"), WEP_CRYLINK | HITTYPE_SECONDARY, trace_endpos, cvar("g_balance_crylink_secondary_force") * w_shotdir);
-}
-
 void spawnfunc_weapon_crylink (void)
 {
 	weapon_defaultspawnfunc(WEP_CRYLINK);
@@ -216,10 +201,7 @@ float w_crylink(float req)
 		if (self.BUTTON_ATCK2)
 		if (weapon_prepareattack(1, cvar("g_balance_crylink_secondary_refire")))
 		{
-			if(cvar("g_balance_crylink_secondary_lightning"))
-				W_Crylink_Attack3();
-			else
-				W_Crylink_Attack2();
+			W_Crylink_Attack2();
 			weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_crylink_secondary_animtime"), w_ready);
 		}
 	}

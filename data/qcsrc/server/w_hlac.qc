@@ -136,6 +136,20 @@ void W_HLAC_Attack2 (void)
 	}
 }
 
+// experimental lightning gun
+void W_HLAC_Attack3 (void)
+{
+       if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
+               self.ammo_cells = self.ammo_cells - cvar("g_balance_hlac_primary_ammo");
+       W_SetupShot (self, TRUE, 0, "weapons/crylink_fire2.wav", cvar("g_balance_hlac_primary_damage"));
+
+       traceline_antilag(self, w_shotorg, w_shotorg + w_shotdir * cvar("g_balance_hlac_primary_radius"), FALSE, self, ANTILAG_LATENCY(self));
+
+       te_lightning1(self, w_shotorg, trace_endpos);
+
+       if (trace_fraction < 1)
+               Damage(trace_ent, self, self, cvar("g_balance_hlac_primary_damage"), WEP_HLAC | HITTYPE_SECONDARY, trace_endpos, cvar("g_balance_hlac_primary_force") * w_shotdir);
+}
 
 // weapon frames
 void HLAC_fire1_02()
@@ -181,11 +195,14 @@ float w_hlac(float req)
 		if (weapon_prepareattack(0, cvar("g_balance_hlac_primary_refire")))
 		{
 			self.HLAC_bulletcounter = 0;
-			W_HLAC_Attack();
+			if(cvar("g_balance_hlac_primary_lightning"))
+				W_HLAC_Attack3();
+			else
+				W_HLAC_Attack();
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_hlac_primary_refire"), HLAC_fire1_02);
 		}
 
-		if (self.BUTTON_ATCK2)
+		if (self.BUTTON_ATCK2 && cvar("g_balance_hlac_secondary"))
 		if (weapon_prepareattack(1, cvar("g_balance_hlac_secondary_refire")))
 		{
 			W_HLAC_Attack2();

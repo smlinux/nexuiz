@@ -117,7 +117,7 @@ float w_shotgun(float req)
 			W_Shotgun_Attack();
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_shotgun_primary_animtime"), w_ready);
 		}
-		if (self.BUTTON_ATCK2)
+		if (self.BUTTON_ATCK2 && cvar("g_balance_shotgun_secondary"))
 		if (weapon_prepareattack(1, cvar("g_balance_shotgun_secondary_refire")))
 		{
 			W_Shotgun_Attack2();
