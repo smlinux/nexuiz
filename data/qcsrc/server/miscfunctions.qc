@@ -6,8 +6,7 @@ void droptofloor();
 void traceline_antilag (entity source, vector v1, vector v2, float nomonst, entity forent, float lag);
 void crosshair_trace(entity pl)
 {
-	makevectors(pl.v_angle);
-	traceline_antilag(pl, pl.origin + pl.view_ofs, pl.origin + pl.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NORMAL, pl, ANTILAG_LATENCY(pl));
+	traceline_antilag(pl, pl.cursor_trace_start, pl.cursor_trace_start + normalize(pl.cursor_trace_endpos - pl.cursor_trace_start) * MAX_SHOT_DISTANCE, MOVE_NORMAL, pl, ANTILAG_LATENCY(pl));
 }
 
 void() spawnfunc_info_player_deathmatch; // needed for the other spawnpoints
