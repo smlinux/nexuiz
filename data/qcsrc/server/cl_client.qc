@@ -1293,7 +1293,7 @@ void FixClientCvars(entity e)
 	if(g_race || g_cts)
 		stuffcmd(e, "cl_cmd settemp cl_movecliptokeyboard 2\n");
 	if(cvar("g_antilag") == 3) // client side hitscan
-		stuffcmd(e, "cl_cmd settemp cl_prydoncursor -1\n");
+		stuffcmd(e, "cl_cmd settemp cl_prydoncursor -1\ncl_cmd settemp cl_prydoncursor_notrace 0\n");
 	/*
 	 * we no longer need to stuff this. Remove this comment block if you feel
 	 * 2.3 and higher (or was it 2.2.3?) don't need these any more
