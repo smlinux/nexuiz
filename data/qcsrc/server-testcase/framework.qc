@@ -1,3 +1,6 @@
+void dprint(string s, ...) = #25;
+string ftos(float f) = #26;
+string vtos(vector v) = #27;
 void error(string e) = #10;
 float test();
 
