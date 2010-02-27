@@ -200,6 +200,7 @@ void racer_fire_cannon(string tagname)
     setorigin(bolt, gettaginfo(self,gettagindex(self,tagname)));
 
     vector v;
+	// FIXME this uses prydon cursor
     v = normalize(self.owner.cursor_trace_endpos - bolt.origin);
     v_forward_z = v_z * 0.5;
     //v_forward_z *= 0.5;
@@ -454,6 +455,7 @@ float racer_pplug()
 
     /*
     // for homing rockets
+	// FIXME this uses prydon cursor
     if(self.owner.cursor_trace_ent)
     {
         self.tur_head.gun1 = self.owner.cursor_trace_ent;

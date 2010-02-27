@@ -140,7 +140,8 @@ void ImpulseCommands (void)
 				sprint(self, "personal waypoint spawned at location\n");
 				break;
 			case 31:
-				wp = WaypointSprite_DeployPersonal("waypoint", self.cursor_trace_endpos);
+				crosshair_trace(self);
+				wp = WaypointSprite_DeployPersonal("waypoint", trace_endpos);
 				if(wp)
 				{
 					WaypointSprite_UpdateTeamRadar(wp, RADARICON_WAYPOINT, '0 1 1');
@@ -183,7 +184,8 @@ void ImpulseCommands (void)
 				sprint(self, "HERE spawned at location\n");
 				break;
 			case 35:
-				wp = WaypointSprite_DeployFixed("here", FALSE, self.cursor_trace_endpos);
+				crosshair_trace(self);
+				wp = WaypointSprite_DeployFixed("here", FALSE, trace_endpos);
 				if(wp)
 				{
 					WaypointSprite_UpdateTeamRadar(wp, RADARICON_HERE, '0 1 0');
@@ -213,7 +215,8 @@ void ImpulseCommands (void)
 				sprint(self, "DANGER spawned at location\n");
 				break;
 			case 38:
-				wp = WaypointSprite_DeployFixed("danger", FALSE, self.cursor_trace_endpos);
+				crosshair_trace(self);
+				wp = WaypointSprite_DeployFixed("danger", FALSE, trace_endpos);
 				if(wp)
 				{
 					WaypointSprite_UpdateTeamRadar(wp, RADARICON_DANGER, '1 0.5 0');

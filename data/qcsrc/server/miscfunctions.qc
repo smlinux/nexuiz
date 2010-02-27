@@ -3,6 +3,13 @@ void objerror(string s);
 void droptofloor();
 .vector dropped_origin;
 
+void traceline_antilag (entity source, vector v1, vector v2, float nomonst, entity forent, float lag);
+void crosshair_trace(entity pl)
+{
+	makevectors(pl.v_angle);
+	traceline_antilag(pl, pl.origin + pl.view_ofs, pl.origin + pl.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NORMAL, pl, ANTILAG_LATENCY(pl));
+}
+
 void() spawnfunc_info_player_deathmatch; // needed for the other spawnpoints
 void() spawnpoint_use;
 float race_GetTime(float pos);
@@ -440,10 +447,16 @@ string formatmessage(string msg)
 {
 	float p, p1, p2;
 	float n;
+	vector cursor;
+	entity cursor_ent;
 	string escape;
 	string replacement;
 	p = 0;
 	n = 7;
+
+	crosshair_trace(self);
+	cursor = trace_endpos;
+	cursor_ent = trace_ent;
 
 	while (1) {
 		if (n < 1)
@@ -480,7 +493,7 @@ string formatmessage(string msg)
 		else if (escape == "l")
 			replacement = NearestLocation(self.origin);
 		else if (escape == "y")
-			replacement = NearestLocation(self.cursor_trace_endpos);
+			replacement = NearestLocation(cursor);
 		else if (escape == "d")
 			replacement = NearestLocation(self.death_origin);
 		else if (escape == "w") {
@@ -498,8 +511,8 @@ string formatmessage(string msg)
 			else if (self.items & IT_CELLS) replacement = "cells";
 			else replacement = "batteries"; // ;)
 		} else if (escape == "x") {
-			replacement = self.cursor_trace_ent.netname;
-			if (!replacement || !self.cursor_trace_ent)
+			replacement = cursor_ent.netname;
+			if (!replacement || !cursor_ent)
 				replacement = "nothing";
 		} else if (escape == "p") {
 			if (self.last_selected_player)

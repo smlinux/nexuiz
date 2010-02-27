@@ -290,7 +290,8 @@ float CheatCommand(float argc)
 				//   howmany
 				effectnum = particleeffectnum(argv(1));
 				f = stof(argv(2));
-				start = (1-f) * self.origin + f * self.cursor_trace_endpos;
+				crosshair_trace(self);
+				start = (1-f) * self.origin + f * trace_endpos;
 				end = stov(argv(3));
 				f = stof(argv(4));
 				pointparticles(effectnum, start, end, f);
@@ -395,7 +396,10 @@ float CheatCommand(float argc)
 			if(argc == 4)
 				setorigin(e.aiment, stov(argv(2)));
 			else
-				setorigin(e.aiment, self.cursor_trace_endpos);
+			{
+				crosshair_trace(self);
+				setorigin(e.aiment, trace_endpos);
+			}
 
 			e.enemy = spawn();
 			e.enemy.classname = "dragbox_corner_2";
@@ -403,7 +407,7 @@ float CheatCommand(float argc)
 			setmodel(e.enemy, "models/marker.md3");
 			e.enemy.skin = 1;
 			setsize(e.enemy, '0 0 0', '0 0 0');
-			end = normalize(self.cursor_trace_start - e.aiment.origin);
+			end = normalize(self.origin + self.view_ofs - e.aiment.origin);
 			end_x = (end_x > 0) * 2 - 1;
 			end_y = (end_y > 0) * 2 - 1;
 			end_z = (end_z > 0) * 2 - 1;
@@ -442,7 +446,8 @@ float CheatCommand(float argc)
 				setorigin(e, stov(argv(2)));
 			else
 			{
-				setorigin(e, self.cursor_trace_endpos + normalize(self.cursor_trace_start - self.cursor_trace_endpos));
+				crosshair_trace(self);
+				setorigin(e, trace_endpos + normalize(self.origin + self.view_ofs - trace_endpos));
 				move_out_of_solid(e);
 			}
 
@@ -461,10 +466,11 @@ float CheatCommand(float argc)
 		case "drag_remove":
 			IS_CHEAT(0, argc, 0);
 			RandomSelection_Init();
+			crosshair_trace(self);
 			for(e = world; (e = find(e, classname, "dragbox_box")); )
-				RandomSelection_Add(e, 0, string_null, 1, 1 / vlen(e.origin + (e.mins + e.maxs) * 0.5 - self.cursor_trace_endpos));
+				RandomSelection_Add(e, 0, string_null, 1, 1 / vlen(e.origin + (e.mins + e.maxs) * 0.5 - trace_endpos));
 			for(e = world; (e = find(e, classname, "dragpoint")); )
-				RandomSelection_Add(e, 0, string_null, 1, 1 / vlen(e.origin + (e.mins + e.maxs) * 0.5 - self.cursor_trace_endpos));
+				RandomSelection_Add(e, 0, string_null, 1, 1 / vlen(e.origin + (e.mins + e.maxs) * 0.5 - trace_endpos));
 			if(RandomSelection_chosen_ent)
 			{
 				remove(RandomSelection_chosen_ent.killindicator.killindicator);
@@ -482,10 +488,11 @@ float CheatCommand(float argc)
 			if(argc == 2)
 			{
 				RandomSelection_Init();
+				crosshair_trace(self);
 				for(e = world; (e = find(e, classname, "dragbox_box")); )
-					RandomSelection_Add(e, 0, string_null, 1, 1 / vlen(e.origin + (e.mins + e.maxs) * 0.5 - self.cursor_trace_endpos));
+					RandomSelection_Add(e, 0, string_null, 1, 1 / vlen(e.origin + (e.mins + e.maxs) * 0.5 - trace_endpos));
 				for(e = world; (e = find(e, classname, "dragpoint")); )
-					RandomSelection_Add(e, 0, string_null, 1, 1 / vlen(e.origin + (e.mins + e.maxs) * 0.5 - self.cursor_trace_endpos));
+					RandomSelection_Add(e, 0, string_null, 1, 1 / vlen(e.origin + (e.mins + e.maxs) * 0.5 - trace_endpos));
 				if(RandomSelection_chosen_ent)
 				{
 					if(substring(argv(1), 0, 1) == "*")
@@ -721,20 +728,23 @@ float CheatFrame()
 	{
 		if(Drag_CanDrag(self))
 			if(self.BUTTON_DRAG)
-				if(self.cursor_trace_ent)
-					if(Drag_IsDraggable(self.cursor_trace_ent))
+			{
+				crosshair_trace(self);
+				if(trace_ent)
+					if(Drag_IsDraggable(trace_ent))
 						switch(0)
 						{
 							default:
 								IS_CHEAT(0, 0, CHRAME_DRAG);
-								if(self.cursor_trace_ent.draggedby)
-									Drag_Finish(self.cursor_trace_ent.draggedby);
-								if(self.cursor_trace_ent.tag_entity)
-									detach_sameorigin(self.cursor_trace_ent);
-								Drag_Begin(self, self.cursor_trace_ent, self.cursor_trace_endpos);
+								if(trace_ent.draggedby)
+									Drag_Finish(trace_ent.draggedby);
+								if(trace_ent.tag_entity)
+									detach_sameorigin(trace_ent);
+								Drag_Begin(self, trace_ent, trace_endpos);
 								DID_CHEAT();
 								break;
 						}
+			}
 	}
 
 	END_CHEAT_FUNCTION();

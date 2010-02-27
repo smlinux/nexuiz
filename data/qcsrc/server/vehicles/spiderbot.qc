@@ -70,6 +70,7 @@ void spiderbot_rocket_think()
     self.solid      = SOLID_BBOX;
     self.touch      = spiderbot_rocket_touch;
     olddir = normalize(self.velocity);
+	// FIXME this uses prydon cursor
     //newdir = normalize(self.owner.cursor_trace_endpos - self.origin);
     newdir = normalize(self.pos1 - self.origin);
     newdir += randomvec() * cvar("g_vehicle_spiderbot_rocket_noise");
@@ -129,6 +130,7 @@ void spiderbot_rocket_do()
     rocket.think           = spiderbot_rocket_think;
     rocket.flags           = FL_PROJECTILE;
     rocket.solid           = SOLID_NOT;
+	// FIXME this uses prydon cursor
     rocket.pos1            = self.owner.cursor_trace_endpos;
 
 	CSQCProjectile(rocket, FALSE, PROJECTILE_ROCKET, FALSE); // no culling, has fly sound
