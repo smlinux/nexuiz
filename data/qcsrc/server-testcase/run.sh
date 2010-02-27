@@ -18,7 +18,21 @@ engine=$1; shift
 map=$1; shift
 echo "$testcase" > "$dir/testcase.qc"
 if ( cd $dir && fteqcc ); then
-	r=`"$engine" -nexuiz -basedir "$dir/../../.." +sv_progs progs-testcase.dat "$@" +map "$map" | tee /dev/stderr`
+	set -- "$engine" -nexuiz -basedir "$dir/../../.." +sv_progs progs-testcase.dat "$@" +map "$map"
+	if [ -n "$GDB_ME" ]; then
+		cmdfile=`mktemp`
+		{
+			echo "break VM_dprint"
+			echo "run"
+			echo "delete 1"
+			echo "finish"
+		} > "$cmdfile"
+		gdb -x "$cmdfile" --args "$@"
+		rm -f "$cmdfile"
+		exit 0
+	else
+		r=`"$@" | tee /dev/stderr`
+	fi
 	case "$r" in
 		*"TESTCASE: PASS"*)
 			echo "PASS detected"

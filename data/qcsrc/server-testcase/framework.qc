@@ -7,6 +7,7 @@ float test();
 void spawnfunc_worldspawn()
 {
 	float r;
+	dprint("TESTCASE: START\n");
 	r = test();
 	if(r == 1)
 		error("TESTCASE: PASS"); 
