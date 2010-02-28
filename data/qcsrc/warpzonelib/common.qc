@@ -138,6 +138,56 @@ void WarpZone_TraceBox(vector org, vector mi, vector ma, vector end, float nomon
 	v_up = vu;
 }
 
+void WarpZone_TraceBox_ThroughZone(vector org, vector mi, vector ma, vector end, float nomonsters, entity forent, entity zone)
+{
+	float frac, sol;
+	vector o0, e0;
+	entity e;
+	vector vf, vr, vu;
+	vf = v_forward;
+	vr = v_right;
+	vu = v_up;
+	WarpZone_MakeAllSolid();
+	o0 = org;
+	e0 = end;
+	sol = -1;
+	frac = 0;
+	e = world;
+	for(;;)
+	{
+		tracebox(org, mi, ma, end, nomonsters, forent);
+		if(WarpZone_trace_callback)
+			WarpZone_trace_callback();
+		if(sol < 0)
+			sol = trace_startsolid;
+		if(trace_fraction >= 1)
+			break;
+		frac = trace_fraction = frac + (1 - frac) * trace_fraction;
+		if(trace_ent.classname != "trigger_warpzone")
+			break;
+		if(trace_ent != zone)
+			break;
+		// we hit a warpzone... so, let's perform the trace after the warp again
+		org = WarpZone_TransformOrigin(trace_ent, trace_endpos);
+		end = WarpZone_TransformOrigin(trace_ent, end);
+		WarpZone_trace_velocity = WarpZone_TransformVelocity(trace_ent, WarpZone_trace_velocity);
+		WarpZone_trace_angles = WarpZone_TransformAngles(trace_ent, WarpZone_trace_angles);
+		WarpZone_trace_v_angle = WarpZone_TransformVAngles(trace_ent, WarpZone_trace_v_angle);
+		if(trace_ent == e)
+		{
+			dprint("I transformed into the same zone again, wtf, aborting the trace\n");
+			break;
+		}
+		e = trace_ent;
+	}
+	WarpZone_MakeAllOther();
+	trace_startsolid = sol;
+	WarpZone_trace_endpos = o0 + (e0 - o0) * trace_fraction;
+	v_forward = vf;
+	v_right = vr;
+	v_up = vu;
+}
+
 void WarpZone_TraceLine(vector org, vector end, float nomonsters, entity forent)
 {
 	WarpZone_TraceBox(org, '0 0 0', '0 0 0', end, nomonsters, forent);
@@ -185,13 +235,13 @@ void WarpZone_TraceToss(entity e, entity forent)
 
 void WarpZone_TrailParticles(entity own, float eff, vector org, vector end)
 {
-	float frac;
 	vector vf, vr, vu;
+	entity e;
 	vf = v_forward;
 	vr = v_right;
 	vu = v_up;
 	WarpZone_MakeAllSolid();
-	frac = 0;
+	e = world;
 	for(;;)
 	{
 		traceline(org, end, MOVE_NOMONSTERS, world);
@@ -204,6 +254,12 @@ void WarpZone_TrailParticles(entity own, float eff, vector org, vector end)
 		// we hit a warpzone... so, let's perform the trace after the warp again
 		org = WarpZone_TransformOrigin(trace_ent, trace_endpos);
 		end = WarpZone_TransformOrigin(trace_ent, end);
+		if(trace_ent == e)
+		{
+			dprint("I transformed into the same zone again, wtf, aborting the trace\n");
+			break;
+		}
+		e = trace_ent;
 	}
 	WarpZone_MakeAllOther();
 	v_forward = vf;
