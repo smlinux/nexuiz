@@ -1,4 +1,3 @@
-.vector warpzone_transform;
 void WarpZone_Read(float isnew)
 {
 	if not(self.enemy)
@@ -31,6 +30,10 @@ void WarpZone_Read(float isnew)
 	self.avelocity_z = ReadCoord();
 
 	self.avelocity = AnglesTransform_TurnDirectionFR(self.avelocity);
+
+	// for common code
+	self.warpzone_origin = self.enemy.oldorigin;
+	self.enemy.warpzone_origin = self.oldorigin;
 	self.warpzone_transform = AnglesTransform_Divide(self.avelocity, self.enemy.avelocity);
 
 	self.flags = FL_CAMERA;
@@ -57,9 +60,8 @@ void WarpZone_FixView()
 	if(e)
 	{
 		warpzone_saved = 1;
-		warpzone_fixview_origin = AnglesTransform_Apply(e.warpzone_transform, warpzone_fixview_origin - e.enemy.oldorigin) + e.oldorigin;
-		warpzone_fixview_angles = WarpZone_TransformVAngles(e.warpzone_transform, warpzone_fixview_angles);
-		break;
+		warpzone_fixview_origin = WarpZone_TransformOrigin(e, warpzone_fixview_origin);
+		warpzone_fixview_angles = WarpZone_TransformVAngles(e, warpzone_fixview_angles);
 	}
 
 	// if we are near any warpzone planes - MOVE AWAY (work around nearclip)

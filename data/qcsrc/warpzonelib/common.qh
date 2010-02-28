@@ -1,8 +1,17 @@
 float FL_CAMERA = 8192;
 
-vector WarpZone_TransformVAngles(vector t, vector ang);
 float WarpZoneLib_BoxTouchesBrush(vector mi, vector ma, entity e, entity ig);
 
 entity WarpZone_Find(vector mi, vector ma);
 void WarpZone_MakeAllSolid();
 void WarpZone_MakeAllOther();
+
+vector WarpZone_trace_endpos; // UNtransformed endpos
+void WarpZone_TraceBox(vector org, vector min, vector max, vector end, float nomonsters, entity forent);
+void WarpZone_TraceLine(vector org, vector end, float nomonsters, entity forent);
+void WarpZone_TrailParticles(entity own, float eff, vector org, vector end);
+
+vector WarpZone_TransformOrigin(entity wz, vector v);
+vector WarpZone_TransformVelocity(entity wz, vector v);
+vector WarpZone_TransformAngles(entity wz, vector v);
+vector WarpZone_TransformVAngles(entity wz, vector v);

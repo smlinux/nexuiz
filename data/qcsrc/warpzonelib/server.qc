@@ -23,9 +23,8 @@ void WarpZone_TeleportPlayer(entity teleporter, entity player, vector to, vector
 }
 
 // the transform
-.vector warpzone_origin, warpzone_angles;
+.vector warpzone_angles;
 .vector warpzone_forward;
-.vector warpzone_transform;
 
 float WarpZone_Teleport(entity player)
 {
@@ -41,12 +40,12 @@ float WarpZone_Teleport(entity player)
 	// this situation we may want to create a temporary clone
 	// entity of the player to fix graphics glitch
 
-	o1 = AnglesTransform_Apply(self.warpzone_transform, o0 - self.warpzone_origin) + self.enemy.warpzone_origin;
-	v1 = AnglesTransform_Apply(self.warpzone_transform, v0);
+	o1 = WarpZone_TransformOrigin(self, o0);
+	v1 = WarpZone_TransformVelocity(self, v0);
 	if(player.classname == "player")
-		a1 = WarpZone_TransformVAngles(self.warpzone_transform, player.v_angle);
+		a1 = WarpZone_TransformVAngles(self, player.v_angle);
 	else
-		a1 = AnglesTransform_ApplyToAngles(self.warpzone_transform, a0);
+		a1 = WarpZone_TransformAngles(self, a0);
 
 	// put him inside solid
 	tracebox(o1 - player.view_ofs, player.mins, player.maxs, o1 - player.view_ofs, MOVE_NOMONSTERS, player);
@@ -224,60 +223,4 @@ void WarpZone_InitStep_UpdateTransform()
 	// our mins/maxs are set to the warpzone... so all we need:
 	self.flags |= FL_CAMERA;
 	self.view_ofs = self.enemy.warpzone_origin;
-}
-
-void WarpZone_TraceBox(vector org, vector mi, vector ma, vector end, float nomonsters, entity forent)
-{
-	float frac, sol;
-	vector o0, e0;
-	o0 = org;
-	e0 = end;
-	WarpZone_MakeAllSolid();
-	sol = -1;
-	frac = 0;
-	for(;;)
-	{
-		tracebox(org, mi, ma, end, nomonsters, forent);
-		if(sol < 0)
-			sol = trace_startsolid;
-		if(trace_fraction >= 1)
-			break;
-		frac = trace_fraction = frac + (1 - frac) * trace_fraction;
-		if(trace_ent.classname != "trigger_warpzone")
-			break;
-		// we hit a warpzone... so, let's perform the trace after the warp again
-		org = AnglesTransform_Apply(trace_ent.warpzone_transform, trace_endpos - trace_ent.warpzone_origin) + trace_ent.enemy.warpzone_origin;
-		end = AnglesTransform_Apply(trace_ent.warpzone_transform, end - trace_ent.warpzone_origin) + trace_ent.enemy.warpzone_origin;
-	}
-	WarpZone_MakeAllOther();
-	WarpZone_trace_endpos = o0 + (e0 - o0) * trace_fraction;
-}
-
-void WarpZone_TraceLine(vector org, vector end, float nomonsters, entity forent)
-{
-	WarpZone_TraceBox(org, '0 0 0', '0 0 0', end, nomonsters, forent);
-}
-
-void WarpZone_TrailParticles(entity own, float eff, vector org, vector end)
-{
-	float frac, sol;
-	WarpZone_MakeAllSolid();
-	sol = -1;
-	frac = 0;
-	for(;;)
-	{
-		traceline(org, end, MOVE_NOMONSTERS, world);
-		if(sol < 0)
-			sol = trace_startsolid;
-		//print(vtos(org), " to ", vtos(trace_endpos), "\n");
-		trailparticles(own, eff, org, trace_endpos);
-		if(trace_fraction >= 1)
-			break;
-		if(trace_ent.classname != "trigger_warpzone")
-			break;
-		// we hit a warpzone... so, let's perform the trace after the warp again
-		org = AnglesTransform_Apply(trace_ent.warpzone_transform, trace_endpos - trace_ent.warpzone_origin) + trace_ent.enemy.warpzone_origin;
-		end = AnglesTransform_Apply(trace_ent.warpzone_transform, end - trace_ent.warpzone_origin) + trace_ent.enemy.warpzone_origin;
-	}
-	WarpZone_MakeAllOther();
 }

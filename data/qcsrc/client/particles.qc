@@ -293,7 +293,7 @@ void Net_ReadNexgunBeamParticle()
 	
 	//draw either the old v2.3 beam or the new beam
 	if (cvar("cl_particles_oldnexbeam") && (getstati(STAT_ALLOW_OLDNEXBEAM) || isdemo()))
-		trailparticles(world, particleeffectnum("TE_TEI_G3"), shotorg, endpos);
+		WarpZone_TrailParticles(world, particleeffectnum("TE_TEI_G3"), shotorg, endpos);
 	else
-		trailparticles(world, particleeffectnum("nex_beam"), shotorg, endpos);
+		WarpZone_TrailParticles(world, particleeffectnum("nex_beam"), shotorg, endpos);
 }

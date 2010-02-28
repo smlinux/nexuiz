@@ -8,9 +8,9 @@ void SendCSQCNexBeamParticle() {
 	WriteCoord(MSG_BROADCAST, w_shotorg_x);
 	WriteCoord(MSG_BROADCAST, w_shotorg_y);
 	WriteCoord(MSG_BROADCAST, w_shotorg_z);
-	WriteCoord(MSG_BROADCAST, trace_endpos_x);
-	WriteCoord(MSG_BROADCAST, trace_endpos_y);
-	WriteCoord(MSG_BROADCAST, trace_endpos_z);
+	WriteCoord(MSG_BROADCAST, WarpZone_trace_endpos_x);
+	WriteCoord(MSG_BROADCAST, WarpZone_trace_endpos_y);
+	WriteCoord(MSG_BROADCAST, WarpZone_trace_endpos_z);
 }
 
 void W_Nex_Attack (void)

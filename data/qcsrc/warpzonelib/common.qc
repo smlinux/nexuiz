@@ -1,44 +1,6 @@
-vector WarpZone_TransformVAngles(vector t, vector ang)
-{
-	float roll;
-
-	roll = ang_z;
-	ang_z = 0;
-
-	/*
-	vector vf, vr, vu;
-	print(vtos(ang), " input\n");
-	makevectors(ang);
-	vf = v_forward;
-	vr = v_right;
-	vu = v_up;
-	print(vtos(vf), " -> ", vtos(AnglesTransform_Apply(t, vf)), "\n");
-	print(vtos(vr), " -> ", vtos(AnglesTransform_Apply(t, vr)), "\n");
-	print(vtos(vu), " -> ", vtos(AnglesTransform_Apply(t, vu)), "\n");
-	*/
-
-	ang = AnglesTransform_ApplyToVAngles(t, ang);
-	// FIXME when a roll comes out and angle is near +/-90 degrees
-	// then roll can be incorporated into yaw and cancelled out
-
-	/*
-	print(vtos(ang), " output\n");
-	makevectors(ang);
-	print(vtos(vf), " -> ", vtos(v_forward), "\n");
-	print(vtos(vr), " -> ", vtos(v_right), "\n");
-	print(vtos(vu), " -> ", vtos(v_up), "\n");
-	*/
-
-	ang = AnglesTransform_Normalize(ang, TRUE);
-	ang = AnglesTransform_CancelRoll(ang);
-
-	/*
-	print(vtos(ang), " output\n");
-	*/
-
-	ang_z = roll;
-	return ang;
-}
+.vector warpzone_origin;
+.vector warpzone_transform;
+.entity enemy;
 
 vector WarpZoneLib_BoxTouchesBrush_mins;
 vector WarpZoneLib_BoxTouchesBrush_maxs;
@@ -117,4 +79,90 @@ void WarpZone_MakeAllOther()
 	entity e;
 	for(e = world; (e = find(e, classname, "trigger_warpzone")); )
 		e.solid = SOLID_TRIGGER;
+}
+
+void WarpZone_TraceBox(vector org, vector mi, vector ma, vector end, float nomonsters, entity forent)
+{
+	float frac, sol;
+	vector o0, e0;
+	o0 = org;
+	e0 = end;
+	WarpZone_MakeAllSolid();
+	sol = -1;
+	frac = 0;
+	for(;;)
+	{
+		tracebox(org, mi, ma, end, nomonsters, forent);
+		if(sol < 0)
+			sol = trace_startsolid;
+		if(trace_fraction >= 1)
+			break;
+		frac = trace_fraction = frac + (1 - frac) * trace_fraction;
+		if(trace_ent.classname != "trigger_warpzone")
+			break;
+		// we hit a warpzone... so, let's perform the trace after the warp again
+		org = WarpZone_TransformOrigin(trace_ent, trace_endpos);
+		end = WarpZone_TransformOrigin(trace_ent, end);
+	}
+	WarpZone_MakeAllOther();
+	WarpZone_trace_endpos = o0 + (e0 - o0) * trace_fraction;
+}
+
+void WarpZone_TraceLine(vector org, vector end, float nomonsters, entity forent)
+{
+	WarpZone_TraceBox(org, '0 0 0', '0 0 0', end, nomonsters, forent);
+}
+
+void WarpZone_TrailParticles(entity own, float eff, vector org, vector end)
+{
+	float frac, sol;
+	WarpZone_MakeAllSolid();
+	sol = -1;
+	frac = 0;
+	for(;;)
+	{
+		traceline(org, end, MOVE_NOMONSTERS, world);
+		if(sol < 0)
+			sol = trace_startsolid;
+		//print(vtos(org), " to ", vtos(trace_endpos), "\n");
+		trailparticles(own, eff, org, trace_endpos);
+		if(trace_fraction >= 1)
+			break;
+		if(trace_ent.classname != "trigger_warpzone")
+			break;
+		// we hit a warpzone... so, let's perform the trace after the warp again
+		org = WarpZone_TransformOrigin(trace_ent, trace_endpos);
+		end = WarpZone_TransformOrigin(trace_ent, end);
+	}
+	WarpZone_MakeAllOther();
+}
+
+vector WarpZone_TransformOrigin(entity wz, vector v)
+{
+	return wz.enemy.warpzone_origin + AnglesTransform_Apply(wz.warpzone_transform, v - wz.warpzone_origin);
+}
+
+vector WarpZone_TransformVelocity(entity wz, vector v)
+{
+	return AnglesTransform_Apply(wz.warpzone_transform, v);
+}
+
+vector WarpZone_TransformAngles(entity wz, vector v)
+{
+	return AnglesTransform_ApplyToAngles(wz.warpzone_transform, v);
+}
+
+vector WarpZone_TransformVAngles(entity wz, vector ang)
+{
+	float roll;
+
+	roll = ang_z;
+	ang_z = 0;
+
+	ang = AnglesTransform_ApplyToVAngles(wz.warpzone_transform, ang);
+	ang = AnglesTransform_Normalize(ang, TRUE);
+	ang = AnglesTransform_CancelRoll(ang);
+
+	ang_z = roll;
+	return ang;
 }
