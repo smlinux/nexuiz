@@ -46,19 +46,19 @@ void WarpZone_Read(float isnew)
 
 float warpzone_fixingview;
 float warpzone_fixingview_drawexteriormodel;
-float warpzone_fixingview_sidespeed;
-float warpzone_fixingview_forwardspeed;
+//float warpzone_fixingview_sidespeed;
+//float warpzone_fixingview_forwardspeed;
 void WarpZone_Inside()
 {
 	if(warpzone_fixingview)
 		return;
 	warpzone_fixingview = 1;
 	warpzone_fixingview_drawexteriormodel = cvar("r_drawexteriormodel");
-	warpzone_fixingview_sidespeed = cvar("cl_sidespeed");
-	warpzone_fixingview_forwardspeed = cvar("cl_forwardspeed");
+	//warpzone_fixingview_sidespeed = cvar("cl_sidespeed");
+	//warpzone_fixingview_forwardspeed = cvar("cl_forwardspeed");
 	cvar_set("r_drawexteriormodel", "0");
-	cvar_set("cl_sidespeed", ftos(warpzone_fixingview_sidespeed / 100)); // just keep a bit of it in case player gets stuck
-	cvar_set("cl_forwardspeed", ftos(warpzone_fixingview_forwardspeed / 100)); // just keep a bit of it in case player gets stuck
+	//cvar_set("cl_sidespeed", ftos(warpzone_fixingview_sidespeed / 100)); // just keep a bit of it in case player gets stuck
+	//cvar_set("cl_forwardspeed", ftos(warpzone_fixingview_forwardspeed / 100)); // just keep a bit of it in case player gets stuck
 }
 
 void WarpZone_Outside()
@@ -67,8 +67,8 @@ void WarpZone_Outside()
 		return;
 	warpzone_fixingview = 0;
 	cvar_set("r_drawexteriormodel", ftos(warpzone_fixingview_drawexteriormodel));
-	cvar_set("cl_sidespeed", ftos(warpzone_fixingview_sidespeed));
-	cvar_set("cl_forwardspeed", ftos(warpzone_fixingview_forwardspeed));
+	//cvar_set("cl_sidespeed", ftos(warpzone_fixingview_sidespeed));
+	//cvar_set("cl_forwardspeed", ftos(warpzone_fixingview_forwardspeed));
 }
 
 float warpzone_saved;
