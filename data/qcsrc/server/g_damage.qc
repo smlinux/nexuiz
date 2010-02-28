@@ -1116,7 +1116,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 						local float hitratio;
 						local vector hitloc;
 						local vector myblastorigin;
-						myblastorigin = WarpZone_UnTransformOrigin(targ, blastorigin);
+						myblastorigin = WarpZone_TransformOrigin(targ, blastorigin);
 						center = targ.origin + (targ.mins + targ.maxs) * 0.5;
 						// if it's a player, use the view origin as reference
 						if (targ.classname == "player")
@@ -1135,7 +1135,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 						while (c < total)
 						{
 							//traceline(targ.WarpZone_findradius_findorigin, nearest, MOVE_NOMONSTERS, inflictor);
-							WarpZone_TraceLine(blastorigin, WarpZone_TransformOrigin(targ, nearest), MOVE_NOMONSTERS, inflictor);
+							WarpZone_TraceLine(blastorigin, WarpZone_UnTransformOrigin(targ, nearest), MOVE_NOMONSTERS, inflictor);
 							if (trace_fraction == 1 || trace_ent == targ)
 							{
 								hits = hits + 1;

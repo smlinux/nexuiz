@@ -394,7 +394,6 @@ void WarpZone_FindRadius_Recurse(vector org, float rad,        vector org0,     
 	vector org_new;
 	vector org0_new;
 	vector shift_new, transform_new;
-	vector shift_second, transform_second;
 	vector p;
 	entity e, e0;
 	entity wz;
@@ -444,10 +443,8 @@ void WarpZone_FindRadius_Recurse(vector org, float rad,        vector org0,     
 		traceline(e.warpzone_targetorigin, org0_new, MOVE_NOMONSTERS, e);
 		org_new = trace_endpos;
 
-		transform_second = AnglesTransform_Invert(e.warpzone_transform);
-		shift_second = AnglesTransform_PrePostShift_GetPostShift(e.warpzone_shift, transform_second, '0 0 0'); // invert the shift
-		transform_new = AnglesTransform_Multiply(transform, transform_second);
-		shift_new = AnglesTransform_Multiply_GetPostShift(transform, shift, transform_second, shift_second);
+		transform_new = AnglesTransform_Multiply(e.warpzone_transform, transform);
+		shift_new = AnglesTransform_Multiply_GetPostShift(e.warpzone_transform, e.warpzone_shift, transform, shift);
 		WarpZone_FindRadius_Recurse(
 			org_new,
 			bound(0, rad - vlen(org_new - org0_new), rad - 8),

@@ -32,7 +32,7 @@ void WarpZone_TrailParticles(entity own, float eff, vector org, vector end);
 
 .vector WarpZone_findradius_dist;
 .vector WarpZone_findradius_nearest;
-// also set: warpzone parameters, so WarpZone_TransformOrigin can transform vectors from victim's to blast's system
+// also set: warpzone parameters, so WarpZone_TransformOrigin can transform vectors from blast's to victim's system
 .vector WarpZone_findradius_findorigin;
 .float WarpZone_findradius_findradius;
 entity WarpZone_FindRadius(vector org, float radius, float needlineofsight);
