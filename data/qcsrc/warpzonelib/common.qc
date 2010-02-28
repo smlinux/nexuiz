@@ -1,6 +1,7 @@
 void WarpZone_SetUp(entity e, vector my_org, vector my_ang, vector other_org, vector other_ang)
 {
 	e.warpzone_transform = AnglesTransform_Divide(other_ang, AnglesTransform_TurnDirectionFR(my_ang));
+	e.warpzone_shift = AnglesTransform_PrePostShift_GetPostShift(my_org, e.warpzone_transform, other_org);
 	e.warpzone_origin = my_org;
 	e.warpzone_targetorigin = other_org;
 	e.warpzone_angles = my_ang;
@@ -35,8 +36,6 @@ float WarpZoneLib_BoxTouchesBrush_Recurse()
 		return 0;
 	if (trace_ent == WarpZoneLib_BoxTouchesBrush_ent)
 		return 1;
-
-	
 
 	se = trace_ent;
 	s = se.solid;
@@ -279,7 +278,7 @@ float WarpZone_TargetPlaneDist(entity wz, vector v)
 
 vector WarpZone_TransformOrigin(entity wz, vector v)
 {
-	return wz.warpzone_targetorigin + AnglesTransform_Apply(wz.warpzone_transform, v - wz.warpzone_origin);
+	return wz.warpzone_shift + AnglesTransform_Apply(wz.warpzone_transform, v);
 }
 
 vector WarpZone_TransformVelocity(entity wz, vector v)
@@ -309,7 +308,7 @@ vector WarpZone_TransformVAngles(entity wz, vector ang)
 
 vector WarpZone_UnTransformOrigin(entity wz, vector v)
 {
-	return wz.warpzone_origin + AnglesTransform_Apply(AnglesTransform_Invert(wz.warpzone_transform), v - wz.warpzone_targetorigin);
+	return AnglesTransform_Apply(AnglesTransform_Invert(wz.warpzone_transform), v - wz.warpzone_shift);
 }
 
 vector WarpZone_UnTransformVelocity(entity wz, vector v)
@@ -348,13 +347,13 @@ vector WarpZoneLib_NearestPointOnBox(vector mi, vector ma, vector org)
 
 .float WarpZone_findradius_hit;
 .entity WarpZone_findradius_next;
-void WarpZone_FindRadius_Recurse(vector org, float rad,        vector org0,            vector shift0, vector transform, vector shift1, float needlineofsight)
+void WarpZone_FindRadius_Recurse(vector org, float rad,        vector org0,               vector transform, vector shift, float needlineofsight)
 //                               blast origin of current search   original blast origin   how to untransform (victim to blast system)
 {
 	vector org_new;
 	vector org0_new;
-	vector shift0_new, transform_new, shift1_new;
-	vector transform_second;
+	vector shift_new, transform_new;
+	vector shift_second, transform_second;
 	vector p;
 	entity e, e0;
 	entity wz;
@@ -390,8 +389,7 @@ void WarpZone_FindRadius_Recurse(vector org, float rad,        vector org0,     
 			else
 			{
 				e.warpzone_transform = transform;
-				e.warpzone_origin = shift0;
-				e.warpzone_targetorigin = shift1;
+				e.warpzone_shift = shift;
 
 				e.WarpZone_findradius_hit = 1;
 			}
@@ -404,14 +402,14 @@ void WarpZone_FindRadius_Recurse(vector org, float rad,        vector org0,     
 		org_new = trace_endpos;
 
 		transform_second = AnglesTransform_Invert(e.warpzone_transform);
+		shift_second = AnglesTransform_PrePostShift_GetPostShift(e.warpzone_shift, transform_second, '0 0 0'); // invert the shift
 		transform_new = AnglesTransform_Multiply(transform, transform_second);
-		shift0_new = AnglesTransform_Multiply_GetPreShift(shift0, transform, shift1, e.warpzone_targetorigin, transform_second, e.warpzone_origin);
-		shift1_new = AnglesTransform_Multiply_GetPostShift(shift0, transform, shift1, e.warpzone_targetorigin, transform_second, e.warpzone_origin);
+		shift_new = AnglesTransform_Multiply_GetPostShift(transform, shift, transform_second, shift_second);
 		WarpZone_FindRadius_Recurse(
 			org_new,
 			bound(0, rad - vlen(org_new - org0_new), rad - 8),
 			org0_new,
-			shift0_new, transform_new, shift1_new,
+			transform_new, shift_new,
 			needlineofsight);
 		e.WarpZone_findradius_hit = 0;
 		e.enemy.WarpZone_findradius_hit = 0;
@@ -420,7 +418,7 @@ void WarpZone_FindRadius_Recurse(vector org, float rad,        vector org0,     
 entity WarpZone_FindRadius(vector org, float rad, float needlineofsight)
 {
 	entity e0, e;
-	WarpZone_FindRadius_Recurse(org, rad, org, '0 0 0', '0 0 0', '0 0 0', needlineofsight);
+	WarpZone_FindRadius_Recurse(org, rad, org, '0 0 0', '0 0 0', needlineofsight);
 	e0 = findchainfloat(WarpZone_findradius_hit, 1);
 	for(e = e0; e; e = e.chain)
 		e.WarpZone_findradius_hit = 0;
@@ -430,18 +428,15 @@ entity WarpZone_FindRadius(vector org, float rad, float needlineofsight)
 void WarpZone_Accumulator_Clear(entity acc)
 {
 	acc.warpzone_transform = '0 0 0';
-	acc.warpzone_origin = '0 0 0';
-	acc.warpzone_targetorigin = '0 0 0';
+	acc.warpzone_shift = '0 0 0';
 }
 void WarpZone_Accumulator_Add(entity acc, entity wz)
 {
-	vector sf, t, st;
-	sf = AnglesTransform_Multiply_GetPreShift(wz.warpzone_origin, wz.warpzone_transform, wz.warpzone_targetorigin, acc.warpzone_origin, acc.warpzone_transform, acc.warpzone_targetorigin);
+	vector t, st;
 	t = AnglesTransform_Multiply(wz.warpzone_transform, acc.warpzone_transform);
-	st = AnglesTransform_Multiply_GetPostShift(wz.warpzone_origin, wz.warpzone_transform, wz.warpzone_targetorigin, acc.warpzone_origin, acc.warpzone_transform, acc.warpzone_targetorigin);
-	acc.warpzone_origin = sf;
+	st = AnglesTransform_Multiply_GetPostShift(wz.warpzone_transform, wz.warpzone_shift, acc.warpzone_transform, acc.warpzone_shift);
 	acc.warpzone_transform = t;
-	acc.warpzone_targetorigin = st;
+	acc.warpzone_shift = st;
 }
 
 .entity WarpZone_refsys;

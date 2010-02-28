@@ -169,17 +169,14 @@ vector AnglesTransform_ApplyToVAngles(vector transform, vector v)
 }
 #endif
 
-vector AnglesTransform_Multiply_GetPreShift(vector sf0, vector t0, vector st0, vector sf1, vector t1, vector st1)
+vector AnglesTransform_Multiply_GetPostShift(vector t0, vector st0, vector t1, vector st1)
 {
 	// we want the result of:
-	//   t0 * (t1 * (p - sf1) + st1 - sf0) + st0
-	//   t0 * t1 * (p - sf1) + t0 * (st1 - sf0) + st0
-	return sf1;
+	//   t0 * (t1 * p + st1) + st0
+	//   t0 * t1 * p + t0 * st1 + st0
+	return st0 + AnglesTransform_Apply(t0, st1);
 }
-vector AnglesTransform_Multiply_GetPostShift(vector sf0, vector t0, vector st0, vector sf1, vector t1, vector st1)
+vector AnglesTransform_PrePostShift_GetPostShift(vector sf, vector t, vector st)
 {
-	// we want the result of:
-	//   t0 * (t1 * (p - sf1) + st1 - sf0) + st0
-	//   t0 * t1 * (p - sf1) + t0 * (st1 - sf0) + st0
-	return AnglesTransform_Apply(t0, st1 - sf0) + st0;
+	return st - AnglesTransform_Apply(t, sf);
 }

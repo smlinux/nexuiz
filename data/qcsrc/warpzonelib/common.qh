@@ -1,3 +1,4 @@
+.vector warpzone_shift;
 .vector warpzone_origin;
 .vector warpzone_angles;
 .vector warpzone_forward;
