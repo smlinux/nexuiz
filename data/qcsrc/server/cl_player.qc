@@ -811,7 +811,7 @@ void UpdateSelectedPlayer()
 	makevectors(self.v_angle); // sets v_forward
 
 	// 1. cursor trace is always right
-	crosshair_trace(self);
+	WarpZone_crosshair_trace(self);
 	if(trace_ent && trace_ent.classname == "player" && !trace_ent.deadflag)
 	{
 		selected = trace_ent;

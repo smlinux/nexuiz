@@ -8,6 +8,12 @@ void crosshair_trace(entity pl)
 {
 	traceline_antilag(pl, pl.cursor_trace_start, pl.cursor_trace_start + normalize(pl.cursor_trace_endpos - pl.cursor_trace_start) * MAX_SHOT_DISTANCE, MOVE_NORMAL, pl, ANTILAG_LATENCY(pl));
 }
+void WarpZone_traceline_antilag (entity source, vector v1, vector v2, float nomonst, entity forent, float lag);
+void WarpZone_crosshair_trace(entity pl)
+{
+	makevectors(pl.v_angle);
+	WarpZone_traceline_antilag(pl, pl.origin + pl.view_ofs, pl.origin + pl.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NORMAL, pl, ANTILAG_LATENCY(pl));
+}
 
 void() spawnfunc_info_player_deathmatch; // needed for the other spawnpoints
 void() spawnpoint_use;
@@ -401,7 +407,7 @@ string formatmessage(string msg)
 	p = 0;
 	n = 7;
 
-	crosshair_trace(self);
+	WarpZone_crosshair_trace(self);
 	cursor = trace_endpos;
 	cursor_ent = trace_ent;
 

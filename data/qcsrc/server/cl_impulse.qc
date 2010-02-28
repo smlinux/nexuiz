@@ -140,7 +140,7 @@ void ImpulseCommands (void)
 				sprint(self, "personal waypoint spawned at location\n");
 				break;
 			case 31:
-				crosshair_trace(self);
+				WarpZone_crosshair_trace(self);
 				wp = WaypointSprite_DeployPersonal("waypoint", trace_endpos);
 				if(wp)
 				{
@@ -184,7 +184,7 @@ void ImpulseCommands (void)
 				sprint(self, "HERE spawned at location\n");
 				break;
 			case 35:
-				crosshair_trace(self);
+				WarpZone_crosshair_trace(self);
 				wp = WaypointSprite_DeployFixed("here", FALSE, trace_endpos);
 				if(wp)
 				{
@@ -215,7 +215,7 @@ void ImpulseCommands (void)
 				sprint(self, "DANGER spawned at location\n");
 				break;
 			case 38:
-				crosshair_trace(self);
+				WarpZone_crosshair_trace(self);
 				wp = WaypointSprite_DeployFixed("danger", FALSE, trace_endpos);
 				if(wp)
 				{
