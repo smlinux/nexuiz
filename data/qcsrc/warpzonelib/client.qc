@@ -1,4 +1,3 @@
-float FL_CAMERA = 8192;
 .vector warpzone_transform;
 void WarpZone_Read(float isnew)
 {
@@ -66,7 +65,7 @@ void WarpZone_FixView()
 	}
 
 	// if we are near any warpzone planes - MOVE AWAY (work around nearclip)
-	float nearclip = 2;
+	float nearclip = 1;
 	for(e = world; (e = find(e, classname, "warpzone_to")); )
 	{
 		if(WarpZoneLib_BoxTouchesBrush(warpzone_fixview_origin - '1 1 1' * nearclip, warpzone_fixview_origin + '1 1 1' * nearclip, e, world))
