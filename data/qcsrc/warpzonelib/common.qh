@@ -18,7 +18,6 @@ void WarpZone_MakeAllSolid();
 void WarpZone_MakeAllOther();
 
 var void(vector start, vector hit, vector end) WarpZone_trace_callback; // called after every trace
-vector WarpZone_trace_startpos; // start pos of the current segment (useful for the callback)
 vector WarpZone_trace_angles; // total angles accumulator
 vector WarpZone_trace_v_angle; // total v_angle accumulator
 vector WarpZone_trace_velocity; // total velocity

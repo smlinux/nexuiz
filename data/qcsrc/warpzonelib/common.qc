@@ -93,17 +93,26 @@ void WarpZone_TraceBox(vector org, vector mi, vector ma, vector end, float nomon
 {
 	float frac, sol;
 	vector o0, e0;
-	entity e;
+	entity wz;
 	vector vf, vr, vu;
 	vf = v_forward;
 	vr = v_right;
 	vu = v_up;
+	// if starting in warpzone, first transform
+	wz = WarpZone_Find(org + mi, org + ma);
+	if(wz)
+	{
+		org = WarpZone_TransformOrigin(wz, trace_endpos);
+		end = WarpZone_TransformOrigin(wz, end);
+		WarpZone_trace_velocity = WarpZone_TransformVelocity(wz, WarpZone_trace_velocity);
+		WarpZone_trace_angles = WarpZone_TransformAngles(wz, WarpZone_trace_angles);
+		WarpZone_trace_v_angle = WarpZone_TransformVAngles(wz, WarpZone_trace_v_angle);
+	}
 	WarpZone_MakeAllSolid();
 	o0 = org;
 	e0 = end;
 	sol = -1;
 	frac = 0;
-	e = world;
 	for(;;)
 	{
 		tracebox(org, mi, ma, end, nomonsters, forent);
@@ -116,18 +125,18 @@ void WarpZone_TraceBox(vector org, vector mi, vector ma, vector end, float nomon
 		frac = trace_fraction = frac + (1 - frac) * trace_fraction;
 		if(trace_ent.classname != "trigger_warpzone")
 			break;
-		// we hit a warpzone... so, let's perform the trace after the warp again
-		org = WarpZone_TransformOrigin(trace_ent, trace_endpos);
-		end = WarpZone_TransformOrigin(trace_ent, end);
-		WarpZone_trace_velocity = WarpZone_TransformVelocity(trace_ent, WarpZone_trace_velocity);
-		WarpZone_trace_angles = WarpZone_TransformAngles(trace_ent, WarpZone_trace_angles);
-		WarpZone_trace_v_angle = WarpZone_TransformVAngles(trace_ent, WarpZone_trace_v_angle);
-		if(trace_ent == e)
+		if(trace_ent == wz)
 		{
 			dprint("I transformed into the same zone again, wtf, aborting the trace\n");
 			break;
 		}
-		e = trace_ent;
+		wz = trace_ent;
+		// we hit a warpzone... so, let's perform the trace after the warp again
+		org = WarpZone_TransformOrigin(wz, trace_endpos);
+		end = WarpZone_TransformOrigin(wz, end);
+		WarpZone_trace_velocity = WarpZone_TransformVelocity(wz, WarpZone_trace_velocity);
+		WarpZone_trace_angles = WarpZone_TransformAngles(wz, WarpZone_trace_angles);
+		WarpZone_trace_v_angle = WarpZone_TransformVAngles(wz, WarpZone_trace_v_angle);
 	}
 	WarpZone_MakeAllOther();
 	trace_startsolid = sol;
@@ -141,17 +150,34 @@ void WarpZone_TraceBox_ThroughZone(vector org, vector mi, vector ma, vector end,
 {
 	float frac, sol;
 	vector o0, e0;
-	entity e;
+	entity wz;
 	vector vf, vr, vu;
 	vf = v_forward;
 	vr = v_right;
 	vu = v_up;
+	// if starting in warpzone, first transform
+	wz = WarpZone_Find(org + mi, org + ma);
+	if(wz)
+	{
+		if(wz != zone)
+		{
+			// we are in ANOTHER warpzone. This is bad. Make a zero length trace and return.
+			sol = 1;
+			trace_fraction = 0;
+			trace_endpos = org;
+			goto fail;
+		}
+		org = WarpZone_TransformOrigin(wz, trace_endpos);
+		end = WarpZone_TransformOrigin(wz, end);
+		WarpZone_trace_velocity = WarpZone_TransformVelocity(wz, WarpZone_trace_velocity);
+		WarpZone_trace_angles = WarpZone_TransformAngles(wz, WarpZone_trace_angles);
+		WarpZone_trace_v_angle = WarpZone_TransformVAngles(wz, WarpZone_trace_v_angle);
+	}
 	WarpZone_MakeAllSolid();
 	o0 = org;
 	e0 = end;
 	sol = -1;
 	frac = 0;
-	e = world;
 	for(;;)
 	{
 		tracebox(org, mi, ma, end, nomonsters, forent);
@@ -166,20 +192,21 @@ void WarpZone_TraceBox_ThroughZone(vector org, vector mi, vector ma, vector end,
 			break;
 		if(trace_ent != zone)
 			break;
-		// we hit a warpzone... so, let's perform the trace after the warp again
-		org = WarpZone_TransformOrigin(trace_ent, trace_endpos);
-		end = WarpZone_TransformOrigin(trace_ent, end);
-		WarpZone_trace_velocity = WarpZone_TransformVelocity(trace_ent, WarpZone_trace_velocity);
-		WarpZone_trace_angles = WarpZone_TransformAngles(trace_ent, WarpZone_trace_angles);
-		WarpZone_trace_v_angle = WarpZone_TransformVAngles(trace_ent, WarpZone_trace_v_angle);
-		if(trace_ent == e)
+		if(trace_ent == wz)
 		{
 			dprint("I transformed into the same zone again, wtf, aborting the trace\n");
 			break;
 		}
-		e = trace_ent;
+		wz = trace_ent;
+		// we hit a warpzone... so, let's perform the trace after the warp again
+		org = WarpZone_TransformOrigin(wz, trace_endpos);
+		end = WarpZone_TransformOrigin(wz, end);
+		WarpZone_trace_velocity = WarpZone_TransformVelocity(wz, WarpZone_trace_velocity);
+		WarpZone_trace_angles = WarpZone_TransformAngles(wz, WarpZone_trace_angles);
+		WarpZone_trace_v_angle = WarpZone_TransformVAngles(wz, WarpZone_trace_v_angle);
 	}
 	WarpZone_MakeAllOther();
+:fail
 	trace_startsolid = sol;
 	WarpZone_trace_endpos = o0 + (e0 - o0) * trace_fraction;
 	v_forward = vf;
@@ -196,9 +223,17 @@ void WarpZone_TraceToss(entity e, entity forent)
 {
 	float g, dt;
 	vector vf, vr, vu, v0, o0;
+	entity wz;
 	vf = v_forward;
 	vr = v_right;
 	vu = v_up;
+	// if starting in warpzone, first transform
+	wz = WarpZone_Find(e.origin + e.mins, e.origin + e.maxs);
+	if(wz)
+	{
+		setorigin(e, WarpZone_TransformOrigin(wz, e.origin));
+		e.velocity = WarpZone_TransformVelocity(wz, e.velocity);
+	}
 	WarpZone_MakeAllSolid();
 	g = cvar("sv_gravity") * e.gravity;
 	WarpZone_tracetoss_time = 0;
@@ -217,9 +252,15 @@ void WarpZone_TraceToss(entity e, entity forent)
 			break;
 		if(trace_ent.classname != "trigger_warpzone")
 			break;
+		if(trace_ent == wz)
+		{
+			dprint("I transformed into the same zone again, wtf, aborting the trace\n");
+			break;
+		}
+		wz = trace_ent;
 		// we hit a warpzone... so, let's perform the trace after the warp again
-		e.origin = WarpZone_TransformOrigin(trace_ent, e.origin);
-		e.velocity = WarpZone_TransformVelocity(trace_ent, e.velocity);
+		e.origin = WarpZone_TransformOrigin(wz, e.origin);
+		e.velocity = WarpZone_TransformVelocity(wz, e.velocity);
 	}
 	WarpZone_MakeAllOther();
 	v_forward = vf;
@@ -432,10 +473,10 @@ void WarpZone_Accumulator_Clear(entity acc)
 }
 void WarpZone_Accumulator_AddTransform(entity acc, vector t, vector s)
 {
-	vector t, st;
-	t = AnglesTransform_Multiply(t, acc.warpzone_transform);
+	vector tr, st;
+	tr = AnglesTransform_Multiply(t, acc.warpzone_transform);
 	st = AnglesTransform_Multiply_GetPostShift(t, s, acc.warpzone_transform, acc.warpzone_shift);
-	acc.warpzone_transform = t;
+	acc.warpzone_transform = tr;
 	acc.warpzone_shift = st;
 }
 void WarpZone_Accumulator_Add(entity acc, entity wz)
