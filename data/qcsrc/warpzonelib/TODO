@@ -1,6 +1,4 @@
 Open issues:
-- hitscan
-  - make function WarpZone_TraceDirection
 - radius damage
   - make warpzone entities radiusdamage-able, and do a new radius damage on the
     opposite side
