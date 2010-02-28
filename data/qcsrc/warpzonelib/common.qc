@@ -85,9 +85,13 @@ void WarpZone_TraceBox(vector org, vector mi, vector ma, vector end, float nomon
 {
 	float frac, sol;
 	vector o0, e0;
+	vector vf, vr, vu;
+	vf = v_forward;
+	vr = v_right;
+	vu = v_up;
+	WarpZone_MakeAllSolid();
 	o0 = org;
 	e0 = end;
-	WarpZone_MakeAllSolid();
 	sol = -1;
 	frac = 0;
 	for(;;)
@@ -106,6 +110,9 @@ void WarpZone_TraceBox(vector org, vector mi, vector ma, vector end, float nomon
 	}
 	WarpZone_MakeAllOther();
 	WarpZone_trace_endpos = o0 + (e0 - o0) * trace_fraction;
+	v_forward = vf;
+	v_right = vr;
+	v_up = vu;
 }
 
 void WarpZone_TraceLine(vector org, vector end, float nomonsters, entity forent)
@@ -116,6 +123,10 @@ void WarpZone_TraceLine(vector org, vector end, float nomonsters, entity forent)
 void WarpZone_TrailParticles(entity own, float eff, vector org, vector end)
 {
 	float frac, sol;
+	vector vf, vr, vu;
+	vf = v_forward;
+	vr = v_right;
+	vu = v_up;
 	WarpZone_MakeAllSolid();
 	sol = -1;
 	frac = 0;
@@ -135,6 +146,9 @@ void WarpZone_TrailParticles(entity own, float eff, vector org, vector end)
 		end = WarpZone_TransformOrigin(trace_ent, end);
 	}
 	WarpZone_MakeAllOther();
+	v_forward = vf;
+	v_right = vr;
+	v_up = vu;
 }
 
 vector WarpZone_TransformOrigin(entity wz, vector v)
