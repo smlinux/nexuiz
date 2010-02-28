@@ -1,7 +1,4 @@
 Open issues:
-- radius damage
-  - make warpzone entities radiusdamage-able, and do a new radius damage on the
-    opposite side
 - grep for TODO and FIXME
 
 Weapon support:
@@ -18,8 +15,7 @@ Weapon support:
 - hlac: YES
 - minstanex: YES
 - rifle: YES
-
-- fireball: PARTIAL (no radius damage, laser damage)
+- fireball: YES (BFG effect cannot work through warpzones by design, so it's not available through warpzones)
 
 - rocketlauncher: NO (guiding not working, trail bug)
 - hook: NO (hook beam, pull not working)

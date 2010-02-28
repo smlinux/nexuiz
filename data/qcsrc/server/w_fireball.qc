@@ -25,6 +25,7 @@ void W_Fireball_Explode (void)
 		modeleffect_spawn("models/sphere/sphere.md3", 0, 0, self.origin, '0 0 0', '0 0 0', '0 0 0', 0, cvar("g_balance_fireball_secondary_bfgradius"), 0.2, 0.05, 0.25);
 
 		// 2. bfg effect
+		// NOTE: this cannot be made warpzone aware by design. So, better intentionally ignore warpzones here.
 		for(e = findradius(self.origin, cvar("g_balance_fireball_secondary_bfgradius")); e; e = e.chain)
 		if(e != self.owner) if(e.takedamage == DAMAGE_AIM) if(e.classname != "player" || !self.owner || IsDifferentTeam(e, self))
 		{
@@ -68,26 +69,23 @@ void W_Fireball_LaserPlay(float dt, float dist, float damage, float edgedamage, 
 		return;
 
 	RandomSelection_Init();
-	for(e = findradius(self.origin, dist); e; e = e.chain)
+	for(e = WarpZone_FindRadius(self.origin, dist, TRUE); e; e = e.chain)
 	if(e != self.owner) if(e.takedamage == DAMAGE_AIM) if(e.classname != "player" || !self.owner || IsDifferentTeam(e, self))
 	{
 		p = e.origin;
 		p_x += e.mins_x + random() * (e.maxs_x - e.mins_x);
 		p_y += e.mins_y + random() * (e.maxs_y - e.mins_y);
 		p_z += e.mins_z + random() * (e.maxs_z - e.mins_z);
-		d = vlen(self.origin - p);
+		d = vlen(WarpZone_UnTransformOrigin(e, self.origin) - p);
 		if(d < dist)
 		{
-			traceline(p, self.origin, MOVE_NORMAL, e);
-			if(/* trace_startsolid || */ trace_fraction != 1)
-				continue;
 			e.fireball_impactvec = p;
 			RandomSelection_Add(e, 0, string_null, 1 / (1 + d), !Fire_IsBurning(e));
 		}
 	}
 	if(RandomSelection_chosen_ent)
 	{
-		d = vlen(self.origin - RandomSelection_chosen_ent.fireball_impactvec);
+		d = vlen(WarpZone_UnTransformOrigin(RandomSelection_chosen_ent, self.origin) - RandomSelection_chosen_ent.fireball_impactvec);
 		d = damage + (edgedamage - damage) * (d / dist);
 		Fire_AddDamage(RandomSelection_chosen_ent, self.realowner, d * burntime, burntime, self.projectiledeathtype | HITTYPE_BOUNCE);
 		//trailparticles(self, particleeffectnum("fireball_laser"), self.origin, RandomSelection_chosen_ent.fireball_impactvec);
