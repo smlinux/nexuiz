@@ -40,7 +40,7 @@ float WarpZone_Teleport(entity player)
 	v0 = player.velocity;
 	a0 = player.angles;
 
-	if(WarpZone_PlaneDist(self, o0) >= 0) // wrong side of the portal
+	if(WarpZone_PlaneDist(self, o0) >= 0) // wrong side of the trigger_warpzone
 		return 2;
 	// no failure, we simply don't want to teleport yet; TODO in
 	// this situation we may want to create a temporary clone
@@ -274,15 +274,96 @@ void WarpZonePosition_InitStep_FindTarget()
 
 void WarpZone_InitStep_UpdateTransform()
 {
-	if(!self.enemy || self.enemy.enemy != self || !self.aiment)
+	vector org, ang, norm, point;
+	float area;
+	vector tri, a, b, c, p, q, n;
+	float i_s, i_t, n_t;
+	string tex;
+
+	if(!self.enemy || self.enemy.enemy != self)
 	{
 		error("Invalid warp zone detected. Killed.");
 		return;
 	}
 
-	WarpZone_SetUp(self, self.aiment.origin, self.aiment.angles, self.enemy.aiment.origin, self.enemy.aiment.angles);
+	org = self.origin;
+	if(org == '0 0 0')
+		org = 0.5 * (self.mins + self.maxs);
 
-	// now enable touch
+	norm = point = '0 0 0';
+	area = 0;
+	for(i_s = 0; ; ++i_s)
+	{
+		tex = getsurfacetexture(self, i_s);
+		if not(tex)
+			break; // this is beyond the last one
+		if(tex != "textures/common/warpzone")
+			continue;
+		n_t = getsurfacenumtriangles(self, i_s);
+		for(i_t = 0; i_t < n_t; ++i_t)
+		{
+			tri = getsurfacetriangle(self, i_s, i_t);
+			a = getsurfacepoint(self, i_s, tri_x);
+			b = getsurfacepoint(self, i_s, tri_y);
+			c = getsurfacepoint(self, i_s, tri_z);
+			p = b - a;
+			q = c - a;
+			n =     '1 0 0' * (q_y * p_z - q_z * p_y)
+			+       '0 1 0' * (q_z * p_x - q_x * p_z)
+			+       '0 0 1' * (q_x * p_y - q_y * p_x);
+			area = area + vlen(n);
+			norm = norm + n;
+			point = point + vlen(n) * (a + b + c);
+		}
+	}
+	if(area > 0)
+	{
+		norm = norm * (1 / area);
+		point = point * (1 / (3 * area));
+		if(vlen(norm) < 0.99)
+		{
+			print("trigger_warpzone near ", vtos(self.aiment.origin), " is nonplanar. BEWARE.\n");
+			area = 0; // no autofixing in this case
+		}
+		norm = normalize(norm);
+	}
+
+	if(self.aiment)
+	{
+		org = self.aiment.origin;
+		ang = self.aiment.angles;
+		if(area > 0)
+		{
+			org = org - ((org - point) * norm) * norm; // project to plane
+			makevectors(ang);
+			if(norm * v_forward < 0)
+			{
+				print("Position target of trigger_warpzone near ", vtos(self.aiment.origin), " points into trigger_warpzone. BEWARE.\n");
+				norm = -1 * norm;
+			}
+			ang = vectoangles(norm, v_up); // keep rotation, but turn exactly against plane
+			ang_x = -ang_x;
+			if(norm * v_forward < 0.99)
+				print("trigger_warpzone near ", vtos(self.aiment.origin), " has been turned to match plane orientation (", vtos(self.aiment.angles), " -> ", vtos(ang), "\n");
+			if(vlen(org - self.aiment.origin) > 0.5)
+				print("trigger_warpzone near ", vtos(self.aiment.origin), " has been moved to match the plane (", vtos(self.aiment.origin), " -> ", vtos(org), ").\n");
+		}
+	}
+	else if(area > 0)
+	{
+		org = point;
+		ang = vectoangles(norm);
+		ang_x = -ang_x;
+	}
+	else
+		error("cannot infer origin/angles for this warpzone, please use a killtarget or a trigger_warpzone_position");
+
+	self.warpzone_origin = org;
+	self.warpzone_angles = ang;
+}
+void WarpZone_InitStep_FinalizeTransform()
+{
+	WarpZone_SetUp(self, self.warpzone_origin, self.warpzone_angles, self.enemy.warpzone_origin, self.enemy.warpzone_angles);
 	self.touch = WarpZone_Touch;
 }
 
@@ -329,6 +410,8 @@ void WarpZone_StartFrame()
 			WarpZonePosition_InitStep_FindTarget();
 		for(self = warpzone_first; self; self = self.warpzone_next)
 			WarpZone_InitStep_UpdateTransform();
+		for(self = warpzone_first; self; self = self.warpzone_next)
+			WarpZone_InitStep_FinalizeTransform();
 		self = e;
 	}
 	for(e = world; (e = nextent(e)); )

@@ -806,9 +806,17 @@ float SPA_LIGHTMAP0_TEXCOORDS = 5;
 float SPA_LIGHTMAP0_COLOR = 6;
 //builtin definitions:
 vector(entity e, float s, float n, float a) getsurfacepointattribute = #486;
-
 //description:
 //function to query extended information about a point on a certain surface
+
+//DP_QC_GETSURFACETRIANGLE
+//idea: div0
+//darkplaces implementation: div0
+//builtin definitions:
+float(entity e, float s) getsurfacenumtriangles = #628;
+vector(entity e, float s, float n) getsurfacetriangle = #629;
+//description:
+//function to query triangles of a surface
 
 //DP_QC_GETTAGINFO
 //idea: VorteX, LordHavoc (somebody else?)
