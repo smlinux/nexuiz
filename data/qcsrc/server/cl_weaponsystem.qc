@@ -145,7 +145,15 @@ void W_SetupShot_Dir_ProjectileSize(entity ent, vector s_forward, vector mi, vec
 	else
 		WarpZone_TraceLine(ent.origin + ent.view_ofs, ent.origin + ent.view_ofs + s_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, ent);
 	ent.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE;
+
+	vector vf, vr, vu;
+	vf = v_forward;
+	vr = v_right;
+	vu = v_up;
 	trueaimpoint = WarpZone_UnTransformOrigin(WarpZone_trace_transform, trace_endpos); // warpzone support
+	v_forward = vf;
+	v_right = vr;
+	v_up = vu;
 
 	// track max damage
 	if not(inWarmupStage) {
