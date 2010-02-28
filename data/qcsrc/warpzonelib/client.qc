@@ -16,6 +16,7 @@ void WarpZone_Read(float isnew)
 	self.maxs_x = ReadCoord();
 	self.maxs_y = ReadCoord();
 	self.maxs_z = ReadCoord();
+	self.scale = ReadByte() / 16;
 	self.enemy.oldorigin_x = ReadCoord();
 	self.enemy.oldorigin_y = ReadCoord();
 	self.enemy.oldorigin_z = ReadCoord();
@@ -46,7 +47,7 @@ vector WarpZone_Camera_camera_transform(vector org, vector ang)
 {
 	// a fixed camera view
 	trace_endpos = self.oldorigin;
-	makevectors(self.angles);
+	makevectors(self.avelocity);
 	return self.oldorigin;
 }
 
@@ -63,6 +64,7 @@ void WarpZone_Camera_Read(float isnew)
 	self.maxs_x = ReadCoord();
 	self.maxs_y = ReadCoord();
 	self.maxs_z = ReadCoord();
+	self.scale = ReadByte() / 16;
 	self.oldorigin_x = ReadCoord();
 	self.oldorigin_y = ReadCoord();
 	self.oldorigin_z = ReadCoord();
