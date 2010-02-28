@@ -64,7 +64,7 @@ void WarpZone_FixView()
 	}
 
 	// if we are near any warpzone planes - MOVE AWAY (work around nearclip)
-	float nearclip = 1;
+	float nearclip = 2;
 	e = WarpZone_Find(warpzone_fixview_origin - '1 1 1' * nearclip, warpzone_fixview_origin + '1 1 1' * nearclip);
 	if(e)
 	{
