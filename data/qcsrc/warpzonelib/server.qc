@@ -419,11 +419,15 @@ entity warpzone_first;
 entity warpzone_position_first;
 entity warpzone_camera_first;
 .entity warpzone_next;
-void spawnfunc_trigger_warpzone_position(void)
+void spawnfunc_misc_warpzone_position(void)
 {
 	// "target", "angles", "origin"
 	self.warpzone_next = warpzone_position_first;
 	warpzone_position_first = self;
+}
+void spawnfunc_trigger_warpzone_position(void)
+{
+	spawnfunc_misc_warpzone_position();
 }
 void spawnfunc_trigger_warpzone(void)
 {

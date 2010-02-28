@@ -1739,3 +1739,32 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
 model="models/weapons/g_fireball.md3"
 */
+
+/*QUAKED trigger_warpzone (1 .5 1) ?
+A warp zone, i.e. seamlessly connecting two parts of the map.
+One surface of this entity must have the common/warpzone shader - this will be the warp plane - the others should be common/trigger.
+Must target, or be targeted by, another trigger_warpzone with a congruent common/warpzone surface.
+Should target a target_position, or be targeted by a misc_warpzone_position.
+Should be thick enough to fit a player entity (i.e. 32 units), preferably even thicker.
+-------- KEYS --------
+target: must point to another trigger_warpzone, or...
+targetname: must be pointed to by another trigger_warpzone. Should be pointed to by a misc_warpzone_position entity, or...
+killtarget: should point to a target_position entity, or
+*/
+
+/*QUAKED misc_warpzone_position (1 .5 .25) (-8 -8 -8) (8 8 8) 
+Orientation specification for a trigger_warpzone
+-------- KEYS --------
+target: must point to a trigger_warpzone
+angles: must point perpendicular to the common/warpzone surface of the trigger_warpzone, and away from the trigger brush
+origin: must be on the common/warpzone surface of the trigger_warpzone
+*/
+
+/*QUAKED func_camera (1 .5 1) ?
+A camera, i.e. a surface that shows a view from another part of the map.
+One surface of this entity must have the common/camera shader, the others should be common/caulk.
+Must target a target_position that indicates the view to be shown (and whose angles also indicate the orientation of the view)
+-------- KEYS --------
+target: must point to a target_position
+*/
+
