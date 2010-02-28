@@ -44,10 +44,36 @@ void WarpZone_Read(float isnew)
 	setsize(self, self.mins, self.maxs);
 }
 
+float warpzone_fixingview;
+float warpzone_fixingview_drawexteriormodel;
+float warpzone_fixingview_sidespeed;
+float warpzone_fixingview_forwardspeed;
+void WarpZone_Inside()
+{
+	if(warpzone_fixingview)
+		return;
+	warpzone_fixingview = 1;
+	warpzone_fixingview_drawexteriormodel = cvar("r_drawexteriormodel");
+	warpzone_fixingview_sidespeed = cvar("cl_sidespeed");
+	warpzone_fixingview_forwardspeed = cvar("cl_forwardspeed");
+	cvar_set("r_drawexteriormodel", "0");
+	cvar_set("cl_sidespeed", ftos(warpzone_fixingview_sidespeed / 100)); // just keep a bit of it in case player gets stuck
+	cvar_set("cl_forwardspeed", ftos(warpzone_fixingview_forwardspeed / 100)); // just keep a bit of it in case player gets stuck
+}
+
+void WarpZone_Outside()
+{
+	if(!warpzone_fixingview)
+		return;
+	warpzone_fixingview = 0;
+	cvar_set("r_drawexteriormodel", ftos(warpzone_fixingview_drawexteriormodel));
+	cvar_set("cl_sidespeed", ftos(warpzone_fixingview_sidespeed));
+	cvar_set("cl_forwardspeed", ftos(warpzone_fixingview_forwardspeed));
+}
+
 float warpzone_saved;
 vector warpzone_saved_origin;
 vector warpzone_saved_angles;
-float warpzone_fixingview;
 void WarpZone_FixView()
 {
 	float pd;
@@ -62,7 +88,10 @@ void WarpZone_FixView()
 		warpzone_saved = 1;
 		warpzone_fixview_origin = WarpZone_TransformOrigin(e, warpzone_fixview_origin);
 		warpzone_fixview_angles = WarpZone_TransformVAngles(e, warpzone_fixview_angles);
+		WarpZone_Inside();
 	}
+	else
+		WarpZone_Outside();
 
 	// if we are near any warpzone planes - MOVE AWAY (work around nearclip)
 	float nearclip = 2;
@@ -81,19 +110,6 @@ void WarpZone_FixView()
 	{
 		R_SetView(VF_ORIGIN, warpzone_fixview_origin);
 		R_SetView(VF_ANGLES, warpzone_fixview_angles);
-		if(!warpzone_fixingview)
-		{
-			cvar_set("r_drawexteriormodel", "0"); // hide my own model
-			warpzone_fixingview = 1;
-		}
-	}
-	else
-	{
-		if(warpzone_fixingview)
-		{
-			cvar_set("r_drawexteriormodel", "1"); // hide my own model
-			warpzone_fixingview = 0;
-		}
 	}
 }
 void WarpZone_UnFixView()
@@ -105,4 +121,13 @@ void WarpZone_UnFixView()
 		R_SetView(VF_ORIGIN, warpzone_fixview_origin);
 		R_SetView(VF_ANGLES, warpzone_fixview_angles);
 	}
+}
+
+void WarpZone_Init()
+{
+}
+
+void WarpZone_Shutdown()
+{
+	WarpZone_Outside();
 }

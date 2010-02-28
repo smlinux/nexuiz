@@ -176,6 +176,8 @@ void CSQC_Init(void)
 	mi_center = (mi_min + mi_max) * 0.5;
 	mi_scale = mi_max - mi_min;
 	minimapname = strzone(minimapname);
+
+	WarpZone_Init();
 }
 
 // CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)
@@ -187,6 +189,8 @@ void CSQC_Shutdown(void)
 		return 0;
 #pragma TARGET fte
 #endif
+
+	WarpZone_Shutdown();
 
 	remove(teams);
 	remove(players);
