@@ -20,6 +20,28 @@ void WarpZone_Accumulator_Add(entity acc, entity wz)
 	acc.warpzone_shift = st;
 }
 
+.vector(vector, vector) camera_transform;
+var float autocvar_cl_warpzone_usetrace = 1;
+vector WarpZone_camera_transform(vector org, vector ang)
+{
+	vector vf, vr, vu;
+	vf = v_forward;
+	vr = v_right;
+	vu = v_up;
+	org = WarpZone_TransformOrigin(self, org);
+	vf = WarpZone_TransformVelocity(self, vf);
+	vr = WarpZone_TransformVelocity(self, vr);
+	vu = WarpZone_TransformVelocity(self, vu);
+	if(autocvar_cl_warpzone_usetrace)
+		traceline(self.warpzone_targetorigin, org, MOVE_NOMONSTERS, world);
+	else
+		trace_endpos = self.warpzone_targetorigin;
+	v_forward = vf;
+	v_right = vr;
+	v_up = vu;
+	return org;
+}
+
 void WarpZone_SetUp(entity e, vector my_org, vector my_ang, vector other_org, vector other_ang)
 {
 	e.warpzone_transform = AnglesTransform_Divide(other_ang, AnglesTransform_TurnDirectionFR(my_ang));
@@ -30,6 +52,7 @@ void WarpZone_SetUp(entity e, vector my_org, vector my_ang, vector other_org, ve
 	e.warpzone_targetangles = other_ang;
 	fixedmakevectors(my_ang); e.warpzone_forward = v_forward;
 	fixedmakevectors(other_ang); e.warpzone_targetforward = v_forward;
+	e.camera_transform = WarpZone_camera_transform;
 }
 
 .entity enemy;

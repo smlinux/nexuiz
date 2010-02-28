@@ -219,10 +219,6 @@ void WarpZone_InitStep_UpdateTransform()
 
 	// now enable touch
 	self.touch = WarpZone_Touch;
-
-	// our mins/maxs are set to the warpzone... so all we need:
-	self.flags |= FL_CAMERA;
-	self.view_ofs = self.warpzone_targetorigin;
 }
 
 float WarpZone_CheckProjectileImpact()

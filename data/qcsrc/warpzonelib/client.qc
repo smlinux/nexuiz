@@ -34,8 +34,6 @@ void WarpZone_Read(float isnew)
 
 	// engine currently wants this
 	self.avelocity = AnglesTransform_TurnDirectionFR(self.avelocity);
-
-	self.flags = FL_CAMERA;
 	self.drawmask = MASK_NORMAL;
 
 	// link me

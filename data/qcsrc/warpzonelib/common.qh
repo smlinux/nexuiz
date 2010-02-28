@@ -13,8 +13,6 @@ const void func_null(void); // never assign to this one please
 .vector warpzone_transform;
 void WarpZone_SetUp(entity e, vector my_org, vector my_ang, vector other_org, vector other_ang);
 
-float FL_CAMERA = 8192;
-
 float WarpZoneLib_BoxTouchesBrush(vector mi, vector ma, entity e, entity ig);
 vector WarpZoneLib_NearestPointOnBox(vector mi, vector ma, vector org);
 

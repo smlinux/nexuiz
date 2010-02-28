@@ -359,5 +359,6 @@ textures/common/warpzone
 		map textures/common/mirror1.tga // fully transparent
 		blendfunc blend
 	}
-	dp_refract 1 1 1 1
+	dp_camera
+	dp_refract 1 1 1 1 // makes the camera render like a refraction
 }
