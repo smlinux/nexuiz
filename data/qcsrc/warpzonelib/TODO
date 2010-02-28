@@ -10,6 +10,7 @@ Weapon support:
 - shotgun: YES
 - uzi: YES
 - grenadelauncher: YES
+- electro: YES
 - crylink: YES
 - nex: YES
 - hagar: YES
@@ -18,7 +19,6 @@ Weapon support:
 - minstanex: YES
 - rifle: YES
 
-- electro: PARTIAL (no combo detonation)
 - fireball: PARTIAL (no radius damage, laser damage)
 
 - rocketlauncher: NO (guiding not working, trail bug)

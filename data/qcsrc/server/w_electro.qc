@@ -9,22 +9,17 @@ void W_Plasma_Explode_Combo (void);
 void W_Plasma_TriggerCombo(vector org, float rad, entity own)
 {
 	local entity e;
-	e = findradius(org, rad);
+	e = WarpZone_FindRadius(org, rad, TRUE);
 	while (e)
 	{
 		if (e.classname == "plasma")
 		{
-			// see if there is line of sight to the combo ball
-			traceline(org, e.origin, MOVE_NOMONSTERS, e);
-			if (trace_fraction == 1 || trace_ent == e)
-			{
-				// change owner to whoever caused the combo explosion
-				e.owner = own;
-				e.takedamage = DAMAGE_NO;
-				e.classname = "plasma_chain";
-				e.think = W_Plasma_Explode_Combo;
-				e.nextthink = time + vlen(e.origin - org) / cvar("g_balance_electro_combo_speed"); // delay combo chains, looks cooler
-			}
+			// change owner to whoever caused the combo explosion
+			e.owner = own;
+			e.takedamage = DAMAGE_NO;
+			e.classname = "plasma_chain";
+			e.think = W_Plasma_Explode_Combo;
+			e.nextthink = time + vlen(e.WarpZone_findradius_dist) / cvar("g_balance_electro_combo_speed"); // delay combo chains, looks cooler
 		}
 		e = e.chain;
 	}
@@ -97,7 +92,8 @@ void W_Plasma_Damage (entity inflictor, entity attacker, float damage, float dea
 			self.owner = inflictor.owner;
 			self.classname = "plasma_chain";
 			self.think = W_Plasma_Explode_Combo;
-			self.nextthink = time + vlen(self.origin - inflictor.origin) / cvar("g_balance_electro_combo_speed"); // delay combo chains, looks cooler
+			self.nextthink = time + min(cvar("g_balance_electro_combo_radius"), vlen(self.origin - inflictor.origin)) / cvar("g_balance_electro_combo_speed"); // delay combo chains, looks cooler
+				//                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ bounding the length, because inflictor may be in a galaxy far far away (warpzones)
 		}
 		else
 		{
