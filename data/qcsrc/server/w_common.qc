@@ -64,7 +64,7 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 		trace_ent.railgunhit = TRUE;
 		trace_ent.railgunhitloc = end;
 		trace_ent.railgunhitsolidbackup = trace_ent.solid;
-		trace_ent.railgundistance = vlen(WarpZone_trace_endpos - start);
+		trace_ent.railgundistance = vlen(WarpZone_UnTransformOrigin(WarpZone_trace_transform, trace_endpos) - start);
 
 		// stop if this is a wall
 		if (trace_ent.solid == SOLID_BSP)
@@ -414,9 +414,7 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 			trace_fraction = 0;
 			fireBallisticBullet_trace_callback_ent = self;
 			fireBallisticBullet_trace_callback_eff = eff;
-			WarpZone_trace_callback = fireBallisticBullet_trace_callback;
-			WarpZone_TraceToss(self, oldself);
-			WarpZone_trace_callback = func_null;
+			WarpZone_TraceToss_ThroughZone(self, oldself, world, fireBallisticBullet_trace_callback);
 			self.velocity = v0;
 			self.gravity = g0;
 

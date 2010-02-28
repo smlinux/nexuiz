@@ -2,15 +2,17 @@
 REGISTER_WEAPON(NEX, w_nex, IT_CELLS, 7, WEP_FLAG_NORMAL | WEP_TYPE_HITSCAN, BOT_PICKUP_RATING_HIGH, "nex", "nex", "Nex");
 #else
 void SendCSQCNexBeamParticle() {
+	vector v;
+	v = WarpZone_UnTransformOrigin(WarpZone_trace_transform, trace_endpos);
 	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte(MSG_BROADCAST, TE_CSQC_NEXGUNBEAMPARTICLE);
 	
 	WriteCoord(MSG_BROADCAST, w_shotorg_x);
 	WriteCoord(MSG_BROADCAST, w_shotorg_y);
 	WriteCoord(MSG_BROADCAST, w_shotorg_z);
-	WriteCoord(MSG_BROADCAST, WarpZone_trace_endpos_x);
-	WriteCoord(MSG_BROADCAST, WarpZone_trace_endpos_y);
-	WriteCoord(MSG_BROADCAST, WarpZone_trace_endpos_z);
+	WriteCoord(MSG_BROADCAST, v_x);
+	WriteCoord(MSG_BROADCAST, v_y);
+	WriteCoord(MSG_BROADCAST, v_z);
 }
 
 void W_Nex_Attack (void)

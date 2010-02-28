@@ -80,11 +80,9 @@ void Draw_GrapplingHook()
 		rgb = '.3 1 .3';
 	}
 
-	WarpZone_trace_callback = Draw_GrapplingHook_trace_callback;
 	Draw_GrapplingHook_trace_callback_tex = tex;
 	Draw_GrapplingHook_trace_callback_rnd = random();
-	WarpZone_TraceLine(a, b, MOVE_NOMONSTERS, world);
-	WarpZone_trace_callback = func_null;
+	WarpZone_TraceBox_ThroughZone(a, '0 0 0', '0 0 0', b, MOVE_NOMONSTERS, world, world, Draw_GrapplingHook_trace_callback);
 	Draw_GrapplingHook_trace_callback_tex = string_null;
 }
 
