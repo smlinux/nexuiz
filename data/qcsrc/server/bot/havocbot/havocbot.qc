@@ -1285,7 +1285,7 @@ float havocbot_moveto(vector pos)
 	entity head;
 	for(head = world; (head = find(head, classname, "trigger_teleport")); )
 	{
-		if(BoxTouchesBrush(pos, pos, head, world))
+		if(WarpZoneLib_BoxTouchesBrush(pos, pos, head, world))
 		{
 			wp.wpflags |= WAYPOINTFLAG_TELEPORT;
 			self.lastteleporttime = 0;

@@ -44,7 +44,7 @@ float WarpZone_Teleport(entity player)
 	o1 = AnglesTransform_Apply(self.warpzone_transform, o0 - self.warpzone_origin) + self.enemy.warpzone_origin;
 	v1 = AnglesTransform_Apply(self.warpzone_transform, v0);
 	if(player.classname == "player")
-		a1 = AnglesTransform_Normalize(AnglesTransform_ApplyToVAngles(self.warpzone_transform, player.v_angle), TRUE);
+		a1 = WarpZone_TransformVAngles(self.warpzone_transform, player.v_angle);
 	else
 		a1 = AnglesTransform_ApplyToAngles(self.warpzone_transform, a0);
 
@@ -151,12 +151,13 @@ void WarpZone_InitStep_SpawnFunc()
 	//              the map, with another killtarget to designate its
 	//              orientation
 
-	// TODO nexuiz specific
 	string m;
 	m = self.model;
-	EXACTTRIGGER_INIT;
+	WarpZoneLib_ExactTrigger_Init();
 	setmodel(self, m);
-	Net_LinkEntity(self, FALSE, 0, WarpZone_Send);
+	self.SendEntity = WarpZone_Send;
+	self.SendFlags = 0xFFFFFF;
+	self.effects |= EF_NODEPTHTEST;
 }
 
 void WarpZone_InitStep_FindTarget()

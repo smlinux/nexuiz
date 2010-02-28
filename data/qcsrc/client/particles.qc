@@ -43,7 +43,7 @@ void Draw_PointParticles()
 		p_x += random() * sz_x;
 		p_y += random() * sz_y;
 		p_z += random() * sz_z;
-		if(BoxTouchesBrush(p, p, self, world))
+		if(WarpZoneLib_BoxTouchesBrush(p, p, self, world))
 		{
 			if(self.movedir != '0 0 0')
 			{

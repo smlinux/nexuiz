@@ -33,8 +33,6 @@ void WarpZone_Read(float isnew)
 
 	self.avelocity = AnglesTransform_TurnDirectionFR(self.avelocity);
 	self.warpzone_transform = AnglesTransform_Divide(self.avelocity, self.enemy.avelocity);
-	
-	print(vtos(AnglesTransform_Apply(self.warpzone_transform, '0 0 1')), "\n");
 
 	self.flags = FL_CAMERA;
 	self.drawmask = MASK_NORMAL;
@@ -56,7 +54,7 @@ void WarpZone_FixView()
 	for(e = world; (e = find(e, classname, "warpzone_to")); )
 	{
 		//print(sprintf("does %s (%s to %s) touch %s?\n", e.model, vtos(e.absmin), vtos(e.absmax), vtos(pmove_org)));
-		if(BoxTouchesBrush(pmove_org, pmove_org, e, world))
+		if(WarpZoneLib_BoxTouchesBrush(pmove_org, pmove_org, e, world))
 		{
 			warpzone_saved_origin = warpzone_fixview_origin;
 			warpzone_saved_angles = warpzone_fixview_angles;
@@ -64,7 +62,7 @@ void WarpZone_FixView()
 			roll = warpzone_fixview_angles_z;
 			warpzone_fixview_angles_z = 0;
 			warpzone_fixview_origin = AnglesTransform_Apply(e.warpzone_transform, warpzone_fixview_origin - e.enemy.oldorigin) + e.oldorigin;
-			warpzone_fixview_angles = AnglesTransform_Normalize(AnglesTransform_ApplyToVAngles(e.warpzone_transform, warpzone_fixview_angles), TRUE);
+			warpzone_fixview_angles = WarpZone_TransformVAngles(e.warpzone_transform, warpzone_fixview_angles);
 			warpzone_fixview_angles_z = roll;
 			R_SetView(VF_ORIGIN, warpzone_fixview_origin);
 			R_SetView(VF_ANGLES, warpzone_fixview_angles);

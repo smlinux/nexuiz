@@ -47,9 +47,12 @@ vector AnglesTransform_TurnDirectionFR(vector transform)
 	// changes in-direction to out-direction
 	//fixedmakevectors(transform);
 	//return fixedvectoangles2(-1 * v_forward, 1 * v_up);
-	transform_x = 180 - transform_x;
+	transform_x = -transform_x;
 	transform_y = 180 + transform_y;
 	transform_z = -transform_z;
+	// pitch: -s +c
+	// yaw:   -s -c
+	// roll:  -s +c
 	return transform;
 }
 
@@ -59,7 +62,7 @@ vector AnglesTransform_TurnDirectionFU(vector transform)
 	// changes in-direction to out-direction
 	//fixedmakevectors(transform);
 	//return fixedvectoangles2(-1 * v_forward, 1 * v_up);
-	transform_x = 180 - transform_x;
+	transform_x = -transform_x;
 	transform_y = 180 + transform_y;
 	transform_z = 180 - transform_z;
 	return transform;

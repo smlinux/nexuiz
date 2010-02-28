@@ -1700,8 +1700,8 @@ void precache()
 #define WRITESPECTATABLE(msg,statement) if(msg == MSG_ONE) { WRITESPECTATABLE_MSG_ONE(statement); } else statement float WRITESPECTATABLE_workaround = 0
 
 // WARNING: this kills the trace globals
-#define EXACTTRIGGER_TOUCH if not(BoxTouchesBrush(other.absmin, other.absmax, self, other)) return
-#define EXACTTRIGGER_INIT  InitSolidBSPTrigger(); self.solid = SOLID_TRIGGER
+#define EXACTTRIGGER_TOUCH if(WarpZoneLib_ExactTrigger_Touch()) return
+#define EXACTTRIGGER_INIT  WarpZoneLib_ExactTrigger_Init()
 
 #define INITPRIO_FIRST              0
 #define INITPRIO_GAMETYPE           0

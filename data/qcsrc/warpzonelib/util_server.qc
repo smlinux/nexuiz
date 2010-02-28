@@ -53,3 +53,30 @@ float WarpZoneLib_MoveOutOfSolid(entity e)
 	return TRUE;
 }
 
+float WarpZoneLib_ExactTrigger_Touch()
+{
+	return !WarpZoneLib_BoxTouchesBrush(other.absmin, other.absmax, self, other);
+}
+
+void WarpZoneLib_ExactTrigger_Init()
+{
+	if (self.movedir == '0 0 0')
+	if (self.angles != '0 0 0')
+	{
+		makevectors (self.angles);
+		self.movedir = v_forward;
+	}
+ 	if(self.model != "")
+ 	{
+ 		precache_model(self.model);
+ 		setmodel(self, self.model);
+ 	}
+	setorigin(self, self.origin);
+	if(self.scale)
+		setsize(self, self.mins * self.scale, self.maxs * self.scale);
+	else
+		setsize(self, self.mins, self.maxs);
+	self.movetype = MOVETYPE_NONE;
+	self.solid = SOLID_TRIGGER;
+	self.model = "";
+}
