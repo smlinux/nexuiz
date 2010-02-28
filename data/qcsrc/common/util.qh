@@ -77,10 +77,6 @@ float compressShortVector(vector vec);
 
 #ifndef MENUQC
 float CheckWireframeBox(entity forent, vector v0, vector dvx, vector dvy, vector dvz);
-
-void fixedmakevectors(vector a);
-#define fixedvectoangles2 vectoangles2
-#define fixedvectoangles vectoangles
 #endif
 
 string fixPriorityList(string pl, float from, float to, float subtract, float complete);
@@ -131,14 +127,6 @@ string rgb_to_hexcolor(vector rgb);
 
 float boxesoverlap(vector m1, vector m2, vector m3, vector m4);
 float boxinsidebox(vector smins, vector smaxs, vector bmins, vector bmaxs);
-
-#ifndef MENUQC
-vector AnglesTransform_Apply(vector transform, vector v);
-vector AnglesTransform_Multiply(vector t1, vector t2);
-vector AnglesTransform_Invert(vector transform);
-vector AnglesTransform_TurnDirection(vector transform);
-vector AnglesTransform_Divide(vector to_transform, vector from_transform);
-#endif
 
 typedef float(string s, vector size) textLengthUpToWidth_widthFunction_t;
 typedef float(string s) textLengthUpToLength_lenFunction_t;

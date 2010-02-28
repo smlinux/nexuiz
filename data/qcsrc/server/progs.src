@@ -6,6 +6,12 @@ pre-builtins.qh
 builtins.qh
 extensions.qh
 post-builtins.qh
+
+../warpzonelib/anglestransform.qh
+../warpzonelib/common.qh
+../warpzonelib/util_server.qh
+../warpzonelib/server.qh
+
 ../common/mathlib.qh
 constants.qh
 ../common/constants.qh
@@ -165,3 +171,8 @@ playerdemo.qc
 
 anticheat.qc
 cheats.qc
+
+../warpzonelib/anglestransform.qc
+../warpzonelib/common.qc
+../warpzonelib/util_server.qc
+../warpzonelib/server.qc

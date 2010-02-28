@@ -51,60 +51,8 @@ float DistributeEvenly_Get(float weight)
     return f;
 }
 
-void move_out_of_solid_expand(entity e, vector by)
-{
-    float eps = 0.0625;
-    tracebox(e.origin, e.mins - '1 1 1' * eps, e.maxs + '1 1 1' * eps, e.origin + by, MOVE_WORLDONLY, e);
-    if (trace_startsolid)
-        return;
-    if (trace_fraction < 1)
-    {
-        // hit something
-        // adjust origin in the other direction...
-        setorigin(e,e.origin - by * (1 - trace_fraction));
-    }
-}
+#define move_out_of_solid(e) WarpZoneLib_MoveOutOfSolid(e)
 
-float move_out_of_solid(entity e)
-{
-    vector o, m0, m1;
-
-    o = e.origin;
-    traceline(o, o, MOVE_WORLDONLY, e);
-    if (trace_startsolid)
-        return 0;
-
-    tracebox(o, e.mins, e.maxs, o, MOVE_WORLDONLY, e);
-    if (!trace_startsolid)
-        return 1;
-
-    m0 = e.mins;
-    m1 = e.maxs;
-    e.mins = '0 0 0';
-    e.maxs = '0 0 0';
-    move_out_of_solid_expand(e, '1 0 0' * m0_x);
-    e.mins_x = m0_x;
-    move_out_of_solid_expand(e, '1 0 0' * m1_x);
-    e.maxs_x = m1_x;
-    move_out_of_solid_expand(e, '0 1 0' * m0_y);
-    e.mins_y = m0_y;
-    move_out_of_solid_expand(e, '0 1 0' * m1_y);
-    e.maxs_y = m1_y;
-    move_out_of_solid_expand(e, '0 0 1' * m0_z);
-    e.mins_z = m0_z;
-    move_out_of_solid_expand(e, '0 0 1' * m1_z);
-    e.maxs_z = m1_z;
-    setorigin(e, e.origin);
-
-    tracebox(e.origin, e.mins, e.maxs, e.origin, MOVE_WORLDONLY, e);
-    if (trace_startsolid)
-    {
-        setorigin(e, o);
-        return 0;
-    }
-
-    return 1;
-}
 
 string STR_PLAYER = "player";
 string STR_SPECTATOR = "spectator";
