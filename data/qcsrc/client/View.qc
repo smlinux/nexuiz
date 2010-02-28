@@ -346,7 +346,7 @@ void CSQC_UpdateView(float w, float h)
 	entity e;
 	float fov;
 	float f, i, j;
-	vector v;
+	vector v, vo;
 
 	WaypointSprite_Load();
 
@@ -356,11 +356,29 @@ void CSQC_UpdateView(float w, float h)
 		myteam = GetPlayerColor(player_localentnum - 1);
 
 	ticrate = getstatf(STAT_MOVEVARS_TICRATE) * getstatf(STAT_MOVEVARS_TIMESCALE);
+	vo = '0 0 1' * getstati(STAT_VIEWHEIGHT);
+
+	// if view origin is INSIDE a warpzone, we are screwed and must
+	// temporarily move the origin to the other side of the warp
+	pmove_org = pmove_org + vo;
+	for(e = world; (e = find(e, classname, "warpzone_to")); )
+	{
+		//print(sprintf("does %s (%s to %s) touch %s?\n", e.model, vtos(e.absmin), vtos(e.absmax), vtos(pmove_org)));
+		if(BoxTouchesBrush(pmove_org, pmove_org, e, world))
+		{
+			pmove_org = AnglesTransform_Apply(e.warpzone_transform, pmove_org - e.enemy.oldorigin) + e.oldorigin;
+			input_angles = AnglesTransform_Multiply(e.warpzone_transform, input_angles);
+			R_SetView(VF_ORIGIN, pmove_org);
+			R_SetView(VF_ANGLES, input_angles);
+			break;
+		}
+	}
+	pmove_org = pmove_org - vo;
 
 	// Render the Scene
 	if(!intermission || !view_set)
 	{
-		view_origin = pmove_org + '0 0 1' * getstati(STAT_VIEWHEIGHT);
+		view_origin = pmove_org + vo;
 		view_angles = input_angles;
 		makevectors(view_angles);
 		view_forward = v_forward;

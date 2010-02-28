@@ -348,3 +348,16 @@ textures/common/lightgrid
 	surfaceparm lightgrid
 }
 
+
+textures/common/warpzone
+{
+	surfaceparm nolightmap
+	surfaceparm nonsolid
+	surfaceparm trans
+	surfaceparm nomarks
+	{
+		map textures/common/mirror1.tga // fully transparent
+		blendfunc blend
+	}
+	dp_refract 1 1 1 1
+}

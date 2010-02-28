@@ -211,3 +211,7 @@ string cdr(string s); // returns all but first word
 float matchacl(string acl, string str); // matches str against ACL acl (with entries +foo*, +foo, +*foo, +*foo*, and same with - for forbidding)
 float startsWith(string haystack, string needle);
 float startsWithNocase(string haystack, string needle);
+
+#ifndef MENUQC
+float BoxTouchesBrush(vector mi, vector ma, entity e, entity ig);
+#endif

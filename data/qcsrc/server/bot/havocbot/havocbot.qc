@@ -1285,22 +1285,11 @@ float havocbot_moveto(vector pos)
 	entity head;
 	for(head = world; (head = find(head, classname, "trigger_teleport")); )
 	{
-		entity s, o;
-		s = self;
-		o = other;
-		self = head;
-		other = spawn();
-		other.absmin = pos;
-		other.absmax = pos;
-		other.dphitcontentsmask = self.dphitcontentsmask;
-		if(ExactTriggerHit())
+		if(BoxTouchesBrush(pos, pos, head, world))
 		{
 			wp.wpflags |= WAYPOINTFLAG_TELEPORT;
-			s.lastteleporttime = 0;
+			self.lastteleporttime = 0;
 		}
-		remove(other);
-		self = s;
-		other = o;
 	}
 
 /*

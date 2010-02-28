@@ -839,6 +839,51 @@ void Ent_RandomSeed()
 	psrandom(s);
 }
 
+float FL_CAMERA = 8192;
+.vector warpzone_transform;
+void Ent_WarpZone(float isnew)
+{
+	if not(self.enemy)
+	{
+		self.enemy = spawn();
+		self.enemy.classname = "warpzone_from";
+	}
+	self.classname = "warpzone_to";
+	self.origin_x = ReadCoord();
+	self.origin_y = ReadCoord();
+	self.origin_z = ReadCoord();
+	self.modelindex = ReadShort();
+	self.mins_x = ReadCoord();
+	self.mins_y = ReadCoord();
+	self.mins_z = ReadCoord();
+	self.maxs_x = ReadCoord();
+	self.maxs_y = ReadCoord();
+	self.maxs_z = ReadCoord();
+	self.enemy.oldorigin_x = ReadCoord();
+	self.enemy.oldorigin_y = ReadCoord();
+	self.enemy.oldorigin_z = ReadCoord();
+	self.enemy.avelocity_x = ReadCoord();
+	self.enemy.avelocity_y = ReadCoord();
+	self.enemy.avelocity_z = ReadCoord();
+	self.oldorigin_x = ReadCoord();
+	self.oldorigin_y = ReadCoord();
+	self.oldorigin_z = ReadCoord();
+	self.avelocity_x = ReadCoord();
+	self.avelocity_y = ReadCoord();
+	self.avelocity_z = ReadCoord();
+
+	self.avelocity = AnglesTransform_TurnDirection(self.avelocity);
+	self.warpzone_transform = AnglesTransform_Divide(self.avelocity, self.enemy.avelocity);
+
+	self.flags = FL_CAMERA;
+	self.drawmask = MASK_NORMAL;
+
+	// link me
+	//setmodel(self, self.model);
+	setorigin(self, self.origin);
+	setsize(self, self.mins, self.maxs);
+}
+
 // CSQC_Ent_Update : Called every frame that the server has indicated an update to the SSQC / CSQC entity has occured.
 // The only parameter reflects if the entity is "new" to the client, meaning it just came into the client's PVS.
 void Ent_RadarLink();
@@ -896,6 +941,7 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		case ENT_CLIENT_WALL: Ent_Wall(); break;
 		case ENT_CLIENT_MODELEFFECT: Ent_ModelEffect(bIsNewEntity); break;
 		case ENT_CLIENT_TUBANOTE: Ent_TubaNote(bIsNewEntity); break;
+		case ENT_CLIENT_WARPZONE: Ent_WarpZone(bIsNewEntity); break;
 		default:
 			error(strcat("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n"));
 			break;

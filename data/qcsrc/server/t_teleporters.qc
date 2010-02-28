@@ -325,7 +325,7 @@ float warpzone_teleport(entity player)
 {
 	vector o0, a0, v0, o1, a1, v1;
 
-	o0 = player.origin;
+	o0 = player.origin + player.view_ofs;
 	v0 = player.velocity;
 	a0 = player.angles;
 
@@ -343,7 +343,7 @@ float warpzone_teleport(entity player)
 		a1 = AnglesTransform_Multiply(self.warpzone_transform, a0);
 
 	// put him inside solid
-	tracebox(o1, player.mins, player.maxs, o1, MOVE_NOMONSTERS, player);
+	tracebox(o1 - player.view_ofs, player.mins, player.maxs, o1 - player.view_ofs, MOVE_NOMONSTERS, player);
 	if(trace_startsolid)
 	{
 		print("in solid\n");
@@ -359,7 +359,7 @@ float warpzone_teleport(entity player)
 	//print(sprintf("warpzone: %f %f %f -> %f %f %f\n", o0_x, o0_y, o0_z, o1_x, o1_y, o1_z));
 
 	//o1 = trace_endpos;
-	TeleportPlayer(self, other, o1, a1, v1, '0 0 0', '0 0 0', TELEPORT_FLAGS_WARPZONE);
+	TeleportPlayer(self, other, o1 - player.view_ofs, a1, v1, '0 0 0', '0 0 0', TELEPORT_FLAGS_WARPZONE);
 
 	return 1;
 }
@@ -425,6 +425,40 @@ void warpzone_findtarget (void)
 	self.touch = warpzone_touch;
 }
 
+float warpzone_send(entity to, float sendflags)
+{
+	WriteByte(MSG_ENTITY, ENT_CLIENT_WARPZONE);
+
+	// we need THESE to render the warpzone (and cull properly)...
+	WriteCoord(MSG_ENTITY, self.origin_x);
+	WriteCoord(MSG_ENTITY, self.origin_y);
+	WriteCoord(MSG_ENTITY, self.origin_z);
+
+	WriteShort(MSG_ENTITY, self.modelindex);
+	WriteCoord(MSG_ENTITY, self.mins_x);
+	WriteCoord(MSG_ENTITY, self.mins_y);
+	WriteCoord(MSG_ENTITY, self.mins_z);
+	WriteCoord(MSG_ENTITY, self.maxs_x);
+	WriteCoord(MSG_ENTITY, self.maxs_y);
+	WriteCoord(MSG_ENTITY, self.maxs_z);
+
+	// we need THESE to calculate the proper transform
+	WriteCoord(MSG_ENTITY, self.warpzone_origin_x);
+	WriteCoord(MSG_ENTITY, self.warpzone_origin_y);
+	WriteCoord(MSG_ENTITY, self.warpzone_origin_z);
+	WriteCoord(MSG_ENTITY, self.warpzone_angles_x);
+	WriteCoord(MSG_ENTITY, self.warpzone_angles_y);
+	WriteCoord(MSG_ENTITY, self.warpzone_angles_z);
+	WriteCoord(MSG_ENTITY, self.enemy.warpzone_origin_x);
+	WriteCoord(MSG_ENTITY, self.enemy.warpzone_origin_y);
+	WriteCoord(MSG_ENTITY, self.enemy.warpzone_origin_z);
+	WriteCoord(MSG_ENTITY, self.enemy.warpzone_angles_x);
+	WriteCoord(MSG_ENTITY, self.enemy.warpzone_angles_y);
+	WriteCoord(MSG_ENTITY, self.enemy.warpzone_angles_z);
+
+	return TRUE;
+}
+
 void spawnfunc_trigger_warpzone(void)
 {
 	// warp zone entities must have:
@@ -435,9 +469,13 @@ void spawnfunc_trigger_warpzone(void)
 	//              the map, with another killtarget to designate its
 	//              orientation
 	
+	string m;
+	m = self.model;
 	EXACTTRIGGER_INIT;
+	setmodel(self, m);
 
 	self.use = trigger_teleport_use; // set team
 	InitializeEntity(self, warpzone_findtarget, INITPRIO_FINDTARGET);
 	InitializeEntity(self, warpzone_updatetransform, INITPRIO_LAST);
+	Net_LinkEntity(self, FALSE, 0, warpzone_send);
 }
