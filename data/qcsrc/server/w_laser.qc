@@ -104,7 +104,7 @@ void W_Laser_Attack2 (void) // gauntlet
 {
 	W_SetupShot (self, TRUE, 0, "weapons/gauntlet_fire.wav", cvar("g_balance_laser_primary_damage"));
 
-	traceline_antilag(self, w_shotorg, w_shotorg + w_shotdir * cvar("g_balance_laser_primary_radius"), FALSE, self, ANTILAG_LATENCY(self));
+	WarpZone_traceline_antilag(self, w_shotorg, w_shotorg + w_shotdir * cvar("g_balance_laser_primary_radius"), FALSE, self, ANTILAG_LATENCY(self));
 
 	pointparticles(particleeffectnum("laser_gauntlet"), w_shotorg + w_shotdir * cvar("g_balance_laser_primary_radius"), '0 0 0', 1);
 

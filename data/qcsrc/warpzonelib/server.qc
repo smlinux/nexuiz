@@ -225,3 +225,59 @@ void WarpZone_InitStep_UpdateTransform()
 	self.flags |= FL_CAMERA;
 	self.view_ofs = self.enemy.warpzone_origin;
 }
+
+void WarpZone_TraceBox(vector org, vector mi, vector ma, vector end, float nomonsters, entity forent)
+{
+	float frac, sol;
+	vector o0, e0;
+	o0 = org;
+	e0 = end;
+	WarpZone_MakeAllSolid();
+	sol = -1;
+	frac = 0;
+	for(;;)
+	{
+		tracebox(org, mi, ma, end, nomonsters, forent);
+		if(sol < 0)
+			sol = trace_startsolid;
+		if(trace_fraction >= 1)
+			break;
+		frac = trace_fraction = frac + (1 - frac) * trace_fraction;
+		if(trace_ent.classname != "trigger_warpzone")
+			break;
+		// we hit a warpzone... so, let's perform the trace after the warp again
+		org = AnglesTransform_Apply(trace_ent.warpzone_transform, trace_endpos - trace_ent.warpzone_origin) + trace_ent.enemy.warpzone_origin;
+		end = AnglesTransform_Apply(trace_ent.warpzone_transform, end - trace_ent.warpzone_origin) + trace_ent.enemy.warpzone_origin;
+	}
+	WarpZone_MakeAllOther();
+	WarpZone_trace_endpos = o0 + (e0 - o0) * trace_fraction;
+}
+
+void WarpZone_TraceLine(vector org, vector end, float nomonsters, entity forent)
+{
+	WarpZone_TraceBox(org, '0 0 0', '0 0 0', end, nomonsters, forent);
+}
+
+void WarpZone_TrailParticles(entity own, float eff, vector org, vector end)
+{
+	float frac, sol;
+	WarpZone_MakeAllSolid();
+	sol = -1;
+	frac = 0;
+	for(;;)
+	{
+		traceline(org, end, MOVE_NOMONSTERS, world);
+		if(sol < 0)
+			sol = trace_startsolid;
+		//print(vtos(org), " to ", vtos(trace_endpos), "\n");
+		trailparticles(own, eff, org, trace_endpos);
+		if(trace_fraction >= 1)
+			break;
+		if(trace_ent.classname != "trigger_warpzone")
+			break;
+		// we hit a warpzone... so, let's perform the trace after the warp again
+		org = AnglesTransform_Apply(trace_ent.warpzone_transform, trace_endpos - trace_ent.warpzone_origin) + trace_ent.enemy.warpzone_origin;
+		end = AnglesTransform_Apply(trace_ent.warpzone_transform, end - trace_ent.warpzone_origin) + trace_ent.enemy.warpzone_origin;
+	}
+	WarpZone_MakeAllOther();
+}

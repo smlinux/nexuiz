@@ -21,6 +21,7 @@ void W_GiveWeapon (entity e, float wep, string name)
 	self = oldself;
 }
 
+.float railgundistance;
 void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, float mindist, float maxdist, float halflifedist, float forcehalflifedist, float deathtype)
 {
 	local vector hitloc, force, endpoint, dir;
@@ -51,9 +52,9 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 	while (1)
 	{
 		if(self.antilag_debug)
-			traceline_antilag (self, start, end, FALSE, self, self.antilag_debug);
+			WarpZone_traceline_antilag (self, start, end, FALSE, self, self.antilag_debug);
 		else
-			traceline_antilag (self, start, end, FALSE, self, ANTILAG_LATENCY(self));
+			WarpZone_traceline_antilag (self, start, end, FALSE, self, ANTILAG_LATENCY(self));
 
 		// if it is world we can't hurt it so stop now
 		if (trace_ent == world || trace_fraction == 1)
@@ -63,6 +64,7 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 		trace_ent.railgunhit = TRUE;
 		trace_ent.railgunhitloc = end;
 		trace_ent.railgunhitsolidbackup = trace_ent.solid;
+		trace_ent.railgundistance = vlen(WarpZone_trace_endpos - start);
 
 		// stop if this is a wall
 		if (trace_ent.solid == SOLID_BSP)
@@ -117,9 +119,6 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 	{
 		// get the details we need to call the damage function
 		hitloc = ent.railgunhitloc;
-		ent.railgunhitloc = '0 0 0';
-		ent.railgunhitsolidbackup = SOLID_NOT;
-		ent.railgunhit = FALSE;
 
 		//for stats so that team hit will count as a miss
 		if(ent.flags & FL_CLIENT)
@@ -130,8 +129,8 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 		if(ent.team == self.team)
 			hit = 0;
 
-		f = ExponentialFalloff(mindist, maxdist, halflifedist, (ent.origin - start) * dir);
-		ffs = ExponentialFalloff(mindist, maxdist, forcehalflifedist, (ent.origin - start) * dir);
+		f = ExponentialFalloff(mindist, maxdist, halflifedist, ent.railgundistance);
+		ffs = ExponentialFalloff(mindist, maxdist, forcehalflifedist, ent.railgundistance);
 
 		// apply the damage
 		if (ent.takedamage)
@@ -140,6 +139,11 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 		// create a small explosion to throw gibs around (if applicable)
 		//setorigin (explosion, hitloc);
 		//RadiusDamage (explosion, self, 10, 0, 50, world, 300, deathtype);
+
+		ent.railgunhitloc = '0 0 0';
+		ent.railgunhitsolidbackup = SOLID_NOT;
+		ent.railgunhit = FALSE;
+		ent.railgundistance = 0;
 
 		// advance to the next entity
 		ent = findfloat(ent, railgunhit, TRUE);

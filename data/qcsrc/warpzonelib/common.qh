@@ -2,3 +2,7 @@ float FL_CAMERA = 8192;
 
 vector WarpZone_TransformVAngles(vector t, vector ang);
 float WarpZoneLib_BoxTouchesBrush(vector mi, vector ma, entity e, entity ig);
+
+entity WarpZone_Find(vector mi, vector ma);
+void WarpZone_MakeAllSolid();
+void WarpZone_MakeAllOther();

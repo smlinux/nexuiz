@@ -6,7 +6,7 @@ void WarpZone_Read(float isnew)
 		self.enemy = spawn();
 		self.enemy.classname = "warpzone_from";
 	}
-	self.classname = "warpzone_to";
+	self.classname = "trigger_warpzone";
 	self.origin_x = ReadCoord();
 	self.origin_y = ReadCoord();
 	self.origin_z = ReadCoord();
@@ -53,31 +53,27 @@ void WarpZone_FixView()
 	warpzone_saved_origin = warpzone_fixview_origin;
 	warpzone_saved_angles = warpzone_fixview_angles;
 
-	for(e = world; (e = find(e, classname, "warpzone_to")); )
+	e = WarpZone_Find(warpzone_fixview_origin, warpzone_fixview_origin);
+	if(e)
 	{
-		if(WarpZoneLib_BoxTouchesBrush(warpzone_fixview_origin, warpzone_fixview_origin, e, world))
-		{
-			warpzone_saved = 1;
-			warpzone_fixview_origin = AnglesTransform_Apply(e.warpzone_transform, warpzone_fixview_origin - e.enemy.oldorigin) + e.oldorigin;
-			warpzone_fixview_angles = WarpZone_TransformVAngles(e.warpzone_transform, warpzone_fixview_angles);
-			break;
-		}
+		warpzone_saved = 1;
+		warpzone_fixview_origin = AnglesTransform_Apply(e.warpzone_transform, warpzone_fixview_origin - e.enemy.oldorigin) + e.oldorigin;
+		warpzone_fixview_angles = WarpZone_TransformVAngles(e.warpzone_transform, warpzone_fixview_angles);
+		break;
 	}
 
 	// if we are near any warpzone planes - MOVE AWAY (work around nearclip)
 	float nearclip = 1;
-	for(e = world; (e = find(e, classname, "warpzone_to")); )
+	e = WarpZone_Find(warpzone_fixview_origin - '1 1 1' * nearclip, warpzone_fixview_origin + '1 1 1' * nearclip);
+	if(e)
 	{
-		if(WarpZoneLib_BoxTouchesBrush(warpzone_fixview_origin - '1 1 1' * nearclip, warpzone_fixview_origin + '1 1 1' * nearclip, e, world))
+		fixedmakevectors(e.enemy.avelocity);
+		pd = (warpzone_fixview_origin - e.enemy.oldorigin) * v_forward;
+		if(pd >= 0 && pd < nearclip)
 		{
-			fixedmakevectors(e.enemy.avelocity);
+			warpzone_saved = 1;
+			warpzone_fixview_origin = warpzone_fixview_origin + v_forward * (nearclip - pd);
 			pd = (warpzone_fixview_origin - e.enemy.oldorigin) * v_forward;
-			if(pd >= 0 && pd < nearclip)
-			{
-				warpzone_saved = 1;
-				warpzone_fixview_origin = warpzone_fixview_origin + v_forward * (nearclip - pd);
-				pd = (warpzone_fixview_origin - e.enemy.oldorigin) * v_forward;
-			}
 		}
 	}
 

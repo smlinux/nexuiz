@@ -307,7 +307,7 @@ A version of traceline that must be used by SOLID_SLIDEBOX things that want to h
 Additionally it moves players back into the past before the trace and restores them afterward.
 ==================
 */
-void tracebox_antilag_force (entity source, vector v1, vector mi, vector ma, vector v2, float nomonst, entity forent, float lag)
+void tracebox_antilag_force_wz (entity source, vector v1, vector mi, vector ma, vector v2, float nomonst, entity forent, float lag, float wz)
 {
 	local entity player;
 	local float oldsolid;
@@ -337,7 +337,10 @@ void tracebox_antilag_force (entity source, vector v1, vector mi, vector ma, vec
 	}
 
 	// do the trace
-	tracebox (v1, mi, ma, v2, nomonst, forent);
+	if(wz)
+		WarpZone_TraceBox (v1, mi, ma, v2, nomonst, forent);
+	else
+		tracebox (v1, mi, ma, v2, nomonst, forent);
 
 	// restore players to current positions
 	if (lag)
@@ -356,7 +359,7 @@ void tracebox_antilag_force (entity source, vector v1, vector mi, vector ma, vec
 }
 void traceline_antilag_force (entity source, vector v1, vector v2, float nomonst, entity forent, float lag)
 {
-	tracebox_antilag_force(source, v1, '0 0 0', '0 0 0', v2, nomonst, forent, lag);
+	tracebox_antilag_force_wz(source, v1, '0 0 0', '0 0 0', v2, nomonst, forent, lag, FALSE);
 }
 void traceline_antilag (entity source, vector v1, vector v2, float nomonst, entity forent, float lag)
 {
@@ -368,7 +371,23 @@ void tracebox_antilag (entity source, vector v1, vector mi, vector ma, vector v2
 {
 	if (cvar("g_antilag") != 2 || source.cvar_cl_noantilag)
 		lag = 0;
-	tracebox_antilag_force(source, v1, mi, ma, v2, nomonst, forent, lag);
+	tracebox_antilag_force_wz(source, v1, mi, ma, v2, nomonst, forent, lag, FALSE);
+}
+void WarpZone_traceline_antilag_force (entity source, vector v1, vector v2, float nomonst, entity forent, float lag)
+{
+	tracebox_antilag_force_wz(source, v1, '0 0 0', '0 0 0', v2, nomonst, forent, lag, TRUE);
+}
+void WarpZone_traceline_antilag (entity source, vector v1, vector v2, float nomonst, entity forent, float lag)
+{
+	if (cvar("g_antilag") != 2 || source.cvar_cl_noantilag)
+		lag = 0;
+	WarpZone_traceline_antilag_force(source, v1, v2, nomonst, forent, lag);
+}
+void WarpZone_tracebox_antilag (entity source, vector v1, vector mi, vector ma, vector v2, float nomonst, entity forent, float lag)
+{
+	if (cvar("g_antilag") != 2 || source.cvar_cl_noantilag)
+		lag = 0;
+	tracebox_antilag_force_wz(source, v1, mi, ma, v2, nomonst, forent, lag, TRUE);
 }
 
 float tracebox_inverted (vector v1, vector mi, vector ma, vector v2, float nomonsters, entity forent) // returns the number of traces done, for benchmarking

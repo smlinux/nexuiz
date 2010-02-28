@@ -8,3 +8,8 @@ void WarpZone_PostTeleportPlayer(entity pl);
 
 // server must also define a float called ENT_CLIENT_WARPZONE for the initial byte of WarpZone entities
 const float ENT_CLIENT_WARPZONE;
+
+vector WarpZone_trace_endpos; // UNtransformed endpos
+void WarpZone_TraceBox(vector org, vector min, vector max, vector end, float nomonsters, entity forent);
+void WarpZone_TraceLine(vector org, vector end, float nomonsters, entity forent);
+void WarpZone_TrailParticles(entity own, float eff, vector org, vector end);
