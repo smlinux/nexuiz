@@ -17,7 +17,8 @@ entity WarpZone_Find(vector mi, vector ma);
 void WarpZone_MakeAllSolid();
 void WarpZone_MakeAllOther();
 
-var void(void) WarpZone_trace_callback; // called after every trace
+var void(vector start, vector hit, vector end) WarpZone_trace_callback; // called after every trace
+vector WarpZone_trace_startpos; // start pos of the current segment (useful for the callback)
 vector WarpZone_trace_angles; // total angles accumulator
 vector WarpZone_trace_v_angle; // total v_angle accumulator
 vector WarpZone_trace_velocity; // total velocity
@@ -50,6 +51,8 @@ vector WarpZone_UnTransformVAngles(entity wz, vector v);
 
 // reference systems (chained warpzone transforms)
 void WarpZone_RefSys_Add(entity me, entity wz);
+void WarpZone_RefSys_AddIncrementally(entity me, entity ref);
+void WarpZone_RefSys_BeginAddingIncrementally(entity me, entity ref);
 vector WarpZone_RefSys_TransformOrigin(entity from, entity to, vector org);
 vector WarpZone_RefSys_TransformVelocity(entity from, entity to, vector vel);
 vector WarpZone_RefSys_TransformAngles(entity from, entity to, vector ang);

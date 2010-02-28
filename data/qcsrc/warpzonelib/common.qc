@@ -108,7 +108,7 @@ void WarpZone_TraceBox(vector org, vector mi, vector ma, vector end, float nomon
 	{
 		tracebox(org, mi, ma, end, nomonsters, forent);
 		if(WarpZone_trace_callback)
-			WarpZone_trace_callback();
+			WarpZone_trace_callback(org, trace_endpos, end);
 		if(sol < 0)
 			sol = trace_startsolid;
 		if(trace_fraction >= 1)
@@ -156,7 +156,7 @@ void WarpZone_TraceBox_ThroughZone(vector org, vector mi, vector ma, vector end,
 	{
 		tracebox(org, mi, ma, end, nomonsters, forent);
 		if(WarpZone_trace_callback)
-			WarpZone_trace_callback();
+			WarpZone_trace_callback(org, trace_endpos, end);
 		if(sol < 0)
 			sol = trace_startsolid;
 		if(trace_fraction >= 1)
@@ -208,7 +208,7 @@ void WarpZone_TraceToss(entity e, entity forent)
 	{
 		tracetoss(e, forent);
 		if(WarpZone_trace_callback)
-			WarpZone_trace_callback();
+			WarpZone_trace_callback(e.origin, trace_endpos, trace_endpos);
 		e.origin = trace_endpos;
 		dt = vlen(e.origin - o0) / vlen(e.velocity);
 		WarpZone_tracetoss_time += dt;
@@ -430,6 +430,14 @@ void WarpZone_Accumulator_Clear(entity acc)
 	acc.warpzone_transform = '0 0 0';
 	acc.warpzone_shift = '0 0 0';
 }
+void WarpZone_Accumulator_AddTransform(entity acc, vector t, vector s)
+{
+	vector t, st;
+	t = AnglesTransform_Multiply(t, acc.warpzone_transform);
+	st = AnglesTransform_Multiply_GetPostShift(t, s, acc.warpzone_transform, acc.warpzone_shift);
+	acc.warpzone_transform = t;
+	acc.warpzone_shift = st;
+}
 void WarpZone_Accumulator_Add(entity acc, entity wz)
 {
 	vector t, st;
@@ -460,6 +468,35 @@ void WarpZone_RefSys_Add(entity me, entity wz)
 	}
 	if(wz)
 		WarpZone_Accumulator_Add(me.WarpZone_refsys, wz);
+}
+.vector WarpZone_refsys_incremental_shift;
+.vector WarpZone_refsys_incremental_transform;
+void WarpZone_RefSys_AddIncrementally(entity me, entity ref)
+{
+	vector t, s;
+	if(me.WarpZone_refsys_incremental_transform == ref.WarpZone_refsys.warpzone_transform)
+	if(me.WarpZone_refsys_incremental_shift == ref.WarpZone_refsys.warpzone_shift)
+		return;
+	if(me.WarpZone_refsys.owner != me)
+	{
+		me.WarpZone_refsys = spawn();
+		me.WarpZone_refsys.classname = "warpzone_refsys";
+		me.WarpZone_refsys.owner = me;
+		me.WarpZone_refsys.think = WarpZone_RefSys_GC;
+		me.WarpZone_refsys.nextthink = time + 1;
+		WarpZone_Accumulator_Clear(me.WarpZone_refsys);
+	}
+	t = AnglesTransform_Invert(me.WarpZone_refsys_incremental_transform);
+	s = AnglesTransform_PrePostShift_GetPostShift(me.WarpZone_refsys_incremental_shift, t, '0 0 0');
+	WarpZone_Accumulator_AddTransform(me.WarpZone_refsys, t, s);
+	WarpZone_Accumulator_Add(me.WarpZone_refsys, ref);
+	me.WarpZone_refsys_incremental_shift = ref.WarpZone_refsys.warpzone_shift;
+	me.WarpZone_refsys_incremental_transform = ref.WarpZone_refsys.warpzone_transform;
+}
+void WarpZone_RefSys_BeginAddingIncrementally(entity me, entity ref)
+{
+	me.WarpZone_refsys_incremental_shift = ref.WarpZone_refsys.warpzone_shift;
+	me.WarpZone_refsys_incremental_transform = ref.WarpZone_refsys.warpzone_transform;
 }
 vector WarpZone_RefSys_TransformOrigin(entity from, entity to, vector org)
 {
@@ -498,6 +535,14 @@ entity WarpZone_RefSys_SpawnSameRefSys(entity me)
 	entity e;
 	e = spawn();
 	if(me.WarpZone_refsys)
-		WarpZone_RefSys_Add(e, me.WarpZone_refsys);
+	{
+		e.WarpZone_refsys = spawn();
+		e.WarpZone_refsys.classname = "warpzone_refsys";
+		e.WarpZone_refsys.owner = e;
+		e.WarpZone_refsys.think = WarpZone_RefSys_GC;
+		e.WarpZone_refsys.nextthink = time + 1;
+		e.WarpZone_refsys.warpzone_shift = me.WarpZone_refsys.warpzone_shift;
+		e.WarpZone_refsys.warpzone_transform = me.WarpZone_refsys.warpzone_transform;
+	}
 	return e;
 }

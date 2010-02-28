@@ -17,6 +17,6 @@ Weapon support:
 - minstanex: YES
 - rifle: YES
 - fireball: YES (BFG effect cannot work through warpzones by design, so it's not available through warpzones)
+- hook: YES
 
-- hook: NO (hook beam, pull not working)
 - tuba: NO (sound)

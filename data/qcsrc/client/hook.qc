@@ -29,6 +29,14 @@ void Draw_CylindricLine(vector from, vector to, float thickness, string texture,
 	R_EndPolygon();
 }
 
+string Draw_GrapplingHook_trace_callback_tex;
+float Draw_GrapplingHook_trace_callback_rnd;
+void Draw_GrapplingHook_trace_callback(vector start, vector hit, vector end)
+{
+	Draw_CylindricLine(hit, start, 8, Draw_GrapplingHook_trace_callback_tex, 0.25, Draw_GrapplingHook_trace_callback_rnd, '1 1 1', 1, DRAWFLAG_NORMAL);
+	Draw_GrapplingHook_trace_callback_rnd += 0.25 * vlen(hit - start) / 8;
+}
+
 void Draw_GrapplingHook()
 {
 	vector a, b;
@@ -71,7 +79,13 @@ void Draw_GrapplingHook()
 		tex = "particles/hook_green";
 		rgb = '.3 1 .3';
 	}
-	Draw_CylindricLine(b, a, 8, tex, 0.25, random(), '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	WarpZone_trace_callback = Draw_GrapplingHook_trace_callback;
+	Draw_GrapplingHook_trace_callback_tex = tex;
+	Draw_GrapplingHook_trace_callback_rnd = random();
+	WarpZone_TraceLine(a, b, MOVE_NOMONSTERS, world);
+	WarpZone_trace_callback = func_null;
+	Draw_GrapplingHook_trace_callback_tex = string_null;
 }
 
 void Net_GrapplingHook()

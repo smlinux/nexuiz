@@ -324,7 +324,7 @@ void endFireBallisticBullet()
 
 entity fireBallisticBullet_trace_callback_ent;
 float fireBallisticBullet_trace_callback_eff;
-void fireBallisticBullet_trace_callback()
+void fireBallisticBullet_trace_callback(vector start, vector hit, vector end)
 {
 	if(vlen(trace_endpos - fireBallisticBullet_trace_callback_ent.origin) > 16)
 		zcurveparticles_from_tracetoss(fireBallisticBullet_trace_callback_eff, fireBallisticBullet_trace_callback_ent.origin, trace_endpos, fireBallisticBullet_trace_callback_ent.velocity);
