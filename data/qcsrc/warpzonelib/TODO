@@ -1,0 +1,9 @@
+Open issues:
+- hitscan
+  - make function WarpZone_TraceDirection
+- radius damage
+  - make warpzone entities radiusdamage-able, and do a new radius damage on the
+    opposite side
+- fast projectiles
+  - when projectile touches, check if it had hit a warpzone... if it did, do
+    NOT detonate, but transform
