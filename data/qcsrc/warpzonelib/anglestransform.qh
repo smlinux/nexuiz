@@ -21,3 +21,7 @@ vector AnglesTransform_Normalize(vector t, float minimize_roll); // makes sure a
 
 vector AnglesTransform_ApplyToAngles(vector transform, vector v);
 vector AnglesTransform_ApplyToVAngles(vector transform, vector v);
+
+// transformed = (original - preshift) * transform + postshift
+vector AnglesTransform_Multiply_GetPreShift(vector sf0, vector t0, vector st0, vector sf1, vector t1, vector st1);
+vector AnglesTransform_Multiply_GetPostShift(vector sf0, vector t0, vector st0, vector sf1, vector t1, vector st1);

@@ -298,6 +298,7 @@ void WarpZone_FindRadius_Recurse(vector org, float rad,        vector org0,     
 	vector org_new;
 	vector org0_new;
 	vector shift0_new, transform_new, shift1_new;
+	vector transform_second;
 	vector p;
 	entity e, e0;
 	entity wz;
@@ -345,9 +346,11 @@ void WarpZone_FindRadius_Recurse(vector org, float rad,        vector org0,     
 		org0_new = WarpZone_TransformOrigin(e, org);
 		traceline(e.warpzone_targetorigin, org0_new, MOVE_NOMONSTERS, e);
 		org_new = trace_endpos;
-		transform_new = AnglesTransform_Multiply(transform, AnglesTransform_Invert(e.warpzone_transform));
-		shift0_new = e.warpzone_targetorigin;
-		shift1_new = AnglesTransform_Apply(transform, e.warpzone_origin - shift0) + shift1;
+
+		transform_second = AnglesTransform_Invert(e.warpzone_transform);
+		transform_new = AnglesTransform_Multiply(transform, transform_second);
+		shift0_new = AnglesTransform_Multiply_GetPreShift(shift0, transform, shift1, e.warpzone_targetorigin, transform_second, e.warpzone_origin);
+		shift1_new = AnglesTransform_Multiply_GetPostShift(shift0, transform, shift1, e.warpzone_targetorigin, transform_second, e.warpzone_origin);
 		WarpZone_FindRadius_Recurse(
 			org_new,
 			bound(0, rad - vlen(org_new - org0_new), rad - 8),
@@ -366,4 +369,84 @@ entity WarpZone_FindRadius(vector org, float rad, float needlineofsight)
 	for(e = e0; e; e = e.chain)
 		e.WarpZone_findradius_hit = 0;
 	return e0;
+}
+
+void WarpZone_Accumulator_Clear(entity acc)
+{
+	acc.warpzone_transform = '0 0 0';
+	acc.warpzone_origin = '0 0 0';
+	acc.warpzone_targetorigin = '0 0 0';
+}
+void WarpZone_Accumulator_Add(entity acc, entity wz)
+{
+	vector sf, t, st;
+	sf = AnglesTransform_Multiply_GetPreShift(wz.warpzone_origin, wz.warpzone_transform, wz.warpzone_targetorigin, acc.warpzone_origin, acc.warpzone_transform, acc.warpzone_targetorigin);
+	t = AnglesTransform_Multiply(wz.warpzone_transform, acc.warpzone_transform);
+	st = AnglesTransform_Multiply_GetPostShift(wz.warpzone_origin, wz.warpzone_transform, wz.warpzone_targetorigin, acc.warpzone_origin, acc.warpzone_transform, acc.warpzone_targetorigin);
+	acc.warpzone_origin = sf;
+	acc.warpzone_transform = t;
+	acc.warpzone_targetorigin = st;
+}
+
+.entity WarpZone_refsys;
+void WarpZone_RefSys_GC()
+{
+	// garbage collect unused reference systems
+	self.nextthink = time + 1;
+	if(self.owner.WarpZone_refsys != self)
+		remove(self);
+}
+void WarpZone_RefSys_Add(entity me, entity wz)
+{
+	if(me.WarpZone_refsys.owner != me)
+	{
+		me.WarpZone_refsys = spawn();
+		me.WarpZone_refsys.classname = "warpzone_refsys";
+		me.WarpZone_refsys.owner = me;
+		me.WarpZone_refsys.think = WarpZone_RefSys_GC;
+		me.WarpZone_refsys.nextthink = time + 1;
+		WarpZone_Accumulator_Clear(me.WarpZone_refsys);
+	}
+	if(wz)
+		WarpZone_Accumulator_Add(me.WarpZone_refsys, wz);
+}
+vector WarpZone_RefSys_TransformOrigin(entity from, entity to, vector org)
+{
+	if(from.WarpZone_refsys)
+		org = WarpZone_UnTransformOrigin(from.WarpZone_refsys, org);
+	if(to.WarpZone_refsys)
+		org = WarpZone_TransformOrigin(to.WarpZone_refsys, org);
+	return org;
+}
+vector WarpZone_RefSys_TransformVelocity(entity from, entity to, vector vel)
+{
+	if(from.WarpZone_refsys)
+		vel = WarpZone_UnTransformVelocity(from.WarpZone_refsys, vel);
+	if(to.WarpZone_refsys)
+		vel = WarpZone_TransformVelocity(to.WarpZone_refsys, vel);
+	return vel;
+}
+vector WarpZone_RefSys_TransformAngles(entity from, entity to, vector ang)
+{
+	if(from.WarpZone_refsys)
+		ang = WarpZone_UnTransformAngles(from.WarpZone_refsys, ang);
+	if(to.WarpZone_refsys)
+		ang = WarpZone_TransformAngles(to.WarpZone_refsys, ang);
+	return ang;
+}
+vector WarpZone_RefSys_TransformVAngles(entity from, entity to, vector ang)
+{
+	if(from.WarpZone_refsys)
+		ang = WarpZone_UnTransformVAngles(from.WarpZone_refsys, ang);
+	if(to.WarpZone_refsys)
+		ang = WarpZone_TransformVAngles(to.WarpZone_refsys, ang);
+	return ang;
+}
+entity WarpZone_RefSys_SpawnSameRefSys(entity me)
+{
+	entity e;
+	e = spawn();
+	if(me.WarpZone_refsys)
+		WarpZone_RefSys_Add(e, me.WarpZone_refsys);
+	return e;
 }

@@ -228,8 +228,8 @@ void W_Rocket_Think (void)
 				velspeed = vlen(self.velocity);
 
 				makevectors(self.owner.v_angle);
-				desireddir = v_forward;
-				desiredorigin = self.owner.origin + self.owner.view_ofs;
+				desireddir = WarpZone_RefSys_TransformVelocity(self.owner, self, v_forward);
+				desiredorigin = WarpZone_RefSys_TransformOrigin(self.owner, self, self.owner.origin + self.owner.view_ofs);
 				olddir = normalize(self.velocity);
 
 #if 0
@@ -298,7 +298,7 @@ void W_Rocket_Attack (void)
 	W_SetupShot_ProjectileSize (self, '-3 -3 -3', '3 3 3', FALSE, 5, "weapons/rocket_fire.wav", cvar("g_balance_rocketlauncher_damage"));
 	pointparticles(particleeffectnum("rocketlauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
-	missile = spawn ();
+	missile = WarpZone_RefSys_SpawnSameRefSys(self);
 	missile.owner = self;
 	self.lastrocket = missile;
 	if(cvar("g_balance_rocketlauncher_detonatedelay") >= 0)

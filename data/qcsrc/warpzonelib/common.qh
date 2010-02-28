@@ -45,3 +45,11 @@ vector WarpZone_UnTransformOrigin(entity wz, vector v);
 vector WarpZone_UnTransformVelocity(entity wz, vector v);
 vector WarpZone_UnTransformAngles(entity wz, vector v);
 vector WarpZone_UnTransformVAngles(entity wz, vector v);
+
+// reference systems (chained warpzone transforms)
+void WarpZone_RefSys_Add(entity me, entity wz);
+vector WarpZone_RefSys_TransformOrigin(entity from, entity to, vector org);
+vector WarpZone_RefSys_TransformVelocity(entity from, entity to, vector vel);
+vector WarpZone_RefSys_TransformAngles(entity from, entity to, vector ang);
+vector WarpZone_RefSys_TransformVAngles(entity from, entity to, vector ang);
+entity WarpZone_RefSys_SpawnSameRefSys(entity me);

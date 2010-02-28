@@ -86,7 +86,8 @@ float WarpZone_Teleport(entity player)
 	//print(sprintf("warpzone: %f %f %f -> %f %f %f\n", o0_x, o0_y, o0_z, o1_x, o1_y, o1_z));
 
 	//o1 = trace_endpos;
-	WarpZone_TeleportPlayer(self, other, o1 - player.view_ofs, a1, v1);
+	WarpZone_RefSys_Add(player, self);
+	WarpZone_TeleportPlayer(self, player, o1 - player.view_ofs, a1, v1);
 	WarpZone_StoreProjectileData(player);
 	player.warpzone_teleport_time = time;
 
@@ -237,6 +238,7 @@ float WarpZone_CheckProjectileImpact()
 	v0 = self.velocity;
 	a0 = self.angles;
 
+	// FIXME this code assumes the trace goes through just one warpzone.
 	// this approach transports the projectile at its full speed, but does
 	// not properly retain the projectile trail (but we can't retain it
 	// easily anyway without delaying the projectile by two frames, so who
@@ -263,6 +265,7 @@ float WarpZone_CheckProjectileImpact()
 			return FALSE;
 		}
 	}
+	WarpZone_RefSys_Add(self, wz);
 	WarpZone_StoreProjectileData(self);
 	self.warpzone_teleport_time = time;
 
