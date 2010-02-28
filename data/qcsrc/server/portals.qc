@@ -34,7 +34,9 @@ vector Portal_ApplyTransformToPlayerAngle(vector transform, vector vangle)
 	 */
 
 	// PLAYERS use different math
+#ifndef POSITIVE_PITCH_IS_DOWN
 	ang_x = -ang_x;
+#endif
 
 	//print("reference: ", vtos(AnglesTransform_ApplyToVAngles(transform, ang)), "\n");
 
@@ -73,7 +75,9 @@ vector Portal_ApplyTransformToPlayerAngle(vector transform, vector vangle)
 		//print("GOOD path: ", vtos(ang), "\n");
 	}
 
+#ifndef POSITIVE_PITCH_IS_DOWN
 	ang_x = -ang_x;
+#endif
 	ang_z = vangle_z;
 	return ang;
 }
@@ -99,7 +103,7 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 	// this now is INSIDE the plane... can't use that
 
 	// shift it out
-	fixedmakevectors(teleporter.enemy.angles);
+	fixedmakevectors(teleporter.enemy.mangle);
 
 	// first shift it ON the plane if needed
 	planeshift = ((teleporter.enemy.origin - to) * v_forward) + PlayerEdgeDistance(player, v_forward) + 1;
@@ -188,7 +192,7 @@ float Portal_FindSafeOrigin(entity portal)
 	o = portal.origin;
 	portal.mins = PL_MIN - SAFERNUDGE;
 	portal.maxs = PL_MAX + SAFERNUDGE;
-	fixedmakevectors(portal.angles);
+	fixedmakevectors(portal.mangle);
 	portal.origin += 16 * v_forward;
 	if(!move_out_of_solid(portal))
 	{
@@ -276,7 +280,7 @@ void Portal_Touch()
 		if(other.aiment.classname == "player")
 			if(IS_INDEPENDENT_PLAYER(other.aiment) || IS_INDEPENDENT_PLAYER(self.aiment))
 				return; // cannot go through someone else's portal
-	fixedmakevectors(self.angles);
+	fixedmakevectors(self.mangle);
 	g = frametime * '0 0 -1' * cvar("sv_gravity");
 	if(!Portal_WillHitPlane(other.origin, other.mins, other.maxs, other.velocity + g, self.origin, v_forward, self.maxs_x))
 		return;
@@ -351,7 +355,7 @@ void Portal_Disconnect(entity teleporter, entity destination)
 
 void Portal_Connect(entity teleporter, entity destination)
 {
-	teleporter.portal_transform = AnglesTransform_Divide(AnglesTransform_TurnDirectionFR(destination.angles), teleporter.angles);
+	teleporter.portal_transform = AnglesTransform_Divide(AnglesTransform_TurnDirectionFR(destination.mangle), teleporter.mangle);
 
 	teleporter.enemy = destination;
 	destination.enemy = teleporter;
@@ -389,7 +393,7 @@ void Portal_Remove(entity portal, float killed)
 	// makes the portal vanish
 	if(killed)
 	{
-		fixedmakevectors(portal.angles);
+		fixedmakevectors(portal.mangle);
 		sound(portal, CHAN_PROJECTILE, "porto/explode.wav", VOL_BASE, ATTN_NORM);
 		pointparticles(particleeffectnum("rocket_explode"), portal.origin + v_forward * 16, v_forward * 1024, 4);
 		remove(portal);
@@ -445,7 +449,7 @@ void Portal_Think()
 
 	g = frametime * '0 0 -1' * cvar("sv_gravity");
 
-	fixedmakevectors(self.angles);
+	fixedmakevectors(self.mangle);
 
 	FOR_EACH_PLAYER(e)
 	{
@@ -602,7 +606,9 @@ entity Portal_Spawn(entity own, vector org, vector ang)
 	portal.classname = "portal";
 	portal.aiment = own;
 	setorigin(portal, org);
+	portal.mangle = ang;
 	portal.angles = ang;
+	portal.angles_x = -portal.angles_x; // is a bmodel
 	portal.think = Portal_Think;
 	portal.nextthink = 0;
 	portal.portal_activatetime = time + 0.1;
