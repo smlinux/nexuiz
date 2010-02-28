@@ -435,11 +435,13 @@ void spawnfunc_trigger_warpzone(void)
 	//              the map, with another killtarget to designate its
 	//              orientation
 
+	if(!self.scale)
+		self.scale = self.modelscale;
+	if(!self.scale)
+		self.scale = 1;
 	string m;
 	m = self.model;
 	WarpZoneLib_ExactTrigger_Init();
-	if(!self.scale)
-		self.scale = self.modelscale;
  	if(m != "")
  	{
  		precache_model(m);
@@ -450,8 +452,6 @@ void spawnfunc_trigger_warpzone(void)
 		setsize(self, self.mins * self.scale, self.maxs * self.scale);
 	else
 		setsize(self, self.mins, self.maxs);
-	if(!self.scale)
-		self.scale = self.modelscale;
 	self.SendEntity = WarpZone_Send;
 	self.SendFlags = 0xFFFFFF;
 	self.effects |= EF_NODEPTHTEST;
@@ -462,6 +462,8 @@ void spawnfunc_func_camera(void)
 {
 	if(!self.scale)
 		self.scale = self.modelscale;
+	if(!self.scale)
+		self.scale = 1;
  	if(self.model != "")
  	{
  		precache_model(self.model);
