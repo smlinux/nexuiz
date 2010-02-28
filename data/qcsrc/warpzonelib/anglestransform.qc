@@ -93,10 +93,18 @@ vector AnglesTransform_Normalize(vector t, float minimize_roll)
 	return t;
 }
 
+vector AnglesTransform_ApplyToAngles(vector transform, vector v)
+{
+	//v_x = -v_x;
+	v = AnglesTransform_Multiply(transform, v);
+	//v_x = -v_x;
+	return v;
+}
+
 vector AnglesTransform_ApplyToVAngles(vector transform, vector v)
 {
 	v_x = -v_x;
-	v = AnglesTransform_ApplyToAngles(transform, v);
+	v = AnglesTransform_Multiply(transform, v);
 	v_x = -v_x;
 	return v;
 }

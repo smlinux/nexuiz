@@ -1,9 +1,38 @@
 vector WarpZone_TransformVAngles(vector t, vector ang)
 {
 	float roll;
+
 	roll = ang_z;
 	ang_z = 0;
-	ang = AnglesTransform_Normalize(AnglesTransform_ApplyToVAngles(t, ang), TRUE);
+
+	/*
+	vector vf, vr, vu;
+	print(vtos(ang), " input\n");
+	makevectors(ang);
+	vf = v_forward;
+	vr = v_right;
+	vu = v_up;
+	print(vtos(vf), " -> ", vtos(AnglesTransform_Apply(t, vf)), "\n");
+	print(vtos(vr), " -> ", vtos(AnglesTransform_Apply(t, vr)), "\n");
+	print(vtos(vu), " -> ", vtos(AnglesTransform_Apply(t, vu)), "\n");
+	*/
+
+	ang = AnglesTransform_ApplyToVAngles(t, ang);
+
+	/*
+	print(vtos(ang), " output\n");
+	makevectors(ang);
+	print(vtos(vf), " -> ", vtos(v_forward), "\n");
+	print(vtos(vr), " -> ", vtos(v_right), "\n");
+	print(vtos(vu), " -> ", vtos(v_up), "\n");
+	*/
+
+	ang = AnglesTransform_Normalize(ang, TRUE);
+
+	/*
+	print(vtos(ang), " output\n");
+	*/
+
 	ang_z = roll;
 	return ang;
 }

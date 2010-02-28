@@ -48,26 +48,44 @@ vector warpzone_saved_origin;
 vector warpzone_saved_angles;
 void WarpZone_FixView()
 {
+	float pd;
 	entity e;
-	float roll;
 	warpzone_saved = 0;
+	warpzone_saved_origin = warpzone_fixview_origin;
+	warpzone_saved_angles = warpzone_fixview_angles;
+
 	for(e = world; (e = find(e, classname, "warpzone_to")); )
 	{
-		//print(sprintf("does %s (%s to %s) touch %s?\n", e.model, vtos(e.absmin), vtos(e.absmax), vtos(pmove_org)));
-		if(WarpZoneLib_BoxTouchesBrush(pmove_org, pmove_org, e, world))
+		if(WarpZoneLib_BoxTouchesBrush(warpzone_fixview_origin, warpzone_fixview_origin, e, world))
 		{
-			warpzone_saved_origin = warpzone_fixview_origin;
-			warpzone_saved_angles = warpzone_fixview_angles;
 			warpzone_saved = 1;
-			roll = warpzone_fixview_angles_z;
-			warpzone_fixview_angles_z = 0;
 			warpzone_fixview_origin = AnglesTransform_Apply(e.warpzone_transform, warpzone_fixview_origin - e.enemy.oldorigin) + e.oldorigin;
 			warpzone_fixview_angles = WarpZone_TransformVAngles(e.warpzone_transform, warpzone_fixview_angles);
-			warpzone_fixview_angles_z = roll;
-			R_SetView(VF_ORIGIN, warpzone_fixview_origin);
-			R_SetView(VF_ANGLES, warpzone_fixview_angles);
 			break;
 		}
+	}
+
+	// if we are near any warpzone planes - MOVE AWAY (work around nearclip)
+	float nearclip = 2;
+	for(e = world; (e = find(e, classname, "warpzone_to")); )
+	{
+		if(WarpZoneLib_BoxTouchesBrush(warpzone_fixview_origin - '1 1 1' * nearclip, warpzone_fixview_origin + '1 1 1' * nearclip, e, world))
+		{
+			fixedmakevectors(e.enemy.avelocity);
+			pd = (warpzone_fixview_origin - e.enemy.oldorigin) * v_forward;
+			if(pd >= 0 && pd < nearclip)
+			{
+				warpzone_saved = 1;
+				warpzone_fixview_origin = warpzone_fixview_origin + v_forward * (nearclip - pd);
+				pd = (warpzone_fixview_origin - e.enemy.oldorigin) * v_forward;
+			}
+		}
+	}
+
+	if(warpzone_saved)
+	{
+		R_SetView(VF_ORIGIN, warpzone_fixview_origin);
+		R_SetView(VF_ANGLES, warpzone_fixview_angles);
 	}
 }
 void WarpZone_UnFixView()

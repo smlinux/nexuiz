@@ -352,7 +352,7 @@ textures/common/lightgrid
 textures/common/warpzone
 {
 	surfaceparm nolightmap
-	surfaceparm nonsolid
+	// surfaceparm nonsolid // no, it must be solid like trigger
 	surfaceparm trans
 	surfaceparm nomarks
 	{

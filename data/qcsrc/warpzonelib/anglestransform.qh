@@ -11,5 +11,5 @@ vector AnglesTransform_Divide(vector to_transform, vector from_transform);
 
 vector AnglesTransform_Normalize(vector t, float minimize_roll); // makes sure all angles are in their range: yaw in -180..180, pitch in -90..90, roll in -180..180 (or if minimize_roll is set, pitch in -180..180, roll in -90..90)
 
-#define AnglesTransform_ApplyToAngles(t,v) AnglesTransform_Multiply(t, v)
+vector AnglesTransform_ApplyToAngles(vector transform, vector v);
 vector AnglesTransform_ApplyToVAngles(vector transform, vector v);

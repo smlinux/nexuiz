@@ -52,14 +52,21 @@ float WarpZone_Teleport(entity player)
 	tracebox(o1 - player.view_ofs, player.mins, player.maxs, o1 - player.view_ofs, MOVE_NOMONSTERS, player);
 	if(trace_startsolid)
 	{
-		setorigin(player, o1 - player.view_ofs);
+		vector mi, ma;
+		mi = player.mins;
+		ma = player.maxs;
+		setsize(player, mi - player.view_ofs, ma - player.view_ofs);
+		setorigin(player, o1);
 		if(WarpZoneLib_MoveOutOfSolid(player))
 		{
+			o1 = player.origin;
+			setsize(player, mi, ma);
 			setorigin(player, o0);
-			o1 = player.origin + player.view_ofs;
 		}
 		else
 		{
+			print("would have to put player in solid, won't do that\n");
+			setsize(player, mi, ma);
 			setorigin(player, o0 - player.view_ofs);
 			return 0; // cannot fix
 		}
@@ -87,7 +94,8 @@ void WarpZone_Touch (void)
 	if(other.movetype == MOVETYPE_NONE)
 		return;
 
-	EXACTTRIGGER_TOUCH;
+	if(WarpZoneLib_ExactTrigger_Touch())
+		return;
 
 	e = self.enemy;
 	if(WarpZone_Teleport(other))
@@ -186,9 +194,6 @@ void WarpZone_InitStep_FindTarget()
 			self.enemy.enemy = self;
 		}
 	}
-
-	// now enable touch
-	self.touch = WarpZone_Touch;
 }
 
 void WarpZone_InitStep_UpdateTransform()
@@ -212,4 +217,7 @@ void WarpZone_InitStep_UpdateTransform()
 	// 3. store off a saved forward vector for plane hit decisions
 	fixedmakevectors(self.warpzone_angles);
 	self.warpzone_forward = v_forward;
+
+	// now enable touch
+	self.touch = WarpZone_Touch;
 }
