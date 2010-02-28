@@ -66,6 +66,6 @@ bgmscript.qc
 ../common/items.qc
 
 ../warpzonelib/anglestransform.qc
-../common/mathlib.qc
+../warpzonelib/mathlib.qc
 ../warpzonelib/common.qc
 ../warpzonelib/client.qc
