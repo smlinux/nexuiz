@@ -314,16 +314,22 @@ vector WarpZone_TransformAngles(entity wz, vector v)
 
 vector WarpZone_TransformVAngles(entity wz, vector ang)
 {
+#ifdef KEEP_ROLL
 	float roll;
-
 	roll = ang_z;
 	ang_z = 0;
+#endif
 
 	ang = AnglesTransform_ApplyToVAngles(wz.warpzone_transform, ang);
+
+#ifdef KEEP_ROLL
 	ang = AnglesTransform_Normalize(ang, TRUE);
 	ang = AnglesTransform_CancelRoll(ang);
-
 	ang_z = roll;
+#else
+	ang = AnglesTransform_Normalize(ang, FALSE);
+#endif
+
 	return ang;
 }
 

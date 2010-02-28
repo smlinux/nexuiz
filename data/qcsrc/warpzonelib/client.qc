@@ -74,6 +74,9 @@ void WarpZone_Outside()
 float warpzone_saved;
 vector warpzone_saved_origin;
 vector warpzone_saved_angles;
+#ifndef KEEP_ROLL
+var float autocvar_cl_rollkillspeed = 10;
+#endif
 void WarpZone_FixView()
 {
 	float pd;
@@ -81,6 +84,13 @@ void WarpZone_FixView()
 	warpzone_saved = 0;
 	warpzone_saved_origin = warpzone_fixview_origin;
 	warpzone_saved_angles = warpzone_fixview_angles;
+
+#ifndef KEEP_ROLL
+	if(autocvar_cl_rollkillspeed)
+		R_SetView(VF_CL_VIEWANGLES_Z, input_angles_z * max(0, (1 - frametime * autocvar_cl_rollkillspeed)));
+	else
+		R_SetView(VF_CL_VIEWANGLES_Z, 0);
+#endif
 
 	e = WarpZone_Find(warpzone_fixview_origin, warpzone_fixview_origin);
 	if(e)
