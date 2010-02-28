@@ -1,5 +1,6 @@
 Open issues:
 - grep for TODO and FIXME
+- when shot origin is inside warpzone, nex shot fails (and is even drawn in totally wrong direction). WHY? Possibly v_forward got lost?
 
 Weapon support:
 

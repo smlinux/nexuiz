@@ -98,6 +98,8 @@ void WarpZone_TraceBox(vector org, vector mi, vector ma, vector end, float nomon
 	vf = v_forward;
 	vr = v_right;
 	vu = v_up;
+	o0 = org;
+	e0 = end;
 	// if starting in warpzone, first transform
 	wz = WarpZone_Find(org + mi, org + ma);
 	if(wz)
@@ -109,8 +111,6 @@ void WarpZone_TraceBox(vector org, vector mi, vector ma, vector end, float nomon
 		WarpZone_trace_v_angle = WarpZone_TransformVAngles(wz, WarpZone_trace_v_angle);
 	}
 	WarpZone_MakeAllSolid();
-	o0 = org;
-	e0 = end;
 	sol = -1;
 	frac = 0;
 	for(;;)
@@ -155,6 +155,8 @@ void WarpZone_TraceBox_ThroughZone(vector org, vector mi, vector ma, vector end,
 	vf = v_forward;
 	vr = v_right;
 	vu = v_up;
+	o0 = org;
+	e0 = end;
 	// if starting in warpzone, first transform
 	wz = WarpZone_Find(org + mi, org + ma);
 	if(wz)
@@ -174,8 +176,6 @@ void WarpZone_TraceBox_ThroughZone(vector org, vector mi, vector ma, vector end,
 		WarpZone_trace_v_angle = WarpZone_TransformVAngles(wz, WarpZone_trace_v_angle);
 	}
 	WarpZone_MakeAllSolid();
-	o0 = org;
-	e0 = end;
 	sol = -1;
 	frac = 0;
 	for(;;)
@@ -227,6 +227,8 @@ void WarpZone_TraceToss(entity e, entity forent)
 	vf = v_forward;
 	vr = v_right;
 	vu = v_up;
+	v0 = e.velocity;
+	o0 = e.origin;
 	// if starting in warpzone, first transform
 	wz = WarpZone_Find(e.origin + e.mins, e.origin + e.maxs);
 	if(wz)
@@ -237,8 +239,6 @@ void WarpZone_TraceToss(entity e, entity forent)
 	WarpZone_MakeAllSolid();
 	g = cvar("sv_gravity") * e.gravity;
 	WarpZone_tracetoss_time = 0;
-	v0 = e.velocity;
-	o0 = e.origin;
 	for(;;)
 	{
 		tracetoss(e, forent);
