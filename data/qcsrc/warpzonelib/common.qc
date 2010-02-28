@@ -97,6 +97,8 @@ void WarpZone_TraceBox(vector org, vector mi, vector ma, vector end, float nomon
 	for(;;)
 	{
 		tracebox(org, mi, ma, end, nomonsters, forent);
+		if(WarpZone_trace_callback)
+			WarpZone_trace_callback();
 		if(sol < 0)
 			sol = trace_startsolid;
 		if(trace_fraction >= 1)
@@ -109,6 +111,7 @@ void WarpZone_TraceBox(vector org, vector mi, vector ma, vector end, float nomon
 		end = WarpZone_TransformOrigin(trace_ent, end);
 	}
 	WarpZone_MakeAllOther();
+	trace_startsolid = sol;
 	WarpZone_trace_endpos = o0 + (e0 - o0) * trace_fraction;
 	v_forward = vf;
 	v_right = vr;
@@ -120,21 +123,58 @@ void WarpZone_TraceLine(vector org, vector end, float nomonsters, entity forent)
 	WarpZone_TraceBox(org, '0 0 0', '0 0 0', end, nomonsters, forent);
 }
 
+void WarpZone_TraceToss(entity e, entity forent)
+{
+	float g, dt;
+	vector vf, vr, vu, v0, o0;
+	vf = v_forward;
+	vr = v_right;
+	vu = v_up;
+	WarpZone_MakeAllSolid();
+	g = cvar("sv_gravity") * e.gravity;
+	WarpZone_tracetoss_time = 0;
+	v0 = e.velocity;
+	o0 = e.origin;
+	for(;;)
+	{
+		tracetoss(e, forent);
+		if(WarpZone_trace_callback)
+			WarpZone_trace_callback();
+		e.origin = trace_endpos;
+		dt = vlen(e.origin - o0) / vlen(e.velocity);
+		WarpZone_tracetoss_time += dt;
+		e.velocity_z -= WarpZone_tracetoss_time * g;
+		if(trace_fraction >= 1)
+			break;
+		if(trace_ent.classname != "trigger_warpzone")
+			break;
+		// we hit a warpzone... so, let's perform the trace after the warp again
+		e.origin = WarpZone_TransformOrigin(trace_ent, e.origin);
+		e.velocity = WarpZone_TransformVelocity(trace_ent, e.velocity);
+	}
+	WarpZone_MakeAllOther();
+	v_forward = vf;
+	v_right = vr;
+	v_up = vu;
+	WarpZone_tracetoss_velocity = e.velocity;
+	e.velocity = v0;
+	e.origin = o0;
+	WarpZone_trace_endpos = e.origin + e.velocity * WarpZone_tracetoss_time;
+	WarpZone_trace_endpos_z -= 0.5 * g * WarpZone_tracetoss_time * WarpZone_tracetoss_time;
+}
+
 void WarpZone_TrailParticles(entity own, float eff, vector org, vector end)
 {
-	float frac, sol;
+	float frac;
 	vector vf, vr, vu;
 	vf = v_forward;
 	vr = v_right;
 	vu = v_up;
 	WarpZone_MakeAllSolid();
-	sol = -1;
 	frac = 0;
 	for(;;)
 	{
 		traceline(org, end, MOVE_NOMONSTERS, world);
-		if(sol < 0)
-			sol = trace_startsolid;
 		//print(vtos(org), " to ", vtos(trace_endpos), "\n");
 		trailparticles(own, eff, org, trace_endpos);
 		if(trace_fraction >= 1)

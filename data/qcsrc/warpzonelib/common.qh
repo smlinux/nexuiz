@@ -6,9 +6,13 @@ entity WarpZone_Find(vector mi, vector ma);
 void WarpZone_MakeAllSolid();
 void WarpZone_MakeAllOther();
 
+var void(void) WarpZone_trace_callback; // called after every trace
 vector WarpZone_trace_endpos; // UNtransformed endpos
+vector WarpZone_tracetoss_velocity; // ending velocity of a tracetoss (post-transform)
+float WarpZone_tracetoss_time; // duration of toss (approximate)
 void WarpZone_TraceBox(vector org, vector min, vector max, vector end, float nomonsters, entity forent);
 void WarpZone_TraceLine(vector org, vector end, float nomonsters, entity forent);
+void WarpZone_TraceToss(entity e, entity forent);
 void WarpZone_TrailParticles(entity own, float eff, vector org, vector end);
 
 vector WarpZone_TransformOrigin(entity wz, vector v);
