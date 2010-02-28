@@ -2,9 +2,6 @@ Open issues:
 - radius damage
   - make warpzone entities radiusdamage-able, and do a new radius damage on the
     opposite side
-- fast projectiles
-  - when projectile touches, check if it had hit a warpzone... if it did, do
-    NOT detonate, but transform
 - grep for TODO and FIXME
 
 Weapon support:
@@ -15,15 +12,15 @@ Weapon support:
 - porto: YES (bwahahahaha)
 - minstanex: YES
 - rifle: YES
+- crylink: YES
 
+- laser: PARTIAL (no radius damage)
 - grenadelauncher: PARTIAL (no radius damage)
 - electro: PARTIAL (no radius damage)
+- hagar: PARTIAL (no radius damage)
+- hlac: PARTIAL (no radius damage)
 - fireball: PARTIAL (no radius damage, laser damage)
 
-- laser: NO (no radius damage, fast projectile)
-- crylink: NO (fast projectile)
-- hagar: NO (fast projectile)
-- rocketlauncher: NO (guiding not working)
+- rocketlauncher: NO (guiding not working, trail bug)
 - hook: NO (no radius damage, hook beam, pull not working)
-- hlac: NO (no radius damage, fast projectile)
 - tuba: NO (no radius damage, sound)
