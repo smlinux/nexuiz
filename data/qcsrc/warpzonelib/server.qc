@@ -160,67 +160,6 @@ float WarpZone_Send(entity to, float sendflags)
 	return TRUE;
 }
 
-void WarpZone_InitStep_SpawnFunc()
-{
-	// warp zone entities must have:
-	// "killtarget" pointing to a target_position with a direction arrow
-	//              that points AWAY from the warp zone, and that is inside
-	//              the warp zone trigger
-	// "target"     pointing to an identical warp zone at another place in
-	//              the map, with another killtarget to designate its
-	//              orientation
-
-	string m;
-	m = self.model;
-	WarpZoneLib_ExactTrigger_Init();
-	setmodel(self, m);
-	self.SendEntity = WarpZone_Send;
-	self.SendFlags = 0xFFFFFF;
-	self.effects |= EF_NODEPTHTEST;
-}
-
-void WarpZone_InitStep_FindTarget()
-{
-	entity e;
-
-	if(self.killtarget == "")
-	{
-		objerror("Warp zone with no killtarget");
-		return;
-	}
-	self.aiment = find(world, targetname, self.killtarget);
-	if(self.aiment == world)
-	{
-		objerror("Warp zone with nonexisting killtarget");
-		return;
-	}
-
-	// this way only one of the two ents needs to target
-	if(self.target != "")
-	{
-		e = find(world, targetname, self.target);
-		if(e)
-		{
-			self.enemy = e;
-			self.enemy.enemy = self;
-		}
-	}
-}
-
-void WarpZone_InitStep_UpdateTransform()
-{
-	if(!self.enemy || self.enemy.enemy != self)
-	{
-		objerror("Invalid warp zone detected. Killed.");
-		return;
-	}
-
-	WarpZone_SetUp(self, self.aiment.origin, self.aiment.angles, self.enemy.aiment.origin, self.enemy.aiment.angles);
-
-	// now enable touch
-	self.touch = WarpZone_Touch;
-}
-
 float WarpZone_CheckProjectileImpact()
 {
 	// if self hit a warpzone, abort
@@ -264,12 +203,6 @@ float WarpZone_CheckProjectileImpact()
 
 	return TRUE;
 }
-void WarpZone_StartFrame()
-{
-	entity e;
-	for(e = world; (e = nextent(e)); )
-		WarpZone_StoreProjectileData(e);
-}
 float WarpZone_Projectile_Touch()
 {
 	if(other.classname == "trigger_warpzone")
@@ -287,4 +220,117 @@ float WarpZone_Projectile_Touch()
 	}
 
 	return FALSE;
+}
+
+void WarpZone_InitStep_FindTarget()
+{
+	entity e;
+
+	if(self.killtarget != "")
+	{
+		self.aiment = find(world, targetname, self.killtarget);
+		if(self.aiment == world)
+		{
+			error("Warp zone with nonexisting killtarget");
+			return;
+		}
+	}
+
+	// this way only one of the two ents needs to target
+	if(self.target != "")
+	{
+		e = find(world, targetname, self.target);
+		if(e)
+		{
+			self.enemy = e;
+			self.enemy.enemy = self;
+		}
+	}
+}
+
+void WarpZonePosition_InitStep_FindTarget()
+{
+	entity e;
+
+	if(self.target == "")
+	{
+		error("Warp zone position with no target");
+		return;
+	}
+	self.enemy = find(world, targetname, self.target);
+	if(self.enemy == world)
+	{
+		error("Warp zone position with nonexisting target");
+		return;
+	}
+	if(self.enemy.aiment)
+	{
+		// already is positioned
+		error("Warp zone position targeting already oriented warpzone");
+		return;
+	}
+	self.enemy.aiment = self;
+}
+
+void WarpZone_InitStep_UpdateTransform()
+{
+	if(!self.enemy || self.enemy.enemy != self || !self.aiment)
+	{
+		error("Invalid warp zone detected. Killed.");
+		return;
+	}
+
+	WarpZone_SetUp(self, self.aiment.origin, self.aiment.angles, self.enemy.aiment.origin, self.enemy.aiment.angles);
+
+	// now enable touch
+	self.touch = WarpZone_Touch;
+}
+
+float warpzone_initialized;
+entity warpzone_first;
+entity warpzone_position_first;
+.entity warpzone_next;
+void spawnfunc_trigger_warpzone_position(void)
+{
+	// "target", "angles", "origin"
+	self.warpzone_next = warpzone_position_first;
+	warpzone_position_first = self;
+}
+void spawnfunc_trigger_warpzone(void)
+{
+	// warp zone entities must have:
+	// "killtarget" pointing to a target_position with a direction arrow
+	//              that points AWAY from the warp zone, and that is inside
+	//              the warp zone trigger
+	// "target"     pointing to an identical warp zone at another place in
+	//              the map, with another killtarget to designate its
+	//              orientation
+
+	string m;
+	m = self.model;
+	WarpZoneLib_ExactTrigger_Init();
+	setmodel(self, m);
+	self.SendEntity = WarpZone_Send;
+	self.SendFlags = 0xFFFFFF;
+	self.effects |= EF_NODEPTHTEST;
+	self.warpzone_next = warpzone_first;
+	warpzone_first = self;
+}
+void WarpZone_StartFrame()
+{
+	entity e;
+	if(warpzone_initialized == 0)
+	{
+		warpzone_initialized = 1;
+		e = self;
+		for(self = warpzone_first; self; self = self.warpzone_next)
+			WarpZone_InitStep_FindTarget();
+		for(self = warpzone_position_first; self; self = self.warpzone_next)
+			WarpZonePosition_InitStep_FindTarget();
+		for(self = warpzone_first; self; self = self.warpzone_next)
+			WarpZone_InitStep_UpdateTransform();
+		self = e;
+	}
+	for(e = world; (e = nextent(e)); )
+		WarpZone_StoreProjectileData(e);
 }

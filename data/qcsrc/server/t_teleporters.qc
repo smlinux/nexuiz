@@ -307,10 +307,3 @@ void WarpZone_PostTeleportPlayer_Callback(entity pl)
 		pl.oldvelocity = pl.velocity;
 	}
 }
-
-void spawnfunc_trigger_warpzone(void)
-{
-	WarpZone_InitStep_SpawnFunc();
-	InitializeEntity(self, WarpZone_InitStep_FindTarget, INITPRIO_FINDTARGET);
-	InitializeEntity(self, WarpZone_InitStep_UpdateTransform, INITPRIO_LAST);
-}
