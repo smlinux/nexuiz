@@ -306,6 +306,12 @@ void spawnfunc_trigger_teleport (void)
 
 void warpzone_updatetransform()
 {
+	if(!self.enemy || self.enemy.enemy != self)
+	{
+		objerror("Invalid warp zone detected. Killed.");
+		return;
+	}
+
 	// 1. update this, and the enemy, warp zone
 	self.warpzone_origin = self.aiment.origin;
 	self.warpzone_angles = self.aiment.angles;
@@ -405,17 +411,7 @@ void warpzone_touch (void)
 }
 void warpzone_findtarget (void)
 {
-	if(self.target == "")
-	{
-		objerror("Warp zone with no target");
-		return;
-	}
-	self.enemy = find(world, targetname, self.target);
-	if(self.enemy == world)
-	{
-		objerror("Warp zone with nonexisting target");
-		return;
-	}
+	entity e;
 
 	if(self.killtarget == "")
 	{
@@ -427,6 +423,17 @@ void warpzone_findtarget (void)
 	{
 		objerror("Warp zone with nonexisting killtarget");
 		return;
+	}
+
+	// this way only one of the two ents needs to target
+	if(self.target != "")
+	{
+		e = find(world, targetname, self.target);
+		if(e)
+		{
+			self.enemy = e;
+			self.enemy.enemy = self;
+		}
 	}
 
 	// now enable touch
