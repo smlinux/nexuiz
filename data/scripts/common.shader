@@ -348,7 +348,6 @@ textures/common/lightgrid
 	surfaceparm lightgrid
 }
 
-
 textures/common/warpzone
 {
 	surfaceparm nolightmap
@@ -361,4 +360,13 @@ textures/common/warpzone
 	}
 	dp_camera
 	dp_refract 1 1 1 1 // makes the camera render like a refraction
+}
+
+textures/common/camera
+{
+	{
+		map textures/common/mirror1.tga // fully transparent
+		blendfunc blend
+	}
+	dp_camera
 }

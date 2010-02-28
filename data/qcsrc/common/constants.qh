@@ -97,6 +97,7 @@ const float ENT_CLIENT_SPIDERBOT = 21;
 const float ENT_CLIENT_MODELEFFECT = 22;
 const float ENT_CLIENT_TUBANOTE = 23;
 const float ENT_CLIENT_WARPZONE = 24;
+const float ENT_CLIENT_WARPZONE_CAMERA = 25;
 
 const float ENT_CLIENT_TURRET = 40;
 

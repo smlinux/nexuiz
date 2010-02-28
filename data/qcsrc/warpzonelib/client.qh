@@ -1,4 +1,5 @@
 void WarpZone_Read(float bIsNewEntity);
+void WarpZone_Camera_Read(float bIsNewEntity);
 
 vector warpzone_fixview_origin;
 vector warpzone_fixview_angles;

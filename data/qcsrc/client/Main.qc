@@ -901,6 +901,7 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		case ENT_CLIENT_MODELEFFECT: Ent_ModelEffect(bIsNewEntity); break;
 		case ENT_CLIENT_TUBANOTE: Ent_TubaNote(bIsNewEntity); break;
 		case ENT_CLIENT_WARPZONE: WarpZone_Read(bIsNewEntity); break;
+		case ENT_CLIENT_WARPZONE_CAMERA: WarpZone_Camera_Read(bIsNewEntity); break;
 		default:
 			error(strcat("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n"));
 			break;

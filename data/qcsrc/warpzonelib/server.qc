@@ -142,6 +142,7 @@ float WarpZone_Send(entity to, float sendflags)
 	WriteCoord(MSG_ENTITY, self.maxs_x);
 	WriteCoord(MSG_ENTITY, self.maxs_y);
 	WriteCoord(MSG_ENTITY, self.maxs_z);
+	WriteByte(MSG_ENTITY, bound(1, self.scale * 16, 255));
 
 	// we need THESE to calculate the proper transform
 	WriteCoord(MSG_ENTITY, self.warpzone_origin_x);
@@ -156,6 +157,35 @@ float WarpZone_Send(entity to, float sendflags)
 	WriteCoord(MSG_ENTITY, self.warpzone_targetangles_x);
 	WriteCoord(MSG_ENTITY, self.warpzone_targetangles_y);
 	WriteCoord(MSG_ENTITY, self.warpzone_targetangles_z);
+
+	return TRUE;
+}
+
+float WarpZone_Camera_Send(entity to, float sendflags)
+{
+	WriteByte(MSG_ENTITY, ENT_CLIENT_WARPZONE_CAMERA);
+
+	// we need THESE to render the warpzone (and cull properly)...
+	WriteCoord(MSG_ENTITY, self.origin_x);
+	WriteCoord(MSG_ENTITY, self.origin_y);
+	WriteCoord(MSG_ENTITY, self.origin_z);
+
+	WriteShort(MSG_ENTITY, self.modelindex);
+	WriteCoord(MSG_ENTITY, self.mins_x);
+	WriteCoord(MSG_ENTITY, self.mins_y);
+	WriteCoord(MSG_ENTITY, self.mins_z);
+	WriteCoord(MSG_ENTITY, self.maxs_x);
+	WriteCoord(MSG_ENTITY, self.maxs_y);
+	WriteCoord(MSG_ENTITY, self.maxs_z);
+	WriteByte(MSG_ENTITY, bound(1, self.scale * 16, 255));
+
+	// we need THESE to calculate the proper transform
+	WriteCoord(MSG_ENTITY, self.enemy.origin_x);
+	WriteCoord(MSG_ENTITY, self.enemy.origin_y);
+	WriteCoord(MSG_ENTITY, self.enemy.origin_z);
+	WriteCoord(MSG_ENTITY, self.enemy.angles_x);
+	WriteCoord(MSG_ENTITY, self.enemy.angles_y);
+	WriteCoord(MSG_ENTITY, self.enemy.angles_z);
 
 	return TRUE;
 }
@@ -272,6 +302,23 @@ void WarpZonePosition_InitStep_FindTarget()
 	self.enemy.aiment = self;
 }
 
+void WarpZoneCamera_InitStep_FindTarget()
+{
+	entity e;
+
+	if(self.target == "")
+	{
+		error("Camera with no target");
+		return;
+	}
+	self.enemy = find(world, targetname, self.target);
+	if(self.enemy == world)
+	{
+		error("Camera with nonexisting target");
+		return;
+	}
+}
+
 void WarpZone_InitStep_UpdateTransform()
 {
 	vector org, ang, norm, point;
@@ -370,6 +417,7 @@ void WarpZone_InitStep_FinalizeTransform()
 float warpzone_initialized;
 entity warpzone_first;
 entity warpzone_position_first;
+entity warpzone_camera_first;
 .entity warpzone_next;
 void spawnfunc_trigger_warpzone_position(void)
 {
@@ -390,12 +438,48 @@ void spawnfunc_trigger_warpzone(void)
 	string m;
 	m = self.model;
 	WarpZoneLib_ExactTrigger_Init();
-	setmodel(self, m);
+	if(!self.scale)
+		self.scale = self.modelscale;
+ 	if(m != "")
+ 	{
+ 		precache_model(m);
+ 		setmodel(self, m); // no precision needed
+	}
+	setorigin(self, self.origin);
+	if(self.scale)
+		setsize(self, self.mins * self.scale, self.maxs * self.scale);
+	else
+		setsize(self, self.mins, self.maxs);
+	if(!self.scale)
+		self.scale = self.modelscale;
 	self.SendEntity = WarpZone_Send;
 	self.SendFlags = 0xFFFFFF;
 	self.effects |= EF_NODEPTHTEST;
 	self.warpzone_next = warpzone_first;
 	warpzone_first = self;
+}
+void spawnfunc_func_camera(void)
+{
+	if(!self.scale)
+		self.scale = self.modelscale;
+ 	if(self.model != "")
+ 	{
+ 		precache_model(self.model);
+ 		setmodel(self, self.model); // no precision needed
+	}
+	setorigin(self, self.origin);
+	if(self.scale)
+		setsize(self, self.mins * self.scale, self.maxs * self.scale);
+	else
+		setsize(self, self.mins, self.maxs);
+	if(!self.solid)
+		self.solid = SOLID_BSP;
+	else if(self.solid < 0)
+		self.solid = SOLID_NOT;
+	self.SendEntity = WarpZone_Camera_Send;
+	self.SendFlags = 0xFFFFFF;
+	self.warpzone_next = warpzone_camera_first;
+	warpzone_camera_first = self;
 }
 void WarpZone_StartFrame()
 {
@@ -408,6 +492,8 @@ void WarpZone_StartFrame()
 			WarpZone_InitStep_FindTarget();
 		for(self = warpzone_position_first; self; self = self.warpzone_next)
 			WarpZonePosition_InitStep_FindTarget();
+		for(self = warpzone_camera_first; self; self = self.warpzone_next)
+			WarpZoneCamera_InitStep_FindTarget();
 		for(self = warpzone_first; self; self = self.warpzone_next)
 			WarpZone_InitStep_UpdateTransform();
 		for(self = warpzone_first; self; self = self.warpzone_next)
