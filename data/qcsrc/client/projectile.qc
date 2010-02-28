@@ -88,7 +88,7 @@ void Projectile_Draw()
 			default:
 				break;
 		}
-		self.angles = AnglesTransform_Multiply(self.angles, rot * (t - self.spawntime));
+		self.angles = AnglesTransform_ApplyToAngles(self.angles, rot * (t - self.spawntime));
 	}
 
 	fixedmakevectors(self.angles);

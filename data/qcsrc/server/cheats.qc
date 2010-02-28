@@ -339,7 +339,7 @@ float CheatCommand(float argc)
 					if(f == 1)
 					{
 						e.angles = fixedvectoangles2(trace_plane_normal, v_forward);
-						e.angles = AnglesTransform_Multiply(e.angles, '-90 0 0'); // so unrotated models work
+						e.angles = AnglesTransform_ApplyToAngles(e.angles, '-90 0 0'); // so unrotated models work
 					}
 					oldself = self;
 					self = e;

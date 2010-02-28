@@ -1,10 +1,26 @@
-// helper function
+#ifdef POSITIVE_PITCH_IS_DOWN
+vector fixedvectoangles(vector a)
+{
+	vector ang;
+	ang = vectoangles(a);
+	ang_x = -ang_x;
+	return ang;
+}
+vector fixedvectoangles2(vector a, vector b)
+{
+	vector ang;
+	ang = vectoangles2(a, b);
+	ang_x = -ang_x;
+	return ang;
+}
+#else
 void fixedmakevectors(vector a)
 {
 	// a makevectors that actually inverts vectoangles
 	a_x = -a_x;
 	makevectors(a);
 }
+#endif
 
 // angles transforms
 // angles in fixedmakevectors/fixedvectoangles space
@@ -12,8 +28,8 @@ vector AnglesTransform_Apply(vector transform, vector v)
 {
 	fixedmakevectors(transform);
 	return v_forward * v_x
-	     + v_right   * (-v_y)
-		 + v_up      * v_z;
+		+ v_right   * (-v_y)
+		+ v_up      * v_z;
 }
 
 vector AnglesTransform_Multiply(vector t1, vector t2)
@@ -93,14 +109,57 @@ vector AnglesTransform_Normalize(vector t, float minimize_roll)
 	return t;
 }
 
-vector AnglesTransform_ApplyToAngles(vector transform, vector v)
+vector AnglesTransform_CancelRoll(vector t)
 {
-	//v_x = -v_x;
-	v = AnglesTransform_Multiply(transform, v);
-	//v_x = -v_x;
-	return v;
+	const float epsilon = 30;
+	float f;
+
+	// constraints:
+	// forward vector (NOT SO important)
+	// right vector, up vector: screen rotation (MORE important)
+	// choose best match among all pitch-yaw only rotations
+
+	// FIXME find a better method
+
+	f = fabs(t_x - (-90)) / epsilon;
+	if(f < 1)
+	{
+		//t_x = -90;
+		t_y += t_z;
+		t_z = 0;
+	}
+	else
+	{
+		f = fabs(t_x - 90) / epsilon;
+		if(f < 1)
+		{
+			//t_x = 90;
+			t_y -= t_z;
+			t_z = 0;
+		}
+	}
+	return t;
 }
 
+#ifdef POSITIVE_PITCH_IS_DOWN
+vector AnglesTransform_ApplyToAngles(vector transform, vector v)
+{
+	v_x = -v_x;
+	v = AnglesTransform_Multiply(transform, v);
+	v_x = -v_x;
+	return v;
+}
+vector AnglesTransform_ApplyToVAngles(vector transform, vector v)
+{
+	v = AnglesTransform_Multiply(transform, v);
+	return v;
+}
+#else
+vector AnglesTransform_ApplyToAngles(vector transform, vector v)
+{
+	v = AnglesTransform_Multiply(transform, v);
+	return v;
+}
 vector AnglesTransform_ApplyToVAngles(vector transform, vector v)
 {
 	v_x = -v_x;
@@ -108,3 +167,4 @@ vector AnglesTransform_ApplyToVAngles(vector transform, vector v)
 	v_x = -v_x;
 	return v;
 }
+#endif

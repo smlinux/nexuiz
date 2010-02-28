@@ -30,13 +30,13 @@ vector Portal_ApplyTransformToPlayerAngle(vector transform, vector vangle)
 	ang = vangle;
 	/*
 	   ang_x = bound(-89, mod(-ang_x + 180, 360) - 180, 89);
-	   ang = AnglesTransform_Multiply(transform, ang);
+	   ang = AnglesTransform_ApplyToVAngles(transform, ang);
 	 */
 
 	// PLAYERS use different math
 	ang_x = -ang_x;
 
-	//print("reference: ", vtos(AnglesTransform_Multiply(transform, ang)), "\n");
+	//print("reference: ", vtos(AnglesTransform_ApplyToVAngles(transform, ang)), "\n");
 
 	fixedmakevectors(ang);
 	old_forward = v_forward;
@@ -144,7 +144,7 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 	if(player.classname == "player")
 		ang = Portal_ApplyTransformToPlayerAngle(transform, player.v_angle);
 	else
-		ang = AnglesTransform_Multiply(transform, player.angles);
+		ang = AnglesTransform_ApplyToAngles(transform, player.angles);
 
 	// factor -1 allows chaining portals, but may be weird
 	player.right_vector = -1 * AnglesTransform_Apply(transform, player.right_vector);

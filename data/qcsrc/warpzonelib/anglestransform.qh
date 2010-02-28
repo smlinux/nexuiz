@@ -1,6 +1,14 @@
+#define POSITIVE_PITCH_IS_DOWN
+
+#ifdef POSITIVE_PITCH_IS_DOWN
+#define fixedmakevectors makevectors
+vector fixedvectoangles(vector a);
+vector fixedvectoangles2(vector a, vector b);
+#else
 void fixedmakevectors(vector a);
 #define fixedvectoangles2 vectoangles2
 #define fixedvectoangles vectoangles
+#endif
 
 vector AnglesTransform_Apply(vector transform, vector v);
 vector AnglesTransform_Multiply(vector t1, vector t2);

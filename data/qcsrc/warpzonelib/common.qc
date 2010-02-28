@@ -30,6 +30,7 @@ vector WarpZone_TransformVAngles(vector t, vector ang)
 	*/
 
 	ang = AnglesTransform_Normalize(ang, TRUE);
+	ang = AnglesTransform_CancelRoll(ang);
 
 	/*
 	print(vtos(ang), " output\n");
