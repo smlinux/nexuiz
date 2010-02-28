@@ -4,7 +4,7 @@ config.qh
 ../common/util-pre.qh
 msys.qh
 mbuiltin.qh
-../common/mathlib.qh
+../warpzonelib/mathlib.qh
 ../common/util.qh
 
 oo/base.h
@@ -40,4 +40,4 @@ nexuiz/util.qc
 ../common/mapinfo.qc
 ../common/items.qc
 
-../common/mathlib.qc
+../warpzonelib/mathlib.qc

@@ -8,10 +8,10 @@ csqc_constants.qc
 csqc_builtins.qc
 
 ../warpzonelib/anglestransform.qh
+../warpzonelib/mathlib.qh
 ../warpzonelib/common.qh
 ../warpzonelib/client.qh
 
-../common/mathlib.qh
 ../common/util.qh
 ../common/items.qh
 
@@ -65,8 +65,7 @@ bgmscript.qc
 ../common/mapinfo.qc
 ../common/items.qc
 
-../common/mathlib.qc
-
 ../warpzonelib/anglestransform.qc
+../common/mathlib.qc
 ../warpzonelib/common.qc
 ../warpzonelib/client.qc
