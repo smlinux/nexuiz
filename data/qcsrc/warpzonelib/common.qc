@@ -418,11 +418,14 @@ void WarpZone_FindRadius_Recurse(vector org, float rad,        vector org0,     
 			e.WarpZone_findradius_dist = org0 - p;
 			e.WarpZone_findradius_findorigin = org;
 			e.WarpZone_findradius_findradius = rad;
-			if(e.classname == "trigger_warpzone")
+			if(e.classname == "warpzone_refsys")
+			{
+				// ignore, especially: do not overwrite the refsys parameters
+			}
+			else if(e.classname == "trigger_warpzone")
 			{
 				e.WarpZone_findradius_next = wz;
 				wz = e;
-
 				e.WarpZone_findradius_hit = 1;
 				e.enemy.WarpZone_findradius_dist = '0 0 0'; // we don't want to go through this zone ever again
 				e.enemy.WarpZone_findradius_hit = 1;
@@ -431,7 +434,6 @@ void WarpZone_FindRadius_Recurse(vector org, float rad,        vector org0,     
 			{
 				e.warpzone_transform = transform;
 				e.warpzone_shift = shift;
-
 				e.WarpZone_findradius_hit = 1;
 			}
 		}
