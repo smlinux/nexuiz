@@ -154,6 +154,24 @@ vector AnglesTransform_ApplyToVAngles(vector transform, vector v)
 	v = AnglesTransform_Multiply(transform, v);
 	return v;
 }
+vector AnglesTransform_FromAngles(vector v)
+{
+	v_x = -v_x;
+	return v;
+}
+vector AnglesTransform_ToAngles(vector v)
+{
+	v_x = -v_x;
+	return v;
+}
+vector AnglesTransform_FromVAngles(vector v)
+{
+	return v;
+}
+vector AnglesTransform_ToVAngles(vector v)
+{
+	return v;
+}
 #else
 vector AnglesTransform_ApplyToAngles(vector transform, vector v)
 {
@@ -164,6 +182,24 @@ vector AnglesTransform_ApplyToVAngles(vector transform, vector v)
 {
 	v_x = -v_x;
 	v = AnglesTransform_Multiply(transform, v);
+	v_x = -v_x;
+	return v;
+}
+vector AnglesTransform_FromAngles(vector v)
+{
+	return v;
+}
+vector AnglesTransform_ToAngles(vector v)
+{
+	return v;
+}
+vector AnglesTransform_FromVAngles(vector v)
+{
+	v_x = -v_x;
+	return v;
+}
+vector AnglesTransform_ToVAngles(vector v)
+{
 	v_x = -v_x;
 	return v;
 }

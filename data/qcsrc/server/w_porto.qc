@@ -193,7 +193,7 @@ void W_Porto_Attack (void)
 	gren.portal_id = time;
 	self.porto_current = gren;
 	gren.playerid = self.playerid;
-	fixedmakevectors(vectoangles(gren.velocity));
+	fixedmakevectors(fixedvectoangles(gren.velocity));
 	gren.right_vector = v_right;
 
 	gren.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_PLAYERCLIP;

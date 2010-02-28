@@ -88,10 +88,13 @@ void Projectile_Draw()
 			default:
 				break;
 		}
-		self.angles = AnglesTransform_ApplyToAngles(self.angles, rot * (t - self.spawntime));
+		self.angles = AnglesTransform_ToAngles(AnglesTransform_Multiply(AnglesTransform_FromAngles(self.angles), rot * (t - self.spawntime)));
 	}
 
-	fixedmakevectors(self.angles);
+	vector ang;
+	ang = self.angles;
+	ang_x = -ang_x;
+	makevectors(ang);
 
 	a = 1 - (time - self.fade_time) * self.fade_rate;
 	if(a <= 0)

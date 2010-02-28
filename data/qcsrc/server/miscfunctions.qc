@@ -2423,7 +2423,9 @@ void attach_sameorigin(entity e, entity to, string tag)
 
     // current forward and up directions
     if (substring(e.model, 0, 1) == "*") // bmodels have their own rules
-        e.angles_x = -e.angles_x;
+		e.angles = AnglesTransform_FromVAngles(e.angles);
+	else
+		e.angles = AnglesTransform_FromAngles(e.angles);
     fixedmakevectors(e.angles);
 
     // untransform forward, up!
@@ -2436,7 +2438,9 @@ void attach_sameorigin(entity e, entity to, string tag)
 
     e.angles = fixedvectoangles2(e_forward, e_up);
     if (substring(e.model, 0, 1) == "*") // bmodels have their own rules
-        e.angles_x = -e.angles_x;
+		e.angles = AnglesTransform_ToVAngles(e.angles);
+	else
+		e.angles = AnglesTransform_ToAngles(e.angles);
 
     setattachment(e, to, tag);
     setorigin(e, e.origin);
@@ -2448,7 +2452,9 @@ void detach_sameorigin(entity e)
     org = gettaginfo(e, 0);
     e.angles = fixedvectoangles2(v_forward, v_up);
     if (substring(e.model, 0, 1) == "*") // bmodels have their own rules
-        e.angles_x = -e.angles_x;
+		e.angles = AnglesTransform_ToVAngles(e.angles);
+	else
+		e.angles = AnglesTransform_ToAngles(e.angles);
     setorigin(e, org);
     setattachment(e, world, "");
     setorigin(e, e.origin);
