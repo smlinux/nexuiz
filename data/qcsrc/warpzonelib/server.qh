@@ -2,9 +2,13 @@ void WarpZone_InitStep_SpawnFunc();
 void WarpZone_InitStep_FindTarget();
 void WarpZone_InitStep_UpdateTransform();
 
+void WarpZone_StartFrame();
+float WarpZone_Projectile_Touch();
+
 // THESE must be defined by calling QC code:
 void spawnfunc_trigger_warpzone(); // must call the init steps in order, first all spawnfunc init steps, then all findtarget init steps, then all updatetransform init steps
-void WarpZone_PostTeleportPlayer(entity pl);
+void WarpZone_PostTeleportPlayer_Callback(entity pl);
+float WarpZone_Projectile_Touch_ImpactFilter_Callback();
 
 // server must also define a float called ENT_CLIENT_WARPZONE for the initial byte of WarpZone entities
 const float ENT_CLIENT_WARPZONE;

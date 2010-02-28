@@ -29,12 +29,11 @@ void WarpZone_Read(float isnew)
 	self.avelocity_y = ReadCoord();
 	self.avelocity_z = ReadCoord();
 
-	self.avelocity = AnglesTransform_TurnDirectionFR(self.avelocity);
+	// common stuff
+	WarpZone_SetUp(self, self.enemy.oldorigin, self.enemy.avelocity, self.oldorigin, self.avelocity);
 
-	// for common code
-	self.warpzone_origin = self.enemy.oldorigin;
-	self.enemy.warpzone_origin = self.oldorigin;
-	self.warpzone_transform = AnglesTransform_Divide(self.avelocity, self.enemy.avelocity);
+	// engine currently wants this
+	self.avelocity = AnglesTransform_TurnDirectionFR(self.avelocity);
 
 	self.flags = FL_CAMERA;
 	self.drawmask = MASK_NORMAL;
@@ -69,13 +68,11 @@ void WarpZone_FixView()
 	e = WarpZone_Find(warpzone_fixview_origin - '1 1 1' * nearclip, warpzone_fixview_origin + '1 1 1' * nearclip);
 	if(e)
 	{
-		fixedmakevectors(e.enemy.avelocity);
-		pd = (warpzone_fixview_origin - e.enemy.oldorigin) * v_forward;
+		pd = WarpZone_PlaneDist(e, warpzone_fixview_origin);
 		if(pd >= 0 && pd < nearclip)
 		{
 			warpzone_saved = 1;
-			warpzone_fixview_origin = warpzone_fixview_origin + v_forward * (nearclip - pd);
-			pd = (warpzone_fixview_origin - e.enemy.oldorigin) * v_forward;
+			warpzone_fixview_origin = warpzone_fixview_origin + e.warpzone_forward * (nearclip - pd);
 		}
 	}
 

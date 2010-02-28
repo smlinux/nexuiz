@@ -176,6 +176,8 @@ void StartFrame (void)
 	UncustomizeEntitiesRun();
 	InitializeEntitiesRun();
 
+	WarpZone_StartFrame();
+
 	sv_gravity = cvar("sv_gravity");
 	sv_maxairspeed = cvar("sv_maxairspeed");
 	sv_maxspeed = cvar ("sv_maxspeed");

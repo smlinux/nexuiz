@@ -1,5 +1,14 @@
-.vector warpzone_origin;
-.vector warpzone_transform;
+void WarpZone_SetUp(entity e, vector my_org, vector my_ang, vector other_org, vector other_ang)
+{
+	e.warpzone_transform = AnglesTransform_Divide(other_ang, AnglesTransform_TurnDirectionFR(my_ang));
+	e.warpzone_origin = my_org;
+	e.warpzone_targetorigin = other_org;
+	e.warpzone_angles = my_ang;
+	e.warpzone_targetangles = other_ang;
+	fixedmakevectors(my_ang); e.warpzone_forward = v_forward;
+	fixedmakevectors(other_ang); e.warpzone_targetforward = v_forward;
+}
+
 .entity enemy;
 
 vector WarpZoneLib_BoxTouchesBrush_mins;
@@ -109,6 +118,9 @@ void WarpZone_TraceBox(vector org, vector mi, vector ma, vector end, float nomon
 		// we hit a warpzone... so, let's perform the trace after the warp again
 		org = WarpZone_TransformOrigin(trace_ent, trace_endpos);
 		end = WarpZone_TransformOrigin(trace_ent, end);
+		WarpZone_trace_velocity = WarpZone_TransformVelocity(trace_ent, WarpZone_trace_velocity);
+		WarpZone_trace_angles = WarpZone_TransformAngles(trace_ent, WarpZone_trace_angles);
+		WarpZone_trace_v_angle = WarpZone_TransformVAngles(trace_ent, WarpZone_trace_v_angle);
 	}
 	WarpZone_MakeAllOther();
 	trace_startsolid = sol;
@@ -189,6 +201,16 @@ void WarpZone_TrailParticles(entity own, float eff, vector org, vector end)
 	v_forward = vf;
 	v_right = vr;
 	v_up = vu;
+}
+
+float WarpZone_PlaneDist(entity wz, vector v)
+{
+	return (v - wz.warpzone_origin) * wz.warpzone_forward;
+}
+
+float WarpZone_TargetPlaneDist(entity wz, vector v)
+{
+	return (v - wz.warpzone_targetorigin) * wz.warpzone_targetforward;
 }
 
 vector WarpZone_TransformOrigin(entity wz, vector v)

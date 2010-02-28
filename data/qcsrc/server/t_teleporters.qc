@@ -298,7 +298,7 @@ void spawnfunc_trigger_teleport (void)
 	}
 }
 
-void WarpZone_PostTeleportPlayer(entity pl)
+void WarpZone_PostTeleportPlayer_Callback(entity pl)
 {
 	UpdateCSQCProjectileAfterTeleport(pl);
 	if(pl.classname == "player")

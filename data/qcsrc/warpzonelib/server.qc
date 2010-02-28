@@ -1,4 +1,14 @@
-void WarpZone_TeleportPlayer(entity teleporter, entity player, vector to, vector to_angles, vector to_velocity, vector telefragmin, vector telefragmax, float tflags)
+.vector warpzone_oldorigin, warpzone_oldvelocity, warpzone_oldangles;
+.float warpzone_teleport_time;
+
+void WarpZone_StoreProjectileData(entity e)
+{
+	e.warpzone_oldorigin = e.origin;
+	e.warpzone_oldvelocity = e.velocity;
+	e.warpzone_oldangles = e.angles;
+}
+
+void WarpZone_TeleportPlayer(entity teleporter, entity player, vector to, vector to_angles, vector to_velocity)
 {
 	vector from;
 
@@ -19,12 +29,8 @@ void WarpZone_TeleportPlayer(entity teleporter, entity player, vector to, vector
 	if(player.classname == "player")
 		player.flags &~= FL_ONGROUND;
 
-	WarpZone_PostTeleportPlayer(player);
+	WarpZone_PostTeleportPlayer_Callback(player);
 }
-
-// the transform
-.vector warpzone_angles;
-.vector warpzone_forward;
 
 float WarpZone_Teleport(entity player)
 {
@@ -34,7 +40,7 @@ float WarpZone_Teleport(entity player)
 	v0 = player.velocity;
 	a0 = player.angles;
 
-	if((o0 - self.warpzone_origin) * self.warpzone_forward >= 0) // wrong side of the portal
+	if(WarpZone_PlaneDist(self, o0) >= 0) // wrong side of the portal
 		return 2;
 	// no failure, we simply don't want to teleport yet; TODO in
 	// this situation we may want to create a temporary clone
@@ -71,7 +77,7 @@ float WarpZone_Teleport(entity player)
 		}
 	}
 
-	if((o1 - self.enemy.warpzone_origin) * self.enemy.warpzone_forward <= 0) // wrong side of the portal post-teleport
+	if(WarpZone_TargetPlaneDist(self, o1) <= 0)
 	{
 		print("inconsistent warp zones or evil roundoff error\n");
 		return 0;
@@ -80,7 +86,9 @@ float WarpZone_Teleport(entity player)
 	//print(sprintf("warpzone: %f %f %f -> %f %f %f\n", o0_x, o0_y, o0_z, o1_x, o1_y, o1_z));
 
 	//o1 = trace_endpos;
-	TeleportPlayer(self, other, o1 - player.view_ofs, a1, v1, '0 0 0', '0 0 0', TELEPORT_FLAGS_WARPZONE);
+	WarpZone_TeleportPlayer(self, other, o1 - player.view_ofs, a1, v1);
+	WarpZone_StoreProjectileData(player);
+	player.warpzone_teleport_time = time;
 
 	return 1;
 }
@@ -88,6 +96,9 @@ float WarpZone_Teleport(entity player)
 void WarpZone_Touch (void)
 {
 	entity oldself, e;
+
+	if(other.classname == "trigger_warpzone")
+		return;
 
 	// FIXME needs a better check to know what is safe to teleport and what not
 	if(other.movetype == MOVETYPE_NONE)
@@ -138,12 +149,12 @@ float WarpZone_Send(entity to, float sendflags)
 	WriteCoord(MSG_ENTITY, self.warpzone_angles_x);
 	WriteCoord(MSG_ENTITY, self.warpzone_angles_y);
 	WriteCoord(MSG_ENTITY, self.warpzone_angles_z);
-	WriteCoord(MSG_ENTITY, self.enemy.warpzone_origin_x);
-	WriteCoord(MSG_ENTITY, self.enemy.warpzone_origin_y);
-	WriteCoord(MSG_ENTITY, self.enemy.warpzone_origin_z);
-	WriteCoord(MSG_ENTITY, self.enemy.warpzone_angles_x);
-	WriteCoord(MSG_ENTITY, self.enemy.warpzone_angles_y);
-	WriteCoord(MSG_ENTITY, self.enemy.warpzone_angles_z);
+	WriteCoord(MSG_ENTITY, self.warpzone_targetorigin_x);
+	WriteCoord(MSG_ENTITY, self.warpzone_targetorigin_y);
+	WriteCoord(MSG_ENTITY, self.warpzone_targetorigin_z);
+	WriteCoord(MSG_ENTITY, self.warpzone_targetangles_x);
+	WriteCoord(MSG_ENTITY, self.warpzone_targetangles_y);
+	WriteCoord(MSG_ENTITY, self.warpzone_targetangles_z);
 
 	return TRUE;
 }
@@ -203,24 +214,81 @@ void WarpZone_InitStep_UpdateTransform()
 		return;
 	}
 
-	// 1. update this, and the enemy, warp zone
-	self.warpzone_origin = self.aiment.origin;
-	self.warpzone_angles = self.aiment.angles;
-	self.enemy.warpzone_origin = self.enemy.aiment.origin;
-	self.enemy.warpzone_angles = self.enemy.aiment.angles;
-
-	// 2. combine the angle transforms
-	//    current forward must be turned into previous backward
-	self.warpzone_transform = AnglesTransform_Divide(AnglesTransform_TurnDirectionFR(self.enemy.warpzone_angles), self.warpzone_angles);
-
-	// 3. store off a saved forward vector for plane hit decisions
-	fixedmakevectors(self.warpzone_angles);
-	self.warpzone_forward = v_forward;
+	WarpZone_SetUp(self, self.aiment.origin, self.aiment.angles, self.enemy.aiment.origin, self.enemy.aiment.angles);
 
 	// now enable touch
 	self.touch = WarpZone_Touch;
 
 	// our mins/maxs are set to the warpzone... so all we need:
 	self.flags |= FL_CAMERA;
-	self.view_ofs = self.enemy.warpzone_origin;
+	self.view_ofs = self.warpzone_targetorigin;
+}
+
+float WarpZone_CheckProjectileImpact()
+{
+	// if self hit a warpzone, abort
+	vector o0, v0, a0;
+	float mpd, pd, dpd;
+	entity wz;
+	wz = WarpZone_Find(self.origin + self.mins, self.origin + self.maxs);
+	if(!wz)
+		return FALSE;
+	o0 = self.origin;
+	v0 = self.velocity;
+	a0 = self.angles;
+
+	// this approach transports the projectile at its full speed, but does
+	// not properly retain the projectile trail (but we can't retain it
+	// easily anyway without delaying the projectile by two frames, so who
+	// cares)
+	WarpZone_trace_angles = self.angles;
+	WarpZone_trace_velocity = self.velocity;
+	WarpZone_TraceBox(self.warpzone_oldorigin, self.mins, self.maxs, self.warpzone_oldorigin + self.warpzone_oldvelocity * frametime, MOVE_NORMAL, self); // this will get us through the warpzone
+	setorigin(self, trace_endpos);
+	self.angles = WarpZone_trace_angles;
+	self.velocity = WarpZone_trace_velocity;
+	
+	// in case we are in our warp zone post-teleport, shift the projectile forward a bit
+	mpd = max(vlen(self.mins), vlen(self.maxs));
+	pd = WarpZone_TargetPlaneDist(wz, self.origin);
+	if(pd < mpd)
+	{
+		dpd = normalize(self.velocity) * self.warpzone_targetforward;
+		setorigin(self, self.origin + normalize(self.velocity) * ((mpd - pd) / dpd));
+		if(!WarpZoneLib_MoveOutOfSolid(self))
+		{
+			setorigin(self, o0);
+			self.angles = a0;
+			self.velocity = v0;
+			return FALSE;
+		}
+	}
+	WarpZone_StoreProjectileData(self);
+	self.warpzone_teleport_time = time;
+
+	return TRUE;
+}
+void WarpZone_StartFrame()
+{
+	entity e;
+	for(e = world; (e = nextent(e)); )
+		WarpZone_StoreProjectileData(e);
+}
+float WarpZone_Projectile_Touch()
+{
+	if(other.classname == "trigger_warpzone")
+		return TRUE;
+	if(WarpZone_Projectile_Touch_ImpactFilter_Callback())
+		return TRUE;
+	if(WarpZone_CheckProjectileImpact())
+		return TRUE;
+	if(self.warpzone_teleport_time == time) // already got teleported this frame? no collision then please
+	{
+		setorigin(self, self.warpzone_oldorigin);
+		self.velocity = self.warpzone_oldvelocity;
+		self.angles = self.warpzone_oldangles;
+		return TRUE;
+	}
+
+	return FALSE;
 }

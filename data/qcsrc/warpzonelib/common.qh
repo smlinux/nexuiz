@@ -1,3 +1,12 @@
+.vector warpzone_origin;
+.vector warpzone_angles;
+.vector warpzone_forward;
+.vector warpzone_targetorigin;
+.vector warpzone_targetangles;
+.vector warpzone_targetforward;
+.vector warpzone_transform;
+void WarpZone_SetUp(entity e, vector my_org, vector my_ang, vector other_org, vector other_ang);
+
 float FL_CAMERA = 8192;
 
 float WarpZoneLib_BoxTouchesBrush(vector mi, vector ma, entity e, entity ig);
@@ -7,6 +16,9 @@ void WarpZone_MakeAllSolid();
 void WarpZone_MakeAllOther();
 
 var void(void) WarpZone_trace_callback; // called after every trace
+vector WarpZone_trace_angles; // total angles accumulator
+vector WarpZone_trace_v_angle; // total v_angle accumulator
+vector WarpZone_trace_velocity; // total velocity
 vector WarpZone_trace_endpos; // UNtransformed endpos
 vector WarpZone_tracetoss_velocity; // ending velocity of a tracetoss (post-transform)
 float WarpZone_tracetoss_time; // duration of toss (approximate)
@@ -15,6 +27,8 @@ void WarpZone_TraceLine(vector org, vector end, float nomonsters, entity forent)
 void WarpZone_TraceToss(entity e, entity forent);
 void WarpZone_TrailParticles(entity own, float eff, vector org, vector end);
 
+float WarpZone_PlaneDist(entity wz, vector v);
+float WarpZone_TargetPlaneDist(entity wz, vector v);
 vector WarpZone_TransformOrigin(entity wz, vector v);
 vector WarpZone_TransformVelocity(entity wz, vector v);
 vector WarpZone_TransformAngles(entity wz, vector v);
