@@ -47,6 +47,7 @@ void WarpZone_Read(float isnew)
 float warpzone_saved;
 vector warpzone_saved_origin;
 vector warpzone_saved_angles;
+float warpzone_fixingview;
 void WarpZone_FixView()
 {
 	float pd;
@@ -80,6 +81,19 @@ void WarpZone_FixView()
 	{
 		R_SetView(VF_ORIGIN, warpzone_fixview_origin);
 		R_SetView(VF_ANGLES, warpzone_fixview_angles);
+		if(!warpzone_fixingview)
+		{
+			cvar_set("r_drawexteriormodel", "0"); // hide my own model
+			warpzone_fixingview = 1;
+		}
+	}
+	else
+	{
+		if(warpzone_fixingview)
+		{
+			cvar_set("r_drawexteriormodel", "1"); // hide my own model
+			warpzone_fixingview = 0;
+		}
 	}
 }
 void WarpZone_UnFixView()
