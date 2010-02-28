@@ -7,3 +7,4 @@ Open issues:
 - fast projectiles
   - when projectile touches, check if it had hit a warpzone... if it did, do
     NOT detonate, but transform
+- grep for TODO and FIXME

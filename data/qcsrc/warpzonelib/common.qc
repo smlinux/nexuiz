@@ -18,6 +18,8 @@ vector WarpZone_TransformVAngles(vector t, vector ang)
 	*/
 
 	ang = AnglesTransform_ApplyToVAngles(t, ang);
+	// FIXME when a roll comes out and angle is near +/-90 degrees
+	// then roll can be incorporated into yaw and cancelled out
 
 	/*
 	print(vtos(ang), " output\n");
