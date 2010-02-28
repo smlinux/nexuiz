@@ -1084,7 +1084,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 	stat_damagedone = 0;
 	stat_maxdamage = 0;
 
-	targ = findradius (blastorigin, rad);
+	targ = WarpZone_FindRadius (blastorigin, rad, FALSE);
 	while (targ)
 	{
 		next = targ.chain;
@@ -1093,8 +1093,8 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 			{
 				// LordHavoc: measure distance to nearest point on target (not origin)
 				// (this guarentees 100% damage on a touch impact)
-				nearest = NearestPointOnBox(targ, blastorigin);
-				diff = nearest - blastorigin;
+				nearest = targ.WarpZone_findradius_nearest;
+				diff = targ.WarpZone_findradius_dist;
 				// round up a little on the damage to ensure full damage on impacts
 				// and turn the distance into a fraction of the radius
 				power = 1 - ((vlen (diff) - 2) / rad);
@@ -1115,11 +1115,13 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 						local float total;
 						local float hitratio;
 						local vector hitloc;
+						local vector myblastorigin;
+						myblastorigin = WarpZone_UnTransformOrigin(targ, blastorigin);
 						center = targ.origin + (targ.mins + targ.maxs) * 0.5;
 						// if it's a player, use the view origin as reference
 						if (targ.classname == "player")
 							center = targ.origin + targ.view_ofs;
-						force = normalize(center - blastorigin);
+						force = normalize(center - myblastorigin);
 						force = force * (finaldmg / coredamage) * forceintensity;
 						// test line of sight to multiple positions on box,
 						// and do damage if any of them hit
@@ -1132,7 +1134,8 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 						c = 0;
 						while (c < total)
 						{
-							traceline(blastorigin, nearest, MOVE_NOMONSTERS, inflictor);
+							//traceline(targ.WarpZone_findradius_findorigin, nearest, MOVE_NOMONSTERS, inflictor);
+							WarpZone_TraceLine(blastorigin, WarpZone_TransformOrigin(targ, nearest), MOVE_NOMONSTERS, inflictor);
 							if (trace_fraction == 1 || trace_ent == targ)
 							{
 								hits = hits + 1;

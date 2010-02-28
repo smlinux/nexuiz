@@ -6,21 +6,21 @@ Open issues:
 
 Weapon support:
 
+- laser: YES
 - shotgun: YES
 - uzi: YES
+- grenadelauncher: YES
+- crylink: YES
 - nex: YES
+- hagar: YES
 - porto: YES (bwahahahaha)
+- hlac: YES
 - minstanex: YES
 - rifle: YES
-- crylink: YES
 
-- laser: PARTIAL (no radius damage)
-- grenadelauncher: PARTIAL (no radius damage)
-- electro: PARTIAL (no radius damage)
-- hagar: PARTIAL (no radius damage)
-- hlac: PARTIAL (no radius damage)
+- electro: PARTIAL (no combo detonation)
 - fireball: PARTIAL (no radius damage, laser damage)
 
 - rocketlauncher: NO (guiding not working, trail bug)
-- hook: NO (no radius damage, hook beam, pull not working)
-- tuba: NO (no radius damage, sound)
+- hook: NO (hook beam, pull not working)
+- tuba: NO (sound)

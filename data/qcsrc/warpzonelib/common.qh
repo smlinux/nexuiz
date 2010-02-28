@@ -10,6 +10,7 @@ void WarpZone_SetUp(entity e, vector my_org, vector my_ang, vector other_org, ve
 float FL_CAMERA = 8192;
 
 float WarpZoneLib_BoxTouchesBrush(vector mi, vector ma, entity e, entity ig);
+vector WarpZoneLib_NearestPointOnBox(vector mi, vector ma, vector org);
 
 entity WarpZone_Find(vector mi, vector ma);
 void WarpZone_MakeAllSolid();
@@ -27,9 +28,20 @@ void WarpZone_TraceLine(vector org, vector end, float nomonsters, entity forent)
 void WarpZone_TraceToss(entity e, entity forent);
 void WarpZone_TrailParticles(entity own, float eff, vector org, vector end);
 
+.vector WarpZone_findradius_dist;
+.vector WarpZone_findradius_nearest;
+// also set: warpzone parameters, so WarpZone_TransformOrigin can transform vectors from victim's to blast's system
+.vector WarpZone_findradius_findorigin;
+.float WarpZone_findradius_findradius;
+entity WarpZone_FindRadius(vector org, float radius, float needlineofsight);
+
 float WarpZone_PlaneDist(entity wz, vector v);
 float WarpZone_TargetPlaneDist(entity wz, vector v);
 vector WarpZone_TransformOrigin(entity wz, vector v);
 vector WarpZone_TransformVelocity(entity wz, vector v);
 vector WarpZone_TransformAngles(entity wz, vector v);
 vector WarpZone_TransformVAngles(entity wz, vector v);
+vector WarpZone_UnTransformOrigin(entity wz, vector v);
+vector WarpZone_UnTransformVelocity(entity wz, vector v);
+vector WarpZone_UnTransformAngles(entity wz, vector v);
+vector WarpZone_UnTransformVAngles(entity wz, vector v);

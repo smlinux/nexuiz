@@ -94,6 +94,7 @@ void WarpZone_TraceBox(vector org, vector mi, vector ma, vector end, float nomon
 {
 	float frac, sol;
 	vector o0, e0;
+	entity e;
 	vector vf, vr, vu;
 	vf = v_forward;
 	vr = v_right;
@@ -103,6 +104,7 @@ void WarpZone_TraceBox(vector org, vector mi, vector ma, vector end, float nomon
 	e0 = end;
 	sol = -1;
 	frac = 0;
+	e = world;
 	for(;;)
 	{
 		tracebox(org, mi, ma, end, nomonsters, forent);
@@ -121,6 +123,12 @@ void WarpZone_TraceBox(vector org, vector mi, vector ma, vector end, float nomon
 		WarpZone_trace_velocity = WarpZone_TransformVelocity(trace_ent, WarpZone_trace_velocity);
 		WarpZone_trace_angles = WarpZone_TransformAngles(trace_ent, WarpZone_trace_angles);
 		WarpZone_trace_v_angle = WarpZone_TransformVAngles(trace_ent, WarpZone_trace_v_angle);
+		if(trace_ent == e)
+		{
+			dprint("I transformed into the same zone again, wtf, aborting the trace\n");
+			break;
+		}
+		e = trace_ent;
 	}
 	WarpZone_MakeAllOther();
 	trace_startsolid = sol;
@@ -215,7 +223,7 @@ float WarpZone_TargetPlaneDist(entity wz, vector v)
 
 vector WarpZone_TransformOrigin(entity wz, vector v)
 {
-	return wz.enemy.warpzone_origin + AnglesTransform_Apply(wz.warpzone_transform, v - wz.warpzone_origin);
+	return wz.warpzone_targetorigin + AnglesTransform_Apply(wz.warpzone_transform, v - wz.warpzone_origin);
 }
 
 vector WarpZone_TransformVelocity(entity wz, vector v)
@@ -241,4 +249,121 @@ vector WarpZone_TransformVAngles(entity wz, vector ang)
 
 	ang_z = roll;
 	return ang;
+}
+
+vector WarpZone_UnTransformOrigin(entity wz, vector v)
+{
+	return wz.warpzone_origin + AnglesTransform_Apply(AnglesTransform_Invert(wz.warpzone_transform), v - wz.warpzone_targetorigin);
+}
+
+vector WarpZone_UnTransformVelocity(entity wz, vector v)
+{
+	return AnglesTransform_Apply(AnglesTransform_Invert(wz.warpzone_transform), v);
+}
+
+vector WarpZone_UnTransformAngles(entity wz, vector v)
+{
+	return AnglesTransform_ApplyToAngles(AnglesTransform_Invert(wz.warpzone_transform), v);
+}
+
+vector WarpZone_UnTransformVAngles(entity wz, vector ang)
+{
+	float roll;
+
+	roll = ang_z;
+	ang_z = 0;
+
+	ang = AnglesTransform_ApplyToVAngles(AnglesTransform_Invert(wz.warpzone_transform), ang);
+	ang = AnglesTransform_Normalize(ang, TRUE);
+	ang = AnglesTransform_CancelRoll(ang);
+
+	ang_z = roll;
+	return ang;
+}
+
+vector WarpZoneLib_NearestPointOnBox(vector mi, vector ma, vector org)
+{
+	vector nearest;
+	nearest_x = bound(mi_x, org_x, ma_x);
+	nearest_y = bound(mi_y, org_y, ma_y);
+	nearest_z = bound(mi_z, org_z, ma_z);
+	return nearest;
+}
+
+.float WarpZone_findradius_hit;
+.entity WarpZone_findradius_next;
+void WarpZone_FindRadius_Recurse(vector org, float rad,        vector org0,            vector shift0, vector transform, vector shift1, float needlineofsight)
+//                               blast origin of current search   original blast origin   how to untransform (victim to blast system)
+{
+	vector org_new;
+	vector org0_new;
+	vector shift0_new, transform_new, shift1_new;
+	vector p;
+	entity e, e0;
+	entity wz;
+	if(rad <= 0)
+		return;
+	e0 = findradius(org, rad);
+	wz = world;
+
+	for(e = e0; e; e = e.chain)
+	{
+		p = WarpZoneLib_NearestPointOnBox(e.origin + e.mins, e.origin + e.maxs, org0);
+		if(needlineofsight)
+		{
+			traceline(org, p, MOVE_NOMONSTERS, e);
+			if(trace_fraction < 1)
+				continue;
+		}
+		if(!e.WarpZone_findradius_hit || vlen(e.WarpZone_findradius_dist) > vlen(org0 - p))
+		{
+			e.WarpZone_findradius_nearest = p;
+			e.WarpZone_findradius_dist = org0 - p;
+			e.WarpZone_findradius_findorigin = org;
+			e.WarpZone_findradius_findradius = rad;
+			if(e.classname == "trigger_warpzone")
+			{
+				e.WarpZone_findradius_next = wz;
+				wz = e;
+
+				e.WarpZone_findradius_hit = 1;
+				e.enemy.WarpZone_findradius_dist = '0 0 0'; // we don't want to go through this zone ever again
+				e.enemy.WarpZone_findradius_hit = 1;
+			}
+			else
+			{
+				e.warpzone_transform = transform;
+				e.warpzone_origin = shift0;
+				e.warpzone_targetorigin = shift1;
+
+				e.WarpZone_findradius_hit = 1;
+			}
+		}
+	}
+	for(e = wz; e; e = e.WarpZone_findradius_next)
+	{
+		org0_new = WarpZone_TransformOrigin(e, org);
+		traceline(e.warpzone_targetorigin, org0_new, MOVE_NOMONSTERS, e);
+		org_new = trace_endpos;
+		transform_new = AnglesTransform_Multiply(transform, AnglesTransform_Invert(e.warpzone_transform));
+		shift0_new = e.warpzone_targetorigin;
+		shift1_new = AnglesTransform_Apply(transform, e.warpzone_origin - shift0) + shift1;
+		WarpZone_FindRadius_Recurse(
+			org_new,
+			bound(0, rad - vlen(org_new - org0_new), rad - 8),
+			org0_new,
+			shift0_new, transform_new, shift1_new,
+			needlineofsight);
+		e.WarpZone_findradius_hit = 0;
+		e.enemy.WarpZone_findradius_hit = 0;
+	}
+}
+entity WarpZone_FindRadius(vector org, float rad, float needlineofsight)
+{
+	entity e0, e;
+	WarpZone_FindRadius_Recurse(org, rad, org, '0 0 0', '0 0 0', '0 0 0', needlineofsight);
+	e0 = findchainfloat(WarpZone_findradius_hit, 1);
+	for(e = e0; e; e = e.chain)
+		e.WarpZone_findradius_hit = 0;
+	return e0;
 }
