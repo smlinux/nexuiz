@@ -346,8 +346,17 @@ float warpzone_teleport(entity player)
 	tracebox(o1 - player.view_ofs, player.mins, player.maxs, o1 - player.view_ofs, MOVE_NOMONSTERS, player);
 	if(trace_startsolid)
 	{
-		print("in solid\n");
-		return 0; // TODO nudge out of solid here!
+		setorigin(player, o1 - player.view_ofs);
+		if(move_out_of_solid(player))
+		{
+			setorigin(player, o0);
+			o1 = player.origin + player.view_ofs;
+		}
+		else
+		{
+			setorigin(player, o0 - player.view_ofs);
+			return 0; // cannot fix
+		}
 	}
 
 	if((o1 - self.enemy.warpzone_origin) * self.enemy.warpzone_forward <= 0) // wrong side of the portal post-teleport
@@ -380,19 +389,18 @@ void warpzone_touch (void)
 	e = self.enemy;
 	if(warpzone_teleport(other))
 	{
+		if(self.aiment.target)
+		{
+			oldself = self;
+			activator = other;
+			self = self.aiment;
+			SUB_UseTargets();
+			self = oldself;
+		}
 	}
 	else
 	{
 		dprint("WARPZONE FAIL AHAHAHAHAH))\n");
-	}
-
-	if(self.aiment.target)
-	{
-		oldself = self;
-		activator = other;
-		self = self.aiment;
-		SUB_UseTargets();
-		self = oldself;
 	}
 }
 void warpzone_findtarget (void)
