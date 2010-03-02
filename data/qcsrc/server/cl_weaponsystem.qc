@@ -1561,7 +1561,7 @@ void W_SetupProjectileVelocityEx(entity missile, vector dir, vector upDir, float
 
 void W_SetupProjectileVelocity(entity missile, float pSpeed, float spread)
 {
-	W_SetupProjectileVelocityEx(missile, w_shotdir, v_up, pSpeed, 0, spread);
+	W_SetupProjectileVelocityEx(missile, w_shotdir, v_up, pSpeed, 0, 0, spread);
 }
 
 #define W_SETUPPROJECTILEVELOCITY_UP(m,s) W_SetupProjectileVelocityEx(m, w_shotdir, v_up, cvar(#s "_speed"), cvar(#s "_speed_up"), cvar(#s "_speed_z"), cvar(#s "_spread"))
