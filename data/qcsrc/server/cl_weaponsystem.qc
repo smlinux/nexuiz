@@ -1531,12 +1531,13 @@ float mspercallsum;
 float mspercallsstyle;
 float mspercallcount;
 #endif
-void W_SetupProjectileVelocityEx(entity missile, vector dir, vector upDir, float pSpeed, float pUpSpeed, float spread)
+void W_SetupProjectileVelocityEx(entity missile, vector dir, vector upDir, float pSpeed, float pUpSpeed, float pZSpeed, float spread)
 {
 	if(missile.owner == world)
 		error("Unowned missile");
 
 	dir = dir + upDir * (pUpSpeed / pSpeed);
+	dir_z += pZSpeed / pSpeed;
 	pSpeed *= vlen(dir);
 	dir = normalize(dir);
 
@@ -1563,5 +1564,5 @@ void W_SetupProjectileVelocity(entity missile, float pSpeed, float spread)
 	W_SetupProjectileVelocityEx(missile, w_shotdir, v_up, pSpeed, 0, spread);
 }
 
-#define W_SETUPPROJECTILEVELOCITY_UP(m,s) W_SetupProjectileVelocityEx(m, w_shotdir, v_up, cvar(#s "_speed"), cvar(#s "_speed_up"), cvar(#s "_spread"))
-#define W_SETUPPROJECTILEVELOCITY(m,s) W_SetupProjectileVelocityEx(m, w_shotdir, v_up, cvar(#s "_speed"), 0, cvar(#s "_spread"))
+#define W_SETUPPROJECTILEVELOCITY_UP(m,s) W_SetupProjectileVelocityEx(m, w_shotdir, v_up, cvar(#s "_speed"), cvar(#s "_speed_up"), cvar(#s "_speed_z"), cvar(#s "_spread"))
+#define W_SETUPPROJECTILEVELOCITY(m,s) W_SetupProjectileVelocityEx(m, w_shotdir, v_up, cvar(#s "_speed"), 0, 0, cvar(#s "_spread"))

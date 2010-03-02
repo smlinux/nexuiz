@@ -104,7 +104,7 @@ void W_Crylink_Attack (void)
 			s_z = v_forward_y;
 		}
 		s = s * cvar("g_balance_crylink_primary_spread") * g_weaponspreadfactor;
-		W_SetupProjectileVelocityEx(proj, w_shotdir + right * s_y + up * s_z, v_up, cvar("g_balance_crylink_primary_speed"), 0, 0);
+		W_SetupProjectileVelocityEx(proj, w_shotdir + right * s_y + up * s_z, v_up, cvar("g_balance_crylink_primary_speed"), 0, 0, 0);
 		proj.touch = W_Crylink_Touch;
 		if(counter == 0)
 			SUB_SetFade(proj, time + cvar("g_balance_crylink_primary_middle_lifetime"), cvar("g_balance_crylink_primary_middle_fadetime"));
@@ -155,7 +155,7 @@ void W_Crylink_Attack2 (void)
 		setorigin (proj, w_shotorg);
 		setsize(proj, '0 0 0', '0 0 0');
 
-		W_SetupProjectileVelocityEx(proj, (w_shotdir + (((counter + 0.5) / shots) * 2 - 1) * v_right * cvar("g_balance_crylink_secondary_spread") * g_weaponspreadfactor), v_up, cvar("g_balance_crylink_secondary_speed"), 0, 0);
+		W_SetupProjectileVelocityEx(proj, (w_shotdir + (((counter + 0.5) / shots) * 2 - 1) * v_right * cvar("g_balance_crylink_secondary_spread") * g_weaponspreadfactor), v_up, cvar("g_balance_crylink_secondary_speed"), 0, 0, 0);
 		proj.touch = W_Crylink_Touch2;
 		if(counter == (shots - 1) / 2)
 			SUB_SetFade(proj, time + cvar("g_balance_crylink_secondary_middle_lifetime"), cvar("g_balance_crylink_secondary_middle_fadetime"));
