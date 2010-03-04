@@ -130,7 +130,7 @@ float w_hagar(float req)
 			W_Hagar_Attack();
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_hagar_primary_refire"), w_ready);
 		}
-		if (self.BUTTON_ATCK2)
+		if (self.BUTTON_ATCK2 && cvar("g_balance_hagar_secondary"))
 		if (weapon_prepareattack(1, cvar("g_balance_hagar_secondary_refire")))
 		{
 			W_Hagar_Attack2();
