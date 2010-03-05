@@ -583,6 +583,7 @@ void race_send_speedaward_alltimebest(float msg)
 string GetMapname(void);
 float speedaward_lastupdate;
 float speedaward_lastsent;
+.float jumppadusetime;
 void SV_PlayerPhysics()
 {
 	local vector wishvel, wishdir, v;
@@ -826,7 +827,7 @@ void SV_PlayerPhysics()
 
 	if(self.classname == "player")
 	{
-		if(sv_doublejump)
+		if(sv_doublejump && time - self.jumppadusetime > 2 * sys_frametime)
 		{
 			tracebox(self.origin + '0 0 0.01', self.mins, self.maxs, self.origin - '0 0 0.01', MOVE_NORMAL, self);
 			self.flags &~= FL_ONGROUND;

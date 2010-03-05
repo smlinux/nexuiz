@@ -152,6 +152,7 @@ void trigger_push_touch()
 	other.flags &~= FL_ONGROUND;
 
 	other.velocity = self.movedir;
+	other.jumppadusetime = time;
 
 	if (other.classname == "player")
 	{
