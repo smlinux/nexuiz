@@ -470,18 +470,19 @@ void PM_Accelerate(vector wishdir, float wishspeed, float wishspeed0, float acce
 		// negative: only apply so much sideways friction to stay below the speed you could get by "braking"
 	{
 		float f, fminimum;
-		f = (1 - frametime * wishspeed * sidefric);
+		f = max(0, 1 + frametime * wishspeed * sidefric);
 		fminimum = (vel_xy_backward*vel_xy_backward - vel_straight*vel_straight) / (vel_perpend*vel_perpend);
+		// this cannot be > 1
 		if(fminimum <= 0)
-			vel_perpend = vel_perpend * f;
+			vel_perpend = vel_perpend * max(0, f);
 		else
 		{
 			fminimum = sqrt(fminimum);
-			vel_perpend = vel_perpend * bound(fminimum, f, 1);
+			vel_perpend = vel_perpend * max(fminimum, f);
 		}
 	}
 	else
-		vel_perpend = vel_perpend * (1 - frametime * wishspeed * sidefric);
+		vel_perpend = vel_perpend * max(0, 1 - frametime * wishspeed * sidefric);
 	
 	vel_xy = vel_straight * wishdir + vel_perpend;
 	
