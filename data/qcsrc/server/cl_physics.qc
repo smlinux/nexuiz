@@ -91,7 +91,7 @@ void PlayerJump (void)
 			//print("Trace plane normal z: ", ftos(trace_plane_normal_z), ", disabling speed cap!\n");
 		}
 		else
-			self.velocity_z = min(cvar("sv_jumpvelocity") * cvar("sv_jumpspeedcap_max"), self.velocity_z);
+			self.velocity_z = min(cvar("sv_jumpvelocity") * cvar("sv_jumpspeedcap_max"), self.velocity_z) + trace_ent.velocity_z;
 	}
 
 	if(!(self.lastflags & FL_ONGROUND))
