@@ -25,4 +25,5 @@
   entities="quake3"
   brushtypes="quake3"
   patchtypes="quake3"
+  default_scale="0.25"
 />
