@@ -195,13 +195,14 @@ For Linux users: you need to have libcurl installed, otherwise you won't be able
 Alientrap wants to ensure everyone has a pleasant time playing Nexuiz, so if you have problems we would like to ask you to report them and thus help solve them.  Especially crash reports can be very helpful.  See below for how to contact Alientrap (<a class="link" href="#Where can i get more help?">Where can i get more help?</a>)
 </p>
 <p class="Body">
-On Mac: IS THERE AN EASY WAY?
+<strong>On Mac</strong>: IS THERE AN EASY WAY? </p>
+<p class="Body">
+<strong>On Linux</strong>: In a xterm, <tt>cd</tt> into your Nexuiz installation directory, start <tt>catchsegv ./nexuiz-linux-686-sdl -condebug -developer &gt; crash.txt 2&gt;&amp;1</tt> and give the file crash.txt to the developers.  Note that you can also use <tt>./nexuiz-linux-686-glx</tt> or if you have a 64bit system <tt>./nexuiz-linux-x86_64-sdl</tt> and <tt>./nexuiz-linux-x86_64-glx</tt>
 </p>
 <p class="Body">
-On Linux: In a xterm, <tt>cd</tt> into your Nexuiz installation directory, start <tt>catchsegv ./nexuiz-linux-686-sdl -condebug -developer &gt; crash.txt 2&gt;&amp;1</tt> and give the file crash.txt to the developers.  Note that you can also use <tt>./nexuiz-linux-686-glx</tt> or if you have a 64bit system <tt>./nexuiz-linux-x86_64-sdl</tt> and <tt>./nexuiz-linux-x86_64-glx</tt>
-</p>
-<p class="Body">
-On Windows: Click Start-&gt;Run, and enter drwtsn32, click Ok in the next window, run Nexuiz and wait for the crash.  Then go to <tt>C:\Documents and Settings\All Users\Application Data\Microsoft\Dr Watson</tt> there should be a file called &quot;drwtsn32.log&quot;, give that file along with the engine's build date to the developers.  You'll see that date when you open the ingame console (<a class="link" href="#How do I open the console?">How do I open the console?</a>).  Note that some folders of that path may be hidden or have a translated name if you're using a non-english windows.
+<strong>On Windows</strong>: Click Start-&gt;Run, and enter drwtsn32, click Ok in the next window, run Nexuiz and wait for the crash.  Then go to <tt>C:\Documents and Settings\All Users\Application Data\Microsoft\Dr Watson</tt> there should be a file called &quot;drwtsn32.log&quot;, give that file along with the engine's build date to the developers.  You'll see that date when you open the ingame console (<a class="link" href="#How do I open the console?">How do I open the console?</a>).  Note that some folders of that path may be hidden or have a translated name if you're using a non-english windows.
+<br />
+<strong>This method is not availible in Windows Vista or Windows 7.</strong><br />
 </p>
 <!--End Section 2-->
 <h3><a name="Where can I get more help?">Where can I get more help?</a></h3>
@@ -344,8 +345,9 @@ To compile the game code you need <a class="link" href="http://sourceforge.net/p
 			<a id="valid_css" href="http://jigsaw.w3.org/css-validator/validator?uri=http%3A%2F%2Falientrap.org%2Fnexuiz%2Findex.php">&nbsp;</a>
 			<a id="valid_xhtml" href="http://validator.w3.org/check?uri=http%3A%2F%2Falientrap.org%2Fnexuiz%2Findex.php">&nbsp;</a>
 			<p>&copy; 2004-2008 Nexuiz.com</p>
-	  </div>
+		</div>
 	</div><!-- end right -->
+</div>
 </div>
 </body>
 </html>
