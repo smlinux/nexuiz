@@ -37,6 +37,7 @@ void fillNexuizAudioSettingsTab(entity me)
 		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Ambient:"));
 		makeMulti(s, "snd_entchannel2volume");
 		me.TD(me, 1, 2, s);
+		setDependentStringNotEqual(e, "volume", "0");
 		setDependentStringNotEqual(s, "volume", "0");
 	me.TR(me);
 		me.TDempty(me, 0.2);
