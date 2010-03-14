@@ -1633,6 +1633,7 @@ void precache()
     precache_sound ("misc/gib_splat03.wav");
     precache_sound ("misc/gib_splat04.wav");
     precache_sound ("misc/hit.wav");
+	precache_sound ("misc/typehit.wav");
     PrecacheGlobalSound((globalsound_fall = "misc/hitground 4"));
     PrecacheGlobalSound((globalsound_metalfall = "misc/metalhitground 4"));
     precache_sound ("misc/null.wav");
