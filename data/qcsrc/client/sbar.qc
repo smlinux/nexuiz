@@ -1072,7 +1072,7 @@ vector Sbar_Scoreboard_MakeTable(vector pos, entity tm, vector rgb, vector bg_si
 			}
 
 			tmp_x = stringwidth(sbar_title[i], FALSE, sbar_fontsize);
-			tmp_x = (sbar_size[i] - tmp_x) * sbar_fontsize_x;
+			tmp_x = sbar_size[i] - tmp_x;
 			drawstring(pos + tmp, sbar_title[i], sbar_fontsize, rgb * 1.5, sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
 			pos_x -= sbar_fontsize_x;
 		}
@@ -1131,7 +1131,8 @@ vector Sbar_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 	float i;
 	float weapon_hit, weapon_damage, weapon_stats;
 	float fontsize = 40 * 1/3;
-	float weapon_cnt = 12;
+	float xsave;
+	float weapon_cnt;
 	float rows;
 	if(cvar("sbar_accuracy_doublerows"))
 		rows = 2;
@@ -1144,6 +1145,7 @@ vector Sbar_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 		return pos;
 	}
 
+	xsave = pos_x;
 	drawstring(pos, strcat("Accuracy stats (average ", ftos(average_accuracy), "%)"), sbar_fontsize, '1 1 1', sbar_scoreboard_alpha_fg, DRAWFLAG_NORMAL);
 	pos_y += 18;
 	vector tmp;
@@ -1166,15 +1168,27 @@ vector Sbar_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 		drawfill(pos + '0 1 0' * height * (2/3) + '0 1 0' * height * i, '1 0 0' * sbwidth + '0 1 0' * fontsize, '1 1 1', sbar_scoreboard_highlight_alpha, DRAWFLAG_NORMAL);	
 	}
 
+	if(getstati(STAT_SWITCHWEAPON) == WEP_MINSTANEX)
+		g_minstagib = 1; // TODO: real detection for minstagib?
+
+	// skip useless weapons
+	weapon_cnt = 0;
+	for(i = WEP_FIRST; i <= WEP_LAST; ++i)
+	{
+		self = get_weaponinfo(i);
+		if not(self.weapons)
+			continue;
+		if ((i == WEP_NEX && g_minstagib) || i == WEP_PORTO || (i == WEP_MINSTANEX && !g_minstagib) || i == WEP_TUBA || i == WEP_FIREBALL) // skip port-o-launch, nex || minstanex, tuba and fireball
+			continue;
+		++weapon_cnt;
+	}
+
 	drawfont = sbar_bigfont;
 	average_accuracy = 0;
 	float weapons_with_stats;
 	weapons_with_stats = 0;
 	if(rows == 2)
 		pos_x += sbwidth/weapon_cnt / 2;
-
-	if(getstati(STAT_SWITCHWEAPON) == WEP_MINSTANEX)
-		g_minstagib = 1; // TODO: real detection for minstagib?
 
 	for(i = WEP_FIRST; i <= WEP_LAST; ++i)
 	{
@@ -1221,9 +1235,7 @@ vector Sbar_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 	if(weapons_with_stats)
 		average_accuracy = floor(average_accuracy / weapons_with_stats);
 
-	if(rows == 2)
-		pos_x -= sbwidth/weapon_cnt / 2;
-	pos_x -= sbwidth;
+	pos_x = xsave;
 	pos_y += height;
 	return pos;
 }
@@ -2351,7 +2363,7 @@ void Sbar_DrawAccuracyStats_Description_Splash(vector position)
 
 void Sbar_DrawAccuracyStats()
 {
-	float i, count_hitscan, count_splash, row;  // count is the number of 'colums'
+	float i, count_hitscan, count_splash, row_hitscan, row_splash;  // count is the number of 'colums'
 	float weapon_hit, weapon_damage, weapon_stats;
 	float left_border;  // position where the weapons start, the description is in the border
 	vector fill_colour, fill_size;
@@ -2431,12 +2443,12 @@ void Sbar_DrawAccuracyStats()
 				if ((left_border + count_splash * (fill_size_x + col_margin) + fill_size_x) >= vid_conwidth)
 				{
 					count_splash = 0;
-					++row;
-					Sbar_DrawAccuracyStats_Description_Splash('1 0 0' * col_margin + '0 1 0' * (top_border_splash + row * (fill_size_y + row_margin)));
+					++row_splash;
+					Sbar_DrawAccuracyStats_Description_Splash('1 0 0' * col_margin + '0 1 0' * (top_border_splash + row_splash * (fill_size_y + row_margin)));
 				}
 
 				pos_x = left_border + count_splash * (fill_size_x + col_margin);
-				pos_y = top_border_splash + row * (fill_size_y + row_margin);
+				pos_y = top_border_splash + row_splash * (fill_size_y + row_margin);
 
 				// background
 				drawpic(pos, "gfx/hud/sb_accuracy", fill_size , fill_colour, sbar_alpha_bg, DRAWFLAG_NORMAL);
@@ -2481,12 +2493,12 @@ void Sbar_DrawAccuracyStats()
 				if ((left_border + count_hitscan * (fill_size_x + col_margin) + fill_size_x + cvar("stats_right_margin")) >= vid_conwidth)
 				{
 					count_hitscan = 0;
-					++row;
-					Sbar_DrawAccuracyStats_Description_Hitscan('1 0 0' * col_margin + '0 1 0' * (top_border_hitscan + row * (fill_size_y + row_margin)));
+					++row_hitscan;
+					Sbar_DrawAccuracyStats_Description_Hitscan('1 0 0' * col_margin + '0 1 0' * (top_border_hitscan + row_hitscan * (fill_size_y + row_margin)));
 				}
 
 				pos_x = left_border + count_hitscan * (fill_size_x + col_margin);
-				pos_y = top_border_hitscan + row * (fill_size_y + row_margin);
+				pos_y = top_border_hitscan + row_hitscan * (fill_size_y + row_margin);
 
 				// background
 				drawpic(pos, "gfx/hud/sb_accuracy", fill_size , fill_colour, sbar_alpha_bg, DRAWFLAG_NORMAL);
@@ -2634,6 +2646,11 @@ void Sbar_Draw (void)
 
 	sbar_fontsize = Sbar_GetFontsize("sbar_fontsize");
 	sbar_fontsize_spec = Sbar_GetFontsize("sbar_fontsize_spec");
+	if(sbar_fontsize != sbar_oldfontsize)
+	{
+		Cmd_Sbar_SetFields(0);
+		sbar_oldfontsize = sbar_fontsize;
+	}
 
 	if(spectatee_status && !intermission)
 	{

@@ -96,6 +96,7 @@ float teamscores_flags[MAX_SCORE];
 
 
 vector sbar_fontsize;
+vector sbar_oldfontsize;
 vector sbar_fontsize_spec;
 
 float RANKINGS_RECEIVED_CNT;
