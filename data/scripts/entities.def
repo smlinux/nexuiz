@@ -266,7 +266,7 @@ message2: death message when someone gets pushed into this (default: "was thrown
 Location for use by the %l escape in "say" messages.
 The closest "visible" info_location entity is chosen to find the right location name for a point.
 -------- KEYS --------
-message: name of location, possibly with color codes
+netname: name of location, possibly with color codes
 */
 
 /*QUAKED info_notnull (0 .5 0) (-8 -8 -8) (8 8 8) 
