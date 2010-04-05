@@ -158,7 +158,7 @@ void SV_ParseClientCommand(string s) {
 		if not(self.flags & FL_CLIENT)
 			return;
 		if (argv(1) == "$gameversion") {
-			//versionmsg = "^1client is too old to get versioninfo.\nUPDATE!!! (http://www.nexuiz.com)^8";
+			//versionmsg = "^1client is too old to get versioninfo.\nUPDATE!!! (http://www.alientrap.org/nexuiz/)^8";
 			// either that or someone wants to be funny
 			self.version = 1;
 		} else {
